@@ -1,0 +1,351 @@
+<div class="row mx-1 pl-2">
+  <div class="col-12">
+    <!--inner header-->
+
+    <div class="row  text-secondary pr-0 mt-1">
+      <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+
+
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+          <ol class="breadcrumb mb-0 bg-white d-flex align-items-center">
+            <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto">Home</li>
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a
+                routerLink="/main/inbound/container-receipt">Inbound</a></li>
+            <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto"><a routerLink="/main/inbound/item-main">Goods
+                Receipt</a></li>
+          </ol>
+        </nav>
+
+
+        <div class="d-flex ml-auto my-auto">
+          <!--matInput (input)="grNewTag.filterGlobal($any($event.target).value, 'contains');" -->
+          <!-- <div [hidden]="isShowDiv"><input
+              class="form-control filter_button mt-2 mx-2 border-bottom" placeholder="Scan Barcode" style="width:90%"  autofocus>
+          </div> -->
+
+          <!-- (keyup.enter)="lablelGenerate($event)"-->
+          <div [hidden]="isShowDiv"> <input autofocus matInput (input)="grNewTag.filterGlobal($any($event.target).value, 'contains')" 
+            class="form-control filter_button mt-2 mt-2 mx-2 border-bottom" placeholder="Search" style="width:90%">
+        </div>
+        
+          <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row d-flex align-items-center">
+            <!--
+                      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-2"
+                      matTooltip="Add">
+                      <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                    </button>
+                    -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+              matTooltip="Display">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+              matTooltip="Edit">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+              matTooltip="Delete">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+            </button>
+            <!--
+                      <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                    class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="Info">
+                    <mat-icon class="action-icon d-flex align-items-center justify-content-center">info_outline</mat-icon>
+                  </button>
+                    -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+              matTooltip="Download">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+            </button>
+
+
+            <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+              [ngClass]="{'bg-orange' : toggle, 'purple': !toggle}">
+              <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab disabled
+              class=" floating-buttons1 disabled d-flex align-items-center justify-content-center darkaction text-white mx-2 mr-3 align-middle"
+              matTooltip="New">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">add</mat-icon>
+            </button>
+            <button mat-mini-fab
+              class=" floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-2 mr-3 align-middle"
+              matTooltip="Save">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">save</mat-icon>
+            </button>
+            <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button  bg-red" type="button"
+              mat-button>
+              <mat-icon class="">tune</mat-icon> Filter
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--main section-->
+  <mat-drawer-container class="example-container w-100 pr-0">
+    <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+
+    </mat-drawer>
+    <div class="example-sidenav-content  mt-1 pr-1">
+      <div class="tabbar1 px-0 uatwhite my-auto col d-flex align-items-center mt-1">
+        <h5 class="my-auto mb-0 mx-4 font-weight-bold whs-text-grey">Order No - {{code.refDocNumber}}</h5>
+      </div>
+      <div class="row mt-1 pr-1" style="height: calc(100vh - 11.7rem);">
+        <div class="col-md-12 px-0">
+          <div class="">
+            <mat-tab-group class="mx-3 mt-1">
+              <mat-tab label="Lines">
+                <div class="row ">
+                  <p-table #grNewTag [value]="grNew" 
+                    [globalFilterFields]="['itemCode', 'itemDescription', 'acceptedQty', 'damageQty', 'varianceQty', 'partner_item_barcode', 'packBarcodes', 'accQty', 'damQty']"
+                    styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single"
+                    scrollHeight="calc(100vh - 21.2rem)" sortField="preInboundNo" [sortOrder]="-1" [paginator]="true"
+                    [rows]="100" [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true"
+                    style="width: 100%;margin-left: 10px;background-color:white">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th style="max-width: 3.5rem; justify-content: center;">
+                          <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+                        </th>
+                        <th style="max-width: 9rem;" pSortableColumn="itemCode" pResizableColumn>Part No<p-sortIcon
+                            field="itemCode"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 9.4rem;" pSortableColumn="itemDescription" pResizableColumn>Item Description<p-sortIcon
+                            field="itemDescription"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 6rem;" pSortableColumn="manufacturerName" pResizableColumn>Mfr Name<p-sortIcon field="manufacturerName"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 4rem;" pSortableColumn="orderQty" pResizableColumn>Order Qty<p-sortIcon field="orderQty">
+                          </p-sortIcon>
+                        </th>
+                        <th style="max-width: 4rem;" pSortableColumn="acceptedQty" pResizableColumn>Acc Qty<p-sortIcon field="acceptedQty">
+                          </p-sortIcon>
+                        </th>
+                        <th style="max-width: 5rem;" pSortableColumn="damageQty" pResizableColumn>Rejected Qty<p-sortIcon field="damageQty">
+                          </p-sortIcon>
+                        </th>
+                        <!-- <th  pSortableColumn="Inventory" pResizableColumn>Inventory<p-sortIcon field="Inventory"></p-sortIcon></th> -->
+                   
+                        <th style="max-width: 5rem;" pSortableColumn="varianceQty" pResizableColumn>Variance <p-sortIcon field="varianceQty">
+                          </p-sortIcon>
+                        </th>
+                        <!-- <th style="max-width: 5.1rem;" pSortableColumn="actions" pResizableColumn>Actions <p-sortIcon field="actions">
+                        </p-sortIcon>
+                      </th> -->
+                        <th  style="max-width: 7.9rem;" pSortableColumn="partner_item_barcode" pResizableColumn>Barcode ID <p-sortIcon field="partner_item_barcode">
+                          </p-sortIcon>
+                        </th>
+                        <th   style="max-width: 6.5rem;"  pSortableColumn="rec_accept_qty" pResizableColumn>Received Acc Qty <p-sortIcon
+                            field="rec_accept_qty"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 8.5rem;" pSortableColumn="rec_damage_qty" pResizableColumn>Received Rejected Qty <p-sortIcon
+                            field="rec_damage_qty"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 5.3rem;" pSortableColumn="orderUom" pResizableColumn>UOM <p-sortIcon field="orderUom"></p-sortIcon>
+                        </th>
+                        <th style="max-width: 5.3rem;" pSortableColumn="interimStorageBin" pResizableColumn>Bin Location <p-sortIcon
+                            field="interimStorageBin"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="interimStorageBin" pResizableColumn>Delete <p-sortIcon
+                            field="interimStorageBin"></p-sortIcon>
+                        </th>
+                      </tr>
+
+                      <tr>
+                        <th style="max-width: 3.5rem; justify-content: center;">
+                          <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+                        </th>
+                        <th style="max-width: 9rem;">
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'itemCode', 'contains')"
+                            [value]="$any(grNewTag.filters['itemCode'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 9.4rem;">
+                          <input  pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'itemDescription', 'contains')"
+                            [value]="$any(grNewTag.filters['itemDescription'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 6rem;">
+                          <input  pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'manufacturerName', 'contains')"
+                            [value]="$any(grNewTag.filters['manufacturerName'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 4rem;" >
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'orderQty', 'contains')"
+                            [value]="$any(grNewTag.filters['orderQty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 4rem;" >
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'acceptedQty', 'contains')"
+                            [value]="$any(grNewTag.filters['acceptedQty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 5rem;">
+                          <input  pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'damageQty', 'contains')"
+                            [value]="$any(grNewTag.filters['damageQty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <!-- <th >
+                                 <input pInputText  type="text" (input)="grNewTag.filter($any($event.target)?.value, 'Inventory', 'contains')"
+                                 [value]="$any(grNewTag.filters['Inventory'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+                               </th> -->
+                        <th style="max-width: 5rem;">
+                          <input  pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'varianceQty', 'contains')"
+                            [value]="$any(grNewTag.filters['varianceQty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        
+                        <!-- <th style="max-width: 5.1rem;">
+                          <input  pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'actions', 'contains')"
+                            [value]="$any(grNewTag.filters['actions'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th> -->
+                        <th  style="max-width: 7.9rem;">
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'partner_item_barcode', 'contains')"
+                            [value]="$any(grNewTag.filters['partner_item_barcode'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th  style="max-width: 6.5rem;" >
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'rec_accept_qty', 'contains')"
+                            [value]="$any(grNewTag.filters['rec_accept_qty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 8.5rem;">
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'rec_damage_qty', 'contains')"
+                            [value]="$any(grNewTag.filters['rec_damage_qty'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 5.3rem;">
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'orderUom', 'contains')"
+                            [value]="$any(grNewTag.filters['orderUom'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th style="max-width: 5.3rem;">
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'interimStorageBin', 'contains')"
+                            [value]="$any(grNewTag.filters['interimStorageBin'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                        <th>
+                          <input pInputText type="text"
+                            (input)="grNewTag.filter($any($event.target)?.value, 'interimStorageBin', 'contains')"
+                            [value]="$any(grNewTag.filters['interimStorageBin'])?.value" placeholder="Search"
+                            class=" w-100 p-column-filter">
+                        </th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-grNew>
+                      <tr [ngClass]="{'row-confirmed': grNew.packBarcodesState === true, 'row-confirmed1': grNew.packBarcodesState === false}"> <!--  // 'row-confirmed1': grNew.statusId === 17-->
+                        <td style="max-width: 3.5rem; justify-content: center;">
+                          <p-checkbox  (onChange)="onChange()" [(ngModel)]="selectedgrNew"   [value]="grNew"></p-checkbox>
+                        </td>
+                        <td style="max-width: 9rem;">{{grNew.itemCode}}</td>
+                        <td style="max-width: 9.4rem;">{{grNew.itemDescription}}</td>
+                        <td style="max-width: 6rem;">{{grNew.manufacturerName}}</td>
+                        <td style="max-width: 4rem;">{{grNew.orderQty}}</td>
+                        <td style="max-width: 4rem;">{{grNew.acceptedQty | number}}</td>
+                        <td style="max-width: 5rem;">{{grNew.damageQty}}</td>
+                        <!-- <td type="button" (click)="callInventory(grNew)">
+                                    <p class="text-orange mb-0">Inventory Details</p>
+                                  </td> -->
+                        <td style="max-width: 5rem;">{{grNew.varianceQty}}</td>
+                        <!-- <td style="max-width: 5.1rem;" type="button" (click)="packBarcodes(grNew)">   
+                          <p class="text-orange mb-0">{{grNew.packBarcodesState ? 'Confirmed' : 'Confirm'}}</p>
+                        </td> -->
+                        <td style="max-width: 7.9rem;">{{grNew.partner_item_barcode}}</td>
+                        <td  style="max-width: 6.5rem;" >{{grNew.rec_accept_qty}}</td>
+                        <td  style="max-width: 8.5rem;" >{{grNew.rec_damage_qty}}</td>
+                        <td style="max-width: 5.3rem;">{{grNew.orderUom }}</td>
+                        <td style="max-width: 5.3rem;">{{grNew.interimStorageBin}}</td>
+                        <td> 
+                          <button mat-icon-button (click)="onDeleteRow(grNew)">
+                          <mat-icon class="text-danger">delete_outline</mat-icon>
+                        </button>
+                      </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </mat-tab>
+              <form [formGroup]="form" class="w-100">
+                <mat-tab label="Header">
+                  <div class="row mt-2 boxgrey pb-3">
+                    <div class="col-lg-3 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Order No</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="refDocNumber">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0">Preinbound No</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="preInboundNo">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0">GR No</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="goodsReceiptNo">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0">Case Received On</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput [matDatepicker]="picker" placeholder="Choose Date "
+                            formControlName="createdOn">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </mat-tab>
+              </form>
+            </mat-tab-group>
+            <div class="d-flex justify-content-center align-items-center pt-2  bottombutton">
+              <!-- <button mat-raised-button class="bg-warning px-4 text-white mx-1" (click)="delete();">
+                <mat-icon class="">done</mat-icon> Delete
+              </button> -->
+              <button mat-raised-button class="text-white mx-1 px-4" color="warn" routerLink="/main/inbound/item-main">
+                <mat-icon class="">close</mat-icon>Cancel
+              </button>
+              <button mat-raised-button class="bg-darkblue px-4 text-white mx-1" (click)="assignUserID()">
+                <!-- (click)="assignhe();"-->
+                <mat-icon class="">done</mat-icon> Release
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-drawer-container>
+</div>

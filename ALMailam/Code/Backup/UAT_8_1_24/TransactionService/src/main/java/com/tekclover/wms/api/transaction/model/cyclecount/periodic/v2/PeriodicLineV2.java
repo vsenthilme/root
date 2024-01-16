@@ -1,0 +1,74 @@
+package com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2;
+
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLine;
+import lombok.Data;
+
+import javax.persistence.*;
+
+@Data
+@Entity
+public class PeriodicLineV2 extends PeriodicLine {
+
+	@Column(name = "C_TEXT", columnDefinition = "nvarchar(255)")
+	private String companyDescription;
+
+	@Column(name = "PLANT_TEXT", columnDefinition = "nvarchar(255)")
+	private String plantDescription;
+
+	@Column(name = "WH_TEXT", columnDefinition = "nvarchar(255)")
+	private String warehouseDescription;
+
+	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
+	private String statusDescription;
+
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
+	private String manufacturerName;
+
+	@Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
+	private String barcodeId;
+
+	@Column(name = "ITM_TEXT", columnDefinition = "nvarchar(255)")
+	private String itemDesc;
+
+	@Column(name = "ST_SEC_ID")
+	private String storageSectionId;
+
+	@Column(name = "MFR_PART", columnDefinition = "nvarchar(255)")
+	private String manufacturerPartNo;
+
+//	@Column(name = "SP_ST_IND_ID")
+//	private Long specialStockIndicator;
+
+	@Column(name = "MIDDLEWARE_ID", columnDefinition = "nvarchar(50)")
+	private String middlewareId;
+
+	@Column(name = "MIDDLEWARE_HEADER_ID", columnDefinition = "nvarchar(50)")
+	private String middlewareHeaderId;
+
+	@Column(name = "MIDDLEWARE_TABLE", columnDefinition = "nvarchar(50)")
+	private String middlewareTable;
+
+	@Column(name = "MANUFACTURER_FULL_NAME", columnDefinition = "nvarchar(150)")
+	private String manufacturerFullName;
+
+	@Column(name = "MFR_CODE", columnDefinition = "nvarchar(255)")
+	private String manufacturerCode;
+
+	@Column(name = "REF_DOC_TYPE", columnDefinition = "nvarchar(150)")
+	private String referenceDocumentType;
+
+	@Column(name = "FrozenQty")
+	private Double frozenQty;
+
+	@Column(name = "IB_QTY")
+	private Double inboundQuantity;
+
+	@Column(name = "OB_QTY")
+	private Double outboundQuantity;
+
+	@Column(name = "FIRST_CTD_QTY")
+	private Double firstCountedQty;
+
+	@Column(name = "SECOND_CTD_QTY")
+	private Double secondCountedQty;
+}

@@ -1,0 +1,15 @@
+package com.tekclover.wms.api.transaction.model.outbound.v2;
+
+import com.tekclover.wms.api.transaction.model.outbound.SearchOutboundLine;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class SearchOutboundLineV2 extends SearchOutboundLine {
+
+	private List<String> languageId;
+	private List<String> companyCodeId;
+	private List<String> plantId;
+
+}

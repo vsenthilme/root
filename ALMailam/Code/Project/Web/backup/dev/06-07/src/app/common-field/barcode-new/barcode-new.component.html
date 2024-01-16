@@ -1,0 +1,23 @@
+<div class="row container" *ngFor="let element of barcodeValueList">
+<div class="col-1"></div>
+    <div class="col-5 border py-2">
+        <div class="d-flex justify-content-between">
+            <mat-label class="font-weight-bold text-dark py-1">{{element.manufacturerPartNo}}</mat-label>
+            <mat-label class="text-dark py-1">MADE IN TAIWAN</mat-label>
+        </div>  
+        <mat-label class="font-weight-bold text-dark py-1">PART No {{element.packBarcodes}}</mat-label>
+        <div class="d-flex justify-content-between">
+            <mat-label class="py-1 text-dark">{{element.itemDescription}}</mat-label>
+            <mat-label class="py-1 text-dark font-weight-bold">Qty {{element.Qty}}</mat-label>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+           <img src="./assets/img/almailem.png" style="width: 10rem;height: 4rem;" srcset="">
+            <ngx-barcode [bc-value]="element.packBarcodes" [bc-display-value]="true" [bc-font-size]="13"
+            bc-format='CODE128' [bc-height]="60" [bc-width]="1.6" bc-element-type='svg'
+            bc-text-position="top">
+        </ngx-barcode>
+        </div>
+    </div>
+<div class="col-1"></div>
+    
+</div>

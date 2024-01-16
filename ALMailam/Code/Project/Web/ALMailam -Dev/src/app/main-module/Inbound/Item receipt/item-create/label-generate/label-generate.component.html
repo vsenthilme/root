@@ -1,0 +1,100 @@
+<div class="card  border-0 bg-white " style="overflow: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h6 class="my-auto">GR Release - {{this.data.goodsReceiptNo}}</h6>
+      <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+    </div>
+    <div class="row mx-0 mt-2 ">
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0">Part No</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput placeholder="Enter" disabled [value]="this.data.itemCode">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0">Item Description</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput placeholder="Enter" disabled [value]="this.data.itemDescription">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0">Mfr Name</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput placeholder="Enter" disabled [value]="this.data.manufacturerName">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0 required">Barcode</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput placeholder="Enter" [value]="this.data.partner_item_barcode"  [(ngModel)]="this.data.partner_item_barcode">
+            <button  matSuffix mat-icon-button (click)="searchBarcode()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0 required">Bin Location</label>
+          <mat-form-field *ngIf="!showDropdown1" class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter" [(ngModel)]="this.data.interimStorageBin" 
+             disabled>
+             <button  matSuffix mat-icon-button (click)="showDropdown()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-form-field>
+
+
+          <p-dropdown *ngIf="showDropdown1" placeholder="Select" [filter]="true" class="w-100" [options]="multiselectStorageList"
+          [resetFilterOnHide]="true" 
+          [(ngModel)]="this.data.interimStorageBin" name="product" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"
+              (onFilter)="onStorageType($event)"  >     </p-dropdown>
+
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0 required">Accepted Qty</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput type="number" placeholder="Enter"  (keyup)="getVariance()"  [(ngModel)]="this.data.acceptedQty">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0">Rejected Qty</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput type="number" placeholder="Enter" (keyup)=" getVariance()"  [(ngModel)]="this.data.damageQty">
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div class="col-4 mt-1">
+        <div class="form-group mb-0">
+          <label for="inputEmail4" class="mb-0">Variance Qty</label>
+          <mat-form-field class="mb-0 w-100 " appearance="outline">
+            <input matInput type="number" placeholder="Enter"  disabled  [(ngModel)]="this.data.varianceQty">
+          </mat-form-field>
+        </div>
+      </div>
+
+ 
+
+    </div>
+  
+    <div class="d-flex justify-content-center mr-3 mb-1 pb-2">
+      <button mat-raised-button mat-dialog-close class=" bg-red text-white mx-1">
+        <mat-icon class="">close</mat-icon> Cancel
+      </button>
+      <button mat-raised-button (click)="submit()" class=" bg-darkblue text-white mx-1">
+        <mat-icon class="">done</mat-icon> Confirm
+      </button>
+    </div>
+  </div>

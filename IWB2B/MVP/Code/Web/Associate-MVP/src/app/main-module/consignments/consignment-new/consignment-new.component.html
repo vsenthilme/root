@@ -1,0 +1,143 @@
+<div class="row mt-2">
+    <div class="d-flex justify-content-between mt-2">
+        <nav  aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item fontb"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Consignment New</li>
+            </ol>
+          </nav>
+          <div class="btn-group">
+              <button class="btn btn-outline-warning btn-sm d-flex align-items-center"  type="button" (click)="openDialog('New')">
+                <mat-icon>add</mat-icon>New
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu py-3 px-2">
+                <li><a type="button" class="dropdown-item disabled  d-flex align-items-center text-muted my-1" >
+                    <mat-icon class="mr-3">edit</mat-icon>Edit
+                  </a></li>
+                <li><a class="dropdown-item disabled  d-flex align-items-center text-muted my-1" href="#">
+                    <mat-icon class="mr-3">search</mat-icon>Display
+                  </a></li>
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="delete()">
+                    <mat-icon class="mr-3">delete</mat-icon>Delete
+                  </a></li>
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" (click)=" downloadexcel( )">
+                    <mat-icon class="mr-3">download</mat-icon>Download
+                  </a></li>
+              </ul>
+            </div>
+    </div>
+    <div>
+    <div class="bg-white mt-2">
+        <p-table  #consignmentNew [globalFilterFields]="['orderId','customerId','originDetailsAddressLine1','destinationDetailsAddressLine1', 'deliveryCharge','createdOn', 'status']" selectionMode="single" [value]="consignmentNew1"
+        styleClass="p-datatable-gridlines p-datatable-responsive-demo p-datatable-sm" [scrollable]="true" scrollDirection="both"   selectionMode="single"
+        scrollHeight="calc(100vh - 10.2rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true" >
+        <ng-template pTemplate="header">
+          <tr >
+            <th style="max-width: 3.5rem">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+          </th>
+            <th style="width:9rem"  pResizableColumn>Order ID
+              
+            </th>
+            <th style="width:10rem"  pResizableColumn>Customer ID
+              
+            </th>
+            
+            <th style="width:11rem"  pResizableColumn>Origin Address
+                
+              </th>
+              
+            <th style="width:10rem"  pResizableColumn>Destination Address
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Details
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Delivery Charge
+                
+              </th>
+           <!--   <th style="width:12rem"  pResizableColumn>No of Items
+                
+              </th>-->
+              <th style="width:12rem"  pResizableColumn>Order Date
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Status
+                
+              </th>
+          </tr>
+      
+          <tr>
+            <th style="max-width: 3.5rem">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+          </th>
+            <th style="width:9rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'orderId', 'contains')" 
+                [value]="$any(consignmentNew.filters['orderId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th style="width:10rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'customerId', 'contains')" 
+              [value]="$any(consignmentNew.filters['customerId'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:11rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'originDetailsAddressLine1', 'contains')" 
+              [value]="$any(consignmentNew.filters['originDetailsAddressLine1'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:10rem" >
+              <input pInputText type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'destinationDetailsAddressLine1', 'contains')" 
+              [value]="$any(consignmentNew.filters['destinationDetailsAddressLine1'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>   
+            <th style="width:12rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'consignmentNew', 'contains')" 
+                [value]="$any(consignmentNew.filters['consignmentNew'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>  
+               <th style="width:12rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'deliveryCharge', 'contains')" 
+                [value]="$any(consignmentNew.filters['deliveryCharge'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>
+             <!-- <th style="width:12rem" >
+               <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType1', 'contains')" 
+               [value]="$any(consignmentNew.filters['accessType1'])?.value" placeholder="No of items" class="w-100 p-column-filter">
+             </th>-->
+             <th style="width:12rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+              [value]="$any(consignmentNew.filters['createdOn'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:12rem" >
+             <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'status', 'contains')" 
+             [value]="$any(consignmentNew.filters['status'])?.value" placeholder="Search" class="w-100 p-column-filter">
+           </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-consigmment>
+          <tr>
+            <td style="max-width:3.5rem;">
+              <!-- <p-tableCheckbox [value]="levels"></p-tableCheckbox>-->
+              <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedconsignmentNew1"  [value]="consigmment"></p-checkbox>
+           </td>
+            <td style="width:9rem" >{{consigmment.orderId}}</td>
+            <td style="width:10rem" >{{consigmment.customerId}}</td>
+            <td style="width:11rem" >{{consigmment.originDetailsAddressLine1}}</td>
+            <td style="width:10rem" >{{consigmment.destinationDetailsAddressLine1}}</td>
+            <td style="width:12rem"><i type="button" class="fas fa-external-link-alt" (click)="openLines(consigmment)"></i></td>
+            <td style="width:12rem" >{{consigmment.deliveryCharge | currency: 'KWD'}}</td>
+           <!-- <td style="width:12rem" >{{consigmment.accessType1}}</td>-->
+            <td style="width:12rem" >{{consigmment.createdOn | date: 'dd-MM-YYYY' }}</td>
+            <td style="width:12rem" >{{consigmment.status}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+              <td class="w-100">No data found.</td>
+          </tr>
+      </ng-template>
+      </p-table> 
+    </div>
+    </div>
+    </div>

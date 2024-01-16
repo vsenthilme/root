@@ -1,0 +1,97 @@
+<div class="row p-2 px-4 mt-3 mx-1 bg-white">
+  <p-tabView>
+    <p-tabPanel header="General" leftIcon="pi pi-bookmark" >
+     <div class="row">
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-1 darkgrey label">Customer ID</p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled matInput placeholder="Enter" [value]="customerId">
+        </mat-form-field>
+      </label>
+
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-1 darkgrey label">Customer Name</p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled matInput placeholder="Enter" [value]="customerName">
+        </mat-form-field>
+      </label>
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-2 darkgrey label">Customer Type </p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled matInput placeholder="Enter" [value]="customerType">
+        </mat-form-field>
+      </label>
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-1 darkgrey label">Account opened On</p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled  matInput placeholder="Enter" [value]="createdOn">
+        </mat-form-field>
+      </label>
+     </div>
+    </p-tabPanel>
+</p-tabView>
+<p-tabView>
+  <p-tabPanel header="Personal Details" leftIcon="pi pi-user" >
+   <div class="row">
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-1 darkgrey label">Address</p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="address">
+      </mat-form-field>
+    </label>
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-1 darkgrey label">Phone No</p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="phoneNo">
+      </mat-form-field>
+    </label>
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-1 darkgrey label">Email</p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="emailId">
+      </mat-form-field>
+    </label>
+
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-1 darkgrey label">City</p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="city">
+      </mat-form-field>
+    </label>
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-1 darkgrey label">State</p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="state">
+      </mat-form-field>
+    </label>
+    <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+      <p class="mb-0  fw-bold ml-2 darkgrey label">Country </p>
+      <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+        <input disabled matInput placeholder="Enter" [value]="country">
+      </mat-form-field>
+    </label>
+   </div>
+  </p-tabPanel>
+</p-tabView>
+<p-tabView>
+  <p-tabPanel header="Loyalty" leftIcon="pi pi-chart-bar" >
+   <div class="row">
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-1 darkgrey label">Loyality Points</p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled matInput placeholder="Enter" [value]="loyaltyPoint">
+        </mat-form-field>
+      </label>
+      <label class="col-12 d-flex flex-column justify-content-center col-md-3 px-4 ">
+        <p class="mb-0  fw-bold ml-2 darkgrey label">Category </p>
+        <mat-form-field class="form-group input_field mb-0 mt-1" appearance="outline">
+          <input disabled matInput placeholder="Enter" [value]="customerCategory">
+        </mat-form-field>
+      </label>
+   </div>
+  </p-tabPanel>
+</p-tabView>
+</div>
+<div class="mt-3 bg-white">
+ 
+</div>

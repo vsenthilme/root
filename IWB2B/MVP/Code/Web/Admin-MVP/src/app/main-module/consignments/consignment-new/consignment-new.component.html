@@ -1,0 +1,128 @@
+<div class="row mt-2">
+    <div class="d-flex justify-content-between mt-2">
+        <nav  aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item fontb"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Consignment New</li>
+            </ol>
+          </nav>
+          <div class="btn-group">
+            <button class="btn btn-outline-warning btn-sm d-flex align-items-center"  type="button" (click)="openDialog('New')">
+              <mat-icon>add</mat-icon>New
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="openDialog('Edit')">
+                  <mat-icon class="mr-3">edit</mat-icon>Edit
+                </a></li>
+              <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="openDialog('Display')">
+                  <mat-icon class="mr-3">search</mat-icon>Display
+                </a></li>
+              <li><a type="button" class="disabled dropdown-item  d-flex align-items-center text-muted my-1"  (click)="delete()">
+                  <mat-icon class="mr-3">delete</mat-icon>Delete
+                </a></li>
+              <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)=" downloadexcel( )">
+                  <mat-icon class="mr-3">download</mat-icon>Download
+                </a></li>
+            </ul>
+          </div>
+    </div>
+    <div>
+    <div class="bg-white mt-2">
+        <p-table  #consignmentNew [globalFilterFields]="['userName', 'profileType', 'partner']" selectionMode="single" [value]="consignmentNew1"
+        styleClass="p-datatable-gridlines p-datatable-responsive-demo p-datatable-sm" [scrollable]="true" scrollDirection="both"   selectionMode="single" 
+        scrollHeight="calc(100vh - 10.2rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true" >
+        <ng-template pTemplate="header">
+          <tr >
+            <th style="max-width: 3rem">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+          </th>
+          <th  style="width:6rem"  pResizableColumn>Actions</th>
+            <th pSortableColumn="orderId"  style="width:9rem"  pResizableColumn>Order ID
+          <p-sortIcon field="orderId"></p-sortIcon></th>
+
+            <th pSortableColumn="customerId" style="width:10rem"  pResizableColumn>Customer Name
+          <p-sortIcon field="customerId"></p-sortIcon></th>
+            
+     
+              
+
+              <th style="width:12rem"  pResizableColumn>Details</th>
+
+              <th pSortableColumn="deliveryCharge" style="width:12rem"  pResizableColumn>Delivery Charge
+              <p-sortIcon field="deliveryCharge"></p-sortIcon></th>
+              
+
+              <th pSortableColumn="createdOn" style="width:12rem"  pResizableColumn>Order Date    
+            <p-sortIcon field="createdOn"></p-sortIcon></th>
+
+              <th pSortableColumn="status" style="width:19.5rem"  pResizableColumn>Status
+            <p-sortIcon field="status"></p-sortIcon></th>
+          </tr>
+      
+          <tr>
+            <th style="max-width: 3rem">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+          </th>
+          <th style="width:6rem" >
+        </th>
+            <th style="width:9rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'orderId', 'contains')" 
+                [value]="$any(consignmentNew.filters['orderId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th style="width:10rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'customerId', 'contains')" 
+              [value]="$any(consignmentNew.filters['customerId'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>   
+            <th style="width:12rem" > </th>  
+               <th style="width:12rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'deliveryCharge', 'contains')" 
+                [value]="$any(consignmentNew.filters['deliveryCharge'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>
+             <th style="width:12rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+              [value]="$any(consignmentNew.filters['createdOn'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:19.5rem" >
+             <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'status', 'contains')" 
+             [value]="$any(consignmentNew.filters['status'])?.value" placeholder="Search" class="w-100 p-column-filter">
+           </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="max-width: 3rem">
+              <!-- <p-tableCheckbox [value]="product" ></p-tableCheckbox> -->
+              <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedconsignmentNew1"  [value]="product"></p-checkbox>
+          </td>
+          
+          <td style="width:6rem"><i type="button" class="fas fa-ellipsis-h" (click)="op.toggle($event)"></i></td>
+            <td style="width:9rem" >{{product.orderId}}</td>
+            <td style="width:10rem" >{{product.customerId}}</td>
+            <td style="width:12rem"><i type="button" class="fas fa-external-link-alt" (click)="openLines(product)"></i></td>
+            <td style="width:12rem" >{{product.deliveryCharge}}</td>
+            <td style="width:12rem" >{{product.createdOn | date :'dd-MM-YYYY'}}</td>
+            <td style="width:19.5rem" >{{product.status}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+              <td class="w-100">No data found.</td>
+          </tr>
+      </ng-template>
+      </p-table> 
+    </div>
+    </div>
+    </div>
+
+
+    <p-overlayPanel #op>
+      <ng-template pTemplate>
+       <span class="" type="button" >Approve</span>
+      </ng-template>
+    </p-overlayPanel>

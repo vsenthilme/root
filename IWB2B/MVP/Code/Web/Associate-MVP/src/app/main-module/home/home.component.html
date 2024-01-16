@@ -1,0 +1,93 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" [mode]="getScreenWidth > 700 ? 'side' : 'over'"
+    [opened]="getScreenWidth > 700 ? 'true' : 'false'">
+<div class="text-center  profile"> <!-- my-5-->
+  <img src="./assets/Img/menu/profile.png" class="img-fluid profilePhoto" alt="" srcset="">
+  <div class="d-flex justify-content-center align-items-center mt-3">
+    <h6 class="textmainblue text-center pr-2" style="    font-size: 16px;">{{this.auth.firstname | uppercase}}</h6>
+    <!-- <span class="topbar-icon text-white pi pi-cog shortCutIcons1" type="button" style="position: absolute; right: 5%; top: 2%;font-size: 18px; "></span> -->
+  </div>
+</div>
+    <div class="sidePanel "> <!--mt-4-->
+       <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/dashboard">
+        <img src="./assets/Img/menu/home.png" class="sideIcon1" alt="" srcset=""><span class="pl-2">DASHBOARD</span>
+      </div>
+     <!-- <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/customer/customerProfile">
+        <img src="./assets/Img/menu/user.png" class="sideIcon" alt="" srcset=""><span class="pl-2">CUSTOMER PROFILE</span>
+      </div>
+      <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/loyalty/loyaltyCategory">
+        <img src="./assets/Img/menu/excellence.png" class="sideIcon" alt="" srcset=""><span class="pl-2">LOYALTY CATEGORY</span>
+      </div>
+      <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/loyalty/loyaltySetup">
+        <img src="./assets/Img/menu/gear.png" class="sideIcon" alt="" srcset=""><span class="pl-2">LOYALTY SETUP</span>
+      </div> -->
+      <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/consignment/consignmentNew">
+        <!-- <i class="layout-menuitem-icon pi pi-fw pi-box pr-4"></i><span>Consignments New</span> -->
+        <img src="./assets/Img/menu/order.png" class="sideIcon" alt="" srcset=""><span class="pl-2">CONSIGNMENT NEW</span>
+      </div>
+      <div class="layout-menu" mat-list-item routerLinkActive="active-list-item" routerLink="/main/consignment/consignmentHistory">
+        <!-- <i class="layout-menuitem-icon pi pi-fw pi-shopping-cart pr-4"></i><span>Consignments History</span> -->
+        <img src="./assets/Img/menu/tracking.png" class="sideIcon" alt="" srcset=""><span class="pl-2">CONSIGNMENT HISTORY</span>
+      </div>
+      <!-- <div class="layout-menu">
+        <img src="./assets/Img/menu/google-docs.png" class="sideIcon1" alt="" srcset=""><span class="pl-2">REPORTS</span>
+      </div> -->
+    </div>
+    
+    <img src="./assets/Img/iwlogo.png" class="pb-3 logoPosition" style="max-width: 85%;"   alt="" srcset="">
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <div class="row mainHeader profileSection1">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <a id="omega-menu-button" type="button" (click)="drawer.toggle()"><span
+              style="font-size: 28px;" class="pi pi-bars text-white"></span></a>
+          <!-- <span class="topbar-title pb-1">Dashboard</span> -->
+        </div>
+        <div class="d-flex align-items-center">
+          <div id="topbar-icons" class="animated d-none d-md-block">
+            <!-- <span><input type="text" class="topbar-search " placeholder="Search"><span
+                class="topbar-search-icon text-white  pi pi-search"></span></span> -->  
+            <!-- <span class="topbar-icon   pi pi-envelope shortCutIcons"></span> -->
+            <mat-icon class="text-white mx-3">mail</mat-icon>
+            <mat-icon class="text-white mx-3">settings</mat-icon>
+            <mat-icon class="text-white mx-3" type="button" (click)="op.toggle($event)">person</mat-icon>
+            <!-- <span class="topbar-icon   pi pi-cog shortCutIcons"></span>
+            <span class="topbar-icon   pi pi-user shortCutIcons"></span> -->
+          </div>
+          <span type="button" class="topbar-icon pi pi-ellipsis-h shortCutIcons  text-white d-block d-md-none"
+            (click)="shortcut122.toggle($event)"></span>
+
+          <p-overlayPanel #shortcut122>
+            <ng-template pTemplate class="d-flex">
+              <span class="my-2"><input type="text" class="topbar-search" placeholder="Search"><span
+                  class="topbar-search-icon pi pi-search"></span></span>
+              <div class="mt-2"> <span class="topbar-icon pi pi-envelope shortCutIcons1 my-2"><span
+                    class="topbar-item-text pl-2">Mail</span></span></div>
+              <div> <span class="topbar-icon pi pi-cog shortCutIcons1 my-2"><span
+                    class="topbar-item-text pl-2">Settings</span></span></div>
+              <div type="button" (click)="op.toggle($event)"> <span class="topbar-icon pi pi-user shortCutIcons1 my-2"><span
+                    class="topbar-item-text pl-2">User</span></span></div>
+            </ng-template>
+          </p-overlayPanel>
+        </div>
+      </div>
+    </div>
+    <div class=" mx-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</mat-drawer-container>
+
+
+<p-toast [style]="{'width': '25%'}" position="bottom-right" key="br"></p-toast>
+
+
+
+<p-overlayPanel #op>
+  <ng-template pTemplate>
+   <span class="" type="button" (click)="logOut()">Logout</span>
+  </ng-template>
+</p-overlayPanel>

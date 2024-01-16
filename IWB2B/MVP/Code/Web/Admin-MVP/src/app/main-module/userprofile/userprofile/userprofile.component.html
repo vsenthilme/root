@@ -1,0 +1,149 @@
+<div class="row mt-2">
+    <div class="d-flex justify-content-between mt-2">
+        <nav  aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item fontb"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+            </ol>
+          </nav>
+          <div class="btn-group">
+              <button class="btn btn-outline-warning btn-sm d-flex align-items-center"  type="button" (click)="openDialog('New')">
+                <mat-icon>add</mat-icon>New
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu py-3 px-2">
+                <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="openDialog('Edit')">
+                    <mat-icon class="mr-3">edit</mat-icon>Edit
+                  </a></li>
+                <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="openDialog('Display')">
+                    <mat-icon class="mr-3">search</mat-icon>Display
+                  </a></li>
+                <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1"  (click)="delete()">
+                    <mat-icon class="mr-3">delete</mat-icon>Delete
+                  </a></li>
+                <li><a type="button" class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="downloadexcel()">
+                    <mat-icon class="mr-3">download</mat-icon>Download
+                  </a></li>
+              </ul>
+            </div>
+    </div>
+    <div>
+    <div class="bg-white mt-2">
+        <p-table #Setupuser [globalFilterFields]="['username','email','firstname','lastname','userTypeId','phoneNo','status','createdBy','createdOn']" selectionMode="single" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" scrollDirection="both"  selectionMode="single"
+        scrollHeight="calc(100vh - 10.2rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <!-- <th style="max-width:4rem"  pResizableColumn>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th> -->
+              <th style="max-width: 3rem">
+                <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+            </th>
+            <th  pSortableColumn="username" style="width:12rem"  pResizableColumn>User Name
+                <p-sortIcon field="username"></p-sortIcon></th>
+      
+              <th  pSortableColumn="email" style="width:10rem"  pResizableColumn>Email
+                <p-sortIcon field="email"></p-sortIcon></th>
+              
+              <th  pSortableColumn="firstname" style="width:11rem"  pResizableColumn>First Name
+                <p-sortIcon field="firstname"></p-sortIcon></th>
+                
+              <th  pSortableColumn="lastname" style="width:9rem"  pResizableColumn>Second Name
+                <p-sortIcon field="lastname"></p-sortIcon></th>
+  
+               <th  pSortableColumn="userTypeId" style="width:9rem"  pResizableColumn>User Type
+                  <p-sortIcon field="userTypeId"></p-sortIcon></th>
+          
+                <th  pSortableColumn="phoneNo" style="width:9rem"  pResizableColumn>Phone No
+                                  <p-sortIcon field="phoneNo"></p-sortIcon></th>       
+                                  <th  pSortableColumn="status" style="width:9rem"  pResizableColumn>Status
+                                    <p-sortIcon field="status"></p-sortIcon></th>                   
+                <th  pSortableColumn="createdBy" style="width:12rem"  pResizableColumn>Created By
+                  <p-sortIcon field="createdBy"></p-sortIcon></th>
+                  
+                <th  pSortableColumn="createdOn" style="width:12rem"  pResizableColumn>Created on 
+                  <p-sortIcon field="createdOn"></p-sortIcon></th>
+          </tr>
+    
+          <tr>
+            <th style="max-width: 3rem">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+          </th>
+            <!-- <th style="max-width:4rem" ><p-tableCheckbox [disabled]="true"></p-tableCheckbox></th> -->
+            <th style="width:12rem" >
+                <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'username', 'contains')" 
+                [value]="$any(Setupuser.filters['username'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>
+              <th style="width:10rem" >
+                  <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'email', 'contains')" 
+                  [value]="$any(Setupuser.filters['email'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+                <th style="width:11rem" >
+                  <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'firstname', 'contains')" 
+                  [value]="$any(Setupuser.filters['firstname'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+                <th style="width:9rem" >
+                  <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'lastname', 'contains')" 
+                  [value]="$any(Setupuser.filters['lastname'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+                <th style="width:9rem" >
+                  <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'userTypeId', 'contains')" 
+                  [value]="$any(Setupuser.filters['userTypeId'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+                <th style="width:9rem" >
+                  <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'phoneNo', 'contains')" 
+                  [value]="$any(Setupuser.filters['phoneNo'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+                <th style="width:9rem" >
+                    <input pInputText type="text" (input)="Setupuser.filter($any($event.target)?.value, 'status', 'contains')" 
+                    [value]="$any(Setupuser.filters['status'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                  </th>
+              <th style="width:12rem" >
+                  <input pInputText  type="text" (input)="Setupuser.filter($any($event.target)?.value, 'createdBy', 'contains')" 
+                  [value]="$any(Setupuser.filters['createdBy'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>  
+                 <th style="width:12rem" >
+                  <input pInputText  type="text" (input)="Setupuser.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+                  [value]="$any(Setupuser.filters['createdOn'])?.value" placeholder="Search" class="w-100 p-column-filter">
+                </th>
+          </tr>
+        </ng-template>
+    
+          <ng-template pTemplate="body" let-products>
+            <tr>
+            <!-- <td style="max-width:4rem" >
+                <p-tableCheckbox [value]="product"></p-tableCheckbox>
+              </td> -->
+              <td style="max-width: 3rem">
+                <!-- <p-tableCheckbox [value]="product" ></p-tableCheckbox> -->
+                <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedProducts"  [value]="products"></p-checkbox>
+            </td>
+            <td style="width:12rem" >{{products.username}}</td>
+            <td style="width:10rem" >{{products.email}}</td>
+            <td style="width:11rem" >{{products.firstname}}</td>
+            <td style="width:9rem" >{{products.lastname}}</td>
+            <td style="width:9rem" >{{products.userTypeId}}</td>
+            <td style="width:9rem" >{{products.phoneNo}}</td>
+            <td style="width:9rem" >{{products.status}}</td>
+            <td style="width:12rem" >{{products.createdBy}}</td>
+            <td style="width:12rem" >{{products.createdOn | date: 'dd-MM-YYYY'}}</td>
+          </tr>
+        </ng-template>
+          <ng-template pTemplate="emptymessage">
+        <tr>
+            <td class="w-100">No data found.</td>
+        </tr>
+    </ng-template>
+      </p-table>
+    </div>
+    </div>
+    </div>
+    
+    
+    

@@ -1,0 +1,332 @@
+<div class="row mt-3">
+    <a type="button"  class="col-lg-4 mt-1 " (click)="selectedDashBoard('Customer')" >
+    <div  class="p-2 px-4 d-flex justify-content-between bg-white align-items-center " [ngClass]="customerTable ? 'activeTab bgBorderGreen' : ''" >
+      <div class="d-flex flex-column">
+        <span  [ngClass]="customerTable ? 'text-success title' : ' title'" style="font-size: 20px;">Customers</span>
+        <span class="title" class="text-muted mt-2">Number of Customers</span>
+      </div>
+      <div _ngcontent-ejg-c57="" class="flex align-items-center">
+        <h2><span class="badge px-3 bgGreen">{{this.products.length}}</span></h2>
+      </div>
+    </div>
+</a>
+
+  <a type="button"  class="col-lg-4 mt-1" (click)="selectedDashBoard('Consignment')">
+    <div class=" p-2 px-4 d-flex justify-content-between bg-white align-items-center" [ngClass]="consignmentTable ? 'activeTab bgBorderYellow' : ''" >
+      <div class="d-flex flex-column">
+        <span [ngClass]="consignmentTable ? 'text-warning title' : 'text-warning title'" style="font-size: 20px;">Consignments New</span>
+        <span class="title" class="text-muted mt-2">Number of New Consignments</span>
+      </div>
+      <div _ngcontent-ejg-c57="" class="flex align-items-center">
+        <h2><span class="badge px-3 bgYellow">{{this.consignmentNew1.length}}</span></h2>
+      </div>
+    </div>
+</a>
+
+  <a type="button" class="col-lg-4 mt-1" (click)="selectedDashBoard('Consignment-New')">
+    <div class=" p-2 px-4 d-flex justify-content-between bg-white align-items-center" [ngClass]="congignmentNewTable ? 'activeTab bgBorderBlue' : ''" >
+      <div class="d-flex flex-column">
+        <span [ngClass]="congignmentNewTable ? 'text-primary title' : 'text-primary title'"style="font-size: 20px;">Consignment History</span>
+        <span class="title" class="text-muted mt-2">Number of Consignment History</span>
+      </div>
+      <div _ngcontent-ejg-c57="" class="flex align-items-center">
+        <h2><span class="badge px-3 bgBlue">{{this.consignmentHistory1.length}}</span></h2>
+      </div> 
+    </div>
+</a>
+</div>
+<div class="mt-3 bg-white">
+  <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" selectionMode="single" [value]="products"
+  styleClass="p-datatable-gridlines" [scrollable]="true"  scrollDirection="both"  selectionMode="single"
+  scrollHeight="calc(100vh - 13.2rem)" [paginator]="false" [rows]="10" [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+  [resizableColumns]="true" *ngIf="this.customerTable">
+  <ng-template pTemplate="header">
+    <tr>
+      <th  pSortableColumn="customerId" style="width:9rem"  pResizableColumn>Customer ID
+        <p-sortIcon field="customerId"></p-sortIcon></th>
+
+      <th  pSortableColumn="customerName" style="width:12rem"  pResizableColumn>Customer Name
+        <p-sortIcon field="customerName"></p-sortIcon></th>
+
+      <th  pSortableColumn="customerCategory" style="width:10rem"  pResizableColumn>Category
+        <p-sortIcon field="customerCategory"></p-sortIcon></th>
+      
+      <th  pSortableColumn="phoneNo" style="width:11rem"  pResizableColumn>Mobile No 
+        <p-sortIcon field="phoneNo"></p-sortIcon></th>
+        
+      <th  pSortableColumn="status" style="width:9rem"  pResizableColumn>Status
+        <p-sortIcon field="status"></p-sortIcon></th>
+        
+        <th  pSortableColumn="createdBy" style="width:12rem"  pResizableColumn>Created By
+          <p-sortIcon field="createdBy"></p-sortIcon></th>
+          
+        <th  pSortableColumn="createdOn" style="width:12rem"  pResizableColumn>Created on 
+          <p-sortIcon field="createdOn"></p-sortIcon></th>
+    </tr>
+
+    <tr>
+      <!-- <th style="max-width:4rem" ><p-tableCheckbox [disabled]="true"></p-tableCheckbox></th> -->
+      <th style="width:9rem" >
+          <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customerId', 'contains')" 
+          [value]="$any(userProfile.filters['customerId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+      </th>
+      <th style="width:12rem" >
+        <input pInputText type="text" (input)="userProfile.filter($any($event.target)?.value, 'customerName', 'contains')" 
+        [value]="$any(userProfile.filters['customerName'])?.value" placeholder="Search" class="w-100 p-column-filter">
+      </th>
+      <th style="width:10rem" >
+        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customerCategory', 'contains')" 
+        [value]="$any(userProfile.filters['customerCategory'])?.value" placeholder="Search" class="w-100 p-column-filter">
+      </th>
+      <th style="width:11rem" >
+        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'phoneNo', 'contains')" 
+        [value]="$any(userProfile.filters['phoneNo'])?.value" placeholder="Search" class="w-100 p-column-filter">
+      </th>
+      <th style="width:9rem" >
+        <input pInputText type="text" (input)="userProfile.filter($any($event.target)?.value, 'status', 'contains')" 
+        [value]="$any(userProfile.filters['status'])?.value" placeholder="Search" class="w-100 p-column-filter">
+      </th>   
+      <th style="width:12rem" >
+          <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'createdBy', 'contains')" 
+          [value]="$any(userProfile.filters['createdBy'])?.value" placeholder="Search" class="w-100 p-column-filter">
+        </th>  
+         <th style="width:12rem" >
+          <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+          [value]="$any(userProfile.filters['createdOn'])?.value" placeholder="Search" class="w-100 p-column-filter">
+        </th>
+    </tr>
+  </ng-template>
+
+    <ng-template pTemplate="body" let-product>
+      <tr>
+  
+      <td style="width:9rem" >{{product.customerId}}</td>
+      <td style="width:12rem" >{{product.customerName}}</td>
+      <td style="width:10rem" >{{product.customerCategory}}</td>
+      <td style="width:11rem" >{{product.phoneNo}}</td>
+      <td style="width:9rem" >{{product.status}}</td>
+      <td style="width:12rem" >{{product.createdBy}}</td>
+      <td style="width:12rem" >{{product.createdOn | date: 'dd-MM-YYYY'}}</td>
+    </tr>
+  </ng-template>
+    <ng-template pTemplate="emptymessage">
+  <tr>
+      <td class="w-100">No data found.</td>
+  </tr>
+</ng-template>
+</p-table>
+
+  <!-- consignment new-->
+  <p-table  #consignmentNew [globalFilterFields]="['orderId','customerId','originDetailsAddressLine1','destinationDetailsAddressLine1', 'deliveryCharge','createdOn', 'status']" selectionMode="single" [value]="consignmentNew1"
+  styleClass="p-datatable-gridlines p-datatable-responsive-demo p-datatable-sm" [scrollable]="true" scrollDirection="both"   selectionMode="single" [(selection)]="selectedconsignmentNew1"
+  scrollHeight="calc(100vh - 13.2rem)" [paginator]="false" [rows]="10" [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+  [resizableColumns]="true" *ngIf="consignmentTable">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:9rem"  pResizableColumn>Order ID
+        
+      </th>
+     <th style="width:10rem"  pResizableColumn>Customer ID
+        
+     </th>
+      
+      <th style="width:11rem"  pResizableColumn>Origin Address
+          
+        </th>
+        
+      <th style="width:9rem"  pResizableColumn>Destination Address
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Details
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Delivery Charge
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Order Date
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Status
+          
+        </th>
+    </tr>
+
+    <tr>
+      <th style="width:9rem" >
+          <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'orderId', 'contains')" 
+          [value]="$any(consignmentNew.filters['orderId'])?.value" placeholder="Order ID" class=" w-100 p-column-filter">
+      </th>
+      <th style="width:10rem" >
+        <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'customerId', 'contains')" 
+        [value]="$any(consignmentNew.filters['customerId'])?.value" placeholder="Customer ID" class="w-100 p-column-filter">
+      </th>
+      <th style="width:11rem" >
+        <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'originDetailsAddressLine1', 'contains')" 
+        [value]="$any(consignmentNew.filters['originDetailsAddressLine1'])?.value" placeholder="Origin Address" class="w-100 p-column-filter">
+      </th>
+      <th style="width:9rem" >
+        <input pInputText type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'destinationDetailsAddressLine1', 'contains')" 
+        [value]="$any(consignmentNew.filters['destinationDetailsAddressLine1'])?.value" placeholder="Destination Address" class="w-100 p-column-filter">
+      </th>   
+      <th style="width:12rem" >
+          <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'password', 'contains')" 
+          [value]="$any(consignmentNew.filters['password'])?.value" placeholder="Search" class="w-100 p-column-filter">
+        </th>  
+         <th style="width:12rem" >
+          <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'deliveryCharge', 'contains')" 
+          [value]="$any(consignmentNew.filters['deliveryCharge'])?.value" placeholder="Delivery Charge" class="w-100 p-column-filter">
+         </th>
+      <th style="width:12rem" >
+       <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+       [value]="$any(consignmentNew.filters['createdOn'])?.value" placeholder="Order Date" class="w-100 p-column-filter">
+     </th>
+     <th style="width:12rem" >
+      <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'status', 'contains')" 
+      [value]="$any(consignmentNew.filters['status'])?.value" placeholder="Status" class="w-100 p-column-filter">
+    </th>
+    
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <tr>
+      <td style="width:9rem" >{{product.orderId}}</td>
+      <td style="width:10rem" >{{product.customerId}}</td>
+      <td style="width:11rem" >{{product.originDetailsAddressLine1}}</td>
+      <td style="width:9rem" >{{product.destinationDetailsAddressLine1}}</td>
+      <td style="width:12rem"><i type="button" class="fas fa-external-link-alt" (click)="openLines(product)"></i></td>
+      <td style="width:12rem" >{{product.deliveryCharge | currency: 'KWD'}}</td>
+      <td style="width:12rem" >{{product.createdOn | date: 'dd-MM-YYYY' }}</td>
+      <td style="width:12rem" >{{product.status}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+        <td class="w-100">No data found.</td>
+    </tr>
+</ng-template>
+</p-table>  
+
+
+  <!-- consignment history-->
+  <p-table  #consignmentHistory [globalFilterFields]="['orderId','customerId','originDetailsAddressLine1','destinationDetailsAddressLine1', 'deliveryCharge','createdOn', 'status','loyaltyPoint']" selectionMode="single" [value]="consignmentHistory1"
+  styleClass="p-datatable-gridlines p-datatable-responsive-demo p-datatable-sm" [scrollable]="true" scrollDirection="both"   selectionMode="single" [(selection)]="selectedconsignmentHistory1"
+  scrollHeight="calc(100vh - 13.2rem)" [paginator]="false" [rows]="10" [showCurrentPageReport]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+  [resizableColumns]="true" *ngIf="congignmentNewTable">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width:9rem"  pResizableColumn>Order ID
+              
+      </th>   <th style="width:9rem"  pResizableColumn>Customer ID 
+        
+      </th>
+     <!-- <th style="width:10rem"  pResizableColumn>Customer Name
+        
+      </th>-->
+      
+      <th style="width:11rem"  pResizableColumn>Origin Address
+          
+        </th>
+        
+      <th style="width:9rem"  pResizableColumn>Destination Address
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Details
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Delivery Charge
+          
+        </th>
+      <!--  <th style="width:12rem"  pResizableColumn>No of Items
+          
+        </th>-->
+        <th style="width:12rem"  pResizableColumn>Order Date
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Status
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Loyality Point
+          
+        </th>
+        <th style="width:12rem"  pResizableColumn>Credit Amount
+          
+        </th>
+    </tr>
+
+    <tr>
+      <th style="width:9rem" >
+        <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'orderId', 'contains')" 
+        [value]="$any(consignmentHistory.filters['orderId'])?.value" placeholder="Order ID" class=" w-100 p-column-filter">
+    </th>
+    <th style="width:9rem" >
+        <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'customerId', 'contains')" 
+        [value]="$any(consignmentHistory.filters['customerId'])?.value" placeholder="Customer ID" class=" w-100 p-column-filter">
+    </th>
+   <!-- <th style="width:10rem" >
+      <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'employeeName', 'contains')" 
+      [value]="$any(consignmentNew.filters['employeeName'])?.value" placeholder="Search" class="w-100 p-column-filter">
+    </th>-->
+    <th style="width:11rem" >
+      <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'originDetailsAddressLine1', 'contains')" 
+      [value]="$any(consignmentHistory.filters['originDetailsAddressLine1'])?.value" placeholder="Origin Address" class="w-100 p-column-filter">
+    </th>
+    <th style="width:9rem" >
+      <input pInputText type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'destinationDetailsAddressLine1', 'contains')" 
+      [value]="$any(consignmentHistory.filters['destinationDetailsAddressLine1'])?.value" placeholder="Destination Address" class="w-100 p-column-filter">
+    </th>   
+    <th style="width:12rem" >
+        <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'consignmentNew', 'contains')" 
+        [value]="$any(consignmentHistory.filters['consignmentNew'])?.value" placeholder="Search" class="w-100 p-column-filter">
+      </th>  
+       <th style="width:12rem" >
+        <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'deliveryCharge', 'contains')" 
+        [value]="$any(consignmentHistory.filters['deliveryCharge'])?.value" placeholder="Delivery Charge" class="w-100 p-column-filter">
+      </th>
+     <!-- <th style="width:12rem" >
+       <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType1', 'contains')" 
+       [value]="$any(consignmentNew.filters['accessType1'])?.value" placeholder="Search" class="w-100 p-column-filter">
+     </th>-->
+     <th style="width:12rem" >
+      <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'accessType2', 'contains')" 
+      [value]="$any(consignmentHistory.filters['accessType2'])?.value" placeholder="Search" class="w-100 p-column-filter">
+    </th>
+    <th style="width:12rem" >
+     <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'status', 'contains')" 
+     [value]="$any(consignmentHistory.filters['status'])?.value" placeholder="Status" class="w-100 p-column-filter">
+   </th>
+   <th style="width:12rem" >
+    <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'loyaltyPoint', 'contains')" 
+    [value]="$any(consignmentHistory.filters['loyaltyPoint'])?.value" placeholder="Loyality Point" class="w-100 p-column-filter">
+  </th>
+  <th style="width:12rem" >
+   <input pInputText  type="text" (input)="consignmentHistory.filter($any($event.target)?.value, 'accessType5', 'contains')" 
+   [value]="$any(consignmentHistory.filters['accessType5'])?.value" placeholder="Credit Amount" class="w-100 p-column-filter">
+ </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product let-expanded="expanded">
+    <tr>
+      <td style="width:9rem" >{{product.orderId}}</td>
+      <td style="width:9rem" >{{product.customerId}}</td>
+    <!--  <td style="width:10rem" >{{product.employeeName}}</td>-->
+      <td style="width:11rem" >{{product.originDetailsAddressLine1}}</td>
+      <td style="width:9rem" >{{product.destinationDetailsAddressLine1}}</td>
+      <td style="width:12rem"><i type="button" class="fas fa-external-link-alt" (click)="openLines(product)"></i></td>
+      <td style="width:12rem" >{{product.deliveryCharge | currency: 'KWD'}}</td>
+      <!--<td style="width:12rem" >{{product.accessType1}}</td>-->
+      <td style="width:12rem" >{{product.createdOn |  date: 'dd-MM-YYYY'}}</td>
+      <td style="width:12rem" >{{product.status}}</td>
+      <td style="width:12rem" >{{product.loyaltyPoint}}</td>
+      <td style="width:12rem" >{{product.accessType5 | currency: 'KWD'}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+        <td class="w-100">No data found.</td>
+    </tr>
+</ng-template>
+</p-table> 
+</div>

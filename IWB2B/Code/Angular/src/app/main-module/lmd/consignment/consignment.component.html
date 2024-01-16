@@ -1,0 +1,392 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">LMD</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Consignment</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-lmd-tab></app-lmd-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  <div class="d-flex justify-content-end ml-3">
+    <div class=" bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+          <div class="btn-group mr-2">
+            <button class="btn btn-outline-danger btn-sm d-flex align-items-center" type="button">
+              <mat-icon class="mr-1">close</mat-icon>Cancel
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li type="button" (click)="uploadcancel()"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+                  <mat-icon class="mr-2">checklist</mat-icon>Upload Excel For Bulk Update
+                </a></li>  
+                <li type="button" (click)="print('Print')"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">print</mat-icon>Scan For Bulk Update
+                </a></li>
+            </ul>
+          </div>
+          <div class="btn-group mr-2">
+            <button class="btn btn-outline-warning btn-sm d-flex align-items-center" type="button">
+              <mat-icon class="mr-1">tune</mat-icon>Actions
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+                  <mat-icon class="mr-2">document_scanner</mat-icon>Outscan
+                </a></li>  
+                <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">checklist</mat-icon>Bulk Outscan
+                </a></li>
+                <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">upload</mat-icon>Upload Excel for Bulk Outscan
+                </a></li>
+            </ul>
+          </div>
+          <button class="btn mr-2 btn-outline-pink btn-sm d-flex align-items-center" type="button">
+            <mat-icon class="mr-1">done</mat-icon>Mark NPR
+          </button>
+          <div class="btn-group mr-2">
+            <button class="btn btn-outline-primary btn-sm d-flex align-items-center" type="button">
+              <mat-icon class="mr-1">print</mat-icon>Arrival
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-primary  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+                  <mat-icon class="mr-2">arrow_forward</mat-icon>Arrival
+                </a></li>  
+                <li type="button" (click)="bulkArrival()"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">checklist</mat-icon>Bulk Arrival
+                </a></li>
+                <li type="button" (click)="uploadArrival()"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">upload</mat-icon>Upload Excel for Bulk Arrival
+                </a></li>
+            </ul>
+          </div>
+          <div class="btn-group mr-2">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button">
+              <mat-icon class="mr-1">keyboard_double_arrow_right</mat-icon>Inscan at Hub
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+                  <mat-icon class="mr-2">document_scanner</mat-icon>Inscan
+                </a></li>  
+                <li type="button" (click)="bulkInscan();"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">checklist</mat-icon>Bulk Inscan
+                </a></li>
+                <li type="button" (click)="uploadInscan();"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">upload</mat-icon>Upload Excel for Bulk Inscan
+                </a></li>
+            </ul>
+          </div>
+          <div class="btn-group mr-2">
+            <button class="btn btn-outline-info btn-sm d-flex align-items-center" type="button">
+              <mat-icon class="mr-1">keyboard_double_arrow_left</mat-icon>Destination Outscan
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-info  dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu py-3 px-2">
+              <li ><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+                  <mat-icon class="mr-2">document_scanner</mat-icon>Outscan
+                </a></li>  
+                <li type="button" (click)="bulkOutScan()"> <a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">checklist</mat-icon>Bulk Outscan
+                </a></li>
+                <li type="button" (click)="uploadExcel()"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+                  <mat-icon class="mr-2">upload</mat-icon>Upload Excel for Bulk Outscan
+                </a></li>
+            </ul>
+          </div>
+      <div class="btn-group mr-2">
+        <button type="button" class="btn btn-outline-success dropdown-toggle btn-sm d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+          <mat-icon class="mr-1">add</mat-icon>New
+        </button>
+        <ul class="dropdown-menu">
+          <li type="button" (click)="newConsignment();"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+            <mat-icon class="mr-2">upload</mat-icon>Upload
+          </a></li>
+          <!-- <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+            <mat-icon class="mr-2">description</mat-icon>Download Sample CSV
+          </a></li> -->
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+            <mat-icon class="mr-2">download</mat-icon>Download Consignment
+          </a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-outline-warning btn-sm d-flex align-items-center" type="button">
+          <mat-icon class="mr-1">print</mat-icon>Print
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li type="button" (click)="print('Bulk')"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1">
+              <mat-icon class="mr-2">checklist</mat-icon>Bulk Print Label
+            </a></li>  
+            <li type="button" (click)="print('Print')"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+              <mat-icon class="mr-2">print</mat-icon>Print Label
+            </a></li>
+            <li type="button" (click)="print('Upload')"><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" >
+              <mat-icon class="mr-2">upload</mat-icon>Upload Excel for Bulk Print
+            </a></li>
+        </ul>
+      </div>
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+  </div>
+    <div class=" bg-white">
+      <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+        scrollHeight="calc(100vh - 17.5rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+  
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:4rem;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Consignment
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Customer Ref No
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:14rem;" pResizableColumn>Consignment Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Movement Type	
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Sender's Name And Address
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Sender Pincode
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:15rem;" pResizableColumn>Recipient Name
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:14rem;" pResizableColumn>Recipient Address
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Destination Pincode
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+  
+            <th style="width:12rem;" pResizableColumn>Status
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+  
+            <th style="width:12rem;" pResizableColumn>Hub Code	
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Last Updated
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Pickup Submission
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>            
+            <th style="width:12rem;" pResizableColumn>Ageing
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>            
+            <th style="width:12rem;" pResizableColumn>Notes
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>          
+            <th style="width:12rem;" pResizableColumn>Weight
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>     
+            <th style="width:12rem;" pResizableColumn>Dimensions L x B x H (cms)
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>COD Amount
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Customer
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>	Volumetric Weight
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>		NPR Reason
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>	NPR Source
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="width:4rem;"></th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+            </th>
+            <th style="width:14rem;">
+              <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType2"></p-columnFilter>
+            </th>
+            <th style="width:15rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType4"></p-columnFilter>
+            </th>
+            <th style="width:14rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType3"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="accessType"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="alerts"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs2"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field2"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field3"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field4"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field5"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field6"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field7"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field8"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field9"></p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:4rem;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="width:12rem;">{{product.organization}}</td>
+            <td style="width:12rem;">{{product.apiSubs}}</td>
+            <td style="width:14rem;">{{product.partnerType}}</td>
+            <td style="width:10rem;">{{product.systemType}}</td>
+            <td style="width:12rem;">{{product.systemType1}}</td>
+            <td style="width:12rem;">{{product.systemType4}} </td>
+            <td style="width:15rem;">{{product.systemType2}}</td>
+            <td style="width:14rem;">{{product.systemType3}}</td>
+            <td style="width:10rem;">{{product.accessType}}</td>
+            <td style="width:12rem;">{{product.alerts}}</td>
+            <td style="width:12rem;">{{product.activehrs}}</td>
+            <td style="width:12rem;">{{product.activehrs1}}</td>
+            <td style="width:12rem;">{{product.activehrs2}}</td>
+            <td style="width:12rem;">{{product.field1}}</td>
+            <td style="width:12rem;">{{product.field2}}</td>
+            <td style="width:12rem;">{{product.field3}}</td>
+            <td style="width:12rem;">{{product.field4}}</td>
+            <td style="width:12rem;">{{product.field5}}</td>
+            <td style="width:12rem;">{{product.field6}}</td>
+            <td style="width:12rem;">{{product.field7}}</td>
+            <td style="width:12rem;">{{product.field8}}</td>
+            <td style="width:12rem;">{{product.field9}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

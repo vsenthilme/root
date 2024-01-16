@@ -1,0 +1,52 @@
+
+
+<p-toast [style]="{'width': '25%'}" position="bottom-right" key="br"></p-toast>
+
+
+
+
+
+
+
+<div class="container vw-100 vh-100 mw-100 px-0" style="background-color: #003F5E;">
+  <!--<img src=".\assets\img\icons\logo.png" class="img-fluid logo" alt="" srcset="">-->
+  <div class="d-flex justify-content-center align-items-center" style="height: 46vh;background-color: #f0f0f0;">
+  </div>
+
+  
+ <form class="d-flex justify-content-center flex-column align-items-center " [formGroup]="lgForm" (ngSubmit)="login()" >
+  <div class="login-body  shadow" style="background-color: #ffffff; position: absolute; top: 27%;">
+    <form [formGroup]="lgForm" (ngSubmit)="login()">
+    <div id="login-wrapper">
+      <!-- <img src="assets/layout/images/login-logo.png" alt="omega-layout"> -->
+      <img src="./assets/Img/IW Express.png" class="img-fluid mt-2" alt="" style="width: 18rem;" srcset="">
+      <div id="login-container">
+        <div class="row">
+          <div class="col-12 my-3">
+            <input type="text" autocomplete="off" placeholder="Username" formControlName="userName" 
+              class="p-inputtext p-component p-element w-100">
+            </div>
+            <div class="col-12 mb-3">
+            <input type="password" formControlName="password"  autocomplete="off"  placeholder="Password"
+              class="p-inputtext p-component p-element w-100">
+            </div>
+          <div class="col-lg-6  mb-3">
+            <p-checkbox class="p-element pr-2">
+              <div class="p-checkbox p-component">
+                <div class="p-hidden-accessible"><input type="checkbox" value="undefined" aria-checked="false"></div>
+                <div class="p-checkbox-box"><span class="p-checkbox-icon"></span></div>
+              </div>
+            </p-checkbox><span class="remember-me">Remember Me</span>
+          </div>
+          <div class="col-lg-6 mb-3 "><a href="#" class="text-primary">Forgot Password</a></div>
+          <div class="col-12">
+            <p-button  type="Submit" label="Sign In" icon="pi pi-user" class="p-element w-100" tabindex="0"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+  </form> 
+
+</div>

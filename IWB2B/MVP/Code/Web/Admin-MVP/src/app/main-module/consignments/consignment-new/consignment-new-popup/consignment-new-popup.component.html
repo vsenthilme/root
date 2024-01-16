@@ -1,0 +1,333 @@
+
+<div class="row mt-2">
+  <div class="d-flex justify-content-between mt-2">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item fontb"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Consignment New</li>
+      </ol>
+    </nav>
+    <div class="btn-group">
+      <button class="btn disabled btn-outline-warning btn-sm d-flex align-items-center" type="button">
+        <mat-icon>add</mat-icon>New
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="visually-hidden">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu py-3 px-2">
+        <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+            <mat-icon class="mr-3">edit</mat-icon>Edit
+          </a></li>
+        <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+            <mat-icon class="mr-3">search</mat-icon>Display
+          </a></li>
+        <li><a class="dropdown-item  d-flex align-items-center text-muted my-1">
+            <mat-icon class="mr-3">delete</mat-icon>Delete
+          </a></li>
+        <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+            <mat-icon class="mr-3">download</mat-icon>Download
+          </a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="card bg-white mt-2" style="overflow-x: hidden;">
+    <mat-accordion>
+      <form [formGroup]="form">
+              <mat-expansion-panel #panel12 [expanded]="step === 0" (opened)="setStep(0)"   hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title
+            class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+            General
+            <mat-icon class="text-secondary">{{panel12.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row text-secondary fw-bold desc  p-1">
+          
+          <div class="col-lg-3 col-md-6 mt-1" *ngIf="this.js.pageflow != 'New'">
+            <p class="mb-0 py-0">Order ID</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="orderId">
+            </mat-form-field>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Load Type</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select class="mb-0" placeholder="Select"  formControlName="loadType">
+                <mat-option value="Document">Document</mat-option>
+                <mat-option value="Non Document">Non Document</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1"> 
+            <p class="mb-0 py-0">Customer Name</p>
+            <!-- <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="dropdown">
+            </mat-form-field> -->
+            <p-dropdown [filter]="true" placeholder="Select"  class="w-100 my-1 mb-2"
+            [options]="multiCustomerList" formControlName="customerId" [style]="{'width': '100%'}"
+            [panelStyle]="{'width':'20%'}"></p-dropdown>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1" *ngIf="this.js.pageflow != 'New'"> 
+            <p class="mb-0 py-0">Reference No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="referenceNo">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Status</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="status">
+            </mat-form-field>
+          </div>
+        </div>
+        </mat-expansion-panel>
+      <mat-expansion-panel #panel hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title
+            class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+            Origin
+            <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row text-secondary fw-bold desc  p-1">
+         
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Customer Name</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originDetailsName">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Address</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originDetailsAddressLine1">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">State</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originState">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Country</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originCountry">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Zip Code</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originDetailsPincode">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Phone No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="originDetailsPhone">
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel1  hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title
+            class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+            Destination
+            <mat-icon class="text-secondary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row text-secondary fw-bold desc  p-1">
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Customer Name</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationDetailsName">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Address</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationDetailsAddressLine1">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">State</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationState">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Country</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationCountry">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Zip Code</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationDetailsPincode">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-1">
+            <p class="mb-0 py-0">Phone No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="destinationDetailsPhone">
+            </mat-form-field>
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+      </form>
+      <form [formGroup]="orderLines">
+      <mat-expansion-panel #panel5 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title
+            class="d-flex justify-content-between collapsefont text-secondary fw-bold align-items-center">
+            Commodity Details
+            <mat-icon class="text-secondary">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class=" p-1 text-secondary fw-bold  mt-2">
+          <div class="d-flex justify-content-end mb-2">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" type="button" (click)="addNewRow()">
+              <mat-icon>add</mat-icon>Add
+            </button>
+          </div>
+      
+      
+          <div class="scroll w-100">
+            <table class="table  table-bordered">
+              <thead>
+                <tr>
+                  <th >Description </th>
+                  <th >No of Items </th>
+                  <th >Length  </th>
+                  <th >Width </th>
+                  <th >Height </th>
+                  <th >Weight</th>
+                  <th >Weight UOM</th>
+                  <th >Dimension UOM </th>
+                  <th scope="col" style="width: 0px;">Delete </th>
+                </tr>
+              </thead>
+              <tbody formArrayName="Rows">
+                <tr *ngFor="let entity of orderLines.get('Rows')?.['controls'];
+                let i = index;
+                let l = last" [formGroupName]="i">
+                <td style="width:10rem"><input type="text" pInputText formControlName="commodityName"/></td>
+                <td style="width:11rem"> <input type="text" pInputText formControlName="noOfPieces"/></td>
+                <td style="width:10rem"><input type="text" pInputText formControlName="length"/></td>
+                <td style="width:12rem"><input type="text" pInputText formControlName="width"/></td>
+                <td style="width:12rem"><input type="text" pInputText formControlName="height"/></td>
+                <td style="width:12rem"><input type="text" pInputText formControlName="weight"/></td>
+                <td style="width:12rem"><input type="text" pInputText formControlName="weightUnit"/></td>
+                <td style="width:12rem"><input type="text" pInputText formControlName="dimensionUnit"/></td>
+                <td class="w-20">
+                  <button mat-icon-button (click)="removerow(i)">
+                    <mat-icon class="text-danger">delete_outline</mat-icon>
+                  </button>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      </form>
+      <form [formGroup]="form">
+        <mat-expansion-panel #panel123  hideToggle *ngIf="this.js.pageflow != 'New'">
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title
+              class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+              Loyalty
+              <mat-icon class="text-secondary">{{panel123.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row text-secondary fw-bold desc  p-1">
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Loyalty Point</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="loyaltyPoint">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Loyalty Amount</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="loyaltyAmount">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </form>
+      <form [formGroup]="form">
+      <mat-expansion-panel #panel2 hideToggle *ngIf="this.js.pageflow != 'New'">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title
+            class="d-flex justify-content-between collapsefont text-secondary fw-bold align-items-center">
+            Admin
+            <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row p-1 text-secondary fw-bold px-3  mt-2">
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="AP-Editable" formControlName="createdBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="AP-Editable" formControlName="createdOn">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="AP-Editable" formControlName="updatedBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="AP-Editable" formControlName="updatedOn">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <div class="row">
+        <div class="col-lg-2 col-md-2 my-auto">
+          <button mat-flat-button class="mx-2 saveColor px-4" (click)="calculate()">Calculate</button>
+        </div>
+        <div class="col-lg-3 col-md-6 mt-1">
+          <p class="mb-0 py-0">Delivery Charge</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput currencyMask placeholder="Enter" formControlName="deliveryCharge">
+          </mat-form-field>
+        </div>
+      </div>
+      </form>
+    </mat-accordion>
+    <div class="d-flex justify-content-center border-top align-items-center py-2">
+      <button mat-flat-button mat-dialog-close class="mx-2 cancelcolor" routerLink="/main/consignment/consignmentNew"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-flat-button class="mx-2 saveColor px-4" (click)="save()"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>{{btnText}}</button>
+      <!-- <button mat-flat-button class="saveColor" type="button" disabled>
+              <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+              Saving...
+            </button> -->
+    </div>
+
+  </div>
+</div>

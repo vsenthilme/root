@@ -1,0 +1,133 @@
+<div class="row mt-2">
+    <div class="d-flex justify-content-between mt-2">
+        <nav  aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item fontb"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Consignment New</li>
+            </ol>
+          </nav>
+          <div class="btn-group">
+              <button class="btn btn-outline-warning btn-sm d-flex align-items-center"  type="button" routerLink="/main/consignment/consignmentCreate">
+                <mat-icon>add</mat-icon>New
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu py-3 px-2">
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+                    <mat-icon class="mr-3">edit</mat-icon>Edit
+                  </a></li>
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+                    <mat-icon class="mr-3">search</mat-icon>Display
+                  </a></li>
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" (click)="delete()">
+                    <mat-icon class="mr-3">delete</mat-icon>Delete
+                  </a></li>
+                <li><a class="dropdown-item  d-flex align-items-center text-muted my-1" href="#">
+                    <mat-icon class="mr-3">download</mat-icon>Download
+                  </a></li>
+              </ul>
+            </div>
+    </div>
+    <div>
+    <div class="bg-white mt-2">
+        <p-table  #consignmentNew [globalFilterFields]="['userName', 'profileType', 'partner']" selectionMode="single" [value]="consignmentNew1"
+        styleClass="p-datatable-gridlines p-datatable-responsive-demo p-datatable-sm" [scrollable]="true" scrollDirection="both"   selectionMode="single" [(selection)]="selectedconsignmentNew1"
+        scrollHeight="calc(100vh - 10.2rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true" >
+        <ng-template pTemplate="header">
+          <tr >
+            <th style="width:9rem"  pResizableColumn>Order ID
+              
+            </th>
+            <th style="width:10rem"  pResizableColumn>Customer Name
+              
+            </th>
+            
+            <th style="width:11rem"  pResizableColumn>Origin Address
+                
+              </th>
+              
+            <th style="width:10rem"  pResizableColumn>Destination Address
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Details
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Delivery Charge
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>No of Items
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Order Date
+                
+              </th>
+              <th style="width:12rem"  pResizableColumn>Status
+                
+              </th>
+          </tr>
+      
+          <tr>
+            <th style="width:9rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'code', 'contains')" 
+                [value]="$any(consignmentNew.filters['code'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th style="width:10rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'employeeName', 'contains')" 
+              [value]="$any(consignmentNew.filters['employeeName'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:11rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'userName', 'contains')" 
+              [value]="$any(consignmentNew.filters['userName'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:10rem" >
+              <input pInputText type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'password', 'contains')" 
+              [value]="$any(consignmentNew.filters['password'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>   
+            <th style="width:12rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'consignmentNew', 'contains')" 
+                [value]="$any(consignmentNew.filters['consignmentNew'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>  
+               <th style="width:12rem" >
+                <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType', 'contains')" 
+                [value]="$any(consignmentNew.filters['accessType'])?.value" placeholder="Search" class="w-100 p-column-filter">
+              </th>
+              <th style="width:12rem" >
+               <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType1', 'contains')" 
+               [value]="$any(consignmentNew.filters['accessType1'])?.value" placeholder="Search" class="w-100 p-column-filter">
+             </th>
+             <th style="width:12rem" >
+              <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType2', 'contains')" 
+              [value]="$any(consignmentNew.filters['accessType2'])?.value" placeholder="Search" class="w-100 p-column-filter">
+            </th>
+            <th style="width:12rem" >
+             <input pInputText  type="text" (input)="consignmentNew.filter($any($event.target)?.value, 'accessType3', 'contains')" 
+             [value]="$any(consignmentNew.filters['accessType3'])?.value" placeholder="Search" class="w-100 p-column-filter">
+           </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:9rem" >{{product.code}}</td>
+            <td style="width:10rem" >{{product.employeeName}}</td>
+            <td style="width:11rem" >{{product.userName}}</td>
+            <td style="width:10rem" >{{product.password}}</td>
+            <td style="width:12rem" >{{product.userProfile}}</td>
+            <td style="width:12rem" >{{product.accessType | currency: 'KWD'}}</td>
+            <td style="width:12rem" >{{product.accessType1}}</td>
+            <td style="width:12rem" >{{product.accessType2}}</td>
+            <td style="width:12rem" >{{product.accessType3}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+              <td class="w-100">No data found.</td>
+          </tr>
+      </ng-template>
+      </p-table> 
+    </div>
+    </div>
+    </div>

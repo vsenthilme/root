@@ -1,0 +1,157 @@
+<div class="container  vw-100  mw-100  mx-0 px-0">
+  <div class="col px-0">
+    <div class="d-flex justify-content-between text-white whs-header-height  pr-2">
+      <div class="d-flex justify-content-center align-items-center">
+        <img src="./assets/Img/headerlogo.png" class="img-fluid ml-3" alt="" srcset="">
+      </div>
+      <div class="d-flex flex-row-reverse pr-3">
+        <div class="my-auto ml-1">
+          <button mat-icon-button class="mr-2 ml-1 " [matMenuTriggerFor]="menu7">
+            <mat-icon class="textblue sidebar_icon hvr-bounce-in" style="font-size:27px">account_circle</mat-icon>
+          </button>
+        </div>
+        <mat-menu #menu7="matMenu" class="logout">
+          <button mat-menu-item class=" dropdown_fields" (click)="logout()"><i
+              class="fas fa-power-off mx-2 font_1-5 mb-0 pb-0 my-auto"></i>Logout</button>
+        </mat-menu>
+        
+        <!-- <div class="my-auto ml-2">
+          <button mat-icon-button class="headericon">
+            <mat-icon class="textblue sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="Notification">notifications</mat-icon>
+          </button>
+        </div> -->
+        <div class="d-flex flex-column justify-content-center mt-2 username ml-2">
+          <h6 class="mb-0 text-center fw-bold textblue" style="font-size: 0.9rem;">ADMIN </h6>
+          <p class="mb-1 textblue text-center"><small> {{currentdate | date:'dd-MM-yyyy HH:mm:ss'}}</small>
+          </p>
+        </div>
+        </div>
+      </div>
+
+<!-- <div class="bgblue text-white" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+  <nav aria-label="breadcrumb" class="d-flex align-items-center">
+    <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+      <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto">Home</li>
+      <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Outbound</li>
+      <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto">Delivery</li>
+    </ol>
+  </nav>
+</div> -->
+
+  </div>
+  <div class=" no-gutters" style="height:calc(100vh - 4rem);">
+    <!--Sidebar-->
+
+    <mat-sidenav-container class="example-container col ml-0" autosize> <!-- [ngClass]="{'navwhite' : toggle, 'navgrey': !toggle}"-->
+      <mat-sidenav #sidenav class="example-sidenav" mode="side"
+        opened="true" style="overflow-y: hidden !important;" >
+        <mat-nav-list class="">
+          <mat-list-item  class=" parent text-white  hvr-sweep-to-right " routerLink="/main/dashboard" *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3   d-flex align-items-center" *ngIf="isExpanded || isShowing">Home</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px" matTooltip="Home"
+              [matTooltipDisabled]="isExpanded || isShowing" matTooltipPosition="right">home</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item  class=" parent  hvr-sweep-to-right text-white"  routerLink="/main/admin/userprofile"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Admin</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px" matTooltip="settings"
+              [matTooltipDisabled]="isExpanded || isShowing" matTooltipPosition="right">settings</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item  class=" parent  hvr-sweep-to-right text-white"  routerLink="/main/system/createnewsystem"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">System Segment</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px" matTooltip="System Segment"
+              matTooltipPosition="right" [matTooltipDisabled]="isExpanded || isShowing">key</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item class=" parent  hvr-sweep-to-right text-white" routerLink="/main/partner/createPartner"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Partner Segment</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px" matTooltip="Partner Segment"
+              matTooltipPosition="right" [matTooltipDisabled]="isExpanded || isShowing">login</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item  class=" parent  hvr-sweep-to-right text-white" routerLink="/main/montoring/apiconsole"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Monitoring Section</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="Monitoring Section" matTooltipPosition="right" [matTooltipDisabled]="isExpanded || isShowing">
+              sync_alt</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item  class=" parent  hvr-sweep-to-right text-white"  routerLink="/main/analytical/archivesLog"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Analytics Dashboard</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px" matTooltip="Analytics Dashboard"
+              matTooltipPosition="right" [matTooltipDisabled]="isExpanded || isShowing">logout</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item class=" parent  hvr-sweep-to-right text-white" routerLink="/main/lmd/delivery"  *ngIf="usertype != 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">LMD</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="LMD Activity" matTooltipPosition="right"
+              [matTooltipDisabled]="isExpanded || isShowing">local_shipping</mat-icon>
+          </mat-list-item>
+
+          
+          <mat-list-item class=" parent  hvr-sweep-to-right text-white"  routerLink="/main/dashboard"    *ngIf="usertype == 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Home</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="JNT Orders" matTooltipPosition="right"
+              [matTooltipDisabled]="isExpanded || isShowing">home</mat-icon>
+          </mat-list-item>
+
+          <mat-list-item class=" parent1  hvr-sweep-to-right text-white"  routerLink="/main/settings/userProfile"    *ngIf="usertype == 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Settings</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="JNT Orders" matTooltipPosition="right"
+              [matTooltipDisabled]="isExpanded || isShowing">settings</mat-icon>
+          </mat-list-item>
+
+
+          <mat-list-item class="  parent  hvr-sweep-to-right text-white" routerLink="/main/jntOrders/jntOrdersList"  *ngIf="usertype == 2">
+            <i class="fas fa-boxes sidebar_icon hvr-bounce-in ml-1"  style="font-size:25px"></i>  <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Consignment</span>
+            <!-- <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="JNT Orders" matTooltipPosition="right"
+              [matTooltipDisabled]="isExpanded || isShowing">box</mat-icon> -->
+    
+          </mat-list-item>
+
+
+          <mat-list-item class="  parent  hvr-sweep-to-right text-white"  [matMenuTriggerFor]="setup"  *ngIf="usertype == 2">
+            <span class="full-width pt-2 ml-3 " *ngIf="isExpanded || isShowing">Report</span>
+            <mat-icon mat-list-icon class=" sidebar_icon hvr-bounce-in" style="font-size:27px"
+              matTooltip="JNT Orders" matTooltipPosition="right"
+              [matTooltipDisabled]="isExpanded || isShowing">description</mat-icon>
+              <mat-icon class="menu-button mx-2 pt-1 my-auto" *ngIf="isExpanded || isShowing" >
+                expand_more</mat-icon> 
+          </mat-list-item>
+
+        </mat-nav-list>
+
+      </mat-sidenav>
+      <div class="example-sidenav-content">
+
+        <div class="col px-0" >
+
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-container>
+  </div>
+  
+</div>
+
+
+
+
+
+
+<mat-menu class="nav-item" #setup="matMenu" class="custom-class2" style="padding-bottom: 5px !important;">
+  <button mat-menu-item  class=" dropdown_fields"  routerLink="/main/report/jntReport"><i
+      class="fas fa-angle-double-right sidebar_icon " style="font-size:18px; margin-right: 16px;"></i>JNT </button>
+  <button mat-menu-item  class="dropdown_fields"   routerLink="/main/report/boutiqaatReport"><i
+      class="fas fa-angle-double-right sidebar_icon " style="font-size:22px; margin-right: 16px;"></i>Boutiqaat </button>
+      <button mat-menu-item  class="dropdown_fields"   routerLink="/main/report/iwint"><i
+        class="fas fa-angle-double-right sidebar_icon " style="font-size:22px; margin-right: 16px;"></i>IWINTL </button>
+      <button mat-menu-item  class="dropdown_fields"   routerLink="/main/report/tracking"><i
+          class="fas fa-angle-double-right sidebar_icon " style="font-size:22px; margin-right: 16px;"></i>Tracking </button>
+</mat-menu>

@@ -1,0 +1,147 @@
+
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex  border-botton align-items-center text-secondary fontBold text-center p-2">
+      <h6 class="my-auto mx-auto">Consignment Details</h6>
+      <mat-icon class="text-secondary " mat-dialog-close>close</mat-icon>
+    </div>
+      <mat-accordion>
+        <mat-expansion-panel #panel2 [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+              Origin
+              <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row text-secondary fw-bold desc  p-1">
+     
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Customer ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originDetailsName">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Address</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originDetailsAddressLine1">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">State</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originState">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Country</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originCountry">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Zip Code</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originDetailsPincode">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Phone No</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.originDetailsPhone">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panel3 hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+              Destination
+              <mat-icon class="text-secondary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row text-secondary fw-bold desc  p-1">
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Customer ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationDetailsName">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Address</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationDetailsAddressLine1">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">State</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationState">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Country</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationCountry">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Zip Code</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationDetailsPincode">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-1">
+              <p class="mb-0 py-0">Phone No</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" [value]="this.data.destinationDetailsPhone">
+              </mat-form-field>
+            </div>
+  
+  
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panel  hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+              Lines
+              <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+      <div class="row text-secondary fw-bold desc  p-1">
+        <p-table #userProfile  [value]="orderLines"
+        styleClass="p-datatable-gridlines" [scrollable]="true"  
+        scrollHeight="calc(100vh - 32.2rem)" [paginator]="false" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th >Description </th>
+                <th >No of Items </th>
+              </tr>
+        </ng-template>
+    
+          <ng-template pTemplate="body" let-product>
+            <tr>
+            <td style="width:10rem">{{product.commodityName}}</td>
+            <td style="width:11rem">{{product.noOfPieces}}</td>
+          </tr>
+        </ng-template>
+          <ng-template pTemplate="emptymessage">
+        <tr>
+            <td class="w-100">No data found.</td>
+        </tr>
+    </ng-template>
+      </p-table>
+      </div>
+        </mat-expansion-panel>
+     
+      </mat-accordion>
+      <div class="d-flex justify-content-center border-top align-items-center py-2">
+        <button mat-flat-button mat-dialog-close class="mx-2 cancelcolor"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      </div>
+
+
+  </div>
+

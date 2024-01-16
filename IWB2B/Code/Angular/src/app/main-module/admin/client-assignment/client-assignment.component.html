@@ -1,0 +1,122 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Admin</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Client Assignment</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-admin-tab></app-admin-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  
+    <div class="bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+      <div class="btn-group">
+        <button class="btn btn-outline-warning btn-sm d-flex align-items-center" (click)="new()" type="button">
+          <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">edit</mat-icon>Edit
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">search</mat-icon>Display
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">delete</mat-icon>Delete
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">download</mat-icon>Download
+            </a></li>
+        </ul>
+      </div>
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+    <div class=" bg-white">
+      <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts"
+        scrollHeight="calc(100vh - 17.5rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+  
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="max-width:4%;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+    
+            <th style="max-width:14%" pResizableColumn>Organisation
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="max-width:16%" pResizableColumn>API Subscription
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="max-width:16%" pResizableColumn>Partner Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="max-width:16%" pResizableColumn>System Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th pResizableColumn>Partner
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="max-width:4%;"></th>
+            <th style="max-width:14%">
+              <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+            </th>
+            <th style="max-width:16%">
+              <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+            </th>
+            <th style="max-width:16%">
+              <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+            </th>
+            <th style="max-width:16%">
+              <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" placeholder="Search" field="accessType"></p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="max-width:4%;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="max-width:14%">{{product.organization}}</td>
+            <td style="max-width:16%">{{product.apiSubs}}</td>
+            <td style="max-width:16%">{{product.partnerType}}</td>
+            <td style="max-width:16%">{{product.systemType}}</td>
+            <td>{{product.accessType}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

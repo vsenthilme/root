@@ -1,0 +1,26 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex  border-botton border-secondary align-items-center text-secondary fontBold text-center p-2">
+      <h6 class="my-auto mx-auto">Tracking </h6>
+      <mat-icon class="text-secondary " mat-dialog-close>close</mat-icon>
+    </div>
+<div class="row my-2">
+    <p-timeline [value]="events" align="alternate">
+        <ng-template pTemplate="marker" let-event>
+            <span class="custom-marker shadow-2" [style.backgroundColor]="event.color">
+                <i [ngClass]="event.icon"></i>
+            </span>
+        </ng-template>
+        <ng-template pTemplate="content" let-event>
+            <p-card [header]="event.status"  [subheader]="event.date" [style.backgroundColor]="event.color">
+                <!-- <img *ngIf="event.image" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + event.image" [alt]="event.name" width="200" class="shadow-2" /> -->
+                <!-- <p style=" font-size: 13px;
+                margin-bottom: 0px;
+                line-height: 17px;">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt</p> -->
+                <!-- <button pButton label="Read more" class="p-button-text"></button> -->
+            </p-card>
+        </ng-template>
+    </p-timeline>
+</div>
+</div>

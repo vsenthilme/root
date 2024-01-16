@@ -1,0 +1,105 @@
+newJNTRequest: 
+
+JNTRequest(customerCode=BOQ, digest=, serviceType=01, orderType=2, deliveryType=04, expressType=EZKSA, network=, length=10.0, sendStartTime=Tue May 23 22:05:31 IST 2023, weight=1.2, remark=test, billCode=, batchNumber=, txlogisticId=, goodsType=DOCUMENT, totalQuantity=10, receiver=Receiver(area=LF Logistics/Mohebi Logistics, Plot, address=house 61 Block 5, street 517, town=, street=, city=Kuwait, mobile=string, mailBox=, phone=string, countryCode=Kuwait, name=???? ??????, company=, postCode=91710, prov=string), sender=Sender(area=Mohebi Logistics; Plot WT01 & WT04, address=LF Logistics/Mohebi Logistics, Plot, town=, street=, city=Dubai, mobile=97101606811863, mailBox=, phone=, countryCode=UAE, name=?????? ????? , company=, postCode=8005, prov=DUBAI), itemsValue=100.0, priceCurrency=AED, width=1.2, offerFee=0.0, items=[Items(number=1, itemType=, itemName=Gift, priceCurrency=DHS, itemValue=100.0, itemUrl=, desc=Gift)], sendEndTime=Tue May 23 22:05:31 IST 2023, height=null, payType=, operateType=1.0, platformName=, customerAccount=, isUnpackEnabled=true)
+
+2023-05-23 22:05:31.989  INFO 9568 --- [nio-5003-exec-2] i.a.i.c.ConsignmentIntegrationController : 
+
+
+
+
+=====================================================================================
+
+http://www.jsons.cn/md5/ --> MD5
+
+IWE001
+Test123
+apiAccount : 528954563554705436
+privateKey: 2447c1cdf5f44ed3b347fbc301c622eb
+
+--------####################-----------Production------------############################----------
+ 客户名称Client's name: INNERWORKS
+Client's number : J0086003429 J0086003429
+Account password： HDb2mxQ7
+Encrypted Password: 4905961514711EE85EBB176C7D00987D
+
+Bz-Partner digest: 5TRtjiKgibGXq1p+esX0gQ==
+
+Official address:https://openapi.jtjms-sa.com/webopenplatformapi/api/order/addOrder
+
+ApiAccount:528954563554705436
+
+PrivateKey:2447c1cdf5f44ed3b347fbc301c622eb
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test API account: 292508153084379141
+Test private key: a0a1047cce70493c9d5d29704f05d0d9
+Test customer account & password: J0086024173  -----  Aa123456
+
+3B29A9C5728BF3E1DB0C4D66B79748B7
+
+approved API:
+https://demoopenapi.jtjms-sa.com/webopenplatformapi/api/order/addOrder?uuid=1e7a4527718d4413950bf818eb080e07
+
+Bz-Signature: digest:VdlpKaoq64AZ0yEsBkvt1A==
+
+VdlpKaoq64AZ0yEsBkvt1A==
+VdlpKaoq64AZ0yEsBkvt1A==
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Please see below and attached details for Integration,
+
+ 
+
+1.Please register on developer portal(https://developer.dhl.com/express ) where you can find all information,
+
+2.Please use https://express.api.dhl.com/mydhlapi/test/shipments endpoint for testing,Please see below login credentials for testing,
+
+ 
+
+User Name: innerworkspKW
+Password: I@4yZ@3gU^9jP^0i
+ 
+
+3.After you confirm all ok with testing, Please generate AWB & Invoice for us to check  so that we will move you to production(Auth) and end point will be https://express.api.dhl.com/mydhlapi/shipments
+
+Username: Innerworks
+Password: We1c@me$123
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Select AWB_3RD_PARTY from tblconsignment where REFERENCE_NUMBER='BOQ00219'; 
+ 
+select TYPE,HUB_CODE, EVENT_TIME from tblconsignmentwebhook where REFERENCE_NUMBER='BOQ00201' and HUB_CODE='JT' order by EVENT_TIME;
+ 
+select TYPE,HUB_CODE, EVENT_TIME from tblconsignmentwebhook where HUB_CODE='JT' and EVENT_TIME between '2023-07-23 00:00:00' and '2023-07-24 23:59:59' order by EVENT_TIME
+ 
+select distinct w.REFERENCE_NUMBER, c.AWB_3RD_PARTY, w.TYPE from tblconsignmentwebhook w join tblconsignment c on c.REFERENCE_NUMBER = w.REFERENCE_NUMBER where w.REFERENCE_NUMBER IN ('BOQ00219','BOQ00220','BOQ00237','BOQ00224','BOQ00305','BOQ00298') and w.HUB_CODE='JT';
+  
+ BOQ00219
+
+tblorigindetail
+select * from tblorigindetail where consignment_id = (Select consignment_id from tblconsignment where REFERENCE_NUMBER='BOQ01658');
+
+select ADDRESS_LINE_1, ADDRESS_LINE_2, CITY, STATE from tbldestinationdetail where consignment_id = (Select consignment_id from tblconsignment where REFERENCE_NUMBER='BOQ00828');
+
+select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = 'JT' GROUP BY tc.REFERENCE_NU	
+MBER 
+
+SELECT TOP 1 c.REFERENCE_NUMBER, c.CUSTOMER_REFERENCE_NUMBER, c.STATUS_DESCRIPTION, c.AWB_3RD_PARTY, c.CREATED_AT, c.IS_AWB_PRINTED, j.scan_type from tblconsignment c join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY where c.REFERENCE_NUMBER = 'BOQ00201' ORDER BY j.SCAN_TIME DESC
+
+SELECT TOP 1 c.REFERENCE_NUMBER, c.CUSTOMER_REFERENCE_NUMBER, 
+c.STATUS_DESCRIPTION, c.AWB_3RD_PARTY, 
+c.CREATED_AT, c.IS_AWB_PRINTED, 
+j.scan_type from tblconsignment c 
+join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY 
+where c.REFERENCE_NUMBER = :referenceNumber
+ORDER BY j.SCAN_TIME DESC
+
+SELECT TOP 1 jw.scan_type scanType \r\n"
+			+ "FROM tbljntwebhook jw WHERE JW.BILL_CODE = :billCode \r\n"
+			+ "ORDER BY SCAN_TIME DESC

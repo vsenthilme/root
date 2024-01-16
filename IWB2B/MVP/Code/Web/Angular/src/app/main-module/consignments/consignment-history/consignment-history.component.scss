@@ -1,0 +1,17 @@
+
+
+.breadcrumb > li + li::before { color: #787878 !important;  content: " ►" !important;   padding: 0 5px !important;}
+.breadcrumb { padding: 0.75rem 1rem;  margin-bottom: 0rem;  list-style: none;  background-color: #e9ecef; border-radius: 0.25rem;}
+.breadcrumb {
+    background-color: transparent !important;
+    color: #6e6e6e !important;
+    padding: 0.25rem 1rem !important;
+}
+.breadcrumb-item.active {
+    color: #6e6e6e !important;
+}
+::ng-deep.btn-outline-warning:hover {
+    color: #ffff !important;
+    background-color: #ffc107;
+    border-color: #ffc107;
+  }

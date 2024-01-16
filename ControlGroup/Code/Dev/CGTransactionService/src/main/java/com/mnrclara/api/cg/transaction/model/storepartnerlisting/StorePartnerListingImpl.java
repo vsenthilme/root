@@ -1,0 +1,66 @@
+package com.mnrclara.api.cg.transaction.model.storepartnerlisting;
+
+import java.util.Date;
+
+public interface StorePartnerListingImpl {
+
+    String getLanguageId();
+    String getCompanyId();
+    String getStoreId();
+    Long getVersionNumber();
+    String getStoreName();
+    Date getValidityDateFrom();
+    Date getValidityDateTo();
+    Long getGroupTypeId();
+    String getGroupTypeName();
+    Long getSubGroupId();
+    String getSubGroupName();
+    Long getGroupId();
+    String getGroupName();
+    Long getCoOwnerId1();
+    Long getCoOwnerId2();
+    Long getCoOwnerId3();
+    Long getCoOwnerId4();
+    Long getCoOwnerId5();
+    Long getCoOwnerId6();
+    Long getCoOwnerId7();
+    Long getCoOwnerId8();
+    Long getCoOwnerId9();
+    Long getCoOwnerId10();
+    String getCoOwnerName1();
+    String getCoOwnerName2();
+    String getCoOwnerName3();
+    String getCoOwnerName4();
+    String getCoOwnerName5();
+    String getCoOwnerName6();
+    String getCoOwnerName7();
+    String getCoOwnerName8();
+    String getCoOwnerName9();
+    String getCoOwnerName10();
+    Double getCoOwnerPercentage1();
+    Double getCoOwnerPercentage2();
+    Double getCoOwnerPercentage3();
+    Double getCoOwnerPercentage4();
+    Double getCoOwnerPercentage5();
+    Double getCoOwnerPercentage6();
+    Double getCoOwnerPercentage7();
+    Double getCoOwnerPercentage8();
+    Double getCoOwnerPercentage9();
+    Double getCoOwnerPercentage10();
+    Long getStatusId();
+    Long getDeletionIndicator();
+    String getReferenceField1();
+    String getReferenceField2();
+    String getReferenceField3();
+    String getReferenceField4();
+    String getReferenceField5();
+    String getReferenceField6();
+    String getReferenceField7();
+    String getReferenceField8();
+    String getReferenceField9();
+    String getReferenceField10();
+    String getCreatedBy();
+    Date getCreatedOn();
+    String getUpdatedBy();
+    Date getUpdatedOn();
+}

@@ -1,0 +1,51 @@
+
+
+
+
+    <!-- <highcharts-chart
+      id="container"
+      [Highcharts]="Highcharts"
+      [constructorType]="chartConstructor"
+      [options]="chartOptions"
+      [callbackFunction]="chartCallback"
+      [(update)]="updateFromInput"
+      [oneToOne]="true"
+      style="display: block;"
+    >
+    </highcharts-chart> -->
+
+
+
+    <div class="card bg-white " style="overflow-x: hidden;">
+      <!-- <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+        class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+        <h6 class="my-auto">Bin ID : {{binPassed.BinNo}}</h6>
+        <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+      </div> -->
+      <div class="row  text-center d-flex justify-content-center p-1">
+        
+        <highcharts-chart
+        id="container"
+        [Highcharts]="Highcharts"
+        [constructorType]="chartConstructor"
+        [options]="chartOptions"
+        [callbackFunction]="chartCallback"
+        [(update)]="updateFromInput"
+        [oneToOne]="true"
+        style="display: block; width: 100%;"
+      >
+      </highcharts-chart>
+
+
+      </div>
+      <!-- <div class="row d-flex justify-content-center fw-bold">
+          <p>Status: {{binPassed.status}}</p>
+          <p>Qty: {{binPassed.qtyAvailable}}</p>
+        </div>
+  -->
+      <!-- <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      </div> -->
+    </div>
+    

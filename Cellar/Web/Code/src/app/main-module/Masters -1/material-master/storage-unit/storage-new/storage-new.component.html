@@ -1,0 +1,488 @@
+<form [formGroup]="form" >
+<div class="row mx-1 pl-2">
+    <div class="col-12">
+      <!--inner header-->
+  
+      <div class="row  text-secondary pr-0 mt-1">
+        <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+  
+  
+          <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb mb-0 bg-white">
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a >Home</a>
+              </li>
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Master</li>
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Material Master</li>
+              <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto"><a
+                  routerLink="/main/inbound/container-receipt"> Storage Unit</a></li>
+            </ol>
+          </nav>
+  
+  
+          <div class="d-flex ml-auto my-auto">
+            <div [hidden]="isShowDiv"> <input matInput   class="form-control filter_button mt-2 mt-2 mx-2 border-bottom"
+                placeholder="Search" style="width:90%">
+            </div>
+            <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+              class="button-row d-flex align-items-center">
+              <!--
+                          <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-2"
+                          matTooltip="Add">
+                          <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                        </button>
+                        -->
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+                matTooltip="Display">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+              </button>
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+                matTooltip="Edit">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+              </button>
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+                matTooltip="Delete">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+              </button>
+              <!-- 
+                          <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                        class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="Info">
+                        <mat-icon class="action-icon d-flex align-items-center justify-content-center">info_outline</mat-icon>
+                      </button>
+                        -->
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+                matTooltip="Download">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+              </button>
+  
+  
+              <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button bg-orange1"
+                [ngClass]="{'optionsColor' : toggle, 'bg-orange': !toggle}">
+                <mat-icon>{{icon}}</mat-icon>Options
+              </button>
+              <button mat-mini-fab disabled
+                class=" floating-buttons1 disabled d-flex align-items-center justify-content-center darkaction text-white mx-2 mr-3 align-middle"
+                matTooltip="New">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">add</mat-icon>
+              </button>
+              <button mat-mini-fab
+                class=" floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-2 mr-3 align-middle disabled"
+                matTooltip="save" disabled>
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">save</mat-icon>
+              </button>
+              <button mat-mini-fab disabled class="text-white mx-2 action-button  bg-red disabled" type="button"
+                mat-button>
+                <mat-icon class="">tune</mat-icon> Filter
+              </button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!--main section-->
+    <div class="row mt-1 mx-1 pr-0 w-100">
+      <div class=" bg-white col-md-12 px-0" style="height:calc(100vh - 12rem);">
+        <div class="">
+          <mat-accordion >
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle >
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  <div> <img src="./assets/img/icons/header.png" class="header_icon mr-2" alt="" srcset=""> General
+                    Data</div>
+                  <mat-icon class="collapsefont text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  boxgrey  mt-2">
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'"> 
+                  <p class="mb-0 py-0">Item Code</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="itemCode">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required">Code ID</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="codeId">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('codeId')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required">Description</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="description">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('description')">{{getErrorMessage()}}</mat-error>
+                </div>
+                 <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Storage Size in M2</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="storeSizeMeterSquare">
+                  </mat-form-field>
+                 </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Item Type</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="itemTypeList"
+                  formControlName="itemType" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Item Group</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="itemGroupList"
+                  formControlName="itemGroup" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.form.controls.storageType.value != 'Bin Storage'">
+                  <p class="mb-0 py-0">Door Type</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="doorTypeList"
+                  formControlName="doorType" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Storage Type</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="storageTypeList"
+                  formControlName="storageType" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2"  *ngIf="this.form.controls.storageType.value != 'Bin Storage'">
+                  <p class="mb-0 py-0">Phase</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="phaseList"
+                  formControlName="phase" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.form.controls.storageType.value != 'Bin Storage'">
+                  <p class="mb-0 py-0">Zone </p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="zoneList"
+                  formControlName="zone" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.form.controls.storageType.value != 'Self Storage'">
+                  <p class="mb-0 py-0">Room</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="roomList"
+                  formControlName="room" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                  
+                </div>
+
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Aisle </p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <mat-select class="form-group input_field mb-0"
+                      placeholder="Select" formControlName="aisle">
+                      <mat-option value="A">A</mat-option>
+                      <mat-option value="B">B </mat-option>
+                      <mat-option value="C">C</mat-option>
+                      <mat-option value="D">D </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.form.controls.storageType.value != 'Self Storage'">
+                  <p class="mb-0 py-0">Rack</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="rackList"
+                  formControlName="rack" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.form.controls.storageType.value != 'Self Storage'">
+                  <p class="mb-0 py-0">Bin</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="binList"
+                  formControlName="bin" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Availability</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="statusList"
+                  formControlName="availability" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset=""> Price Details
+                  </div>
+                  <mat-icon class="collapsefont">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  boxgrey mt-2">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Currency</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="currencyList"
+                  formControlName="referenceField1" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Price in M2</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask placeholder="Enter" formControlName="priceMeterSquare">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rent - Weekly</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask placeholder="Enter" formControlName="weekly">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rent - Monthly</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask placeholder="Enter" formControlName="monthly" >
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rent - Quarterly</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask placeholder="Enter" formControlName="quarterly" >
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rent - Half Yearly</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask placeholder="Enter" formControlName="halfYearly">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rent - Yearly</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput currencyMask  placeholder="Enter" formControlName="yearly">
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset="">Dimensions</div>
+                  <mat-icon class="collapsefont">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  boxgrey mt-2">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Length</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="length" >
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Width</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="width">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Original Dim.</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="originalDimention" >
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Rounded Dim.</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="roundedDimention">
+                  </mat-form-field>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Dimension Unit</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="uomTypeList"
+                  formControlName="referenceField2" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                </div>
+          
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'"> 
+                  <p class="mb-0 py-0">Occupied From</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput [matDatepicker]="picker5" placeholder="Choose Date" formControlName="occupiedFrom">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'"> 
+                  <p class="mb-0 py-0">Available After</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput [matDatepicker]="picker4" placeholder="Choose Date " formControlName="availableAfter">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'"> 
+                  <p class="mb-0 py-0">Linked Agreement/Contract</p>
+                  <mat-form-field class="mb-0 w-100 " appearance="outline">
+                    <input matInput placeholder="Enter" [disabled]="true" formControlName="linkedAgreement" readonly>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+  
+            <mat-expansion-panel #panel2 hideToggle *ngIf="this.js.pageflow != 'New'"> 
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset="">Agreement Details</div>
+                  <mat-icon class="collapsefont">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  boxgrey mt-2">
+                <div class="scroll3 w-100">
+             <div class="">
+                  <table mat-table matSort [dataSource]="dataSource" class="w-100">
+     
+                   <!-- Checkbox Column -->
+                   <ng-container matColumnDef="select">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                       <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                         [checked]="selection.hasValue() && isAllSelected()"
+                         [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                       </mat-checkbox>
+                     </th>
+                     <td mat-cell *matCellDef="let row">
+                       <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                         [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                       </mat-checkbox>
+                     </td>
+                   </ng-container>
+     
+                   <!-- Position Column -->
+                   <ng-container matColumnDef="usercode">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Agreement No </th>
+                     <td mat-cell *matCellDef="let element"> {{element.agreementNumber}} </td>
+                   </ng-container>
+     
+                   <!-- Name Column -->
+                   <ng-container matColumnDef="name">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Contract Date </th>
+                     <td mat-cell *matCellDef="let element"> {{element.createdOn | date:"dd-MM-yyyy" :'UTC 0'}} </td>
+                   </ng-container>
+     
+                   <!-- Weight Column -->
+                   <ng-container matColumnDef="admin">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Store ID</th>
+                     <td mat-cell *matCellDef="let element"> {{element.referenceField4}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="role">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Name</th>
+                     <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="userid">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference No </th>
+                     <td mat-cell *matCellDef="let element"> {{element.userid}} </td>
+                   </ng-container>
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="password">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date</th>
+                     <td mat-cell *matCellDef="let element"> {{element.startDate | date:"dd-MM-yyyy" :'UTC 0'}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="endDate">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                     <td mat-cell *matCellDef="let element"> {{element.endDate | date:"dd-MM-yyyy" :'UTC 0'}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="status">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>status </th>
+                     <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                   </ng-container>
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="phoneno">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Method </th>
+                     <td mat-cell *matCellDef="let element"> {{element.phoneno}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="Agreement">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Storage Stuff Value</th>
+                     <td mat-cell *matCellDef="let element"> {{element.Agreement}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="created">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Rent Value</th>
+                     <td mat-cell *matCellDef="let element"> {{element.rent}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="processed">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Deposit</th>
+                     <td mat-cell *matCellDef="let element"> {{element.deposit}} </td>
+                   </ng-container>
+     
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="leadtime">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Other Amount </th>
+                     <td mat-cell *matCellDef="let element"> {{element.leadtime}} </td>
+                   </ng-container>
+  
+                      <!-- Symbol Column -->
+                      <ng-container matColumnDef="totalamount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount</th>
+                        <td mat-cell *matCellDef="let element"> {{element.totalAfterDiscount}} </td>
+                      </ng-container>
+                         <!-- Symbol Column -->
+                   <ng-container matColumnDef="lastbilled">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Billed Amount</th>
+                    <td mat-cell *matCellDef="let element"> {{element.leadtime}} </td>
+                  </ng-container>
+                     <!-- Symbol Column -->
+                     <ng-container matColumnDef="voucher">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Voucher No.</th>
+                      <td mat-cell *matCellDef="let element"> {{element.leadtime}} </td>
+                    </ng-container>
+     
+                   <tr mat-header-row *matHeaderRowDef="displayedColumns2;sticky: true"></tr>
+                   <tr mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="clearselection(row)">
+                   </tr>
+                 </table>
+             </div>
+                </div>
+                <!-- <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+                aria-label="Select page of periodic elements">
+              </mat-paginator> -->
+                 </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+  
+       
+  
+        </div>
+      </div>
+  
+    </div>
+    <div class="d-flex justify-content-center  align-items-center py-2 fixed-bottom">
+  
+      <button mat-raised-button class="text-white mx-1 px-3 bg-red roundButton"  (click)="back()">
+        <mat-icon class="">close</mat-icon>Cancel
+      </button>
+      <button *ngIf="this.js.pageflow != 'Display'" mat-raised-button class="darkaction text-white mx-1 roundButton  px-3 roundButton" (click)="submit()" >
+        <mat-icon class="">done</mat-icon>{{js.pageflow =='Edit'? 'Update': 'Save'}}
+      </button>
+      <!-- <button mat-raised-button class="bg-info  text-white mx-1 px-4" routerLink="/main/operation/payment" > 
+        <mat-icon class="">done</mat-icon> Raise Payment
+      </button>
+      <button mat-raised-button class="bg-orange  text-white mx-1 px-4" >
+        <mat-icon class="">done</mat-icon> Raise Contract
+      </button>
+      <button mat-raised-button class="bg-success  text-white mx-1 px-4" routerLink="/main/operation/invoice"  >
+        <mat-icon class="">done</mat-icon> Raise Invoice
+      </button> -->
+    </div>
+  
+  
+  
+  
+    <!--right pane
+        <div class="col-3 pl-1 pr-1 mt-1 ">
+          <div class="whs-rightpane bg-white shadow">
+          </div>
+        </div>
+        -->
+  </div>
+</form>

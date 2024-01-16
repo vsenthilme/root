@@ -1,0 +1,289 @@
+<div class="mx-1 pl-2">
+
+    <!--row mx-1 pl-2-->
+    <div class="col-12">
+      <!--inner header-->
+  
+      <div class="row  text-secondary pr-0 mt-1">
+        <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+  
+  
+          <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb mb-0 bg-white">
+              <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto">Home</li>
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Operation</li>
+              <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto"><a>Payment</a></li>
+            </ol>
+          </nav>
+  
+  
+          <div class="d-flex ml-auto my-auto">
+            <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"  class="form-control filter_button mt-2 mt-2 mx-2 border-bottom"
+                placeholder="Search" style="width:90%">
+            </div>
+            <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+              class="button-row d-flex align-items-center">
+              <!--
+                        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-2"
+                        matTooltip="Add">
+                        <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                      </button>
+                      -->
+              <button type="button" mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+                matTooltip="Display" (click)="openDialog('Display')">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+              </button>
+              <button type="button" mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+                matTooltip="Edit" (click)="openDialog('Edit')">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+              </button>
+              <button type="button" mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+                matTooltip="Delete" (click)="deleteDialog()">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+              </button>
+              <!-- 
+                        <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                      class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="Info">
+                      <mat-icon class="action-icon d-flex align-items-center justify-content-center">info_outline</mat-icon>
+                    </button>
+                      -->
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+                matTooltip="Download" (click)="downloadexcel()">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+              </button>
+  
+  
+              <button type="button" mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button bg-orange1"
+                [ngClass]="{'optionsColor' : toggle, 'bg-orange': !toggle}">
+                <mat-icon>{{icon}}</mat-icon>Options
+              </button>
+              <button type="button" mat-mini-fab
+                class=" floating-buttons1  d-flex align-items-center justify-content-center darkaction text-white mx-2 mr-3 align-middle"
+                matTooltip="New" (click)="openDialog('New')">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">add</mat-icon>
+              </button>
+              <button disabled type="submit" mat-mini-fab 
+                class="disabled floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-2 mr-3 align-middle "
+                matTooltip="save" >
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">save</mat-icon>
+              </button>
+              <button mat-mini-fab class="text-white mx-2 action-button  bg-red " type="button" mat-button
+              (click)="drawer.toggle()"  >
+                <mat-icon class="">tune</mat-icon> Filter
+              </button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--main-section-tabbar-->
+    
+    <!--vertical tab-->
+    <mat-drawer-container class="example-container  w-100">
+      <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+        <div class="card-header whs-cellar-blue text-white d-flex justify-content-between align-items-center">
+          <h6 class="my-auto mb-0">Search Parameter</h6>
+          <mat-icon type="button" (click)="drawer.toggle()">close</mat-icon>
+        </div>
+        <form [formGroup]="searhform">
+        <div class="row  mt-1 mr-1 p-2 pl-3">
+          <div class="col-12 my-1">
+            <div class="form-group mb-0">
+              <label for="inputEmail4" class="mb-0">Voucher No </label>
+              <p-multiSelect   placeholder="Select" class="w-100" [options]="multiselectvoucherIdList"
+              formControlName="voucherId" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}"> </p-multiSelect >
+            </div>
+          </div>
+          <div class="col-12 my-1">
+            <div class="form-group mb-0">
+              <label for="inputEmail4" class="mb-0">Agreement No </label>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput placeholder="Enter">
+                
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group mb-1">
+              <label for="inputEmail4" class="mb-0">Amount Paid </label>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput placeholder="Enter">
+            
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-12 my-1">
+            <div class="form-group mb-0">
+              <label for="inputEmail4" class="mb-0">Payment Mode</label>
+        
+                <p-multiSelect   placeholder="Select" class="w-100" [options]="multiselectmodeOfPaymentList"
+                formControlName="modeOfPayment" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}"> </p-multiSelect >
+               
+              
+            </div>
+          </div>
+        </div>
+        </form>
+        <div class="d-flex justify-content-center align-items-center py-2">
+          <button mat-raised-button  class="bg-red text-white mx-1 roundButton px-4" (click)="resetSearch();">
+            <mat-icon class="">restart_alt</mat-icon> Reset
+          </button>
+          <button mat-raised-button class="darkaction text-white mx-1 roundButton " (click)="search();drawer.toggle()">
+            <mat-icon class="">done</mat-icon> Search
+          </button>
+        </div>
+      </mat-drawer>
+      <div class="example-sidenav-content">
+        <!-- <div class="mt-2">
+          <app-operation-tab></app-operation-tab>
+        </div> -->
+        <div class="row mt-1 mx-1 ">
+          <div class="col-12 px-0 pl-1 pb-1">
+            <div class="scroll bg-white">
+      <div class="scroll3">
+        <table mat-table  matSort matSortActive="voucherId" matSortDirection="desc" [dataSource]="dataSource" class="w-100">
+  
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+              (change)="clearselection(row)"
+                            [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+        
+          <!-- Position Column -->
+          <ng-container matColumnDef="voucherId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Voucher No </th>
+            <td mat-cell *matCellDef="let element"> {{element.voucherId}} </td>
+          </ng-container>
+        
+          <!-- Name Column -->
+          <ng-container matColumnDef="contractNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Agreement No </th>
+            <td mat-cell *matCellDef="let element"> {{element.contractNumber}} </td>
+          </ng-container>
+        
+          <!-- Weight Column -->
+          <ng-container matColumnDef="voucherAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount Paid</th>
+            <td mat-cell *matCellDef="let element"> {{element.voucherAmount | currency:'KWD ':'code':'1.3-3'}} </td>
+          </ng-container>
+        
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cheque No</th>
+            <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+          </ng-container>
+
+                 <!-- Symbol Column -->
+                 <ng-container matColumnDef="userid">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Cheque Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.userid}} </td>
+                </ng-container>
+<!-- Symbol Column -->
+<ng-container matColumnDef="password">
+<th mat-header-cell *matHeaderCellDef mat-sort-header> Received From</th>
+<td mat-cell *matCellDef="let element"> {{element.password}} </td>
+</ng-container>
+
+
+<!-- Symbol Column -->
+<ng-container matColumnDef="customerFullName">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+  <td mat-cell *matCellDef="let element"> {{element.customerFullName}} </td>
+  </ng-container>
+          
+<!-- Symbol Column -->
+<ng-container matColumnDef="voucherDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Voucher Date</th>
+  <td mat-cell *matCellDef="let element"> {{element.voucherDate | date:"dd-MM-yyyy" :'UTC 0'}} </td>
+  </ng-container>
+           <!-- Symbol Column -->
+           <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Billed Amount</th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+          </ng-container>
+<!-- Symbol Column -->
+<ng-container matColumnDef="phoneno">
+<th mat-header-cell *matHeaderCellDef mat-sort-header> Voucher No </th>
+<td mat-cell *matCellDef="let element"> {{element.phoneno}} </td>
+</ng-container>
+        
+   <!-- Symbol Column -->
+   <ng-container matColumnDef="modeOfPayment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Payment Mode </th>
+      <td mat-cell *matCellDef="let element"> {{element.modeOfPayment}} </td>
+    </ng-container>    
+        <!-- Symbol Column -->
+  <ng-container matColumnDef="phase">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Phase</th>
+<td mat-cell *matCellDef="let element"> {{element.phase}} </td>
+  </ng-container> 
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="storeName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Store No </th>
+    <td mat-cell *matCellDef="let element"> {{element.storeName}} </td>
+  </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="voucherStatus">
+       <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+       <td mat-cell *matCellDef="let element"> {{element.voucherStatus}} </td>
+     </ng-container>
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="createdBy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By</th>
+    <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+  </ng-container>
+   <!-- Symbol Column -->
+   <ng-container matColumnDef="createdOn">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created On</th>
+    <td mat-cell *matCellDef="let element"> {{element.createdOn | date : 'dd-MM-yyyy ' :'GMT'}} </td>
+  </ng-container>
+
+       <!-- Symbol Column -->
+   <ng-container matColumnDef="Doc">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Doc</th>
+    <td mat-cell *matCellDef="let element"> 
+      <img src="./assets/img/icons/pin.png"  type="button" (click)="generatePdf(element)" style="height: 30px;width:30px;" alt="" srcset="">
+    </td>
+  </ng-container>
+
+       <!-- Symbol Column -->
+   <ng-container matColumnDef="paiddate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Paid Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.paiddate}} </td>
+  </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clearselection(row)">
+          </tr>
+        </table>
+      </div>
+            </div>
+            <mat-paginator [pageSizeOptions]="[100, 150, 200]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+  
+          </div>
+        </div>
+      </div>
+    </mat-drawer-container>
+  
+  </div>
+  

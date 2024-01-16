@@ -1,0 +1,433 @@
+<form [formGroup]="form">
+  <div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center whs-cellar-blue text-white p-2">
+      <h6 class="my-auto">Invoice - {{data? data.pageflow: 'New'}} </h6>
+      <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+            General
+            <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll p-1">
+          <div class="col-lg-4  col-md-4  mt-1" *ngIf="data.pageflow != 'New' && data.pageflow != 'Copy From Agreement'" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Invoice No</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="invoiceNumber">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1">
+            <p class="mb-0 py-0 required">Invoice Date</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input matInput [matDatepicker]="picker4" placeholder="Choose Date " formControlName="invoiceDate">
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('invoiceDate')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1">
+            <p class="mb-0 py-0 required">Customer ID</p>
+            <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="customerIDList"
+              formControlName="customerId" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+            <mat-error *ngIf="errorHandling('customerId')">{{getErrorMessage()}}</mat-error>
+          </div>
+ 
+          <div class="col-lg-4  col-md-4  mt-1">
+            <p class="mb-0 py-0 required">Document</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select placeholder="select" formControlName="referenceField2">
+                  <!-- <mat-option value="Inquiry" disabled>Inquiry</mat-option> -->
+                  <mat-option value="Quote" >Quote</mat-option>
+                  <mat-option value="Agreement">Agreement</mat-option>
+                  <mat-option value="Work Order">Work Order</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('referenceField2')">{{getErrorMessage()}}</mat-error>
+
+          </div>
+          
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 ">Payment Frequency</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select placeholder="Select" formControlName="referenceField5" (selectionChange)="rentCalculation()">
+                  <mat-option value="WEEKLY">Weekly </mat-option>
+                  <mat-option value="MONTHLY">Monthly</mat-option>
+                  <mat-option value="QUARTERLY">Quarterly </mat-option>
+                  <mat-option value="HALFYEARLY">Half Yearly </mat-option>
+                  <mat-option value="YEARLY">Yearly </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('referenceField5')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <div class="col-lg-4  col-md-4  mt-1" *ngIf="this.form.controls.referenceField2.value">
+            <p class="mb-0 py-0 required">{{this.form.controls.referenceField2.value}} No</p>
+            <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="copyFromList" (onChange)="documentNo()"
+            formControlName="documentNumber" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+            <mat-error *ngIf="errorHandling('documentNumber')">{{getErrorMessage()}}</mat-error>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mt-1">
+            <p class="mb-0 py-0 required">SBU</p>
+            <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="workOrderSbuList"
+              formControlName="sbu" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+            <mat-error *ngIf="errorHandling('sbu')">{{getErrorMessage()}}</mat-error>
+          </div>
+          
+          <!-- <div class="col-lg-4  col-md-4  mt-1" *ngIf="this.form.controls.referenceField2.value != 'Work Order'">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Phase</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="referenceField3">
+              </mat-form-field>
+            </div>
+          </div> -->
+          <!-- <div class="col-lg-4  col-md-4  mt-1" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Store ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="referenceField4">
+              </mat-form-field>
+            </div>
+          </div> -->
+          <div class="col-lg-4  col-md-4  mt-1" *ngIf="this.form.controls.referenceField2.value != 'Work Order'">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 ">Rent Period </p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" formControlName="documentStartDate" (dateChange)="rentCalculation()">
+                  <input matEndDate placeholder="End date" formControlName="documentEndDate" (dateChange)="rentCalculation()">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('documentStartDate')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Unit</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="unit">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1" *ngIf="this.form.controls.referenceField2.value == 'Agreement'">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black ">Qty</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="quantity">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('quantity')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+               
+          <div class="col-lg-4  col-md-4  mt-1" *ngIf="this.form.controls.referenceField2.value == 'Agreement'">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Rent per Period</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput currencyMask placeholder="Enter" formControlName="monthlyRent" (change)="rentCalculation()">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Currency</p>
+              <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="currencyList"
+                formControlName="invoiceCurrency" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+              <mat-error *ngIf="errorHandling('invoiceCurrency')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Amount </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input  matInput currencyMask placeholder="Enter" formControlName="invoiceAmount">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('invoiceAmount')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <!--    
+        <div class="col-lg-4  col-md-4  mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Phone No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="">
+            </mat-form-field>
+          </div>
+        </div> -->
+
+
+          <div class="col-lg-4  col-md-4  mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Discount if any
+                <mat-radio-group class="ml-1" formControlName="referenceField1">
+                  <mat-radio-button value="KWD" class="ml-1">KWD</mat-radio-button>
+                  <mat-radio-button value="Percentage" class="ml-1">Percentage</mat-radio-button>
+                </mat-radio-group>
+              </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input type="number" matInput placeholder="Enter" formControlName="invoiceDiscount">
+                <mat-hint class="mt-2">Select discount method to enable this field</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Total after Discount</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input  matInput currencyMask  placeholder="Enter" formControlName="totalAfterDiscount">
+              </mat-form-field>
+            </div>
+          </div>
+   
+          <div class="col-lg-4  col-md-4  mt-1" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Remarks</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter"  formControlName="remarks">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-lg-4  col-md-4  mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Doc.Status</p>
+              <!-- <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select class="form-group input_field mb-0" placeholder="Select" formControlName="invoiceDocumentStatus">
+                <mat-option value="Open ">Open</mat-option>
+                <mat-option value="Cancelled ">Cancelled</mat-option>
+                <mat-option value="Closed ">Closed</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+              <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="statusIDList"
+                formControlName="invoiceDocumentStatus" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+              <mat-error *ngIf="errorHandling('invoiceDocumentStatus')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <!-- <div class="col-12 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Notes</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <textarea matInput rows="3" placeholder="Enter" formControlName=""></textarea>
+            </mat-form-field>
+          </div>
+        </div> -->
+
+
+
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel3 hideToggle *ngIf="this.form.controls.referenceField2.value == 'Agreement'"> 
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+            Store Details
+            <mat-icon class="text-secondary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row p-1  mt-2">
+          <table mat-table matSort [dataSource]="dataSource1" class="w-100">
+            <ng-container matColumnDef="storeNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Store No</th>
+              <td mat-cell *matCellDef="let element"> {{element.storeNumber}} </td>
+                   <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+            </ng-container>
+
+          
+            <ng-container matColumnDef="size">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Size </th>
+              <td mat-cell *matCellDef="let element"> {{element.size}} </td>
+                   <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+            </ng-container>
+          
+            <ng-container matColumnDef="location">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Phase</th>
+              <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+                   <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+            </ng-container>
+          
+            <ng-container matColumnDef="rent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Rent</th>
+              <td mat-cell *matCellDef="let element"> {{element.rent | currency:'KWD'}} </td>
+                   <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;">{{getTotalRent() | currency:'KWD'}} </td>
+            </ng-container>
+  
+               
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns1;" >
+            </tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns1; sticky: true" class="example-first-footer-row"></tr>
+          </table>
+        </div>
+      </mat-expansion-panel>  
+      <mat-expansion-panel #panel2 hideToggle *ngIf="this.form.controls.referenceField2.value == 'Work Order'"> 
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+            Line Details
+            <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row p-1  mt-2">
+          <table mat-table matSort [dataSource]="dataSource" class="w-100">
+
+  
+            
+              <ng-container matColumnDef="usercode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Item/Service </th>
+                <td mat-cell *matCellDef="let element"> {{element.itemServiceName}} </td>
+                     <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+              </ng-container>
+
+            
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity </th>
+                <td mat-cell *matCellDef="let element"> {{element.itemServiceQuantity  | number:'1.1-1'}} </td>
+                     <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;">{{getQty() | number:'1.1-1'}}</td>
+              </ng-container>
+            
+              <ng-container matColumnDef="admin">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Price</th>
+                <td mat-cell *matCellDef="let element"> {{element.itemServiceUnitPrice | number:'1.3-3'}} </td>
+                     <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+              </ng-container>
+            
+              <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total</th>
+                <td mat-cell *matCellDef="let element"> {{element.itemServiceTotal | number:'1.3-3'}} </td>
+                     <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;">{{getTotal() | number:'1.3-3'}} </td>
+              </ng-container>
+    
+                     <!-- <ng-container matColumnDef="userid">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                      <td mat-cell *matCellDef="let element"> {{element.userid}} </td>
+                    </ng-container>
+    <ng-container matColumnDef="password">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Discount if Any</th>
+    <td mat-cell *matCellDef="let element"> {{element.password}} </td>
+    </ng-container>
+    
+         <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total After Discount</th>
+          <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+        </ng-container>
+    
+               <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+     -->
+    
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" >
+              </tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+            </table>
+        </div>
+      </mat-expansion-panel>  
+      <mat-expansion-panel #panel4 hideToggle *ngIf="data.pageflow != 'New' && data.pageflow !=  'Copy From Agreement'" >
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+            Admin
+            <mat-icon class="text-secondary">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row p-1 px-3  mt-2">
+          <div class="col-lg-4  col-md-4  mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="AP-Editable" formControlName="createdBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="createdOn">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="updatedBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4  col-md-4  mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="updatedOn">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    <div class="col-lg-4 col-md-4 mt-1" *ngIf="data.pageflow != 'New'">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Copy To</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select class="form-group input_field mb-0" placeholder="Select" formControlName="copyFrom">
+                <mat-option value="Payment" >Payment</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      </div>
+   
+      <div class="row px-2">
+        <!-- <div class="col-lg-4  col-md-4  mt-1  " *ngIf="data.pageflow == 'New'">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Copy From</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select class="form-group input_field mb-0" placeholder="Select" formControlName="copyFrom">
+                <mat-option value="Inquiry" diabled>Inquiry ID</mat-option>
+                <mat-option value="Quote" diabled>Quote ID </mat-option>
+                <mat-option value="Agreement" diabled>Agreement No </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div> -->
+        <div class="col-lg-4  col-md-4  mt-1  " *ngIf="data.pageflow == 'New' && this.form.controls.copyFrom.value">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">{{this.form.controls.copyFrom.value}}</p>
+            <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="copyFromList"
+              formControlName="copyFromResult" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+          </div>
+        </div>
+      </div>
+    </mat-accordion>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button  mat-dialog-close class="mx-2 roundButton bg-red"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="data.pageflow != 'Display'" mat-raised-button class="mx-2 darkaction px-4 text-white roundButton"
+        (click)="submit();"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+      <button *ngIf="data.pageflow != 'New' || data.pageflow != 'Copy From Agreement'" mat-raised-button class="mx-2 bg-orange1 px-4 text-white roundButton"
+      (click)="copyTo()"> <i class="bi bi-files me-1 font-size-1_5rem"></i>
+
+        Copy To</button>
+    </div>
+
+
+  </div>
+</form>

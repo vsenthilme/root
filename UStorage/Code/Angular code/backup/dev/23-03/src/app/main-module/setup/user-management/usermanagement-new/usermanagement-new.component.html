@@ -1,0 +1,183 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="card bg-white " style="overflow-x: hidden;">
+        <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+          class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+          <h6 class="my-auto">User Management - {{data? data.pageflow: 'New'}} </h6>
+          <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+        </div>
+          <mat-accordion>
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  General
+                  <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+          <div class="row scroll p-1">
+            <div class="col-lg-6 col-md-6 mt-1" *ngIf="data.pageflow != 'New'"> 
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">User ID</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="id" >
+                  </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">User Name </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input  matInput placeholder="Enter" formControlName="username" >
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('username')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">First Name </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="firstname" >
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Last Name </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="lastname" >
+                </mat-form-field>
+              </div>
+            </div>
+  
+
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0 required">User Role ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select class="form-group input_field mb-0"
+                placeholder="Select" formControlName="role">
+                <mat-option value="1">ADMIN </mat-option>
+                <mat-option value="2">MASTERS/CRM/OPERATIONS </mat-option>
+                <mat-option value="3">OPERATIONS </mat-option>
+                <mat-option value="4">SUPER ADMIN </mat-option>
+                <mat-option value="5">MASTERS/OPERATIONS </mat-option>
+              </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('role')">{{getErrorMessage()}}</mat-error>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">User Type ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select class="form-group input_field mb-0"
+                  placeholder="Select" formControlName="userTypeId">
+                  <mat-option value="Ustorage">Ustorage </mat-option>
+                  <mat-option value="Ulogistics">Ulogistics </mat-option>
+                  <mat-option value="Admin">Admin </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+       
+
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">Password</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input  matInput placeholder="Enter" formControlName="password" >
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('password')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+        
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 ">Email</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="email" >
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('email')">{{getErrorMessage()}}</mat-error>
+                <mat-error *ngIf="form.controls.email.hasError('email')">Invalid Email </mat-error>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 ">Phone No</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input  matInput placeholder="Enter" formControlName="phoneNo">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Status</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <mat-select class="form-group input_field mb-0"
+                    placeholder="Select" formControlName="status">
+                    <mat-option value="Active">Active </mat-option>
+                    <mat-option value="Inactive">Inactive </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+ 
+           
+          </div>
+            </mat-expansion-panel>
+            <!-- <mat-expansion-panel #panel2 hideToggle *ngIf="data.pageflow != 'New'"> 
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  Admin
+                  <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-3  mt-2">
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable" formControlName="createdBy">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="createdOn">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="updatedBy">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="updatedOn">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>   -->
+          </mat-accordion>
+          <div class="d-flex justify-content-center align-items-center py-2">
+            <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+                class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+            <button *ngIf="data.pageflow != 'Display'" mat-raised-button class="mx-2 bg-darkblue px-4 text-white"> <i
+                class="bi bi-check2 me-1 font-size-1_5rem"></i>
+              
+                {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+          </div>
+    
+    
+      </div>
+    
+    </form>

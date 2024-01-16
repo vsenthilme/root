@@ -1,0 +1,94 @@
+<div class="box m-5" style="width: 10rem; height: 10rem;">
+    <div class="d-flex justify-content-end ">
+      <div class="  hvr-float" >
+      <div type=button (click)="openDialog(binStatus[0].BinNo);"   class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  "  pTooltip="Qty: {{binStatus[0].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[0].status == 'Available' ? 'available' : binStatus[1].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[0].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[0].BinNo}} <br>
+          Qty: {{binStatus[0].qtyAvailable}} <br>
+          Status: {{binStatus[0].status}}
+        </span>
+      </div>
+      </div>
+    <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[1].BinNo);"  #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  "   pTooltip="Qty: {{binStatus[1].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[1].status == 'Available' ? 'available' : binStatus[1].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[1].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[1].BinNo}} <br>
+          Qty: {{binStatus[1].qtyAvailable}} <br>
+          Status: {{binStatus[1].status}}
+        </span>
+      </div>
+    </div>
+    <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[2].BinNo);"  #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  " pTooltip="Qty: {{binStatus[2].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[2].status == 'Available' ? 'available' : binStatus[2].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[2].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[2].BinNo}} <br>
+          Qty: {{binStatus[2].qtyAvailable}} <br>
+          Status: {{binStatus[2].status}}
+        </span>
+      </div>
+    </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[3].BinNo);"   #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  " pTooltip="Qty: {{binStatus[3].qtyAvailable}}" tooltipPosition="left"
+      [ngClass]="binStatus[3].status == 'Available' ? 'available' : binStatus[3].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[3].BinNo}}</p>
+        <span class="tooltip-text" id="right">
+          Bin No: {{binStatus[3].BinNo}} <br>
+          Qty: {{binStatus[3].qtyAvailable}} <br>
+          Status: {{binStatus[3].status}}
+        </span>
+      </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[4].BinNo);"  #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  "pTooltip="Qty: {{binStatus[4].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[4].status == 'Available' ? 'available' : binStatus[4].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[4].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[4].BinNo}} <br>
+          Qty: {{binStatus[4].qtyAvailable}} <br>
+          Status: {{binStatus[4].status}}
+        </span>
+      </div>
+      </div>
+      <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[5].BinNo);"  #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  " pTooltip="Qty: {{binStatus[5].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[5].status == 'Available' ? 'available' : binStatus[5].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[5].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[5].BinNo}} <br>
+          Qty: {{binStatus[5].qtyAvailable}} <br>
+          Status: {{binStatus[5].status}}
+        </span>
+      </div> 
+      </div>
+      <div class="  hvr-float">
+      <div type=button (click)="openDialog(binStatus[6].BinNo);"  #bin class="bin  animate__zoomInDown  d-flex justify-content-center align-items-center  " pTooltip="Qty: {{binStatus[6].qtyAvailable}}" tooltipPosition="bottom"
+      [ngClass]="binStatus[6].status == 'Available' ? 'available' : binStatus[6].status == 'Filled' ? 'filled' : ''">
+        <p class="mb-0  textCount" >{{binStatus[6].BinNo}}</p>
+        <span class="tooltip-text" id="bottom">
+          Bin No: {{binStatus[6].BinNo}} <br>
+          Qty: {{binStatus[6].qtyAvailable}} <br>
+          Status: {{binStatus[6].status}}
+        </span>
+      </div>
+      </div>
+    </div>
+    </div>
+    <div class="d-flex justify-content-center">
+<div class="d-flex align-items-center mx-1 ">
+  <p class="dot available mb-0 mr-1"></p> Available
+</div>
+<div class="d-flex align-items-center  mx-1">
+  <p class="dot filled mb-0 mr-1"></p> Filled
+</div>
+    </div>
+

@@ -1,0 +1,372 @@
+<div class="row mx-1 pl-2">
+    <div class="col-12">
+      <!--inner header-->
+  
+      <div class="row  text-secondary pr-0 mt-1">
+        <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+  
+  
+          <nav aria-label="breadcrumb" class="d-flex align-items-center">
+            <ol class="breadcrumb mb-0 bg-white">
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a>Home</a>
+              </li>
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Master</li>
+              <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto">Material Master</li>
+              <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto"><a
+                  routerLink="/main/inbound/container-receipt">Consumables</a></li>
+            </ol>
+          </nav>
+  
+  
+          <div class="d-flex ml-auto my-auto">
+            <div [hidden]="isShowDiv"> <input matInput class="form-control filter_button mt-2 mt-2 mx-2 border-bottom"
+                placeholder="Search" style="width:90%">
+            </div>
+            <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+              class="button-row d-flex align-items-center">
+              <!--
+                            <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-2"
+                            matTooltip="Add">
+                            <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                          </button>
+                          -->
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+                matTooltip="Display">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+              </button>
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+                matTooltip="Edit">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+              </button>
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+                matTooltip="Delete">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+              </button>
+              <!-- 
+                            <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                          class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="Info">
+                          <mat-icon class="action-icon d-flex align-items-center justify-content-center">info_outline</mat-icon>
+                        </button>
+                          -->
+              <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+                matTooltip="Download">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+              </button>
+  
+  
+              <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+                [ngClass]="{'bg-orange' : toggle, 'purple': !toggle}">
+                <mat-icon>{{icon}}</mat-icon>Options
+              </button>
+              <button mat-mini-fab disabled
+                class=" floating-buttons1 disabled d-flex align-items-center justify-content-center darkaction text-white mx-2 mr-3 align-middle"
+                matTooltip="New">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">add</mat-icon>
+              </button>
+              <button mat-mini-fab
+                class=" floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-2 mr-3 align-middle"
+                matTooltip="save">
+                <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">save</mat-icon>
+              </button>
+              <button mat-mini-fab disabled class="text-white mx-2 action-button  bg-red disabled" type="button"
+                mat-button>
+                <mat-icon class="">tune</mat-icon> Filter
+              </button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!--main section-->
+    <div class="row mt-1 mx-1 pr-0 w-100">
+      <div class=" bg-white col-md-12 px-0" style="height:calc(100vh - 12rem);">
+        <div class="">
+  
+          <mat-accordion>
+            <form [formGroup]="form">
+              <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+                <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                  <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                    <div> <img src="./assets/img/icons/header.png" class="header_icon mr-2" alt="" srcset=""> General
+                      Data</div>
+                    <mat-icon class="collapsefont text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+  
+                <div class="row  boxgrey  mt-2">
+                  <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'">
+                    <p class="mb-0 py-0">Item Code</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="itemCode">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-6 col-md-6 mt-2">
+                    <p class="mb-0 py-0 required">Description</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="description">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('description')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2" *ngIf="this.js.pageflow != 'New'">
+                    <p class="mb-0 py-0">Item Code</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="itemCode">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Item Group</p>
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="itemGroupList"
+                      formControlName="itemGroup"
+                      [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                      [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">UOM</p>
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="uomList"
+                      formControlName="saleUnitOfMeasure"
+                      [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                      [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Purchase UOM </p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="purchaseUnitOfMeasure">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Inventory UOM </p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="inventoryUnitOfMeasure">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Purchase Unit/Price </p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="unitPrice">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Sale Unit/Price </p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="saleUnitPrice">
+                    </mat-form-field>
+                  </div>
+  
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Status </p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <mat-select class="form-group input_field mb-0"
+                        placeholder="Select" formControlName="status">
+                        <mat-option value="Active">Active</mat-option>
+                        <mat-option value="Inactive">Inactive </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+  
+                </div>
+  
+              </mat-expansion-panel>
+              <mat-expansion-panel #panel5 hideToggle>
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                    <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset="">Inventory Data
+                    </div>
+                    <mat-icon class="collapsefont">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+  
+                <div class="row  boxgrey mt-2">
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Instock</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="inStock">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Open WO</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="openWo">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Last Receipt</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput [matDatepicker]="picker44" placeholder="Choose Date " formControlName="lastReceipt">
+                      <mat-datepicker-toggle matSuffix [for]="picker44"></mat-datepicker-toggle>
+                      <mat-datepicker #picker44></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+              </mat-expansion-panel>
+              <mat-expansion-panel #panel8 hideToggle>
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                    <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset="">Dimensions
+                    </div>
+                    <mat-icon class="collapsefont">{{panel8.expanded? 'remove' : 'add'}}</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+  
+                <div class="row  boxgrey mt-2">
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Length</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="length">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Width</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="width">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Height</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="height">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Volume</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="volume">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Weight</p>
+                    <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="weight">
+                    </mat-form-field>
+                  </div>
+  
+                </div>
+  
+              </mat-expansion-panel>
+            </form>
+            <form [formGroup]="consumebles">
+              <mat-expansion-panel #panel7 hideToggle>
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                    <div> <img src="./assets/img/icons/add.png" class="header_icon mr-2" alt="" srcset="">Purchase Data
+                    </div>
+                    <mat-icon class="collapsefont">{{panel7.expanded? 'remove' : 'add'}}</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="d-flex justify-content-end">
+                  <button mat-stroked-button (click)="addRow()" class="d-flex mx-1 text-white bg-orange mt-2">
+                    <mat-icon>add</mat-icon> Add Lines
+                  </button>
+                  <button mat-stroked-button (click)="saveLines()" class="d-flex mx-1 text-white bg-darkblue mt-2">
+                    <mat-icon>add</mat-icon> Save Lines
+                  </button>
+                </div>
+  
+                <div class="row  boxgrey mt-2">
+  
+                  <div class="scroll w-100">
+                    <table class="table  table-bordered">
+                      <thead>
+                        <tr>
+                          <th scope="col">Item Code </th>
+                          <th scope="col">Receipt Date </th>
+                          <th scope="col" style="width: 0px;">Receipt No</th>
+                          <th scope="col" style="width: 0px;">Vendor</th>
+                          <th scope="col" style="width: 0px;">Quantity</th>
+                          <th scope="col" style="width: 0px;">Value</th>
+                          <th scope="col" style="width: 0px;">Warehouse </th>
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="Rows">
+                        <tr *ngFor="let entity of consumebles.get('Rows')?.['controls'];
+                        let i = index;
+                        let l = last" [formGroupName]="i">
+                        <td class="w-20">
+                          <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                            <input matInput placeholder="Enter" formControlName="itemCode">
+                          </mat-form-field>
+                        </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="receiptDate">
+                            </mat-form-field>
+                          </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="receiptNo">
+                            </mat-form-field>
+                          </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="vendor">
+                            </mat-form-field>
+                          </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="quantity">
+                            </mat-form-field>
+                          </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="value">
+                            </mat-form-field>
+                          </td>
+                          <td class="w-20">
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Enter" formControlName="warehouse">
+                            </mat-form-field>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+  
+                  </div>
+  
+                </div>
+  
+              </mat-expansion-panel>
+            </form>
+          </mat-accordion>
+  
+  
+        </div>
+      </div>
+  
+    </div>
+    <div class="d-flex justify-content-center  align-items-center py-2 fixed-bottom">
+  
+      <button mat-raised-button class="text-white mx-1 px-3" color="warn" routerLink="/main/materialmasters/consumables">
+        <mat-icon class="">close</mat-icon>Cancel
+      </button>
+      <button *ngIf="this.js.pageflow != 'Display'" mat-raised-button class="bg-darkblue text-white mx-1 px-3"
+        (click)="submit()">
+        <mat-icon class="">done</mat-icon>{{js.pageflow =='Edit'? 'Update': 'Save'}}
+      </button>
+      <!-- <button mat-raised-button class="bg-info  text-white mx-1 px-4" routerLink="/main/operation/payment"  > 
+          <mat-icon class="">done</mat-icon> Raise Payment
+        </button>
+        <button mat-raised-button class="bg-orange  text-white mx-1 px-4"  >
+          <mat-icon class="">done</mat-icon> Raise Contract
+        </button>
+        <button mat-raised-button class="bg-success  text-white mx-1 px-4" routerLink="/main/operation/invoice">
+          <mat-icon class="">done</mat-icon> Raise Invoice
+        </button> -->
+    </div>
+  
+  
+  
+  
+    <!--right pane
+          <div class="col-3 pl-1 pr-1 mt-1 ">
+            <div class="whs-rightpane bg-white shadow">
+            </div>
+          </div>
+          -->
+  </div>
+  

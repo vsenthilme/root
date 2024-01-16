@@ -1,0 +1,185 @@
+<div class="row mx-1 pl-2">
+  <div class="col-12">
+    <div class="row  text-secondary pr-0 mt-1">
+      <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+
+
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+          <ol class="breadcrumb mb-0 bg-white">
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem "><a >Home</a></li>
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a
+                routerLink="/main/reports/report-list">Reports</a></li>
+            <li class="breadcrumb-item whs-fontsize-1-2rem ">List</li>
+          </ol>
+        </nav>
+
+
+        <div class="d-flex ml-auto">
+          <div [hidden]="isShowDiv"> <input matInput class="form-control filter_button mt-2 mt-2 mx-3 border-bottom"
+              placeholder="Search" style="width:90%">
+          </div>
+          <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row d-flex align-items-center">
+            <!--
+                          <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-3"
+                          matTooltip="Add">
+                          <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                        </button>
+                        -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+              matTooltip="Display">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+              matTooltip="Edit">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+              matTooltip="Delete">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+            </button>
+            <!-- 
+                          <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                        class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="search">
+                        <mat-icon class="action-icon d-flex align-items-center justify-content-center">search_outline</mat-icon>
+                      </button>
+                        -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+              matTooltip="Download">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+            </button>
+
+
+            <button mat-mini-fab (click)="toggleFloat()" class="mx-3 text-white action-button"
+              [ngClass]="{'bg-orange' : toggle, 'purple': !toggle}">
+              <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab 
+              class=" floating-buttons1  d-flex align-items-center justify-content-center darkaction text-white mx-3 mr-3 align-middle"
+              matTooltip="New">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">add</mat-icon>
+            </button>
+            <button disabled mat-mini-fab 
+              class="disabled floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-3 mr-3 align-middle"
+              matTooltip="Save">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">save</mat-icon>
+            </button>
+            <button disabled mat-mini-fab class="disabled text-white mx-3 action-button   bg-red"  type="button" mat-button>
+              <mat-icon class="">tune</mat-icon> Filter
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mainsection mt-2  px-0 bg-white" style="height: calc(100vh - 11rem);">
+    <div class="tabbar1 px-0 bg-white my-auto col d-flex align-items-center">
+      <h5 class="my-auto mb-0 mx-4  whs-text-grey ">LIST OF REPORTS</h5>
+    </div>
+
+    <mat-nav-list *ngIf="userType != 3" class="scrollheight">
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/wordorderprocessingleadtime"
+        style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">WO Processing Lead Time</p>
+      </a>
+    </mat-list-item>
+    <mat-list-item class=" border "> <a matLine href="..."  routerLink="/main/reports/leadTime"
+        style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">Shifting Lead Time </p>
+      </a>
+    </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/paymentDue"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Payment Due Status </p>
+        </a>
+      </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/inquiryRate"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Inquiry Status</p>
+        </a>
+      </mat-list-item>  
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/storageUnit"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Storage Unit Status</p>
+        </a>
+      </mat-list-item>  
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/masterData"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Master Data List</p>
+        </a>
+      </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..."  routerLink="/main/reports/document"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Documents List</p>
+        </a>
+      </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..."  routerLink="/main/reports/quotationstatus"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Quotation Status </p>
+        </a>
+      </mat-list-item>
+  <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/workOrder"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Work Order Status</p>
+        </a>
+      </mat-list-item> 
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/fillRate"
+          style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">Fill Rate</p>
+        </a>
+      </mat-list-item>
+
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/smsAlert"
+        style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">SMS Alerts Status</p>
+      </a>
+    </mat-list-item>
+    <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/agreementRenew"
+        style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">Agreement Renewal</p>
+      </a>
+    </mat-list-item>
+    <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/employeeEfficiency"
+        style="font-size: 16px;"><img src="./assets/img/icons1/file.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">Employee Efficiency</p>
+      </a>
+    </mat-list-item>
+    
+
+
+    </mat-nav-list>
+
+  </div>
+
+</div>

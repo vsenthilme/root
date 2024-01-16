@@ -1,0 +1,247 @@
+<form [formGroup]="form" >
+    <div class="card bg-white " style="overflow-x: hidden;">
+        <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+          class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+          <h6 class="my-auto">Inquiry - {{data? data.pageflow: 'New'}} </h6>
+          <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+        </div>
+          <mat-accordion>
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  General
+                  <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+          <div class="row scroll p-1">
+            <div class="col-lg-4 col-md-6  mt-1" *ngIf="data.pageflow != 'New'"> 
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Inquiry ID</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="enquiryId">
+                  </mat-form-field>
+              </div>
+            </div>
+      
+       
+
+            <div class="col-lg-4 col-md-6  mt-1">
+              <p class="mb-0 py-0 required">Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="enquiryName">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('enquiryName')">{{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6  mt-1">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 required">Mobile No </p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input  matInput placeholder="Enter" formControlName="enquiryMobileNumber">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('enquiryMobileNumber')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6  mt-1">
+                <p class="mb-0 py-0">Required Services</p>
+                <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="requirementTypeList"
+                formControlName="requirementDetail" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+              </div>
+              <div class="col-lg-4 col-md-6  mt-1">
+                <p class="mb-0 py-0 ">SBU</p>
+                <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="workOrderSbuList"
+                  formControlName="sbu" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                <mat-error *ngIf="errorHandling('sbu')">{{getErrorMessage()}}</mat-error>
+              </div>
+             
+              <div class="col-lg-4 col-md-6  mt-1">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">Email</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput type="email" placeholder="Enter" formControlName="email">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('email')">{{getErrorMessage()}}</mat-error>
+                  <mat-error *ngIf="form.controls.email.hasError('email')">Invalid Email </mat-error>
+                </div>
+              </div>
+              <div class="col-12 mt-1" *ngIf="this.form.controls.requirementDetail.value == 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">From Address</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput  placeholder="Enter" formControlName="addressFrom">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-12 mt-1" *ngIf="this.form.controls.requirementDetail.value == 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">To Address</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput  placeholder="Enter" formControlName="addressTo">
+                  </mat-form-field>
+                </div>
+              </div>
+               <div class="col-lg-4 col-md-6 mt-1" *ngIf="this.form.controls.requirementDetail.value == 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">No of Trips</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput type="number" placeholder="Enter" formControlName="numberOfTrips">
+                  </mat-form-field>
+                </div>
+              </div> 
+              <div class="col-lg-4 col-md-6 mt-1" *ngIf="this.form.controls.requirementDetail.value == 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">Packing Cost</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput currencyMask formControlName="packingCost"   />
+                  </mat-form-field>
+                </div>
+              </div> 
+              <div class="col-lg-4 col-md-6 mt-1" *ngIf="this.form.controls.requirementDetail.value == 'Packing & Moving'">
+                  <p class="mb-0 py-0">Job Card Type </p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <mat-select class="form-group input_field mb-0" placeholder="Select" formControlName="jobcardType">
+                      <mat-option value="Villa"> Villa</mat-option>
+                      <mat-option value="Flat Apartment">Flat Apartment </mat-option>
+                      <mat-option value="Warehouse">Warehouse </mat-option>
+                      <mat-option value="Commercial Space">Commercial Space </mat-option>
+                      <mat-option value="Others">Others </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              <div class="col-lg-4 col-md-6 mt-1">
+                <p class="mb-0 py-0">Type of Customer   </p>
+                <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="customerTypeList"
+                formControlName="customerGroup" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+              </div>
+
+              <div class="col-lg-4 col-md-6 mt-1" *ngIf="this.form.controls.requirementDetail.value != 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">Storage Size (Meter Sq)</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="storageSizeList"
+                  formControlName="enquiryStoreSize" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                  <mat-error *ngIf="errorHandling('enquiryStoreSize')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              
+              <div class="col-lg-4 col-md-6 mt-1">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">Status</p>
+                  <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]=" enquirystatuslist"
+                  formControlName="enquiryStatus" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                  [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                
+              </div>
+            </div>
+              <div class="col-lg-4 col-md-6 mt-1" *ngIf="this.form.controls.requirementDetail.value != 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0 ">Rent Type</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <mat-select placeholder="Select" formControlName="referenceField1">
+                      <mat-option value="WEEKLY">Weekly </mat-option>
+                      <mat-option value="MONTHLY">Monthly</mat-option>
+                      <mat-option value="QUARTERLY">Quarterly </mat-option>
+                      <mat-option value="HALFYEARLY">Half Yearly </mat-option>
+                      <mat-option value="YEARLY">Yearly </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('referenceField1')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+
+
+              <div class="col-lg-3 col-md-3 mt-1 my-auto" *ngIf="this.form.controls.requirementDetail.value != 'Packing & Moving'">
+                <div class="d-flex flex-column">
+                  <button type="button"  class="btn btn-outline-info" (click)="availablityCheck()">Check Availability</button>
+                </div>
+              </div>
+              <div class="col-lg-1 col-md-1 mt-1 my-auto">
+               
+              </div>
+              
+              <div class="col-lg-4 col-md-6 mt-1">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0"> Remarks</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="enquiryRemarks">
+                  </mat-form-field>
+                </div>
+              </div>
+     
+          </div>
+
+      
+            </mat-expansion-panel>
+    
+            <mat-expansion-panel #panel2 hideToggle *ngIf="data.pageflow != 'New'"> 
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                  Admin
+                  <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-3  mt-2">
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable" formControlName="createdBy">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="createdOn">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="updatedBy">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="updatedOn">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>  
+            <div class="col-lg-4 col-md-6 mt-1 ml-1 pl-4 "  *ngIf="data.pageflow != 'New'">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Copy To</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <mat-select class="form-group input_field mb-0"
+                    placeholder="Select" formControlName="copyTo">
+                    <mat-option value="Customer">Create Customer / Lead</mat-option>
+                    <mat-option value="Quote">Quote </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-accordion>
+          <div class="d-flex justify-content-center align-items-center py-2">
+            <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+                class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+                <button *ngIf="data.pageflow != 'Display'" mat-raised-button class="mx-2 bg-darkblue px-4 text-white" (click)="submit()"> <i
+                  class="bi bi-check2 me-1 font-size-1_5rem"></i>
+                  {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+                  <button  *ngIf="data.pageflow != 'New'" mat-raised-button class="mx-2 bg-orange px-4 text-white" (click)="copyTo()"> <i
+                    class="bi bi-files me-1 font-size-1_5rem"></i>
+                    Copy To</button>
+          </div>
+    
+    
+      </div>
+    
+    </form>  

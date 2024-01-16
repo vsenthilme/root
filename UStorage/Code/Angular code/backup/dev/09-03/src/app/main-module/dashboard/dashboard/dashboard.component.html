@@ -1,0 +1,255 @@
+<!-- PROD -->
+<mat-tab-group animationDuration="0ms" [selectedIndex]="0" (selectedTabChange)="tabChanged($event)"> 
+  <mat-tab label="Store Detail">
+    <app-basement></app-basement>
+  </mat-tab>
+    <mat-tab label="UStorage"> 
+<div class="row margint-2 px-0 mx-0 ">
+  <div class="col-6 margint-2">
+    <app-lead-conversion></app-lead-conversion>
+  </div>
+  <div class="col-6 margint-2">
+ <app-binning></app-binning>
+  </div>
+  <div class="col-6 margint-2">
+    <app-billed-paid></app-billed-paid>
+  </div>
+  <div class="col-6 margint-2">
+    <app-bar-chart></app-bar-chart>
+  </div>
+
+</div>
+    </mat-tab>
+    <mat-tab label="ULogistics "> 
+      <div class="row margint-2 px-0 mx-0 ">
+        <div class="col-6 margint-2">
+       <app-lead-conversion1></app-lead-conversion1>
+        </div>
+        <div class="col-6 margint-2">
+        <app-work-order-status></app-work-order-status>
+        </div>
+        <div class="col-6 margint-2">
+          <app-stack-bar></app-stack-bar>
+        </div>
+        <div class="col-6 margint-2">
+          <!-- <app-payment-due></app-payment-due> -->
+        </div>
+      </div>
+    </mat-tab>
+
+</mat-tab-group>
+<!-- DEV-->
+
+ <!-- <div class="row  margint-2 px-0 mx-0 ">
+  <div class="col-8 border">
+    <div class="row">
+      <div class="col-6 border">
+
+        <app-semi-pie></app-semi-pie>
+      </div>
+      <div class="col-6 border">
+        <app-receipt-bar></app-receipt-bar>
+      </div>
+      <div class="col-6 border">
+        <app-bin-chart></app-bin-chart>
+        <app-deliver-chart></app-deliver-chart>
+      </div>
+      <div class="col-6 border">
+        <app-deliver-chart></app-deliver-chart>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 px-0">
+    <div class="d-flex justify-content-end">
+      <div class="d-flex align-items-center">
+        <p class="mb-0 mr-1">FTD</p>
+        <mat-form-field class="mb-0 w-100 " appearance="outline">
+          <input matInput [(ngModel)]="planModel.start_time " [matDatepicker]="picker4" placeholder="Choose Date ">
+          <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+          <mat-datepicker #picker4></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="border">
+      <app-skuchart></app-skuchart>
+    </div>
+  </div>
+</div>  -->
+
+
+<!--design -->
+<!-- 
+ <mat-form-field class="form-group input_field mb-0 w-25 ml-5 mt-2" appearance="outline">
+  <input matInput [matDatepicker]="picker4" placeholder="Choose Date ">
+  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+  <mat-datepicker #picker4></mat-datepicker>
+</mat-form-field>
+<div class="row  margint-2 px-0 mx-0 ml-5">
+  <div class="col-4 mb-2">
+    <h4 class="mb-0  text-grey  font-weight-bold text-center">
+      For the Day : {{date | date: 'dd'}}
+    </h4>
+  </div>
+  <div class="col-2"></div>
+  <div class="col-4 mb-2">
+    <h4 class="mb-0 text-grey  font-weight-bold text-center">
+      For the Month : {{date | date: 'MMMM'}}
+    </h4>
+  </div>
+
+  <div class="col-3 my-2 ">
+    <div class="">
+      <img src="./assets/img/dashboard/receipt1.png" class="img-fluid iconsize" alt="" srcset="">
+      <h4 class="text-grey font-weight-bold mt-3">Receipts</h4>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">235</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Awaiting ASN</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">07</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Container Received</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">12</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Item Received</h6>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3 my-2">
+    <div class="">
+      <img src="./assets/img/dashboard/shipping4.png" class="img-fluid iconsize" alt="" srcset="">
+      <h4 class="text-grey font-weight-bold mt-3">Shipping</h4>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">54</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Shipped Line</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">21</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Normal Order</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-purple  font-weight-bold mt-1">02</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Special Order</h6>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3 my-2">
+    <div class="">
+      <img src="./assets/img/dashboard/receipt5.png" class="img-fluid iconsize" alt="" srcset="">
+      <h4 class="text-grey font-weight-bold mt-3">Receipts</h4>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">08</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Awaiting ASN</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">54</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Container Received</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">21</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Item Received</h6>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="col-3 my-2">
+    <div class="">
+      <img src="./assets/img/dashboard/shipping1.png" class="img-fluid iconsize" alt="" srcset="">
+      <h4 class="text-grey font-weight-bold mt-3">Shipping</h4>
+    </div>
+
+
+
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">08</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Shipped Line</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">35</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Normal Order</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-red  font-weight-bold mt-1">22</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Special Order</h6>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-3 my-2">
+    <div class="">
+      <img src="./assets/img/dashboard/bin1.png" class="img-fluid iconsize" alt="" srcset="">
+      <h4 class="text-grey font-weight-bold mt-3">Bin Status</h4>
+    </div>
+
+
+
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-green  font-weight-bold mt-1">08</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Empty</h6>
+      </div>
+    </div>
+    <div class="row d-flex align-items-center">
+      <div class="col-2">
+        <h4 class="text-green  font-weight-bold mt-1">35</h4>
+      </div>
+      <div class="col-8">
+        <h6 class="text-grey mt-1 ml-1">Full</h6>
+      </div>
+    </div>
+
+
+  </div>
+</div>  -->

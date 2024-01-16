@@ -1,0 +1,110 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+      <h6 class="my-auto">Store Details</h6>
+      <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+    </div>
+    <div class="d-flex justify-content-end align-items-center">
+        <button mat-raised-button type="button" (click)="add()" class=" text-white bg-orange demo-button mt-2">
+          <mat-icon class="">add</mat-icon> Add Lines
+        </button>
+      </div>
+    <div class="row  p-1">
+      <div class="scroll w-100">
+        <table mat-table matSort [dataSource]="dataSource" class="w-100">
+  
+          <ng-container matColumnDef="sno">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>No </th>
+            <td mat-cell *matCellDef="let element; let i = index  "> {{i +1}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-right"> </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="codeId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Store No </th>
+            <td mat-cell *matCellDef="let element;let i = index"> 
+                <p-dropdown   placeholder="Select" class="w-100" [filter]="true"  (onChange)="onItemSelect($event, element)"  [options]="storageunitList" *ngIf="element.editable"
+                [(ngModel)]="element.storeNumber" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown >
+                <!-- <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="storageunitList"
+                [(ngModel)]="element.storeNumber" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown > -->
+                <mat-form-field class="form-group input_field mb-0" appearance="outline" *ngIf="!element.editable">
+                  <input matInput placeholder="Enter"  [disabled]="true" [(ngModel)]="element.storeNumber1">
+                </mat-form-field>
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-right"> </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="storeSizeMeterSquare">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Store Size</th>
+            <td mat-cell *matCellDef="let element;let i = index">
+              <!-- <p-dropdown   placeholder="Select" class="w-100" [filter]="true" [options]="storenumbersizeList" [disabled]="true" *ngIf="element.editable"
+              [(ngModel)]="element.size" [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" 
+              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown > -->
+                <input matInput placeholder="Enter" [disabled]="true" [(ngModel)]="element.size" >
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-right"> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rent">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Rent</th>
+            <td mat-cell *matCellDef="let element;let i = index">
+            <div class="d-flex justify-content-between">
+              <input matInput placeholder="Enter"  [(ngModel)]="element.rent" >
+              <!-- <mat-icon matSuffix >edit_note</mat-icon> -->
+            </div>
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-left">{{getTotalRentAmount() | currency:'KWD'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phase</th>
+            <td mat-cell *matCellDef="let element;let i = index">
+                <input matInput placeholder="Enter" [disabled]="true" [(ngModel)]="element.location" >
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-right"> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions </th>
+            <td mat-cell *matCellDef="let element;let i = index">
+          <div class="d-flex">
+            <button mat-icon-button (click)="removeEmail(i,element)">
+              <mat-icon class="text-danger">delete_outline</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Change Store" (click)="editDomain(element)" *ngIf="!element.editable">
+              <mat-icon class="text-danger">edit_outline</mat-icon>
+            </button>
+          </div>
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+            class="text-right"> </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+        </table>
+        
+      </div>
+      
+    <div class="d-flex ml-auto">
+      <mat-paginator [pageSizeOptions]="[100, 150, 200]" showFirstLastButtons
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+    </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+          <button mat-raised-button color="warn" mat-dialog-close class="mx-2 bg-darkblue px-4 text-white" (click)="submit()"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>Save</button>
+    </div>
+  </div>
+  

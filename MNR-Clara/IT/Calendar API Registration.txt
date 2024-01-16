@@ -1,0 +1,35 @@
+
+1. create developer tenant acount in developer.microsoft.com(including modile authenticator app)
+
+App name : mnrclara
+client id: 2eb66116-b614-4556-9f19-d922a31582ec
+tenant id: 12b6e2a1-dc01-47f7-867b-cbdf8237d353
+secret key: x247Q~BZpT.8gM46hI-WIFzMgpB5jDBlYGx3c
+
+https://login.microsoftonline.com/{{TenantID}}/oauth2/v2.0/authorize
+
+https://login.microsoftonline.com/12b6e2a1-dc01-47f7-867b-cbdf8237d353/oauth2/v2.0/authorize?
+client_id=2eb66116-b614-4556-9f19-d922a31582ec
+&response_type=code
+&redirect_uri=https://oauth.pstmn.io/v1/browser-callback
+&response_mode=query
+
+&section_state=12345
+&scope=https://graph.microsoft.com/.default
+
+
+https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize
+
+https://login.microsoftonline.com/12b6e2a1-dc01-47f7-867b-cbdf8237d353/oauth2/authorize?
+
+https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?
+client_id=2eb66116-b614-4556-9f19-d922a31582ec
+&response_type=code
+&redirect_uri=https://oauth.pstmn.io/v1/browser-callback
+&response_mode=query
+&scope=User.Read.All
+&state=12345
+
+https://oauth.pstmn.io/v1/browser-callback?code=0.AVAAoeK2EgHc90eGe8vfgjfTUxZhti4UtlZFnxnZIqMVgux_AAU.AQABAAIAAAD--DLA3VO7QrddgJg7WevrGRIR33qj5YVEFPS4J8xHNlyyPt7oTYEBPe2IEMm78OQHMNGEgrX5DHoSNU50-qKqewCk32OgW8CYK_nSLd6vFTM0hVdwEUsJRA5WEoCMRLMpYeTlmOeKkZeRcJz2YsAz2QZ8F7WrXx4cUOFWvBjNEpvC8_FQaVCKB3aWJDLOqtNq4Fx0jwGtrghdcHtaCewuyhwIWv8j-tgY3FOrRguCWQcUkeqYyCPF2P_RzirjUBH7KIqXnLHRJcr-TqlzP3JqyJgWVuCdUTFoB0z0J9H4bSB9GeUoOYLJF6MCIYxGqcS-KysySOYdF98JeCAvLeq3ZV7KJz2ajNNuwo_nMnGNaCNe3iCo7Q1pvkbJ7idKcEzZm94di2a8cQ2dlDcB5xvEs_h7qelUa5qn2iY43HW_Io0fJ5gQB7biqOjNl72j7Xr7iD9jalW5HRCcRPxJo36A88Nwf7TdQRIfn4RYV6sS8eeJ3XgerqpoW-W7VcgteChOc-WpNmoRK8EcMW1X-fFPl8RRSZ9lvJ6DIYJEj1OXgHX1ThUuSFvQUm5Lp0j5WoazQxOMg201hYxkHGiaoF0KFaVYubpLpGIS0JLd4YZRgI67tUwMmljuGhc6ufGcAvZ0UyWNUCeZ_axnG2zEXSTRaRp46Dilhir3FBg7_vLpsiAA&state=12345&session_state=3ec568a7-8fb8-4cfa-b9ab-abd2c2378a49#
+
+

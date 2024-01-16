@@ -1,0 +1,54 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2 bg-white">
+    <div class="ps-3">
+        <nav aria-label="breadcrumb mb-0">
+            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                <li class="breadcrumb-item mb-0 ms-3">
+                    <a >
+                        <mat-icon class="text-secondary align-middle">home</mat-icon>
+                    </a>
+                </li>
+                <div class="divider mx-3 border-end"></div>
+                <li class="breadcrumb-item mb-0 active " aria-current="page">Template View</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+        <div> <input matInput disabled class="form-control disabled filter_button mx-2 border-bottom"
+                placeholder="Filter" style="width:90%"></div>
+        <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row">
+            <a mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+                matTooltip="Download Excel" [download]="fileName" [href]="fileUrldownload">
+                <mat-icon class="">download</mat-icon>
+            </a>
+
+            <button mat-mini-fab *ngIf="showFloatingButtons == true" (click)="back()"
+                class="floating-buttons bg-darkblue text-white mx-2" matTooltip="Cancel">
+                <mat-icon class="">close</mat-icon>
+            </button>
+            <button mat-mini-fab [disabled] (click)="toggleFloat()" class=" disabledmx-2 text-white action-button"
+                [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+                <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab disabled class="bg-darkblue text-white mx-2 action-button disabled">
+                <mat-icon class="">add</mat-icon> New
+            </button>
+            <button mat-mini-fab disabled class="text-white mx-2 action-button disabled bg-red" type="button"
+                mat-button>
+                <mat-icon class="">search</mat-icon> Search
+            </button>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+
+
+
+<ngx-doc-viewer class="px-5" *ngIf="!fileName.includes('.pdf')" [url]="docurl" viewer="mammoth" style="width:100%;height: 65%;">
+</ngx-doc-viewer>
+
+<pdf-viewer [src]="docurl">
+</pdf-viewer>

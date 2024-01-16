@@ -1,0 +1,141 @@
+
+
+  <div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+      <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 d-flex align-items-center">
+          <li class="breadcrumb-item mb-0 ms-3">
+            <a >
+              <mat-icon class="text-secondary align-middle">home</mat-icon>
+            </a>
+          </li>
+          <div class="divider mx-3 border-end"></div>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Reports</li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Client </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+      <div  [hidden]="isShowDiv"> <input matInput  class="form-control filter_button mx-2 border-bottom"
+          placeholder="Filter" style="width:90%"></div>
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+          matTooltip="Delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+          matTooltip="Copy">
+          <mat-icon class="">content_copy</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+          matTooltip="Display">
+          <mat-icon class="">search</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+          class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+          [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon>{{icon}}</mat-icon>Options
+        </button>
+        <button disabled  mat-mini-fab class=" disabled  bg-darkblue text-white mx-2 action-button">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button  disabled  mat-mini-fab class=" disabled text-white mx-2 action-button  bg-red" type="button" mat-button>
+          <mat-icon class="">search</mat-icon> Search
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-drawer-container class="example-container" autosize >
+    <!-- <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+        <h3 class="my-auto mb-0">Search Parameter</h3>
+        <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+      </div> 
+      <div class="row scroll2 mx-0">
+       
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset();">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        <button mat-raised-button class="bg-blue text-white mx-1"  (click)="drawer.toggle()">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </mat-drawer> -->
+   
+    <div class="example-sidenav-content"style="overflow: hidden !important;">
+      <div class="tabbar1 px-0 bg-white my-auto col d-flex align-items-center"style="height: 3rem;  ">
+        <h2 class="my-auto mb-0 mx-4  whs-text-grey ">CLIENT REPORTS</h2>
+      </div>
+      <mat-nav-list class="mt-2">
+        <mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/lande"style="font-size: 16px;"><img src="./assets/img/icons1/one.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">NEW CLIENT INFO - L&E</p> </a>
+       
+        </mat-list-item>
+        <mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/immigration"style="font-size: 16px;"><img src="./assets/img/icons1/two.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">NEW CLIENT INFO - IMMIGRATION</p></a>
+       
+       </mat-list-item>
+     <!-- <mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/orderstatus"style="font-size: 16px;"><img src="./assets/img/icons1/four.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">ORDER STATUS REPORT</p> </a>
+      <button mat-icon-button  class="mx-4 text-warning">
+         <mat-icon>search</mat-icon>
+      </button>
+      <mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+    <button mat-icon-button  class="mx-4 text-success">
+      <mat-icon>download</mat-icon>
+    </button>
+   </mat-list-item>
+   <mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/shipment"style="font-size: 16px;"><img src="./assets/img/icons1/five.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">SHIPMENT DELIVERY REPORT</p> </a>
+    <button mat-icon-button  class="mx-4 text-warning">
+       <mat-icon>search</mat-icon>
+    </button>
+    <mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+  <button mat-icon-button  class="mx-4 text-success">
+    <mat-icon>download</mat-icon>
+  </button>
+ </mat-list-item>
+ <mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/shipment-summary"style="font-size: 16px;"><img src="./assets/img/icons1/six.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">SHIPMENT DELIVERY SUMMARY REPORT</p> </a>
+  <button mat-icon-button  class="mx-4 text-warning">
+     <mat-icon>search</mat-icon>
+  </button>
+  <mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+<button mat-icon-button  class="mx-4 text-success">
+  <mat-icon>download</mat-icon>
+</button>
+</mat-list-item>
+<mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/shipment-dispatch"style="font-size: 16px;"><img src="./assets/img/icons1/seven.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">SHIPMENT DISPATCH SUMMARY REPORT </p></a>
+<button mat-icon-button  class="mx-4 text-warning">
+   <mat-icon>search</mat-icon>
+</button>
+<mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+<button mat-icon-button  class="mx-4 text-success">
+<mat-icon>download</mat-icon>
+</button>
+</mat-list-item>
+<mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/receipt-confirmation"style="font-size: 16px;"><img src="./assets/img/icons1/eight.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div><p class="mb-0 d-inline pr-3 mx-4">RECEIPT CONFIRMATION REPORT</p> </a>
+<button mat-icon-button  class="mx-4 text-warning">
+ <mat-icon>search</mat-icon>
+</button>
+<mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+<button mat-icon-button  class="mx-4 text-success">
+<mat-icon>download</mat-icon>
+</button>
+</mat-list-item>
+<mat-list-item class=" border " > <a matLine href="..." routerLink="/main/reports/samplestock"style="font-size: 16px;"><img src="./assets/img/icons1/nine.png" class="mb-1 mx-3" alt="" srcset="" style="height: 25px;width: 25px;"><div  class="vertical d-inline"></div> <p class="mb-0 d-inline pr-3 mx-4">STOCK LIST REPORT</p> </a>
+<button mat-icon-button  class="mx-4 text-warning">
+ <mat-icon>search</mat-icon>
+</button>
+<mat-slide-toggle color="primary" class="mx-4"></mat-slide-toggle>
+<button mat-icon-button  class="mx-4 text-success">
+<mat-icon>download</mat-icon>
+</button>
+</mat-list-item> -->
+      </mat-nav-list>
+    </div>
+  </mat-drawer-container>

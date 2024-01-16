@@ -1,0 +1,112 @@
+<!--
+<div class="bg-white d-flex justify-content-start mx-3 tabbar">
+  <div class="pt-1 menu d-flex justify-content-center red">
+    <div class="d-flex align-items-center py-2">
+      <mat-icon class="red-text">description</mat-icon>
+      <h3 class="mb-0 red-text px-2">General</h3>
+    </div>
+  </div>
+  <div class="pt-1 menu d-flex justify-content-center blue">
+    <div class="d-flex align-items-center py-2">
+      <mat-icon class="blue-text">description</mat-icon>
+      <h3 class="mb-0 blue-text px-2">Notes</h3>
+    </div>
+  </div>
+  <div class="pt-1 menu d-flex justify-content-center purple1">
+    <div class="d-flex align-items-center py-2">
+      <mat-icon class="purple-text">description</mat-icon>
+      <h3 class="mb-0 purple-text px-2">Matters</h3>
+    </div>
+  </div>
+  <div class="pt-1 menu d-flex justify-content-center green">
+    <div class="d-flex align-items-center py-2">
+      <mat-icon class="green-text">description</mat-icon>
+      <h3 class="mb-0 green-text px-2">Emails</h3>
+    </div>
+  </div>
+  <div class="pt-1 menu d-flex justify-content-center yellow">
+    <div class="d-flex align-items-center py-2">
+      <mat-icon class="yellow-text">description</mat-icon>
+      <h3 class="mb-0 yellow-text px-2">Documents</h3>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="bg-white p-1 d-flex justify-content-start mx-3 px-3 tabbar pb-2 mt-1">
+  <div class="mt-1 active d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center py-1">
+      <mat-icon class="red-text">people</mat-icon>
+      <p class="mb-0 red-text px-2">General</p>
+    </div>
+
+  </div>
+ 
+    <div class=" mt-1 pe-5">
+      <div class="icon blue-border  d-flex justify-content-center align-items-center">
+        <mat-icon class="blue-text">content_paste</mat-icon>
+        <p class="mb-0 blue-text px-2">Notes</p>
+      </div>
+    </div>
+
+
+
+<div class=" mt-1 pe-5">
+  <div class="icon purple-border  d-flex justify-content-center align-items-center">
+    <mat-icon class="purple-text">business_center</mat-icon>
+    <p class="mb-0 purple-text px-2">Matters</p>
+  </div>
+</div>
+<div class=" mt-1 pe-5">
+  <div class="icon green-border  d-flex justify-content-center align-items-center">
+    <mat-icon class="green-text">email</mat-icon>
+    <p class="mb-0 green-text px-2">Email</p>
+  </div>
+</div>
+<div class=" mt-1 pe-5">
+  <div class="icon purple-border  d-flex justify-content-center align-items-center">
+    <mat-icon class="pink-text">description</mat-icon>
+    <p class="mb-0 pink-text px-2">Document</p>
+  </div>
+</div>
+</div>
+-->
+
+<!-- 
+
+<div class="header-section">
+  <div class="d-flex justify-content-between  mt-1 align-items-center bg-white text-secondary header-box mx-3"
+  style="height: 3.1rem;filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15));">
+  <h3 class="ps-4 my-auto mb-0 text-dark" style="font-size:22px;">Vilegas Ortega (ID 10001)</h3>
+  </div>
+<div class="tabbar bg-white ms-3 me-3 mt-1">
+  <nav mat-tab-nav-bar class="scroll2 d-flex justify-content-start ">
+    <a mat-tab-link *ngFor=" let link of listmenu" [ngClass]="link.class" (click)="activeLink = link.url"
+      [active]="activeLink == link.url" [routerLink]="link.url">
+      <i [ngClass]="link.icon"></i> {{link.title}} </a>
+  </nav>
+</div>
+</div> -->
+
+<router-outlet></router-outlet>
+
+
+
+<!--
+  
+<div class="header-section">
+  <div class="d-flex justify-content-between  mt-1 align-items-center bg-white text-secondary header-box mx-3"
+style="height: 3.1rem;filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15));">
+<h3 class="ps-4 my-auto mb-0 text-dark" style="font-size:18px;">Vilegas Ortega (ID 10001)</h3>
+</div>
+<div class="tabbar bg-white ms-3 me-3 mt-1">
+  <nav mat-tab-nav-bar class="scroll2 d-flex justify-content-start ">
+    <a mat-tab-link *ngFor=" let link of listmenu" [ngClass]="link.class" (click)="activeLink = link.url"
+      [active]="activeLink == link.url" [routerLink]="link.url">
+      <i [ngClass]="link.icon"></i> {{link.title}} </a>
+  </nav>
+</div>
+</div>
+-->

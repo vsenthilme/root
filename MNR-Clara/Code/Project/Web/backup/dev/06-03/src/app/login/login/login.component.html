@@ -1,0 +1,62 @@
+<div class="container vw-100 vh-100 mw-100 px-0" style="background-color: #003F5E;">
+  <!--<img src=".\assets\img\icons\logo.png" class="img-fluid logo" alt="" srcset="">-->
+  <div class="d-flex justify-content-center align-items-center" style="height: 46vh;background-color: white;">
+    <img src="./assets/img/icons/mandr.png" class="img-fluid" alt="" srcset="" style="width: 338px;height: 161px;">
+  </div>
+
+  <!-- <div class="d-flex justify-content-center align-items-center pt-4 invisible">
+    <span class="material-icons" style="font-size: 3.8rem;color: white;">person</span>
+    <h1 class="d-flex align-self-center mb-0 ms-4" style="color: white;font-size:28px">SIGN IN</h1>
+  </div> -->
+ <form class="d-flex justify-content-center align-items-center mt-5" [formGroup]="lgForm" (ngSubmit)="login()" *ngIf="showLoginDeatils">
+    <div class="mx-auto">
+      <div class="form-group mb-0 mt-3" style="color: #006990;">
+        <h3 class=" mb-1 text-white" style="font-size:19px">User ID</h3>
+        <mat-form-field appearance="outline" style="width:21rem;">
+          <input matInput type="text" formControlName="userName" id="exampleInputEmail1" style="color: black;"
+            aria-describedby="emailHelp" placeholder="UserID" autocomplete="off">
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="form-group mb-0 " style="color: #006990;">
+        <h3 class=" mb-1 text-white" style="font-size:19px">Password</h3>
+        <mat-form-field appearance="outline" style="width:21rem;">
+          <input matInput type="password" formControlName="password" id="exampleInputPassword1" style="color: black;"
+            placeholder="Password" [type]="hide" aria-describedby="forgot" autocomplete="off" >
+          <button mat-icon-button matSuffix (click)="hide= hide=='text' ? 'password' : 'text' "
+            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-button style="background-color: #006990;color: white;width:21rem;"
+        class="btn-lg btn-block py-2 mt-1 mb-2" type="Submit">Login</button>
+    </div>
+  </form> 
+
+
+  <div class="d-flex justify-content-center align-items-center mt-5" *ngIf="showEmailVerify">
+    <div class="mx-auto">
+      <div class="form-group mb-0 mt-3" style="color: #006990;">
+        <h3 class=" mb-1 text-white text-center" style="font-size:18px">We have sent a verification code to</h3>
+        <!-- <p class=" mb-1 text-white text-center" style="font-size:12px">Enter the Verification code sent to</p> -->
+        <p class="mb-3 text-white text-center"  style="font-size:12px">{{userEmail}}</p>
+      </div>
+      <div class="form-group mb-0 " style="color: #006990; margin-bottom: 2rem !important;">
+        <ng-otp-input [config]="{length:4}" (onInputChange)="onOtpChange($event)"  class="mx-auto text-center text-blue" style="margin-bottom:2rem;"></ng-otp-input>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-start mt-2">
+            <!-- <mat-icon>keyboard_backspace</mat-icon> -->
+            <p type="button" class="text-white" style="font-size: 10px;margin-left: 3.5rem;" (click)="back()">Back</p>
+          </div>
+          <div class="d-flex justify-content-start">
+            <!-- <mat-icon>keyboard_backspace</mat-icon> -->
+            <p type="button" class="text-white" style="font-size: 10px;margin-right: 3.5rem;"(click)="resendOTP();">Resend</p>
+          </div>
+        </div>
+      </div>
+      <button mat-button style="background-color: #006990;color: white;width:21rem;"
+        class="btn-lg btn-block py-2 mt-1 my-2" (click)="verifyOtp()">Verify</button>
+    </div>
+  </div>
+</div>

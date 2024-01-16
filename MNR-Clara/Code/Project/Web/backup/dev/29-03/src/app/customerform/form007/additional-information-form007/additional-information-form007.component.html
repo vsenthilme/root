@@ -1,0 +1,104 @@
+<form [formGroup]="chform">
+    <div class="row scroll mt-2 mx-1 px-4">
+        <div formGroupName="additionalInfo" class="row px-4">
+            <p class="mb-0 py-0   mt-2">Have you ever been a member of, involved in, or in any way associated with,
+                any
+                organization, association, fund, foundation, party, club, society or similar group in the United
+                States
+                or in any other location in the world? </p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="haveYouEverbeenAMemberOfAnyOrgOrGroup">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('additionalInfo.haveYouEverbeenAMemberOfAnyOrgOrGroup')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 pb-2  fw-bolder mt-3">If yes, please provide the following information:</p>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Name of the Group</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="nameOfTheGroup" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.nameOfTheGroup')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Purpose of the Group</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="purposeOfTheGroup" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.purposeOfTheGroup')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Date of Membership</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker45">
+                        <input formControlName="sinceFrom" matStartDate placeholder="Start date">
+                        <input formControlName="until" matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker45"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker45></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.sinceFrom')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+
+            <p class="mb-0 py-0   mt-2">Have you ever been part of the military? </p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="haveYouEverbeenPartOfTheMilitary">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('additionalInfo.haveYouEverbeenPartOfTheMilitary')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 pb-2  fw-bolder mt-3">If yes, please provide the following information:</p>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Country</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="country" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.country')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Range</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="range" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.range')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Date of Membership</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker46">
+                        <input formControlName="militaryPeriodsinceFrom" matStartDate placeholder="Start date">
+                        <input formControlName="militaryPeriodUntil" matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker46"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker46></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('additionalInfo.militaryPeriodUntil')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <ul class="mt-2">
+            <li>I certify that I have read and understood all the questions that conform this questionnaire and
+                that
+                the answers that I have provided are correct to the best of my personal knowledge.</li>
+            <li>I understand that any false statement or allegation may result in a permanent denial of any
+                immigration benefit or entrance to the United States.</li>
+
+        </ul>
+
+
+
+    </div>
+</form>

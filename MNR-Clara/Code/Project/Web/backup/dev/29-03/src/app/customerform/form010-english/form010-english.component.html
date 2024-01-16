@@ -1,0 +1,2981 @@
+<div class="table_shadow my-0 py-0 mt-3">
+  <div class="row ms-3 me-3 px-1 smallscreen">
+    <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 shadow">
+      <h2 class="my-auto header-text ps-2">Naturalization Questionnaire - {{itformno}}</h2>
+    </div>
+    <div class="col-md-12 px-0 mt-1">
+      <div class="">
+
+
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel10 [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. Personal Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel10.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <p class="mb-0 pb-2 fw-bolder mt-3 text-center px-3"> For completion by Lawful Permanent Resident </p>
+                <p class="mb-0 pb-2  mt-3 text-center px-3 ">
+                  Please note: Failure to complete all sections or to fully disclose any information requested may
+                  result
+                  in a substantial delay in the processing of this case and/or the denial of the application. We may
+                  require additional information following review. If a question does not apply, please put "none" or
+                  "not
+                  applicable" (N/A).
+                </p>
+                <p class="mb-0 pb-2 fw-bolder mt-3  px-3"> Eligibility </p>
+                <p class="mb-0 pb-2  mt-3 px-3"> I am eligible for Naturalization because I am at least 18 years old and
+                  :
+                </p>
+                <div formGroupName="eligibility" class="row">
+                  <div class="row mt-2 pe-2">
+
+                    <mat-radio-group layout="column" class="d-flex flex-column"
+                      formControlName="ihaveBeenAPermanentResidentFor5Years">
+                      <mat-radio-button color="primary" class="example-margin ml-4 text-break"
+                        value="permanentfor5years">I have been a Permanent
+                        Resident of the U.S. for at least 5 years; or
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" value="permanentfor3years">I have
+                        been a
+                        Permanent
+
+                        Resident of the U.S. for at least 3 years, AND I have been married to and living with the same
+                        U.S.
+                        citizen spouse for the last 3 years, AND my spouse has been a U.S. citizen for the last 3 years;
+                        or
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" value="permanent">I am a Permanent
+                        Resident of the U.S. AND my spouse is a U.S. citizen AND my U.S. citizen spouse is regularly
+                        engaged
+                        in specified employment abroad; or
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" value="applyingonthebasis">I am
+                        applying on the
+                        basis of qualifying military service; or</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Other (Please Explain)</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="explain">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div formGroupName="contactDetails" class="row">
+                  <p class="mb-0 pb-2 fw-bolder mt-3  px-3"> Contact Details </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Current Legal Last Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="currentLegalLastName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Current Legal First Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="currentLegalFirstName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Current Legal Middle Name </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="currentLegalMiddleName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Alias/Nickname </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="aliasOrNickname">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Suffix </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="suffix">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Is your name listed differently on your Permanent Resident
+                    Card?
+                  </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="yourNameListedDifferentlyOnYourPermanentResidentCard">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If yes, please list your name exactly as it appears on the
+                    card
+                  </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">First</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="exactFirstName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Last</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="exactLastName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Middle </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="exactMiddleName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Maiden Name </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="maidenName">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 mt-3 px-3">Have you used any other names from a previous marriage? </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouUsedAnyotherNamesFromAPreviousMarriage">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 py-0">If yes, provide ALL other names used. Separate entries by placing each name on a
+                    new
+                    line. </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="provideAllOtherNamesUsed">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Email Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="emailAddress">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Daytime Phone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="daytimePhone">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Work Phone </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="workPhone">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Evening Phone </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="eveningPhone">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Mobile Phone </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="mobilePhone">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div formGroupName="nameChange" class="row">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Name Change </p>
+                  <p class="mb-0 pb-2 mt-3 px-3">Would you like to legally change your name? </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wouldYouLikeToLegallyChangeYourName">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If no, please skip to the next section. </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">New Last Name </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="newLastName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">New First Name </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="newFirstName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">New Middle Name </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="newMiddleName">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div formGroupName="personalDetails" class="row">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Personal Details </p>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Gender</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="maleGender">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Male
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">Female
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> U.S. Social Security Number </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="socialSecurityNumber">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Alien Number (starts with an “A”): </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alienNumber">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Date of Birth (mm/dd/yyyy): </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker4" formControlName="dateOfBirth">
+                      <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                      <mat-datepicker #picker4></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Date you became a U.S. Permanent Resident (mm/dd/yyyy): </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker50"
+                        formControlName="dateYouBecameUSPermanentResident">
+                      <mat-datepicker-toggle matSuffix [for]="picker50"></mat-datepicker-toggle>
+                      <mat-datepicker #picker50></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Country of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Country of Citizenship (Please list all):</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="countryOfCitizenship">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 mt-3 px-3">Country where most recent citizenship, permanent residency or landed
+                    immigrant status granted: </p>
+
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Height </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> feet </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="heightInFeet">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> inches</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appeheightInInchesarance="outline">
+                      <input matInput placeholder="Enter" formControlName="heightInInches">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Are you Hispanic or Latino?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="areYouHispanicOrLatino">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div formGroupName="race">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Race</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-select placeholder="Select" multiple formControlName="americanIndianOrAlaskaNative">
+                          <mat-option value="topping">White </mat-option>
+                          <mat-option value="topping">Asian</mat-option>
+                          <mat-option value="topping">Black or African American</mat-option>
+                          <mat-option value="topping">American Indian or Alaska Native</mat-option>
+                          <mat-option value="topping">Hawaiian Native or Other Pacific Island</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Hair color</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="hairColor">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Eye color</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="eyeColor">
+                    </mat-form-field>
+                  </div>
+                  <div formGroupName="selectIfAnyApplicable" class="row">
+                    <p class="mb-0 pb-2  mt-3 px-3">Please select if any of the following are true:</p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="column" class="d-flex flex-column"
+                        formControlName="iamBlindOrSightImpaired">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">I am deaf or
+                          hearing
+                          impaired and will need a sign language interpreter who uses the following language
+                          <mat-form-field class="form-group input_field mb-0 w-25" appearance="outline">
+                            <input matInput placeholder="Enter">
+                          </mat-form-field>
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4 " [value]="false">I use a
+                          wheelchair or
+                          other device that assists with mobility
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">I am blind or
+                          sight
+                          impaired (low vision)
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">I require another
+                          type
+                          of accommodation
+                          <mat-form-field class="form-group input_field mb-0 w-25" appearance="outline">
+                            <input matInput placeholder="Enter">
+                          </mat-form-field>
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Do you have a physical or developmental impairment that
+                    prevents
+                    you from demonstrating your knowledge and understanding of the English language and/or civics
+                    requirements for naturalization?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouAaveAPhysicalOrDevelopmentalImpairment">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Are you 50 years of age or older AND have lived in the United
+                    States as Permanent Resident for periods totaling at least 20 years at the time of filing this
+                    application?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="areYou50YearsOfAgeAndLvedInUSAsPermanentResidentForAtleast20Years">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Are you 55 years of age or older AND have lived in the United
+                    States as Permanent Resident for periods totaling at least 15 years at the time of filing this
+                    application?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="areYou55YearsOfAgeAndLvedInUSAsPermanentResidentForAtleast15Years">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Are you 60 years of age or older AND have lived in the United
+                    States as Permanent Resident for periods totaling at least 20 years at the time of filing this
+                    application?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="areYou60YearsOfAgeAndLvedInUSAsPermanentResidentForAtleast20Years">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2. Current Residence and Mailing Address
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="currentResidenceAndMailingAddress" class="row">
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-date-range-input [rangePicker]="picker6">
+                        <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                        <input matEndDate formControlName="untilPresent" placeholder="End date">
+                      </mat-date-range-input>
+                      <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker6></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div formGroupName="residentAddress" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">State/Province/Region</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- 
+                  <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                 -->
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Is this the same address as your current mailing address (for
+                    courier delivery)? If no, please complete the address fields below:</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="thisTheSameAddressAsYourCurrentMailingAddress">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div formGroupName="mailingAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">State/Province/Region</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <!-- 
+                  <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+               -->
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Phone Number Associated With This Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="eg: 555-555-5555" formControlName="phoneNumber">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <p class="mb-0 pb-2  mt-3 text-center px-3 ">
+                  Please note: Failure to complete all sections or to fully disclose any information requested may
+                  result
+                  in a substantial delay in the processing of this case and/or the denial of the application. We may
+                  require additional information following review. If a question does not apply, please put "none" or
+                  "not
+                  applicable" (N/A).
+                </p>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel13 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Residence History
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel13.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="residenceHistory">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2  mt-3  px-3 ">
+                    Please provide all residence information for the past five (5) years, not including your current
+                    address. (If you have lived at your current residence for the past 5 years or more, you do not need
+                    to
+                    complete this section.) Please provide previous addresses in chronological order, most recent
+                    address
+                    first.
+                  </p>
+                  <div formGroupName="residentAddress1" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">B. Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker9">
+                          <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="dateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker9></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="fullAddress">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div> -->
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="residentAddress2" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">C. Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker110">
+                          <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="dateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker110"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker110></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="fullAddress">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div> -->
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="residentAddress3" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">D. Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker111">
+                          <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="dateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker111"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker111></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="fullAddress">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div> -->
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="residentAddress4" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">E. Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker112">
+                          <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="dateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker112"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker112></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="fullAddress">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div> -->
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="residentAddress5" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">F. Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker113">
+                          <input matStartDate formControlName="dateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="dateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker113"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker113></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="fullAddress">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                      <!-- <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Country</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div> -->
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Parents Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="parents">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Were your parents married before your 18th birthday?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYourParentsMarriedBeforeYour18thBirthday">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Is your mother a U.S. citizen?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="yourMotherUSCitizen">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If yes, please provide:</p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Mother’s Last Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="mothersLastName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Mother’s First Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="mothersFirstName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Mother’s Middle Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="mothersMiddleName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Mother’s Country of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="mothersCountryOfBirth">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker21"
+                        formControlName="mothersDateOfBirth">
+                      <mat-datepicker-toggle matSuffix [for]="picker21"></mat-datepicker-toggle>
+                      <mat-datepicker #picker21></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Is your Father a U.S. citizen?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="yourFatherUSCitizen">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If yes, please provide:</p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Father's Last Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fathersLastName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Father's First Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fathersFirstName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Father's Middle Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fathersMiddleName">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Father's Country of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fathersCountryOfBirth">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker20"
+                        formControlName="fathersDateOfBirth">
+                      <mat-datepicker-toggle matSuffix [for]="picker20"></mat-datepicker-toggle>
+                      <mat-datepicker #picker20></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel4 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4. Employment and Schools
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="employmentsAndSchools" class="row">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Please list where you have worked or attended school part
+                    time
+                    or
+                    full time during the last five (5) years. Provide information for the complete time period. Include
+                    all
+                    military, police and/or intelligence service during this time period. List in chronological order,
+                    most
+                    recent first. If you worked for yourself, type “self employed.” If you were unemployed, type
+                    “unemployed.” If you need more space, please attach an additional sheet(s) of paper.</p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">A. Employer or School Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="employerOrSchoolName">
+                    </mat-form-field>
+                  </div>
+                  <div formGroupName="residentAddress" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">State</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="foreignAddress" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If foreign address, include province/region, country and
+                      postal code</p>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">State</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-date-range-input [rangePicker]="picker30">
+                        <input matStartDate formControlName="datesFrom" placeholder="Start date">
+                        <input matEndDate formControlName="datesTo" placeholder="End date">
+                      </mat-date-range-input>
+                      <mat-datepicker-toggle matSuffix [for]="picker30"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker30></mat-date-range-picker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Title / Occupation</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="titleOrOccupation">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  5. Time Spent Outside the U.S
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="timeSpentOutsideTheUS">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Begin with your most recent trip and work backwards. If you
+                    need
+                    more space, use an additional sheet(s) of paper.</p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">How many total days (24 hours or longer) did you spend outside the U.S. during
+                      the
+                      past five (5) years?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="daysSpentOutsideUSForPast5Years">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">How many trips of 24 hours or longer did you take outside the U.S. during the
+                      past
+                      five (5) years?)</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="noOfTripsTakenOutsideUSForPast5Years">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">List below all the trips of 24 hours or longer that you have
+                    taken outside the United States during the last 5 years. Begin with your most recent trip and work
+                    backwards. If you need more space, please attach an additional sheet of paper.</p>
+                  <div formGroupName="tripSpentDetails1" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">A. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="tripSpentDetails2" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">B. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS1">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS1"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS1></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="tripSpentDetails3" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">C. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS2">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS2"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS2></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="tripSpentDetails4" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">D. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS3">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS3"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS3></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="tripSpentDetails5" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">E. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS4">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS4"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS4></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0"></p>
+                  <div formGroupName="tripSpentDetails6" class="row">
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">F. Date you left and return to the U.S. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="dateYouLeftTheUS5">
+                          <input matStartDate formControlName="dateYouLeftTheUS" placeholder="Start date">
+                          <input matEndDate formControlName="dateYouReturnedToTheUS" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="dateYouLeftTheUS5"></mat-datepicker-toggle>
+                        <mat-date-range-picker #dateYouLeftTheUS5></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Did trip last more than 6 months? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="didTripLastMoreThan6Months">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Countries to which you traveled</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countriesToWhichYouTraveled">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Total days outside the U.S.</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="totalDaysOutsideTheUS">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel6 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  6. Marital History
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel6.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="maritalHistory" class="row">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 mt-3 px-3">Please list where you have worked or attended school part time or full
+                    time
+                    during the last five (5) years. Provide information for the complete time period. Include all
+                    military,
+                    police and/or intelligence service during this time period. List in chronological order, most recent
+                    first. If you worked for yourself, type “self employed.” If you were unemployed, type “unemployed.”
+                    If
+                    you need more space, please attach an additional sheet(s) of paper.</p>
+                  <div formGroupName="myCurrentMaritalStatusIs">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">My current marital status is:</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-select placeholder="Select" formControlName="marriageAnnulled">
+                          <mat-option value="volvo"> Single, never married </mat-option>
+                          <mat-option value="volvo2">Married </mat-option>
+                          <mat-option value="volvo3">Separated </mat-option>
+                          <mat-option value="volvo3">Divorced </mat-option>
+                          <mat-option value="volvo3">Widowed</mat-option>
+                          <mat-option value="volvo3">Marriage annulled</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If you are married, is your spouse a current member of the
+                    U.S.
+                    armed forces?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="yourSpouseACurrentMemberOfTheUSArmedForces">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">How many times have you been married (including annulled marriages and
+                      marriage(s)
+                      to the same person)?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="howManyTimesHaveYouBeenMarried">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Spouse Details, Please complete if you are married now.</p>
+                  <div formGroupName="legalNameOfCurrentSpouse" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Legal Name of Current Spouse</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Family/Last Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="familyOrLastName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Given/First Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="givenOrFirstName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Middle Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="middleName">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="previousLegalNameOfCurrentSpouse" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Previous Legal Name of Current Spouse</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Family/Last Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="familyOrLastName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Given/First Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="givenOrFirstName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Middle Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="middleName">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div formGroupName="otherNamesUsedByCurrentSpouse" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Other Names Used by Current Spouse (nicknames, alias,
+                      maiden
+                      name)</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Family/Last Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="familyOrLastName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Given/First Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="givenOrFirstName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Middle Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="middleName">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="spouseInformation" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Spouse Information</p>
+
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker39"
+                          formControlName="dateOfBirth">
+                        <mat-datepicker-toggle matSuffix [for]="picker39"></mat-datepicker-toggle>
+                        <mat-datepicker #picker39></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Marriage </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker49"
+                          formControlName="dateOfMarriage">
+                        <mat-datepicker-toggle matSuffix [for]="picker49"></mat-datepicker-toggle>
+                        <mat-datepicker #picker49></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Spouse’s U.S. Social Security Number</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="spouseUSSocialSecurityNumber">
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Does your spouse have the same home address as you?
+                      If no, please provide spouse’s complete address (street, city, state, and zip)
+                    </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="doesYourSpouseHaveTheSameHomeAddressAsYou">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div formGroupName="spouseCompleteAddress" class="row">
+                      <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="streetAddress">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="city">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">State/Province/Region</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="state">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="zipCode">
+                        </mat-form-field>
+                      </div>
+
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Spouse’s present employer</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="spousePresentEmployer">
+                      </mat-form-field>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Is your current spouse a U.S. citizen?</p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="yourCurrentSpouseAUSCitizen">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div formGroupName="whenDidYourSpouseBecomeUSCitizen">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">If yes, when did your spouse become a U.S. citizen?</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                          <mat-select placeholder="Select" formControlName="atBirth">
+                            <mat-option value="volvo"> At Birth </mat-option>
+                            <mat-option value="volvo2">Other </mat-option>
+                            <mat-option value="volvo3">Not Applicable </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div formGroupName="ifOtherIsMarked" class="row">
+                      <p class="mb-0 pb-2  mt-3 px-3">Date your spouse became a U.S. citizen</p>
+
+                      <div class="col-lg-4 col-md-4 mt-2">
+                        <p class="mb-0 py-0">Date your spouse became a U.S. citizen </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker41"
+                            formControlName="whenDidYoursSpouseBecameAUSCitizen">
+                          <mat-datepicker-toggle matSuffix [for]="picker41"></mat-datepicker-toggle>
+                          <mat-datepicker #picker41></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place your spouse became a U.S. citizen</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeWhereSpouseBecameAUSCitizen">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div formGroupName="ifNotAppicableIsMarked" class="row">
+                      <p class="mb-0 pb-2  mt-3 fw-bolder px-3">If answer above was ‘Not Applicable’</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Spouse’s country of citizenship</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="spouseCountryOfCitizenship">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Spouse's USCIS “A” #</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="spouseUSCISNumber">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">My current marital status is:</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                          <mat-select placeh formControlName="spouseImmigrationStatusOfPermanentResident">
+                            <mat-option value="Permanent Resident"> Permanent Resident </mat-option>
+                            <mat-option value="Other">Other </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Other</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="spouseImmigrationStatusOfOther">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div formGroupName="ifSpouseNotAUSCitizen" class="row">
+                      <p class="mb-0 pb-2  mt-3 fw-bolder px-3">If answer above was ‘no’:</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Spouse’s Country of Citizenship or Nationality</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="spouseCountryOfCitizenshipOrNaionality">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Spouse’s A-Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="anumber">
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Spouse’s Current Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="currentImmigrationStatus">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">How many times has your current spouse been married (including annulled
+                        marriages
+                        and marriage(s) to the same person)?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="howManyTimesHasYourCurrentSpouseBeenMarried">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="spousePreviousMarriageDetailsIfMarriedBefore" class="row">
+                    <p class="mb-0 pb-2  mt-3 fw-bolder px-3">Spouse’s Previous Marriage Details</p>
+                    <p class="mb-0 pb-2  mt-3 px-3">If your current spouse was married before, provide the following
+                      information about your spouse’s previous marriage. If your spouse had more than one previous
+                      marriage,
+                      use a separate page to provide the information requested about each spouse.</p>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Family/Last Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="familyOrLastName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Given/First Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="givenOrFirstName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Middle Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="middleName">
+                      </mat-form-field>
+                    </div>
+                    <div formGroupName="spousesUSImmigrationStatus">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Prior Spouse’s U.S. Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                          <mat-select formControlName="permanentResident" placeholder="Select">
+                            <mat-option value="volvo"> U.S. Citizen </mat-option>
+                            <mat-option value="volvo2">Permanent Resident </mat-option>
+                            <mat-option value="volvo3">Other </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Other</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="other">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Date of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker45"
+                          formControlName="dateOfBirth">
+                        <mat-datepicker-toggle matSuffix [for]="picker45"></mat-datepicker-toggle>
+                        <mat-datepicker #picker45></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Country of Birth</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Prior Spouse’s Country of Citizenship or Nationality</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countryOfCitizenshipOrNationality">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Marriage with Prior Spouse </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker46"
+                          formControlName="dateOfMarriage">
+                        <mat-datepicker-toggle matSuffix [for]="picker46"></mat-datepicker-toggle>
+                        <mat-datepicker #picker46></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date Marriage Ended with Prior Spouse </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker47"
+                          formControlName="dateOfEnded">
+                        <mat-datepicker-toggle matSuffix [for]="picker47"></mat-datepicker-toggle>
+                        <mat-datepicker #picker47></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="priorSpouseMarriageDetails" class="row">
+                    <p class="mb-0 pb-2  mt-3 fw-bolder px-3">Prior Spouse Details</p>
+                    <p class="mb-0 pb-2  mt-3 px-3">If you were married before, provide the following information about
+                      your
+                      prior spouse. If you have more than one previous marriage, use separate page to provide the
+                      information
+                      requested about each marriage.</p>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel #panel11 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  7. children
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel11.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="children">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Provide the following information about all of your children
+                    (sons and daughters), regardless of age. “All” children includes: 1) Children who are alive,
+                    missing,
+                    deceased; 2) Children born in the United States or in other countries; 3) Children under 18 years of
+                    age
+                    or older; 4) Children who are currently married or unmarried; 5) Children living with you or
+                    elsewhere;
+                    6) Current stepchildren; 7) Legally adopted children; 8) Children born when you were not married.
+
+                    In location column, type ‘With me’ if child lives with you; list the street address, city, &
+                    state/country where child lives if not with you; or ‘Missing’ or ‘Deceased’, if applicable. If you
+                    need
+                    more space, use a separate page.
+
+                    For Relationship, enter “Biological, Stepchild, or Legally Adopted”
+                  </p>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Total number of children</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="totalNoOfChildren">
+                    </mat-form-field>
+                  </div>
+                  <div formGroupName="child1" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">A. Full Name (First, Middle, Last)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="fullName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker52"
+                          formControlName="dateOfBirth">
+                        <mat-datepicker-toggle matSuffix [for]="picker52"></mat-datepicker-toggle>
+                        <mat-datepicker #picker52></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">USCIS “A” # (if applicable)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="uscis">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Country of Birth</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Location</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="location">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Relationship To You</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="relationshipToYou">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="child2" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">B. Full Name (First, Middle, Last)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="fullName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="child2"
+                          formControlName="dateOfBirth">
+                        <mat-datepicker-toggle matSuffix [for]="child2"></mat-datepicker-toggle>
+                        <mat-datepicker #child2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">USCIS “A” # (if applicable)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="uscis">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Country of Birth</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Location</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="location">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Relationship To You</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="relationshipToYou">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="child3" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">C. Full Name (First, Middle, Last)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="fullName">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <p class="mb-0 py-0">Date of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="child3"
+                          formControlName="dateOfBirth">
+                        <mat-datepicker-toggle matSuffix [for]="child3"></mat-datepicker-toggle>
+                        <mat-datepicker #child3></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">USCIS “A” # (if applicable)</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="uscis">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Country of Birth</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Location</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="location">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Relationship To You</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="relationshipToYou">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel #panel14 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  8. Additional Questions
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel14.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div formGroupName="additionalQuestions">
+                <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Please indicate "Yes" or “No” and provide an explanation if
+                    any
+                    of the following Yes / No questions apply. Answering ‘Yes’ to any of the following will not prevent
+                    you
+                    from applying for naturalization, but a full explanation is necessary.</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever claimed to be a U.S. citizen (in writing or any other
+                    way)
+                  </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverClaimedToBeAUSCitizen">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever registered to vote in any Federal, State, or local
+                    election
+                    in the United States?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverRegisteredToVoteInAnyFederalStateOrLocalElectionInTheUS">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever voted in any Federal, State, or local election in the
+                    United
+                    States? </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverVotedInAnyFederalStateOrLocalElectionInTheUS">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Do you now have, or did you ever have, a hereditary title or an order
+                    of
+                    nobility in any foreign country?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverHaveAHereditaryTitleOrAnOrderOfNobilityInAnyForeignCountry">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been declared legally incompetent or been confined to a
+                    mental institution?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenDeclaredLegallyIncompetentOrBeenConfinedToAMentalInstitution">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Do you owe any Federal, State, or local taxes that are overdue?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouOweAnyFederalStateOrLocalTaxesThatAreOverdue">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever not filed a Federal, State or local tax return since you
+                    became a Permanent Resident?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverNotFiledAFederalStateOrLocalTaxReturnSinceYouBecameAPermanentResident">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">If yes, did you consider yourself a “non-U.S. resident”?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="didYouConsiderYourselfANonUSResident">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you called yourself a “non-U.S. resident” on a Federal, State or
+                    local tax return since you became a Permanent Resident?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouCalledYourselfANonUSResidentSinceYouBecameAPermanentResident">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been a member of, involved in, or in any way associated
+                    with, any organization, association, fund, foundation, party, club, society, or similar group in the
+                    United States or in any other location in the world?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenAMemberOfOrInAnyWayAssociatedWithAnyOrganizationInTheUSOrOtherCountries">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <p class="mb-0 pb-2  mt-3 px-3">If yes, provide the information below. If you need more space, attach
+                    the
+                    names of the other group(s) on an additional sheet of paper and provide any evidence to support your
+                    answer.</p>
+                  <div formGroupName="memberGroupDetail1" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">A. Name of Group</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="nameOfGroup">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Purpose of Group</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="purposeOfGroup">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker54">
+                          <input matStartDate formControlName="membershipFrom" placeholder="Start date">
+                          <input matEndDate formControlName="membershipTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker54"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker54></mat-date-range-picker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">Have you ever been a member of or in any way associated
+                    (either directly or indirectly) with:</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">A. The Communist Party?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenAMemberOfTheCommunistParty">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B. Any other totalitarian party?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2 mt-3 px-3">C. A terrorist organization?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenAMemberOfAnyOtherTotalitarianParty">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever advocated (either directly or indirectly) the overthrow
+                    of
+                    any government by force or violence?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverAdvocatedTheOverthrowOfAnyGovernmentByForceOrViolence">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever persecuted (either directly or indirectly) any person
+                    because of race, religion, national origin, membership in a particular social group, or political
+                    opinion?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverpersecutedAnyPersonBecauseOfRaceReligion">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">Between March 23, 1933 and May 8, 1945, did you work for
+                    or
+                    associate in any way (either directly or indirectly) with:</p>
+
+                  <p class="mb-0 pb-2  mt-3 px-3">A) The Nazi government of Germany?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouWorkOrAssociateWithNaziGovernmentOfGermanyBetweenMarch231933AndMay81945">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) Any government in any area (1) occupied by, (2) allied with, or (3)
+                    established with the help of the Nazi government of Germany? </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouWorkOrAssociateWithNaziGovernmentOfGermanyBetweenMarch231933AndMay81945">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">C) Any German, Nazi, or S.S. military unit, paramilitary unit,
+                    self-defense unit, vigilante unit, citizen unit, police unit, government agency or office,
+                    extermination
+                    camp, concentration camp, prisoner of war camp, prison, labor camp, or transit camp?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouWorkOrAssociateWithAnyGovernmentInAnyAreaBetweenMarch231933AndMay81945">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">Were you ever involved in any way with any of the
+                    following:
+                  </p>
+                  <p class="mb-0 pb-2  mt-3 px-3">A) Genocide?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverInvolvedInGenocide">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) Torture?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverInvolvedInTorture">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">C) Killing or trying to kill someone?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverInvolvedInKillingOrTryingToKillSomeone">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">D) Badly hurting, or trying to hurt, a person on purpose?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverInvolvedInBadlyHurtingOrTryingToHurtApersonOnPurpose">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">E) Forcing, or trying to force, someone to have any kind of sexual
+                    contact
+                    or relations?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverInvolvedInForcingOrTryingToForceSomeoneToHavAnyKindOfSexualContactOrRelations">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">F) Not letting someone practice his or her religion?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverInvolvedInNotLettingSomeonePracticeHisOrHerReligion">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">Were you ever a member of, or did you ever serve in, help,
+                    or
+                    otherwise participate in, any of the following groups?</p>
+
+                  <p class="mb-0 pb-2  mt-3 px-3">A) Military unit?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInMilitaryUnit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) Paramilitary unit? (a group of people who act like a military group
+                    but
+                    are not part of the official military)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInParamilitaryUnit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">C) Police unit?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInPoliceUnit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">D) Self-defense unit?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInSelfDefenseUnit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">E) Vigilante unit? (a group of people who act like the police, but are
+                    not
+                    part of the official police)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInVigilanteUnit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">F) Rebel group?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInRebelGroup">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">G) Guerilla group? (a group of people who use weapons against or
+                    otherwise
+                    physically attack the military, police, government, or other people)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInGuerillaGroup">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">H) Militia? (an army of people, not part of the official military)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInMilitia">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">I) Insurgent organization? (a group that uses weapons and fights
+                    against
+                    a
+                    government)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverMemberOrServeInInsurgentOrganization">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">Were you ever a worker, volunteer, or soldier, or did you
+                    otherwise ever serve in any of the following?</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">A) Prison or jail?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverWorkerVolunteerSoldierServeInPrisonOrJail">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) Prison camp?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverWorkerVolunteerSoldierServeInPrisonCamp">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">C) Detention facility? (a place where people are forced to stay)</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverWorkerVolunteerSoldierServeInDetentionFacility">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">D) Labor camp? (a place where people are forced to work) </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouEverWorkerVolunteerSoldierServeInLaborCamp">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">E) Any other place where people were forced to stay?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverWorkerVolunteerSoldierServeInAnyOtherPlaceWherePeopleWereForcedToStay">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+                  <p class="mb-0 pb-2  mt-3 px-3">Were you ever part of any group, or did you ever help any group, unit,
+                    or
+                    organization that used a weapon against any person, or threatened to do so?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="wereYouEverPartOrHelpedOfAnyGroupOrOrganizationUsedAWeaponAgainstAnyPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">A) If yes, when you were a part of this group, or when you helped this
+                    group, did you ever use a weapon against another person?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverUsedOrHelpedTheGroupUsingAWeaponAgainstAnyPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) If yes, when you were a part of this group, or when you helped this
+                    group, did you ever tell another person that you would use a weapon against that person?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouTellAnyOtherPersonThatYouWouldUseAWeaponAgainstThatPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Did you ever sell, give or provide weapons to any person, or help
+                    another
+                    person sell, give or provide weapons to any person?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverSellGiveProvideOrHelpWithWeaponsToAnyPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">A) If yes, did you know that this person was going to use weapons
+                    against
+                    another person?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="doYouKnowThatThisPersonIsGoingToSellOrGiveWeaponsToAnotherPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) If yes, did you know that this person was going to sell or give the
+                    weapons to someone else who was going to use them against another person?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="doYouKnowThatThisPersonIsGoingToUseWeaponsAgainstAnotherPerson">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Did you ever receive any type of military, paramilitary (a group of
+                    people
+                    who act like a military group but are not part of the official military), or weapons training?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverReceiveAnyTypeOfMilitaryParamilitaryOrWeaponsTraining">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Did you ever recruit (ask), enlist (sign up), conscript (require), or
+                    use
+                    any person under age 15 to serve in or help an armed forces group?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverRecruitEnlistConscriptOrUseAnyPersonUnderAge15ToServeOrHelpAnArmedForcesGroup">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Did you ever use any person under age 15 to do anything that helped or
+                    supported people in combat?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="didYouEverUseAnyPersonUnderAge15ToDoAnythingThatHelpedOrSupportedPeopleInCombat">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2   fw-bolder  mt-3 px-3">If any of the following questions apply to you, you must
+                    answer “Yes” even if your records have been sealed, expunged, or otherwise cleared. You must
+                    disclose
+                    this information even if anyone, including a judge, law enforcement officer, or attorney, told you
+                    that
+                    it no longer constitutes a record or told you that you do not have to disclose the information.</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever committed, assisted in committing, or attempted to
+                    commit,
+                    a
+                    crime or offense for which you were not arrested?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverCommittedAssistedInCommittingOrAttemptedToCommitACrimeOrOffenseForWhichYouWereNotArrested">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been arrested, cited, or detained by any law enforcement
+                    officer (including any and all immigration officials or the U.S. Armed Forces) for any reason?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenArrestedCitedOrDetainedByAnyLawEnforcementOfficer">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been charged with committing, attempting to commit or
+                    assisting in committing a crime or offense?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenChargedWithCommittedAttemptingOrAssistingInCommittingAcrimeOrOffense">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been convicted of a crime or offense?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenConvictedOfAcrimeOrOffense">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been placed in an alternative sentencing or a
+                    rehabilitative
+                    program (e.g., diversion, deferred inspection, withheld adjudication, deferred adjudication)?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenPlacedInAnAlternativeSentencingOrARehabilitativeProgram">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever received a suspended sentence, been placed on probation
+                    or
+                    been paroled?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverReceivedASuspendedSentenceBeenPlacedOnProbationOrBeenParoled">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">If yes, have you completed the probation or parole?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouCompletedTheProbationOrParole">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever been in jail or prison?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenInJailOrPrison">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">If yes, how long were you in jail or prison?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="howLongWereYouInJailOrPrison">
+                    </mat-form-field>
+                  </div>
+
+                  <!-- <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Months</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+              
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Days</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div> -->
+
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If you answered Yes to any of the questions above, please
+                    complete the following table. If you need more space, use an additional sheet(s) of paper and
+                    provide
+                    any evidence to support your answer. If you answered No to all the questions above, please skip the
+                    table and continue.</p>
+                  <div formGroupName="charges1" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">1. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker58"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="picker58"></mat-datepicker-toggle>
+                        <mat-datepicker #picker58></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="charges2" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">2. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker59"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="picker59"></mat-datepicker-toggle>
+                        <mat-datepicker #picker59></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="charges3" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">3. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="dateArrestedCitiedDetainedOrCharged1"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="dateArrestedCitiedDetainedOrCharged1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateArrestedCitiedDetainedOrCharged1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="charges4" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">4. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="dateArrestedCitiedDetainedOrCharged2"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="dateArrestedCitiedDetainedOrCharged2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateArrestedCitiedDetainedOrCharged2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="charges5" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">5. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="dateArrestedCitiedDetainedOrCharged4"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="dateArrestedCitiedDetainedOrCharged4">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateArrestedCitiedDetainedOrCharged4></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formGroupName="charges6" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">6. Why were you arrested, cited, detained or charged?</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whyWhereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date arrested, cited, detained or charged</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="dateArrestedCitiedDetainedOrCharged5"
+                          formControlName="dateArrestedCitiedDetainedOrCharged">
+                        <mat-datepicker-toggle matSuffix [for]="dateArrestedCitiedDetainedOrCharged5">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateArrestedCitiedDetainedOrCharged5></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Where were you arrested, cited, detained or charged? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="whereWereYouArrestedCitiedDetainedOrCharged">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Outcome or disposition of the arrest, citation, detention, or charge (no
+                        charges
+                        filed, charges dismissed, jail, probation, etc. </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="outcomeOrDispositionOfTheArrestCitationDetentionOrCharge">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If you answer Yes to any of these questions, please provide a
+                    written explanation and provide any evidence to support your answer.</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">Have you ever:</p>
+                  <p class="mb-0 pb-2  mt-3 px-3">A) Been a habitual drunkard?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenAHabitualDrunkard">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">B) Been a prostitute, or procured anyone for prostitution?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenAProstituteOrProcuredAnyoneForProstitution">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">C) Sold or smuggled controlled substances, illegal drugs or narcotics?
+                  </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenSoldOrSmuggledControlledSubstancesIllegalDrugsOrNarcotics">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">D) Been married to more than one person at the same time?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenMarriedToMorethanOnePersonAttheSameTime">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">E) Married someone in order to obtain an immigration benefit?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenMarriedSomeoneInOrderToObtainAnImmigrationBenefit">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">F) Helped anyone enter, or try to enter, the United States illegally?
+                  </p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenHelpedAnyoneEnterOrTryToEnterTheUSIllegally">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">G) Gambled illegally or received income from illegal gambling?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenGambledIllegallyOrReceivedIncomeFromIllegalGambling">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <p class="mb-0 pb-2  mt-3 px-3">H) Failed to support your dependents or to pay alimony?</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row"
+                      formControlName="haveYouEverBeenFailedToSupportYourDependentsOrToPayAlimony">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+
+
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel #panel8 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  9. Oath
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel8.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+
+                <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If your application is approved, you will be scheduled for a
+                  public oath ceremony at which time you will be required to take the following oath of allegiance
+                  immediately prior to becoming a naturalized citizen.</p>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">I hereby declare, on oath, that I absolutely and entirely
+                  renounce and abjure all allegiance and fidelity to any foreign prince, potentate, state, or
+                  sovereignty,
+                  of whom or which I have heretofore been a subject or citizen;</p>
+                <ul class="mb-0 px-5">
+                  <li>That I will support and defend the Constitution and laws of the United States of America against
+                    all
+                    enemies, foreign and domestic;</li>
+                  <li>That I will bear true faith and allegiance to the same; </li>
+                  <li>That I will bear arms on behalf of the United States when required by the law;</li>
+                  <li>That I will perform noncombatant service in the Armed Forces of the United States when required by
+                    the law;</li>
+                  <li>That I will perform work of national importance under civilian direction when required by the law;
+                  </li>
+                  <li>That I take this obligation freely, without any mental reservation or purpose of evasion; so help
+                    me
+                    God.</li>
+
+                </ul>
+
+              </div>
+            </mat-expansion-panel>
+
+            <!-- 
+            <mat-expansion-panel #panel7 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  10. Attach Documents
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel7.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Current Passport</p>
+                <p class="mb-0 pb-1 mt-1 px-3">Complete copy of current passport, including all pages (even blank
+                  pages).
+                  Please provide high-quality copies, preferably color, single-sided.</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Previous (Expired) Passport(s)</p>
+                <p class="mb-0 pb-2 mt-3 px-3">Including all pages (even blank pages). Please provide high-quality
+                  copies,
+                  preferably color, single-sided.</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Alien Registration Card</p>
+                <p class="mb-0 pb-1 mt-1 px-3">Copy of front and back of card</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Photographs</p>
+                <p class="mb-0 pb-1 mt-1 px-3">Two (2) recent color photographs</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Marriage/Child/ren's Birth Certificate: (if applicable)</p>
+                <p class="mb-0 pb-1 mt-1 px-3">Current Marriage and/or Birth certificate(s) to demonstrate relationship
+                  of
+                  family members.</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Proof of termination of prior marriage(s), such as final decree
+                  of divorce, annulment, or death certificate. </p>
+                <p class="mb-0 pb-1 mt-1 px-3">Applies to all previous divorces or annulments.</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Proof of spouse’s U.S. citizenship or permanent resident
+                  status:
+                  (if applicable)</p>
+
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Copies of IRS Form 1722 – Federal Tax Return Transcripts</p>
+                <p class="mb-0 pb-1 mt-1 px-3">(You can obtain these online at:
+                  http://www.irs.gov/Individuals/Order-a-Transcript.)</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Legal Evidence of Name Change Except by Marriage, if
+                  applicable:
+                </p>
+
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Custody Decree for Children, if applicable</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+                <p class="mb-0 pb-0 fw-bolder mt-3 px-3">Additional Attachments</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <input ngf type="file" class="form-control" id="" />
+                </div>
+
+                <p class="mb-0 pb-2 mt-3 px-3">Before submitting this questionnaire, please check all information to
+                  make
+                  sure it is accurate and complete, including, but not limited to:</p>
+                <ul class="mb-0 px-5">
+                  <li>Your biographic details, residence(s), contact information, marital history, work/education
+                    history,
+                    current immigration status and immigration history. </li>
+                  <li>Information about your family members, including their names, biographic details, residence(s),
+                    contact details, marital history, work/education history, current immigration status and immigration
+                    history.</li>
+
+                </ul>
+                <p class="mb-0 pb-2 mt-0 px-3">By submitting this questionnaire, you confirm that you have reviewed all
+                  responses and that each response is true, complete and correct. You also confirm that each supporting
+                  document you provide to Monty & Ramirez LLP is an unaltered original or a true copy thereof. </p>
+
+
+              </div>
+            </mat-expansion-panel> -->
+          </form>
+          <!-- <form [formGroup]="intakefg">
+              <mat-expansion-panel #panel7 *ngIf="pageflow == 'validate' || pageflow == 'Display'" hideToggle>
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title class="d-flex justify-content-between collapsefont text-secondary ">
+                    8. Validation
+                    <mat-icon class="text-primary">{{panel7.expanded? 'remove' : 'add'}}</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row mt-2 mx-1 px-4">
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Intake Status</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-select placeholder="select" formControlName="statusId" placeholder="Select">
+                        <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling_admin('statusId')">{{getErrorMessage()}}</mat-error>
+  
+  
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </form>  -->
+
+        </mat-accordion>
+
+
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+
+          <button *ngIf="!btncancel" mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>
+            Cancel</button>
+          <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            {{btntext}}</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

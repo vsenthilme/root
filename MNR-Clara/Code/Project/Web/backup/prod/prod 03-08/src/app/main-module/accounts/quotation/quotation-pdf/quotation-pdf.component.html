@@ -1,0 +1,160 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Billing</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Quotation</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput disabled class="disabled form-control filter_button mx-2 border-bottom"
+        placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        (click)="convertToPDF()" matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button disabled mat-mini-fab *ngIf="showFloatingButtons == true"
+        class=" disabled floating-buttons bg-yellow1 text-white mx-2" matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button disabled  mat-mini-fab *ngIf="showFloatingButtons == true" class=" disabled floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button disabled  mat-mini-fab *ngIf="showFloatingButtons == true" class=" disabled floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button disabled  mat-mini-fab *ngIf="showFloatingButtons == true" class=" disabled floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class=" mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button disabled mat-mini-fab class=" disabled bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-end">
+  <button  mat-icon-button  routerLink="/main/accounts/quotationslist"
+  class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+  matTooltip="Back">
+  <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">arrow_back
+  </mat-icon>
+</button>
+</div>
+<div class="row scroll px-0 mx-0">
+  <div class="page px-0 vh-100 bg-white" style="display: block; page-break-after:always">
+    <div class="pdf p-0 m-0" id="pdf">
+
+      <div class="d-flex justify-content-start  px-3 py-2 pb-3">
+        <div class="d-flex align-items-center  justify-content-start">
+          <img src="./assets/img/icons/smlogo.png" alt="" class="d-inline" srcset="">
+          <div class="d-flex flex-column w-50">
+            <h4 class="mb-0 my-0 my-1  textdarkblack">Monty & Ramirez LLP
+              150 W. Parker Rd
+              Ste 300 Houston, TX 77076</h4>
+          </div>
+        </div>
+        <div class="d-flex flex-column justify-content-end">
+          <h2 class=" mb-1 text-blue textdarkblack  mt-1">Invoice</h2>
+          <table id="table">
+            <tr>
+              <th class="text-center fw-normal">Date</th>
+              <th class="text-center fw-normal">Invoice No</th>
+            </tr>
+            <tr>
+              <td class="text-center textdarkblack">{{element.quotationDate | date :'MM-dd-yyyy'}}</td>
+              <td class="text-center textdarkblack">{{element.quotationNo}}</td>
+            </tr>
+            <tr>
+          </table>
+        </div>
+      </div>
+      <div class="px-2">
+        <table id="table2" class="mt-2 w-50">
+          <tr>
+            <th class="textdarkblack fw-normal">Name / Address</th>
+          </tr>
+          <tr class=" w-25">
+            <td class="pb-5 textdarkblack">{{elementc.firstNameLastName}}
+              <br />
+              {{elementc.addressLine1}}
+              <br /> {{elementc.city}}, {{elementc.state}} - {{elementc.zipCode}} 
+            </td>
+          </tr>
+          <tr>
+        </table>
+      </div>
+      <div class="d-flex  justify-content-end px-2">
+        <table id="table2">
+          <tr>
+            <th class="text-center fw-normal textdarkblack">Terms</th>
+            <th class="text-center fw-normal textdarkblack">Due Date</th>
+          </tr>
+          <tr>
+            <td class="text-center textdarkblack">{{element.termDetails }}</td>
+            <td class="text-center textdarkblack">{{element.dueDate | date :'MM-dd-yyyy'}}</td>
+          </tr>
+          <tr>
+        </table>
+      </div>
+      <div class="d-flex justify-content-center px-2">
+        <table id="table1">
+          <tr>
+            <th class="fw-normal textdarkblack">Item</th>
+            <th style="width: 34%;" class="fw-normal textdarkblack">Description</th>
+            <th class="fw-normal textdarkblack">Time Keeper</th>
+            <th class="fw-normal textdarkblack">Date </th>
+            <th class="fw-normal textdarkblack">Hours </th>
+            <th class="fw-normal textdarkblack">Rate / Hour </th>
+            <th class="fw-normal textdarkblack">Total </th>
+          </tr>
+          <tr *ngFor="let item of element.quotationLine;">
+            <td class="fw-normal textdarkblack">{{item.serialNumber}}</td>
+            <td class="fw-normal textdarkblack">{{item.itemDescription}}</td>
+            <td class="fw-normal textdarkblack">{{item.timekeeperCode}}</td>
+            <td class="fw-normal textdarkblack" style="width: 16%;">{{element.dueDate | date :'MM-dd-yyyy'}}</td>
+            <td class="fw-normal textdarkblack">{{item.quantity}}</td>
+            <td class="fw-normal textdarkblack">{{item.rateperHour | currency}}</td>
+            <td class="fw-normal textdarkblack text-right">{{item.totalAmount | currency}}
+          </tr>
+
+          <tfoot>
+            <tr>
+              <th id="total" class="fw-normal textdarkblack" colspan="6">Total</th>
+              <td class="text-right textdarkblack">{{element.quotationAmount | currency}}
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="d-flex  justify-content-start mt-2 px-2">
+        <table id="table3">
+          <tr>
+            <th class="text-center fw-normal textdarkblack">Phone Number</th>
+          </tr>
+          <tr>
+            <td class="text-center fw-normal textdarkblack">{{elementc.contactNumber}} </td>
+          </tr>
+          <tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

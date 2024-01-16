@@ -1,0 +1,274 @@
+<form [formGroup]="form">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 *ngIf="data.pageflow == 'Edit' || data.pageflow == 'New'" class="my-auto headertext">{{matter}}{{data.pageflow}} Time Entry</h2>
+      <h2 *ngIf="data.pageflow == 'Copy'" class="my-auto headertext">{{data.pageflow}} Time Entry</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <div class="d-flex align-items-center">
+
+              <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  p-1 px-4 ">
+
+          <div *ngIf="!data.matter || data.pageflow == 'Copy'" class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Matter No.</p>
+              <p-dropdown placeholder="Select" [filter]="true" class="w-100 my-1 mb-2" [options]="multiMatterSelectList"
+                formControlName="matterNumber" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+              </p-dropdown>
+              <mat-error *ngIf="errorHandling('matterNumber')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div *ngIf="!data.matter || data.pageflow == 'Copy'" class="col-lg-4 col-md-6 mt-2 d-flex align-items-center">
+            <mat-checkbox color="primary" formControlName="allmatters" (change)="onChange($event)" class="example-margin ml-4">All Matters</mat-checkbox>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Client Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="clientName" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+       
+          <div class="col-lg-4 d-flex col-md-6 mt-1">
+            <div class="d-flex align-items-center ju">
+              <app-timer [start]="_start" [bookedHours]='form' [showTimerControls]="true">
+              </app-timer>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Booked Hours</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput placeholder="Enter" formControlName="timeTicketHours">
+              </mat-form-field>
+            </div>
+          </div>
+      
+          <!-- <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Approved Amount</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput placeholder="Enter" formControlName="approvedBillableAmount">
+              </mat-form-field>
+            </div>
+          </div> -->
+
+          <div class="col-lg-4 col-md-6 mt-1" *ngIf="ttbSelected">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Activity Code</p>
+              <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select placeholder="select" formControlName="activityCode">
+                  <mat-option *ngFor="let food of activityCodelist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <angular2-multiselect [data]="multiselectactivityList" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings" formControlName="activityCodeFE"></angular2-multiselect> -->
+                <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectactivityList"
+                formControlName="activityCode" [style]="{'width': '100%'}"></p-dropdown>
+
+              <mat-error *ngIf="errorHandling('activityCode')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-1" *ngIf="ttbSelected">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Task Based Code</p>
+              <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="taskCode" placeholder="Select">
+                  <mat-option *ngFor="let food of taskCodelist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <angular2-multiselect [data]="multiselecttaskList" [(ngModel)]="selectedItems2"
+                [settings]="dropdownSettings" formControlName="taskCodeFE"></angular2-multiselect> -->
+                <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselecttaskList"
+                formControlName="taskCode" [style]="{'width': '100%'}"></p-dropdown>
+              <mat-error *ngIf="errorHandling('taskCode')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Bill Type</p>
+
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="billType" placeholder="Select">
+                  <mat-option value="billable">Billable</mat-option>
+                  <mat-option value="non-billable">Non-Billable</mat-option>
+                  <!-- <mat-option value="No-Charge">No Charge</mat-option> -->
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('billType')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Date</p>
+             <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker" formControlName="stimeTicketDateFE"
+                  placeholder="choose Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field> -->
+              <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                <input matInput placeholder="Choose Date" placeholder="Choose Date" [matDatepicker]="picker31"
+                  formControlName="stimeTicketDateFE" class="mb-0 pb-0">
+                <mat-datepicker-toggle matSuffix [for]="picker31"></mat-datepicker-toggle>
+                <mat-datepicker #picker31></mat-datepicker>
+              </mat-form-field>
+           
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Time Keeper</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="timeKeeperCode" placeholder="Select">
+                  <mat-option *ngFor="let food of timeKeeperCodelist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('timeKeeperCode')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Assigned Rate/Hour</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput type="number" placeholder="0" formControlName="defaultRate">
+                <span matPrefix class="text-secondary"
+                  style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('defaultRate')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Default Rate/Hour</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput type="number" placeholder="0" formControlName="defaultRatePerHour">
+                <span matPrefix class="text-secondary"
+                  style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('defaultRatePerHour')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Time Ticket Amount</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <input matInput type="number" placeholder="0" formControlName="timeTicketAmount">
+                <span matPrefix class="text-secondary"
+                  style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('timeTicketAmount')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+          <p class="mb-0"></p>
+          <div class="col-12 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Description</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <textarea matInput rows="3" placeholder="Enter" formControlName="timeTicketDescription"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('timeTicketDescription')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="createdBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="screatedOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Status</p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="statusId" placeholder="Select">
+                  <mat-option *ngFor="let food of statusIdlist" [value]="food.key" disabled>
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{btntext}}</button>
+    </div>
+
+
+
+  </div>
+</form>

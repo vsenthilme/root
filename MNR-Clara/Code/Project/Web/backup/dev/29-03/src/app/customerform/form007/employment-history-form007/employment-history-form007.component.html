@@ -1,0 +1,966 @@
+<form [formGroup]="chform">
+    <div class="row scroll mt-2 mx-1 px-4">
+        <div formGroupName="employmentHistoryDetails">
+            <p class="mb-0 py-0   mt-2">Are you currently working in the U.S.A with a Social Security Number?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="areYouCurrentlyWorkingInUSAWithSSN">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('employmentHistoryDetails.areYouCurrentlyWorkingInUSAWithSSN')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+            <p class="mb-0 py-0   mt-2">Is it valid?</p>
+            <div class="row mt-2">
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="select" formControlName="ssnvalid">
+                        <mat-option value="Yes">Yes</mat-option>
+                        <mat-option value="No">No</mat-option>
+                        <mat-option value="Don't Know">Don't Know</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('employmentHistoryDetails.ssnvalid')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Occupation</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="occupation" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('employmentHistoryDetails.occupation')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Do you pay Taxes in the U.S?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="dpYouPayTaxes">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('employmentHistoryDetails.dpYouPayTaxes')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+            <p class="mb-0 py-0   mt-2">Since when? </p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="sinceWhen">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('employmentHistoryDetails.sinceWhen')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+
+            <p class="mb-0 pb-2  fw-bolder mt-3">List all the employments you have worked at within the past 5
+                years.
+                Starting with your current employment:</p>
+            <div formGroupName="employmentDetails1">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails1.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails2">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill1">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill1"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill1></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails2.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails3">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill2">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill2"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill2></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails3.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails4">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill3">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill3"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill3></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails4.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails5">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill4">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill4"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill4></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails5.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails6">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill5">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill5"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill5></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails6.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails7">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill6">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill6"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill6></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails7.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails8">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill7">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill7"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill7></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails9">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails8.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill8">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill8"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill8></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails9.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="employmentDetails10">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">1. Name of the Company</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOfTheCompany" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.nameOfTheCompany')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="fullAddress">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Street Address</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="streetAddress" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.fullAddress.streetAddress')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">City</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="city" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.fullAddress.city')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">State</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="state" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.fullAddress.state')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0  ">Zip Code</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <input formControlName="zipCode" matInput placeholder="Enter">
+                        </mat-form-field>
+                        <mat-error
+                            *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.fullAddress.zipCode')">
+                            {{getErrorMessage()}}</mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="telephoneNumber" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.telephoneNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Name and Surname of Supervisor</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameAndSurnameOfYourSupervisor" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.nameAndSurnameOfYourSupervisor')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Employment</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="employmentTill9">
+                            <input formControlName="employmentFrom" matStartDate placeholder="Choose date">
+                            <input formControlName="employmentTill" matEndDate placeholder="Choose date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="employmentTill9"></mat-datepicker-toggle>
+                        <mat-date-range-picker #employmentTill9></mat-date-range-picker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.employmentFrom')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Do you have any evidence of employment? Ex. Paystubs, W-2 Form etc. </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveAnyEvidenceOfEmployment">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('employmentHistoryDetails.employmentDetails10.doYouHaveAnyEvidenceOfEmployment')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

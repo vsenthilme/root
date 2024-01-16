@@ -1,0 +1,302 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">CRM</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Intake Form</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%"> </div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" (click)="downloadexcel()">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab disabled *ngIf="showFloatingButtons == true"
+        class="disabled floating-buttons bg-yellow1 text-white mx-2 " matTooltip="Delete" [disabled]="!RA.delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab disabled *ngIf="showFloatingButtons == true"
+        class="disabled floating-buttons text-white mx-2 bg-lightblue" matTooltip="Display" [disabled]="!RA.view">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button disabled mat-mini-fab *ngIf="showFloatingButtons == true"
+        class="floating-buttons text-white mx-2 me-3 primary1 disabled" matTooltip="Edit"
+        [disabled]="!RA.createUpdate">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class="bg-darkblue text-white mx-2 action-button ">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button  bg-red" type="button" mat-button
+        (click)="drawer.toggle()">
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+    <form [formGroup]="searhform">
+
+      <div class="row scroll2 mx-0">
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Inquiry No</p>
+
+
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="inquiryNumber"
+            [valuewithID]="false" apiMethod="crm">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectinquiryList" [(ngModel)]="selectedItems"
+            [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+            (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)" formControlName="inquiryNumberFE">
+          </angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectinquiryList"  [(ngModel)]="selectedItems"
+          formControlName="inquiryNumberFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Intake Form ID</p>
+          
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="intakeFormId">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectintakeIDList" [(ngModel)]="selectedItems3"
+          [settings]="dropdownSettings" formControlName="intakeFormIdFE"></angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectintakeIDList"  [(ngModel)]="selectedItems3"
+          formControlName="intakeFormIdFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Email</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter" formControlName="email">
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Approved On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" formControlName="sapprovedOn">
+              <input matEndDate placeholder="End date" formControlName="eapprovedOn">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Received On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="pickers">
+              <input matStartDate placeholder="Start date" formControlName="sreceivedOn">
+              <input matEndDate placeholder="End date" formControlName="ereceivedOn">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickers></mat-date-range-picker>
+          </mat-form-field>
+
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Sent On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="pickerss">
+              <input matStartDate placeholder="Start date" formControlName="ssentOn">
+              <input matEndDate placeholder="End date" formControlName="esentOn">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="pickerss"></mat-datepicker-toggle>
+            <mat-date-range-picker #pickerss></mat-date-range-picker>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Status</p>
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="statusId"
+            [filerbased]="searchStatusList">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectstatusList" [(ngModel)]="selectedItems2"[settings]="dropdownSettings" 
+          formControlName="statusIdFE"></angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectstatusList"  [(ngModel)]="selectedItems2"
+          formControlName="statusIdFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+          <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+            <mat-select formControlName="statusId">
+              <mat-option *ngFor="let food of statuslist" [value]="food.key">
+                {{food.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+        </div>
+
+
+
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset()">
+        <mat-icon class="">restart_alt</mat-icon> Reset
+      </button>
+      <button mat-raised-button class="bg-blue text-white mx-1" (click)="search(); drawer.toggle();">
+        <mat-icon class="">done</mat-icon> Search
+      </button>
+    </div>
+  </mat-drawer>
+  <div class=" my-0 py-0">
+    <div class="scroll5 ms-3 me-3 px-0 mt-1 ">
+      <div class="scroll4">
+        <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="headerselect">
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()" disabled
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()" disabled>
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="inquiryNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Inquiry No </th>
+            <td mat-cell *matCellDef="let element"> {{element.inquiryNumber}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="intakeFormId_des">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Intake Form Desc</th>
+            <td mat-cell *matCellDef="let element"> {{element.intakeFormId_des}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="createdOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Inquiry Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'MM-dd-yyyy'}}
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="intakeFormNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Intake Form No </th>
+            <td mat-cell *matCellDef="let element"> {{element.intakeFormNumber}} </td>
+          </ng-container>
+
+               <!-- Symbol Column -->
+               <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} {{element.lastname}}  </td>
+              </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email</th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Notes </th>
+            <td *matCellDef="let element" class="tableborder p-0 border-bottom">
+              <button mat-icon-button (click)="openNotes(element)">
+                <!-- <mat-icon class="text-secondary">text_snippet</mat-icon> -->
+                <img src="./assets/img/icons/notes.png" style="height: 27px;width:27px;" alt="" srcset="">
+              </button>
+            </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="sentOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sent / Filled Date </th>
+
+            <td mat-cell *matCellDef="let element"> {{element.sentOn | date :'MM-dd-yyyy'}} </td>
+
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="receivedOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Received Date </th>
+
+            <td mat-cell *matCellDef="let element"> {{element.receivedOn | date :'MM-dd-yyyy'}} </td>
+
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="approvedOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Approved Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.approvedOn| date:'MM-dd-yyyy'}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="statusId_des">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status </th>
+            <td mat-cell *matCellDef="let element"> {{element.statusId_des}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="action" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class=" stick">Actions </th>
+            <td *matCellDef="let row;let element" class="stick">
+              <button mat-icon-button (click)="clearselection(row)" [matMenuTriggerFor]="menu"
+                [matMenuTriggerData]="{element: element}">
+                <mat-icon class="text-secondary">more_horiz</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="p-0 mx-1 m-0">
+      <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+    </div>
+  </div>
+</mat-drawer-container>
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-aliasMenuItems="element">
+    <button mat-menu-item [disabled]="aliasMenuItems.statusId == '10'"
+      (click)="open_new_update(aliasMenuItems,'update')">Update and Assign</button>
+    <button mat-menu-item [disabled]="aliasMenuItems.statusId == '10'"
+      (click)="openDelete(aliasMenuItems)">Delete</button>
+    <!-- <button mat-menu-item *ngIf="aliasMenuItems.statusId == 8"
+      (click)="open_new_update(aliasMenuItems,'validate')">Validate</button> -->
+
+    <button mat-menu-item [disabled]="aliasMenuItems.statusId == '10'"
+      *ngIf="aliasMenuItems.statusId == 8 || aliasMenuItems.statusId == 6 || aliasMenuItems.statusId == 5 "
+      (click)="open_new_update(aliasMenuItems,'validate')">Preview Intake Form</button>
+
+      <!--
+            <button mat-menu-item [disabled]="!RA.createUpdate && aliasMenuItems.statusId == '10'"
+      (click)="open_new_update(aliasMenuItems,'update')">Update and Assign</button>
+    <button mat-menu-item [disabled]="!RA.createUpdate && aliasMenuItems.statusId == '10'"
+      (click)="openDelete(aliasMenuItems)">Delete</button>
+
+    <button mat-menu-item [disabled]=" !RA.createUpdate && aliasMenuItems.statusId == '10'"
+    *ngIf="aliasMenuItems.statusId == 8 || aliasMenuItems.statusId == 6|| aliasMenuItems.statusId == 5 "
+    (click)="open_new_update(aliasMenuItems,'validate')">Validate</button>
+      -->
+  </ng-template>
+</mat-menu>

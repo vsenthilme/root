@@ -1,0 +1,242 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+        <nav aria-label="breadcrumb mb-0">
+            <ol class="breadcrumb mb-0 d-flex align-items-center">
+                <li class="breadcrumb-item mb-0 ms-3"><a >
+                        <mat-icon class="text-secondary align-middle">home</mat-icon>
+                    </a></li>
+                <div class="divider mx-3 border-end"></div>
+                <li class="breadcrumb-item mb-0 active " aria-current="page"> Reports
+                </li>
+                <li class="breadcrumb-item mb-0 active " aria-current="page"> <a  >Productivity</a></li>
+                <li class="breadcrumb-item mb-0 active " aria-current="page">Immigration Payment</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+        <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+                class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+        </div>
+        <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row">
+            <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+                matTooltip="Download Excel" (click)="downloadexcel();">
+                <mat-icon class="">download</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="  floating-buttons bg-yellow1 text-white mx-2 " matTooltip="Delete" [disabled]="!RA.delete">
+                <mat-icon class="">delete</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="  floating-buttons text-white mx-2 bg-lightblue" matTooltip="Display" [disabled]="!RA.view">
+                <mat-icon class="">search</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+                class="floating-buttons text-white mx-2 me-3 primary1  " matTooltip="Edit" [disabled]="!RA.createUpdate">
+                <mat-icon class="">edit</mat-icon>
+            </button>
+            <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+                [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+                <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button  " [disabled]="!RA.createUpdate">
+                <mat-icon class="">add</mat-icon> New
+            </button>
+            <button mat-mini-fab disabled disabled class=" disabled text-white mx-2 action-button bg-red disabled  "
+                type="button" mat-button>
+                <mat-icon class="">search</mat-icon> Search
+            </button>
+        </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center justify-content-between pb-2"
+    style="height: 3rem !important;background-color: #f5f5f5 !important;">
+    <div>
+        <h2 class="my-auto mb-0 mx-4 ps-3 font-weight-bold text-blue">Immigration Payment Report</h2>
+    </div>
+    <div *ngIf="fullscreen">
+        <!-- <button mat-icon-button (click)="togglesearch()"
+            class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+            matTooltip="Fullscreen">
+            <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">launch
+            </mat-icon>
+        </button> -->
+    </div>
+    <div *ngIf="back" class="d-flex w-25">
+         <p-multiSelect placeholder="Select"  appendTo="body" class="w-75 mt-1" [options]="dispList" 
+        [(ngModel)]="selectedDisplay" (onChange)="displayChange($event)" [style]="{'width': '80%'}"[panelStyle]="{'width':'20%'}"></p-multiSelect> 
+        <button mat-icon-button (click)="backsearch()"
+            class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+            matTooltip="Back">
+            <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">
+                arrow_back
+            </mat-icon>
+        </button>
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <div class="mt-3 mb-0 " *ngIf="search">
+        <div class="row  mx-4">
+            <div class="col-lg-3 col-md-4">
+                <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Client ID</p>
+                    <p-multiSelect placeholder="Select"  appendTo="body" class="w-100 my-1 mb-2" [options]="multiSelectClientList" 
+                    formControlName="clientNumber" [style]="{'width': '100%'}"[panelStyle]="{'width':'20%'}"></p-multiSelect> 
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Matter</p>
+                    <p-multiSelect placeholder="Select"  appendTo="body" class="w-100 my-1 mb-2" [options]="multiSelectMatterList" 
+                    formControlName="matterNumber" [style]="{'width': '100%'}"[panelStyle]="{'width':'20%'}"></p-multiSelect> 
+                </div>
+            </div>
+           
+            <div class="col-lg-3 col-md-4">
+                <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required">Date </p>
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="pickers">
+                            <input matStartDate placeholder="Start date" formControlName="fromDueDateFE">
+                            <input matEndDate placeholder="End date" formControlName="toDueDateFE">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                        <mat-date-range-picker #pickers></mat-date-range-picker>
+                    </mat-form-field>
+                    
+                <mat-error *ngIf="errorHandling('toDueDateFE')">{{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Reminder Date </p>
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="pickers1">
+                            <input matStartDate placeholder="Start date" formControlName="fromRemainderDateFE">
+                            <input matEndDate placeholder="End date" formControlName="toRemainderDateFE">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="pickers1"></mat-datepicker-toggle>
+                        <mat-date-range-picker #pickers1></mat-date-range-picker>
+                    </mat-form-field>
+                    
+                <mat-error *ngIf="errorHandling('toRemainderDateFE')">{{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <button mat-raised-button class=" bg-danger px-4 text-white mb-2 mx-2" (click)="reset()"> <i
+              class="bi bi-arrow-counterclockwise me-1 font-size-1_5rem pr-2"></i>Reset</button>
+          <button mat-raised-button class=" bg-darkblue text-white mb-2 mx-2" (click)="filtersearch()"> <i
+                  class="bi bi-gear-fill me-1 font-size-1_5rem pr-2"></i>Execute</button>
+       
+      </div>
+    </div>
+  </form>
+  <div class=" my-0 py-0" *ngIf="table">
+    <div class="ms-3 me-3 px-1" [ngClass]="{'scroll20' : !search, 'scroll2': search}">
+     <div class="scrollhori">
+        <table mat-table [dataSource]="dataSource" matSort class=" w-100 ">
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()" disabled
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(row)" disabled
+                        [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+                <td mat-cell *matCellDef="let element"> {{element.clientId}} </td>
+            </ng-container>
+            <ng-container matColumnDef="matterNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef="quoteNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Quote No</th>
+                <td mat-cell *matCellDef="let element"> {{element.quoteNumber}} </td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef="paymentPlanAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Plan Amount	</th>
+                <td mat-cell *matCellDef="let element"> {{element.paymentPlanAmount | currency}}</td>
+            </ng-container>
+  
+  
+            <ng-container matColumnDef="instalmentAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Instalment Amount </th>
+                <td mat-cell *matCellDef="let element"> {{element.instalmentAmount | currency}}</td>
+                <!-- <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{billhrs() | number : '1.1-1'}}</td> -->
+            </ng-container>
+            <ng-container matColumnDef="invoice">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice</th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-icon-button  (click)="openDialog(element)">
+                        <mat-icon class="text-secondary">open_in_new</mat-icon>
+                      </button>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.startDate | date :'MM-dd-yyyy'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="paymentPlanDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Plan Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.paymentPlanDate | date :'MM-dd-yyyy'}} </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status </th>
+                <td mat-cell *matCellDef="let element"> {{element.status}}</td>
+            </ng-container>
+            <ng-container matColumnDef="dueDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Upcoming Due Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.dueDate | date :'MM-dd-yyyy'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="remainderDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Upcoming Reminder Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.remainderDate | date :'MM-dd-yyyy'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="clientPhoneNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Phone No</th>
+                <td mat-cell *matCellDef="let element"> {{element.clientPhoneNumber}} </td>
+            </ng-container>
+            <ng-container matColumnDef="clientWorkNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client work No</th>
+                <td mat-cell *matCellDef="let element"> {{element.clientWorkNumber}} </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+        </table>
+     </div>
+  
+    </div>
+    <div class="p-0 mx-1 m-0">
+        <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
+  </div>
+  
+  
+  
+  <mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-aliasMenuItems="element">
+        <button mat-menu-item>Edit</button>
+        <button mat-menu-item>Display</button>
+        <button mat-menu-item>Delete</button>
+        <!-- <button mat-menu-item (click)="open_ClientCreation(aliasMenuItems)">Client Creation</button>  -->
+    </ng-template>
+  </mat-menu>

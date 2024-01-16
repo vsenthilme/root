@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<QBWCXML>
+	<AppName>Custonmer Demo WebService</AppName>
+	<AppID>1</AppID>
+	<AppURL>http://localhost:9999/ItemQueryRqSoapImpl</AppURL>
+	<AppDescription>Customer creation WebService</AppDescription>
+	<AppSupport>http://developer.intuit.com</AppSupport>
+	<UserName>User123</UserName>
+	<OwnerID>{67A3B9B1-56F1-4fcc-B1TE-666DE1813D26}</OwnerID>
+	<FileID>{23A44EB5-33D9-4815-AG85-BC87A7E7D1XY}</FileID>
+	<QBType>QBFS</QBType>
+	<Scheduler>
+	<RunEveryNMinutes>2</RunEveryNMinutes>
+	</Scheduler>
+</QBWCXML>

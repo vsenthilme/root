@@ -1,0 +1,113 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 " aria-current="page">CRM</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Conflict Check</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Results</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab disabled *ngIf="showFloatingButtons == true"
+        class="disabled floating-buttons bg-yellow1 text-white mx-2 " matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab disabled *ngIf="showFloatingButtons == true"
+        class="disabled floating-buttons text-white mx-2 bg-lightblue" matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button disabled mat-mini-fab *ngIf="showFloatingButtons == true"
+        class="floating-buttons text-white mx-2 me-3 primary1 disabled" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button disabled mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button disabled"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class="bg-darkblue text-white mx-2 action-button disabled">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab disabled class="disabled text-white mx-2 action-button  bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="card bg-white ">
+  <form [formGroup]="form">
+    <div *ngIf="data" class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Conflict Check</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="mt-2">
+      <div class="row mx-0 ">
+        <div class="col-lg-3 col-md-6   mt-2">
+          <p class="mb-0 py-0">Search Criteria</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+            <mat-select formControlName="searchTableNames">
+              <!-- <mat-option value="volvo" disabled> Client </mat-option>
+            <mat-option value="volvo2" disabled>Matters </mat-option>
+            <mat-option value="volvo3" disabled>Notes</mat-option>
+            <mat-option value="volvo3" disabled>Email</mat-option>
+            <mat-option value="volvo3" disabled>Invoices</mat-option> -->
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="POTENTIALCLIENT">Prospective Client</mat-option>
+              <!-- <mat-option value="AGREEMENT">Agreement</mat-option> -->
+              <mat-option value="CLIENT">Client</mat-option>
+              <mat-option value="MATTER">Matter</mat-option>
+              <mat-option value="INVOICE">Invoice</mat-option>
+              <!-- <mat-option value="volvo3">All</mat-option> -->
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="errorHandling('searchTableNames')">{{getErrorMessage()}}</mat-error>
+
+        </div>
+        <div class="col-lg-4  col-md-6 mt-2">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Search Name</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="searchFieldValue">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('searchFieldValue')">{{getErrorMessage()}}</mat-error>
+
+          </div>
+        </div>
+        <!-- <div class="col-sm-12 mt-2 mb-2 mh-100">
+        <p class="mb-0 py-0 ">Defined Names </p>
+        <div class=" border" style="height:20rem;overflow-y:scroll">
+          <mat-selection-list #shoes [multiple]="false">
+            <mat-list-option>
+              Adelis Villegas Ortega
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+      </div> -->
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <!-- <button mat-raised-button class="text-white mx-2" color="warn">
+          <mat-icon class="me-1">close</mat-icon>Cancel
+        </button> -->
+        <!-- <button mat-raised-button class="bg-blue text-white mx-2" (click)="openDialog()">
+        <mat-icon class="me-1">upload</mat-icon>Load
+      </button> -->
+        <button mat-raised-button class="bg-yellow text-white mx-2 px-4" (click)="routetolist()">
+          <mat-icon class="me-1">settings</mat-icon>Run
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>

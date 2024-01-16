@@ -1,0 +1,161 @@
+<form [formGroup]="form">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">{{matter}}{{data.pageflow}} Expiration Date</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 px-3 p-1">
+
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Document Type </p>
+              <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="documentType" placeholder="Select">
+                  <mat-option *ngFor="let food of documentTypelist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <angular2-multiselect [data]="multiselectdocumentList" [(ngModel)]="selectedItems"
+              [settings]="dropdownSettings" 
+               formControlName="documentType"></angular2-multiselect> -->
+
+               
+               <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectdocumentList" [(ngModel)]="selectedItems"
+               formControlName="documentType" [style]="{'width': '100%'}"></p-dropdown>
+
+              <mat-error *ngIf="errorHandling('documentType')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <p class="mb-0 py-0">Approval Date</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker1" formControlName="approvalDate" >
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('approvalDate')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <p class="mb-0 py-0">Expiration Date</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2" formControlName="expirationDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('expirationDate')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <p class="mb-0 py-0">Eligibility Date</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker3" formControlName="eligibilityDate" >
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('eligibilityDate')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1" *ngIf="form.value.eligibilityDate">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Reminder Days</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="reminderDays" onlyNumber>
+                <mat-error *ngIf="form.controls.reminderDays.errors?.pattern" class="mt-1"> Only Numeric Values </mat-error>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('reminderDays')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1" >
+            <p class="mb-0 py-0">Reminder Date</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline" >
+              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker4" formControlName="reminderDate">
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('reminderDate')">{{getErrorMessage()}}</mat-error>
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-1 my-auto">
+            <mat-slide-toggle formControlName="toggleNotification">Send Notification</mat-slide-toggle>
+            <mat-error *ngIf="errorHandling('toggleNotification')">{{getErrorMessage()}}</mat-error>
+          </div>
+
+          <div class="col-12 mt-1" *ngIf="this.form.controls.toggleNotification.value == true">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Mozeo SMS Notes</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <textarea matInput rows="7" placeholder="Enter" (change)="omit_special_char($event)" formControlName="reminderDescription"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="form.controls.reminderDescription.errors?.maxlength" class="mt-1">Maximum 160 Characters</mat-error>
+              <mat-error *ngIf="errorHandling('reminderDescription')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="createdBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="createdOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{btntext}}</button>
+    </div>
+
+
+
+  </div>
+</form>

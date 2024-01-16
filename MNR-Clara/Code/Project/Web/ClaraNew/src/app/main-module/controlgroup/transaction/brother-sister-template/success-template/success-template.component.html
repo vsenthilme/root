@@ -1,0 +1,57 @@
+<div class="card bg-white ">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Brother-Sister Group Validation</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3" *ngIf="showSubmit"></i>
+  </div>
+  <div class="row mx-1 my-2 scroll1 p-2">
+    <div class="col-8">
+      <h3 class="mb-1">Control Interest Test</h3>
+      <p-progressBar  [value]="controlTestValue" class="customProgress progress-striped" [style]="{'height': '22px'}"></p-progressBar>
+    </div>
+    
+    <div class="col-2 mt-4">
+      <img  *ngIf="showControlTestTick" style="width: 2rem;" [src]="this.data.ControlTest ? './assets/img/tick.gif' : './assets/img/wrong.gif'" alt="" srcset="" class="mt-1">
+    </div>
+</div>
+<div class="row mx-1 my-2 scroll1 p-2">
+    <div class="col-8">
+      <h3 class="mb-1">Effective Control Interest Test</h3>
+      <p-progressBar  [value]="effectiveTestValue" class="customProgress progress-striped bg-success" [style]="{'height': '22px'}"></p-progressBar>
+    </div>
+    <div class="col-2 mt-4">
+      <img  *ngIf="showEffectiveControlTestTick" style="width: 2rem;" [src]="this.data.effectiveControlTest ? './assets/img/tick.gif' : './assets/img/wrong.gif'" alt="" srcset="" class="mt-1">
+    </div>
+</div>
+
+  
+        <div class="row mx-1 my-2 scroll1 p-2">
+       <div class="col-8">
+      <h3 class="mb-1">Brother Sister Test</h3>
+      <p-progressBar  [value]="brotherSisterTestValue" class="customProgress progress-striped" [style]="{'height': '22px'}"></p-progressBar>
+    </div>
+    <div class="col-2 mt-4">
+      <img  *ngIf="showbrotherSisterTestTick" style="width: 2rem;" [src]="this.data.effectiveControlTest  && this.data.ControlTest ? './assets/img/tick.gif' : './assets/img/wrong.gif'" alt="" srcset="" class="mt-1">
+    </div> 
+  </div>
+ 
+
+  <div class="d-flex justify-content-center align-items-center py-2" *ngIf="showSubmit">
+        <button mat-raised-button   mat-dialog-close class="mx-2 bg-blue text-white px-4"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Submit</button>
+  </div>
+</div>
+
+<!--
+      <circle-progress   *ngIf="showProgress"
+    [percent]="100"
+    [radius]="100"
+    [outerStrokeWidth]="16"
+    [innerStrokeWidth]="8"
+    [outerStrokeColor]="'#78C000'"
+    [innerStrokeColor]="'#C7E596'"
+    [animation]="true"
+    [animationDuration]="4500"
+  ></circle-progress>
+-->

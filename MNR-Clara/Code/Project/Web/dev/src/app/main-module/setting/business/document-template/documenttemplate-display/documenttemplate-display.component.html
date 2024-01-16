@@ -1,0 +1,197 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Document Template - {{data? data.pageflow: 'New'}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Class </p>
+              <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="classId" placeholder="Select">
+                  <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Case Category</p>
+              <!-- <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="caseCategoryId" placeholder="Select">
+                  <mat-option *ngFor="let food of caseCategoryIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <angular2-multiselect [data]="multiselectcasesubList" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings" formControlName="caseCategoryIdFE"></angular2-multiselect>
+              <mat-error *ngIf="errorHandling('caseCategoryIdFE')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <!-- <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Document Code</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="documentNumber" placeholder="Enter">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('documentNumber')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div> -->
+          <div class="col-lg-6 col-md-6 my-2" *ngIf="uploadbutton">
+            <p class="mb-0 py-0 required">Upload File</p>
+
+            <input ngf type="file" accept="*" [(files)]="files" (click)="files =[]" class="form-control" id=""
+              required />
+
+            <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+            <mat-error *ngIf="uploadstatus == false">{{getErrorMessage()}}</mat-error>
+          </div>
+    
+
+
+
+          <div class=" col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Document File Description</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="documentFileDescription" placeholder="Enter">
+              </mat-form-field>
+            </div>
+          </div>
+
+
+          <!-- <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Docusign </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select placeholder="Select" formControlName="referenceField1">
+                  <mat-option value="TRUE">Yes </mat-option>
+                  <mat-option value="FALSE">No </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('referenceField1')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div> -->
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 invisible">Docuign </p>
+              <!-- <mat-radio-group (click)= "resetRadio($event)" class="mt-2" formControlName="referenceField1" aria-label="Select an option">
+                <mat-radio-button value="True ">DocuSign</mat-radio-button>
+              </mat-radio-group> -->
+              <mat-checkbox formControlName="referenceField1" (click)= "resetRadio($event)" >DocuSign</mat-checkbox>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 invisible">Docusign </p>
+              <!-- <mat-radio-group  (click)= "resetRadio1($event)" class="mt-2" formControlName="referenceField2" aria-label="Select an option">
+                <mat-radio-button value="True">Client Portal</mat-radio-button>
+              </mat-radio-group> -->
+              <mat-checkbox formControlName="referenceField2" (click)= "resetRadio1($event)" >Client Portal</mat-checkbox>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2 ">
+            <p class="mb-0 py-0 required">Mail Merge</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+              <mat-select formControlName="mailMerge">
+                <mat-option value="true"> Yes </mat-option>
+                <mat-option value="false">No </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('mailMerge')">{{getErrorMessage()}}</mat-error>
+
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Status </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select formControlName="documentStatus" placeholder="Select">
+                  <mat-option value="ACTIVE"> Active </mat-option>
+                  <mat-option value="INACTIVE">Inactive </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-0" *ngIf="form.value.documentUrl">
+            <p class="mb-1 py-0 ">Document File</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline" required>
+              <input matInput formControlName="documentUrl" readOnly placeholder="Enter" required>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="createdBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="createdOn">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="updatedBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="updatedOn">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="data.pageflow!= 'Display'" mat-raised-button class="mx-2 bg-blue text-white" type="submit"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+    </div>
+
+
+
+  </div>
+</form>

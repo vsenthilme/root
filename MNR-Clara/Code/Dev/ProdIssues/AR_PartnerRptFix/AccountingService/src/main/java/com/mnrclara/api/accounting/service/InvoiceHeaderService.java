@@ -1,0 +1,2603 @@
+package com.mnrclara.api.accounting.service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
+import com.mnrclara.api.accounting.model.impl.*;
+import com.mnrclara.api.accounting.model.invoice.report.*;
+import com.mnrclara.api.accounting.model.reports.MatterPLReport;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.mnrclara.api.accounting.model.auth.AuthToken;
+import com.mnrclara.api.accounting.model.invoice.AddInvoiceHeader;
+import com.mnrclara.api.accounting.model.invoice.AddInvoiceLine;
+import com.mnrclara.api.accounting.model.invoice.InvoiceCreateResponse;
+import com.mnrclara.api.accounting.model.invoice.InvoiceHeader;
+import com.mnrclara.api.accounting.model.invoice.InvoiceHeaderTransfer;
+import com.mnrclara.api.accounting.model.invoice.InvoiceLine;
+import com.mnrclara.api.accounting.model.invoice.InvoiceLineTransfer;
+import com.mnrclara.api.accounting.model.invoice.InvoicePreBillDetails;
+import com.mnrclara.api.accounting.model.invoice.InvoiceRet;
+import com.mnrclara.api.accounting.model.invoice.PaymentUpdate;
+import com.mnrclara.api.accounting.model.invoice.ReceivePaymentResponse;
+import com.mnrclara.api.accounting.model.invoice.SearchInvoiceHeader;
+import com.mnrclara.api.accounting.model.invoice.SearchInvoiceHeaderARAgingReport;
+import com.mnrclara.api.accounting.model.invoice.SearchPaymentUpdate;
+import com.mnrclara.api.accounting.model.invoice.TransferBilling;
+import com.mnrclara.api.accounting.model.invoice.UpdateInvoiceHeader;
+import com.mnrclara.api.accounting.model.invoice.UpdateInvoiceLine;
+import com.mnrclara.api.accounting.model.management.ClientGeneral;
+import com.mnrclara.api.accounting.model.management.MatterExpense;
+import com.mnrclara.api.accounting.model.management.MatterExpenseTransfer;
+import com.mnrclara.api.accounting.model.management.MatterGenAcc;
+import com.mnrclara.api.accounting.model.management.MatterTimeTicket;
+import com.mnrclara.api.accounting.model.management.MatterTimeTicketTransfer;
+import com.mnrclara.api.accounting.model.management.entity.MatterAssignment;
+import com.mnrclara.api.accounting.model.prebill.PreBillDetails;
+import com.mnrclara.api.accounting.model.prebill.SearchPreBillDetails;
+import com.mnrclara.api.accounting.model.reports.IMatterGenAcc;
+import com.mnrclara.api.accounting.repository.ARAgingReportRepository;
+import com.mnrclara.api.accounting.repository.BillingReportRepository;
+import com.mnrclara.api.accounting.repository.ClientGeneralRepository;
+import com.mnrclara.api.accounting.repository.InvoiceHeaderRepository;
+import com.mnrclara.api.accounting.repository.InvoiceHeaderTransferRepository;
+import com.mnrclara.api.accounting.repository.InvoiceLineRepository;
+import com.mnrclara.api.accounting.repository.InvoiceLineTransferRepository;
+import com.mnrclara.api.accounting.repository.MatterAssignmentRepository;
+import com.mnrclara.api.accounting.repository.MatterExpenseRepository;
+import com.mnrclara.api.accounting.repository.MatterExpenseTransferRepository;
+import com.mnrclara.api.accounting.repository.MatterGenAccRepository;
+import com.mnrclara.api.accounting.repository.MatterTimeTicketRepository;
+import com.mnrclara.api.accounting.repository.MatterTimeTicketTransferRepository;
+import com.mnrclara.api.accounting.repository.PaymentUpdateRepository;
+import com.mnrclara.api.accounting.repository.PreBillDetailsRepository;
+import com.mnrclara.api.accounting.repository.specification.ARAgingReportSpecification;
+import com.mnrclara.api.accounting.repository.specification.BillingReportSpecification;
+import com.mnrclara.api.accounting.repository.specification.InvoiceHeaderARAgingReportSpecification;
+import com.mnrclara.api.accounting.repository.specification.InvoiceHeaderBillingReportSpecification;
+import com.mnrclara.api.accounting.repository.specification.InvoiceHeaderSpecification;
+import com.mnrclara.api.accounting.repository.specification.MatterGenAccARAgingSpecification;
+import com.mnrclara.api.accounting.repository.specification.PaymentUpdateSpecification;
+import com.mnrclara.api.accounting.repository.specification.PreBillDetailsSpecification;
+import com.mnrclara.api.accounting.util.CommonUtils;
+import com.mnrclara.api.accounting.util.DateUtils;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class InvoiceHeaderService {
+
+	@Autowired
+	InvoiceHeaderRepository invoiceHeaderRepository;
+
+	@Autowired
+	InvoiceLineRepository invoiceLineRepository;
+
+	@Autowired
+	InvoiceHeaderTransferRepository invoiceHeaderTransferRepository;
+
+	@Autowired
+	InvoiceLineTransferRepository invoiceLineTransferRepository;
+
+	@Autowired
+	PreBillDetailsRepository preBillDetailsRepository;
+
+	@Autowired
+	MatterTimeTicketRepository matterTimeTicketRepository;
+
+	@Autowired
+	MatterExpenseRepository matterExpenseRepository;
+
+	@Autowired
+	MatterTimeTicketTransferRepository matterTimeTicketTransferRepository;
+
+	@Autowired
+	MatterExpenseTransferRepository matterExpenseTransferRepository;
+
+	@Autowired
+	MatterGenAccRepository matterGenAccRepository;
+
+	@Autowired
+	PaymentUpdateRepository paymentUpdateRepository;
+
+	@Autowired
+	ClientGeneralRepository clientGeneralRepository;
+
+	@Autowired
+	ARAgingReportRepository arAgingReportRepository;
+
+	@Autowired
+	BillingReportRepository billingReportRepository;
+	
+	@Autowired
+	MatterAssignmentRepository matterAssignmentRepository;
+
+	@Autowired
+	ManagementService managementService;
+
+	@Autowired
+	AuthTokenService authTokenService;
+
+	@Autowired
+	SetupService setupService;
+
+	@Autowired
+	InvoiceLineService invoiceLineService;
+
+	/**
+	 * getInvoiceHeaders
+	 * @return
+	 */
+	public List<AddInvoiceHeader> getInvoiceHeaders () {
+		List<InvoiceHeader> invoiceHeaderList = invoiceHeaderRepository.findAll();
+
+		// Return Response object
+		List<AddInvoiceHeader> addInvoiceHeaderList = new ArrayList<>();
+		for (InvoiceHeader invoiceHeader : invoiceHeaderList) {
+			if (invoiceHeader != null) {
+				List<InvoiceLine> invoiceLineList = invoiceLineRepository.findByInvoiceNumber(invoiceHeader.getInvoiceNumber());
+				List<AddInvoiceLine> newAddInvoiceLineList = new ArrayList<>();
+				for (InvoiceLine invoiceLine : invoiceLineList) {
+					AddInvoiceLine newInvoiceLine = new AddInvoiceLine ();
+					BeanUtils.copyProperties(invoiceLine, newInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+					newAddInvoiceLineList.add(newInvoiceLine);
+				}
+
+				AddInvoiceHeader addInvoiceHeader = new AddInvoiceHeader();
+				BeanUtils.copyProperties(invoiceHeader, addInvoiceHeader, CommonUtils.getNullPropertyNames(invoiceHeader));
+
+				addInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPreBillDate()));
+				addInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+				addInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+
+				addInvoiceHeader.setAddInvoiceLine(newAddInvoiceLineList);
+				addInvoiceHeaderList.add(addInvoiceHeader);
+			}
+		}
+		return addInvoiceHeaderList;
+	}
+
+	/**
+	 * getAllInvoiceHeaders
+	 * @param pageNo
+	 * @param pageSize
+	 * @param sortBy
+	 * @return
+	 */
+	public Page<InvoiceHeader> getAllInvoiceHeaders(Integer pageNo, Integer pageSize, String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+		Page<InvoiceHeader> pagedResult = invoiceHeaderRepository.findByDeletionIndicator(0L,paging);
+		return pagedResult;
+	}
+
+	/**
+	 * getInvoiceHeader
+	 * @param invoiceNumber
+	 * @return
+	 */
+	public AddInvoiceHeader getInvoiceHeader (String invoiceNumber) {
+		InvoiceHeader invoiceHeader = invoiceHeaderRepository.findByInvoiceNumber(invoiceNumber);
+		List<InvoiceLine> listInvoiceLine = invoiceLineRepository.findByInvoiceNumber(invoiceHeader.getInvoiceNumber());
+
+		List<AddInvoiceLine> newAddInvoiceLineList = new ArrayList<>();
+		for (InvoiceLine invoiceLine : listInvoiceLine) {
+			AddInvoiceLine newInvoiceLine = new AddInvoiceLine ();
+			BeanUtils.copyProperties(invoiceLine, newInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+			newAddInvoiceLineList.add(newInvoiceLine);
+		}
+
+		AddInvoiceHeader addInvoiceHeader = new AddInvoiceHeader();
+		BeanUtils.copyProperties(invoiceHeader, addInvoiceHeader, CommonUtils.getNullPropertyNames(invoiceHeader));
+
+		addInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPreBillDate()));
+		addInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+		addInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+
+		addInvoiceHeader.setAddInvoiceLine(newAddInvoiceLineList);
+		return addInvoiceHeader;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public AddInvoiceHeader getLatestInvoiceHeader() {
+		String invoiceNumber = invoiceHeaderRepository.findTopRecord();
+		if (invoiceNumber != null) {
+			InvoiceHeader invoiceHeader = invoiceHeaderRepository.findByInvoiceNumber (invoiceNumber);
+			List<InvoiceLine> listInvoiceLine = invoiceLineRepository.findByInvoiceNumber(invoiceNumber);
+
+			List<AddInvoiceLine> newAddInvoiceLineList = new ArrayList<>();
+			for (InvoiceLine invoiceLine : listInvoiceLine) {
+				AddInvoiceLine newInvoiceLine = new AddInvoiceLine ();
+				BeanUtils.copyProperties(invoiceLine, newInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+				newAddInvoiceLineList.add(newInvoiceLine);
+			}
+
+			AddInvoiceHeader addInvoiceHeader = new AddInvoiceHeader();
+			BeanUtils.copyProperties(invoiceHeader, addInvoiceHeader, CommonUtils.getNullPropertyNames(invoiceHeader));
+
+			addInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPreBillDate()));
+			addInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+			addInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+			log.info("invoiceHeader InvoiceDate : " + invoiceHeader.getInvoiceDate() + ":conv--> " + addInvoiceHeader.getInvoiceDate());
+
+			addInvoiceHeader.setAddInvoiceLine(newAddInvoiceLineList);
+
+			// Update the QB Flag
+			invoiceHeader.setSentToQB(1L);
+			invoiceHeaderRepository.save(invoiceHeader);
+			return addInvoiceHeader;
+		} else {
+			log.info("Already the latest Invoice has been sent to QB: " + invoiceNumber);
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public String getTopRecordByStatusIdAndQbQuery() {
+		String invoiceNumber = invoiceHeaderRepository.findTopRecordByStatusIdAndQbQuery();
+		log.info("getTopRecordByStatusIdAndQbQuery : " + invoiceNumber);
+		return invoiceNumber;
+	}
+
+	/**
+	 *
+	 * @param searchInvoiceHeader
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<AddInvoiceHeader> findInvoiceHeader(SearchInvoiceHeader searchInvoiceHeader) throws ParseException {
+		if (searchInvoiceHeader.getStartInvoiceDate() != null &&
+				searchInvoiceHeader.getEndInvoiceDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInvoiceHeader.getStartInvoiceDate(),
+					searchInvoiceHeader.getEndInvoiceDate());
+			searchInvoiceHeader.setStartInvoiceDate(dates[0]);
+			searchInvoiceHeader.setEndInvoiceDate(dates[1]);
+		}
+
+		InvoiceHeaderSpecification spec = new InvoiceHeaderSpecification(searchInvoiceHeader);
+		List<InvoiceHeader> results = invoiceHeaderRepository.findAll(spec);
+		List<AddInvoiceHeader> responseAddInvoiceHeaderList = createBeanList (results);
+		return responseAddInvoiceHeaderList;
+	}
+
+	/**
+	 *
+	 * @param searchInvoiceHeader
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<InvoiceHeader> findInvoiceHeader(SearchInvoiceHeaderARAgingReport searchInvoiceHeader) throws ParseException {
+		ARAgingReportSpecification spec = new ARAgingReportSpecification(searchInvoiceHeader);
+		List<InvoiceHeader> results = invoiceHeaderRepository.findAll(spec);
+		return results;
+	}
+
+	/**
+	 *
+	 * @param searchInvoiceHeader
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<ARAgingReport> findInvoiceHeaderARAgingReport(SearchInvoiceHeaderARAgingReport searchInvoiceHeader) throws ParseException {
+		InvoiceHeaderARAgingReportSpecification spec = new InvoiceHeaderARAgingReportSpecification(searchInvoiceHeader);
+		List<ARAgingReport> results = arAgingReportRepository.findAll(spec);
+		return results;
+	}
+
+	/**
+	 *
+	 * @param searchPaymentUpdate
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<PaymentUpdate> findPaymentUpdate(SearchPaymentUpdate searchPaymentUpdate) throws ParseException {
+		if (searchPaymentUpdate.getFromPaymentDate() != null &&
+				searchPaymentUpdate.getToPaymentDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchPaymentUpdate.getFromPaymentDate(),
+					searchPaymentUpdate.getToPaymentDate());
+			searchPaymentUpdate.setFromPaymentDate(dates[0]);
+			searchPaymentUpdate.setToPaymentDate(dates[1]);
+		}
+
+		if (searchPaymentUpdate.getFromPostingDate() != null &&
+				searchPaymentUpdate.getToPostingDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchPaymentUpdate.getFromPostingDate(),
+					searchPaymentUpdate.getToPostingDate());
+			searchPaymentUpdate.setFromPostingDate(dates[0]);
+			searchPaymentUpdate.setToPostingDate(dates[1]);
+		}
+
+		PaymentUpdateSpecification spec = new PaymentUpdateSpecification(searchPaymentUpdate);
+		List<PaymentUpdate> results = paymentUpdateRepository.findAll(spec);
+		log.info("PaymentUpdate results : " + results);	
+		return results;
+	}
+
+	/**
+	 *
+	 * @param searchMatterGeneral
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<com.mnrclara.api.accounting.model.prebill.MatterGenAcc> findMatterGeneral (SearchMatterGenAccReport
+																								   searchMatterGeneral) throws ParseException {
+		MatterGenAccARAgingSpecification spec = new MatterGenAccARAgingSpecification(searchMatterGeneral);
+		List<com.mnrclara.api.accounting.model.prebill.MatterGenAcc> results = matterGenAccRepository.findAll(spec);
+		return results;
+	}
+
+	/**
+	 * findInvoiceHeader
+	 * @param searchInvoiceHeader
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<InvoiceHeader> findInvoiceHeader (SearchInvoiceHeaderBillingReport searchInvoiceHeader) throws ParseException {
+		if (searchInvoiceHeader.getFromBillingDate() != null &&
+				searchInvoiceHeader.getToBillingDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInvoiceHeader.getFromBillingDate(),
+					searchInvoiceHeader.getToBillingDate());
+			searchInvoiceHeader.setFromBillingDate(dates[0]);
+			searchInvoiceHeader.setToBillingDate(dates[1]);
+			log.info("FromBillingDate: " + searchInvoiceHeader.getFromBillingDate());
+			log.info("ToBillingDate: " + searchInvoiceHeader.getToBillingDate());
+		}
+
+		if (searchInvoiceHeader.getFromPostingDate() != null &&
+				searchInvoiceHeader.getToPostingDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInvoiceHeader.getFromPostingDate(),
+					searchInvoiceHeader.getToPostingDate());
+			searchInvoiceHeader.setFromPostingDate(dates[0]);
+			searchInvoiceHeader.setToPostingDate(dates[1]);
+			log.info("FromPostingDate: " + searchInvoiceHeader.getFromPostingDate());
+			log.info("ToPostingDate: " + searchInvoiceHeader.getToPostingDate());
+		}
+
+		InvoiceHeaderBillingReportSpecification spec = new InvoiceHeaderBillingReportSpecification(searchInvoiceHeader);
+		List<InvoiceHeader> results = invoiceHeaderRepository.findAll(spec);
+		return results;
+	}
+
+	/**
+	 *
+	 * @param searchInvoiceHeader
+	 * @return
+	 * @throws Exception
+	 */
+	public List<BillingReport> findBillingReport(SearchInvoiceHeaderBillingReport searchInvoiceHeader) throws Exception {
+		if (searchInvoiceHeader.getFromPostingDate() != null &&
+				searchInvoiceHeader.getToPostingDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInvoiceHeader.getFromPostingDate(),
+					searchInvoiceHeader.getToPostingDate());
+			searchInvoiceHeader.setFromPostingDate(dates[0]);
+			searchInvoiceHeader.setToPostingDate(dates[1]);
+			log.info("FromPostingDate: " + searchInvoiceHeader.getFromPostingDate());
+			log.info("ToPostingDate: " + searchInvoiceHeader.getToPostingDate());
+		}
+
+		BillingReportSpecification spec = new BillingReportSpecification(searchInvoiceHeader);
+		List<BillingReport> results = billingReportRepository.findAll(spec);
+		return results;
+	}
+
+	/**
+	 *
+	 * @param fullTextSearch
+	 * @return
+	 */
+	public List<InvoiceHeader> findRecords(String fullTextSearch) {
+		List<InvoiceHeader> invoiceHeader = invoiceHeaderRepository.findRecords(fullTextSearch);
+		return invoiceHeader;
+	}
+
+	/**
+	 *
+	 * @param invoiceHeaderList
+	 * @return
+	 */
+	private List<AddInvoiceHeader> createBeanList(List<InvoiceHeader> invoiceHeaderList) {
+		List<AddInvoiceHeader> listInvoiceHeader = new ArrayList<>();
+		for (InvoiceHeader invoiceHeader : invoiceHeaderList) {
+			AddInvoiceHeader addInvoiceHeader = copyHeaderEntityToBean(invoiceHeader);
+			addInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPreBillDate()));
+			addInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+			addInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+			listInvoiceHeader.add(addInvoiceHeader);
+		}
+		return listInvoiceHeader;
+	}
+
+	/**
+	 *
+	 * @param invoiceHeader
+	 * @return
+	 */
+	private AddInvoiceHeader copyHeaderEntityToBean(InvoiceHeader invoiceHeader) {
+		AddInvoiceHeader addInvoiceHeader = new AddInvoiceHeader();
+		BeanUtils.copyProperties(invoiceHeader, addInvoiceHeader, CommonUtils.getNullPropertyNames(invoiceHeader));
+		return addInvoiceHeader;
+	}
+
+	/**
+	 * invoiceExecute
+	 * @param searchPreBillDetails
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<InvoicePreBillDetails> invoiceExecute (
+			SearchPreBillDetails searchPreBillDetails) throws ParseException {
+		try {
+			if (searchPreBillDetails.getStartPreBillDate() != null && searchPreBillDetails.getEndPreBillDate() != null) {
+				Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreBillDetails.getStartPreBillDate(),
+						searchPreBillDetails.getEndPreBillDate());
+				searchPreBillDetails.setStartPreBillDate(dates[0]);
+				searchPreBillDetails.setEndPreBillDate(dates[1]);
+			}
+
+			//  Status_Id = 29
+			searchPreBillDetails.setStatusId(Arrays.asList(29L));
+			PreBillDetailsSpecification spec = new PreBillDetailsSpecification(searchPreBillDetails);
+			List<PreBillDetails> searchResults = preBillDetailsRepository.findAll(spec);
+//			log.info("searchResults: " + searchResults);
+
+			// Converting prebillDetails to InvoiceSpecific prebilDetails
+			List<InvoicePreBillDetails> invPreBillDetails = new ArrayList<>();
+			for (PreBillDetails preBillDetails : searchResults) {
+				List<InvoiceHeader> existingInvoiceHeaders = 
+						invoiceHeaderRepository.findByPreBillNumberAndDeletionIndicator(preBillDetails.getPreBillNumber(), 0L);
+				if (existingInvoiceHeaders != null && !existingInvoiceHeaders.isEmpty()) {
+					log.info("InvoiceHeader already created for this PrebillNumber : " + preBillDetails.getPreBillNumber());
+					continue;
+				}
+				
+				InvoicePreBillDetails invPreBillDetail = new InvoicePreBillDetails();
+				BeanUtils.copyProperties(preBillDetails, invPreBillDetail, CommonUtils.getNullPropertyNames(preBillDetails));
+
+				// Total Amount logic
+				Map<Long, Double> totalAmount = calculateTotalAmount(preBillDetails.getMatterNumber(), preBillDetails.getPreBillNumber());
+				invPreBillDetail.setTotalAmount(totalAmount);
+				invPreBillDetails.add(invPreBillDetail);
+//				log.info("totalAmount: " + totalAmount);
+			}
+
+//			log.info("results: " + invPreBillDetails);
+			return invPreBillDetails;
+		} catch (Exception e) {
+			log.info("Error invoiceExecute: " + e.getLocalizedMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param matterNumber
+	 * @param preBillNumber
+	 * @return
+	 */
+	private Map<Long, Double> calculateTotalAmount (String matterNumber, String preBillNumber) {
+		AuthToken authTokenForManagementService = authTokenService.getManagementServiceAuthToken();
+		MatterGenAcc matterGenAcc = managementService.getMatterGenAcc(matterNumber, authTokenForManagementService.getAccess_token());
+		Map<Long, Double> mapTotalAmount = new HashMap<>();
+
+		// If Bill_type=Hourly in MatterGenAcc table for Selected Matter_No
+		if (matterGenAcc.getBillingModeId().equalsIgnoreCase("1")) {
+			/*
+			 * Select Sum(APP_AMOUNT) from MatterTimeTicket 
+			 * where Ref_Field_1 = selected Pre_Bill_No and Bill_Type <> NB 
+			 * (check the bill type Non Billable in backend table)  
+			 */
+			Double timeTicketBillAmount = matterTimeTicketRepository.getTimeTicketBillAmount (preBillNumber);
+
+			/*
+			 * Select the Sum(EXP_AMOUNT) as total expense from MatterExpense where Ref_Field_1 = selected Pre_Bill_No and 
+			 * Bill_Type <> NonBillable (check the bill type Non Billable in backend table)  
+			 */
+			Double expenseAmount = matterExpenseRepository.getExpenseAmount(preBillNumber);
+
+			mapTotalAmount.put(1L, timeTicketBillAmount);
+			mapTotalAmount.put(2L, expenseAmount);
+		}
+
+		if (matterGenAcc.getBillingModeId().equalsIgnoreCase("2")) {
+			Double expenseAmount = matterExpenseRepository.getExpenseAmount(preBillNumber);
+			mapTotalAmount.put(1L, matterGenAcc.getFlatFeeAmount() );
+			mapTotalAmount.put(2L, Double.sum(expenseAmount != null ? expenseAmount : 0,
+					(matterGenAcc.getAdministrativeCost() != null ? matterGenAcc.getAdministrativeCost() : 0)));
+		}
+
+		if (matterGenAcc.getBillingModeId().equalsIgnoreCase("3")) {
+			Double referenceField20 = 0D;
+			if (matterGenAcc.getReferenceField20() != null) {
+				referenceField20 = Double.valueOf(matterGenAcc.getReferenceField20());
+			} else {
+				referenceField20 = 0D;
+			}
+
+			// Select the (CONTIG_FEE - Ref_Field_20) as total fees from MatterGenAcc for selected Matter_no
+			if ( matterGenAcc.getContigencyFeeAmount() != null) {
+				Double timeTicketBillAmount = matterGenAcc.getContigencyFeeAmount() - referenceField20;
+				mapTotalAmount.put(1L, timeTicketBillAmount);
+			} else {
+				mapTotalAmount.put(1L, 0D);
+			}
+
+			/*
+			 * Select the Sum(EXP_AMOUNT) as total expense from MatterExpense where Ref_Field_1 = selected Pre_Bill_No and 
+			 * Bill_Type <> NonBillable (check the bill type Non Billable in backend table)
+			 */
+			Double expenseAmount = matterExpenseRepository.getExpenseAmount(preBillNumber);
+			mapTotalAmount.put(2L, expenseAmount);
+		}
+
+		return mapTotalAmount;
+	}
+
+	/**
+	 * createInvoiceHeader
+	 * @param newInvoiceHeaders
+	 * @param loginUserID
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	public InvoiceCreateResponse createInvoiceHeader (List<AddInvoiceHeader> newInvoiceHeaders, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		InvoiceCreateResponse invoiceCreateResponse = new InvoiceCreateResponse();
+		List<AddInvoiceHeader> responseInvoiceHeaders = new ArrayList<>();
+		List<AddInvoiceHeader> existingPrebillNumbers = new ArrayList<>();
+		List<AddInvoiceHeader> erroredOutPrebillNumbers = new ArrayList<>();
+		try {
+			for (AddInvoiceHeader newInvoiceHeader : newInvoiceHeaders) {
+				/*
+				 * Checking whether Invoice already created or not
+				 */
+				List<InvoiceHeader> existingInvoiceHeaders = 
+						invoiceHeaderRepository.findByPreBillNumberAndDeletionIndicator(newInvoiceHeader.getPreBillNumber(), 0L);
+				if (existingInvoiceHeaders != null && !existingInvoiceHeaders.isEmpty()) {
+					log.info("InvoiceHeader already created for this PrebillNumber : " + newInvoiceHeader.getPreBillNumber());
+					existingPrebillNumbers.add(newInvoiceHeader);
+					continue;
+				}
+				
+				InvoiceHeader dbInvoiceHeader = new InvoiceHeader();
+				log.info("newInvoiceHeader : " + newInvoiceHeader);
+				BeanUtils.copyProperties(newInvoiceHeader, dbInvoiceHeader, CommonUtils.getNullPropertyNames(newInvoiceHeader));
+				dbInvoiceHeader.setLanguageId("EN");
+				dbInvoiceHeader.setTotalPaidAmount(0D);
+
+				java.sql.Date sqlPostingDate = new java.sql.Date(newInvoiceHeader.getPostingDate().getTime());
+				dbInvoiceHeader.setPostingDate(sqlPostingDate);
+
+				// Remain_Bal
+				double remainingBalance = dbInvoiceHeader.getInvoiceAmount() - dbInvoiceHeader.getTotalPaidAmount();
+				dbInvoiceHeader.setRemainingBalance(remainingBalance);
+				log.info("dbInvoiceHeader.getPostingDate() : " + dbInvoiceHeader.getPostingDate());
+
+				if (dbInvoiceHeader.getPostingDate() != null) {
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(DateUtils.convertSQLtoUtilDate(dbInvoiceHeader.getPostingDate()));
+					int year = calendar.get(Calendar.YEAR);
+					int month = calendar.get(Calendar.MONTH);
+
+					log.info("year-->month--> : " + year + ":" + month);
+
+					// Invoice_Fiscal_Year
+					dbInvoiceHeader.setInvoiceFiscalYear(String.valueOf(year));
+
+					// Invoice_Period
+					dbInvoiceHeader.setInvoicePeriod(String.valueOf(month));
+				}
+
+				// Invoice_No
+				/*
+				 * During Save, Pass CLASS_ID=03, NUM_RAN_CODE=18 in NUMBERRANGE table and 
+				 * Fetch NUM_RAN_CURRENT values and add +1 and then insert
+				 */
+				Long classID = 3L;
+				Long NUM_RAN_CODE = 18L;
+				AuthToken authTokenForSetupService = authTokenService.getSetupServiceAuthToken();
+				String INVOICE_NO = setupService.getNextNumberRange(classID, NUM_RAN_CODE, authTokenForSetupService.getAccess_token());
+				log.info("nextVal from NumberRange for INVOICE_NO: " + INVOICE_NO);
+				dbInvoiceHeader.setInvoiceNumber(INVOICE_NO);
+				dbInvoiceHeader.setInvoiceDate(sqlPostingDate);
+
+				// Status_ID
+				dbInvoiceHeader.setStatusId(51L);
+				dbInvoiceHeader.setDeletionIndicator(0L);
+				dbInvoiceHeader.setCreatedBy(loginUserID);
+				dbInvoiceHeader.setUpdatedBy(loginUserID);
+				dbInvoiceHeader.setCreatedOn(new Date());
+				dbInvoiceHeader.setUpdatedOn(new Date());
+
+				InvoiceHeader createdInvoiceHeader = null;
+				try {
+					createdInvoiceHeader = invoiceHeaderRepository.save(dbInvoiceHeader);
+					log.info ("Created InvoiceHeader : " + createdInvoiceHeader);
+				} catch (Exception e) {
+					log.info("ERROR on InvoiceCreate----1-----> : " + e.toString());
+					erroredOutPrebillNumbers.add(newInvoiceHeader);
+					continue;
+				}
+
+				/*-----------------------------------------------------------------------------------------------------------*/
+				// Update Ref_Field_1 = Ref_Field_1 + Total_Amount for the respective Matter_No
+				AuthToken authTokenForManagementService = authTokenService.getManagementServiceAuthToken();
+				MatterGenAcc modifiedMatterGeneral = managementService.getMatterGenAcc(dbInvoiceHeader.getMatterNumber(), authTokenForManagementService.getAccess_token());
+				modifiedMatterGeneral.setReferenceField1(modifiedMatterGeneral.getReferenceField1() + dbInvoiceHeader.getTotalBillableHours());
+				managementService.updateMatterGeneral(dbInvoiceHeader.getMatterNumber(), loginUserID, modifiedMatterGeneral,
+						authTokenForManagementService.getAccess_token());
+				long serialNumber = 0;
+
+				/*----------------------InvoiceLine Creation-----------------------------------------------*/
+				List<AddInvoiceLine> createdInvoiceLine = new ArrayList<>();
+				for (AddInvoiceLine addInvoiceLine : newInvoiceHeader.getAddInvoiceLine()) {
+					InvoiceLine dbInvoiceLine = new InvoiceLine();
+					BeanUtils.copyProperties(addInvoiceLine, dbInvoiceLine, CommonUtils.getNullPropertyNames(addInvoiceLine));
+
+					// INVOICE_NO
+					dbInvoiceLine.setInvoiceNumber(dbInvoiceHeader.getInvoiceNumber());
+
+					// Invoice_Fiscal_Year
+					dbInvoiceLine.setInvoiceFiscalYear(dbInvoiceHeader.getInvoiceFiscalYear());
+
+					// Invoice_Period
+					dbInvoiceLine.setInvoicePeriod(dbInvoiceHeader.getInvoicePeriod());
+
+					// Serial_No
+					dbInvoiceLine.setSerialNumber(++serialNumber);
+
+					// LANG_ID
+					dbInvoiceLine.setLanguageId(dbInvoiceHeader.getLanguageId());
+
+					// CLASS_ID
+					dbInvoiceLine.setClassId(dbInvoiceHeader.getClassId());
+
+					// MATTER_NO
+					dbInvoiceLine.setMatterNumber(dbInvoiceHeader.getMatterNumber());
+
+					// CLIENT_ID
+					dbInvoiceLine.setClientId(dbInvoiceHeader.getClientId());
+
+					// Item_No
+					dbInvoiceLine.setItemNumber(addInvoiceLine.getItemNumber());
+
+					// INVOICE_TEXT
+					if (dbInvoiceHeader.getInvoiceFiscalYear() != null && dbInvoiceHeader.getInvoicePeriod() != null) {
+						dbInvoiceLine.setInvoiceText(dbInvoiceHeader.getInvoiceFiscalYear() + "/" + dbInvoiceHeader.getInvoicePeriod());
+					}
+
+					// Currency
+					dbInvoiceLine.setCurrency("USD");
+
+					// STATUS_ID
+					dbInvoiceLine.setStatusId(51L);
+
+					dbInvoiceLine.setBillableAmount(addInvoiceLine.getBillableAmount());
+
+					// Save to DB
+					InvoiceLine invoiceLine = invoiceLineRepository.save(dbInvoiceLine);
+					log.info("dbInvoiceLine : " + dbInvoiceLine);
+
+					BeanUtils.copyProperties(invoiceLine, addInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+					createdInvoiceLine.add(addInvoiceLine);
+
+					/*
+					 * Update Status_Id = 51 for all the time tickets by passing the Pre_Bill_no in Ref_Field_1
+					 */
+					PreBillDetails preBillDetails = 
+							preBillDetailsRepository.findByMatterNumberAndPreBillNumberAndDeletionIndicator(
+									createdInvoiceHeader.getMatterNumber(), createdInvoiceHeader.getPreBillNumber(), 0L);
+					if (preBillDetails != null) {
+						preBillDetails.setStatusId(51L);
+						preBillDetailsRepository.save(preBillDetails);
+					}
+				}
+
+				BeanUtils.copyProperties(createdInvoiceHeader, newInvoiceHeader, CommonUtils.getNullPropertyNames(createdInvoiceHeader));
+				newInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getPreBillDate()));
+				newInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getInvoiceDate()));
+				newInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getPostingDate()));
+				newInvoiceHeader.setAddInvoiceLine(createdInvoiceLine);
+				responseInvoiceHeaders.add(newInvoiceHeader);
+
+				//-------------------MatterTimeTicket-------------------------------------------------------------
+				List<com.mnrclara.api.accounting.model.prebill.MatterTimeTicket> dbMatterTimeTickets =
+						matterTimeTicketRepository.findByReferenceField1(newInvoiceHeader.getPreBillNumber());
+				for (com.mnrclara.api.accounting.model.prebill.MatterTimeTicket dbTimeTicket : dbMatterTimeTickets) {
+					// Update Status_Id = 51 for the respective time ticket from the list
+					/*
+					 * 1. If Bill type = Billable and Non Billable , update STATUS_ID=51
+					 * 2. If Bill type = nocharge, update status ID as 62
+					 * non-billable | billable  
+					 */
+					if (dbTimeTicket.getBillType().equalsIgnoreCase("billable") ||
+							dbTimeTicket.getBillType().equalsIgnoreCase("non-billable")) {
+						dbTimeTicket.setStatusId(51L);
+					} else if (dbTimeTicket.getBillType().equalsIgnoreCase("nocharge")) {
+						dbTimeTicket.setStatusId(62L);
+					}
+
+					dbTimeTicket = matterTimeTicketRepository.save(dbTimeTicket);
+					log.info("dbTimeTicket : " + dbTimeTicket);
+				}
+
+				List<com.mnrclara.api.accounting.model.prebill.MatterExpense> dbMatterExpenses =
+						matterExpenseRepository.findByReferenceField1(newInvoiceHeader.getPreBillNumber());
+				for (com.mnrclara.api.accounting.model.prebill.MatterExpense dbMatterExpense : dbMatterExpenses) {
+					dbMatterExpense.setStatusId(51L);
+					dbMatterExpense = matterExpenseRepository.save(dbMatterExpense);
+					log.info("dbMatterExpense : " + dbMatterExpense);
+				}
+			} 
+		} catch (Exception e) {
+			log.info("ERROR on InvoiceCreate----2-----> :  : " + e.toString());
+			e.printStackTrace();
+		}
+		invoiceCreateResponse.setCreatedInvoiceHeaders(responseInvoiceHeaders);
+		invoiceCreateResponse.setDuplicateInvoiceHeaders(existingPrebillNumbers);
+		invoiceCreateResponse.setErroredOutPrebillNumbers(erroredOutPrebillNumbers);
+		return invoiceCreateResponse;
+	}
+
+	/**
+	 *
+	 * @param newInvoiceHeaders
+	 * @param loginUserID
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	public List<AddInvoiceHeader> recreateInvoiceHeader (List<AddInvoiceHeader> newInvoiceHeaders, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		List<AddInvoiceHeader> responseInvoiceHeaders = new ArrayList<>();
+		for (AddInvoiceHeader newInvoiceHeader : newInvoiceHeaders) {
+			InvoiceHeader dbInvoiceHeader = new InvoiceHeader();
+			log.info("newInvoiceHeader : " + newInvoiceHeader);
+			BeanUtils.copyProperties(newInvoiceHeader, dbInvoiceHeader, CommonUtils.getNullPropertyNames(newInvoiceHeader));
+			dbInvoiceHeader.setLanguageId("EN");
+			dbInvoiceHeader.setTotalPaidAmount(0D);
+
+			java.sql.Date sqlPostingDate = new java.sql.Date(newInvoiceHeader.getPostingDate().getTime());
+			dbInvoiceHeader.setPostingDate(sqlPostingDate);
+
+			// Remain_Bal
+			double remainingBalance = dbInvoiceHeader.getInvoiceAmount() - dbInvoiceHeader.getTotalPaidAmount();
+			dbInvoiceHeader.setRemainingBalance(remainingBalance);
+			log.info("dbInvoiceHeader.getPostingDate() : " + dbInvoiceHeader.getPostingDate());
+
+			if (dbInvoiceHeader.getPostingDate() != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(DateUtils.convertSQLtoUtilDate(dbInvoiceHeader.getPostingDate()));
+				int year = calendar.get(Calendar.YEAR);
+				int month = calendar.get(Calendar.MONTH);
+
+				log.info("year-->month--> : " + year + ":" + month);
+
+				// Invoice_Fiscal_Year
+				dbInvoiceHeader.setInvoiceFiscalYear(String.valueOf(year));
+
+				// Invoice_Period
+				dbInvoiceHeader.setInvoicePeriod(String.valueOf(month));
+			}
+
+			// Invoice_No
+			/*
+			 * During Save, Pass CLASS_ID=03, NUM_RAN_CODE=18 in NUMBERRANGE table and 
+			 * Fetch NUM_RAN_CURRENT values and add +1 and then insert
+			 */
+			Long classID = 3L;
+			Long NUM_RAN_CODE = 18L;
+			AuthToken authTokenForSetupService = authTokenService.getSetupServiceAuthToken();
+			String INVOICE_NO = setupService.getNextNumberRange(classID, NUM_RAN_CODE, authTokenForSetupService.getAccess_token());
+			log.info("nextVal from NumberRange for INVOICE_NO: " + INVOICE_NO);
+			dbInvoiceHeader.setInvoiceNumber(INVOICE_NO);
+			dbInvoiceHeader.setInvoiceDate(sqlPostingDate);
+
+			// Status_ID
+			dbInvoiceHeader.setStatusId(51L);
+			dbInvoiceHeader.setDeletionIndicator(0L);
+			dbInvoiceHeader.setCreatedBy(loginUserID);
+			dbInvoiceHeader.setUpdatedBy(loginUserID);
+			dbInvoiceHeader.setCreatedOn(new Date());
+			dbInvoiceHeader.setUpdatedOn(new Date());
+
+			InvoiceHeader createdInvoiceHeader = invoiceHeaderRepository.save(dbInvoiceHeader);
+			log.info ("Created InvoiceHeader : " + createdInvoiceHeader);
+
+			long serialNumber = 0;
+
+			/*----------------------InvoiceLine Creation-----------------------------------------------*/
+			List<AddInvoiceLine> createdInvoiceLine = new ArrayList<>();
+			for (AddInvoiceLine addInvoiceLine : newInvoiceHeader.getAddInvoiceLine()) {
+				InvoiceLine dbInvoiceLine = new InvoiceLine();
+				BeanUtils.copyProperties(addInvoiceLine, dbInvoiceLine, CommonUtils.getNullPropertyNames(addInvoiceLine));
+
+				// INVOICE_NO
+				dbInvoiceLine.setInvoiceNumber(dbInvoiceHeader.getInvoiceNumber());
+
+				// Invoice_Fiscal_Year
+				dbInvoiceLine.setInvoiceFiscalYear(dbInvoiceHeader.getInvoiceFiscalYear());
+
+				// Invoice_Period
+				dbInvoiceLine.setInvoicePeriod(dbInvoiceHeader.getInvoicePeriod());
+
+				// Serial_No
+				dbInvoiceLine.setSerialNumber(++serialNumber);
+
+				// LANG_ID
+				dbInvoiceLine.setLanguageId(dbInvoiceHeader.getLanguageId());
+
+				// CLASS_ID
+				dbInvoiceLine.setClassId(dbInvoiceHeader.getClassId());
+
+				// MATTER_NO
+				dbInvoiceLine.setMatterNumber(dbInvoiceHeader.getMatterNumber());
+
+				// CLIENT_ID
+				dbInvoiceLine.setClientId(dbInvoiceHeader.getClientId());
+
+				// Item_No
+				dbInvoiceLine.setItemNumber(addInvoiceLine.getItemNumber());
+
+				// INVOICE_TEXT
+				if (dbInvoiceHeader.getInvoiceFiscalYear() != null && dbInvoiceHeader.getInvoicePeriod() != null) {
+					dbInvoiceLine.setInvoiceText(dbInvoiceHeader.getInvoiceFiscalYear() + "/" + dbInvoiceHeader.getInvoicePeriod());
+				}
+
+				// Currency
+				dbInvoiceLine.setCurrency("USD");
+
+				// STATUS_ID
+				dbInvoiceLine.setStatusId(51L);
+
+				dbInvoiceLine.setBillableAmount(addInvoiceLine.getBillableAmount());
+
+				// Save to DB
+				InvoiceLine invoiceLine = invoiceLineRepository.save(dbInvoiceLine);
+				log.info("dbInvoiceLine : " + invoiceLine);
+
+				BeanUtils.copyProperties(invoiceLine, addInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+				createdInvoiceLine.add(addInvoiceLine);
+
+				/*
+				 * Update Status_Id = 51 for all the time tickets by passing the Pre_Bill_no in Ref_Field_1
+				 */
+				PreBillDetails preBillDetails =
+						preBillDetailsRepository.findByPreBillNumberAndDeletionIndicator(createdInvoiceHeader.getPreBillNumber(), 0L);
+				if (preBillDetails != null) {
+					preBillDetailsRepository.deletePreBillDetails(createdInvoiceHeader.getPreBillNumber(), preBillDetails.getMatterNumber());
+					PreBillDetails newPreBillDetails = new PreBillDetails();
+					BeanUtils.copyProperties(preBillDetails, newPreBillDetails, CommonUtils.getNullPropertyNames(preBillDetails));
+					if (preBillDetails != null) {
+						newPreBillDetails.setStatusId(51L);
+						newPreBillDetails.setMatterNumber(createdInvoiceHeader.getMatterNumber());
+						preBillDetailsRepository.save(newPreBillDetails);
+					}
+				}
+			}
+
+			BeanUtils.copyProperties(createdInvoiceHeader, newInvoiceHeader, CommonUtils.getNullPropertyNames(createdInvoiceHeader));
+			newInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getPreBillDate()));
+			newInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getInvoiceDate()));
+			newInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(createdInvoiceHeader.getPostingDate()));
+			newInvoiceHeader.setAddInvoiceLine(createdInvoiceLine);
+			responseInvoiceHeaders.add(newInvoiceHeader);
+
+			//-------------------MatterTimeTicket-------------------------------------------------------------
+			List<com.mnrclara.api.accounting.model.prebill.MatterTimeTicket> dbMatterTimeTickets =
+					matterTimeTicketRepository.findByMatterNumberAndDeletionIndicator(newInvoiceHeader.getMatterNumber(), 0L);
+			for (com.mnrclara.api.accounting.model.prebill.MatterTimeTicket dbTimeTicket : dbMatterTimeTickets) {
+				// Move current record to Transfer table
+				MatterTimeTicketTransfer newMatterTimeTicketTransfer = new MatterTimeTicketTransfer();
+				BeanUtils.copyProperties(dbTimeTicket, newMatterTimeTicketTransfer, CommonUtils.getNullPropertyNames(dbTimeTicket));
+				MatterTimeTicketTransfer createdMatterTimeTicketTransfer = matterTimeTicketTransferRepository.save(newMatterTimeTicketTransfer);
+				log.info("createdMatterTimeTicketTransfer-----> : " + createdMatterTimeTicketTransfer);
+
+				if (createdMatterTimeTicketTransfer != null) {
+					// Hard Delete the existing one
+					matterTimeTicketRepository.delete(dbTimeTicket);
+				}
+
+				// Create new MatterTimeTicket
+				com.mnrclara.api.accounting.model.prebill.MatterTimeTicket newMatterTimeTicket = new
+						com.mnrclara.api.accounting.model.prebill.MatterTimeTicket();
+				BeanUtils.copyProperties(dbTimeTicket, newMatterTimeTicket, CommonUtils.getNullPropertyNames(dbTimeTicket));
+
+				newMatterTimeTicket.setStatusId(51L);
+				newMatterTimeTicket.setMatterNumber(createdInvoiceHeader.getMatterNumber());
+				newMatterTimeTicket = matterTimeTicketRepository.save(newMatterTimeTicket);
+				log.info("newMatterTimeTicket : " + newMatterTimeTicket);
+			}
+
+			List<com.mnrclara.api.accounting.model.prebill.MatterExpense> dbMatterExpenses =
+					matterExpenseRepository.findByMatterNumberAndDeletionIndicator(newInvoiceHeader.getMatterNumber(), 0L);
+			for (com.mnrclara.api.accounting.model.prebill.MatterExpense dbMatterExpense : dbMatterExpenses) {
+				// Move current record to Transfer table
+				MatterExpenseTransfer newMatterExpenseTransfer = new MatterExpenseTransfer();
+				BeanUtils.copyProperties(dbMatterExpense, newMatterExpenseTransfer, CommonUtils.getNullPropertyNames(dbMatterExpense));
+				MatterExpenseTransfer createdMatterExpenseTransfer = matterExpenseTransferRepository.save(newMatterExpenseTransfer);
+				log.info("createdMatterExpenseTransfer-----> : " + createdMatterExpenseTransfer);
+
+				if (createdMatterExpenseTransfer != null) {
+					// Hard Delete the existing one
+					matterExpenseRepository.delete(dbMatterExpense);
+				}
+
+				com.mnrclara.api.accounting.model.prebill.MatterExpense newMatterExpense = new
+						com.mnrclara.api.accounting.model.prebill.MatterExpense();
+				BeanUtils.copyProperties(dbMatterExpense, newMatterExpense, CommonUtils.getNullPropertyNames(dbMatterExpense));
+
+				// Create new MatterExpense
+				newMatterExpense.setStatusId(51L);
+				newMatterExpense.setMatterNumber(createdInvoiceHeader.getMatterNumber());
+				newMatterExpense = matterExpenseRepository.save(newMatterExpense);
+				log.info("newMatterExpense : " + newMatterExpense);
+			}
+		}
+		return responseInvoiceHeaders;
+	}
+
+	/**
+	 * updateInvoiceHeader
+	 * @param loginUserID
+	 * @param invoiceNumber
+	 * @param updateInvoiceHeader
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	public AddInvoiceHeader updateInvoiceHeader (String invoiceNumber, UpdateInvoiceHeader updateInvoiceHeader, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		InvoiceHeader dbInvoiceHeader = invoiceHeaderRepository.findByInvoiceNumber(invoiceNumber);
+		if (dbInvoiceHeader != null) {
+			List<InvoiceLine> invoiceLines = invoiceLineService.getInvoiceLine (invoiceNumber);
+			for (InvoiceLine invoiceLine : invoiceLines) {
+				// Need Update API for INVOICEHEADER/INVOICELINE  to update Status ID and REF_FIELD_10 with Papyment Link)
+				UpdateInvoiceLine updateInvoiceLine = new UpdateInvoiceLine();
+				updateInvoiceLine.setStatusId(updateInvoiceHeader.getStatusId());
+				updateInvoiceLine.setReferenceField10(updateInvoiceLine.getReferenceField10());
+				InvoiceLine dbinvoiceLine = invoiceLineService.updateInvoiceLine(invoiceNumber, invoiceLine.getItemNumber(),
+						updateInvoiceLine, loginUserID);
+			}
+
+			BeanUtils.copyProperties(updateInvoiceHeader, dbInvoiceHeader, CommonUtils.getNullPropertyNames(updateInvoiceHeader));
+			if (updateInvoiceHeader.getInvoiceDate() != null) {
+				dbInvoiceHeader.setInvoiceDate(DateUtils.convertUtilToSQLDate(updateInvoiceHeader.getInvoiceDate()));
+			}
+			
+			if (updateInvoiceHeader.getPostingDate() != null) {
+				dbInvoiceHeader.setPostingDate(DateUtils.convertUtilToSQLDate(updateInvoiceHeader.getPostingDate()));
+			}
+				
+			dbInvoiceHeader.setUpdatedBy(loginUserID);
+			dbInvoiceHeader.setUpdatedOn(new Date());
+			dbInvoiceHeader = invoiceHeaderRepository.save(dbInvoiceHeader);
+			log.info("InvoiceHeader updated : " + dbInvoiceHeader);
+			return getInvoiceHeader (invoiceNumber);
+		} else {
+			throw new EntityNotFoundException("Invoice No : " + invoiceNumber + " does not exist.");
+		}
+	}
+
+	/**
+	 *
+	 * @param invoiceRet
+	 * @return
+	 * @throws ParseException
+	 */
+	public List<PaymentUpdate> createPaymentUpdate (InvoiceRet invoiceRet) throws ParseException {
+		List<PaymentUpdate> createdPaymentUpdates = null;
+		log.info("invoiceRet Data : " + invoiceRet);
+		try {
+			createdPaymentUpdates = new ArrayList<>();
+			InvoiceHeader invoiceHeader = invoiceHeaderRepository.findByInvoiceNumber(String.valueOf(invoiceRet.getRefNumber()));
+
+			//If it is Error Resoponse in QB
+			if (invoiceHeader != null && invoiceRet.getError().equalsIgnoreCase("500")) {
+				invoiceHeader.setUpdatedBy("QBError");
+				invoiceHeader.setUpdatedOn(new Date());
+				invoiceHeader.setQbQuery(1L);
+				InvoiceHeader updatedInvoiceHeader = invoiceHeaderRepository.save(invoiceHeader);
+				log.info("invoiceHeader Query updated for Error: " + updatedInvoiceHeader);
+			}
+
+			log.info("--------########----------> " + invoiceHeader + ">>>> " + invoiceRet);
+			if (invoiceHeader != null && !invoiceRet.getError().equalsIgnoreCase("500")) {
+				// PAYMENT_AMT
+				Double appliedAmount = Math.abs(invoiceRet.getAppliedAmount());
+
+				/*
+				 * Update InvoiceHeader
+				 * 53 - Partially Paid
+				 * 54 - Paid
+				 */
+				Long statusID = 0L;
+				if (invoiceRet.getBalanceRemaining() > 0) {
+					statusID = 53L;
+				} else if (invoiceRet.getIsPaid() == true && invoiceRet.getBalanceRemaining() == 0) {
+					statusID = 54L;
+				}
+
+				if (appliedAmount > 0) {
+					// Paid_Amount
+					invoiceHeader.setTotalPaidAmount(appliedAmount);
+
+					// Remain_Bal = INVOICE_AMT - PAID_AMT
+					Double remainingBalance = invoiceHeader.getInvoiceAmount() - appliedAmount;
+					invoiceHeader.setRemainingBalance(remainingBalance);
+					invoiceHeader.setStatusId(statusID);
+					invoiceHeader.setQbQuery(1L);
+					invoiceHeader.setUpdatedBy("QBPaymentUpdate");
+					invoiceHeader.setUpdatedOn(new Date());
+					InvoiceHeader updatedInvoiceHeader = invoiceHeaderRepository.save(invoiceHeader);
+					log.info("invoiceHeader updated: " + updatedInvoiceHeader);
+				} else {
+					invoiceHeader.setUpdatedBy("QBQueried");
+					invoiceHeader.setUpdatedOn(new Date());
+					InvoiceHeader updatedInvoiceHeader = invoiceHeaderRepository.save(invoiceHeader);
+					log.info("invoiceHeader Query updated: " + updatedInvoiceHeader);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return createdPaymentUpdates;
+	}
+
+	/**
+	 *
+	 * @param receivePaymentResponseList
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PaymentUpdate> createPaymentUpdateByReceivePayment (List<ReceivePaymentResponse> receivePaymentResponseList) throws Exception {
+		List<PaymentUpdate> createdPaymentUpdates = new ArrayList<>();
+		try {
+			String PAYMENT = "PAYMENT";
+
+			/*
+			 * Inserting Payments Receivable
+			 */
+			for (ReceivePaymentResponse receivePaymentRet : receivePaymentResponseList) {
+				String matterNumber = CommonUtils.extractMatterNumber (receivePaymentRet.getCustomerRef());
+				PaymentUpdate paymentUpdate = new PaymentUpdate();
+				paymentUpdate.setMatterNumber(matterNumber);
+
+				com.mnrclara.api.accounting.model.prebill.MatterGenAcc dbMatterGenAcc = matterGenAccRepository.findByMatterNumber(matterNumber);
+				if (dbMatterGenAcc != null) {
+					paymentUpdate.setClientId(dbMatterGenAcc.getClientId());
+				}
+
+				// PAYMENT_AMT
+				Double totalAmount = Math.abs(receivePaymentRet.getTotalAmount());
+				paymentUpdate.setPaymentAmount(totalAmount);
+
+				// Payment_DATE
+				Date mod_date = DateUtils.convertQBPaymentReceiveDate(receivePaymentRet.getTxnDate());
+				paymentUpdate.setPaymentDate(mod_date);
+
+				// PAYMENT_CODE
+				paymentUpdate.setPaymentCode(receivePaymentRet.getRefNumber());
+
+				// TRANSACTION_TYPE
+				paymentUpdate.setTransactionType(PAYMENT);
+
+				// REF_FIELD_1
+				paymentUpdate.setReferenceField1(receivePaymentRet.getTxnID());
+
+				// REF_FIELD_2
+				paymentUpdate.setReferenceField2(String.valueOf(receivePaymentRet.getTxnNumber()));
+
+				// REF_FIELD_3
+				paymentUpdate.setReferenceField3(receivePaymentRet.getARAccountRef());
+
+				// REF_FIELD_4
+				paymentUpdate.setReferenceField4(receivePaymentRet.getPaymentMethodRef());
+
+				// CTD_ON
+				Date ctdOn = DateUtils.convertQBPaymentReceiveDate(receivePaymentRet.getTimeCreated());
+				paymentUpdate.setCreatedOn(ctdOn);
+
+				// STATUS_ID
+				paymentUpdate.setStatusId(receivePaymentRet.getRefNumber());
+				paymentUpdate.setDeletionIndicator(0L);
+				PaymentUpdate existingPaymentUpdate = paymentUpdateRepository.findByReferenceField2(String.valueOf(receivePaymentRet.getTxnNumber()));
+				if (existingPaymentUpdate == null) {
+					PaymentUpdate createdPaymentUpdate = paymentUpdateRepository.save(paymentUpdate);
+					createdPaymentUpdates.add(createdPaymentUpdate);
+				}
+			}
+		} catch (Exception e) {
+			log.error("Error : " + e.toString());
+			e.printStackTrace();
+		}
+		return createdPaymentUpdates;
+	}
+
+	/**
+	 * deleteInvoiceHeader
+	 * @param loginUserID
+	 * @param invoiceNumber
+	 */
+	public void deleteInvoiceHeader (String invoiceNumber, String loginUserID) throws IllegalAccessException {
+		InvoiceHeader invoiceHeader = invoiceHeaderRepository.findByInvoiceNumber(invoiceNumber);
+		if ( invoiceHeader != null) {
+			if(invoiceHeader.getStatusId() == 51L || invoiceHeader.getStatusId() == 52L){
+				invoiceLineService.deleteInvoiceLine(invoiceNumber, loginUserID);
+				invoiceHeader.setDeletionIndicator(1L);
+				invoiceHeader.setUpdatedBy(loginUserID);
+				invoiceHeader.setUpdatedOn(new Date());
+				invoiceHeaderRepository.save(invoiceHeader);
+				log.info("InvoiceHeader deleted : " + invoiceHeader);
+
+				AuthToken authTokenForManagementService = authTokenService.getManagementServiceAuthToken();
+
+				// Obtaining MatterTimeTicket
+				List<com.mnrclara.api.accounting.model.prebill.MatterTimeTicket> matterTimeTickets =
+						matterTimeTicketRepository.findByMatterNumberAndReferenceField1OrderByTimeTicketDateAscTimeTicketNumberAsc(invoiceHeader.getMatterNumber(), invoiceHeader.getPreBillNumber());
+
+				// MatterTimeTicket (Update)
+				for (com.mnrclara.api.accounting.model.prebill.MatterTimeTicket matterTimeTicket : matterTimeTickets) {
+
+					// Status_Id - Update Status_Id=33 for all the time tickets comes under the Matter_No in selected Pre_Bill_Batch_No
+					matterTimeTicket.setStatusId(33L);
+
+					// Ass_Partner - Update Ass_Partner = blank for all the time tickets comes under the Matter_No in selected Pre_Bill_Batch_No
+					matterTimeTicket.setAssignedPartner(null);
+
+					// Ass_On - Update Ass_On = blank for all the time tickets comes under the Matter_No in selected Pre_Bill_Batch_No
+					matterTimeTicket.setAssignedOn(null);
+
+					// Ref_Field_1 - Update Ref_Field_1= blank for all the time tickets comes under the Matter_No in selected Pre_Bill_Batch_No
+					matterTimeTicket.setReferenceField1(null);
+
+					matterTimeTicket.setApprovedBillableAmount(null);
+					matterTimeTicket.setApprovedBillableTimeInHours(null);
+
+					MatterTimeTicket updatedMatterTimeTicket =
+							managementService.updateMatterTimeTicket(matterTimeTicket.getTimeTicketNumber(), loginUserID, matterTimeTicket,
+									authTokenForManagementService.getAccess_token());
+					log.info("updatedMatterTimeTicket : " + updatedMatterTimeTicket);
+				}
+
+				// Obtaining Matter Expense
+				List<com.mnrclara.api.accounting.model.prebill.MatterExpense> matterExpenses =
+						matterExpenseRepository.findByMatterNumberAndReferenceField1(invoiceHeader.getMatterNumber(), invoiceHeader.getPreBillNumber());
+
+				// MatterExpense (Update)
+				for (com.mnrclara.api.accounting.model.prebill.MatterExpense matterExpense : matterExpenses) {
+
+					// Status_Id - Update Status_Id=37 for all the Expense entries comes under the Matter_No for selected Pre_Bill_Batch_No
+					matterExpense.setStatusId(37L);
+
+					// Ref_Field_1 - Update Ref_Field_1=  for all the Expense entries comes under the Matter_No for selected Pre_Bill_Batch_No
+					matterExpense.setReferenceField1(null);
+
+					MatterExpense updatedMatterExpense = managementService.updateMatterExpense(matterExpense.getMatterExpenseId(), loginUserID, matterExpense,
+							authTokenForManagementService.getAccess_token());
+					log.info("updatedMatterExpense : " + updatedMatterExpense);
+				}
+			} else {
+				throw new IllegalAccessException("Error in deleting Id: " + invoiceNumber + "Since the payment is already done");
+			}
+		} else {
+			throw new EntityNotFoundException("Error in deleting Id: " + invoiceNumber);
+		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------
+
+	/**
+	 *
+	 * @param fromMatterNumber
+	 * @param toMatterNumber
+	 * @param fromDateRange
+	 * @param toDateRange
+	 * @throws ParseException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	public TransferBilling transferBilling (String fromMatterNumber, String toMatterNumber, String fromDateRange, String toDateRange)
+			throws ParseException, IllegalAccessException, InvocationTargetException {
+		try {
+			SearchInvoiceHeader searchInvoiceHeader = new SearchInvoiceHeader();
+			searchInvoiceHeader.setMatterNumber(Arrays.asList(fromMatterNumber));
+			if (fromDateRange != null && !fromDateRange.equalsIgnoreCase("null") &&
+					toDateRange != null && !toDateRange.equalsIgnoreCase("null")) {
+				Date fromPostingDate = DateUtils.convertStringToDate (fromDateRange);
+				Date toPostingDate = DateUtils.convertStringToDate (toDateRange);
+				Date[] dates = DateUtils.addTimeToDatesForSearch(fromPostingDate, toPostingDate);
+				searchInvoiceHeader.setStartInvoiceDate(dates[0]);
+				searchInvoiceHeader.setEndInvoiceDate(dates[1]);
+			}
+
+			InvoiceHeaderSpecification spec = new InvoiceHeaderSpecification(searchInvoiceHeader);
+			List<InvoiceHeader> invoiceHeaderResults = invoiceHeaderRepository.findAll(spec);
+			List<AddInvoiceHeader> toBeCreatedInvoiceHeaderList = new ArrayList<>();
+			for (InvoiceHeader invoiceHeader : invoiceHeaderResults) {
+				//-----------------------Move current record to Transfer table--------------------------------------------
+				InvoiceHeaderTransfer newInvoiceHeaderTransfer = new InvoiceHeaderTransfer();
+				BeanUtils.copyProperties(invoiceHeader, newInvoiceHeaderTransfer, CommonUtils.getNullPropertyNames(invoiceHeader));
+				InvoiceHeaderTransfer createdInvoiceHeaderTransfer = invoiceHeaderTransferRepository.save(newInvoiceHeaderTransfer);
+				log.info("createdInvoiceHeaderTransfer-----> : " + createdInvoiceHeaderTransfer);
+
+				if (createdInvoiceHeaderTransfer != null) {
+					// Hard Delete the existing one
+					invoiceHeaderRepository.delete(invoiceHeader);
+				}
+				//------------------------------------------------------------------------------------------------------
+
+				AddInvoiceHeader addInvoiceHeader = new AddInvoiceHeader();
+				BeanUtils.copyProperties(invoiceHeader, addInvoiceHeader, CommonUtils.getNullPropertyNames(invoiceHeader));
+
+				addInvoiceHeader.setMatterNumber(toMatterNumber);
+				addInvoiceHeader.setPreBillDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPreBillDate()));
+				addInvoiceHeader.setInvoiceDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+				addInvoiceHeader.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+				log.info("invoiceHeader InvoiceDate : " + invoiceHeader.getInvoiceDate() + ":conv--> " + addInvoiceHeader.getInvoiceDate());
+
+				List<AddInvoiceLine> newAddInvoiceLineList = new ArrayList<>();
+				List<InvoiceLine> listInvoiceLine = invoiceLineRepository.findByInvoiceNumber(invoiceHeader.getInvoiceNumber());
+				for (InvoiceLine invoiceLine : listInvoiceLine) {
+					//-----------------------Move current record to Transfer table--------------------------------------------
+					InvoiceLineTransfer newInvoiceLineTransfer = new InvoiceLineTransfer();
+					BeanUtils.copyProperties(invoiceLine, newInvoiceLineTransfer, CommonUtils.getNullPropertyNames(invoiceLine));
+					InvoiceLineTransfer createdInvoiceLineTransfer = invoiceLineTransferRepository.save(newInvoiceLineTransfer);
+					log.info("createdInvoiceLineTransfer-----> : " + createdInvoiceLineTransfer);
+
+					if (createdInvoiceLineTransfer != null) {
+						// Hard Delete the existing one
+						invoiceLineRepository.delete(invoiceLine);
+					}
+					//------------------------------------------------------------------------------------------------------
+
+					AddInvoiceLine newInvoiceLine = new AddInvoiceLine ();
+					BeanUtils.copyProperties(invoiceLine, newInvoiceLine, CommonUtils.getNullPropertyNames(invoiceLine));
+					newInvoiceLine.setMatterNumber(toMatterNumber);
+					newAddInvoiceLineList.add(newInvoiceLine);
+				}
+
+				addInvoiceHeader.setAddInvoiceLine(newAddInvoiceLineList);
+				toBeCreatedInvoiceHeaderList.add (addInvoiceHeader);
+			}
+			// Create New Invoices
+			List<AddInvoiceHeader> createdInvoiceHeaders = recreateInvoiceHeader (toBeCreatedInvoiceHeaderList, "TRANSFERED_MATTER");
+
+			//------------------------------PaymentUpdate--------------------------------------------------------------------------------
+			SearchPaymentUpdate searchPaymentUpdate = new SearchPaymentUpdate();
+			searchPaymentUpdate.setMatterNumber(Arrays.asList(fromMatterNumber));
+			if (fromDateRange != null && !fromDateRange.equalsIgnoreCase("null") &&
+					toDateRange != null && !toDateRange.equalsIgnoreCase("null")) {
+				Date fromPostingDate = DateUtils.convertStringToDate (fromDateRange);
+				Date toPostingDate = DateUtils.convertStringToDate (toDateRange);
+				Date[] dates = DateUtils.addTimeToDatesForSearch(fromPostingDate, toPostingDate);
+
+				searchPaymentUpdate.setFromPaymentDate(dates[0]);
+				searchPaymentUpdate.setToPaymentDate(dates[1]);
+			}
+
+			List<PaymentUpdate> paymentUpdateResults = findPaymentUpdate(searchPaymentUpdate);
+
+			// Deleting existing record (soft)
+			List<Long> paymentIds = paymentUpdateResults.stream().map(PaymentUpdate::getPaymentId).collect(Collectors.toList());
+			paymentUpdateRepository.deletePaymentUpdate (paymentIds);
+			log.info("Deleted PaymentUpdateList: " + paymentIds);
+
+			// Creating new record
+			List<PaymentUpdate> newPaymentUpdateList = new ArrayList<>();
+			for (PaymentUpdate dbPaymentUpdate : paymentUpdateResults) {
+				PaymentUpdate newPaymentUpdate = new PaymentUpdate();
+				BeanUtils.copyProperties(dbPaymentUpdate, newPaymentUpdate, CommonUtils.getNullPropertyNames(dbPaymentUpdate));
+				newPaymentUpdate.setMatterNumber(toMatterNumber);
+				newPaymentUpdateList.add(newPaymentUpdate);
+			}
+			newPaymentUpdateList = paymentUpdateRepository.saveAll(newPaymentUpdateList);
+			log.info("newPaymentUpdateList: " + newPaymentUpdateList);
+
+			TransferBilling transferBilling = new TransferBilling();
+			transferBilling.setInvoiceHeaders(createdInvoiceHeaders);
+			transferBilling.setPaymentUpdates(newPaymentUpdateList);
+			log.info("transferBilling: " + transferBilling);
+
+			return transferBilling;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	//------------------------------Reports---------------------------------------------------
+
+	/**
+	 * createARAgingReport
+	 * @param arAgingReportInput
+	 * @return
+	 * @throws ParseException
+	 */
+//	public List<ARAgingReport> createARAgingReport (@Valid ARAgingReportInput arAgingReportInput) throws Exception {
+//		try {
+//			log.info("ARAgingReportInput : " + arAgingReportInput);
+//
+//			SearchInvoiceHeaderARAgingReport searchInvoice = new SearchInvoiceHeaderARAgingReport();
+//			searchInvoice.setClassId(arAgingReportInput.getClassId());
+//
+//			if (arAgingReportInput.getStatusId() != null && arAgingReportInput.getStatusId().isEmpty()) {
+//				searchInvoice.setStatusId(arAgingReportInput.getStatusId());
+//			}
+//
+//			if (arAgingReportInput.getClientId() != null && !arAgingReportInput.getClientId().isEmpty()) {
+//				searchInvoice.setClientId(arAgingReportInput.getClientId());
+//			}
+//
+//			if (arAgingReportInput.getMatterNumber() != null && !arAgingReportInput.getMatterNumber().isEmpty()) {
+//				searchInvoice.setMatterNumber(arAgingReportInput.getMatterNumber());
+//			}
+//
+//			// Search in Invoice
+//			List<ARAgingReport> arAgingReportList = findInvoiceHeaderARAgingReport(searchInvoice);
+//			log.info("arAgingReport done.......: " + arAgingReportList.size());
+//			return arAgingReportList;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw e;
+//		}
+//	}
+
+	/**
+	 *
+	 * @param arAgingReportInput
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ARAgingReportImpl> createARAgingReport (@Valid ARAgingReportInput arAgingReportInput) throws Exception {
+		try {
+			log.info("ARAgingReportInput : " + arAgingReportInput);
+
+			SearchInvoiceHeaderARAgingReport searchInvoice = new SearchInvoiceHeaderARAgingReport();
+			searchInvoice.setClassId(arAgingReportInput.getClassId());
+
+			if (arAgingReportInput.getStatusId() != null && arAgingReportInput.getStatusId().isEmpty()) {
+				searchInvoice.setStatusId(arAgingReportInput.getStatusId());
+			}
+
+			if (arAgingReportInput.getClientId() != null && !arAgingReportInput.getClientId().isEmpty()) {
+				searchInvoice.setClientId(arAgingReportInput.getClientId());
+			}
+
+			if (arAgingReportInput.getMatterNumber() != null && !arAgingReportInput.getMatterNumber().isEmpty()) {
+				searchInvoice.setMatterNumber(arAgingReportInput.getMatterNumber());
+			}
+
+			// Search in Invoice
+			List<ARAgingReportImpl> arAgingReportList = arAgingReportRepository.getARAgingReport(
+					searchInvoice.getClassId(),
+					searchInvoice.getClientId(),
+					searchInvoice.getMatterNumber(),
+					arAgingReportInput.getCaseCategoryId(),
+					arAgingReportInput.getCaseSubCategoryId(),
+					searchInvoice.getStatusId(),
+					arAgingReportInput.getTimekeepers()
+			);
+			log.info("arAgingReport done.......: " + arAgingReportList.size());
+			return arAgingReportList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+//	@Scheduled(cron = "0 15 2,8,12,16 * * *")
+//	public void scheduleARAgingReport() throws Exception {
+//		try {
+//			log.info("scheduleARAgingReport started---------> : " + new Date());
+//
+//			// Search in Invoice
+//			List<IInvoiceHeader> iInvoiceHeaderList = invoiceHeaderRepository.getByCLassId();
+//			DecimalFormat df = new DecimalFormat("0.00");
+//			Set<String> setMatterNumbers = new HashSet<String>();
+//			for (IInvoiceHeader invoiceHeader : iInvoiceHeaderList) {
+//				setMatterNumbers.add(invoiceHeader.getMatterNumber());
+//			}
+//
+//			// Preparing the report
+//			List<ARAgingReport> arAgingReportList = new ArrayList<>();
+//			for (String matterNumber : setMatterNumbers) {
+//				com.mnrclara.api.accounting.model.prebill.MatterGenAcc matter =
+//						matterGenAccRepository.findByMatterNumberAndClassIdIn(matterNumber, Arrays.asList(1L, 2L));
+//				if (matter != null) {
+//					ARAgingReport arAgingReport = new ARAgingReport();
+//					arAgingReport.setArAgingId(System.currentTimeMillis());
+//
+//					// MATTER_NO
+//					arAgingReport.setMatterNumber(matterNumber);
+//
+//					// PaymentUpdate -> SUM(PAYMENT_AMOUNT) -> From 01-01-2000 to till date by passing Matternumber, Is_deleted=0
+//					String fromDate_s = "2000-01-01";
+//					Date fromDate_d = DateUtils.convertStringToDate(fromDate_s);
+//					Date dates[] = DateUtils.addTimeToDatesForSearch(fromDate_d, new Date());
+//					Double totalSumOfPaymentMade = paymentUpdateRepository.getPmtRec(matterNumber, dates[0], dates[1]);
+//					totalSumOfPaymentMade = (totalSumOfPaymentMade != null ? totalSumOfPaymentMade : 0D); // 2000
+//					totalSumOfPaymentMade = Double.valueOf(df.format(totalSumOfPaymentMade));
+//					log.info("Payment : totalSumOfPaymentMade : " + totalSumOfPaymentMade);
+//
+//					// INVOICE_AMT
+//					Double totalInvoiceAmountDue = invoiceHeaderRepository.getInvAmt(matterNumber, totalSumOfPaymentMade); // 2100 - 2000 -> 100
+//					totalInvoiceAmountDue = (totalInvoiceAmountDue != null ? totalInvoiceAmountDue : 0D);
+//					totalInvoiceAmountDue = Double.valueOf(df.format(totalInvoiceAmountDue));
+//					arAgingReport.setTotalAmountDue(totalInvoiceAmountDue);
+//					log.info("Invoice : totalInvoiceAmountDue : " + totalInvoiceAmountDue);
+//
+//					//------------------------------------TEMP Variable-------------------------------------------------------
+//					Double tempInvAmount = 0D;
+//					int slotMatched = 0;
+//					//----------------------------------- Over 120------------------------------------------------------------
+//					Double over120InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 121L, 8000L);
+//					over120InvAmount = (over120InvAmount != null ? over120InvAmount : 0D);	// 200
+//					log.info("over120InvAmount---$$$$$--> : " + over120InvAmount);
+//
+//					Double balanceAmount = (totalSumOfPaymentMade - over120InvAmount);
+//					log.info("over120Inv---balanceAmount--> : " + balanceAmount);
+//
+//					// Finding whether this is last Invoice Amount
+//					if (over120InvAmount > 0) {
+//						slotMatched = 1;
+//					}
+//
+//					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+//						totalSumOfPaymentMade = balanceAmount;
+//						arAgingReport.setUnpaidOver120 (0D);		// 2000 - 200 -> +1800
+//					} else {
+//						totalSumOfPaymentMade = over120InvAmount - totalSumOfPaymentMade;
+//						arAgingReport.setUnpaidOver120 (totalSumOfPaymentMade);
+//						totalSumOfPaymentMade = 0D;
+//					}
+//
+//					log.info("over120Inv---120over--> : " + over120InvAmount);
+//					log.info("totalSumOfPaymentMade---120over--> : " + totalSumOfPaymentMade);
+//					log.info("arAgingReport---120over--> : " + arAgingReport.getUnpaidOver120());
+//
+//					//----------------------------------- 90-120----------------------------------------------------------
+//					Double days_90_120InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 91L, 120L);
+//					days_90_120InvAmount = (days_90_120InvAmount != null ? days_90_120InvAmount : 0D);
+//					balanceAmount = (totalSumOfPaymentMade - days_90_120InvAmount);
+//					log.info("days_90_120---balanceAmount--> : " + balanceAmount);
+//
+//					// Finding whether this is last Invoice Amount
+//					if (days_90_120InvAmount > 0) {
+//						slotMatched = 2;
+//					}
+//
+//					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+//						totalSumOfPaymentMade = balanceAmount;
+//						arAgingReport.setUnpaid91DaysTo120Days(0D);
+//					} else {
+//						totalSumOfPaymentMade = days_90_120InvAmount - totalSumOfPaymentMade;
+//						arAgingReport.setUnpaid91DaysTo120Days (totalSumOfPaymentMade);
+//						totalSumOfPaymentMade = 0D;
+//					}
+//
+//					log.info("days_90_120Inv---91d--> : " + days_90_120InvAmount);
+//					log.info("totalSumOfPaymentMade---91d--> : " + totalSumOfPaymentMade);
+//					log.info("arAgingReport---90_120--> : " + arAgingReport.getUnpaid91DaysTo120Days());
+//
+//					//----------------------------------- 60-90----------------------------------------------------------
+//					Double days_60_90InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 61L, 90L);
+//					days_60_90InvAmount = (days_60_90InvAmount != null ? days_60_90InvAmount : 0D);
+//					balanceAmount = (totalSumOfPaymentMade - days_60_90InvAmount);
+//					log.info("days_60_90---balanceAmount--> : " + balanceAmount);
+//
+//					// Finding whether this is last Invoice Amount
+//					if (days_60_90InvAmount > 0) {
+//						slotMatched = 3;
+//					}
+//
+//					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+//						totalSumOfPaymentMade = balanceAmount;
+//						arAgingReport.setUnpaid61To90Days(0D);
+//					} else {
+//						totalSumOfPaymentMade = days_60_90InvAmount - totalSumOfPaymentMade;
+//						arAgingReport.setUnpaid61To90Days (totalSumOfPaymentMade);
+//						totalSumOfPaymentMade = 0D;
+//					}
+//
+//					log.info("days_60_90InvAmount---60d--> : " + days_60_90InvAmount);
+//					log.info("totalSumOfPaymentMade---60d--> : " + totalSumOfPaymentMade);
+//					log.info("arAgingReport---60_90--> : " + arAgingReport.getUnpaid61To90Days());
+//
+//					//-----------------------------------30-60---------------------------------------------------------
+//					Double days_30_60InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 31L, 60L);
+//					days_30_60InvAmount = (days_30_60InvAmount != null ? days_30_60InvAmount : 0D);
+//					balanceAmount = (totalSumOfPaymentMade - days_30_60InvAmount);
+//					log.info("days_30_60---balanceAmount--> : " + balanceAmount);
+//
+//					// Finding whether this is last Invoice Amount
+//					if (days_30_60InvAmount > 0) {
+//						slotMatched = 4;
+//					}
+//
+//					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+//						totalSumOfPaymentMade = balanceAmount;
+//						arAgingReport.setUnpaid30To60Days(0D);
+//					} else {
+//						totalSumOfPaymentMade = days_30_60InvAmount - totalSumOfPaymentMade;
+//						arAgingReport.setUnpaid30To60Days (totalSumOfPaymentMade);
+//						totalSumOfPaymentMade = 0D;
+//					}
+//
+//					log.info("days_30_60InvAmount---30d--> : " + days_30_60InvAmount);
+//					log.info("totalSumOfPaymentMade---30d--> : " + totalSumOfPaymentMade);
+//					log.info("arAgingReport---30_60--> : " + arAgingReport.getUnpaid30To60Days());
+//
+//					//-----------------------------------CURRENT----------------------------------------------------------
+//					Double currentInvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 0L, 30L);
+//					currentInvAmount = (currentInvAmount != null ? currentInvAmount : 0D);
+//					balanceAmount = (totalSumOfPaymentMade - currentInvAmount);
+//					log.info("current---balanceAmount--> : " + balanceAmount);
+//
+//					// Finding whether this is last Invoice Amount
+//					if (currentInvAmount > 0) {
+//						slotMatched = 5;
+//					}
+//
+//					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+//						arAgingReport.setUnpaidCurrent(0D);
+//						totalSumOfPaymentMade = balanceAmount;
+//					} else {
+//						totalSumOfPaymentMade = currentInvAmount - totalSumOfPaymentMade;
+//						arAgingReport.setUnpaidCurrent (totalSumOfPaymentMade);
+//						totalSumOfPaymentMade = 0D;
+//					}
+//
+//					tempInvAmount = balanceAmount;
+//					log.info("currentInv---current--> : " + currentInvAmount);
+//					log.info("totalSumOfPaymentMade---current--> : " + totalSumOfPaymentMade);
+//					log.info("arAgingReport---current--> : " + arAgingReport.getUnpaidCurrent());
+//					log.info("-----------------------------------------------------------------------------------");
+//
+//					log.info("tempInvAmount---$$$$$$$$$$--> : " + tempInvAmount);
+//					log.info("slotMatched---$$$$$$$$$$--> : " + slotMatched);
+//
+//					if (slotMatched == 1) {
+//						arAgingReport.setUnpaidOver120(-tempInvAmount);
+//					} else if (slotMatched == 2) {
+//						arAgingReport.setUnpaid91DaysTo120Days(-tempInvAmount);
+//					} else if (slotMatched == 3) {
+//						arAgingReport.setUnpaid61To90Days(-tempInvAmount);
+//					} else if (slotMatched == 4) {
+//						arAgingReport.setUnpaid30To60Days(-tempInvAmount);
+//					} else if (slotMatched == 5) {
+//						arAgingReport.setUnpaidCurrent(-tempInvAmount);
+//					}
+//
+//					//------------------------------------------------------------------------------------------------
+//
+//					// Accounting Phone Number
+//					arAgingReport.setAccountingPhoneNumber(matter.getReferenceField11());
+//
+//					// CASE_CATEGORY_ID
+//					arAgingReport.setCaseCategoryId(matter.getCaseCategoryId());
+//
+//					// CASE_SUB_CATEGORY_ID
+//					arAgingReport.setCaseSubCategoryId(matter.getCaseSubCategoryId());
+//
+//					// CASE_OPEN_DATE
+//					arAgingReport.setMatterOpenDate(matter.getCaseOpenedDate());
+//
+//					// MATTER_TEXT
+//					arAgingReport.setMatterName(matter.getMatterDescription());
+//
+//					// CLASS_ID
+//					arAgingReport.setClassId(matter.getClassId());
+//
+//					// CLIENT_ID
+//					arAgingReport.setClientId(matter.getClientId());
+//
+//					//STATUS_ID
+//					arAgingReport.setStatusId(matter.getStatusId());
+//
+//					// FIRST_LAST_NM
+//					ClientGeneral clientGeneral = clientGeneralRepository.findByClientId(matter.getClientId());
+//					if (clientGeneral != null) {
+//						arAgingReport.setClientName(clientGeneral.getFirstNameLastName());
+//					}
+//
+//					//TimeKeeper
+//					MatterAssignment timeKeeper = matterAssignmentRepository.findByMatterNumber(matterNumber);
+//					if (timeKeeper != null) {
+//						arAgingReport.setPartner(timeKeeper.getPartner());
+//						arAgingReport.setAssignedTimeKeeper(timeKeeper.getAssignedTimeKeeper());
+//						arAgingReport.setOriginatingTimeKeeper(timeKeeper.getOriginatingTimeKeeper());
+//						arAgingReport.setResponsibleTimeKeeper(timeKeeper.getResponsibleTimeKeeper());
+//						arAgingReport.setLegalAssistant(timeKeeper.getLegalAssistant());
+//						arAgingReport.setParalegal(timeKeeper.getReferenceField2());
+//						arAgingReport.setLawClerk(timeKeeper.getReferenceField1());
+//					}
+//
+//					// Payment Update
+//					PaymentUpdate paymentUpdate = paymentUpdateRepository.findTopByMatterNumberOrderByPaymentDateDesc(matterNumber);
+//					if (paymentUpdate != null) {
+//						arAgingReport.setLastPaymentDate(paymentUpdate.getPaymentDate());
+//
+//						// Retainer/FlatFeeReceived
+////						Double feeReceived = paymentUpdateRepository.getPmtRec(matterNumber);
+//						arAgingReport.setFeeReceived(paymentUpdate.getPaymentAmount());
+//					}
+//					log.info("arAgingReport: " + arAgingReport);
+//					arAgingReportList.add(arAgingReport);
+//				}
+//			}
+//
+//			log.info("arAgingReport done.......: " + arAgingReportList);
+//			arAgingReportRepository.deleteAll();
+//			arAgingReportRepository.saveAll(arAgingReportList);
+//			log.info("AR Report completed---------> : " + new Date());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+	@Scheduled(cron = "0 15 2,8,12,16 * * *")
+	public void scheduleARAgingReport() throws Exception {
+		try {
+			log.info("scheduleARAgingReport started---------> : " + new Date());
+			
+			List<com.mnrclara.api.accounting.model.prebill.MatterGenAcc> matterGenAccList = 
+					matterGenAccRepository.findByClassIdIn(Arrays.asList(1L, 2L));
+			Set<String> setMatterNumbers = new HashSet<String>();
+			matterGenAccList.stream().forEach(m -> {
+				setMatterNumbers.add(m.getMatterNumber());
+			});
+			
+			// Search in Invoice
+//			List<IInvoiceHeader> iInvoiceHeaderList = invoiceHeaderRepository.getByCLassId();
+			DecimalFormat df = new DecimalFormat("0.00");
+//			Set<String> setMatterNumbers = new HashSet<String>();
+//			for (IInvoiceHeader invoiceHeader : iInvoiceHeaderList) {
+//				setMatterNumbers.add(invoiceHeader.getMatterNumber());
+//			}
+
+			// Preparing the report
+			List<ARAgingReport> arAgingReportList = new ArrayList<>();
+			for (String matterNumber : setMatterNumbers) {
+				com.mnrclara.api.accounting.model.prebill.MatterGenAcc matter =
+						matterGenAccRepository.findByMatterNumberAndClassIdIn(matterNumber, Arrays.asList(1L, 2L));
+				if (matter != null) {
+					ARAgingReport arAgingReport = new ARAgingReport();
+					arAgingReport.setArAgingId(System.currentTimeMillis());
+
+					// MATTER_NO
+					arAgingReport.setMatterNumber(matterNumber);
+
+					// PaymentUpdate -> SUM(PAYMENT_AMOUNT) -> From 01-01-2000 to till date by passing Matternumber, Is_deleted=0
+					String fromDate_s = "2000-01-01";
+					Date fromDate_d = DateUtils.convertStringToDate(fromDate_s);
+					Date dates[] = DateUtils.addTimeToDatesForSearch(fromDate_d, new Date());
+					Double totalSumOfPaymentMade = paymentUpdateRepository.getPmtRec(matterNumber, dates[0], dates[1]);
+					totalSumOfPaymentMade = (totalSumOfPaymentMade != null ? totalSumOfPaymentMade : 0D); // 2000
+					totalSumOfPaymentMade = Double.valueOf(df.format(totalSumOfPaymentMade));
+					log.info("Payment : totalSumOfPaymentMade : " + totalSumOfPaymentMade);
+
+					// INVOICE_AMT
+					Double totalInvoiceAmountDue = invoiceHeaderRepository.getInvAmt(matterNumber, totalSumOfPaymentMade); // 2100 - 2000 -> 100
+					totalInvoiceAmountDue = (totalInvoiceAmountDue != null ? totalInvoiceAmountDue : 0D);
+					totalInvoiceAmountDue = Double.valueOf(df.format(totalInvoiceAmountDue));
+					arAgingReport.setTotalAmountDue(totalInvoiceAmountDue);
+					log.info("Invoice : totalInvoiceAmountDue : " + totalInvoiceAmountDue);
+
+					//------------------------------------TEMP Variable-------------------------------------------------------
+					Double tempInvAmount = 0D;
+					int slotMatched = 0;
+					//----------------------------------- Over 120------------------------------------------------------------
+					Double over120InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 121L, 8000L);
+					over120InvAmount = (over120InvAmount != null ? over120InvAmount : 0D);	// 200
+					log.info("over120InvAmount---$$$$$--> : " + over120InvAmount);
+
+					Double balanceAmount = (totalSumOfPaymentMade - over120InvAmount);
+					log.info("over120Inv---balanceAmount--> : " + balanceAmount);
+
+					// Finding whether this is last Invoice Amount
+					if (over120InvAmount > 0) {
+						slotMatched = 1;
+					}
+
+					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+						totalSumOfPaymentMade = balanceAmount;
+						arAgingReport.setUnpaidOver120 (0D);		// 2000 - 200 -> +1800
+					} else {
+						totalSumOfPaymentMade = over120InvAmount - totalSumOfPaymentMade;
+						arAgingReport.setUnpaidOver120 (totalSumOfPaymentMade);
+						totalSumOfPaymentMade = 0D;
+					}
+
+					log.info("over120Inv---120over--> : " + over120InvAmount);
+					log.info("totalSumOfPaymentMade---120over--> : " + totalSumOfPaymentMade);
+					log.info("arAgingReport---120over--> : " + arAgingReport.getUnpaidOver120());
+
+					//----------------------------------- 90-120----------------------------------------------------------
+					Double days_90_120InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 91L, 120L);
+					days_90_120InvAmount = (days_90_120InvAmount != null ? days_90_120InvAmount : 0D);
+					balanceAmount = (totalSumOfPaymentMade - days_90_120InvAmount);
+					log.info("days_90_120---balanceAmount--> : " + balanceAmount);
+
+					// Finding whether this is last Invoice Amount
+					if (days_90_120InvAmount > 0) {
+						slotMatched = 2;
+					}
+
+					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+						totalSumOfPaymentMade = balanceAmount;
+						arAgingReport.setUnpaid91DaysTo120Days(0D);
+					} else {
+						totalSumOfPaymentMade = days_90_120InvAmount - totalSumOfPaymentMade;
+						arAgingReport.setUnpaid91DaysTo120Days (totalSumOfPaymentMade);
+						totalSumOfPaymentMade = 0D;
+					}
+
+					log.info("days_90_120Inv---91d--> : " + days_90_120InvAmount);
+					log.info("totalSumOfPaymentMade---91d--> : " + totalSumOfPaymentMade);
+					log.info("arAgingReport---90_120--> : " + arAgingReport.getUnpaid91DaysTo120Days());
+
+					//----------------------------------- 60-90----------------------------------------------------------
+					Double days_60_90InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 61L, 90L);
+					days_60_90InvAmount = (days_60_90InvAmount != null ? days_60_90InvAmount : 0D);
+					balanceAmount = (totalSumOfPaymentMade - days_60_90InvAmount);
+					log.info("days_60_90---balanceAmount--> : " + balanceAmount);
+
+					// Finding whether this is last Invoice Amount
+					if (days_60_90InvAmount > 0) {
+						slotMatched = 3;
+					}
+
+					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+						totalSumOfPaymentMade = balanceAmount;
+						arAgingReport.setUnpaid61To90Days(0D);
+					} else {
+						totalSumOfPaymentMade = days_60_90InvAmount - totalSumOfPaymentMade;
+						arAgingReport.setUnpaid61To90Days (totalSumOfPaymentMade);
+						totalSumOfPaymentMade = 0D;
+					}
+
+					log.info("days_60_90InvAmount---60d--> : " + days_60_90InvAmount);
+					log.info("totalSumOfPaymentMade---60d--> : " + totalSumOfPaymentMade);
+					log.info("arAgingReport---60_90--> : " + arAgingReport.getUnpaid61To90Days());
+
+					//-----------------------------------30-60---------------------------------------------------------
+					Double days_30_60InvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 31L, 60L);
+					days_30_60InvAmount = (days_30_60InvAmount != null ? days_30_60InvAmount : 0D);
+					balanceAmount = (totalSumOfPaymentMade - days_30_60InvAmount);
+					log.info("days_30_60---balanceAmount--> : " + balanceAmount);
+
+					// Finding whether this is last Invoice Amount
+					if (days_30_60InvAmount > 0) {
+						slotMatched = 4;
+					}
+
+					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+						totalSumOfPaymentMade = balanceAmount;
+						arAgingReport.setUnpaid30To60Days(0D);
+					} else {
+						totalSumOfPaymentMade = days_30_60InvAmount - totalSumOfPaymentMade;
+						arAgingReport.setUnpaid30To60Days (totalSumOfPaymentMade);
+						totalSumOfPaymentMade = 0D;
+					}
+
+					log.info("days_30_60InvAmount---30d--> : " + days_30_60InvAmount);
+					log.info("totalSumOfPaymentMade---30d--> : " + totalSumOfPaymentMade);
+					log.info("arAgingReport---30_60--> : " + arAgingReport.getUnpaid30To60Days());
+
+					//-----------------------------------CURRENT----------------------------------------------------------
+					Double currentInvAmount = invoiceHeaderRepository.getUnpaidAmountInvoice(matterNumber, 0L, 30L);
+					currentInvAmount = (currentInvAmount != null ? currentInvAmount : 0D);
+					balanceAmount = (totalSumOfPaymentMade - currentInvAmount);
+					log.info("current---balanceAmount--> : " + balanceAmount);
+
+					// Finding whether this is last Invoice Amount
+					if (currentInvAmount > 0) {
+						slotMatched = 5;
+					}
+
+					if (balanceAmount > 0 && totalSumOfPaymentMade >= 0D) { // If it is Positive value then do the below calculation
+						arAgingReport.setUnpaidCurrent(0D);
+						totalSumOfPaymentMade = balanceAmount;
+					} else {
+						totalSumOfPaymentMade = currentInvAmount - totalSumOfPaymentMade;
+						arAgingReport.setUnpaidCurrent (totalSumOfPaymentMade);
+						totalSumOfPaymentMade = 0D;
+					}
+
+					tempInvAmount = balanceAmount;
+					log.info("currentInv---current--> : " + currentInvAmount);
+					log.info("totalSumOfPaymentMade---current--> : " + totalSumOfPaymentMade);
+					log.info("arAgingReport---current--> : " + arAgingReport.getUnpaidCurrent());
+					log.info("-----------------------------------------------------------------------------------");
+
+					log.info("tempInvAmount---$$$$$$$$$$--> : " + tempInvAmount);
+					log.info("slotMatched---$$$$$$$$$$--> : " + slotMatched);
+
+					if (slotMatched == 1) {
+						arAgingReport.setUnpaidOver120(-tempInvAmount);
+					} else if (slotMatched == 2) {
+						arAgingReport.setUnpaid91DaysTo120Days(-tempInvAmount);
+					} else if (slotMatched == 3) {
+						arAgingReport.setUnpaid61To90Days(-tempInvAmount);
+					} else if (slotMatched == 4) {
+						arAgingReport.setUnpaid30To60Days(-tempInvAmount);
+					} else if (slotMatched == 5) {
+						arAgingReport.setUnpaidCurrent(-tempInvAmount);
+					}
+
+					//------------------------------------------------------------------------------------------------
+
+					// Accounting Phone Number
+					arAgingReport.setAccountingPhoneNumber(matter.getReferenceField11());
+
+					// CASE_CATEGORY_ID
+					arAgingReport.setCaseCategoryId(matter.getCaseCategoryId());
+
+					// CASE_SUB_CATEGORY_ID
+					arAgingReport.setCaseSubCategoryId(matter.getCaseSubCategoryId());
+
+					// CASE_OPEN_DATE
+					arAgingReport.setMatterOpenDate(matter.getCaseOpenedDate());
+
+					// MATTER_TEXT
+					arAgingReport.setMatterName(matter.getMatterDescription());
+
+					// CLASS_ID
+					arAgingReport.setClassId(matter.getClassId());
+
+					// CLIENT_ID
+					arAgingReport.setClientId(matter.getClientId());
+
+					//STATUS_ID
+					arAgingReport.setStatusId(matter.getStatusId());
+
+					// FIRST_LAST_NM
+					ClientGeneral clientGeneral = clientGeneralRepository.findByClientId(matter.getClientId());
+					if (clientGeneral != null) {
+						arAgingReport.setClientName(clientGeneral.getFirstNameLastName());
+					}
+
+					//TimeKeeper
+					MatterAssignment timeKeeper = matterAssignmentRepository.findByMatterNumber(matterNumber);
+					if (timeKeeper != null) {
+						arAgingReport.setPartner(timeKeeper.getPartner());
+						arAgingReport.setAssignedTimeKeeper(timeKeeper.getAssignedTimeKeeper());
+						arAgingReport.setOriginatingTimeKeeper(timeKeeper.getOriginatingTimeKeeper());
+						arAgingReport.setResponsibleTimeKeeper(timeKeeper.getResponsibleTimeKeeper());
+						arAgingReport.setLegalAssistant(timeKeeper.getLegalAssistant());
+						arAgingReport.setParalegal(timeKeeper.getReferenceField2());
+						arAgingReport.setLawClerk(timeKeeper.getReferenceField1());
+					}
+
+					// Payment Update
+					PaymentUpdate paymentUpdate = paymentUpdateRepository.findTopByMatterNumberOrderByPaymentDateDesc(matterNumber);
+					if (paymentUpdate != null) {
+						arAgingReport.setLastPaymentDate(paymentUpdate.getPaymentDate());
+
+						// Retainer/FlatFeeReceived
+//						Double feeReceived = paymentUpdateRepository.getPmtRec(matterNumber);
+						arAgingReport.setFeeReceived(paymentUpdate.getPaymentAmount());
+					}
+					log.info("arAgingReport: " + arAgingReport);
+					arAgingReportList.add(arAgingReport);
+				}
+			}
+
+			log.info("arAgingReport done.......: " + arAgingReportList);
+			arAgingReportRepository.deleteAll();
+			arAgingReportRepository.saveAll(arAgingReportList);
+			log.info("AR Report completed---------> : " + new Date());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *
+	 * @param plist_current
+	 * @return
+	 */
+	private Double processPaymentAmount (List<Long> plist_current, String matterNumber) {
+		List<Double> sumOfPaymentList = paymentUpdateRepository.getPaymentAmountForARReport(plist_current, matterNumber);
+		if (sumOfPaymentList == null) {
+			return 0D;
+		}
+		double totalSumOfPayment = sumOfPaymentList.stream().mapToDouble(f -> f.doubleValue()).sum();
+		return totalSumOfPayment;
+	}
+
+/**
+	 * @param billingReportInput
+	 * @return
+	 * @throws Exception
+	 */
+public List<PartnerBillingReportImpl> createPartnerBillingReport(@Valid BillingReportInput billingReportInput) throws Exception {
+
+	if (billingReportInput.getFromPostingDate() != null &&
+			billingReportInput.getToPostingDate() != null) {
+		Date[] dates = DateUtils.addTimeToDatesForSearch(billingReportInput.getFromPostingDate(),
+				billingReportInput.getToPostingDate());
+		billingReportInput.setFromPostingDate(dates[0]);
+		billingReportInput.setToPostingDate(dates[1]);
+		log.info("FromPostingDate: " + billingReportInput.getFromPostingDate());
+		log.info("ToPostingDate: " + billingReportInput.getToPostingDate());
+	}
+
+	if (billingReportInput.getClassId() == null || billingReportInput.getClassId().isEmpty()) {
+		billingReportInput.setClassId(null);
+	}
+	if (billingReportInput.getClientId() == null || billingReportInput.getClientId().isEmpty()) {
+		billingReportInput.setClientId(null);
+	}
+	if (billingReportInput.getMatterNumber() == null || billingReportInput.getMatterNumber().isEmpty()) {
+		billingReportInput.setMatterNumber(null);
+	}
+	if (billingReportInput.getResponsibleTimeKeeper() == null || billingReportInput.getResponsibleTimeKeeper().isEmpty()) {
+		billingReportInput.setResponsibleTimeKeeper(null);
+	}
+	if (billingReportInput.getAssignedTimeKeeper() == null || billingReportInput.getAssignedTimeKeeper().isEmpty()) {
+		billingReportInput.setAssignedTimeKeeper(null);
+	}
+	if (billingReportInput.getPartner() == null || billingReportInput.getPartner().isEmpty()) {
+		billingReportInput.setPartner(null);
+	}
+
+	//truncate the temporary data in the table
+	invoiceHeaderRepository.truncatePaymentTable();
+	invoiceHeaderRepository.truncateInvoiceTable();
+
+	//fill the temporary data for partner report calculation
+//	invoiceHeaderRepository.getARPaymentList(billingReportInput.getClassId(),billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+//	invoiceHeaderRepository.getARInvoiceList(billingReportInput.getClassId(),billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+	invoiceHeaderRepository.getARPaymentList(billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+	invoiceHeaderRepository.getARInvoiceList(billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+	invoiceHeaderRepository.updateARInvoiceFeeBilled(billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+	invoiceHeaderRepository.updateARInvoiceCostBilled(billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+
+	List<PartnerBillingReportImpl> billingReportList = invoiceHeaderRepository.partnerBillingReport(billingReportInput.getClassId(),
+			billingReportInput.getClientId(),
+			billingReportInput.getMatterNumber(),
+			billingReportInput.getResponsibleTimeKeeper(),
+			billingReportInput.getAssignedTimeKeeper(),
+			billingReportInput.getPartner());
+	return billingReportList;
+}
+
+	/**
+	 *
+	 * @param billingReportInput
+	 * @return
+	 * @throws Exception
+	 */
+	public List<BillingReport> createBillingReport(@Valid BillingReportInput billingReportInput) throws Exception {
+		try {
+			SearchInvoiceHeaderBillingReport searchInvoice = new SearchInvoiceHeaderBillingReport();
+			searchInvoice.setClassId(billingReportInput.getClassId());
+			searchInvoice.setStatusId(billingReportInput.getStatusId());
+
+			if (billingReportInput.getFromBillingDate() != null && billingReportInput.getToBillingDate() != null) {
+				searchInvoice.setFromBillingDate(billingReportInput.getFromBillingDate());
+				searchInvoice.setToBillingDate(billingReportInput.getToBillingDate());
+			}
+
+			if (billingReportInput.getClientId() != null && !billingReportInput.getClientId().isEmpty()) {
+				searchInvoice.setClientId(billingReportInput.getClientId());
+			}
+
+			if (!billingReportInput.getMatterNumber().isEmpty()) {
+				searchInvoice.setMatterNumber(billingReportInput.getMatterNumber());
+			}
+
+			if (billingReportInput.getFromPostingDate() != null && billingReportInput.getToPostingDate() != null) {
+				searchInvoice.setFromPostingDate(billingReportInput.getFromPostingDate());
+				searchInvoice.setToPostingDate(billingReportInput.getToPostingDate());
+//				log.info("date1: " + billingReportInput.getFromPostingDate());
+//				log.info("date2: " + billingReportInput.getToPostingDate());
+			}
+
+			if (billingReportInput.getStatusId() != null && !billingReportInput.getStatusId().isEmpty()){
+				searchInvoice.setStatusId(billingReportInput.getStatusId());
+			}
+
+			if (billingReportInput.getCaseCategoryId() != null && !billingReportInput.getCaseCategoryId().isEmpty()){
+				searchInvoice.setCaseCategoryId(billingReportInput.getCaseCategoryId());
+			}
+
+			if (billingReportInput.getCaseSubCategoryId() != null && !billingReportInput.getCaseSubCategoryId().isEmpty()){
+				searchInvoice.setCaseSubCategoryId(billingReportInput.getCaseSubCategoryId());
+			}
+
+			if (billingReportInput.getTimeKeepers() != null && !billingReportInput.getTimeKeepers().isEmpty()){
+				searchInvoice.setTimeKeepers(billingReportInput.getTimeKeepers());
+			}
+
+			List<BillingReport> billingReportList = findBillingReport (searchInvoice);
+			return billingReportList;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Scheduled(fixedRate = 30 * 60 * 1000)
+	public List<BillingReport> scheduleBillingReport2() throws Exception {
+		log.info("BillingReport Scheduled2............... : " + new Date());
+		try {
+//			log.info("BillingReport Scheduled : " + new Date());
+			SearchInvoiceHeaderBillingReport searchInvoice = new SearchInvoiceHeaderBillingReport();
+//			Date startDate = DateUtils.convertStringToDate("2022-07-01");
+			Date startDate = DateUtils.convertStringToDate("2000-01-01");
+			LocalDate sLocalDate = LocalDate.now();
+			Date endDate = Date.from(sLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			Date[] dates = DateUtils.addTimeToDatesForSearch(startDate, endDate);
+
+//			log.info("startDate---##----> " + dates[0]);
+//			log.info("endDate---##----> " + dates[1]);
+			searchInvoice.setFromPostingDate(dates[0]);
+			searchInvoice.setToPostingDate(dates[1]);
+
+			List<InvoiceHeader> invoiceHeaderList = findInvoiceHeader(searchInvoice);
+//			log.info("invoiceHeaderList : " + invoiceHeaderList);
+
+			final String HARDCOST = "Hard cost";
+			final String SOFTCOST = "Soft cost";
+
+			List<BillingReport> billingReportList = new ArrayList<>();
+			for (InvoiceHeader invoiceHeader : invoiceHeaderList) {
+				BillingReport billingReport = new BillingReport();
+				billingReport.setBillingId(System.currentTimeMillis());
+
+				// Paid Amount - from invoice Header
+				billingReport.setPaidAmount(invoiceHeader.getTotalPaidAmount());
+
+				// CLASS_ID
+				billingReport.setClassId(invoiceHeader.getClassId());
+
+				String className = invoiceHeaderRepository.getClassName(invoiceHeader.getClassId());
+
+				billingReport.setClassIdDescription(className);
+
+				// CLIENT_ID
+				billingReport.setClientId(invoiceHeader.getClientId());
+
+				// MATTER_NO
+				billingReport.setMatterNumber(invoiceHeader.getMatterNumber());
+
+				// INVOICE_DATE
+				billingReport.setBillingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getInvoiceDate()));
+
+				// POSTING_DATE
+				billingReport.setPostingDate(DateUtils.convertSQLtoUtilDate(invoiceHeader.getPostingDate()));
+
+				// INVOICE_NO
+				billingReport.setInvoiceNumber(invoiceHeader.getInvoiceNumber());
+
+				billingReport.setPartnerAssigned(invoiceHeader.getPartnerAssigned());
+
+				// INVOICE_AMT
+				InvoiceLine invoiceLine = invoiceLineRepository.findByInvoiceNumberAndMatterNumberAndItemNumber(invoiceHeader.getInvoiceNumber(), invoiceHeader.getMatterNumber(), 1L);
+				if (invoiceLine != null) {
+					billingReport.setFeeBilled(invoiceLine.getBillableAmount());
+				}
+
+				// REMAIN_BAL
+				billingReport.setRemainingBalance(invoiceHeader.getRemainingBalance());
+
+				// TOTAL_BILLED
+				billingReport.setTotalBilled(invoiceHeader.getInvoiceAmount());
+
+				IMatterGenAcc iMatterGenAcc = invoiceHeaderRepository.getMatterGen(invoiceHeader.getMatterNumber());
+				if (iMatterGenAcc != null) {
+					billingReport.setMatterName(iMatterGenAcc.getMatterName());
+					billingReport.setBillingMode(iMatterGenAcc.getBillingMode());
+					billingReport.setBillingModeDescription(iMatterGenAcc.getBillingDesc());
+					billingReport.setClientName(iMatterGenAcc.getClientName());
+					billingReport.setCategoryId(iMatterGenAcc.getCategoryId());
+					billingReport.setSubCategoryId(iMatterGenAcc.getSubCategoryId());
+
+					//HAREESH - 26-08-2022 - took this section from "matterBillingActivityReport"
+					Double iExpenseAmount = invoiceHeaderRepository.getExpenseAmount(invoiceHeader.getMatterNumber(),
+							invoiceHeader.getPreBillNumber(), HARDCOST);
+					if (iExpenseAmount != null) {
+						billingReport.setHardCost(iExpenseAmount);
+					}
+					// SOFTCOST
+					iExpenseAmount = invoiceHeaderRepository.getExpenseAmount(invoiceHeader.getMatterNumber(),
+							invoiceHeader.getPreBillNumber(), SOFTCOST);
+					if (iExpenseAmount != null) {
+						billingReport.setSoftCost(iExpenseAmount);
+					}
+
+					// ADMIN COST
+					if (billingReport.getHardCost() != null && billingReport.getHardCost() == 0D &&
+							billingReport.getSoftCost() != null && billingReport.getSoftCost() == 0D) {
+						billingReport.setAdminCost(iMatterGenAcc.getAdminCost());
+//					log.info("--------AdminCost------> : " + iMatterGenAcc.getAdminCost());
+					}
+
+					billingReport.setAdminCost(iMatterGenAcc.getAdminCost());
+//				log.info("--------AdminCost------> : " + iMatterGenAcc.getAdminCost());
+//				log.info("--------getHardCost------> : " + billingReport.getHardCost());
+//				log.info("--------getSoftCost------> : " + billingReport.getSoftCost());
+				}
+				// MATTERTIMETICKET - Total Hours
+				Double totalHours = matterTimeTicketRepository.getTotalHours(invoiceHeader.getPreBillNumber(), invoiceHeader.getMatterNumber(),
+						dates[0], dates[1]);
+				billingReport.setTotalHours(totalHours);
+
+				// PAYMENTUPDATE
+				Double miscDebits = paymentUpdateRepository.getMiscDebits(invoiceHeader.getMatterNumber());
+				billingReport.setMiscDebits(miscDebits);
+
+				//STATUS ID
+				billingReport.setStatusId(invoiceHeader.getStatusId());
+
+				/*
+				 * MatterAssignment -
+				 */
+				MatterAssignment matterAssignment = matterAssignmentRepository.findByMatterNumber(invoiceHeader.getMatterNumber());
+				if (matterAssignment != null) {
+					billingReport.setResponsibleTimeKeeper(matterAssignment.getResponsibleTimeKeeper());
+					billingReport.setAssignedTimeKeeper(matterAssignment.getAssignedTimeKeeper());
+					billingReport.setPartner(matterAssignment.getPartner());
+				}
+
+				billingReportList.add(billingReport);
+//				log.info("billingReport : " + billingReport);
+			}
+			billingReportRepository.deleteAll();
+			billingReportRepository.saveAll(billingReportList);
+
+			log.info("BillingReport Completed : " + new Date());
+			return billingReportList;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param billingReportInput
+	 * @return
+	 * @throws Exception
+	 */
+	public MatterBillingActvityReport createBillingActivityReport(@Valid MatterBillingActvityReportInput billingReportInput) throws Exception {
+		try {
+			log.info("getFromPostingDate-----###------>: " + billingReportInput.getFromPostingDate());
+			log.info("getToPostingDate-----$$$------>: " + billingReportInput.getToPostingDate());
+			log.info("billingReportInput.getMatterNumber()-----$$$------>: " + billingReportInput.getMatterNumber());
+
+			Date fromPostingDate = DateUtils.convertStringToDate (billingReportInput.getFromPostingDate());
+			Date toPostingDate = DateUtils.convertStringToDate (billingReportInput.getToPostingDate());
+			Date[] dates = DateUtils.addTimeToDatesForSearch(fromPostingDate, toPostingDate);
+			log.info("dates------>: " + dates[0] + "----" + dates[1]);
+
+			List<IInvoiceActivity> dbInvoiceActivity =
+					invoiceHeaderRepository.getInvoiceActivity(billingReportInput.getMatterNumber(),
+							billingReportInput.getFromPostingDate(), billingReportInput.getToPostingDate());
+			log.info("dbInvoiceActivity------>: " + dbInvoiceActivity);
+
+			final String HARDCOST = "Hard cost";
+			final String SOFTCOST = "Soft cost";
+			MatterBillingActvityReport report = new MatterBillingActvityReport();
+			List<InvoiceActivity> invoiceActivityList = new ArrayList<>();
+			for (IInvoiceActivity iinvoiceActivity : dbInvoiceActivity) {
+				InvoiceActivity invoiceActivity = new InvoiceActivity();
+
+				// POSTING_DATE
+				invoiceActivity.setPostingDate(iinvoiceActivity.getPostingDate());
+
+				// ITEM_NO
+				// If ITEM_NO=1 , Hardcode this value as FEE and ITEM_NO = 2, HARDCODE this value as COST
+				if (iinvoiceActivity.getItemNumber() == 1L) {
+					invoiceActivity.setCode("FEE");
+				} else {
+					invoiceActivity.setCode("COST");
+				}
+
+				// EXP_AMOUNT - HARDCOST
+				Double iExpenseAmount = invoiceHeaderRepository.getExpenseAmount(billingReportInput.getMatterNumber(),
+						iinvoiceActivity.getPreBillNumber(), HARDCOST);
+				if (iExpenseAmount != null) {
+					invoiceActivity.setHardCost(iExpenseAmount);
+				}
+
+				// SOFTCOST
+				iExpenseAmount = invoiceHeaderRepository.getExpenseAmount(billingReportInput.getMatterNumber(),
+						iinvoiceActivity.getPreBillNumber(), SOFTCOST);
+				if (iExpenseAmount != null) {
+					invoiceActivity.setSoftCost(iExpenseAmount);
+				}
+
+				// DEBIT
+				invoiceActivity.setDebit(iinvoiceActivity.getBillAmount());
+
+				// DESCRIPTION
+				invoiceActivity.setDescription(iinvoiceActivity.getInvoiceRemarks());
+
+				// TRANSACTION ID
+				invoiceActivity.setTransactionID(iinvoiceActivity.getInvoiceNumber());
+
+				invoiceActivityList.add(invoiceActivity);
+			}
+
+			// Exact MatterNumber
+			com.mnrclara.api.accounting.model.prebill.MatterGenAcc matterGenAcc = matterGenAccRepository.findByMatterNumber(billingReportInput.getMatterNumber());
+			String matterNumber = matterGenAcc.getMatterNumber();
+			log.info("dbPaymentUpdateList------#--------> : " + dates[0] + "---" + dates[1]);
+
+			List<PaymentUpdate> dbPaymentUpdateList = 
+					paymentUpdateRepository.findByMatterNumberLikeAndPaymentDateBetweenAndDeletionIndicator(matterNumber, dates[0], dates[1], 0L);
+			log.info("dbPaymentUpdateList------1--------> : " + dbPaymentUpdateList);
+			if (dbPaymentUpdateList == null || dbPaymentUpdateList.isEmpty()) {
+				matterNumber = billingReportInput.getMatterNumber();
+				log.info("matterNumber : " + matterNumber);
+				dbPaymentUpdateList = 
+						paymentUpdateRepository.findByMatterNumberLikeAndPaymentDateBetweenAndDeletionIndicator(matterNumber, dates[0], dates[1], 0L);
+			}
+			log.info("dbPaymentUpdateList-----2------>: " + dbPaymentUpdateList);
+			List<PaymentActivity> paymentActivityList = new ArrayList<>();
+			for (PaymentUpdate dbPaymentUpdate : dbPaymentUpdateList) {
+				PaymentActivity paymentActivity = new PaymentActivity();
+
+				// Date
+				paymentActivity.setPaymentDate(dbPaymentUpdate.getPaymentDate());
+
+				// CODE
+				paymentActivity.setPaymentCode(dbPaymentUpdate.getPaymentCode());
+
+				// CREDIT
+				paymentActivity.setCredit(dbPaymentUpdate.getPaymentAmount());
+
+				// PAYMENT NUMBER
+				paymentActivity.setPaymentNumber(dbPaymentUpdate.getReferenceField2());
+
+				// DESCRIPTION
+				paymentActivity.setPaymentDesc(dbPaymentUpdate.getPaymentText());
+
+				// STATUS
+				paymentActivity.setStatusId(dbPaymentUpdate.getStatusId());
+
+				// Transaction Type
+				paymentActivity.setTransactionType(dbPaymentUpdate.getTransactionType());
+
+				paymentActivityList.add(paymentActivity);
+			}
+
+			report.setInvoice(invoiceActivityList);
+			report.setPayment(paymentActivityList);
+			return report;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @param matterPLReportInput
+	 * @return
+	 * @throws Exception
+	 */
+	public List<MatterPLReport> createMatterPLReport(@Valid MatterPLReportInput matterPLReportInput) throws Exception {
+		try {
+
+			Date[] dates = new Date[0];
+			if(matterPLReportInput.getFromInvoiceDate() != null && matterPLReportInput.getToInvoiceDate() != null){
+				Date fromInvoiceDate = DateUtils.convertStringToDate (matterPLReportInput.getFromInvoiceDate());
+				Date toInvoiceDate = DateUtils.convertStringToDate (matterPLReportInput.getToInvoiceDate());
+				dates = DateUtils.addTimeToDatesForSearch(fromInvoiceDate, toInvoiceDate);
+				log.info("dates------>: " + dates[0] + "----" + dates[1]);
+				matterPLReportInput.setFromDate(dates[0]);
+				matterPLReportInput.setToDate(dates[1]);
+			}
+
+			List<MatterPLReport> matterPLReportList = new ArrayList<>();
+
+			List<MatterPLReportImpl> dbMatterPLReportImpl =
+					invoiceHeaderRepository.getMatterPLReport(
+							matterPLReportInput.getClassId(),
+							matterPLReportInput.getPartner(),
+							matterPLReportInput.getMatterNumber(),
+							matterPLReportInput.getClientNumber(),
+							matterPLReportInput.getCaseCategoryId(),
+							matterPLReportInput.getCaseSubCategoryId(),
+							matterPLReportInput.getFromDate(),
+							matterPLReportInput.getToDate());
+
+			if(dbMatterPLReportImpl.size() == 0){
+				throw new EntityNotFoundException("The given Matter doesn't have Bill Mode Id 2[Flat Fee]");
+			}
+
+			for(MatterPLReportImpl newMatterPLReport : dbMatterPLReportImpl){
+
+				MatterPLReport dbMatterPLReport = new MatterPLReport();
+
+				dbMatterPLReport.setClientId(newMatterPLReport.getClientId());
+				dbMatterPLReport.setClientName(newMatterPLReport.getClientName());
+				dbMatterPLReport.setMatterNumber(newMatterPLReport.getMatterNumber());
+				dbMatterPLReport.setMatterDescription(newMatterPLReport.getMatterDescription());
+				dbMatterPLReport.setPartnerAssigned(newMatterPLReport.getPartnerAssigned());
+				dbMatterPLReport.setInvoiceDate(newMatterPLReport.getInvoiceDate());
+				dbMatterPLReport.setInvoiceNumber(newMatterPLReport.getInvoiceNumber());
+				dbMatterPLReport.setTimeticketCaptured(newMatterPLReport.getTimeticketCaptured());
+				dbMatterPLReport.setCostCaptured(newMatterPLReport.getCostCaptured());
+
+				InvoiceLine flatFeeBilled = invoiceLineRepository.findByInvoiceNumberAndItemNumber(
+						newMatterPLReport.getInvoiceNumber(),1l );
+				InvoiceLine costBilled = invoiceLineRepository.findByInvoiceNumberAndItemNumber(
+						newMatterPLReport.getInvoiceNumber(),2l );
+
+				if(flatFeeBilled != null) {
+					dbMatterPLReport.setFlatFeeBilled(flatFeeBilled.getBillableAmount());
+				}
+				if(costBilled != null) {
+					dbMatterPLReport.setCostBilled(costBilled.getBillableAmount());
+				}
+
+				if(dbMatterPLReport.getFlatFeeBilled() != null && dbMatterPLReport.getCostBilled() != null){
+					Double totalBilled = dbMatterPLReport.getFlatFeeBilled() + dbMatterPLReport.getCostBilled();
+					dbMatterPLReport.setTotalBilled(totalBilled);
+				}else if(dbMatterPLReport.getFlatFeeBilled() != null && dbMatterPLReport.getCostBilled() == null){
+					dbMatterPLReport.setTotalBilled(flatFeeBilled.getBillableAmount());
+				}else if(dbMatterPLReport.getFlatFeeBilled() == null && dbMatterPLReport.getCostBilled() != null){
+					dbMatterPLReport.setTotalBilled(costBilled.getBillableAmount());
+				}
+
+				Double totalBilledValue = dbMatterPLReport.getTotalBilled();
+
+				if(dbMatterPLReport.getTimeticketCaptured() != null && dbMatterPLReport.getTotalBilled() != null){
+					Double matterPL = dbMatterPLReport.getTotalBilled() - dbMatterPLReport.getTimeticketCaptured();
+					dbMatterPLReport.setMatterPandL(matterPL);
+				}else if(dbMatterPLReport.getTimeticketCaptured() == null && dbMatterPLReport.getTotalBilled() != null){
+					dbMatterPLReport.setMatterPandL(totalBilledValue);
+				}else if(dbMatterPLReport.getTimeticketCaptured() != null && dbMatterPLReport.getTotalBilled() == null){
+					dbMatterPLReport.setMatterPandL(newMatterPLReport.getTimeticketCaptured());
+				}
+
+				matterPLReportList.add(dbMatterPLReport);
+
+			}
+
+			return matterPLReportList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @param invoiceNumber
+	 * @return
+	 */
+	public InvoiceHeader updateInvoiceHeaderQB(String invoiceNumber, Long statusId) {
+		InvoiceHeader invoiceHeader = invoiceHeaderRepository.findByInvoiceNumber(invoiceNumber);
+		if (invoiceHeader != null) {
+			invoiceHeader.setSentToQB(statusId);
+			invoiceHeader.setUpdatedOn(new Date());
+			return invoiceHeaderRepository.save(invoiceHeader);
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param paymentUpdate
+	 * @param loginUserID
+	 * @return
+	 */
+	public PaymentUpdate createPaymentUpdateTable(PaymentUpdate paymentUpdate, String loginUserID) {
+		Long maxId = paymentUpdateRepository.findMaxPaymentID ();
+		log.info("maxId : " + maxId);
+		paymentUpdate.setPaymentId(maxId+1);
+		paymentUpdate.setDeletionIndicator(0L);	
+		paymentUpdate.setCreatedBy(loginUserID);
+		PaymentUpdate createdPaymentUpdate = paymentUpdateRepository.save(paymentUpdate);
+		log.info("createdPaymentUpdate : " + createdPaymentUpdate);
+		return createdPaymentUpdate;
+	}
+
+	/**
+	 *
+	 * @param paymentId
+	 * @return
+	 */
+	public PaymentUpdate getPaymentUpdate(Long paymentId) {
+		PaymentUpdate dbPaymentUpdate = paymentUpdateRepository.findByPaymentIdAndDeletionIndicator(paymentId, 0L);
+		log.info("dbPaymentUpdate :" + dbPaymentUpdate);	
+		if (dbPaymentUpdate != null) {
+			return dbPaymentUpdate;
+		}else{
+			throw new EntityNotFoundException("The given Payment Id not present : " + paymentId);
+		}
+	}
+
+	/**
+	 *
+	 * @param paymentId
+	 * @param paymentUpdate
+	 * @return
+	 */
+	public PaymentUpdate updatePaymentUpdate(Long paymentId, PaymentUpdate paymentUpdate) {
+		PaymentUpdate dbPaymentUpdate = getPaymentUpdate(paymentId);
+		if (dbPaymentUpdate != null) {
+			BeanUtils.copyProperties(paymentUpdate, dbPaymentUpdate, CommonUtils.getNullPropertyNames(paymentUpdate));
+			return paymentUpdateRepository.save(dbPaymentUpdate);
+		}else{
+			throw new EntityNotFoundException("The given Payment Id not present : " + paymentId);
+		}
+	}
+
+	/**
+	 *
+	 * @param paymentId
+	 * @return
+	 */
+	public void deletePaymentUpdate(Long paymentId) {
+		PaymentUpdate dbPaymentUpdate = paymentUpdateRepository.findByPaymentIdAndDeletionIndicator(paymentId, 0L);
+		if (dbPaymentUpdate != null) {
+			dbPaymentUpdate.setDeletionIndicator(1L);
+			paymentUpdateRepository.save(dbPaymentUpdate);
+		} else{
+			throw new EntityNotFoundException("The given Payment Id not present : " + paymentId);
+		}
+	}
+
+	/**
+	 *
+	 * @param immigrationPaymentPlanReportInput
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ImmigrationPaymentPlanReport> createImmigrationPaymentPlanReport(
+			@Valid ImmigrationPaymentPlanReportInput immigrationPaymentPlanReportInput) throws Exception {
+		try {
+			Date[] dates = new Date[0];
+			Date[] dueDates = new Date[0];
+
+			if(immigrationPaymentPlanReportInput.getFromRemainderDate() != null && immigrationPaymentPlanReportInput.getToRemainderDate() != null){
+				Date fromRemainderDate = DateUtils.convertStringToDate (immigrationPaymentPlanReportInput.getFromRemainderDate());
+				Date toRemainderDate = DateUtils.convertStringToDate (immigrationPaymentPlanReportInput.getToRemainderDate());
+				dates = DateUtils.addTimeToDatesForSearch(fromRemainderDate, toRemainderDate);
+				log.info("Remainder dates------>: " + dates[0] + "----" + dates[1]);
+				immigrationPaymentPlanReportInput.setFromRDate(dates[0]);
+				immigrationPaymentPlanReportInput.setToRDate(dates[1]);
+			}
+
+			if(immigrationPaymentPlanReportInput.getFromDueDate() != null && immigrationPaymentPlanReportInput.getToDueDate() != null){
+				Date fromDueDate = DateUtils.convertStringToDate (immigrationPaymentPlanReportInput.getFromDueDate());
+				Date toDueDate = DateUtils.convertStringToDate (immigrationPaymentPlanReportInput.getToDueDate());
+				dueDates = DateUtils.addTimeToDatesForSearch(fromDueDate, toDueDate);
+				log.info("Due dates------>: " + dueDates[0] + "----" + dueDates[1]);
+				immigrationPaymentPlanReportInput.setFromDDate(dueDates[0]);
+				immigrationPaymentPlanReportInput.setToDDate(dueDates[1]);
+			}
+
+			List<ImmigrationPaymentPlanReport> immigrationPaymentPlanReportList = new ArrayList<>();
+
+			List<ImmigrationPaymentPlanReportImpl> dbImmigrationPaymentPlanReportImpl =
+					invoiceHeaderRepository.getImmigrationPaymentPlanReport(
+							immigrationPaymentPlanReportInput.getMatterNumber(),
+							immigrationPaymentPlanReportInput.getClientNumber());
+			for(ImmigrationPaymentPlanReportImpl newImmigrationPaymentPlanReport : dbImmigrationPaymentPlanReportImpl){
+
+				ImmigrationPaymentPlanReport dbImmigrationPaymentPlanReport = new ImmigrationPaymentPlanReport();
+
+				dbImmigrationPaymentPlanReport.setClientId(newImmigrationPaymentPlanReport.getClientId());
+				dbImmigrationPaymentPlanReport.setMatterNumber(newImmigrationPaymentPlanReport.getMatterNumber());
+				dbImmigrationPaymentPlanReport.setQuoteNumber(newImmigrationPaymentPlanReport.getQuoteNumber());
+				dbImmigrationPaymentPlanReport.setPaymentPlanNumber(newImmigrationPaymentPlanReport.getPaymentPlanNumber());
+				dbImmigrationPaymentPlanReport.setPaymentPlanAmount(newImmigrationPaymentPlanReport.getPaymentPlanAmount());
+				dbImmigrationPaymentPlanReport.setInstalmentAmount(newImmigrationPaymentPlanReport.getInstalmentAmount());
+				dbImmigrationPaymentPlanReport.setStartDate(newImmigrationPaymentPlanReport.getStartDate());
+				dbImmigrationPaymentPlanReport.setPaymentPlanDate(newImmigrationPaymentPlanReport.getPaymentPlanDate());
+				dbImmigrationPaymentPlanReport.setStatus(newImmigrationPaymentPlanReport.getStatus());
+				dbImmigrationPaymentPlanReport.setClientCell(newImmigrationPaymentPlanReport.getClientCell());
+				dbImmigrationPaymentPlanReport.setClientWorkNumber(newImmigrationPaymentPlanReport.getClientWorkNumber());
+				dbImmigrationPaymentPlanReport.setClientPhoneNumber(newImmigrationPaymentPlanReport.getClientPhoneNumber());
+				dbImmigrationPaymentPlanReport.setClientName(newImmigrationPaymentPlanReport.getClientName());
+
+				ImmigrationPaymentPlanLineReportImpl dbImmigrationPaymentPlanLineReport =
+						invoiceHeaderRepository.getPaymentPlanReportLine2(
+								newImmigrationPaymentPlanReport.getPaymentPlanNumber(),
+								immigrationPaymentPlanReportInput.getFromDDate(),
+								immigrationPaymentPlanReportInput.getToDDate());
+				ImmigrationPaymentPlanLineReportImpl dbImmigrationPaymentPlanLineReport1 =
+						invoiceHeaderRepository.getPaymentPlanReportLine3(
+								newImmigrationPaymentPlanReport.getPaymentPlanNumber(),
+								immigrationPaymentPlanReportInput.getFromRDate(),
+								immigrationPaymentPlanReportInput.getToRDate());
+				ImmigrationPaymentPlanLineReportImpl dbImmigrationPaymentPlanLineReport2 =
+						invoiceHeaderRepository.getPaymentPlanReportLine4(
+								newImmigrationPaymentPlanReport.getPaymentPlanNumber(),
+								immigrationPaymentPlanReportInput.getToRDate(),
+								immigrationPaymentPlanReportInput.getToDDate());
+
+//				List<ImmigrationPaymentPlanLineReport> newImmigrationLineList = new ArrayList<>();
+
+//				for(ImmigrationPaymentPlanLineReportImpl dbImmigrationLine : dbImmigrationPaymentPlanLineReport){
+//					ImmigrationPaymentPlanLineReport dbImmigrationPaymentPlanLine = new ImmigrationPaymentPlanLineReport();
+
+					if(dbImmigrationPaymentPlanLineReport2!= null) {
+						dbImmigrationPaymentPlanReport.setPaidAmount(dbImmigrationPaymentPlanLineReport2.getPaidAmount());
+					}
+
+					if(dbImmigrationPaymentPlanLineReport2 != null) {
+						dbImmigrationPaymentPlanReport.setBalanceAmount(dbImmigrationPaymentPlanLineReport2.getBalanceAmount());
+					}
+
+					if(dbImmigrationPaymentPlanLineReport != null) {
+						dbImmigrationPaymentPlanReport.setDueDate(dbImmigrationPaymentPlanLineReport.getDueDate());
+					}
+
+					if(dbImmigrationPaymentPlanLineReport1 != null) {
+						dbImmigrationPaymentPlanReport.setRemainderDate(dbImmigrationPaymentPlanLineReport1.getRemainderDate());
+					}
+//					newImmigrationLineList.add(dbImmigrationPaymentPlanLine);
+//				}
+//				dbImmigrationPaymentPlanReport.setLines(dbImmigrationPaymentPlanLine);
+
+				List<ImmigrationPaymentPlanInvoiceReportImpl> dbImmigrationPaymentPlanInvoiceReport =
+						invoiceHeaderRepository.getPaymentPlanReportInvoice(
+								newImmigrationPaymentPlanReport.getMatterNumber());
+
+				List<ImmigrationPaymentPlanInvoiceReport> newImmigrationInvoiceList = new ArrayList<>();
+
+				for(ImmigrationPaymentPlanInvoiceReportImpl dbImmigrationInvoice : dbImmigrationPaymentPlanInvoiceReport){
+					ImmigrationPaymentPlanInvoiceReport dbImmigrationPaymentPlanInvoice = new ImmigrationPaymentPlanInvoiceReport();
+					dbImmigrationPaymentPlanInvoice.setInvoiceAmount(dbImmigrationInvoice.getInvoiceAmount());
+					dbImmigrationPaymentPlanInvoice.setInvoiceNumber(dbImmigrationInvoice.getInvoiceNumber());
+					dbImmigrationPaymentPlanInvoice.setInvoiceDate(dbImmigrationInvoice.getInvoiceDate());
+					dbImmigrationPaymentPlanInvoice.setClientId(newImmigrationPaymentPlanReport.getClientId());
+					dbImmigrationPaymentPlanInvoice.setClientName(newImmigrationPaymentPlanReport.getClientName());
+					newImmigrationInvoiceList.add(dbImmigrationPaymentPlanInvoice);
+				}
+				dbImmigrationPaymentPlanReport.setInvoices(newImmigrationInvoiceList);
+
+				immigrationPaymentPlanReportList.add(dbImmigrationPaymentPlanReport);
+			}
+			return immigrationPaymentPlanReportList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+}

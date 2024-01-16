@@ -1,0 +1,748 @@
+<div class="my-0 py-0 mt-1">
+  <div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+      <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 d-flex align-items-center">
+          <li class="breadcrumb-item mb-0 ms-3">
+            <a>
+              <mat-icon class="text-secondary align-middle">home</mat-icon>
+            </a>
+          </li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Controlled Groups</li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Transactions</li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">{{js.pageflow}}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+        class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+          matTooltip="Delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+          matTooltip="Copy">
+          <mat-icon class="">content_copy</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+          matTooltip="Display">
+          <mat-icon class="">search</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+          class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button disabled mat-mini-fab (click)="toggleFloat()" class=" disabled mx-2 text-white action-button"
+          [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon>{{icon}}</mat-icon>Options
+        </button>
+        <button disabled mat-mini-fab class=" disabled bg-darkblue text-white mx-2 action-button">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button bg-red" type="button" mat-button>
+          <mat-icon class="">search</mat-icon> Search
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row ms-3 me-3 px-1">
+    <div class="col-md-12 px-0 mt-1">
+      <div class="">
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1.Select Store
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel.expanded ? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  mt-2 mx-2">
+          <!--      <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required">Language ID</p>
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectLanguageID"
+                      formControlName="languageId"
+                      [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                      [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                    <mat-error *ngIf="errorHandling('languageId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required">Company ID</p>
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectcompanyID"
+                      formControlName="companyId"
+                      [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                      [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                    <mat-error *ngIf="errorHandling('companyId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>-->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required">Store ID</p>
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectstoreID"
+                      #storeId (onChange)="onstoreChange(storeId.selectedOption)" formControlName="storeId"
+                      [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                      [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                    <mat-error *ngIf="errorHandling('storeId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+
+                </div>
+              
+                <div *ngIf="this.js.pageflow!='Display'" class="col-lg-3 col-md-6 mt-2 my-auto">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required invisible">Store ID</p>
+                    <div>
+                      <mat-icon class="mx-1" (click)="createStore('TransactionCreate')"
+                        style="background-color: white;color:#003f5e ;padding-top:4%;padding-left:-10%;cursor:pointer;">add_circle</mat-icon>
+
+                      <!-- <mat-icon class="mx-1" (click)="upload()"
+                        style="background-color: white;color:#003f5e ;padding-top:4%;padding-left:-10%;cursor:pointer;">upload_file</mat-icon> -->
+                    </div>
+                  </div>
+                
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 [expanded]="panelOpenState1" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2.Assign Co-Owner
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class=" my-0 py-0 ">
+                <div class=" px-1 scroll1 mt-1 bg-white">
+                  <div class="row">
+                  </div>
+                  <div class="">
+                    <div class="margin-left:80%;margin-top:-5%">
+                      <button mat-stroked-button (click)="createClient('New')" *ngIf="this.js.pageflow == 'New' || this.js.pageflow == 'Edit' || this.js.pageflow=='TransEdit'"
+                      class="d-flex ml-auto demo-button hoverbutton mt-2">
+                      <mat-icon>add</mat-icon> Add Client
+                    </button>
+                      </div>
+                    <table class="table table table-striped" style="border:#0000001f!important;">
+                      <thead>
+                        <tr style="height:48px">
+                          <td
+                            style="text-align:center; vertical-align: middle;min-width:50px;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                            <mat-checkbox></mat-checkbox>
+                          </td>
+                          <td
+                            style="width:15%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                            Co-Owner ID</td>
+                          <td
+                            style="width:30%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                            Co-Owner Name</td>
+                            <td
+                            style="width:15%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                           Relationship</td>
+                           <td
+                           style="width:30%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                          Relationship Name</td>
+                          <td
+                          
+                            style="width:10%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                            Percentage</td>
+                          <td
+                            style="width:10%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
+                            Delete    
+                          </td>
+                        
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngIf="showfirstRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName1' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID" #clientId
+                              (onChange)="onClientChange1(clientId.selectedOption)" formControlName="coOwnerId1"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%;">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName1">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship1" #relationShipId
+                            (onChange)="OnrealtionShipChange1(relationShipId.selectedOption)"
+                            formControlName="relationShipId1"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName1">
+                          </td>
+                          <td style="width:2%;">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage1">
+                          </td>
+                       
+                        
+                          <td *ngIf="this.js.pageflow!='Display'" style="width:2%;">
+                           
+
+                          </td>
+                        </tr>
+                        <tr *ngIf="showsecondRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName2' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID2" #clientId
+                              (onChange)="onClientChange2(clientId.selectedOption)" formControlName="coOwnerId2"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName2">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship2" #relationShipId
+                            (onChange)="OnrealtionShipChange2(relationShipId.selectedOption)"
+                            formControlName="relationShipId2"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName2">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage2">
+                          </td>
+                          <td style="width:2%">
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName2')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                        
+                        </tr>
+                        <tr *ngIf="showthirdRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName3' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID3" #clientId formControlName="coOwnerId3"
+                              (onChange)="onClientChange3(clientId.selectedOption)"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #fff'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName3">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship3"  #relationShipId
+                            (onChange)="OnrealtionShipChange3(relationShipId.selectedOption)"
+                            formControlName="relationShipId3"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName3">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage3">
+                          </td>
+                          <td style="width:2%"> <button class="mx-2" [disabled]="this.js.pageflow == 'Display'"
+                              (click)="onDelete('clientName3')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button></td>
+                         
+                        </tr>
+                        <tr *ngIf="showFourthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName4' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID4" #clientId formControlName="coOwnerId4"
+                              (onChange)="onClientChange4(clientId.selectedOption)"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName4">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship4"  #relationShipId
+                            (onChange)="OnrealtionShipChange4(relationShipId.selectedOption)"
+                            formControlName="relationShipId4"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName4">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage4">
+                          </td>
+                       
+                          <td style="width:2%"> <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName4')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                       
+                        </tr>
+                        <tr *ngIf="showFifthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName5' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID5" #clientId formControlName="coOwnerId5"
+                              (onChange)="onClientChange5(clientId.selectedOption)"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #fff'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName5">
+                          </td>
+                         
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship5"  #relationShipId
+                            (onChange)="OnrealtionShipChange5(relationShipId.selectedOption)"
+                            formControlName="relationShipId5"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName5">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage5">
+                          </td>
+                         
+                          <td style="width:2%">
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName5')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                         
+                        </tr>
+                        <tr *ngIf="showSixthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName6' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID6" #clientId
+                              (onChange)="onClientChange6(clientId.selectedOption)" formControlName="coOwnerId6"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName6">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship6"  #relationShipId
+                            (onChange)="OnrealtionShipChange6(relationShipId.selectedOption)"
+                            formControlName="relationShipId6"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName6">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage6">
+                          </td>
+                       
+                          <td style="width:2%" >
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName6')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                       
+                        </tr>
+                        <tr *ngIf="showSeventhRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName7' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID7" #clientId
+                              (onChange)="onClientChange7(clientId.selectedOption)" formControlName="coOwnerId7"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName7">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship7"  #relationShipId
+                            (onChange)="OnrealtionShipChange7(relationShipId.selectedOption)"
+                            formControlName="relationShipId7"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName7">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage7">
+                          </td>
+                          <td style="width:2%" >
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName7')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                         
+                        </tr>
+                        <tr *ngIf="showEigthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName8' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID81" #clientId
+                              (onChange)="onClientChange8(clientId.selectedOption)" formControlName="coOwnerId8"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName8">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship8"  #relationShipId
+                            (onChange)="OnrealtionShipChange8(relationShipId.selectedOption)"
+                            formControlName="relationShipId8"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName8">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage8">
+                          </td>
+                          <td style="width:2%">
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName8')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                         
+                        </tr>
+                        <tr *ngIf="showNinthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName9' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID9" #clientId
+                              (onChange)="onClientChange9(clientId.selectedOption)" formControlName="coOwnerId9"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName9">
+                          </td>
+                       
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship9" 
+                            formControlName="relationShipId9" #relationShipId
+                            (onChange)="OnrealtionShipChange9(relationShipId.selectedOption)"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName9">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage9">
+                          </td>
+                         
+                          <td style="width:2%">
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName9')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                        
+                        </tr>
+                        <tr *ngIf="showTenthRow" style="height:48px">
+                          <td style="text-align: center; vertical-align: middle;width:50px">
+                            <mat-checkbox (change)="onChange('clientName10' ,$event)"></mat-checkbox>
+                          </td>
+                          <td style="width:5%">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                              [options]="dropdownSelectclientID10" #clientId
+                              (onChange)="onClientChange10(clientId.selectedOption)" formControlName="coOwnerId10"
+                              [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                              [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName10">
+                          </td>
+                          <td style="width:5%;">
+                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                            [options]="dropdownSelectRealtionship10"  #relationShipId
+                            (onChange)="OnrealtionShipChange10(relationShipId.selectedOption)"
+                            formControlName="relationShipId10"
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          </td>
+                          <td style="width:5%">
+                            <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName10">
+                          </td>
+                          <td style="width:2%">
+                            <input matInput style="border:none;" placeholder="Enter"
+                              formControlName="coOwnerPercentage10">
+                          </td>
+                          <td style="width:2%">
+                            <button class="mx-2" [disabled]="this.js.pageflow == 'Display' "
+                              (click)="onDelete('clientName10')" mat-icon-button>
+                              <mat-icon class="text-danger">delete_outline</mat-icon>
+                            </button>
+                          </td>
+                       
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td style="width:2%"></td>
+                          <td style="width:1%"></td>
+                          <td style="width:5%"></td>
+                          <td style="width:5%"></td>
+                          <td style="width:5%"></td>
+                          <td style="width:2%">
+                            <p-progressBar [value]="calculateTotal()"></p-progressBar>
+                            
+                          </td>
+                        <td style="width:2%">
+                          <mat-icon *ngIf="this.js.pageflow =='New' " style="background-color: white;color:#003f5e ;padding-left:30%;cursor:pointer;"
+                            (click)="toggleRows()">add_circle_outline</mat-icon>
+                        </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+
+
+                </div>
+                <!-- <div class="p-0 mx-1 m-0">
+                  <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div> -->
+              </div>
+            </mat-expansion-panel>
+          
+          </form>
+          <form [formGroup]="form1">
+            <mat-expansion-panel #panel6 [expanded]="panelOpenState6" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3.Upload
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel6.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  mx-0 py-2 d-flex justify-content-end align-items-center">
+                <div class="col-2">
+                  <button *ngIf="this.js.pageflow != 'Display'" mat-raised-button (click)="addRow()"   class="mx-2 bg-yellow text-white"> <i
+                    class="bi bi-plus me-1 font-size-1_5rem"></i>
+                  Add</button>
+                </div>
+                    </div> 
+              <div class=" my-0 py-0 ">
+                <div class=" px-1  mt-1 bg-white">
+                  <div class="row">
+                  </div>
+                  <div class="">
+                    <div class="scroll">
+                      <table mat-table [dataSource]="dataSource1" class="col-12 w-100" formArrayName="formLine">
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="chooseFile">
+                          <th mat-header-cell1 *matHeaderCellDef style="background:'#e2edf7';width:10%">Upload File</th>
+                          <td mat-cell *matCellDef="let element; let index = index" class="d-flex"  [formGroupName]="index">
+                              <input mat-raised-button class="form-control w-10 ms-2" id="formFile" type="file"
+                              (change)="this.onFilechange($event, element)" style="width: 20rem !important;" />
+                          </td>
+                        </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="fileName">
+                          <th mat-header-cell1 *matHeaderCellDef style="background:'#e2edf7'">File Name</th>
+                          <td mat-cell *matCellDef="let element; let index = index"   [formGroupName]="index">
+                             <mat-form-field class="form-group input_field mb-0 w-100"  appearance="outline"> 
+                                  <input matInput  placeholder="Enter" [disabled]="true" formControlName="fileName" readonly>
+                            </mat-form-field> 
+                          </td>
+                        </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="status">
+                          <th mat-header-cell1 *matHeaderCellDef style="background:'#e2edf7'">Action</th>
+                          <td mat-cell *matCellDef="let element; let index = index"  [formGroupName]="index">
+                            <button mat-icon-button matTooltip="Download" (click)="download(element)" *ngIf="element.controls.fileName.value">
+                              <mat-icon class="text-primary hvr-wobble-horizontal ml-2">download</mat-icon>
+                            </button>
+              
+                            <button mat-icon-button matTooltip="Delete" (click)="delete(element, index)" *ngIf="element.controls.fileName.value && this.js.pageflow!='Display' ">
+                              <mat-icon class="text-danger hvr-wobble-horizontal ml-2">delete</mat-icon>
+                            </button>
+              
+                          </td>
+                        </ng-container>
+              
+                 
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+
+
+                </div>
+                <!-- <div class="p-0 mx-1 m-0">
+                  <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div> -->
+              </div>
+            </mat-expansion-panel>
+          </form>
+          <form [formGroup]="form2">
+          <mat-expansion-panel #panel2 [expanded]="panelOpenState2" hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white"  (click)="showClient()">
+              <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                4.Group List
+                <div class="d-flex align-items-center">
+                  <mat-icon class="my-auto text-primary">{{panel2.expanded ? 'remove' : 'add'}}</mat-icon>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="row  p-2 mx-0">
+              <div class="">
+                <div class="scroll">
+                  <table mat-table [dataSource]="dataSource3" class="col-12 w-100" >
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="groupId">
+                      <th mat-header-cell1 *matHeaderCellDef style="background:'#e2edf7'">Group Id</th>
+                      <td mat-cell *matCellDef="let element"> {{element.groupId }} </td>
+                    </ng-container>
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="groupName">
+                      <th mat-header-cell1 *matHeaderCellDef style="background:'#e2edf7'">Group Name </th>
+                      <td mat-cell *matCellDef="let element"> {{element.groupName}} </td>
+                    </ng-container>
+                    <!-- Weight Column -->
+                  
+          
+             
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns2;sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns2;">
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </form>
+          <form [formGroup]="form">
+            <mat-expansion-panel *ngIf="this.js.pageflow != 'New'" #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4.Admin
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row  mt-2">
+              
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0">Created By</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="createdBy" readOnly>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Created on</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Auto-Populate" formControlName="createdOnFE" readOnly>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0">Updated By</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="updatedBy" readOnly>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Updated on</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Auto-Populate" formControlName="updatedOnFE" readOnly>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+          </form>
+        </mat-accordion>
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white w-100 bottombutton1"
+          style="bottom: -20% !important;">
+          <button mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-arrow-left me-1 font-size-1_5rem"></i>Back</button>
+          <button *ngIf="this.js.pageflow != 'Display'" mat-raised-button class="bg-darkblue text-white mx-1 px-3"
+            (click)="submit()">
+            <mat-icon class="">done</mat-icon>
+            {{js.pageflow =='Edit' ? 'Update': 'Save'}}
+          </button>
+
+
+          <!-- <button *ngIf="this.js.pageflow != 'Display'" mat-raised-button class="bg-yellow text-white mx-1 px-3"
+            (click)="upload()">
+            <mat-icon class="">done</mat-icon>
+            Upload
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

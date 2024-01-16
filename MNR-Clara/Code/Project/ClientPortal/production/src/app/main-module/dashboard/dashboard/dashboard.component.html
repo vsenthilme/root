@@ -1,0 +1,147 @@
+<div class="row mx-0 phone">
+  <div class="profile py-2 pb-4 profile-font">
+    <h3 class=" header-size fw-lighter text-blue xl-margin ml-4" style="font-size: 2rem !important;">Personal Information</h3>
+    <div class="row width pr-0">
+
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">First Name</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientfirstName}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Middle Name</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientmiddleName}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Last Name</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientlastName}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Full Name</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientfullName}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Mobile No</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientcontactNo}}</p>
+      </label>
+      <!-- <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Account No</p>
+        <p class="mb-0 ml-4 lightgrey label1">34555566</p>
+      </label> -->
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Suite / Door No</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{suiteDoorNo}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Address </p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientaddress1}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">City</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientcity}}</p>
+      </label>
+      <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+        <p class="mb-0 fw-bold ml-4 darkgrey label">Zip Code</p>
+        <p class="mb-0 ml-4 lightgrey label1">{{clientzipcode}}</p>
+      </label>
+    </div>
+  </div>
+  <div class="row px-0 mx-0 mt-4 px-1">
+    <div class="col-md-4  col-12 profilecard   border pt-3">
+      <div class="d-flex justify-content-between mx-2">
+        <h2 class="mb-1 d-inline">Matter</h2>
+        <h3 class="mb-1 ml-2  count">{{this.matter}}</h3>
+       </div>
+      <p>&nbsp;</p>
+      <div class="card-footer client-grey1">
+        <div type="button" routerLink="/main/matters/matters" class="d-flex justify-content-end align-items-center text-blue">
+          <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+              class="  my-auto">trending_flat</mat-icon></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4  col-12 profilecard   border pt-3 mt-1">
+      <div class="d-flex justify-content-between mx-2">
+       <h2 class="mb-1 d-inline">Receipt No</h2>
+     <h3 class="mb-1 ml-2  count">{{this.receiptNumber != null ? this.receiptNumber : 0}}</h3>
+      </div>
+       <p>&nbsp;</p>
+       <div class="card-footer client-grey1">
+         <div type="button" routerLink="/main/receipt/receiptList"  class="d-flex justify-content-end align-items-center text-blue">
+           <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+               class="  my-auto">trending_flat</mat-icon></span>
+         </div>
+       </div>
+     </div>
+    <div class="col-md-4  col-12 profilecard   border pt-3 mt-1">
+      <div class="d-flex justify-content-between mx-2">
+       <h2 class="mb-1 d-inline">Initial Retainer</h2>
+     <h3 class="mb-1 ml-2  count">{{this.quotation}}</h3>
+      </div>
+       <p>&nbsp;</p>
+       <div class="card-footer client-grey1">
+         <div type="button" routerLink="/main/quotations/quotations"  class="d-flex justify-content-end align-items-center text-blue">
+           <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+               class="  my-auto">trending_flat</mat-icon></span>
+         </div>
+       </div>
+     </div>
+     <div class="col-md-4  col-12 profilecard   border pt-3 mt-1">
+      <div class="d-flex justify-content-between mx-2">
+       <h2 class="mb-1 d-inline">Payment Plan</h2>
+       <h3 class="mb-1 ml-2  count">{{this.paymentPlan}}</h3>
+      </div>
+       <p>&nbsp;</p>
+       <div class="card-footer client-grey1">
+         <div type="button" routerLink="/main/payment/payment"  class="d-flex justify-content-end align-items-center text-blue">
+           <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+               class="  my-auto">trending_flat</mat-icon></span>
+         </div>
+       </div>
+     </div>
+    <div class="col-md-4  col-12 profilecard  border pt-3">
+      <div class="d-flex justify-content-between mx-2">
+        <h2 class="t mb-1 d-inline">Invoice</h2>
+        <h3 class="mb-1 ml-2  count">{{this.invoice}}</h3>
+       </div>
+      <p>&nbsp;</p>
+      <div class="card-footer client-grey1">
+        <div type="button" routerLink="/main/invoice"  class="d-flex justify-content-end align-items-center text-blue">
+          <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+              class="  my-auto">trending_flat</mat-icon></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4  col-12 profilecard   border pt-3 mt-1">
+      <div class="d-flex justify-content-between mx-2">
+        <h2 class="mb-1 d-inline">Document Upload</h2>
+         <h3 class="mb-1 ml-2  count">{{this.document}}</h3> 
+       </div>
+      <p>&nbsp;</p>
+      <div class="card-footer client-grey1">
+        <div type="button" routerLink="/main/documents/document-MR"   class="d-flex justify-content-end align-items-center text-blue">
+          <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+              class="  my-auto">trending_flat</mat-icon></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4  col-12 profilecard   border pt-3 mt-1">
+      <div class="d-flex justify-content-between mx-2">
+        <h2 class="mb-1 d-inline">Document Checklist</h2>
+     <h3 class="mb-1 ml-2  count">{{this.documentsChecklist}}</h3>
+       </div>
+      <p>&nbsp;</p>
+      <div class="card-footer client-grey1">
+        <div type="button" routerLink="/main/documents/documents" class="d-flex justify-content-end align-items-center text-blue">
+          <span mat-icon-button class=" mb-0 d-flex my-auto hvr-wobble-horizontal">View Details <mat-icon
+              class="  my-auto">trending_flat</mat-icon></span>
+        </div>
+      </div>
+    </div>
+    
+
+    
+
+    
+  </div>
+</div>

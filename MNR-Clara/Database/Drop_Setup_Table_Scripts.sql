@@ -1,0 +1,25 @@
+DROP Table `MNRCLARA`.`tbluserroleid`;
+DROP Table `MNRCLARA`.`tbluserprofileid`;
+DROP Table `MNRCLARA`.`tbltimekeepercodeid`;
+DROP Table `MNRCLARA`.`tblclassid`;
+DROP Table `MNRCLARA`.`tblcasecategoryid`;
+DROP Table `MNRCLARA`.`tblcasesubcategoryid`;
+DROP Table `MNRCLARA`.`tblactivitycodeid`;
+DROP Table `MNRCLARA`.`tbltaskbasecodeid`;
+DROP Table `MNRCLARA`.`tblchartofaccountsid`;
+DROP Table `MNRCLARA`.`tblexpensecodeid`;
+DROP Table `MNRCLARA`.`tbltasktypeid`;
+DROP Table `MNRCLARA`.`tbladmincostid`;
+DROP Table `MNRCLARA`.`tblbillingmodeid`;
+DROP Table `MNRCLARA`.`tblbillingfrequencyid`;
+DROP Table `MNRCLARA`.`tblbillingformatid`;
+DROP Table `MNRCLARA`.`tbldeadlinecalculatorid`;
+DROP Table `MNRCLARA`.`tblnumberrangeid`;
+DROP Table `MNRCLARA`.`tblagreementtemplateid`;
+DROP Table `MNRCLARA`.`tbldocumenttemplateid`;
+DROP Table `MNRCLARA`.`tblclientuserid`;
+DROP Table `MNRCLARA`.`tblinquirymodeid`;
+DROP Table `MNRCLARA`.`tblreferralid`;
+DROP Table `MNRCLARA`.`tblnotetypeid`;
+DROP Table `MNRCLARA`.`tblauditlogid`;
+

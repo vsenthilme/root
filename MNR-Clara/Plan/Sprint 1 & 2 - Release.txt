@@ -1,0 +1,21 @@
+Sprint 1:
+=========
+1. API Integration – Mozeo			- 2 weeks
+2. Table Structure Creation			- 2 weeks
+	- Setup (35 Nos)
+	- CRM (10 Nos)
+3. Microservices Development			- 3 weeks (can start after creating tables)
+	- CRM
+	- Inquiry Forms
+4. API Development for Website’s (M&R) 
+	WordPress DB integration - Analysis 	- 1 weeks
+	
+Sprint 2:
+=========
+1. API integration – DocuSign				- 2 weeks
+2. Microservices Development				- 4 weeks
+3. Document Storage Development - Analysis 		- 1 week
+4. Mail Merge Functionality	- R&D 			- 2 weeks
+5. Website API Integration				- 2 weeks
+
+root/MNR-Clara/Code/Project/ITForm -JSON/

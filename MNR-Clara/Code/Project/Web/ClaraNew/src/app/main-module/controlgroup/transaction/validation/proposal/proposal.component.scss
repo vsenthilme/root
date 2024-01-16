@@ -1,0 +1,341 @@
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #006990 !important;
+  }
+  
+  ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle,
+  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element,
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+  .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+    background-color: #006990 !important;
+  }
+  
+  .rounded_100 {
+    border-radius: 15px;
+  }
+  
+  .card_box {
+    width: 85%;
+  }
+  
+  .space {
+    letter-spacing: 1.6px;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+  
+  .font-size-1_6rem {
+    font-size: 1.6rem;
+  }
+  
+  
+  
+  
+  
+  .table_shadow {
+    filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15));
+  }
+  
+  .mat-header-cell {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(53, 53, 53);
+    background-color: #e2edf7;
+    filter: drop-shadow(0px 3px 0px rgba(0, 0, 0, 0.15));
+  }
+  
+  ::ng-deep.mat-paginator-container {
+    min-height: 36px;
+  }
+  
+  ::ng-deep.mat-form-field-wrapper {
+    padding-bottom: 1.1em;
+  }
+  
+  .mat-dialog-container {
+    background-color: greenyellow !important;
+  }
+  
+  //Checkbox
+  ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+  ::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background {
+    background-color: #006990 !important;
+  }
+  
+  ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+    background-color: #006990 !important;
+  }
+  
+  .example-sidenav {
+    width: 35rem;
+  }
+  
+  checkbox-new {
+    margin-left: 40%;
+  }
+  
+  .filter_button {
+    border-top: 2px !important;
+    border-left: 2px !important;
+    border-right: 2px !important;
+    background-color: transparent !important;
+    border-color: #d2d2d2 !important;
+    width: 15rem !important;
+  }
+  
+  .breadcrumb>li+li::before {
+    color: #6c757d;
+    content: ">";
+    padding: 0 5px;
+  }
+  
+  .breadcrumb {
+    background-color: transparent !important;
+    color: #222222 !important;
+  }
+  
+  .breadcrumb-item.active {
+    color: #181818;
+  }
+  
+  ::ng-deep.mat-drawer-inner-container {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  //input
+  .input_field {
+    width: 80%;
+    border-color: #dee2e6;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.7em 0 !important;
+  }
+  
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0.5rem;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgb(167 167 167 / 4%);
+  }
+  
+  .bg-darkblue {
+    background-color: rgba(0, 63, 94, 0.8) !important;
+  }
+  
+  .dropdown_fields {
+    position: relative;
+    transition: all 250ms ease-in-out;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .font_1-5 {
+    font-size: 1.2rem;
+  }
+  
+  .dropdown_fields:hover {
+    background: #fff;
+    padding-left: 30px;
+    width: 100%;
+    box-shadow: 0 0 17px rgb(0 0 0 / 40%);
+    color: #514E51;
+  }
+  
+  ::ng-deep .purple {
+    background-color: #9c27b0;
+  }
+  
+  ::ng-deep .action-button {
+    border-radius: 4px;
+    min-width: 6rem;
+    box-shadow: none !important;
+  }
+  
+  .example-container{margin-top: 6.6rem !important;}
+  
+  
+  .font-size-1_5rem {
+    font-size: 1.5rem;
+  }
+  
+  
+  .bottombutton1 {
+    position: absolute;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    bottom: -5% !important;
+  }
+  
+
+  .p-progressbar .p-progressbar-label {
+    color: whitesmoke;
+    line-height: 1.5rem;
+  }
+  .mat-column-select {
+    flex: 0 0 17% !important;
+    width: 0% !important;
+    padding-right: 20px !important;
+    text-align: center !important;
+  }
+  
+  
+  ::ng-deep.mat-tab-group.mat-primary .mat-ink-bar {
+    background-color: transparent !important;
+  }
+  
+  // ::ng-deep .mat-tab-label-active {
+  //   color: white   !important;
+  //   background-color: #006990 !important;
+  // }
+  ::ng-deep.mat-tab-label.mat-tab-label-active:not(.mat-tab-disabled),
+  ::ng-deep.mat-tab-label.mat-tab-label-active.cdk-keyboard-focused:not(.mat-tab-disabled) {
+    color: white !important;
+    background-color: #267fa0 !important;
+    opacity: 1;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    border-right: 1px solid #d2d2d2 !important;
+    border-left: 1px solid #d2d2d2 !important;
+    border-top: 1px solid #d2d2d2 !important;
+    font-weight: bold !important;
+  }
+  
+  ::ng-deep.mat-tab-label {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    border-right: 1px solid #d2d2d2 !important;
+    border-left: 1px solid #d2d2d2 !important;
+    border-top: 1px solid #d2d2d2 !important;
+    margin: 0 0.3rem !important;
+    color: #727272 !important;
+    opacity: 1 !important;
+    font-weight: bold !important;
+  }
+  
+  ::ng-deep.mat-dialog-container {
+    padding: 0px;
+  }
+  
+  .header_colour {
+    background-color: #4faf99;
+  }
+  
+  //input
+  ::ng-deep .mat-dialog-container {
+    color: rgba(0, 0, 0, 1);
+  }
+  
+  .input_field {
+    width: 100%;
+    border-color: #dee2e6;
+  }
+  
+  .input_field1 {
+    width: 30%;
+    border-color: #dee2e6;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.7em 0 !important;
+  }
+  
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0.05rem;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgb(167 167 167 / 4%);
+  }
+  
+  ::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+  ::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background {
+    background-color: #006990 !important;
+  }
+  
+  ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+    background-color: #006990 !important;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f7f7f7  !important;
+}
+.table-striped>tbody>tr:nth-of-type(odd) {
+  --bs-table-accent-bg: #f7f7f7  !important;
+}
+
+
+.scrollStore{
+  height: calc(100vh - 12rem) !important;
+  overflow-y: scroll !important;
+}
+.scrollInside{
+  height: calc(100vh - 33rem) !important;
+    overflow-y: scroll  !important;
+}
+
+.scrollMain{
+  height: calc(100vh - 18rem) !important;
+  overflow-y: scroll  !important;
+}
+.scrollMain1{
+  height: calc(100vh - 25rem) !important;
+  overflow-y: scroll  !important;
+}
+.scrollMain2{
+  height: calc(100vh - 30rem) !important;
+  overflow-y: scroll  !important;
+}
+
+.textLightGreen{color: #10b81c !important}
+.bgDarkGreen{background-color: #c9ffcd  !important;}
+
+.textLightBlue{color: #8d00dc  !important}
+.bgDarkBlue{background-color: #ffcdfa  !important;}
+
+
+/* Float Shadow */
+.hvr-float-shadow {
+//  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.hvr-float-shadow:before {
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+  content: '';
+  top: 100%;
+  left: 5%;
+  height: 10px;
+  width: 90%;
+  opacity: 0;
+  background: -webkit-radial-gradient(center, ellipse, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+  /* W3C */
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform, opacity;
+  transition-property: transform, opacity;
+}
+.hvr-float-shadow:hover, .hvr-float-shadow:focus, .hvr-float-shadow:active {
+  -webkit-transform: translateY(-5px);
+  transform: translateY(-5px);
+  /* move the element up by 5px */
+}
+.hvr-float-shadow:hover:before, .hvr-float-shadow:focus:before, .hvr-float-shadow:active:before {
+  opacity: 1;
+  -webkit-transform: translateY(5px);
+  transform: translateY(5px);
+  /* move the element down by 5px (it will stay in place because it's attached to the element that also moves up 5px) */
+}

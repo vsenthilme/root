@@ -1,0 +1,184 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Client</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Email</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete" [disabled]="!RA.delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display" [disabled]="!RA.view">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit" [disabled]="!RA.createUpdate">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab [disabled]="!RA.createUpdate" class="bg-darkblue text-white mx-2 action-button"
+        (click)="new()">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button" color="warn" type="button" mat-button
+        (click)="drawer.toggle()">
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-between align-items-center bg-white text-secondary header-box mt-1 mx-3"
+  style="height: 3.1rem;filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15))">
+  <h3 class="ps-4 my-auto mb-0 text-dark" style="font-size:18px;">Vilegas Ortega (ID 10001)</h3>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+    <div class="row scroll2 mx-0">
+      <div class="col-12 mt-2">
+        <p class="mb-0 py-0">Mail Type</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <input matInput placeholder="Enter">
+        </mat-form-field>
+      </div>
+      <div class="col-12 mt-2">
+        <p class="mb-0 py-0">Date</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <input matInput placeholder="Enter">
+        </mat-form-field>
+      </div>
+      <div class="col-12 mt-2">
+        <p class="mb-0 py-0">Date From - To</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+       
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date">
+            <input matEndDate placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset();">
+        <mat-icon class="">restart_alt</mat-icon> Reset
+      </button>
+      <button mat-raised-button class="bg-blue text-white mx-1">
+        <mat-icon class="">done</mat-icon> Search
+      </button>
+    </div>
+  </mat-drawer>
+
+
+  <div class="example-sidenav-content">
+
+    <div class=" my-0 py-0 ">
+
+      <div class="ms-3 me-3 px-1 mt-1 scroll1 bg-white">
+        <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()" disabled
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mail Type</th>
+            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+            <td mat-cell *matCellDef="let element"> {{element.from}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+            <td mat-cell *matCellDef="let element"> {{element.to}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="cc">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cc</th>
+            <td mat-cell *matCellDef="let element"> {{element.cc}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+            <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="body">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Body</th>
+            <td mat-cell *matCellDef="let element"> {{element.body}} </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email Date/Time</th>
+            <td mat-cell *matCellDef="let element"> {{element.date | date :'MM-dd-yyyy'}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+
+      </div>
+      <div class="p-0 mx-1 m-0">
+        <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent>
+    <button mat-menu-item>Edit</button>
+    <button mat-menu-item>Display</button>
+  </ng-template>
+</mat-menu>

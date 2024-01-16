@@ -1,0 +1,491 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Billing</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Prebill</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Generate</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input disabled matInput class=" disabled form-control filter_button mx-2 border-bottom"
+        placeholder="Search" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+        class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class=" bg-darkblue disabled text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class="text-white mx-2 action-button disabled  bg-red" type="button" mat-button>
+        <mat-icon class="">tune</mat-icon> Filter
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <div class="row ms-4 ps-3 me-3 mt-4" *ngIf="checkboxselect"> -->
+  <div class="row ms-4 ps-3 me-3 mt-4" *ngIf="!isassign"> 
+  <mat-radio-group aria-label="Select an option" [(ngModel)]="isByIndividual">
+    <mat-radio-button [value]="true" (change)="onChange($event)" class="mr-3">By Individual</mat-radio-button>
+    <mat-radio-button [value]="false" (change)="onChange($event)" class="mr-3">By Group</mat-radio-button>
+  </mat-radio-group>
+
+
+</div>
+
+<form [formGroup]="form">
+  <div class="row  mx-2  mt-3">
+
+    <mat-accordion>
+ <div *ngIf="filtersection">
+        <div class="d-flex align-items-center border-bottom border-top justify-content-between" 
+        style="height: 3.8rem !important;">
+        <div>
+            <h2 class="my-auto mb-0 mx-4 ">Filter</h2>
+        </div>
+      </div>
+        <div class="row mt-2 " *ngIf="isByIndividual">
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Class ID</p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="classId"
+                [singleSelection]="true">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2"   [settings]="dropdownSettings1"  [data]="multiselectclassList" [(ngModel)]="selectedItems"
+                (onSelect)="onItemSelect($event,'CLASS_INDIVIDUAL')"  formControlName="classIdFE"></angular2-multiselect> -->
+                <p-multiSelect placeholder="Select"   [selectionLimit]="1" class="w-100 my-1 mb-2" [options]="multiselectclassList" 
+                formControlName="classId"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+                <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Client ID </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="clientId"
+                [singleSelection]="true" apiMethod="client">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [settings]="dropdownSettings1" [data]="multiselectclientList" [(ngModel)]="selectedClientItems"
+               (onSelect)="onItemSelect($event,'CLIENT')"  formControlName="clientIdFE"></angular2-multiselect> -->
+               <p-multiSelect placeholder="Select"   [selectionLimit]="1" class="w-100 my-1 mb-2"  [options]="multiselectclientList" 
+               formControlName="clientIdFE"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Matter No </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="matterNumber"
+                [singleSelection]="true" [valuewithID]="false" apiMethod="matter">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [settings]="dropdownSettings1"  [data]="multiselectmatterList" [(ngModel)]="selectedMatterItems"
+              (onSelect)="onItemSelect($event,'')"  formControlName="matterNumberFE"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select"   [selectionLimit]="1" class="w-100 my-1 mb-2" [options]="multiselectmatterList" 
+              formControlName="matterNumberFE"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+            <mat-error *ngIf="errorHandling('matterNumber')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column ">
+              <p class="mb-0 py-0 text-black required">Bill Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker7" formControlName="preBillDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                <mat-datepicker #picker7></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('preBillDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Start Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker8" formControlName="startDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                <mat-datepicker #picker8></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('startDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Fees / Cost Cutoff Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker9" formControlName="feesCutoffDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                <mat-datepicker #picker9></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('feesCutoffDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Payment Cutoff Date</p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker10"
+                  formControlName="paymentCutoffDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                <mat-datepicker #picker10></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentCutoffDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+        </div>
+     
+        <div class="row   mt-2" *ngIf="!isByIndividual" [ngClass]="{'scroll79' : !search, 'scroll1': search}">
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Class ID</p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="classId">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [data]="multiselectclassList1" [(ngModel)]="selectedItems9"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'CLASS')" 
+              (onDeSelect)="OnItemDeSelect($event,'CLASS')" (onSelectAll)="onSelectAll($event,'CLASS')"
+              (onDeSelectAll)="onDeSelectAll($event,'CLASS')" formControlName="classIdFE"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select" [selectionLimit]="1"    class="w-100 my-1 mb-2 border-danger"   [options]="multiselectclassList1" 
+              formControlName="classId"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+              <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Billing Mode </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="billingMode"
+                apiName="billingModeId"></app-ng-multiselect-dropdown> -->
+                <!-- <angular2-multiselect class="mb-2" [data]="multiselectbillmodeList" [(ngModel)]="selectedItems4"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'')" 
+                (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                (onDeSelectAll)="onDeSelectAll($event)" formControlName="billingModeFE"></angular2-multiselect> -->
+                <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event)" [options]="multiselectbillmodeList" 
+                formControlName="billingMode"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+                
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Case Category </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="caseCategory"
+                apiName="caseCategoryId"></app-ng-multiselect-dropdown> -->
+                <!-- <angular2-multiselect class="mb-2" [data]="multiselectcasecatList" [(ngModel)]="selectedItems5"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'CATEGORY')" 
+                (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                (onDeSelectAll)="onDeSelectAll($event)" formControlName="caseCategoryFE"></angular2-multiselect> -->
+                <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event,'CATEGORY')" [options]="multiselectcasecatList" 
+                formControlName="caseCategory"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Case Sub Category </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100"
+                formControlName="caseSubCategory" apiName="caseSubcategoryId"></app-ng-multiselect-dropdown> -->
+                <!-- <angular2-multiselect class="mb-2" [data]="multiselectcasesubList" [(ngModel)]="selectedItems8"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'SUB_CATEGORY')" 
+                (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                (onDeSelectAll)="onDeSelectAll($event)" formControlName="caseSubCategoryFE"></angular2-multiselect> -->
+                <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event,'SUB_CATEGORY')" [options]="multiselectcasesubList" 
+                formControlName="caseSubCategory"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+
+          <!-- <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Billing Frequency </p>
+              <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="billingFrequency"
+                apiName="billingFrequencyId"></app-ng-multiselect-dropdown>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Billing Format Code </p>
+              <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="billingFormatCode"
+                apiName="billingFormatId"></app-ng-multiselect-dropdown>
+            </div>
+          </div> -->
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Originating Time Keeper </p>
+              <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event,'ORG')" [options]="multiselectresptimeList" 
+              formControlName="originatingTimeKeeper"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Responsible Time Keeper </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100"
+                formControlName="responsibleTimeKeeper" apiName="timeKeeperCode">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [data]="multiselectresptimeList" [(ngModel)]="selectedItems6"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'RES_TIME')" 
+              (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="responsibleTimeKeeperFE"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event,'RES_TIME')" [options]="multiselectresptimeList" 
+              formControlName="responsibleTimeKeeper"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div> 
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Assigned Time Keeper </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100"
+                formControlName="assignedTimeKeeper" apiName="timeKeeperCode">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [data]="multiselectassigntimeList" [(ngModel)]="selectedItems7"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'ADDIGNED_TIME')" 
+              (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="assignedTimeKeeperFE"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" (onChange)="onItemSelect($event,'ADDIGNED_TIME')" [options]="multiselectassigntimeList" 
+              formControlName="assignedTimeKeeper"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Client ID </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="clientId"
+                apiMethod="client">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect class="mb-2" [data]="multiselectclientList" [(ngModel)]="selectedClientItems"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'CLIENT')" 
+              (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="clientIdFE"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2" [options]="multiselectclientList" 
+              formControlName="clientIdFE"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black ">Matter No </p>
+              <!-- <app-ng-multiselect-dropdown class="mb-3 form-group input_field mb-0 w-100" formControlName="matterNumber"
+                [valuewithID]="false" apiMethod="matter">         </app-ng-multiselect-dropdown> -->
+                <!-- <angular2-multiselect class="mb-2" [data]="multiselectmatterList" [(ngModel)]="selectedItems2"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'MATTER')" 
+                (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                (onDeSelectAll)="onDeSelectAll($event)" formControlName="matterNumberFE"></angular2-multiselect> -->
+                <p-multiSelect placeholder="Select"   class="w-100 my-1 mb-2"  [options]="multiselectmatterList" 
+                formControlName="matterNumberFE"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'100%'}"></p-multiSelect>
+            </div>
+            <mat-error *ngIf="errorHandling('matterNumberFE')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required required">Bill Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker17" formControlName="preBillDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker17"></mat-datepicker-toggle>
+                <mat-datepicker #picker17></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('preBillDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Start Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker18" formControlName="startDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker18"></mat-datepicker-toggle>
+                <mat-datepicker #picker18></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('startDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Fees / Cost Cutoff Date </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker19" formControlName="feesCutoffDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker19"></mat-datepicker-toggle>
+                <mat-datepicker #picker19></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('feesCutoffDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Payment Cutoff Date</p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker11"
+                  formControlName="paymentCutoffDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                <mat-datepicker #picker11></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentCutoffDateFE')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <mat-expansion-panel class="shadow-none" #panel6 [expanded]="step === 0" (opened)="setStep(0)" hideToggle *ngIf="isassign">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+            Details
+            <div class="d-flex align-items-center">
+              <!-- <button mat-stroked-button (click)="openfilter();"
+                class="hoverbutton py-1 shadow-none  mx-2 d-inline mr-2 ">
+                <mat-icon class="">tune</mat-icon>Filter
+              </button> -->
+              <button mat-icon-button (click)="backsearch()" *ngIf="backicon"
+            class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white align-middle"
+            matTooltip="Back">
+            <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">
+                arrow_back
+            </mat-icon>
+        </button>
+              <!-- <mat-icon class="text-primary">{{panel6.expanded? 'remove' : 'add'}}</mat-icon> -->
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="example-sidenav-content">
+
+          <div class=" my-0 py-0 ">
+
+            <!-- <div class=" px-1 mt-1 scroll8" [ngClass]="{'scroll8' : !search, 'scroll1': search}"> -->
+              <div class=" px-1 mt-1 scroll1">
+              <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="headerselect">
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()" disabled
+                      [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="preBillDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Prebill Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.spreBillDate | date :'MM-dd-yyyy'}} </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="clientId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.clientId_name}} </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="matterNumber">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                  <td mat-cell *matCellDef="let element"> {{element.matterNo}} </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="timeticket">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Time Tickets</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="timeticket(element.matterTimeTicket);">
+                      <mat-icon class="text-secondary">open_in_new</mat-icon>
+                    </button>
+                  </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <ng-container matColumnDef="expense">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expenses</th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="expense(element.matterExpense);">
+                      <mat-icon class="text-secondary">open_in_new</mat-icon>
+                    </button>
+                  </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="totalAmount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount </th>
+                  <td mat-cell *matCellDef="let element"class="text-right">{{element.totalAmount | currency}} </td>
+                  <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"class="text-right">{{getTotalAmount() | currency}} </td>
+                </ng-container>
+                <!-- Symbol Column -->
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+              </table>
+
+            </div>
+            <!-- <div class="p-0 mx-1 m-0">
+              <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div> -->
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+    <!-- <div class="d-flex justify-content-center align-items-center py-2 bottombutton">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2" (click)="back()"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="run()" *ngIf="isrun"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Run</button>
+
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="assign()" *ngIf="isassign"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Assign</button>
+    </div> -->
+
+
+    <div class=" pb-1 w-100 d-flex bottombutton" [ngClass]="{'justify-content-end' : isassign, 'justify-content-center': !isassign}">
+      <div class=" py-2  mr-5 pr-5">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2" (click)="back()"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="run()" *ngIf="isrun"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Run</button>
+
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="assign()" *ngIf="isassign"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Assign</button>
+      </div>
+      <div class="p-0 mx-1 ">
+        <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]" *ngIf="isassign"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</form>

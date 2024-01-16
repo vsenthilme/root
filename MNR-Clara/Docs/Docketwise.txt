@@ -1,0 +1,138 @@
+-- GET API Response for Matter 
+----------------------------------
+
+{
+	"id": 1587655,
+	"number": null,
+	"title": "tEST",
+	"description": "",
+	"attorney_id": null,
+	"client_id": 5152838,
+	"created_at": "2022-01-13T20:30:36.735Z",
+	"updated_at": "2022-01-13T20:30:36.773Z",
+	"archived": false,
+	"discarded_at": null,
+	"settings": null,
+	"firm_id": 5638,
+	"receipt_number": null,
+	"preference_category_id": 14,
+	"priority_date": "2021-12-30",
+	"priority_date_status": "not_current",
+	"invoice_id": null,
+	"created_by_migration": null,
+	"matter_type_id": 11516,
+	"matter_status_id": 24781,
+	"matter_status_start_date": "2022-01-13",
+	"matter_status_due_date": "2022-02-12",
+	"uuid": null,
+	"permissions_level": "shared",
+	"applicant_id": null
+}
+
+GET Contact API
+-----------------
+
+{
+	"id": 5152838,
+	"first_name": "Rodriguez",
+	"last_name": "Claudia",
+	"middle_name": "M",
+	"company_name": null,
+	"email": "jiyengar@montyramirezlaw.com",
+	"created_at": "2022-01-13T20:18:48.403Z",
+	"updated_at": "2022-01-17T03:13:37.977Z",
+	"uuid": null,
+	"ssn": "",
+	"gender": "",
+	"city_of_birth": "",
+	"date_of_birth": "",
+	"marital_status": "",
+	"country_of_birth_id": "",
+	"currently_in_the_us": "",
+	"date_of_birth_format": "",
+	"alien_registration_number": "",
+	"country_of_citizenship_id": "1",
+	"uscis_elis_account_number": "",
+	"country_of_citizenship": "Afghanistan",
+	"mailing_address": {
+		"id": null,
+		"street_number_and_name": null,
+		"apartment_number": null,
+		"apartment_suite_floor": null,
+		"city": null,
+		"state": null,
+		"county": null,
+		"postal_code": null,
+		"province": null,
+		"date_from": null,
+		"date_to": null,
+		"in_care_of": null,
+		"zip_code": null,
+		"created_at": null,
+		"updated_at": null,
+		"country": null
+	},
+	"physical_address": {
+		"id": 5265945,
+		"street_number_and_name": "150 W Parker Road",
+		"apartment_number": "300",
+		"apartment_suite_floor": null,
+		"city": null,
+		"state": "Texas",
+		"county": null,
+		"postal_code": null,
+		"province": null,
+		"date_from": null,
+		"date_to": null,
+		"in_care_of": null,
+		"zip_code": "77076",
+		"created_at": "2022-01-17T03:13:37.989Z",
+		"updated_at": "2022-01-17T03:13:37.989Z",
+		"country": null
+	},
+	"phone_numbers": [
+		{
+			"id": 2899170,
+			"number": "2814935529",
+			"country_code": null,
+			"number_type": null,
+			"other_numberable_id": 5152838,
+			"other_numberable_type": "Contact",
+			"created_at": "2022-01-17T03:13:37.991Z",
+			"updated_at": "2022-01-17T03:13:37.991Z",
+			"data": {
+				"number": "2814935529"
+			},
+			"created_by_migration": null
+		},
+		{
+			"id": 2889881,
+			"number": "2814935529",
+			"country_code": null,
+			"number_type": null,
+			"other_numberable_id": 5152838,
+			"other_numberable_type": "Contact",
+			"created_at": "2022-01-13T20:18:48.412Z",
+			"updated_at": "2022-01-13T20:18:48.412Z",
+			"data": {
+				"number": "2814935529"
+			},
+			"created_by_migration": null
+		},
+		{
+			"id": 2889898,
+			"number": "2814935529",
+			"country_code": null,
+			"number_type": null,
+			"other_numberable_id": 5152838,
+			"other_numberable_type": "Contact",
+			"created_at": "2022-01-13T20:22:34.432Z",
+			"updated_at": "2022-01-13T20:22:34.432Z",
+			"data": {
+				"number": "2814935529"
+			},
+			"created_by_migration": null
+		}
+	]
+}  
+

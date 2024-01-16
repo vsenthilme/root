@@ -1,0 +1,801 @@
+<div class="col-md-3 px-1 animate__animated animate__fadeInLeft" style="animation-delay: 0.7s;">
+    <div class="card shadow">
+      <div class="card-header whs-green text-white d-flex justify-content-between border whs-border-green"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Settings - Admin</h3>
+        </div>
+        <mat-slide-toggle [(ngModel)]="checked" class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 whs-border-green border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-angle-double-right hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Company</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">12</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle style="padding: 0 0px 0px !important;">
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-poll hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Class ID</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">17</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user-tag hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">User Role</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">20</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">User Profile</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-cog hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Client Type</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">18</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Client User</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Client Category</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">10</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-signature hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Intake Form</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">12</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-cog hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Number Range</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">17</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-bell hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Notification</p>
+                </div>
+                <div>
+                  <span class="badge text-success green-badge whs-badge border border-success">19</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft" style="animation-delay: 0.6s;">
+    <div class="card shadow">
+      <div class="card-header whs-red text-white d-flex justify-content-between border border-danger"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Settings - Business</h3>
+        </div>
+        <mat-slide-toggle [(ngModel)]="checked" class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 border-danger border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-cog hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Time Keeper</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Case Category</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-signature hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1  text-secondary">Case Sub Category</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-contract hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Activity Code</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">TaskBased Code</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-contract hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Chart of Accounts</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-contract hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Expense Code</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-signature hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Task Type</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-donate hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Admin Cost</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-medical-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Billing Mode</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-medical-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Billing Type</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-medical-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Billing Format</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-calculator hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Deadline Calculator</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Agreement Template</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Document Template</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-external-link-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Inquiry Mode</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-medical-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Referral</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-medical-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Note Type</p>
+                </div>
+                <div>
+                  <span class="badge red-badge whs-badge text-danger border border-danger">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft" style="animation-delay: 0.5s;">
+    <div class="card shadow">
+      <div class="card-header whs-yellow  text-white d-flex justify-content-between border border-warning"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">CRM</h3>
+        </div>
+        <mat-slide-toggle [(ngModel)]="checked" class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 border-warning border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-external-link-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Inquiry New</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user-cog hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Inquiry Assign</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 ps-1 text-secondary">Inquiry Validation</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-signature hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Intake</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Prospective Client</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Agreement</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user-cog text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Conflict Check</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft   " style="animation-delay: 0.4s;">
+    <div class="card shadow">
+      <div class="card-header whs-dark text-white d-flex justify-content-between border border-dark"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Client</h3>
+        </div>
+        <mat-slide-toggle class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 border-dark border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-user hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Client Management</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Quotation</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-signature hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Intake Form</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Form/Document</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft mt-1   " style="animation-delay: 0.8s;">
+    <div class="card shadow">
+      <div class="card-header whs-yellow text-white d-flex justify-content-between border border-warning"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Matters</h3>
+        </div>
+        <mat-slide-toggle class="text-success"></mat-slide-toggle>
+
+      </div>
+      <div class="card-body list-group p-0 border-warning border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-briefcase hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Matters Management</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="far fa-calendar-check hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Task</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-clock hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Time Ticket</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="far fa-chart-bar hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Productivity</p>
+                </div>
+                <div>
+                  <span class="badge yellow-badge text-warning border-warning whs-badge border">14</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft mt-1   " style="animation-delay: 0.9s;">
+    <div class="card shadow">
+      <div class="card-header whs-pink text-white d-flex justify-content-between border whs-border-grey"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Accounting</h3>
+        </div>
+        <mat-slide-toggle class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 whs-border-grey border-bottom pb-2">
+        <div class="whs-scroll">
+
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="far fa-credit-card hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Expense</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-invoice-dollar hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Prebill</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-clock text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Time Ticket Diary</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-file-alt hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Bill</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-money-check-alt hvr-icon text-secondary " style="font-size:15px;"></i>
+                  <p class="mb-0 font-1rem mx-2 ps-1 text-secondary">Payment Updates</p>
+                </div>
+                <div>
+                  <span class="badge grey-badge whs-badge text-secondary border">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 px-1 animate__animated animate__fadeInLeft mt-1   " style="animation-delay: 1s;">
+    <div class="card shadow">
+      <div class="card-header whs-purple  text-white d-flex justify-content-between border whs-border-blue"
+        style="padding:0.4rem;">
+        <div class="ps-2">
+          <h3 class="mb-0 mx-auto">Report</h3>
+        </div>
+        <mat-slide-toggle class="text-success"></mat-slide-toggle>
+      </div>
+      <div class="card-body list-group p-0 whs-border-blue border-bottom pb-2">
+        <div class="whs-scroll">
+          <mat-expansion-panel #panel1 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="far fa-address-card hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">CRM</p>
+                </div>
+                <div>
+                  <span class="badge bg-info invisible whs-badge">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-users hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Clients</p>
+                </div>
+                <div>
+                  <span class="badge bg-info invisible whs-badge">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-briefcase text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 ps-1 text-secondary">Matters Management</p>
+                </div>
+                <div>
+                  <span class="badge bg-info invisible whs-badge">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="fas fa-dollar-sign hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 ps-2 text-secondary">Accounting</p>
+                </div>
+                <div>
+                  <span class="badge bg-info invisible whs-badge">125</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel3 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont hvr-wobble-horizontal">
+                <div class="d-flex justify-content-start">
+                  <i class="far fa-chart-bar hvr-icon text-secondary " style="font-size:16px;"></i>
+                  <p class="mb-0 font-1rem mx-3 text-secondary">Productivity</p>
+                </div>
+                <div>
+                  <span class="badge bg-info invisible whs-badge">15</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>

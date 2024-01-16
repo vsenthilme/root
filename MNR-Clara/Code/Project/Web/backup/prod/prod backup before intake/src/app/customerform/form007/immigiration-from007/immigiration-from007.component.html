@@ -1,0 +1,1076 @@
+<form [formGroup]="chform">
+    <div class="row scroll mt-2 mx-1 px-4">
+        <div formGroupName="immigrationHistoryQuestions" class="row px-4">
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Which countries have issued you a Passport?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="passportIssuedCountryNames" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.passportIssuedCountryNames')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div formGroupName="passportStolenOrLostDetails">
+                <p class="mb-0 py-0   mt-2">Has your passport ever been stolen or lost? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="hasYourPassportEverbeenStolenOrLost">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.passportStolenOrLostDetails.hasYourPassportEverbeenStolenOrLost')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date it was stolen </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="stolenDate" matInput placeholder="Choose Date"
+                            placeholder="Choose Date"[matDatepicker]="picker12" [max]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                        <mat-datepicker #picker12></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.passportStolenOrLostDetails.stolenDate')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0  ">Did you report it to the police? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wasRepotedToPolice">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.passportStolenOrLostDetails.wasRepotedToPolice')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="livingLocationDetails">
+                <p class="mb-0 py-0   mt-2">Are you currently living in the United States? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="areYouCurrentlyLivingInUSA">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.livingLocationDetails.areYouCurrentlyLivingInUSA')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Since when have you lived in the U.S.A: </p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="stayingSinceYear" matInput placeholder="Choose Date"
+                            placeholder="Choose Date"[matDatepicker]="picker13" [max]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                        <mat-datepicker #picker13></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.livingLocationDetails.stayingSinceYear')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="nameOflocation" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.livingLocationDetails.nameOflocation')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="visaIssuanceDetails">
+                <p class="mb-0 py-0   mt-2">Have you ever had an American Visa? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverHadUSVisa">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaIssuanceDetails.haveYouEverHadUSVisa')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Consulate where your Visa was issued</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="consulateThatIssuedVISA" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaIssuanceDetails.consulateThatIssuedVISA')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Issuance </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="dateOfIssuance" matInput placeholder="Choose Date"
+                            placeholder="Choose Date"[matDatepicker]="picker14" [max]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="picker14"></mat-datepicker-toggle>
+                        <mat-datepicker #picker14></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.visaIssuanceDetails.dateOfIssuance')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Date of Expiration </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="dateOfExpiration" matInput placeholder="Choose Date"
+                            placeholder="Choose Date"[matDatepicker]="picker15" [min]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="picker15"></mat-datepicker-toggle>
+                        <mat-datepicker #picker15></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaIssuanceDetails.dateOfExpiration')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="visaDeniedOrRevoked">
+                <p class="mb-0 py-0   mt-2">Visa Classification? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="visaClassification">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaDeniedOrRevoked.visaClassification')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+
+                <p class="mb-0 py-0   mt-2">Has your American Visa ever been denied or revoked?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverbeenDeniedOrRevokedAmericanVisa">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaDeniedOrRevoked.haveYouEverbeenDeniedOrRevokedAmericanVisa')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Consulate where your Visa was denied</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidYourVisaWasDenied" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaDeniedOrRevoked.whereDidYourVisaWasDenied')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Was denied more than once? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wasDeniedMoreThanOnce">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaDeniedOrRevoked.wasDeniedMoreThanOnce')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">How many? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="howManyTimesGotDenied" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.visaDeniedOrRevoked.howManyTimesGotDenied')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <!--
+            <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Visa Classification? </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+          </div>
+          -->
+            </div>
+
+            <div formGroupName="greenCardInfo">
+                <p class="mb-0 py-0   mt-2">Have you ever applied for a Green Card before? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverAppliedForGreenCardBefore">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.greenCardInfo.haveYouEverAppliedForGreenCardBefore')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">When?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whenDidYouApply" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.greenCardInfo.whenDidYouApply')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Result</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="result" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.greenCardInfo.result')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="detainedOrInterrogatedByAnImmigrationOfficer">
+                <p class="mb-0 py-0   mt-2">Have you ever been detained or interrogated by an immigration officer?
+                </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenDetainedOrInterrogated">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.haveYouEverBeenDetainedOrInterrogated')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidDetainOrInterrogate" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.whereDidDetainOrInterrogate')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/ Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="month" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.month')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <!--
+            <p class="mb-0 py-0   mt-2">Were you detained more than once? </p>
+          <div class="row mt-2">
+            <mat-radio-group layout="row" formControlName="d">
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+              </mat-radio-button>
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">How many times? </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <p class="mb-0 py-0   mt-2">Visa Classification? </p>
+          <div class="row mt-2">
+            <mat-radio-group layout="row" formControlName="d">
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+              </mat-radio-button>
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+-->
+            </div>
+            <div formGroupName="usaEntryDeniedDetails">
+                <p class="mb-0 py-0   mt-2">Have you been denied to enter the U.S.A?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouBeenDeniedToEnterTheUSA">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.usaEntryDeniedDetails.haveYouBeenDeniedToEnterTheUSA')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidItDenied" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.usaEntryDeniedDetails.whereDidItDenied')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/ Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="month" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.usaEntryDeniedDetails.month')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Were you denied more than once? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouDeniedMorethanOnce">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.usaEntryDeniedDetails.wereYouDeniedMorethanOnce')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">How many times? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="howManyTimes" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.usaEntryDeniedDetails.howManyTimes')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+
+            <div formGroupName="deportationProcessDetails">
+                <p class="mb-0 py-0   mt-2">Have you ever been in Deportation process?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenInDeportationProcess">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.haveYouEverBeenInDeportationProcess')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidItHappened" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.whereDidItHappened')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/ Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="month" formControlName="month"
+                            [max]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="month"></mat-datepicker-toggle>
+                        <mat-datepicker #month></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.month')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Final result</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="finalResult" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.finalResult')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Have you been deported more than once? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouBeenDeportedMorethanOnce">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.haveYouBeenDeportedMorethanOnce')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">How many times? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="howManyTimes" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportationProcessDetails.howManyTimes')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="deportedOrExpelledDetails">
+
+                <p class="mb-0 py-0   mt-2">Have you ever been deported or expelled from the U.S.A?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenDeportedOrExpelled">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.haveYouEverBeenDeportedOrExpelled')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidItHappened" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.whereDidItHappened')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/ Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="month" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.month')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <!--
+            <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Reason of Deportation</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.reasonOfDetention')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+       -->
+            </div>
+            <div formGroupName="detainedOrInterrogatedByAnImmigrationOfficer">
+                <p class="mb-0 py-0   mt-2">Have you ever been detained or interrogated by a police officer?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverBeenDetainedOrInterrogated">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.haveYouEverBeenDetainedOrInterrogated')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="whereDidDetainOrInterrogate" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.whereDidDetainOrInterrogate')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/ Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="month" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.detainedOrInterrogatedByAnImmigrationOfficer.month')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="deportedOrExpelledDetails">
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Reason of Detention </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="reasonOfDetention" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.reasonOfDetention')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Was Arrested?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wasArrested">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.wasArrested')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">How many days?</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="howManydays" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.deportedOrExpelledDetails.howManydays')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <!--
+            <p class="mb-0 py-0   mt-2">Have you ever been detained, accused or convicted for a felony including
+            immigration matters?</p>
+          <div class="row mt-2">
+            <mat-radio-group layout="row" formControlName="d">
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+              </mat-radio-button>
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Where?</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Month/ Year </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">What kind of felony? </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Final Result </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          <p class="mb-0 py-0   mt-2">Did you go to trial?</p>
+          <div class="row mt-2">
+            <mat-radio-group layout="row" formControlName="d">
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+              </mat-radio-button>
+              <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-error *ngIf="errorHandling('clientGeneralInfo.clientPersonalInfo.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+-->
+            <div formGroupName="driverLicensesDetails">
+                <p class="mb-0 py-0   mt-2">Do you have a Driver Licenses?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="doYouHaveDriverLicenses">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.driverLicensesDetails.doYouHaveDriverLicenses')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">From Which State? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.driverLicensesDetails.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">When does it expire? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="monthOfExpire" [min]="todaydate"
+                            formControlName="monthOfExpire">
+                        <mat-datepicker-toggle matSuffix [for]="monthOfExpire"></mat-datepicker-toggle>
+                        <mat-datepicker #monthOfExpire></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.driverLicensesDetails.monthOfExpire')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <!--
+            <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Month/Year </p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <input formControlName="d" matInput placeholder="Enter">
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.driverLicensesDetails.fullName')">
+              {{getErrorMessage()}}</mat-error>
+          </div>
+          -->
+            </div>
+            <div formGroupName="trafficTicketsDetails">
+                <p class="mb-0 py-0   mt-2">Have you ever had traffic tickets?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverHadTrafficTickets">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.trafficTicketsDetails.haveYouEverHadTrafficTickets')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">When? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="when" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.trafficTicketsDetails.when')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Where? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="where" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.trafficTicketsDetails.where')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Did you paid the fine? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="finePaid">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error *ngIf="errorHandling('immigrationHistoryQuestions.trafficTicketsDetails.finePaid')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div formGroupName="governmentAssistanceDetails">
+                <p class="mb-0 py-0   mt-2">Have you ever received Government Assistance such as: Food Stamps,
+                    Medicaid,
+                    Tanf, Gold Card, etc.?</p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="haveYouEverReceivedGovernmentAssistance">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.governmentAssistanceDetails.haveYouEverReceivedGovernmentAssistance')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">When? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="sinceWhen" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="errorHandling('immigrationHistoryQuestions.governmentAssistanceDetails.sinceWhen')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+        </div>
+        <div formGroupName="petitionDetails">
+            <p class="mb-0 py-0   mt-2">Has anyone ever filed a petition for you, Your parents or your spouse?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="hasAnyoneFiledPetition">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('petitionDetails.hasAnyoneFiledPetition')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 fw-bolder py-0 mt-2 ps-3">If Yes, please provide the following:</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <mat-select formControlName="petitionFileForYouOrParentsORSpouse" placeholder="Select">
+                    <mat-option value="You">You </mat-option>
+                    <mat-option value="Parents">Parents</mat-option>
+                    <mat-option value="Spouse">Spouse</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('petitionDetails.petitionFileForYouOrParentsORSpouse')">
+                {{getErrorMessage()}}</mat-error>
+
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">When?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="when" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('petitionDetails.when')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Under whose name?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="underWhoseName" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('petitionDetails.underWhoseName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who filed the petition?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoFiledPetition" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('petitionDetails.whoFiledPetition')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Result</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select formControlName="result" placeholder="Select">
+                        <mat-option value="Approved">Approved </mat-option>
+                        <mat-option value="Denied">Denied </mat-option>
+                        <mat-option value="Pending">Pending </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('petitionDetails.result')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Do you have any relatives who belong to the Army or are a Veteran?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="doYouHaveAnyRelativesWhoBelongToTheArmyOrAreVeteran">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('petitionDetails.doYouHaveAnyRelativesWhoBelongToTheArmyOrAreVeteran')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">If yes, what relation do they have with you? </p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whatIsTheRelation" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('petitionDetails.whatIsTheRelation')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="arrivalAndDepartureDetails">
+            <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Information of the Arrival/Departure to the USA</p>
+            <div formGroupName="firstArrival">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">First Arrival to the USA</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="arrivalMonth"
+                            formControlName="arrivalMonth" [max]="todaydate">
+                        <mat-datepicker-toggle matSuffix [for]="arrivalMonth"></mat-datepicker-toggle>
+                        <mat-datepicker #arrivalMonth></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.firstArrival.arrivalMonth')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Place of Arrival </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="placeOfArrival" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.firstArrival.placeOfArrival')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Were you inspected by an Immigration Officer? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouInspectedByAnImmigrationOfficer">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('arrivalAndDepartureDetails.firstArrival.wereYouInspectedByAnImmigrationOfficer')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">When did you come to live to the U.S.A? </p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whenDidYouComeToLiveToUSA" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.whenDidYouComeToLiveToUSA')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Where did you arrive?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whereDidYouArriveInCityOfUSA" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.whereDidYouArriveInCityOfUSA')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div formGroupName="lastArrival">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Last Arrival to the USA</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Month/Year </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="arrivalMonth" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.lastArrival.arrivalMonth')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Place of Arrival </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="placeOfArrival" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.lastArrival.placeOfArrival')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <p class="mb-0 py-0   mt-2">Were you inspected by an Immigration Officer? </p>
+                <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="wereYouInspectedByAnImmigrationOfficer">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error
+                        *ngIf="errorHandling('arrivalAndDepartureDetails.lastArrival.wereYouInspectedByAnImmigrationOfficer')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Mexican Town </p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whereDidYouArriveInMexicanTown" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.whereDidYouArriveInMexicanTown')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <!--
+          <div class="col-lg-4 col-md-6 mt-2">
+          <p class="mb-0 py-0  ">City in the United States </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input formControlName="d" matInput placeholder="Enter">
+          </mat-form-field>
+          <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.fullName')">
+            {{getErrorMessage()}}</mat-error>
+        </div>
+      -->
+            <p class="mb-0 fw-bolder py-0 mt-2 ps-3">List of all your arrivals and departures:</p>
+            <div class="mt-2">
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th scope="col">S.No</th>
+                            <th scope="col">Arrival</th>
+                            <th scope="col">Departure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>
+                                <div formGroupName="arrivals">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date1" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date1" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date1"></mat-datepicker-toggle>
+                                        <mat-datepicker #date1></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.arrivals.date1')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                            <td>
+                                <div formGroupName="departures">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date1" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date11" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date11"></mat-datepicker-toggle>
+                                        <mat-datepicker #date11></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.departures.date1')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>
+
+                                <div formGroupName="arrivals">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date2" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date2" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date2"></mat-datepicker-toggle>
+                                        <mat-datepicker #date2></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.arrivals.date2')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                            <td>
+                                <div formGroupName="departures">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date2" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="depature1" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="depature1"></mat-datepicker-toggle>
+                                        <mat-datepicker #depature1></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.departures.date2')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>
+
+                                <div formGroupName="arrivals">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date3" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date3" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date3"></mat-datepicker-toggle>
+                                        <mat-datepicker #date3></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.arrivals.date3')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                            <td>
+                                <div formGroupName="departures">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date3" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="depature23" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="depature23"></mat-datepicker-toggle>
+                                        <mat-datepicker #depature23></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.departures.date3')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td>
+
+                                <div formGroupName="arrivals">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date4" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date4" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date4"></mat-datepicker-toggle>
+                                        <mat-datepicker #date4></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.arrivals.date4')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                            <td>
+                                <div formGroupName="departures">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date4" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="depature233" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="depature233"></mat-datepicker-toggle>
+                                        <mat-datepicker #depature233></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.departures.date4')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5</th>
+                            <td>
+
+                                <div formGroupName="arrivals">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date5" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="date5" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="date5"></mat-datepicker-toggle>
+                                        <mat-datepicker #date5></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.arrivals.date5')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                            <td>
+
+                                <div formGroupName="departures">
+                                    <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                                        <input formControlName="date5" matInput placeholder="Choose Date"
+                                            placeholder="Choose Date"[matDatepicker]="depature2336" class="mb-0 pb-0" [max]="todaydate">
+                                        <mat-datepicker-toggle matSuffix [for]="depature2336"></mat-datepicker-toggle>
+                                        <mat-datepicker #depature2336></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="errorHandling('arrivalAndDepartureDetails.departures.date5')">
+                                        {{getErrorMessage()}}</mat-error>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div formGroupName="victimOfCrimeDetails">
+            <p class="mb-0 py-0   mt-2">Have you, your parents or your spouse ever been a victim of a crime? </p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="haveYouOrParentsOrSpouseEverbeenVicimOfCrime">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('victimOfCrimeDetails.haveYouOrParentsOrSpouseEverbeenVicimOfCrime')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input formControlName="dateOfOccurred" matInput placeholder="Choose Date"
+                        placeholder="Choose Date"[matDatepicker]="picker59" [max]="todaydate">
+                    <mat-datepicker-toggle matSuffix [for]="picker59"></mat-datepicker-toggle>
+                    <mat-datepicker #picker59></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('victimOfCrimeDetails.dateOfOccurred')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was it reported? </p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasItReported">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('victimOfCrimeDetails.wasItReported')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0    mt-2 ps-3">Summary of what happened:</p>
+            <mat-form-field class="form-group input_field w-100 mb-0 ps-3" appearance="outline">
+                <textarea matInput rows="5" placeholder="Enter" formControlName="summaryOfTheEvent"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('victimOfCrimeDetails.summaryOfTheEvent')">
+                {{getErrorMessage()}}</mat-error>
+        </div>
+    </div>
+</form>

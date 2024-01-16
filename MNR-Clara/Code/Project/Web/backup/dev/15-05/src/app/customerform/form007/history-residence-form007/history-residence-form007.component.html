@@ -1,0 +1,978 @@
+<form [formGroup]="chform">
+    <div class="row scroll mt-2 mx-1 px-4">
+        <div formGroupName="currentLocationResidentAddress" class="row px-4">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('currentLocationResidentAddress.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('currentLocationResidentAddress.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('currentLocationResidentAddress.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('currentLocationResidentAddress.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker20">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker20"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker20></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('currentLocationResidentAddress.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('currentLocationResidentAddress.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('currentLocationResidentAddress.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+
+        <p class="mb-0 pb-2  fw-bolder mt-3">Please list out the address you resided in the US within the past
+            5
+            years:</p>
+        <div formGroupName="previousResidentAddress1">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress1.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress1.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress1.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress1.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker21">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker21"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker21></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress1.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress1.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress1.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress2">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress2.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress2.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress2.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress2.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill1">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill1"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill1></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress2.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress2.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress2.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress3">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress3.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress3.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress3.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress3.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill2">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill2"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill2></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress3.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress3.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress3.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress4">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress4.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress4.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress4.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress4.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill3">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill3"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill3></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress4.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress4.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress4.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress5">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress5.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress5.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress5.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress5.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill4">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill4"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill4></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress5.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress5.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress5.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress6">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress6.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress6.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress6.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress6.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill5">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill5"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill5></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress6.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress6.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress6.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress7">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress7.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress7.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress7.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress7.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill6">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill6"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill6></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress7.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress7.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress7.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress8">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress8.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress8.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress8.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress8.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill7">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill7"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill7></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress8.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress8.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress8.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress9">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress9.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress9.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress9.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress9.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill8">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill8"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill8></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress9.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress9.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress9.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress10">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress10.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress10.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress10.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress10.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill9">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill9"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill9></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress10.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress10.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress10.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress11">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress11.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress11.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress11.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress11.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill10">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill10"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill10></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress11.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress11.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress11.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress12">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress12.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress12.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress12.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress12.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill11">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill11"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill11></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress12.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress12.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress12.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+        <div formGroupName="previousResidentAddress13">
+            <div formGroupName="fullAddress">
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Full Address</p>
+                <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="streetAddress" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress13.fullAddress.streetAddress')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="city" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress13.fullAddress.city')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">state</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="state" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress13.fullAddress.state')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input formControlName="zipCode" matInput placeholder="Enter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('previousResidentAddress13.fullAddress.zipCode')">
+                        {{getErrorMessage()}}</mat-error>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">For how long did you live in this address?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="livingTill12">
+                        <input formControlName="livingFrom" matStartDate placeholder="Choose Date">
+                        <input formControlName="livingTill" matEndDate placeholder="Choose Date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="livingTill12"></mat-datepicker-toggle>
+                    <mat-date-range-picker #livingTill12></mat-date-range-picker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress13.livingTill')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <p class="mb-0 py-0   mt-2">Was the residence under your name?</p>
+            <div class="row mt-2">
+                <mat-radio-group layout="row" formControlName="wasTheResidenceUnderYourName">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('previousResidentAddress13.wasTheResidenceUnderYourName')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Who did you live with?</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input formControlName="whoDidYouLiveWith" matInput placeholder="Enter">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('previousResidentAddress13.whoDidYouLiveWith')">
+                    {{getErrorMessage()}}</mat-error>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</form>

@@ -1,0 +1,11 @@
+
+    <div class="tabbar d-flex justify-content-between align-items-center bggrey1 ms-3 me-3">
+      <nav mat-tab-nav-bar class="scroll2 d-flex justify-content-end ">
+        <a mat-tab-link *ngFor=" let link of listmenu" [ngClass]="link.class" (click)="activeLink = link.title"
+          [active]="activeLink == link.title" [routerLink]="link.url">
+          <i [ngClass]="link.icon"></i> {{link.title}} </a>
+      </nav>
+    </div>
+  <router-outlet></router-outlet>
+
+  

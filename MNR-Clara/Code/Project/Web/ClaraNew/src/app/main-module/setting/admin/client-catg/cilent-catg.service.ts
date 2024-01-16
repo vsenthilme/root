@@ -1,0 +1,52 @@
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+export interface CilentCatgElement {
+
+  classId: number;
+  clientCategoryDescription: string;
+  clientCategoryId: number;
+  createdBy: string;
+  createdOn: Date;
+  deletionIndicator: number;
+  languageId: string;
+  referenceField1: string;
+  referenceField10: string;
+  referenceField2: string;
+  referenceField3: string;
+  referenceField4: string;
+  referenceField5: string;
+  referenceField6: string;
+  referenceField7: string;
+  referenceField8: string;
+  referenceField9: string;
+  updatedBy: string;
+  updatedOn: Date;
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class CilentCatgService {
+
+
+  constructor(private http: HttpClient) { }
+
+  apiName = '/mnr-setup-service/';
+  method = 'clientCategory'
+  url = this.apiName + this.method;
+  Getall() {
+    return this.http.get<any>(this.url);
+  }
+  Get(code: string) {
+    return this.http.get<any>(this.url + '/' + code);
+  }
+  Create(obj: CilentCatgElement) {
+    return this.http.post<any>(this.url, obj);
+  }
+  Update(obj: CilentCatgElement, code: any) {
+    return this.http.patch<any>(this.url + `?clientCategoryId=` + code, obj);
+  }
+  Delete(code: any) {
+    return this.http.delete<any>(this.url + '/' + code);
+  }
+}

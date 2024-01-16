@@ -1,0 +1,85 @@
+<div class="row  vh-100 vw-100 mx-0">
+   
+        
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav="matSidenav" class="d-flex  text-secondary">
+        <img src="./assets/img/icons/smallbg3.png" class="img-fluid mx-auto mt-2 mb-4 d-none d-md-block" alt="" srcset="" >
+        <button mat-button (click)="sidenav.toggle()" class="float-right d-block d-md-none">
+            <mat-icon>close</mat-icon> 
+        </button>
+        <a mat-list-item  routerLinkActive="active-list-item" class="menu-button py-2 pl-5" routerLink="/main/dashboard" >
+            <i class="fas fa-list  text iconsize mr-4"></i>
+            <span class="nav-text">Summary</span>
+        </a>
+        <a mat-list-item  routerLinkActive="active-list-item" class="menu-button py-2 pl-5" routerLink="/main/matters/matters" >
+            <i class="fas fa-briefcase text iconsize mr-4"></i>
+            <span class="nav-text">Matter</span>
+        </a>
+        <a mat-list-item  routerLinkActive="active-list-item" class="menu-button py-2 pl-5" routerLink="/main/quotations/quotations" *ngIf="authclassId != 1">
+            <i class="fas fa-file-invoice text iconsize mr-4"></i>
+            <span class="nav-text">Initial Retainer</span>
+        </a>
+        <a mat-list-item  routerLinkActive="active-list-item"class="menu-button py-2 pl-5" routerLink="/main/payment/payment" *ngIf="authclassId != 1">
+            <i class="fas fa-dollar-sign     text iconsize mr-4"></i>
+            <span class="nav-text">Payment Plan</span>
+        </a>
+        <a mat-list-item  routerLinkActive="active-list-item"class="menu-button py-2 pl-5" routerLink="/main/invoice" >
+            <i class="fas fa-file-invoice-dollar text iconsize mr-4"></i>
+            <span class="nav-text text-start">Invoice</span>
+        </a>
+  
+        <a mat-list-item  routerLinkActive="active-list-item"class="menu-button py-2 pl-5" routerLink="/main/documents/document-MR" >
+            <i class="fas fa-file-upload text iconsize mr-4"></i>
+            <span class="nav-text">Document Upload</span>
+        </a>
+        <a mat-list-item  routerLinkActive="active-list-item"class="menu-button py-2 pl-5" routerLink="/main/documents/documents" *ngIf="authclassId != 1">
+            <i class="fas fa-file-upload text iconsize mr-4"></i>
+            <span class="nav-text">Document Checklist</span>
+        </a>
+       
+  
+    </mat-sidenav>
+        
+        <mat-sidenav-content>
+            <div class="px-0 col-md-12 pl-0">
+           <div class="content d-flex justify-content-between align-items-center">
+          <div>
+            <mat-toolbar class="pl-0">
+                <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()" class="text-blue">
+                    <mat-icon *ngIf="!sidenav.opened">
+                        menu
+                    </mat-icon>
+                    <mat-icon *ngIf="sidenav.opened">
+                        close
+                    </mat-icon>
+                </button>
+                
+                <img src="./assets/img/icons/smallbg.png" class="img-fluid mt-2 ml-3 d-block d-md-none" style="width: 75% !important;"alt="" srcset="" >
+              </mat-toolbar>
+          </div>
+          <div class="p">
+            <button mat-mini-fab class="floating-buttons1 bg-white text-secondary shadow-none" [matMenuTriggerFor]="menu">
+                <mat-icon class="text-blue">person</mat-icon>
+            </button>
+        </div>
+           </div>
+           <div class="content-xl">
+            <div class="d-flex justify-content-end  m-2  border-bottom">
+                <div class="d-flex flex-row align-items-center mr-2">
+                        <p  class="mb-0 text-blue d-inline mr-2">Welcome - {{username| uppercase}}</p>
+                    <button mat-mini-fab class="floating-buttons1 bg-white text-secondary shadow-none" [matMenuTriggerFor]="menu">
+                        <mat-icon class="text-blue">person</mat-icon>
+                    </button>
+                
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item  class="list">My Profile</button>
+                        <button mat-menu-item class="list" (click)="logout()">Logout</button>
+                      </mat-menu>
+                </div>
+                </div>
+           </div>
+          <router-outlet></router-outlet>
+        </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

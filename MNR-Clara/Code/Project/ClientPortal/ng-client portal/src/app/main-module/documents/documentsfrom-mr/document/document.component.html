@@ -1,0 +1,63 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2 bg-white">
+
+  </div>
+  
+  <div class="d-flex justify-content-between align-items-center text-secondary mx-3"
+    style="height: 3rem;padding-left: 2.4rem;">
+    <h3 class="my-auto mb-0 text-dark" style="font-size:22px;">Document Number - {{documentNo}}</h3>
+  </div>
+  
+  <!-- <div *ngIf="pageflowupload" class="mt-2 d-flex justify-content-start align-items-center" style="padding-left: 1.9rem;">
+    <input mat-raised-button class="form-control w-25 ms-4" ngf type="file" accept="*" [(files)]="files"
+      (click)="files =[]" />
+    <button mat-mini-fab *ngIf="files.length >0" 
+      class="floating-buttons bg-pink text-white mx-2 shadow-none">
+      <mat-icon class="">remove_red_eye</mat-icon>
+    </button>
+    <button mat-mini-fab *ngIf="files.length >0 && isupload" 
+      class="floating-buttons bg-pink text-white mx-2 shadow-none">
+      <mat-icon class="">upload</mat-icon>
+    </button>
+  
+    <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+  
+  
+  
+  
+  </div> -->
+
+  
+  <div class="mt-2 d-flex justify-content-end align-items-center" style="padding-left: 1.9rem;">
+    <a mat-mini-fab  [download]="fileName" [href]="docurl"
+      class="floating-buttons bg-pink text-white mx-2 shadow-none">
+      <mat-icon class="">download</mat-icon>
+  </a>
+  
+  </div> 
+
+  <br />
+  
+  
+  
+  
+<div class="scroll d-flex justify-content-center">
+  <ngx-doc-viewer class="px-5" *ngIf="fileName.includes('.d')" [url]="docurl" viewer="mammoth" style="width:100%;height: 65%;">
+  </ngx-doc-viewer>
+  
+  
+  <!-- <pdf-viewer *ngIf="fileName.includes('.pdf')" [src]="docurl"></pdf-viewer> -->
+
+  <img *ngIf="!fileName.includes('.pdf') && !fileName.includes('.d')" [src]="image">
+    
+  <pdf-viewer  *ngIf="fileName.includes('.pdf')" [src]="docurl"
+              [render-text]="true"
+              [original-size]="false"
+              style="width: 793px;overflow-x: hidden;"
+  ></pdf-viewer> 
+
+  <!-- <ngx-image-viewer  [src]="docurl"></ngx-image-viewer> -->
+</div>
+  <!-- <br />
+      <br /> -->
+  <!-- <ngx-doc-viewer [url]="docurl" viewer="office" style="width:100%;height: 65%;">
+      </ngx-doc-viewer> -->

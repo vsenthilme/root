@@ -1,0 +1,91 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class=" ps-3">
+      <input type="email" class="form-control filter_button" placeholder="Search">
+    </div>
+    <div class="pe-2 me-1">
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+          matTooltip="Delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary" class="floating-buttons text-white mx-2 me-3"
+          matTooltip="Edit">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button" [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon >{{icon}}</mat-icon>Actions
+        </button>
+        <button mat-mini-fab class="bg-darkblue text-white mx-2 action-button">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button mat-mini-fab class="text-white mx-2 action-button" color="warn" type="button" mat-button (click)="drawer.toggle()">
+          <mat-icon class="">search</mat-icon> Search
+        </button>
+      </div>
+  
+    </div>
+  </div>
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+   <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+      <div class="row scroll2 mx-0">
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Class ID</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">User Type ID</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Description</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Created By</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Created On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date">
+              <input matEndDate placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+  
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1" (click)="drawer.toggle()">
+          <mat-icon class="">close</mat-icon> Cancel
+        </button>
+        <button mat-raised-button class="bg-blue text-white mx-1">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </mat-drawer>
+    <div class="example-sidenav-content">
+      <app-client-id></app-client-id>
+      
+    </div>
+  </mat-drawer-container>
+ 

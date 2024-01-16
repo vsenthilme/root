@@ -1,0 +1,237 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext"> {{title}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required  text-black">First Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="firstName">
+                <mat-error *ngIf="form.controls.firstName.errors?.required"> Field Should not be Blank </mat-error>
+                <mat-error *ngIf="form.controls.firstName.errors?.maxlength"> Maximum is 20 Characters</mat-error>
+                <mat-error *ngIf="form.controls.firstName.errors?.pattern"> Invalid Characters</mat-error>
+              </mat-form-field>
+              
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  required">Last Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="lastName">
+                <mat-error *ngIf="form.controls.firstName.errors?.required"> Field Should not be Blank </mat-error>
+                <mat-error *ngIf="form.controls.lastName.errors?.maxlength"> Maximum is 20 Characters</mat-error>
+                <mat-error *ngIf="form.controls.lastName.errors?.pattern"> Invalid Characters</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required ">Phone No</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput [textMask]="{mask: mask}"   [(ngModel)]="myModel" placeholder="Enter" formControlName="contactNumber">
+                <mat-error *ngIf="form.controls.contactNumber.errors?.maxlength" class="mt-1">Number should Maximum 12 Characters</mat-error>
+                <mat-error *ngIf="form.controls.contactNumber.errors?.minlength" class="mt-1">Number should be 12 Characters</mat-error>
+                <mat-error *ngIf="form.controls.contactNumber.errors?.required" class="mt-1"> Field Should not be Blank </mat-error>
+                <mat-error *ngIf="form.controls.contactNumber.errors?.pattern" class="mt-1"> Invalid Phone No </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- <div *ngIf="submitted">
+              <div class="alert alert-danger" *ngIf="!form.value.contactNumber">Phone Number Required</div>
+              <div *ngIf="form.value.contactNumber && form.controls['contactNumber'].errors">Invalid Phone Number
+              </div>
+            </div> -->
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  required">Email</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput  type="email" placeholder="Enter" formControlName="email" type="email">
+                <mat-error class="mt-1" *ngIf="form.controls.email.errors?.required">Field Should not be Blank </mat-error>
+                <mat-error class="mt-1" *ngIf="form.controls.email.hasError('email')">Invalid Email </mat-error>
+              </mat-form-field>
+             
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <p class="mb-0 py-0 required ">Inquiry Mode</p>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select class="form-group input_field mb-0 " formControlName="inquiryModeId" placeholder="Select">
+                <mat-option *ngFor="let food of inquiryModeIdList" [value]="food.key">
+                  {{food.value}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls.inquiryModeId.errors?.required">Field Should not be Blank </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Inquiry Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="inquiryDate" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 mt-3 mb-2 mh-100">
+            <p class="mb-0 py-0   ">Objective of Visit. What is the purpose of your visit?</p>
+            <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+              <textarea matInput rows="7" placeholder="Enter" formControlName="referenceField9"></textarea>
+            </mat-form-field>
+            <!-- <mat-error *ngIf="form.controls.referenceField9.errors?.pattern"> Invalid Characters</mat-error> -->
+
+          </div>
+
+          <div class="col-sm-12 mt-3 mb-2 mh-100">
+            <p class="mb-0 py-0   ">Objective of Visit (Website Comments)</p>
+            <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+              <textarea matInput rows="7" placeholder="Enter" formControlName="referenceField4"></textarea>
+
+            </mat-form-field>
+
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="assigif">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Assign
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 p-1 px-3">
+
+
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0   text-black">Class ID</p>
+              <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="classId" placeholder="Select">
+                  <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Assign To</p>
+              <!-- <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="assignedUserId" placeholder="Select">
+                  <mat-option *ngFor="let food of useridList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <angular2-multiselect [data]="multiselecttimekeeperList" [(ngModel)]="selectedItems"
+              [settings]="dropdownSettings" formControlName="assignedUserId"></angular2-multiselect>
+              <mat-error *ngIf="errorHandling('assignedUserId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel3 hideToggle *ngIf="validationif">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Status
+            <mat-icon class="text-primary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Inquiry Status</p>
+              <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="statusId" placeholder="Select">
+                  <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel1 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Created By</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput formControlName="createdBy" readOnly>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <p class="mb-0 py-0  ">Created On</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput formControlName="createdOn" readOnly>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2" *ngIf="assigif">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Assigned By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2" *ngIf="assigif">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Assigned On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="updatedOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button mat-dialog-close color="warn" class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button type="submit" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{btntxt}}</button>
+
+      <!-- <button mat-raised-button *ngIf="assigif" type="submit" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Assign</button> -->
+    </div>
+
+
+
+  </div>
+</form>

@@ -1,0 +1,137 @@
+<div class="container vw-100 vh-100 mw-100 px-0" style="background-color: #006990;overflow-x: hidden !important;">
+
+  <div class="row p-0 m-0 firsthalf">
+    <div class="col-md-8 d-flex justify-content-center align-items-center bg-grey">
+      <!--<img src=".\assets\img\icons\logo.png" class="img-fluid logo" alt="" srcset="">-->
+      <div class=" logopic">
+        <img src="./assets/img/icons/mandr1.png" class="img-fluid" alt="" srcset="">
+      </div>
+    </div>
+    <form class="col-md-4 flex-column d-flex justify-content-center align-items-center" [formGroup]="lgForm">
+      <div class="d-flex justify-content-center align-items-center pt-4">
+      </div>
+      <div class="d-flex justify-content-between">
+        <mat-radio-button (change)="radioChange($event)"  #mobileOTP class="mx-3" [checked]="true">Mobile OTP</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" #emailOTP class="mx-3">Email OTP</mat-radio-button>
+      </div>
+      <div [hidden]="!mobileOTP.checked">
+        <div class="form-group mb-0 mt-5" style="color: #006990;">
+          <mat-form-field style="width:18rem;">
+            <input matInput type="tel" [textMask]="{mask: mask}" [(ngModel)]="myModel" formControlName="userName"
+              style="color: black;" placeholder="Mobile No" autocomplete="off">
+            <!-- <mat-hint class="text-blue" align="start">To log into CLARA Client Portal please enter this 6-digit code:</mat-hint> -->
+            <mat-hint class="text-blue" align="start">ENTER NUMBER TO GET ONE TIME PASSWORD (OTP)</mat-hint>
+            <button mat-icon-button matSuffix *ngIf="lgForm.get('userName').valid && lgForm.get('userName').enabled"
+              style="cursor: pointer;" (click)="sendOtp()">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+            <mat-error *ngIf="lgForm.controls.userName.errors?.required" class="mt-1"> Field Should not be Blank
+            </mat-error>
+            <mat-error *ngIf="lgForm.controls.userName.errors?.pattern" class="mt-1"> Invalid Phone No </mat-error>
+          </mat-form-field>
+          <!-- <button mat-icon-button matSuffix 
+    style="cursor: pointer;" (click)="sendOtp()">
+    <mat-icon>play_arrow</mat-icon>
+  </button> -->
+        </div>
+        <div class="form-group mb-0 mt-5" style="color: #006990;">
+          <ng-otp-input [config]="{length:6}" (onInputChange)="onOtpChange($event)"
+            class="mx-auto text-center text-blue" style="margin-bottom:1rem;"></ng-otp-input>
+        </div>
+        <button mat-button style="background-color: #006990;color: white;width:18rem;"
+          class="btn-lg btn-block rounded-0 py-2 mt-5 mb-2" type="submit" (click)="login()"
+          [disabled]="loginButtonDisabled">LOGIN</button>
+      </div>
+      <div [hidden]="!emailOTP.checked">
+        <div class="form-group mb-0 mt-5" style="color: #006990;">
+          <mat-form-field style="width:18rem;">
+            <input matInput type="email" formControlName="email" style="color: black;" placeholder="Email"
+              autocomplete="off">
+            <!-- <mat-hint class="text-blue" align="start">To log into CLARA Client Portal please enter this 6-digit code:</mat-hint> -->
+            <mat-hint class="text-blue" align="start">ENTER EMAIL TO GET ONE TIME PASSWORD (OTP)</mat-hint>
+            <button mat-icon-button matSuffix *ngIf="lgForm.get('email').valid" style="cursor: pointer;"
+              (click)="sendEmailOtp()">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+            <mat-error *ngIf="lgForm.controls.email.errors?.required" class="mt-1"> Field Should not be Blank
+            </mat-error>
+            <mat-error *ngIf="lgForm.controls.email.errors?.pattern" class="mt-1"> Invalid Email ID</mat-error>
+          </mat-form-field>
+          <!-- <button mat-icon-button matSuffix 
+    style="cursor: pointer;" (click)="sendOtp()">
+    <mat-icon>play_arrow</mat-icon>
+  </button> -->
+        </div>
+        <div class="form-group mb-0 mt-5" style="color: #006990;">
+          <ng-otp-input [config]="{length:4}" (onInputChange)="onOtpChange1($event)"
+            class="mx-auto text-center text-blue" style="margin-bottom:1rem;"></ng-otp-input>
+        </div>
+        <button mat-button style="background-color: #006990;color: white;width:18rem;"
+          class="btn-lg btn-block rounded-0 py-2 mt-5 mb-2" type="submit" (click)="emailLogin()"
+          [disabled]="loginButtonEmailDisabled">LOGIN</button>
+      </div>
+      <mat-tab-group class="d-none">
+        <mat-tab label="Mobile OTP">
+          <div class="form-group mb-0 mt-5" style="color: #006990;">
+            <mat-form-field style="width:18rem;">
+              <input matInput type="tel" [textMask]="{mask: mask}" [(ngModel)]="myModel" formControlName="userName"
+                style="color: black;" placeholder="Mobile No" autocomplete="off">
+              <!-- <mat-hint class="text-blue" align="start">To log into CLARA Client Portal please enter this 6-digit code:</mat-hint> -->
+              <mat-hint class="text-blue" align="start">ENTER NUMBER TO GET ONE TIME PASSWORD (OTP)</mat-hint>
+              <button mat-icon-button matSuffix *ngIf="lgForm.get('userName').valid && lgForm.get('userName').enabled"
+                style="cursor: pointer;" (click)="sendOtp()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+              <mat-error *ngIf="lgForm.controls.userName.errors?.required" class="mt-1"> Field Should not be Blank
+              </mat-error>
+              <mat-error *ngIf="lgForm.controls.userName.errors?.pattern" class="mt-1"> Invalid Phone No </mat-error>
+            </mat-form-field>
+            <!-- <button mat-icon-button matSuffix 
+            style="cursor: pointer;" (click)="sendOtp()">
+            <mat-icon>play_arrow</mat-icon>
+          </button> -->
+          </div>
+          <div class="form-group mb-0 mt-5" style="color: #006990;">
+            <ng-otp-input [config]="{length:6}" (onInputChange)="onOtpChange($event)"
+              class="mx-auto text-center text-blue" style="margin-bottom:1rem;"></ng-otp-input>
+          </div>
+          <button mat-button style="background-color: #006990;color: white;width:18rem;"
+            class="btn-lg btn-block rounded-0 py-2 mt-5 mb-2" type="submit" (click)="login()"
+            [disabled]="loginButtonDisabled">LOGIN</button>
+        </mat-tab>
+        <mat-tab label="Email OTP">
+          <div class="form-group mb-0 mt-5" style="color: #006990;">
+            <mat-form-field style="width:18rem;">
+              <input matInput type="email" formControlName="email" style="color: black;" placeholder="Email"
+                autocomplete="off">
+              <!-- <mat-hint class="text-blue" align="start">To log into CLARA Client Portal please enter this 6-digit code:</mat-hint> -->
+              <mat-hint class="text-blue" align="start">ENTER EMAIL TO GET ONE TIME PASSWORD (OTP)</mat-hint>
+              <button mat-icon-button matSuffix *ngIf="lgForm.get('email').valid" style="cursor: pointer;"
+                (click)="sendEmailOtp()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+              <mat-error *ngIf="lgForm.controls.email.errors?.required" class="mt-1"> Field Should not be Blank
+              </mat-error>
+              <mat-error *ngIf="lgForm.controls.email.errors?.pattern" class="mt-1"> Invalid Email ID</mat-error>
+            </mat-form-field>
+            <!-- <button mat-icon-button matSuffix 
+            style="cursor: pointer;" (click)="sendOtp()">
+            <mat-icon>play_arrow</mat-icon>
+          </button> -->
+          </div>
+          <div class="form-group mb-0 mt-5" style="color: #006990;">
+            <ng-otp-input [config]="{length:4}" (onInputChange)="onOtpChange1($event)"
+              class="mx-auto text-center text-blue" style="margin-bottom:1rem;"></ng-otp-input>
+          </div>
+          <button mat-button style="background-color: #006990;color: white;width:18rem;"
+            class="btn-lg btn-block rounded-0 py-2 mt-5 mb-2" type="submit" (click)="emailLogin()"
+            [disabled]="loginButtonEmailDisabled">LOGIN</button>
+        </mat-tab>
+      </mat-tab-group>
+
+
+    </form>
+
+  </div>
+
+</div>

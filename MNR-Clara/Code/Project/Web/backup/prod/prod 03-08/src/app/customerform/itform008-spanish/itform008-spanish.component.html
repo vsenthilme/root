@@ -1,0 +1,2478 @@
+<div class="table_shadow my-0 py-0 mt-3">
+    <div class="row ms-3 me-3 px-1">
+      <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 shadow">
+        <h2 class="my-auto header-text ps-2">Cuestionario Biográfico  </h2>
+      </div>
+      <div class="col-md-12 px-0 mt-1">
+        <div class="">
+          <mat-accordion>
+            <mat-expansion-panel #panel10 [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. Detalles personales
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel10.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Otros nombres usados</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker1">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad y país de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País de Ciudadanía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Residencia</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Altura</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Pies                                     </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Pulgadas  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Color de Ojos                              </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Color de Cabello </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Peso en libras</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Raza </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="Select" multiple>
+                      <mat-option value="topping">Blanco   </mat-option>
+                      <mat-option value="topping">Asiático</mat-option>
+                      <mat-option value="topping">Negro o Afroamericano</mat-option>
+                      <mat-option value="topping">Indio American o Nativo American</mat-option>
+                      <mat-option value="topping">Nativo de Hawái u Otra Isla Pacífica</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Estado Civil</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">Soltero            </mat-option>
+                      <mat-option value="volvo2">Comprometido         </mat-option>
+                      <mat-option value="volvo3">Casado/a </mat-option>
+                      <mat-option value="volvo4">Unión Libre          </mat-option>
+                      <mat-option value="volvo4">Viudo         </mat-option>
+                      <mat-option value="volvo4">Divorciado/a     </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Si usted está casado o comprometido, por favor conteste las siguientes preguntas.</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántas veces ha estado casado/a?     </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre complete de su cónyuge o prometido/a </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad y país de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País de Ciudadanía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de matrimonio</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker3">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de matrimonio</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de residencia</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Si usted esta divorciado/a o es viudo/a, por favor conteste las siguientes rpeguntas</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre del ex cónyuge</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad y país de nacimiento:</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País de Ciudadanía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha del Matrimonio</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de terminación del matrimonio</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker17">
+                    <mat-datepicker-toggle matSuffix [for]="picker17"></mat-datepicker-toggle>
+                    <mat-datepicker #picker17></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cómo termino su matrimonio?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">divorcio</mat-option>
+                      <mat-option value="volvo2">anulación </mat-option>
+                      <mat-option value="volvo3">muerte </mat-option>
+                      <mat-option value="volvo3">Otro </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2. Detalles de padres / hermanos
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+                <p class="mb-0 pb-2 fw-bolder mt-3">¿su padre/madre es un ciudadano/a americano/a? 
+                  Si lo es, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cómo obtuvo su Ciudadanía Americana? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">Nacimiento       </mat-option>
+                      <mat-option value="volvo2">Naturalización </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿En qué año?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Qué edad tenía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 pb-2 fw-bolder mt-3"> ¿su padre/madre es un/a residente americano/a? 
+                  Si lo es, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cómo obtuvo su Residencia Americana? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+  
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">Petición Familiar   </mat-option>
+                      <mat-option value="volvo2">Empleo    </mat-option>
+                      <mat-option value="volvo2">Otro </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Otro</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">In ¿En qué año?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 pb-2 fw-bolder mt-3">Información sobre su padre</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker18">
+                    <mat-datepicker-toggle matSuffix [for]="picker18"></mat-datepicker-toggle>
+                    <mat-datepicker #picker18></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad y país de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País de Ciudadanía </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 pb-2 fw-bolder mt-3">Información sobre su madre </p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker19">
+                    <mat-datepicker-toggle matSuffix [for]="picker19"></mat-datepicker-toggle>
+                    <mat-datepicker #picker19></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad y país de nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País de Ciudadanía </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 pb-2 fw-bolder mt-3">En relación a las siguientes personas, ¿alguno de ellos está actualmente en los E.U.A o tienen un Residencia Americana, o Ciudadanía Americana? Conteste Sí o No, e indique la condición de la persona que está actualmente en E.U.A (Por ejemplo: Residente Permanente Legal, Ciudadano Americano, Visitante con Visa, Visa de Estudiante, Visa de Trabajo, etc.)  </p>
+                <div class="row">
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Esposo/Esposa</p>
+                  <div class="col-lg-4 col-md-4 mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí       
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder=" Enter">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Padre/Madre</p>
+                  <div class="col-lg-4 col-md-4 mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí       
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder=" Enter">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Novio/Novia</p>
+                  <div class="col-lg-4 col-md-4 mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí       
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder=" Enter">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Hijo/Hija</p>
+                  <div class="col-lg-4 col-md-4 mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí       
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder=" Enter">
+                    </mat-form-field>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Hermano/Hermana</p>
+                  <div class="col-lg-4 col-md-4 mt-2">
+                    <mat-radio-group layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí       
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="col-lg-4 col-md-4">
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder=" Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+  
+                <p class="mb-0 pb-2 fw-bolder mt-3">Si usted tiene hermanos o hermanas que sean ciudadanos americanos o que tengan tarjeta de residente, por favor complete la siguiente información:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cómo obtuvo su ciudadanía/residencia permanente?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">Petición Familiar       </mat-option>
+                      <mat-option value="volvo2">Empleo   </mat-option>
+                      <mat-option value="volvo2">Otro </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Por favor brinde la información de todos sus hijos (hijos e hijas), sin importar su edad. </p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">1. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker5">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">2. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker11">
+                    <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                    <mat-datepicker #picker11></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">3. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker7">
+                    <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                    <mat-datepicker #picker7></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">4. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker8">
+                    <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                    <mat-datepicker #picker8></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">5. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker9">
+                    <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                    <mat-datepicker #picker9></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">6. Nombre Completo del Niño/a</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required  required">Fecha de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker10">
+                    <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                    <mat-datepicker #picker10></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de Nacimiento</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿El niño/a vive con usted? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Historia de la inmigración
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Qué países le han emitido un pasaporte?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez su pasaporte ha sido robado o extraviado? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha en la que fue robado  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker12">
+                    <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                    <mat-datepicker #picker12></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required ">¿Lo reporto a la policía?       </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Está viviendo en los Estados Unidos actualmente? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">¿Desde cuándo vive en EUA?   </p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/Año </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker13">
+                    <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                    <mat-datepicker #picker13></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha tenido una visa Americana? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Consulado en dónde le entregaron su visa: </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de emisión</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker14">
+                    <mat-datepicker-toggle matSuffix [for]="picker14"></mat-datepicker-toggle>
+                    <mat-datepicker #picker14></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de vencimiento </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker15">
+                    <mat-datepicker-toggle matSuffix [for]="picker15"></mat-datepicker-toggle>
+                    <mat-datepicker #picker15></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">Clasificación de la visa?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez su visa ha sido denegada o revocada?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Consulado en dónde le negaron su visa</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Ha sido denegada más de una vez?      </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántas veces? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Clasificación de la visa ? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha solicitado una Green Card?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuándo? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Resultado</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha sido detenido o interrogado por un oficial de inmigración? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Lo han detenido más de una vez?     </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántas veces?   </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">Clasificación de la visa ? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez se le ha negado la entrada a EUA?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Lo han detenido más de una vez?     </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántas veces?   </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha estado en proceso de deportación?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Resultado Final</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Lo han deportado más de una vez?     </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántas veces?   </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+  
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha sido deportado o expulsado de EUA?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Motivo de la deportación</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha sido detenido o interrogado por un oficial de policía?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Motivo de la detención </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Fué arrestado?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuántos días?    </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">Have you ever been detained, accused or convicted for a felony including
+                  immigration matters?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/ Año  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Qué tipo de crimen?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Resultado Final </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Fué a juicio?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Tiene Licencia de Conducir?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿De cuál estado? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuándo vence?    </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/Año </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha tenido infracciones de tráfico?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuándo?  </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Dónde?   </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Pagó la multa?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha recibido ayuda gubernamental, así como: Estampillas de Comida, Medicaid, Tanf, Golf Card, etc.?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Desde cuándo?    </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez alguien a sometido una solicitud por usted, sus padres o su esposo/a? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <mat-select placeholder="Select">
+                    <mat-option value="topping">Usted                     </mat-option>
+                    <mat-option value="topping">Padres             </mat-option>
+                    <mat-option value="topping">Esposo/a</mat-option>
+                  </mat-select>
+                </mat-form-field>
+  
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuándo? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Bajo qué nombre?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Quién sometió la solicitud?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Resultado</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="Select">
+                      <mat-option value="volvo">Aprobada             </mat-option>
+                      <mat-option value="volvo2">Negada                 </mat-option>
+                      <mat-option value="volvo2">Pendiente </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene familiares que estén en el ejército o que sean veteranos?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Qué relación tiene con usted? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Información de sus llegadas/salidas de eua</p>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Primera llegada a EUA</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/Año </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de llegada </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Fue inspeccionado por un oficial de inmigración?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Cuándo vino a vivir a los Estados Unidos? </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿A dónde llego?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Última llegada a EUA</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Mes/Año </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Lugar de llegada </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Fue inspeccionado por un oficial de inmigración?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad Mexicana   </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ciudad en los Estados Unidos </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">List of all your arrivals and departures:</p>
+                <div class="mt-2">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Llegada(s)</th>
+                        <th scope="col">Salida(s)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>
+                          
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker47"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker47"></mat-datepicker-toggle>
+                              <mat-datepicker #picker47></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                         
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker48"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker48"></mat-datepicker-toggle>
+                              <mat-datepicker #picker48></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>
+                          
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker49"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker49"></mat-datepicker-toggle>
+                              <mat-datepicker #picker49></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                         
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker50"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker50"></mat-datepicker-toggle>
+                              <mat-datepicker #picker50></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>
+                          
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker51"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker51"></mat-datepicker-toggle>
+                              <mat-datepicker #picker51></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                         
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker52"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker52"></mat-datepicker-toggle>
+                              <mat-datepicker #picker52></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">4</th>
+                        <td>
+                          
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker53"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker53"></mat-datepicker-toggle>
+                              <mat-datepicker #picker53></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                         
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker54"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker54"></mat-datepicker-toggle>
+                              <mat-datepicker #picker54></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">5</th>
+                        <td>
+                          
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker55"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker55"></mat-datepicker-toggle>
+                              <mat-datepicker #picker55></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                         
+                            <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker56"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker56"></mat-datepicker-toggle>
+                              <mat-datepicker #picker56></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">6</th>
+                        <td>
+                            <mat-form-field class="form-group input_field mb-0 pb-0" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker57"
+                                class="mb-0 pb-0">
+                              <mat-datepicker-toggle matSuffix [for]="picker57"></mat-datepicker-toggle>
+                              <mat-datepicker #picker57></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker58">
+                              <mat-datepicker-toggle matSuffix [for]="picker58"></mat-datepicker-toggle>
+                              <mat-datepicker #picker58></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿alguna vez sus padres o esposo/a han sdo víctimas de un crimen?         </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha en que ocurrió</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker59">
+                      <mat-datepicker-toggle matSuffix [for]="picker59"></mat-datepicker-toggle>
+                      <mat-datepicker #picker59></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Fue reportado? </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 py-0 required   mt-2 ps-3">Resumen de lo sucedido:</p>
+                <mat-form-field class="form-group input_field w-100 mb-0 ps-3" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter"></textarea>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel3 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4. Historia de la Residencia
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker20">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker20"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker20></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+                <p class="mb-0 pb-2  fw-bolder mt-3">Please list the addresses you resided in the us within the past 5 years:</p>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">1. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker21">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker21"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker21></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">2. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker22">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker22></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">3. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker23">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker23"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker23></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">4. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker24">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker24"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker24></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">5. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker25">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker25"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker25></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">6.Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker26">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker26"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker26></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">7. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker27">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker27"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker27></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">8.Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker28">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker28"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker28></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">9. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker29">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker29"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker29></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">10.Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker30">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker30"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker30></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">11. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker31">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker31"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker31></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">12. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker33">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker33"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker33></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-2">
+                  <p class="mb-0 py-0 required ">13. Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Por cuánto tiempo vivió ahí?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker34">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker34"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker34></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿La residencia estaba a su nombre?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">¿Con quién vivía?</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+  
+  
+  
+  
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel4 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  5. Historial de empleo
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+                <p class="mb-0 py-0 required  mt-2">¿Está trabajando con un número de seguridad social de EUA actualmente?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <p class="mb-0 py-0 required  mt-2">¿Está valido?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Ocupación</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Paga impuestos en EUA?</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 fw-bolder py-0 mt-2 ps-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <p class="mb-0 py-0 required  mt-2">Since ¿Cuándo?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+                <p class="mb-0 pb-2  fw-bolder mt-3">Enliste todos los empleos en los que ha trabajado en los últimos 5 años, empezando con su empleo actual</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">1. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker35">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker35"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker35></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">2. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker36">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker36"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker36></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">3. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker37">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker37"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker37></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">4. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker38">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker38"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker38></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">5. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker39">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker39"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker39></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">6. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker40">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker40"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker40></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">7. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker41">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker41"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker41></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">8. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker42">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker42"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker42></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">9. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker43">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker43"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker43></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">10. Nombre de la Compañía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Domicilio Completo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Número Telefónico</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre y Apellido de su Supervisorr</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fechas de Empleo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker44">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker44"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker44></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                <p class="mb-0 py-0 required  mt-2">¿Tiene manera de comprobar su empleo? Ej. Nóminas, Formulario W-2, etc.. </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+  
+  
+  
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  6. Información adicional
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4">
+                <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha sido miembro o ha estado involucrado de cualquier manera, con cualquier organización u asociación, fundación, partido, club social, sociedad o grupo similar en los Estados Unidos o en cualquier otro lugar del mundo?  </p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Nombre del Grupo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Propósito del Grupo</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de la Membresía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker45">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker45"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker45></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+  
+                            <p class="mb-0 py-0 required  mt-2">¿Alguna vez ha estado en el ejército militar?	</p>
+                <div class="row mt-2">
+                  <mat-radio-group layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Sí
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <p class="mb-0 pb-2  fw-bolder mt-3">Si contestó “Sí”, por favor brinde la siguiente información</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">País</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Rango</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required ">Fecha de la Membresía</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-date-range-input [rangePicker]="picker46">
+                      <input matStartDate placeholder="Start date">
+                      <input matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker46"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker46></mat-date-range-picker>
+                  </mat-form-field>
+                </div>
+                  <ul class="mt-2">
+                    <li>I certify that I have read and understood all the questions that conform this questionnaire and that the answers that I have provided are correct to the best of my personal knowledge.</li>
+                    <li>I understand that any false statement or allegation may result in a permanent denial of any immigration benefit or entrance to the United States.</li>
+            
+                  </ul>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0 required ">Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+    
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker47">
+                      <mat-datepicker-toggle matSuffix [for]="picker47"></mat-datepicker-toggle>
+                      <mat-datepicker #picker47></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+    
+  
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+            <button mat-raised-button color="warn" class="mx-2"> <i
+                class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+            <button mat-raised-button mat-dialog-close class="mx-2 bg-blue text-white"> <i
+                class="bi bi-check2 me-1 font-size-1_5rem"></i>
+              Save</button>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  

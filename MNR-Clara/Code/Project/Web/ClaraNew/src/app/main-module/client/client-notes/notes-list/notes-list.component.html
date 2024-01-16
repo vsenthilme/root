@@ -1,0 +1,202 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page"><a routerLink="/main/client/clientlist">
+            Client
+          </a></li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Notes</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" (click)="downloadexcel()">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete" [disabled]="!RA.delete" (click)="deleteDialog()">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class=" floating-buttons text-white mx-2 bg-lightblue"
+        (click)="openDialog('Display')" matTooltip="Display" [disabled]="!RA.view">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit" [disabled]="!RA.createUpdate" (click)="openDialog('Edit')">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab [disabled]="!RA.createUpdate" class="bg-darkblue text-white mx-2 action-button"
+        (click)="openDialog('New')">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+
+
+      <button mat-mini-fab class="text-white mx-2 action-button bg-red" type="button" mat-button
+        (click)="drawer.toggle()">
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+    <form [formGroup]="searhform">
+      <div class="row scroll2 mx-0">
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Note No</p>
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="notesNumber"
+            [valuewithID]="false" apiMethod="client" [filerbased]="ClientFilter">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectnotenoList" [(ngModel)]="selectedItems"[settings]="dropdownSettings" 
+          formControlName="notesNumberFE"></angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectnotenoList"  [(ngModel)]="selectedItems"
+          formControlName="notesNumberFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Type </p>
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="noteTypeId">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectnotetypeList" [(ngModel)]="selectedItems2"[settings]="dropdownSettings" 
+          formControlName="noteTypeIdFE"></angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectnotetypeList"  [(ngModel)]="selectedItems2"
+          formControlName="noteTypeIdFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Date From To</p>
+
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" formControlName="startCreatedOn">
+              <input matEndDate placeholder="End date" formControlName="endCreatedOn">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Status </p>
+          <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="statusId"
+            [filerbased]="searchStatusList">
+          </app-ng-multiselect-dropdown> -->
+          <!-- <angular2-multiselect [data]="multiselectstatusList" [(ngModel)]="selectedItems3"[settings]="dropdownSettings" 
+          formControlName="statusIdFE"></angular2-multiselect> -->
+          <p-multiSelect  placeholder="Select" class="w-100" [options]="multiselectstatusList"  [(ngModel)]="selectedItems3"
+          formControlName="statusIdFE" [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">  </p-multiSelect>
+
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset();">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        <button mat-raised-button class="bg-blue text-white mx-1" (click)="search(); drawer.toggle();">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </form>
+  </mat-drawer>
+
+
+  <div class="example-sidenav-content">
+
+    <div class=" my-0 py-0">
+
+      <div class="ms-3 me-3 px-1 mt-1 scroll1">
+     <div class="scroll4">
+      <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="headerselect">
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()" disabled
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="notesNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Note No</th>
+          <td mat-cell *matCellDef="let element"> {{element.notesNumber}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="noteTypeId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+          <td mat-cell *matCellDef="let element"> {{element.noteTypeId}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td mat-cell *matCellDef="let element"> {{element.noteText}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="matterNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter</th>
+          <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+        </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By</th>
+          <td mat-cell *matCellDef="let element"> {{element.createdBy}} </td>
+        </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="createdOn">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+          <td mat-cell *matCellDef="let element"> {{element.createdOn | date :'MM-dd-yyyy'}} </td>
+        </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="statusId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let element"> {{element.statusId}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+     </div>
+
+      </div>
+      <div class="p-0 mx-1 m-0">
+        <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

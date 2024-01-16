@@ -1,0 +1,127 @@
+
+
+<form [formGroup]="form">
+  <div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Checklist Template - {{data? data.type: 'New'}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="mt-2">
+      <div class="row p-1 px-3">
+        <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 text-black required">Class ID</p>
+            <mat-form-field appearance="outline">
+              <mat-select class="form-group input_field mb-0" formControlName="classId" placeholder="Select">
+                <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                  {{food.value}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage('classId')}}</mat-error>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0 required">Case Category</p>
+          <angular2-multiselect [data]="multiSelectCaseCategoryList" [(ngModel)]="selectedCaseCategoryItems"
+            (onSelect)="onItemSelect1($event)" [settings]="dropdownSettings" formControlName="caseCategoryId">
+          </angular2-multiselect>
+          <mat-error *ngIf="errorHandling('caseCategoryId')">{{getErrorMessage('caseCategoryId')}}</mat-error>
+
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0 required">Case Sub Category</p>
+          <angular2-multiselect [data]="multiSelectSubCaseCategoryList" [(ngModel)]="selectedSubCaseCategoryItems"
+            [settings]="dropdownSettings" formControlName="caseSubCategoryId"></angular2-multiselect>
+          <mat-error *ngIf="errorHandling('caseSubCategoryId')">{{getErrorMessage('caseSubCategoryId')}}</mat-error>
+
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Status</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <mat-select formControlName="documentStatus" placeholder="Select">
+              <mat-option value="ACTIVE"> Active </mat-option>
+              <mat-option value="INACTIVE">Inactive </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</form>
+
+<div class="d-flex justify-content-end my-2">
+  <button mat-raised-button class="mx-2 bg-yellow text-white" (click)="addDocument()"> <i
+      class="bi bi-plus me-1 font-size-1_5rem"></i>
+    Add</button>
+</div>
+<div class="px-1 scroll2 bg-white">
+  <table mat-table [dataSource]="dataSource" class=" w-100">
+
+    <!-- si no Column -->
+    <ng-container matColumnDef="sino">
+      <th mat-header-cell *matHeaderCellDef>S No</th>
+      <td mat-cell *matCellDef="let element;let i = index"> {{i +1}} </td>
+    </ng-container>
+
+    <!-- doc name Column -->
+    <ng-container matColumnDef="documentName">
+      <th mat-header-cell *matHeaderCellDef>Document Name</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field class="form-group w-100 mb-0" appearance="outline">
+          <input matInput [(ngModel)]="element.documentName" placeholder="Enter" required
+            [disabled]="element.documentUrl != null && element.documentUrl.trim() != '' ">
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- doc upload Column -->
+    <ng-container matColumnDef="documentUpload">
+      <th mat-header-cell *matHeaderCellDef>
+        Checklist Template
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="" *ngIf="element.documentUrl == null || element.documentUrl.trim() == ''">
+          <input ngf type="file" accept="*" [(files)]="element.files" (click)="element.files =[]" class="form-control"
+            id="" required />
+          <ngfFormData [files]=" element.files" [(FormData)]="element.myFormData" postName="file"></ngfFormData>
+        </div>
+        <div class="" *ngIf="element.documentUrl != null && element.documentUrl.trim() != ''">
+          {{element.documentUrl}}
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="upload">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element;let i =index" class="d-flex py-2">
+        <button mat-icon-button matTooltip="Upload"  (click)="uploadDocument(element,i)"
+          *ngIf="element.files.length > 0 && element.documentUrl.trim() == '' ">
+          <mat-icon class="text-warning">upload</mat-icon>
+        </button>
+        <button mat-icon-button class=" text-white mx-2" matTooltip="Delete" (click)="deleteDocument(element,i)">
+          <!-- <mat-icon class="text-danger"><span class="material-symbols-outlined">
+            delete
+            </span></mat-icon> -->
+            <i class="bi bi-trash text-danger" style="font-size: 20px;"></i>
+        </button>
+        <button mat-icon-button matTooltip="Download" (click)="download(element)"
+          *ngIf="data.type == 'Edit' && element.documentUrl.trim() != ''">
+          <mat-icon class="text-primary hvr-wobble-horizontal ml-2">download</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+  </table>
+</div>
+
+<div class="d-flex justify-content-center align-items-center py-2">
+  <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+      class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+  <button mat-raised-button class="mx-2 bg-blue text-white" (click)="saveDocuments();"><i
+      class="bi bi-check2 me-1 font-size-1_5rem"></i>{{data.type == 'Edit' ? 'Update' : 'Save'}}</button>
+</div>

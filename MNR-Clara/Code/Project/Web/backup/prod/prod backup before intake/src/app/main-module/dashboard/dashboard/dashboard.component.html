@@ -1,0 +1,135 @@
+<!--
+<app-class></app-class> 
+<app-prospective-input></app-prospective-input>
+<app-prospective-output></app-prospective-output>
+<app-referral-input></app-referral-input>
+<app-referral-output></app-referral-output>
+<app-lead-input></app-lead-input>
+<app-lead-output></app-lead-output>
+<app-matters-tab></app-matters-tab>
+
+<app-matters-email></app-matters-email>
+
+<app-resouce-assignment></app-resouce-assignment>
+<app-caseassignment-list></app-caseassignment-list>
+-->
+
+
+<div class="">
+  <div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+      <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 d-flex align-items-center">
+          <li class="breadcrumb-item mb-0 ms-3">
+            <a >
+              <mat-icon class="text-secondary align-middle">home</mat-icon>
+            </a>
+          </li>
+          <div class="divider mx-3 border-end"></div>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">{{pathname}}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+      <div [hidden]="isShowDiv"> <input matInput class="form-control filter_button mx-2 border-bottom"
+          placeholder="Filter" style="width:90%"></div>
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+        class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+          matTooltip="Delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+          matTooltip="Display">
+          <mat-icon class="">search</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+          matTooltip="Edit">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button disabled mat-mini-fab (click)="toggleFloat()"  class=" disabled mx-2 text-white action-button"
+          [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon>{{icon}}</mat-icon>Options
+        </button>
+        <button disabled mat-mini-fab class="disabled bg-darkblue text-white mx-2 action-button">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button disabled mat-mini-fab class="disabled text-white mx-2 action-button" color="warn" type="button"
+          mat-button>
+          <mat-icon class="">search</mat-icon> Search
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <div >
+    <!--  <div *ngIf="RA.view != false">-->
+  <mat-tab-group animationDuration="0ms" class="ms-3 me-3 px-1 mt-1" [selectedIndex]="active" 
+    (selectedIndexChange)="onTabChange($event)">
+    <mat-tab label="CRM">
+      <div class="row  px-0 mx-0" style="height: 30rem;">
+        <div class="col-6  border-end mt-3">
+          <app-stack-chart></app-stack-chart>
+        </div>
+        <div class="col-6  mt-3">
+          <app-lead-conversion></app-lead-conversion>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Matter">
+      <div class="row  px-0 mx-0" style="height: 30rem;">
+        <div class="col-6 border-end mt-3">
+          <app-line-chart></app-line-chart>
+        </div>
+        <div class="col-6  mt-3">
+          <app-piechart></app-piechart>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Billing-1">
+      <div class="row  px-0 mx-0" style="height: 30rem;">
+        <div class="col-6 border-end mt-3">
+          <app-bar-chart></app-bar-chart>
+        </div>
+        <div class="col-6  mt-3">
+          <app-basic-line></app-basic-line>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Billing-2">
+      <div class="row  px-0 mx-0" style="height: 30rem;">
+        <div class="col-6  border-end mt-3">
+          <app-top-clients></app-top-clients>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- <div *ngIf="RA.view == false" class="d-flex justofy-content-center align-items-center">
+  <h5 class="text-secondary">You Don't have access to the screen </h5>
+</div> -->
+  <!-- <div class="row px-0 mx-0">
+  <div class="col-8">
+    <app-bar-chart></app-bar-chart>
+  </div>
+  <div class="col-4">
+    <app-line-chart></app-line-chart> 
+  </div>
+  <div class="col-4 margint-2">
+    <app-piechart></app-piechart>
+  </div>
+  <div class="col-4 margint-2">
+
+    <app-stack-chart></app-stack-chart>
+  </div>
+  <div class="col-4 margint-2">
+    <app-basic-line></app-basic-line>
+  </div>
+</div> -->
+
+</div>

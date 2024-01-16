@@ -1,0 +1,205 @@
+<form [formGroup]="form">
+    <div class="card bg-white ">
+      <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+        class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+        <h2 class="my-auto headertext">{{matter}}{{data.pageflow}} Expense</h2>
+        <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+      </div>
+      <mat-accordion>
+        <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              General
+              <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row scroll mt-2 px-3 p-1">
+  
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Expense Code </p>
+                <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                  <mat-select formControlName="expenseCode" placeholder="Select">
+                    <mat-option *ngFor="let food of expenseCodelist" [value]="food.key">
+                      {{food.value}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+                <angular2-multiselect [data]="multiselectexpenseList" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings"  (onSelect)="onItemSelect($event)" 
+                 formControlName="expenseCode"></angular2-multiselect>
+                <mat-error *ngIf="errorHandling('expenseCode')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+  
+            </div>
+  
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Cost Type </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <mat-select formControlName="referenceField5">
+                    <mat-option value="Hard cost">Hard cost </mat-option>
+                    <mat-option value="Soft cost">Soft cost </mat-option>
+                  </mat-select>
+                </mat-form-field>
+  
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Cost Per Item</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <span matPrefix class="text-secondary"
+                    style="display: table-cell; vertical-align: middle;">$&nbsp;</span><input matInput
+                    placeholder="Enter" readOnly formControlName="costPerItem">
+                </mat-form-field>
+              </div>
+  
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">No of Items</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="numberofItems" OnlyNumber>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('numberofItems')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+  
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Amount</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="expenseAmount" readOnly>
+                  <span matPrefix class="text-secondary"
+                    style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('expenseAmount')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+  
+  
+  
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Description</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Editable" formControlName="expenseDescription">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Expense type
+                </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <mat-select placeholder="select" formControlName="expenseType">
+                    <mat-option value="Debit">Debit (Charge the Client)</mat-option>
+                    <mat-option value="Credit">Credit (Client Payment/Discount)</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('expenseType')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+            <!-- <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Bill Type</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <mat-select placeholder="select" formControlName="billType">
+                    <mat-option value="Billed">Billed</mat-option>
+                    <mat-option value="Unbilled">Unbilled</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('billType')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div> -->
+            <!-- <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Write Off</p>
+                <mat-radio-group aria-label="Select" formControlName="writeOff">
+                  <mat-radio-button value="true" class="mx-2 mt-2">Yes</mat-radio-button>
+                  <mat-radio-button value="false" class="mx-2 mt-2">No</mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('writeOff')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div> -->
+  
+            <!-- <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Status</p>
+                <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                  <mat-select formControlName="statusId" placeholder="Select">
+                    <mat-option *ngFor="let food of statusIdlist" [value]="food.key">
+                      {{food.value}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div> -->
+  
+  
+  
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              Admin
+              <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row mt-2 p-1 px-3">
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Created By</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput formControlName="createdBy" readOnly>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Created On</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput formControlName="createdOn" readOnly>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Updated By</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput formControlName="updatedBy" readOnly>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Updated On</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput formControlName="updatedOn" readOnly>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+  
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+        <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          {{btntext}}</button>
+      </div>
+  
+  
+  
+    </div>
+  </form>

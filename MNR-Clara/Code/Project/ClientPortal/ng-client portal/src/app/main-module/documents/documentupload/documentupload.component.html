@@ -1,0 +1,71 @@
+<h1 class=" header-size fw-lighter text-blue xl-margin ml-4">Document Upload</h1>
+
+<!-- <div class="row px-0 mx-0 uploadbox">
+    <div class="col-5">
+      <div type="button" mat-icon-button class="d-flex justify-content-center">
+        <div  class="d-flex justify-content-center align-items-center flex-column  upload m-1">
+            <mat-icon class="text-blue mx-auto icon my-2 mb-4">file_upload</mat-icon> 
+            <img src="../../../../assets/img/icons/file1.png" alt="" srcset="">
+                <p class="mb-0 text-blue  mt-2">Choose Files</p>
+           </div>
+      </div>
+    </div>
+    <div class="col-4 my-auto offset-2">
+        <p class="mb-0 py-0">Matter No </p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+    </div> 
+</div> -->
+<div class="scroll2 xl-margin">
+  <table mat-table [dataSource]="dataSource" class=" w-100  rowheight">
+
+
+
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="lineno">
+      <th mat-header-cell *matHeaderCellDef>Matter No</th>
+      <td mat-cell *matCellDef="let element"> {{element.lineno}} </td>
+
+    </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="partner">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">
+        <div>{{element.partner}} </div>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <i class="fas fa-check text-success"></i>
+      </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <!-- <button mat-icon-button  class="hvr-wobble-horizontal" routerLink="/main/documents/document-upload">
+                    <p class="d-inline mr-2 text-blue hide-xs">View</p> <mat-icon class="d-inline text-blue ">trending_flat</mat-icon>
+                   </button> -->
+        <button mat-icon-button class="mx-2">
+          <mat-icon class="text-secondary hvr-wobble-horizontal">upload</mat-icon>
+        </button>
+        <button mat-icon-button class="mx-2">
+          <mat-icon class="text-secondary hvr-wobble-horizontal">file_download</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+<div class="buttons border bg-white pb-1 w-100 d-flex justify-content-end">
+  <div class="p-0 mx-1 " style="background-color: #ffff;">
+    <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>

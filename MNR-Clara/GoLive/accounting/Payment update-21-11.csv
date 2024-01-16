@@ -1,0 +1,2 @@
+paymentid,invoice_no,class_id,client_id,ctd_by,ctd_on,lang_id,matter_no,payment_amount,payment_date,payment_number,payment_text,posting_date,status_id,transaction_type,payment_code
+1585999,13491,1,51142,admin,2021-12-01,EN,51142-03,105,2021-12-01,27636,Check Number 1239 against Inv# 13491,2021-12-01,HPD,PAYMENT,HPD

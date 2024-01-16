@@ -1,0 +1,222 @@
+<form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+  <div class=" my-0 py-0 screenSize">
+    <div class="row ms-3 me-3 px-1 smallscreen">
+      <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 ">
+        <h2 class="my-auto header-text fw-bolder ps-2">Feedback-Form</h2>
+        <!-- <h2 class="my-auto header-text fw-bolder ps-2">
+          {{this.js.inquiryNumber ? "Inquiry No - " + this.js.inquiryNumber : ''}}</h2> -->
+      </div>
+      <div class="auto">
+        <form [formGroup]="form">
+          <div class="scroll1">
+            <div class="auto">
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">En general, ¿cómo fue su experiencia con Monty & Ramirez</p>
+                <div class="row">
+              
+                  <div class="col-md-2 px-0">
+                    <p class="px-3 text-blue ">Malo</p>
+                  </div>
+                <div class="col-md-3 px-0">
+                  <fieldset class="rating"  id="question1" >
+              
+                    <input type="radio"  formControlName="overallExperience" name="question1" matTooltip="Excellent" value="Excellent" id="21"><label for="21">☆</label>
+                    <input type="radio"  formControlName="overallExperience" name="question1" matTooltip="Good" value="Good" id="22"><label for="22">☆</label>
+                    <input type="radio" formControlName="overallExperience" name="question1"  matTooltip="Fair" value="Fair" id="23"><label for="23">☆</label>
+                    <input type="radio"  formControlName="overallExperience"  name="question1" matTooltip="Poor" value="Poor" id="24"><label for="24">☆</label>
+                    <input type="radio" formControlName="overallExperience"  name="question1"  matTooltip="Bad"  value="Bad" id="25"><label for="25">☆</label>
+                  </fieldset>
+                </div>
+                <div class="col-md-3 px-0 textLeft">
+                  <label class="px-3 text-blue">Excelente</label>
+                </div>
+                <mat-error class="px-3" *ngIf="errorHandling('overallExperience')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Cómo fue su experiencia al solicitar nuestros servicios?</p>
+                <div class="row">
+              
+                  <div class="col-md-2 px-0">
+                    <p class="px-3 text-blue ">Malo</p>
+                  </div>
+                <div class="col-md-3 px-0">
+                  <fieldset class="rating"  id="question2" >
+              
+                    <input type="radio"  formControlName="inquiryExperience"  name="question2"  matTooltip="Excellent" value="Excellent" id="11"><label for="11">☆</label>
+                    <input type="radio"  formControlName="inquiryExperience" name="question2" matTooltip="Good" value="Good" id="12"><label for="12">☆</label>
+                    <input type="radio" formControlName="inquiryExperience"  name="question2" matTooltip="Fair" value="Fair" id="13"><label for="13">☆</label>
+                    <input type="radio"  formControlName="inquiryExperience"  name="question2" matTooltip="Poor" value="Poor" id="14"><label for="14">☆</label>
+                    <input type="radio" formControlName="inquiryExperience"  name="question2"  matTooltip="Bad"  value="Bad" id="15"><label for="15">☆</label>
+                  </fieldset>
+                </div> 
+                <div class="col-md-3 px-0 textLeft">
+                  <label class="px-3 text-blue">Excelente</label>
+                </div>
+                <mat-error class="px-3" *ngIf="errorHandling('inquiryExperience')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Cómo calificaría su interacción con la primera persona con la que
+                  habló?</p>
+                  <div class="row">
+              
+                    <div class="col-md-2 px-0">
+                      <p class="px-3 text-blue ">Malo</p>
+                    </div>
+                  <div class="col-md-3 px-0">
+                    <fieldset class="rating"   >
+                
+                    <input type="radio"  formControlName="firstPersonInteraction"  matTooltip="Excellent" value="Excellent" id="16"><label for="16">☆</label>
+                    <input type="radio"  formControlName="firstPersonInteraction" matTooltip="Good" value="Good" id="17"><label for="17">☆</label>
+                    <input type="radio" formControlName="firstPersonInteraction" matTooltip="Fair" value="Fair" id="18"><label for="18">☆</label>
+                    <input type="radio"  formControlName="firstPersonInteraction" matTooltip="Poor" value="Poor" id="19"><label for="19">☆</label>
+                    <input type="radio" formControlName="firstPersonInteraction"  matTooltip="Bad"  value="Bad" id="20"><label for="20">☆</label>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-3 px-0 textLeft">
+                    <label class="px-3 text-blue">Excelente</label>
+                  </div>
+                  <mat-error class="px-3" *ngIf="errorHandling('firstPersonInteraction')">{{getErrorMessage()}}</mat-error>
+                  </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Fue fácil programar su consulta?</p>
+                <div class="auto">
+                  <mat-radio-group formControlName="consultationSchedule" layout="row">
+                    <label style="width:40px"></label>
+                    <mat-radio-button color="primary" style="width:40px" class="example-margin ml-4" value="Si">Si
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" style="width:40px" class="example-margin ml-4" value="No">No
+                    </mat-radio-button>
+                    <label style="width:40px"></label>
+                  </mat-radio-group>
+                </div>
+                <mat-error *ngIf="errorHandling('consultationSchedule')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Nuestro personal hizo un buen trabajo de seguimiento y
+                  recordatorio de su consulta?</p>
+                <div class="auto">
+                  <mat-radio-group formControlName="staffFollowUp" layout="row">
+                    <label style="width:40px"></label>
+                    <mat-radio-button color="primary" style="width:40px" class="example-margin ml-4" value="Si">Si
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" style="width:40px" class="example-margin ml-4" value="No">No
+                    </mat-radio-button>
+                    <label style="width:40px"></label>
+                  </mat-radio-group>
+                </div>   
+                 <mat-error class="px-3" *ngIf="errorHandling('staffFollowUp')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Cuán satisfecho estuvo con la consulta con su abogado?</p>
+                <div class="row mx-2">
+                  <div class="col-md-2 px-0">
+                    <label class="px-3 text-blue">no me satisfizo en absoluto</label>
+                  </div>
+                  <div class="col-md-3 px-0">
+                    <fieldset class="rating"   >
+                      <input type="radio"  formControlName="attorneyConsultation"  value="10" id="10"><label for="10">☆</label>
+                      <input type="radio"  formControlName="attorneyConsultation"  value="9" id="9"><label for="9">☆</label>
+                      <input type="radio" formControlName="attorneyConsultation"  value="8" id="8"><label for="8">☆</label>
+                      <input type="radio"  formControlName="attorneyConsultation" value="7" id="7"><label for="7">☆</label>
+                      <input type="radio" formControlName="attorneyConsultation"   value="6" id="6"><label for="6">☆</label>
+                    <input type="radio"  formControlName="attorneyConsultation"  value="5" id="5"><label for="5">☆</label>
+                    <input type="radio"  formControlName="attorneyConsultation"  value="4" id="4"><label for="4">☆</label>
+                    <input type="radio" formControlName="attorneyConsultation"  value="3" id="3"><label for="3">☆</label>
+                    <input type="radio"  formControlName="attorneyConsultation" value="2" id="2"><label for="2">☆</label>
+                    <input type="radio" formControlName="attorneyConsultation"   value="1" id="1"><label for="1">☆</label>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-3 px-0 textLeft">
+                    <label class="px-3 text-blue">he quedado muy satisfecho</label>
+                  </div>
+                  <mat-error class="px-3" *ngIf="errorHandling('attorneyConsultation')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Fue su consulta informativa?</p>
+                <div class="row mx-2">
+                  <div class="col-md-2 px-0 ">
+                    <label class="px-3 text-blue">nada informativo</label>
+                  </div>
+                  <div class="col-md-3 px-0">
+                    <fieldset class="rating"   >
+                      <input type="radio"  formControlName="consultationInformative"  value="10" id="35"><label for="35">☆</label>
+                      <input type="radio"  formControlName="consultationInformative"  value="9" id="34"><label for="34">☆</label>
+                      <input type="radio" formControlName="consultationInformative"  value="8" id="33"><label for="33">☆</label>
+                      <input type="radio"  formControlName="consultationInformative" value="7" id="32"><label for="32">☆</label>
+                      <input type="radio" formControlName="consultationInformative"   value="6" id="31"><label for="31">☆</label>
+                    <input type="radio"  formControlName="consultationInformative"  value="5" id="30"><label for="30">☆</label>
+                    <input type="radio"  formControlName="consultationInformative"  value="4" id="29"><label for="29">☆</label>
+                    <input type="radio" formControlName="consultationInformative"  value="3" id="28"><label for="28">☆</label>
+                    <input type="radio"  formControlName="consultationInformative" value="2" id="27"><label for="27">☆</label>
+                    <input type="radio" formControlName="consultationInformative"   value="1" id="26"><label for="26">☆</label>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-3 px-0 textLeft">
+                    <label class="px-3 text-blue">muy informativo</label>
+                  </div>
+                  <mat-error *ngIf="errorHandling('consultationInformative')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Qué tan cómodo se sintió discutiendo su caso con su abogado?</p>
+                <div class="row mx-2">
+                  <div class="col-md-2 px-0">
+                    <label class="px-3 text-blue">no me sentía cómodo</label>
+                  </div>
+                  <div class="col-md-3 px-0">
+                    <fieldset class="rating"   >
+                      <input type="radio"  formControlName="attorneyDiscussionComfortable"  value="10" id="45"><label for="45">☆</label>
+                      <input type="radio"  formControlName="attorneyDiscussionComfortable"  value="9" id="44"><label for="44">☆</label>
+                      <input type="radio" formControlName="attorneyDiscussionComfortable"  value="8" id="43"><label for="43">☆</label>
+                      <input type="radio"  formControlName="attorneyDiscussionComfortable" value="7" id="42"><label for="42">☆</label>
+                      <input type="radio" formControlName="attorneyDiscussionComfortable"   value="6" id="41"><label for="41">☆</label>
+                    <input type="radio"  formControlName="attorneyDiscussionComfortable"  value="5" id="40"><label for="40">☆</label>
+                    <input type="radio"  formControlName="attorneyDiscussionComfortable"  value="4" id="39"><label for="39">☆</label>
+                    <input type="radio" formControlName="attorneyDiscussionComfortable"  value="3" id="38"><label for="38">☆</label>
+                    <input type="radio"  formControlName="attorneyDiscussionComfortable" value="2" id="37"><label for="37">☆</label>
+                    <input type="radio" formControlName="attorneyDiscussionComfortable"   value="1" id="36"><label for="36">☆</label>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-3 px-0 textLeft">
+                    <label class="px-3 text-blue">ha estado muy a gusto</label>
+                  </div>
+                  <mat-error class="px-3" *ngIf="errorHandling('attorneyDiscussionComfortable')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="auto">
+                <p class="auto fw-bolder py-3 required">¿Recomendaría nuestro bufete a un amigo o familiar?</p>
+                <div class="auto">
+                  <mat-radio-group formControlName="referFriendOrFamily" layout="row">
+                    <label style="width:40px"></label>
+                    <mat-radio-button color="primary" class="example-margin ml-4" value="Si">Si
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" value="No">No
+                    </mat-radio-button>
+                    <label style="width:40px"></label>
+                  </mat-radio-group>
+                </div>
+                <mat-error *ngIf="errorHandling('referFriendOrFamily')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="mb-5">
+              <p class="auto fw-bolder py-3 required">¿Cómo podemos mejorar?</p>
+              <mat-form-field class="form-group input_field w-100 mb-0 ps-3" appearance="outline">
+                <textarea matInput rows="5" placeholder="Enter" formControlName="improveRemark"></textarea>
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('improveRemark')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+        </form>
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white  fixed-bottom w-100">
+          <button mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

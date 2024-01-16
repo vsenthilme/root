@@ -1,0 +1,367 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; background-color: #F4F4F7;letter-spacing: 4px;}
+*{letter-spacing: 1px;}
+body { margin: 0; }
+::ng-deep.mat-dialog-container{padding: 0px;}
+// NOTE: From `2.0.0-beta.10`, you can now pass the typography via the mat-core() mixin:
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config(
+  $font-family: 'Roboto Slab',
+);
+
+//@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+// @font-face {
+ //  font-family: 'Comforter';
+ //  src: url(assets/font/Comforter-Regular.ttf) format("opentype");
+// }
+
+
+
+@include mat-core($custom-typography);
+
+.mat-expansion-panel {
+  color: black !important;
+}
+.mat-cell {
+  color: black !important;
+}
+
+
+//float action
+::ng-deep .purple {background-color: #9c27b0;}
+::ng-deep .action-button{border-radius: 4px;min-width: 6rem;}
+
+mark, .mark {
+  padding: 0.2em;
+  background-color: #fff3b4 !important;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {padding: 0.3rem 0 !important;
+}
+.mat-expansion-panel-spacing {
+  margin: 0px 0 !important;
+}
+
+.padding-space{padding-top: 2rem;padding-bottom: 2rem;}
+.mat-cell {
+ // text-align: center !important;
+  border-right: 0.5px solid rgba(0,0,0,.12) !important;
+}
+
+.client-grey{background-color: #f5f5f5 !important;}
+.client-grey1{background-color: #f6f6f6 !important;}
+.text-light{color: #707070 !important;}
+.disabled{opacity: 0.55 !important;}
+.text-blue{color: #006990 !important;}
+.bg-orange1{  background: linear-gradient( 90deg, #f56f16, #f56f16 49%, #f59453 51% ) !important; }
+.bg-pink{  background: linear-gradient( 90deg, #ff085e, #ff085e 49%, #ff3f7f 51% ); }
+.bg-blue{background-color: #006990 !important;}
+.bg-lightblue{  background: linear-gradient( 90deg, #007ce7 , #007ce7   49%, #3098f3   51% ) !important; }
+.text-yellow{color: #FDBB12 !important;}
+.primary1{  background: linear-gradient( 90deg, #aace1a, #aace1a  49%, #c9e45f  51% ) !important; }
+.bg-yellow{background-color: #FDBB12 !important;}
+.bg-yellow1{  background: linear-gradient( 90deg, #ffb902, #ffb902  49%, #ffd057  51% ); }
+.bg-success1{ background: linear-gradient( 90deg, #208839, #208839  49%, #28A745  51% ) !important; }
+.bg-darkblue{background-color:rgba(0, 63, 94, 0.8) !important;}
+.bg-darkblue1{  background: linear-gradient( 90deg, #0f5e7a, #0f5e7a 49%, #13789c 51% ); }
+.header_colour{background-color: #237da0 !important;}
+.purple {background-color: #9c27b0 !important;}
+.bg-red{background-color: #f44336 !important;}
+.bg-orange{  background: linear-gradient( 90deg, #f16508, #f16508 49%, #f16508 51% ); }
+.header-text{color: #4faf99 !important;}
+//input
+
+.input_field{width: 100%;border-color: #dee2e6;}
+.input_field1{width: 30%;border-color: #dee2e6;}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.7em 0 !important;
+}
+.mat-dialog-title {
+  margin: 0 0 0px !important;
+  display: block;
+}
+.grid{height: 1.5rem;width: 1.5rem;}
+.tab_icon{font-size: 1.9rem;}
+.font_1-5{font-size: 1.2rem;}
+
+.form-control:focus { box-shadow: none !important;}
+.form-select , .form-control {width: 11rem;height: 1.9rem;border-color: #dee2e6;font-size: 0.8rem;}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+  color: rgba(0,0,0,0);
+  background-color: #f7f7f7 !important;
+}
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: rgba(0,0,0,0.8) !important;
+}
+.mat-select-disabled .mat-select-value {
+  color: rgba(0,0,0,0.8) !important;
+}
+.bottombutton {
+  position: absolute;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  bottom: -3% !important;
+}
+
+// .mat-row:nth-child(even){
+//   background-color: #f7f7f7 !important;
+// }
+      
+// .mat-row:nth-child(odd){
+//   background-color: white !important;
+// }
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #ffff !important;
+}
+
+.hoverbutton{background-color: white; color: #006990;}
+.hoverbutton:hover{background-color: #006990; color: white;}
+
+.scroll{height: 19rem;overflow-y: scroll;}
+.mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+  transform: translateY(3%) !important;
+}
+
+
+.mat-paginator-container {
+  min-height: 36px !important;
+}
+.mat-stroked-button:not(.mat-button-disabled) {
+  border-color: rgba(0,0,0,0) !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  overflow-y: scroll;
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a8a8a8;
+  border-radius: 8px;
+}
+::-webkit-scrollbar {
+  height: 8px;
+  overflow-x: scroll;
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a8a8a8;
+  border-radius: 8px;
+}
+
+.img{color: #fff;background-image: url("./assets/img/icons/background7.png");background-position-y: top;padding-bottom: 0.3rem;z-index: -10;width: 100%;}
+
+.collapsefont{font-size: 1.2rem; color: #4d4d4d;}
+::ng-deep.font_1-5{font-size: 1.2rem;}
+
+.floating-buttons {
+  -webkit-animation-name: floating-buttons;
+  animation-name: floating-buttons;
+  box-shadow: none !important;
+  -webkit-animation-duration: 0.9s;
+  animation-duration: 0.9s;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden; }
+
+@keyframes floating-buttons {
+  0% {
+    -webkit-animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    -webkit-transform: translateX(400px) rotate(-445deg);
+    transform: translateX(20px) rotate(-445deg);
+    opacity: 0; }
+  30% {
+    opacity: 1; }
+  50% {
+    -webkit-transform: translateX(-40px) rotate(-20deg);
+    transform: translateX(-40px) rotate(-20deg); }
+  100% {
+    -webkit-animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    -webkit-transform: translateX(0) rotate(0deg);
+    transform: translateX(0) rotate(0deg); } }
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importing Datepicker SCSS file. */
+@import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+
+::ng-deep .mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: rgb(255 255 255);
+  background: blue !important;
+}
+
+.multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+  border: 1px solid #337ab7;
+  margin-right: 5px;
+  margin-bottom: 5px !important;
+  background: #337ab7;
+  padding: 0 5px;
+  color: #fff;
+  border-radius: 2px;
+  float: left;
+  max-width: 260px !important;
+}
+
+.multiselect-dropdown .dropdown-btn {
+  display: inline-block;
+  border: 1px solid #dee2e6 !important;
+  width: 100%;
+  padding: 6px 12px !important;;
+  padding-top: 10px !important;
+  margin-bottom: 0;
+  font-weight: 400;
+  line-height: 1.52857143;
+  text-align: left;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border-radius: 4px;
+}
+
+.stick{top: 0px;z-index: 101;left: 58.781px !important;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(0,0,0,.12);}
+
+.required:after {
+  content:" *";
+  color: red;
+}
+
+
+
+//INTAKE BUTTON HOVER 
+
+
+@-webkit-keyframes hvr-pop {
+  50% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+}
+@keyframes hvr-pop {
+  50% {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+}
+.hvr-pop {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.hvr-pop:hover, .hvr-pop:focus, .hvr-pop:active {
+  -webkit-animation-name: hvr-pop;
+  animation-name: hvr-pop;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+
+
+
+
+
+@media (max-width: 600px) {
+  .smallscreen {padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  }
+  }
+
+
+  .mat-expansion-panel-body {
+    padding: 0 24px 16px !important;
+}
+
+
+
+/* Wobble Horizontal */
+@-webkit-keyframes hvr-wobble-horizontal {
+  16.65% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  33.3% {
+    -webkit-transform: translateX(-6px);
+    transform: translateX(-6px);
+  }
+  49.95% {
+    -webkit-transform: translateX(4px);
+    transform: translateX(4px);
+  }
+  66.6% {
+    -webkit-transform: translateX(-2px);
+    transform: translateX(-2px);
+  }
+  83.25% {
+    -webkit-transform: translateX(1px);
+    transform: translateX(1px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes hvr-wobble-horizontal {
+  16.65% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  33.3% {
+    -webkit-transform: translateX(-6px);
+    transform: translateX(-6px);
+  }
+  49.95% {
+    -webkit-transform: translateX(4px);
+    transform: translateX(4px);
+  }
+  66.6% {
+    -webkit-transform: translateX(-2px);
+    transform: translateX(-2px);
+  }
+  83.25% {
+    -webkit-transform: translateX(1px);
+    transform: translateX(1px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+.hvr-wobble-horizontal {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.hvr-wobble-horizontal:hover, .hvr-wobble-horizontal:focus, .hvr-wobble-horizontal:active {
+  -webkit-animation-name: hvr-wobble-horizontal;
+  animation-name: hvr-wobble-horizontal;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+}
+

@@ -1,0 +1,114 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Billing Details</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+  </div>
+   <div class="row  mx-0 py-2 d-flex justify-content-end align-items-center">
+  <div class="col-2">
+    <button mat-raised-button (click)="Add()" class="mx-2 bg-yellow text-white"> <i
+      class="bi bi-plus me-1 font-size-1_5rem"></i>
+    Add</button>
+  </div>
+      </div> 
+  <div class=" my-0 py-0 ">
+    <div class="scroll">
+      <table mat-table [dataSource]="dataSource" class="col-12 w-100">
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef>Bill to Client </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" [(ngModel)]="element.clientId"
+              singleSelection='true' apiMethod="client" apiName="clientId">
+            </app-ng-multiselect-dropdown> -->
+            <angular2-multiselect [data]="multiselectclientList" [(ngModel)]="element.clientId"
+            [settings]="dropdownSettings"></angular2-multiselect>
+            <!-- <p class="mb-0 kpy-0" for="client" class="d-none">Prebill Date </p> -->
+            <!-- <angular2-multiselect [data]="multiselectclientList" [(ngModel)]="selectedItems"
+              [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" 
+              (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" name="client"></angular2-multiselect> -->
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dimensions">
+          <th mat-header-cell *matHeaderCellDef>Client</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button> $
+            </button>100
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dimensions1">
+          <th mat-header-cell *matHeaderCellDef>Legal Fees</th>
+          <td mat-cell *matCellDef="let element" class="d-flex">
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" style=" margin: 0 0 !important;padding-bottom: 0px !important;"> 
+          <input  type="number" matInput placeholder="Enter" [(ngModel)]="element.fAmount"><span matPrefix
+            class="text-secondary" style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+            </mat-form-field>
+     
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dimensions2">
+          <th mat-header-cell *matHeaderCellDef>Legal Cost</th>
+          <td mat-cell *matCellDef="let element">
+             <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" style=" margin: 0 0 !important;padding-bottom: 0px !important;"> 
+            <input  type="number" matInput placeholder="Enter" [(ngModel)]="element.cAmount"><span matPrefix
+            class="text-secondary" style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+            </mat-form-field> 
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dimensions3">
+          <th mat-header-cell *matHeaderCellDef>Invoice Amt</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button>$
+            </button>{{getamount(element)  | number:'1.2-2'}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="remove(element)"> <mat-icon class="text-danger">delete</mat-icon></button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+        </tr>
+      </table>
+    </div>
+    <!-- <div class="buttons border d-flex justify-content-end">
+          <div class="p-0 mx-1 " style="background-color: #ffff;">
+            <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div> -->
+  </div>
+  <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+    <button mat-raised-button mat-dialog-close class="text-white mr-1 px-4" color="warn">
+      <mat-icon class="">close</mat-icon> Cancel
+    </button>
+    
+    <button mat-raised-button (click)="save()" class="mx-2 bg-blue text-white"> <i
+        class="bi bi-check2 me-1 font-size-1_5rem"></i>
+      Save</button>
+     
+  </div>
+
+</div>

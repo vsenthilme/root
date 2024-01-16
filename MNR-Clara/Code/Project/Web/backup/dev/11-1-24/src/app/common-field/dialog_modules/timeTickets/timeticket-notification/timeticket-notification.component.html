@@ -1,0 +1,12 @@
+<div class="card bg-white p-5" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+  <i mat-dialog-close class="text-secondary  bi-x-lg px-3" style="position: absolute; right: 0px; top: 15px;"></i>
+  <div class="d-flex justify-content-center" style="margin-top:  -3%;">
+    <img [src]="this.data.img" style="width: 20%;" alt="" srcset="">
+  </div>
+  <div class="row mx-2 mt-2 text-center" style="margin-top: -4%;">
+    <h1 class="text-blue font-weight-bold">{{this.data.title}}</h1>
+    <h3 class="text-blue mb-2">{{this.data.content1}}</h3>
+    <h5 class="mb-0 text-secondary">{{this.data.content2}}</h5>
+  </div>
+
+</div>

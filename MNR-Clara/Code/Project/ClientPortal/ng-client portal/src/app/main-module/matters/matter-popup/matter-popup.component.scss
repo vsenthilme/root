@@ -1,0 +1,32 @@
+::ng-deep .mat-vertical-content-container {
+    margin-left: 43px !important;
+    border: 0;
+    position: relative;
+}
+
+::ng-deep .mat-step-icon {
+    border-radius: 50%;
+    height: 40px !important;
+    width: 40px !important;
+    flex-shrink: 0;
+    position: relative;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+    background-color: #006990 !important;
+    color: #fff;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-edit {
+    background-color: #006990 !important;
+    color: #fff;
+}
+
+::ng-deep.mat-dialog-container{padding: 0px;}
+
+
+
+//input
+::ng-deep .mat-dialog-container {
+    color: rgba(0,0,0,1);
+}

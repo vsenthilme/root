@@ -1,0 +1,20 @@
+<mat-form-field appearance="outline" class="mx-2">
+    <mat-label>Time Keepers</mat-label>
+    <mat-select [(ngModel)]="timeKeeper" (ngModelChange)="getCaseAssignment()">
+        <mat-option [value]=timeKeeperEnum.PARTNERS>Partners</mat-option>
+        <mat-option [value]=timeKeeperEnum.ORIGINATINGTIMEKEEPERS>Originating Time Keepers</mat-option>
+        <mat-option [value]=timeKeeperEnum.RESPONSIBLETIMEKEEPERS>Responsible Time Keepers</mat-option>
+        <mat-option [value]=timeKeeperEnum.LEGALASSISTANTS>Legal Assistants</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="mx-2">
+    <mat-label>Class</mat-label>
+    <mat-select [(ngModel)]="classId" (ngModelChange)="getCaseAssignment()">
+        <mat-option [value]="1">L&E</mat-option>
+        <mat-option [value]="2">Imm</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" class="size">
+</highcharts-chart>

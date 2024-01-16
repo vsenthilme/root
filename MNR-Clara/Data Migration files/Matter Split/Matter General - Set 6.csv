@@ -1,0 +1,503 @@
+LANG_ID,CLASS_ID,MATTER_NO,CLIENT_ID,CASEINFO_NO,TRANS_ID,CASE_CATEGORY_ID,CASE_SUB_CATEGORY_ID,BILL_MODE_ID,BILL_FORMAT_ID,BILL_FREQ_ID,BILL_REMARK,FLAT_FEE,ADMIN_COST,MATTER_TEXT,CASE_OPEN_DATE,CASE_CLOSED_DATE,CASE_FILED_DATE,PRIORITY_DATE,RECEIPT_NOT_NO,RECEIPT_DATE,EXPIRATION_DATE,COURT_DATE,APPROVAL_DATE,BILL_MODE_ID,BILL_FREQ_ID,BILL_FORMAT_ID,BILL_REMARK,AR_ACCOUNT_NO,TRUST_DEPOSIT_NO,FLAT_FEE,ADMIN_COST,CONTIG_FEE,RATE_UNIT,DIR_PHONE_NO,STATUS_ID,Isdeleted,CTD_BY,CTD_ON,UTD_BY,UTD_ON,REF_FIELD_25
+Language ID,Class ID,Matter Number,Client ID,Case Information No,Transaction ID,Case Category ID,Case Sub Category ID,Billing Mode ,Billing Format,Billing Frequency ,Billing Remarks,Flat Fee Amount,Administrative Cost,Matter Description,Case Opened Date,Case Closed Date,Case Filed Date,Priority Date,Receipt Notice No,Receipt Date,Expiration Date,Court Date,Approval Date,Billing Mode ID,Billing Frequency ID,Billing Format ID,Billing Remarks,AR Account Number,Trust Deposit No,Flat Fee Amount,Administrative Cost,Contigency Fee Amount,Rate Unit,Direct Phone Number,STATUS ID,Deletion Indicator,created by,created on,updated by,updated on,Retainer Paid
+EN,2,8265-213,8265,888888,6,20,151,2,3,1,,2500,450,Jamie Colbert I-140,2021-06-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-25,,,0
+EN,2,8265-214,8265,888888,6,20,246,2,3,1,,2500,450,Jamie Colbert Premium process upgrade - I-140,2021-08-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-03,,,0
+EN,2,8265-215,8265,888888,6,21,133,2,3,1,,2500,450,Robert Colbert TN RFE Response,2021-05-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-05,,,0
+EN,2,8265-216,8265,888888,6,21,68,2,3,1,,2500,450,Jamie Colbert TN and TD Extension with USCIS,2021-03-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-16,,,0
+EN,2,8265-217,8265,888888,6,20,142,2,3,1,,2500,450,Kyle Colbert - Son AOS Process,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-12,,,0
+EN,2,3341-211,3341,888888,6,12,191,2,3,1,,9500,775,"Nita Patel Family Petition, Motion to terminate  and AOS",2021-07-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-23,,,6000
+EN,2,3341-212,3341,888888,6,22,244,2,3,1,,9500,775,Nilesh Ahir Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,6000
+EN,2,3341-213,3341,888888,6,12,191,2,3,1,,9500,775,"Nilesh H. Ahir Family Petition, Motion to terminate  and AOS",2021-07-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-23,,,6000
+EN,2,9100-211,9100,888888,6,21,4,1,1,1,,750,0,Praveen GANTA General Matter,2021-05-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-28,,,0
+EN,2,9100-212,9100,888888,6,21,261,1,1,1,,750,0,Praveen Ganta H-1B Extension/Amendment,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,0
+EN,2,9100-213,9100,888888,6,21,256,1,1,1,,750,0,Praveen Ganta H-4Extension,2021-12-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-12-10,,,0
+EN,2,8278-211,8278,888888,6,20,30,2,3,1,,,,Anoop Vijayan EB-1 Petition,2021-07-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-15,,,
+EN,2,8278-212,8278,888888,6,21,4,2,3,1,,,,Anoop Vijayan General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,
+EN,2,9175-211,9175,888888,6,21,68,1,2,1,,0,0,Mayra Angelica Amaya Gonzalez TN and TD with DOS,2021-08-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-05,,,0
+EN,2,9175-212,9175,888888,6,21,68,1,2,1,,0,0,Mayra Angelica Amaya Gonzalez TN and TD with USCIS,2021-08-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-05,,,0
+EN,2,3011-211,3011,888888,6,20,223,2,3,1,,,,Jose Briseno Translations,2021-08-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-06,,,
+EN,2,8878-211,8878,888888,6,12,223,2,3,1,,,1200,Ana M. Diaz Garcia Translations,2021-08-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-06,,,"$3,500 + $250 (Credit)"
+EN,2,8878-212,8878,888888,6,12,121,2,3,1,,,1200,Ana M. Diaz Garcia U-Visa Process,2021-06-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-18,,,"$3,500 + $250 (Credit)"
+EN,2,9172-211,9172,888888,6,21,4,1,2,1,,3000,250,Ramasubramanian SUBRAMANIAN General Matter,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,0
+EN,2,9172-212,9172,888888,6,21,53,1,2,1,,3000,250,Ramasubramanian SUBRAMANIAN H-1B Transfer,2021-07-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-30,,,0
+EN,2,3741-211,3741,888888,6,12,147,2,3,1,,,,Melissa Margot Gonzalez MENCHACA EAD/ Travel Document Renewal,2021-05-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-28,,,
+EN,2,8267-211,8267,888888,6,20,151,2,3,1,,2500,0,Fernando Acaso I-140,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,0
+EN,2,8267-212,8267,888888,6,20,158,2,3,1,,2500,0,Fernando Acaso PERM,2021-05-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-05,,,0
+EN,2,8267-213,8267,888888,6,20,142,2,3,1,,2500,0,Fernando Acaso AOS,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,0
+EN,2,8267-214,8267,888888,6,20,150,2,3,1,,2500,0,Laura PArada Landaverde,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,0
+EN,2,8300-211,8300,888888,6,21,4,1,1,1,,5000,250,Venkatesh Kancharla General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8300-212,8300,888888,6,21,56,1,1,1,,5000,250,Venkatesh Kancharla H-4 and EAD,2021-01-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-29,,,0
+EN,2,8300-213,8300,888888,6,20,139,1,1,1,,5000,250,Venkatesh Kancharla PERM,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,5459-211,5459,888888,6,12,135,2,3,1,,750,112.5,Juan Ramon Mejia DACA Renewal,2021-08-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-02,,,750
+EN,2,3772-211,3772,888888,6,12,135,2,3,1,,750,112.5,Victor MORALES DACA Renewal,2021-08-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-03,,,750
+EN,2,9183-211,9183,888888,6,21,303,1,1,1,,1000,0,Pravin Jagtap,2021-08-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-13,,,0
+EN,2,9183-212,9183,888888,6,21,225,1,1,1,,1000,0,Pravin Jagtap L-1A,2021-10-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-22,,,0
+EN,2,9183-213,9183,888888,6,21,182,1,1,1,,1000,0,Pravin Jagtap - Spouse L2,2021-10-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-22,,,0
+EN,2,9134-211,9134,888888,6,12,42,2,3,1,,3000,375,Lucina Herrera B1/B2 Visa with DOS- Rush,2021-08-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-18,,,3000
+EN,2,9134-212,9134,888888,6,12,99,2,3,1,,3000,375,Lucina Herrera FOIA-USCIS,2021-06-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-10,,,3000
+EN,2,8964-211,8964,888888,6,12,303,2,3,1,,4500,450,Maricela Luis U Visa with Waiver,2021-04-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-28,,,1000
+EN,2,9177-211,9177,888888,6,20,139,2,3,1,Legal fees due pertaining to Prevailing Wage for Gilbert Acuna.,2500,250,Gilberto Ruben Acuna Brizeula PERM,2021-08-05,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-08-05,,,0
+EN,2,9084-211,9084,888888,6,12,4,1,1,1,,0,0,Leah Michelle Cross General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,9084-212,9084,888888,6,12,205,1,1,1,,0,0,Leah Michelle Cross TN Extension with USCIS,2021-05-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-10,,,0
+EN,2,8879-201,8879,888888,6,20,142,2,3,1,,9500,0,Jacobus De Villers AOS,2020-08-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-31,,,9500
+EN,2,8879-202,8879,888888,6,20,34,2,3,1,,9500,0,Jacobus De Villers I-140,2020-08-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-31,,,9500
+EN,2,8879-203,8879,888888,6,20,139,2,3,1,,9500,0,Jacobus De Villers PERM,2020-08-31,,,,,,,,,,,,,,,,,,,,26,0,DT,2020-08-31,,,9500
+EN,2,5629-211,5629,888888,6,15,303,2,3,1,,500,75,Arnulfo Arreguin EAD Renewal,2021-07-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-29,,,500
+EN,2,5629-212,5629,888888,6,22,244,2,3,1,,500,75,Arnulfo Arreguin Perez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,500
+EN,2,8378-211,8378,888888,6,15,303,2,3,1,,500,75,Jesus Benzor EAD Renewal,2021-08-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-16,,,500
+EN,2,8378-212,8378,888888,6,12,168,2,3,1,,500,75,Jesus Benzor I-824 Process,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,500
+EN,2,3744-211,3744,888888,6,12,135,2,3,1,,750,112.5,Roger Alvarado Morales,2021-08-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-10,,,750
+EN,2,3388-211,3388,888888,6,15,149,2,3,1,,500,75,Omar Samir Cabrera EAD Renewal 2021,2021-08-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-09,,,500
+EN,2,8172-211,8172,888888,6,15,303,2,3,1,,500,75,Flor De Maria Abrego EAD Renewal,2021-08-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-16,,,500
+EN,2,8172-212,8172,888888,6,15,303,2,3,1,,500,75,Flor De Maria Abrego I-824 Process,2021-08-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-23,,,500
+EN,2,8263-211,8263,888888,6,15,80,2,3,1,,500,75,Kevin Naves EAD Renewal,2021-08-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-09,,,500
+EN,2,9166-211,9166,888888,6,12,216,2,3,1,Legal Fees due pertianing to EOIR/ICE FOIA Request for Thelma Dominguez Inestroza.,250,25,Thelma Dominguez FOIA-ICE/EOIR,2021-07-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-21,,,250
+EN,2,9162-211,9162,888888,6,12,165,2,3,1,,0,0,Emilio Hernandez I-90 and FOIA with USCIS,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,7180-211,7180,888888,6,12,135,2,3,1,,750,112.5,Jonathan Arias Reveles DACA Renewal,2021-07-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-30,,,750
+EN,2,6160-211,6160,888888,6,12,135,2,3,1,,750,112.5,Juan R. Castro DACA Renewal,2021-08-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-05,,,750
+EN,2,3701-211,3701,888888,6,12,135,2,3,1,,750,112.5,Jeffrey Alan Tellez DACA Renewal,2021-08-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-04,,,750
+EN,2,3963-211,3963,888888,6,20,149,2,3,1,,500,75,Claudia Rodriguez Ozuna I-765/I-131 Renewal,2021-05-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-12,,,500
+EN,2,3963-212,3963,888888,6,20,243,2,3,1,,500,75,Claudia Rodriguez Ozuna L1A Amendment,2021-07-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-27,,,500
+EN,2,3963-213,3963,888888,6,20,243,2,3,1,,500,75,Claudia Rodriguez Ozuna Expedite Request on EAD/I131,2021-07-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-27,,,500
+EN,2,8399-211,8399,888888,6,12,129,2,3,1,,,,Elia Mercedes AGURCIA MONCADA Translations,2021-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-01,,,
+EN,2,7013-211,7013,888888,6,21,142,2,3,1,,2500,0,Ricardo Riojas AOS,2021-07-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-07-12,,,0
+EN,2,7013-212,7013,888888,6,21,142,2,3,1,,2500,0,Maria Diaz AOS,2021-07-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-07-12,,,0
+EN,2,7013-213,7013,888888,6,21,151,2,3,1,,2500,0,Ricardo Riojas I-140,2021-05-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-18,,,0
+EN,2,9106-211,9106,888888,6,21,4,1,1,1,,5000,250,Gopu Vinodkannan General Matter,2021-05-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-28,,,0
+EN,2,9106-212,9106,888888,6,20,139,1,1,1,,5000,250,Gopu Vinodkannan PERM,2021-06-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-23,,,0
+EN,2,3863-211,3863,888888,6,12,135,2,3,1,,750,112.5,Marcos Israel Sandoval DACA Renewal,2021-08-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-26,,,750
+EN,2,7462-211,7462,888888,6,15,303,2,3,1,Legal fees due pertaining to Adjustment of Status for Gilson Tiu.,500,75,Gilson Tiu Tiu Rivera AOS,2021-08-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-27,,,500
+EN,2,7462-212,7462,888888,6,15,303,2,3,1,Legal fees due pertaining to Adjustment of Status for Gilson Tiu.,500,75,Gilson Tiu Tiu Rivera EAD Renewal,2021-10-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-27,,,500
+EN,2,3698-211,3698,888888,6,12,135,2,3,1,,750,112.5,Alexis Angel Romero DACA Renewal,2021-08-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-18,,,750
+EN,2,8797-201,8797,888888,6,21,139,2,3,1,,8000,825,Anand Ulaganathan PERM/ I-140,2020-12-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2020-12-17,,,0
+EN,2,8797-202,8797,888888,6,21,52,2,3,1,,8000,825,"Cost Center 0840825-02400""",2020-06-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-01,,,0
+EN,2,8890-201,8890,888888,6,12,251,2,3,1,Legal fees due pertaining to Representation at Interview for Azalia Rojas's Naturalization.,2000,300,Azalia Rojas N400 & Interview,2020-09-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-18,,,2000
+EN,2,7057-211,7057,888888,6,21,237,2,3,1,,6650,950,Guillermo Proestakis E2 Extension with DOS Main Applicant and Family,2021-05-13,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-05-13,,,3650
+EN,2,8875-201,8875,888888,6,12,176,2,3,1,,2000,300,8875-20 Ricardo Lopez Guinazu N400,2020-08-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-21,,,1000
+EN,2,8876-201,8876,888888,6,12,176,2,3,1,,1800,270,8876-20 Maria Marta Ardissone N400,2020-08-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-21,,,900
+EN,2,8362-211,8362,888888,6,12,265,2,3,1,,1500,225,Reina Elizabeth RODRIGUEZ,2021-08-11,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-11,,,1000
+EN,2,8362-212,8362,888888,6,15,303,2,3,1,,1500,225,Reina Elizabeth Rodriguez Prosecutorial Discretion,2021-08-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-11,,,1000
+EN,2,9178-211,9178,888888,6,12,245,2,3,1,,5750,862.5,Cynthia Mayela Martinez  I-130/AOS and Interview,2021-08-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-09,,,0
+EN,2,9179-211,9179,888888,6,12,245,2,3,1,,2500,375,Luis Angel Reyes I-130/AOS and Interview,2021-08-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-09,,,0
+EN,2,9180-211,9180,888888,6,12,245,2,3,1,,2500,375,Jose Miguel Reyes I-130/AOS and Interview,2021-08-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-09,,,4000
+EN,2,9150-211,9150,888888,6,12,131,2,3,1,,1800,300,Floridalma Garcia Bulux Perez Family Petition,2021-06-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-21,,,1800
+EN,2,8843-201,8843,888888,6,12,185,2,3,1,Legal fees due pertianing to Translations on Divorce Certificate for Leticia Carrillo.,2000,300,Leticia Carrillo I-130,2020-07-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2020-07-21,,,1350
+EN,2,9187-211,9187,888888,6,21,68,2,3,1,Final Invoice due pertaining to TN for Josefina Santoyo with U.S. Department of Homeland Security.,5300,450,Josefina Santoyo Garcia TN & TD with USCIS,2021-08-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-17,,,2650
+EN,2,8921-211,8921,888888,6,12,160,2,3,1,,3000,450,Alberto Munoz Santoyo I-212 Waiver,2021-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-18,,,0
+EN,2,8508-211,8508,888888,6,15,303,2,3,1,,500,75,Armando Rodriguez Lopez EAD Renewal,2021-08-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-30,,,500
+EN,2,2986-211,2986,888888,6,15,303,2,3,1,,,,Alejandro De La Rosa EAD Renewal,2021-08-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-25,,,
+EN,2,9176-211,9176,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with CBP for Yesenia Alejandra Velazquez.,500,75,Yesenia Alejandra Velazquez FOIA- CBP,2021-08-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-05,,,500
+EN,2,3845-211,3845,888888,6,12,135,2,3,1,,750,112.5,Lourdes Cervantes,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,750
+EN,2,3695-211,3695,888888,6,12,135,2,3,1,,750,112.5,Antonio de Jesus Gonzalez DACA Renewal,2021-08-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-10,,,750
+EN,2,7344-211,7344,888888,6,12,38,2,3,1,,1500,225,Margarita Valdez Cuadra Interview,2021-08-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-13,,,1000
+EN,2,8861-211,8861,888888,6,12,303,2,3,1,,6800,570,Andres Inocente Sapon I-601/CP,2021-04-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-09,,,1000
+EN,2,9191-211,9191,888888,6,21,4,1,1,1,,3000,250,Venkatrathnam NARADASU SUBBARAYULU General Matter,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,0
+EN,2,9191-212,9191,888888,6,21,52,1,1,1,,3000,250,Venkatrathnam NARADASU SUBBARAYULU H-1B Petition,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,0
+EN,2,9193-211,9193,888888,6,12,68,2,3,1,,3000,300,Janet Jacqueline OCAMPO LOPEZ TN with DOS,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,0
+EN,2,9192-211,9192,888888,6,12,68,2,3,1,Legal fees due pertaining to TN Visa for Adrian Garcia with U.S. Department of Homeland Security.,2000,300,Adrian GARCIA TN with DOS,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,0
+EN,2,8344-201,8344,888888,6,15,180,2,3,1,Legal fees due pertaining to BIA Appeal Brief for Alex Rios-Nativi with U.S. Department of Justice.,2500,375,Alex Rios Nativi Motion to Reconsider,2020-11-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-24,,,0
+EN,2,9110-211,9110,888888,6,21,4,1,1,1,,5000,250,Drisya Gopinath General Matter,2021-06-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-03,,,0
+EN,2,9110-212,9110,888888,6,20,139,1,1,1,,5000,250,Drisya Gopinath PERM,2021-06-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-23,,,0
+EN,2,9159-211,9159,888888,6,20,151,2,3,1,,11500,500,Ahmad El SABAAYONE I140,2021-07-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-13,,,8500
+EN,2,9159-212,9159,888888,6,20,139,2,3,1,,11500,500,Ahmad El SABAAYONE PERM,2021-07-13,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-07-13,,,8500
+EN,2,6919-211,6919,888888,6,12,147,2,3,1,,500,75,Maria D. Hernandez EAD,2021-08-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-30,,,500
+EN,2,8687-211,8687,888888,6,12,80,2,3,1,,1000,150,Maria  Dijkstra EAD/Travel Document Renewal,2021-09-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-08,,,1000
+EN,2,5087-211,5087,888888,6,12,303,2,3,1,,1500,225,Alejandro Gomez Immigration Consequences of Criminal Charges/Conviction,2021-09-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-13,,,1500
+EN,2,8718-201,8718,888888,6,12,176,2,3,1,,1500,150,Victor Natividad Mendoza,2020-02-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-13,,,1500
+EN,2,9185-211,9185,888888,6,21,68,2,3,1,Legal fees due pertaining to Translations on Cesar A. Garcia's TN Petition.,4500,675,Cesar A. Garcia TN Management with DOS,2021-08-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-17,,,4500
+EN,2,7993-211,7993,888888,6,20,142,1,1,1,,2500,250,Khaled El Assir Hawa AOS with USCIS,2021-05-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-26,,,0
+EN,2,7993-212,7993,888888,6,20,4,1,1,1,,2500,250,Khaled El Assir Hawa General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8348-211,8348,888888,6,21,4,1,1,1,,2500,250,Deepayan Mukhop General matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8348-212,8348,888888,6,21,50,1,1,1,,2500,250,Deepayan Mukhopadhyay H-1B Extension,2021-12-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-03,,,0
+EN,2,8348-213,8348,888888,6,21,139,1,1,1,,2500,250,Deepayan Mukhopadhyay PERM,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,0
+EN,2,9198-211,9198,888888,6,22,303,1,1,1,,0,0,"Cal-Maine Foods, Inc.",2021-09-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-14,,,0
+EN,2,5797-211,5797,888888,6,22,244,2,3,1,,1500,0, Jose Antonio Mazarriegos Lopez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,0
+EN,2,9197-211,9197,888888,6,12,4,1,1,1,,3000,250,Veera ADEPU General Matter,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,0
+EN,2,9197-212,9197,888888,6,12,53,1,1,1,,3000,250,Veera ADEPU H-1B Transfer,2021-09-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-10,,,0
+EN,2,5818-211,5818,888888,6,12,135,2,3,1,,750,112.5,Derly Aguilar DACA Renewal,2021-09-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-02,,,750
+EN,2,6828-211,6828,888888,6,12,135,2,3,1,,750,112.5,Felipe De Jesus Barbosa DACA Renewal,2021-08-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-31,,,750
+EN,2,7036-211,7036,888888,6,12,135,2,3,1,,750,112.5,Ariana Garcia Martinez DACA Renewal,2021-09-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-08,,,750
+EN,2,8958-201,8958,888888,6,12,136,2,3,1,,1200,0,Gabriela Rubio Torres DACA,2020-12-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-12-18,,,750
+EN,2,3852-211,3852,888888,6,21,151,2,3,1,,1500,225,Jorge Ignacio Gonzalez Correa I-140/AOS,2021-10-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-14,,,0
+EN,2,3852-212,3852,888888,6,21,139,2,3,1,,1500,225,Jorge Ignacio Gonzalez Correa PERM-ER part only,2021-10-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-14,,,0
+EN,2,3852-213,3852,888888,6,21,228,2,3,1,,1500,225,Jorge Ignacio Gonzalez Correa Response to NOID,2021-12-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-22,,,0
+EN,2,3852-214,3852,888888,6,21,68,2,3,1,,1500,225,Jorge Ignacio Gonzalez Correa TN with USCIS,2021-08-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-30,,,0
+EN,2,9104-211,9104,888888,6,21,4,1,1,1,,2500,0,Sashidhar SIDDAMSETTY General Matter,2021-05-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-28,,,0
+EN,2,9104-212,9104,888888,6,21,52,1,1,1,,2500,0,Sashidhar SIDDAMSETTY H1B,2021-06-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-03,,,0
+EN,2,7518-211,7518,888888,6,21,129,2,3,1,,6000,0,Klavs Pederson Consular Process -& Wife,2021-01-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-04,,,0
+EN,2,7518-212,7518,888888,6,21,4,2,3,1,,6000,0,Klavs Pederson General Matter,2021-08-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-01,,,0
+EN,2,7518-213,7518,888888,6,21,266,2,3,1,,6000,0,Klavs Pederson O-1 Petition,2021-06-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-23,,,0
+EN,2,5987-211,5987,888888,6,12,233,2,3,1,,,,Jose Fuentes N-400 Process with Representation at Interview,2021-09-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-09,,,
+EN,2,5453-211,5453,888888,6,12,135,2,3,1,,750,112.5,Rey Hernandez DACA Renewal,2021-09-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-17,,,750
+EN,2,3903-211,3903,888888,6,12,135,2,3,1,,750,112.5,Yahaira Aguilar DACA Renewal,2021-08-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-31,,,750
+EN,2,5536-211,5536,888888,6,12,135,2,3,1,,750,112.5,Lizeth Perez DACA Renewal,2021-09-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-08,,,750
+EN,2,5536-212,5536,888888,6,22,244,2,3,1,,750,112.5,Lizeth Perez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,750
+EN,2,3613-211,3613,888888,6,12,135,2,3,1,,750,112.5,Carlos Martinez DACA Renewal,2021-09-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-17,,,750
+EN,2,9190-211,9190,888888,6,21,213,2,3,1,Final Invoice pertaining to E-1 Visa for Eduardo Olguin with U.S. Department of Homeland Security.,4000,450,Eduardo Alfonso Olguin E-1 with DOS & Request Expedite Appt.,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,2327.5
+EN,2,3794-211,3794,888888,6,12,143,2,3,1,,1800,270,Maria Garza Hernandez Removal of Conditions,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,1000
+EN,2,9207-211,9207,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Esmeralda Ramos.,2700,0,Esmeralda Ramos CP,2021-09-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-27,,,750
+EN,2,7259-211,7259,888888,6,15,303,2,3,1,,2500,375,Jorge Alejandro Espinoza Prosecutorial Discretion & FOIA - ICE/CBP,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,250
+EN,2,7129-211,7129,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Jasson Alvarado.,3000,450,Jason Alvarado Consular Process,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,1200
+EN,2,6994-211,6994,888888,6,15,303,2,3,1,,500,75,Carlos Cortez EAD Renewal,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,500
+EN,2,5996-211,5996,888888,6,12,147,2,3,1,,500,75,Karina Hervis MARTINEZ EAD - U VISA matter,2021-09-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-21,,,500
+EN,2,5996-212,5996,888888,6,22,244,2,3,1,,500,75,Karina Hervis Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,500
+EN,2,8705-211,8705,888888,6,12,123,2,3,1,Legal fees due pertaining to Waiver Based on USCIS visa with USCIS for Adrian Ortega.,0,0,Adrian Ortega Waiver Based on U visa with USCIS,2021-06-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-21,,,0
+EN,2,8153-211,8153,888888,6,12,149,2,3,1,,500,75,Roger QUIROS GUTIERREZ EAD Ren,2021-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-15,,,300
+EN,2,7116-211,7116,888888,6,12,147,2,3,1,,500,75,Sofia Ortiz EAD,2021-08-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-31,,,500
+EN,2,9168-211,9168,888888,6,21,200,2,3,1,Legal fees due pertaining to E2 Visa for Jeffrey Ward with U.S. Department of Homeland Security.,3500,250,Jeffrey Ward E2 Visa,2021-07-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-26,,,0
+EN,2,9224-211,9224,888888,6,21,68,2,3,1,,8000,500,Miguel Masso TN VISA,2021-09-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-27,,,0
+EN,2,8279-211,8279,888888,6,21,4,1,1,1,,2500,250,Bilal Tawil General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8279-212,8279,888888,6,21,50,1,1,1,,2500,250,Bilal Tawil H-1B Extension,2021-09-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-17,,,0
+EN,2,8279-213,8279,888888,6,21,151,1,1,1,,2500,250,Bilal Tawil I-140,2021-12-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-23,,,0
+EN,2,8440-211,8440,888888,6,15,303,2,3,1,,500,75,Jose Prisciliano Turrubiartes Lumbreras EAD Renewal,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,0
+EN,2,8887-211,8887,888888,6,12,142,2,3,1,Attorney Fees,3500,525,Valentin Trujillo Adjustment of Status,2021-08-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-16,,,1000
+EN,2,8867-201,8867,888888,6,12,267,2,3,1,,7000,1050,Freddy J. GalindoHernandez  - Family Petition,2019-08-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2019-08-06,,,450
+EN,2,9074-211,9074,888888,6,15,303,2,3,1,Legal fees due pertaining to FOIA Request with EOIR for Cruz Yanira Velazquez.,3600,540,Cruz Y. Velasquez Motion to Reopen,2021-04-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-20,,,1250
+EN,2,8200-211,8200,888888,6,22,244,2,3,1,,,,Henry David VIDAL ANGULO Immigration 2019 Reconciliation,2021-10-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-10,,,
+EN,2,8243-211,8243,888888,6,22,244,2,3,1,,,,Imelda RUBIO Immigration 2019 Reconciliation,2021-10-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-10,,,
+EN,2,9210-211,9210,888888,6,12,131,2,3,1,,4500,675,Mirna Mercado Rheinboldt Torres,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,1000
+EN,2,9133-211,9133,888888,6,21,4,1,1,1,,5000,0,Ganganjaneya Thummala General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9133-212,9133,888888,6,21,139,1,1,1,,5000,0,Ganganjaneya Thummala PERM,2021-09-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-09,,,0
+EN,2,9201-211,9201,888888,6,15,303,2,3,1,Legal fees due pertaining to Asylum Application with Court for Nery Obdulio Castro and Daughter.,6000,450,Nery Obdulio Castro Mejia & Daughter Luna Abigail Castro-Rivera Asylum,2021-09-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-22,,,1250
+EN,2,9184-211,9184,888888,6,21,4,1,1,1,,,,TRI Freight General MAtter,2021-10-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-13,,,
+EN,2,9209-211,9209,888888,6,12,53,2,3,1,,3000,250,Rashmi Tallapragada H-1B Transfer,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,0
+EN,2,3978-211,3978,888888,6,15,303,2,3,1,,1000,150,Guillermo Reyes EAD Renewal,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,300
+EN,2,3978-212,3978,888888,6,12,185,2,3,1,,1000,150,Guillermo Reyes I-130,2021-10-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-13,,,300
+EN,2,3680-211,3680,888888,6,12,135,2,3,1,,750,112.5,Uri Samantha Reyes DACA Renewal,2021-10-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-05,,,750
+EN,2,7381-211,7381,888888,6,12,135,2,3,1,,750,112.5,Diego J. Cerda DACA Renewal,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,750
+EN,2,7524-211,7524,888888,6,12,135,2,3,1,,750,112.5,Frany Guadalupe ZEPEDA ZAVALA,2021-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-15,,,750
+EN,2,3784-211,3784,888888,6,12,135,2,3,1,,750,112.5,Diana Molgado DACA Renewal,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,750
+EN,2,5143-211,5143,888888,6,12,135,2,3,1,,750,112.5,Muriel Mendez DACA Renewal,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,487.5
+EN,2,8413-201,8413,888888,6,12,129,2,3,1,,6800,1020,Ruben Flores CP,2020-11-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-30,,,1000
+EN,2,8413-202,8413,888888,6,12,196,2,3,1,,6800,1020,Ruben Flores I-601 PW,2020-11-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-30,,,1000
+EN,2,9203-211,9203,888888,6,21,4,1,1,1,,3000,250,Sriram JANARTHANAN General Matter,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,0
+EN,2,9203-212,9203,888888,6,21,53,1,1,1,,3000,250,Sriram JANARTHANAN H-1B Transfer,2021-09-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-24,,,0
+EN,2,9203-213,9203,888888,6,21,133,1,1,1,,3000,250,Sriram JANARTHANAN RFE - H-1B,2021-12-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-22,,,0
+EN,2,8494-211,8494,888888,6,21,200,2,3,1,,3500,0,Gabriel Loyola E-2 Visa,2021-10-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-18,,,0
+EN,2,9200-211,9200,888888,6,12,177,2,3,1,,500,75,Escolastica DonJuan Arguello LPR Renewal,2021-09-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-21,,,500
+EN,2,9218-211,9218,888888,6,12,99,2,3,1,,1000,150,Juan de la Cruz Padilla Navarro FOIA- CBP and ICE,2021-10-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-08,,,1000
+EN,2,9220-211,9220,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with CBP for Elisa Hernandez Delgado.,500,75,Elisa Hernandez Delgado FOIA-CBP,2021-10-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-12,,,500
+EN,2,9220-212,9220,888888,6,12,223,2,3,1,Legal fees due pertaining to FOIA request with CBP for Elisa Hernandez Delgado.,500,75,Elisa Hernandez Delgado Translation,2021-12-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-01,,,500
+EN,2,9211-211,9211,888888,6,21,53,2,3,1,,3000,250,Suriyapraskash  Nagendiran H-1B Transfer,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,0
+EN,2,9225-211,9225,888888,6,22,4,1,1,1,,0,0,Matthew McGuire General Matter,2021-10-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-22,,,0
+EN,2,9131-211,9131,888888,6,21,4,2,1,1,,2500,250,Karthikeyan Ramachandran General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9131-212,9131,888888,6,21,261,2,1,1,,2500,250,Karthikeyan Ramachandran H-1B Extension/Amendment,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,0
+EN,2,9229-211,9229,888888,6,12,199,2,3,1,Legal fees due pertaining to EOIR FOIA for Wendy Torres.,500,75,Wendy Torres FOIA with EOIRD,2021-10-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-25,,,500
+EN,2,9228-211,9228,888888,6,21,190,2,3,1,Legal fees due pertaining to PIP for Indolfo Mondragon with U.S. Department of Homeland Security.,3000,450,Angelica Abad Parole in Place,2021-10-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-26,,,1000
+EN,2,6895-211,6895,888888,6,12,147,2,3,1,,500,75,Donaciano Cardenas EAD,2021-10-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-25,,,500
+EN,2,6023-211,6023,888888,6,12,147,2,3,1,,500,75,Ana Laura Garcia EAD,2021-10-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-12,,,500
+EN,2,3759-211,3759,888888,6,15,303,2,3,1,,500,75,Jose Juan Obrajero EAD Renewal,2021-10-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-13,,,90
+EN,2,3762-211,3762,888888,6,15,303,2,3,1,,500,75,Alberto Arias EAD Renewal,2021-10-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-11,,,500
+EN,2,9147-211,9147,888888,6,12,165,2,3,1,,650,97.5,Marina Ocampo I-90,2021-06-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-17,,,747.5
+EN,2,7003-211,7003,888888,6,12,147,2,3,1,,500,75,Mario A. Yañez EAD,2021-10-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-20,,,500
+EN,2,8547-211,8547,888888,6,20,257,1,1,1,,,,Francois Vorster Audit Response,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,
+EN,2,9219-211,9219,888888,6,12,4,1,1,1,,0,0,Gabriela Moguel De Flores General Matter,2021-10-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-11,,,0
+EN,2,9219-212,9219,888888,6,12,223,1,1,1,,0,0,Gabriela Moguel De Flores Translation,2021-10-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-28,,,0
+EN,2,8318-211,8318,888888,6,22,142,2,3,1,,2000,300,Ashish Mathur AOS,2021-08-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-10,,,0
+EN,2,8318-212,8318,888888,6,22,174,2,3,1,,2000,300,Ashish Mathur EB-2 NIW,2021-08-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-10,,,0
+EN,2,8318-213,8318,888888,6,21,50,2,3,1,,2000,300,Ashish Mathur H-1B Extension,2021-10-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-11,,,0
+EN,2,9230-211,9230,888888,6,21,4,1,2,1,,4500,350,Monica Coronado General Matter,2021-10-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-26,,,2250
+EN,2,9230-212,9230,888888,6,21,206,1,2,1,,4500,350,Monica Coronado J-1 VISA Program,2021-10-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-26,,,2250
+EN,2,9236-211,9236,888888,6,21,303,2,3,1,Legal fees due pertaining to Change of Status for Victor Ibrahim (3X),17000,0,Victor Ibrahim,2021-11-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-01,,,0
+EN,2,9213-211,9213,888888,6,12,216,2,3,1,Legal fees due pertaining to ICE/EOIR/USCIS/DOS/CBP FOIA request for Elder J. Cardenas.,2500,375,Elder J. Cardenas FOIA- ICE/EOIR/UCISDOS,2021-09-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-29,,,1250
+EN,2,9237-211,9237,888888,6,12,208,2,3,1,Legal fees due pertaining to FOIA with CBP and DOS for Ma. Soledad Ramirez Perez.,,,MA. Soledad Ramirez Perez FOIA - CBP and DOS,2021-11-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-03,,,
+EN,2,9234-211,9234,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with CBP for Ramon Lomeli.,500,75,Ramon Lomeli FOIA with CBP,2021-10-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-27,,,500
+EN,2,9233-211,9233,888888,6,21,4,1,2,1,,3500,0,Mengyu Li General Matter,2021-10-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-27,,,0
+EN,2,9233-212,9233,888888,6,21,52,1,2,1,,3500,0,Mengyu Li H-1B Petition,2021-10-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-27,,,0
+EN,2,9195-211,9195,888888,6,12,156,2,3,1,,2000,0,Laura Alfaro I-360/AOS,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,0
+EN,2,9202-211,9202,888888,6,15,303,2,3,1,,6500,950,Juan Baltazar Torres Hernandez 42B Removal,2021-09-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-24,,,1000
+EN,2,9196-211,9196,888888,6,12,156,2,3,1,,,,Emilia Alfaro I-360/AOS,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,
+EN,2,9223-211,9223,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA  for Alejandro Escalante.,1250,187.5,Alejandro Escalante FOIA & Request Criminal Record,2021-10-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-20,,,1250
+EN,2,9205-211,9205,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Ma del Rosario Santoyo Cruz.,3000,0,Ma Del Rosario Santoyo Cruz CP,2021-09-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-27,,,1000
+EN,2,9216-211,9216,888888,6,12,268,2,3,1,Legal fees due pertaining to Translation on Divorce Decree for Carolina Del Carpio Cortez.,4275,640,Carolina Del Carpio Cortez I-130/AOS,2021-10-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-06,,,1000
+EN,2,9226-211,9226,888888,6,12,120,2,3,1,,2000,300,Raquel Linares U Certification,2021-10-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-25,,,1000
+EN,2,8257-211,8257,888888,6,15,119,2,3,1,Legal fees due pertaining to Change of Address for Eladio Reyes Mendoza.,500,750,Eladio REYES MENDOZA -Change of Address,2021-08-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-10,,,500
+EN,2,8257-212,8257,888888,6,15,303,2,3,1,Legal fees due pertaining to Change of Address for Eladio Reyes Mendoza.,500,750,Eladio Reyes Mendoza EAD Renewal,2021-10-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-28,,,500
+EN,2,8657-211,8657,888888,6,12,135,2,3,1,,,,Jairo R. Ordonez DACA Renewal,2021-10-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-25,,,
+EN,2,9239-211,9239,888888,6,21,4,1,2,1,,2500,0,Juan Carlos Mireles Cantu General Matter,2021-11-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-09,,,0
+EN,2,9239-212,9239,888888,6,21,68,1,2,1,,2500,0,Juan Carlos Mireles Cantu TN and TD with DOS,2021-11-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-09,,,0
+EN,2,8162-211,8162,888888,6,12,129,2,3,1,,6800,570,Nancy Huerta Maya Consular PROCESSING,2021-08-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-04,,,2000
+EN,2,8162-212,8162,888888,6,12,167,2,3,1,,6800,570,Nancy Huerta Maya I-601 Provisional Waiver,2021-08-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-04,,,2000
+EN,2,7009-211,7009,888888,6,21,4,1,1,1,,,,Simon Galt General Matter,2021-11-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-16,,,
+EN,2,8546-211,8546,888888,6,20,257,1,1,1,,0,0,Juan Pierre Van Staden Response to Audit Letter,2021-11-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-11-16,,,0
+EN,2,9235-211,9235,888888,6,12,185,2,3,1,,4950,825,Marco Antonio Lopez Garces I130/AOS,2021-10-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-29,,,1250
+EN,2,6029-211,6029,888888,6,20,142,2,3,1,,2500,250,Karthick Muthaiyan - Spouse AOS,2021-08-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-30,,,0
+EN,2,6029-212,6029,888888,6,12,4,2,3,1,,2500,250,Schreiber Karthick Murthayan General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,6029-213,6029,888888,6,20,151,2,3,1,,2500,250,Karthick Muthaiyan I-140&AOS,2021-08-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-30,,,0
+EN,2,9212-211,9212,888888,6,12,269,2,3,1,,3442.5,350,Samairani Gaeta Topete I-130/I485 with Interview,2021-10-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-01,,,1250
+EN,2,3404-211,3404,888888,6,15,303,2,3,1,,500,75,Luis Nolazco EAD Renewal,2021-11-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-11,,,500
+EN,2,7338-211,7338,888888,6,15,303,2,3,1,,750,112.5,Steven Humberto Esquivel EAD Renwal & Change od Address,2021-11-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-17,,,750
+EN,2,8525-211,8525,888888,6,15,303,2,3,1,,500,75,Jesus Verastegui Rivera EAD Renewal,2021-11-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-17,,,500
+EN,2,8822-211,8822,888888,6,15,303,2,3,1,,500,75,Francisco Sanchez EAD Renewal,2021-11-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-08,,,500
+EN,2,8398-211,8398,888888,6,12,143,2,3,1,,1800,270,Annabel PACANA TOLER Removal of Conditions,2021-10-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-13,,,1000
+EN,2,9231-211,9231,888888,6,21,68,2,3,1,,4950,450,Arturo Santiago Scotto Guzman TN and TD with DOS,2021-10-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-28,,,2475
+EN,2,9062-211,9062,888888,6,20,139,2,3,1,Legal fees due pertaining to FOIA Request with CBP and DOS for Ines Gamino.,7500,0,Ines Gamino Oros FOIA,2021-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-01,,,0
+EN,2,9062-212,9062,888888,6,20,139,2,3,1,Legal fees due pertaining to FOIA Request with CBP and DOS for Ines Gamino.,7500,0,Ines Gamino Oros I140,2021-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-01,,,0
+EN,2,9062-213,9062,888888,6,20,139,2,3,1,Legal fees due pertaining to FOIA Request with CBP and DOS for Ines Gamino.,7500,0,Ines Gamino Oros PERM,2021-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-01,,,0
+EN,2,9217-211,9217,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Visa for Miriam Gutierrez with U.S. Department of State.,2500,250,Miriam Gutierrez TN with DOS,2021-10-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-06,,,0
+EN,2,5952-211,5952,888888,6,12,135,2,3,1,,750,112.5,Alejandra  Isabel Almazan DACA Renewal,2021-11-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-30,,,750
+EN,2,5868-211,5868,888888,6,22,244,2,3,1,,500,75,Angel Canseco Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,500
+EN,2,5868-212,5868,888888,6,12,147,2,3,1,,500,75,Angel Canseco EAD-U Visa,2021-11-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-11,,,500
+EN,2,9087-211,9087,888888,6,20,303,1,1,1,,0,0,LMMM General Matter,2021-05-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-11,,,0
+EN,2,7486-211,7486,888888,6,12,135,2,3,1,,750,112,Laura Viridiana Bautista DACA Renewal,2021-11-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-23,,,750
+EN,2,3817-211,3817,888888,6,12,135,2,3,1,,,,Jose Manuel SILVESTRE  ACUNA DACA Renewal,2021-11-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-12,,,
+EN,2,9259-211,9259,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with CBP for Ofelia Cardenas Sanchez.,500,75,Ofelia Cardenas Sanchez FOIA-CBP,2021-12-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-01,,,500
+EN,2,6924 GE1,6924 GE,888888,6,21,303,,,,,,,La Michocana Corporate General,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2019-09-16,,,
+EN,2,9260-211,9260,888888,6,21,68,2,3,1,,3000,450,Renata Meza TN with DOS,2021-12-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-03,,,3000
+EN,2,9242-211,9242,888888,6,21,200,2,3,1,Legal fees due pertaining to E-2 Visa for Jesse Archibold VISA process.,2250,100,Jesse Archibald E-2 Visa,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,2250
+EN,2,9242-212,9242,888888,6,21,200,2,3,1,Legal fees due pertaining to E-2 Visa for Jesse Archibold VISA process.,2250,100,Jesse Archibald Family's E2 Process,2021-12-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-14,,,2250
+EN,2,7307-211,7307,888888,6,12,80,2,3,1,,375,0,Margarita MUNIZ NAVARRO EAD Renewal & Change of Address,2021-03-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-30,,,375
+EN,2,8223-211,8223,888888,6,12,143,2,3,1,,1800,270,Jose Del Pilar VALLADARES VAZQUEZ,2021-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-15,,,1000
+EN,2,5646-211,5646,888888,6,12,121,2,1,1,,1250,187.5,Aldair A. Ramirez Sandoval U VISA Extension & EAD Renewal,2021-09-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-13,,,1000
+EN,2,5948-211,5948,888888,6,15,303,2,3,1,Legal fees due pertaining to Court Change of Address for Mayra Martinez Hernandez.,,,Mayra Martinez Hernandez COA,2021-12-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-07,,,
+EN,2,5948-212,5948,888888,6,23,244,2,3,1,Legal fees due pertaining to Court Change of Address for Mayra Martinez Hernandez.,,,Mayra Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,LC2,2021-07-03,,,
+EN,2,9257-211,9257,888888,6,21,53,2,3,1,Legal fees due pertaining to H-1B Visa for Fuat Baydogan with U.S. Department of Homeland Security.,2200,0,Fuat BAYDOGAN H-1B Transfer Petition,2021-12-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-01,,,0
+EN,2,9254-211,9254,888888,6,12,120,2,3,1,,2000,300,Mario Yovani Corrales Giron U Certification,2021-11-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-29,,,1250
+EN,2,8471-201,8471,888888,6,12,129,2,3,1,Legal fees due pertianing to Consular Process for Benjamin Alejandro Hernandez Cortinas.,3000,250,Benjamin Alejandro Hernandez Cortinas CP,2020-04-24,,,,,,,,,,,,,,,,,,,,26,0,DT,2020-04-24,,,500
+EN,2,9214-211,9214,888888,6,12,131,2,3,1,,5500,825,Ma Leticia Martinez I-130/I485 with Interview,2021-10-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-05,,,1175
+EN,2,9250-211,9250,888888,6,21,42,2,3,1,Legal fees due pertaining to B-1 Visa for Ander Bock with U.S. Department of Homeland Security.,7750,750,Ander Antonio Bock Sanchez B1/B2 Visa Expedited Request,2021-11-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-19,,,7750
+EN,2,9250-212,9250,888888,6,21,66,2,3,1,Legal fees due pertaining to B-1 Visa for Ander Bock with U.S. Department of Homeland Security.,7750,750,Ander Antonio Bock Sanchez P3 with USCIS  & P3 with DOS,2021-11-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-19,,,7750
+EN,2,9249-211,9249,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with CBP and USCIS for Israel Favela Castillo.,1250,187.5,Israel Favela Castillo FOIAs CBP and USCIS,2021-11-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-18,,,1250
+EN,2,8465-211,8465,888888,6,21,4,1,1,1,,5000,250,Liang Dong Chen General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8465-212,8465,888888,6,21,139,1,1,1,,5000,250,Liang Dong Chen PERM,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,0
+EN,2,7175-211,7175,888888,6,21,270,2,3,1,,4500,675,Abdel Jaaquar L-1A Extension,2021-10-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-11,,,0
+EN,2,8959-201,8959,888888,6,12,131,2,3,1,,2950,442.5,Cistal Gallegos Family Petition,2020-12-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-12-18,,,1250
+EN,2,8959-202,8959,888888,6,12,226,2,3,1,,2950,442.5,Cistal Gallegos Travel Document,2020-12-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-12-18,,,1250
+EN,2,8959-203,8959,888888,6,12,226,2,3,1,,2950,442.5,Cistal Gallegos Translations,2021-01-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-25,,,1250
+EN,2,3646-211,3646,888888,6,12,135,2,3,1,,,,Orlando de la Rosa DACA Renewal,2021-12-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-15,,,
+EN,2,3646-212,3646,888888,6,22,244,2,3,1,,,,Orlando De la Rosa Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,9222-211,9222,888888,6,20,30,2,3,1,Legal fees due pertaining to EB-1 for Clinton McNair with U.S. Department of Homeland Security.,8500,250,Clinton McNair  EB1 or EB2 Petition,2021-10-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-20,,,0
+EN,2,9253-211,9253,888888,6,12,185,2,3,1,,1700,300,Nila Gladys Sandoval Alarcon I130,2021-11-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-23,,,1000
+EN,2,7049-211,7049,888888,6,12,135,2,3,1,,750,112.5,Olga M. Gutierrez DACA Renewal,2021-11-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-29,,,750
+EN,2,8330-211,8330,888888,6,21,4,1,1,1,,,,Mugdha Sawant General Matter,2021-12-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-16,,,
+EN,2,8797-211,8797,888888,6,21,149,1,1,1,,2000,250,Ramya Anandaraj &  Daughter Diksha Anand EAD Renewal,2021-07-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-28,,,0
+EN,2,8797-212,8797,888888,6,21,4,1,1,1,,2000,250,Anand Ulaganathan General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8797-213,8797,888888,6,21,256,1,1,1,,2000,250,Ramya Anandaraj &  Daughter Diksha Anand H-4 Extension,2021-07-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-28,,,0
+EN,2,8638-211,8638,888888,6,15,303,2,3,1,,,,Guadalupe Arias Moreno AOS with USCIS,2021-11-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-15,,,
+EN,2,6789-211,6789,888888,6,22,303,2,3,1,,0,0,PALE 2021-2024,2021-10-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-21,,,0
+EN,2,5928-211,5928,888888,6,12,121,2,3,1,Legal fees due peraining to U-3 Visa Appointment for Andres Gomez Barron with Department of State.,2500,375,Andres Gomez Barron U-3 VISA Consular Process & EAD & Change of Address,2021-04-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-28,,,1000
+EN,2,9248-211,9248,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with USCIS and EOIR for Ruben Reyes.,1250,187.5,Ruben Reyes FOIA USCIS and EOIR,2021-11-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-15,,,1250
+EN,2,7527-211,7527,888888,6,12,80,2,3,1,,,,Juan Francisco Rodriguez Teyes EAD Renewal,2021-12-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-06,,,
+EN,2,8651-211,8651,888888,6,15,303,2,3,1,,500,75,Mayra Lizeth Fuentes Reyes EAD Renewal,2021-11-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-24,,,500
+EN,2,7073-211,7073,888888,6,15,303,2,3,1,,500,75,Adelina Garcia Damian EAD - U Visa,2021-11-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-29,,,500
+EN,2,3865-211,3865,888888,6,15,303,2,3,1,,500,75,Celso Mata EAD Renewal,2021-11-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-24,,,500
+EN,2,5381-211,5381,888888,6,15,303,2,3,1,,500,75,Gerson Leonel Martinez EAD Renewal,2021-11-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-24,,,500
+EN,2,8868-211,8868,888888,6,12,121,2,3,1,"Legal fees due pertaining to U Visa for Petra Lopez with U.S. Department of Homeland Security.,",3000,450,Petra Lopez U Visa with USCIS,2021-11-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-23,,,1000
+EN,2,9132-211,9132,888888,6,21,4,1,1,1,,1250,250,Chaithanya Sai Srinivas Sabnaveesu General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9132-212,9132,888888,6,21,155,1,1,1,,1250,250,Chaithanya Sai Srinivas Sabnaveesu H-1B Amendment,2021-12-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-17,,,0
+EN,2,8720-211,8720,888888,6,21,200,2,3,1,,1000,0,Nik Kicovic E-2,2021-12-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-12-09,,,0
+EN,2,8720-212,8720,888888,6,21,4,2,3,1,,1000,0,Nik Kicovic General Matter,2021-08-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-01,,,0
+EN,2,8720-213,8720,888888,6,21,271,2,3,1,,1000,0,Nik Kicovic Wife - Derivative Visa,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,8867-211,8867,888888,6,12,272,2,3,1,,250,60.45,Freddy J. GalindoHernandez  Request Record,2021-12-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-03,,,250
+EN,2,9272-211,9272,888888,6,21,239,2,3,1,,36000,0,Gerardo Adolfo/Jose Rodolfo/Yanira Zamaria Coca Rivas Emergency Visa Appt.,2021-12-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-29,,,0
+EN,2,7233-201,7233,888888,6,12,119,2,3,1,,150,15,Francisca Chavez,2020-02-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-19,,,150
+EN,2,9266-211,9266,888888,6,12,120,2,3,1,,6000,900,Nora Lisseth Luevano Adame U Certification and U Visa Process,2021-12-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-20,,,0
+EN,2,8613-211,8613,888888,6,12,129,2,3,1,,6800,570,Jesus Martinez Orocio I-601 Waiver and CP,2021-12-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-16,,,1710
+EN,2,8490-211,8490,888888,6,20,142,2,3,1,,0,0,Guadalupe Aranda Olivas AOS,2021-08-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-25,,,0
+EN,2,8490-212,8490,888888,6,20,133,2,3,1,,0,0,Guadalupe Aranda Olivas RFE,2021-12-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-22,,,0
+EN,2,9258-211,9258,888888,6,15,303,2,3,1,,3000,450,Gerardo Henriquez Dominguez Asylum with USCIS and COA,2021-12-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-02,,,1000
+EN,2,9275-221,9275,888888,6,20,53,2,3,1,,750,0,Vinay Kumar RADHARAPU H-1B Transfer,2022-01-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-05,,,0
+EN,2,9275-222,9275,888888,6,20,56,2,3,1,,750,0,Vinay Kumar RADHARAPU H4 Petition,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,0
+EN,2,9275-223,9275,888888,6,20,273,2,3,1,,750,0,Vinay Kumar RADHARAPU Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8415-211,8415,888888,6,15,303,2,3,1,,750,150,Delmy Patricia Martinez Hernandez &  Daughter Jemelly Hernandez EAD RN,2021-12-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-15,,,750
+EN,2,9238-211,9238,888888,6,15,303,2,3,1,,5500,825,"Eliezer O Zepeda Rivas Asylum, 1st EAD & Prosecutorial Discretion",2021-11-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-08,,,1000
+EN,2,3851-211,3851,888888,6,12,135,2,3,1,,,,Kelle Aguilar DACA Renewal,2021-12-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-20,,,
+EN,2,6846-211,6846,888888,6,12,135,2,3,1,,750,,Jesus Villareal DACA Renewal,2021-11-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-30,,,750
+EN,2,9277-221,9277,888888,6,21,53,2,3,1,,,,Rushil Acharya H-1B Transfer,2021-01-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-06,,,
+EN,2,9277-222,9277,888888,6,22,273,2,3,1,,,,Rushil Acharya Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,7128-221,7128,888888,6,12,135,2,3,1,,750,112.5,Martha Lorena Ajpacaja Nambo DACA Renwal,2022-01-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-06,,,750
+EN,2,7128-221,7128,888888,6,22,273,2,3,1,,750,112.5,Martha Lorena Ajpacaja Nambo Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,9245-211,9245,888888,6,21,53,2,3,1,Legal fees due pertaining to H-1B Transfer for Uday Singh with U.S. Department of Homeland Security.,5000,250,Uday Pratap SINGH H-1B Transfer Petition,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,0
+EN,2,9245-212,9245,888888,6,21,245,2,3,1,Legal fees due pertaining to H-1B Transfer for Uday Singh with U.S. Department of Homeland Security.,5000,250,Uday Pratap SINGH I-130/AOS/Interview,2021-12-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-06,,,0
+EN,2,7123-221,7123,888888,6,15,149,2,3,1,,,,Muhammad RAFIQ EAD Renewal,2022-01-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-06,,,
+EN,2,7123-221,7123,888888,6,22,273,2,3,1,,,,Muhammad RAFIQ Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,8588-211,8588,888888,6,21,4,1,1,1,,1000,0,Hemant Deshmukh General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,8588-212,8588,888888,6,21,50,1,1,1,,1000,0,Hemant Deshmukh H-1B Extension/Amendment,2021-12-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-07,,,0
+EN,2,8588-213,8588,888888,6,21,256,1,1,1,,1000,0,Hemant Deshmukh H-4 Extension,2021-12-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-07,,,0
+EN,2,9274-211,9274,888888,6,21,68,2,3,1,,2500,575,Jose Luis Robles TN with DOS,2021-12-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-30,,,0
+EN,2,9199-211,9199,888888,6,12,226,2,3,1,,1000,150,Mariela Campuzano,2021-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-15,,,1000
+EN,2,8711-221,8711,888888,6,12,136,2,3,1,,1200,180,Brandon Azuara DACA Initial,2022-01-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-04,,,1200
+EN,2,8711-222,8711,888888,6,22,273,2,3,1,,1200,180,Brandon Azuara Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1200
+EN,2,9267-211,9267,888888,6,12,192,2,3,1,,2500,150,Salvatore Costa Review & Analysis,2021-12-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-22,,,0
+EN,2,7132-211,7132,888888,6,21,54,2,3,1,Legal fees due pertaining to H4 for Cristian Bolton Family with U.S. Department of State.,"4250.00
+",500,Cristian Bolton H-1B1 & H4 with DOS,2021-12-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-06,,,450
+EN,2,9276-211,9276,888888,6,12,243,2,1,1,,1500,150,Expedite Request B1/B2 Joe Kahi,2022-01-05,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-01-05,,,0
+EN,2,9267-221,9267,888888,6,12,274,2,3,1,Legal fees due pertianing to O-2 and O3 Petition with U.S. Department of Homeland Security.,10500,450,Salvatore Costa O-2 and O-3 Petition,2022-01-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-12,,,4225
+EN,2,9267-222,9267,888888,6,22,273,2,3,1,Legal fees due pertianing to O-2 and O3 Petition with U.S. Department of Homeland Security.,10500,450,Salvatore Costa Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,4225
+EN,2,8396-211,8396,888888,6,12,99,2,3,1,,,0,Maria De Jesus GARCIA LOPEZ FOIA-CBP,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,5074-221,5074,888888,6,12,135,2,3,1,,750,112.5,Erick Enrique Chambasis DACA Renewal,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,750
+EN,2,5074-222,5074,888888,6,22,273,2,3,1,,750,112.5,Erick Enrique Chambasis OSW,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,3888-221,3888,888888,6,12,135,2,3,1,,750,112.5,Josue Duarte DACA Renewal,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,750
+EN,2,3888-222,3888,888888,6,22,273,2,3,1,,750,112.5,Josue Duarte Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,5608-221,5608,888888,6,12,135,2,3,1,,750,112.5,Fabian Gonzalez DACA Renewal,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,750
+EN,2,5608-222,5608,888888,6,22,273,2,3,1,,750,112.5,Fabian Gonzalez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,6696-201,6696,888888,6,12,4,2,3,1,Legal fees due pertianing to Mr. Saul Reyes immigration.,1500,250,Saul H. Reyes Perez Notify -Immigration,2020-09-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-25,,,1500
+EN,2,9278-221,9278,888888,6,15,303,2,3,1,Legal fees due pertaining to BIA Appeal Notice for Balvino Emanuel Sapon-Tajiboy.,500,75,Balvino Emanuel Sapon Tajiboy Appeal with BIA,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,500
+EN,2,9278-222,9278,888888,6,15,303,2,3,1,Legal fees due pertaining to BIA Appeal Notice for Balvino Emanuel Sapon-Tajiboy.,500,75,Balvino Emanuel Sapon Tajiboy EAD Renewal,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,500
+EN,2,9278-223,9278,888888,6,15,303,2,3,1,Legal fees due pertaining to BIA Appeal Notice for Balvino Emanuel Sapon-Tajiboy.,500,75,Balvino Emanuel Sapon Tajiboy I-130 Monitoring,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,500
+EN,2,9278-224,9278,888888,6,22,303,2,3,1,Legal fees due pertaining to BIA Appeal Notice for Balvino Emanuel Sapon-Tajiboy.,500,75,Balvino Emanuel Sapon Tajiboy Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,9287-221,9287,888888,6,12,202,2,3,1,Legal fees due pertaining to Family Petition for Kevin Antonio Campos Alvarado,5000,450,Kevin Antonio Campos Alvarado I-130/CP,2022-01-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-12,,,2000
+EN,2,9287-222,9287,888888,6,12,273,2,3,1,Legal fees due pertaining to Family Petition for Kevin Antonio Campos Alvarado,5000,450,Kevin Antonio Campos Alvarado Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2000
+EN,2,9269-221,9269,888888,6,15,303,2,3,1,"Legal fees due pertaining to FOIA request with CBP, USCIS, and ICE for Edwin Mostesflores.",,,Edwin Eduardo Montesflores-Chavarria 42B Removal,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,
+EN,2,9269-222,9269,888888,6,22,303,2,3,1,"Legal fees due pertaining to FOIA request with CBP, USCIS, and ICE for Edwin Mostesflores.",,,Edwin Eduardo Montesflores-Chavarria Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,8519-201,8519,888888,6,12,129,2,3,1,Legal fees due pertaining to Interview Prep for Jonathan Santana's Consular Process.,3000,450,Jonathan Santana CP,2020-05-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-05-21,,,500
+EN,2,9244-211,9244,888888,6,21,50,2,3,1,,0,0,Nishant SHARMA H-1B Extension,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,0
+EN,2,9291-221,9291,888888,6,15,303,2,3,1,,0,0,Monica E. Buchanan Motion to Reopen,2022-01-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-14,,,0
+EN,2,8823-211,8823,888888,6,12,167,2,3,1,Legal fees due pertaining to I-601A Waiver for Jose Tohom with U.S. Department of Homeland Security.,6800,1020,Jose Vicente Tohom I-601 Waiver and CP,2021-06-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-23,,,1000
+EN,2,8491-221,8491,888888,6,21,273,1,2,1,,2500,300,Alberto Molinar Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8491-222,8491,888888,6,21,68,1,2,1,,2500,300,Alberto Molinar TN with DOS,2022-01-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-11,,,0
+EN,2,6738-201,6738,888888,6,15,149,2,3,1,Legal fees due pertaining to Additional Document for 42B for Wilmer Geovanny Lopez Murcia.,500,75,Wilmer Lopez Murcia EAD Renewal,2020-10-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-20,,,0
+EN,2,7102-221,7102,888888,6,15,121,2,3,1,,500,75,Marco Antonio Alvarez EAD Renewal,2022-01-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-19,,,500
+EN,2,7102-222,7102,888888,6,22,121,2,3,1,,500,75,Marco Antonio Alvarez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,5692-221,5692,888888,6,21,273,1,2,1,,,,Francisco Hernandez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,5692-222,5692,888888,6,21,68,1,2,1,,,,Francisco Hernandez TN Petition with DOS,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,
+EN,2,8159-211,8159,888888,6,15,80,2,3,1,,500,75,Enrique Gutierrez Serrato EAD Renewal,2021-12-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-17,,,500
+EN,2,6179-221,6179,888888,6,15,303,2,3,1,,500,75,Iris Lili Nolasco EAD Renewal,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,500
+EN,2,6179-222,6179,888888,6,12,273,2,3,1,,500,75,Iris Lili Nolasco Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,5396-221,5396,888888,6,15,303,2,3,1,,500,75,Valdemar CAMPA- MELECIO EAD Renewal,2022-01-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-13,,,500
+EN,2,5396-222,5396,888888,6,22,303,2,3,1,,500,75,Valdemar CAMPA- MELECIO Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,9289-221,9289,888888,6,21,53,1,1,1,,1980,0,Krishna Gundammagari H-1B Transfer,2022-01-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-13,,,0
+EN,2,9289-222,9289,888888,6,21,273,1,1,1,,1980,0,Krishna Gundammagari Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9299-221,9299,888888,6,21,52,2,3,1,,3500,250,Sindhu Abhimana Gangula H-1B Petition,2022-01-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-21,,,0
+EN,2,9299-222,9299,888888,6,21,273,2,3,1,,3500,250,Sindhu Abhimana Gangula Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8301-221,8301,888888,6,21,50,2,3,1,,,,Chetan Sharma H-1B Extension,2022-01-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-25,,,
+EN,2,8301-222,8301,888888,6,21,273,2,3,1,,,,Chetan Sharma Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,9279-221,9279,888888,6,12,275,2,3,1,,5500,300,Beronica Guerrero Vargas I-130 & CP,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,2000
+EN,2,9279-222,9279,888888,6,12,273,2,3,1,,5500,300,Beronica Guerrero Vargas Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2000
+EN,2,7264-211,7264,888888,6,12,245,2,3,1,,4500,675,Javier Rojas I-130/AOS and Interview,2021-09-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-30,,,1000
+EN,2,8382-211,8382,888888,6,12,129,2,3,1,Legal fees due pertaining to I-601A for Roberto Navarro with U.S. Department of Homeland Security.,6800,570,Roberto Navarro PW & CP,2021-07-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-15,,,1000
+EN,2,5368-211,5368,888888,6,12,176,2,3,1,,2500,375,Carlos Borjas Naturalization Process with Attorney Representation at Interv,2021-12-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-10,,,2500
+EN,2,8749-221,8749,888888,6,21,4,1,2,1,,,,Monica Alvarez General Matter,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,
+EN,2,8631-211,8631,888888,6,21,54,2,3,1,,1500,225,Zhiruo Zhou H-1B 2022 Registration,2021-02-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-10,,,0
+EN,2,8631-212,8631,888888,6,21,249,2,3,1,,1500,225,Zhiruo Zhou Part II - H-1B Original Submission Petition,2021-03-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-29,,,0
+EN,2,9301-221,9301,888888,6,12,276,1,1,1,,0,0,Juan Carlos Ortega Humanitarian Parole,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,0
+EN,2,9301-222,9301,888888,6,12,273,1,1,1,,0,0,Juan Carlos Ortega Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8309-221,8309,888888,6,21,50,2,3,1,,,,Hadi Sayeed H-1B Extension and H4 Petition,2022-01-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-26,,,
+EN,2,8309-222,8309,888888,6,21,273,2,3,1,,,,Hadi Sayeed Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,8278-221,8278,888888,6,21,50,2,3,1,,1500,250,Anoop Vijayan H-1B Extension,2022-01-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-25,,,0
+EN,2,8278-222,8278,888888,6,21,56,2,3,1,,1500,250,Anoop Vijayan H-4 and EAD,2022-02-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-06,,,0
+EN,2,8278-223,8278,888888,6,21,273,2,3,1,,1500,250,Anoop Vijayan Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,3658-211,3658,888888,6,12,135,2,3,1,,750,112.5,Rodrigo Nolasco Sanchez DACA Renewal,2021-12-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-30,,,862.5
+EN,2,3658-212,3658,888888,6,22,244,2,3,1,,750,112.5,Rodrigo Nolasco Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,862.5
+EN,2,7351-211,7351,888888,6,12,120,2,3,1,,8500,0,Hellen Idalia MORALES-VALERIANO  Translations,2021-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-01,,,2900
+EN,2,7351-212,7351,888888,6,12,121,2,3,1,,8500,0,Brayan E. Villeda Mejia U VISA with Waiver,2021-04-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-16,,,2900
+EN,2,7351-213,7351,888888,6,12,121,2,3,1,,8500,0,Helen Idalia Morales U VISA with Waiver,2021-04-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-16,,,2900
+EN,2,8420-221,8420,888888,6,12,273,1,2,1,,6800,1020,Nicolas Morales Orbe Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,"Client has a credit of $5,445.00"
+EN,2,8420-222,8420,888888,6,12,265,1,2,1,,6800,1020,"Nicolas Morales Orbe Prosecutorial Discretion, I-601 Wavier and Consular Pr",2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,"Client has a credit of $5,445.00"
+EN,2,9304-221,9304,888888,6,21,273,1,2,1,,5000,750,Marisol Lopez Vidal Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,4000
+EN,2,9304-222,9304,888888,6,21,120,1,2,1,,5000,750,Marisol Lopez Vidal U Certification and U Visa Process,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,4000
+EN,2,9270-211,9270,888888,6,21,134,2,3,1,,7500,450,Daniel Alexander Paredes Cerritos DOS Process,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,9270-212,9270,888888,6,21,137,2,3,1,,7500,450,Daniel Alexander Paredes Cerritos L-1A with USCIS,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,8751-211,8751,888888,6,20,142,2,3,1,,1000,150,Andrew Helps  Family AOS - Wife and (3) daughters,2021-04-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-20,,,0
+EN,2,8751-212,8751,888888,6,20,200,2,3,1,,1000,150,Andrew Helps  Spouse E-2 Process,2021-07-23,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-07-23,,,0
+EN,2,8751-213,8751,888888,6,20,30,2,3,1,,1000,150,Andrew Helps EB1c & AOS,2021-04-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-20,,,0
+EN,2,8751-214,8751,888888,6,21,277,2,3,1,,1000,150,Bailey Eleanor Helps& Abigail Margaret Helps Extension Of Stay,2021-01-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-18,,,0
+EN,2,8751-215,8751,888888,6,21,277,2,3,1,,1000,150,Karen Martin Extension Of Stay,2021-01-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-18,,,0
+EN,2,8751-216,8751,888888,6,21,4,2,3,1,,1000,150,Karen Martin General Matter,2021-08-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-01,,,0
+EN,2,9063-211,9063,888888,6,12,139,2,3,1,,6000,500,Miguel A. Salgado Montanez I140,2021-04-19,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-04-19,,,0
+EN,2,9063-212,9063,888888,6,12,139,2,3,1,,6000,500,Miguel A. Salgado Montanez PERM,2021-04-19,,,,,,,,,,,,,,,,,,,,26,0,DT,2021-04-19,,,0
+EN,2,9300-221,9300,888888,6,12,176,1,1,1,,0,0,Edite P. Salazar Morgan N400,2022-01-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-24,,,7500
+EN,2,9300-222,9300,888888,6,12,273,1,1,1,,0,0,Edite P. Salazar Morgan Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,7500
+EN,2,9284-221,9284,888888,6,12,142,2,3,1,,,,Ilda Garcia AOS and Interview,2022-01-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-11,,,
+EN,2,9284-222,9284,888888,6,12,273,2,3,1,,,,Ilda Garcia Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,9297-221,9297,888888,6,12,267,2,3,1,,5500,825,Alicia Palomares I-130/CP,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,1000
+EN,2,9297-222,9297,888888,6,12,273,2,3,1,,5500,825,Alicia Palomares Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,9246-211,9246,888888,6,12,185,2,3,1,,4050,675,Jesus Hernandez Azocar I-130 & I-485,2021-11-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-11,,,2325
+EN,2,9247-211,9247,888888,6,12,185,2,3,1,,4500,675,Juana Baez De Hernandez I-130 & I-485,2021-11-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-11,,,3575
+EN,2,8910-221,8910,888888,6,20,34,2,3,1,,5500,250,Luis De la Torre Gutierrez Immigrant Petition,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,8910-222,8910,888888,6,20,139,2,3,1,,5500,250,Luis De la Torre Gutierrez PERM,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,5454-221,5454,888888,6,12,135,2,3,1,,750,112.5,Amy Carrasco DACA Renewal,2022-01-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-04,,,750
+EN,2,5454-222,5454,888888,6,22,273,2,3,1,,750,112.5,Amy Carrasco Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,3770-221,3770,888888,6,12,135,2,3,1,Legal Fees due pertaining to DACA Renewal for Jose Ortiz with U.S. Department of Homeland Security.,750,112.5,Jose ORTIZ DACA Renewal,2022-02-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-02,,,750
+EN,2,3770-222,3770,888888,6,12,273,2,3,1,Legal Fees due pertaining to DACA Renewal for Jose Ortiz with U.S. Department of Homeland Security.,750,112.5,Jose ORTIZ Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,9272-221,9272,888888,6,21,273,1,2,1,,36000,0,Gerardo Adolfo/Jose Rodolfo/Yanira Zamaria Coca Rivas Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9272-222,9272,888888,6,21,190,1,2,1,,36000,0,Gerardo Adolfo/Jose Rodolfo/Yanira Zamaria Coca Rivas Parole from Mexico to,2022-01-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-27,,,0
+EN,2,9272-223,9272,888888,6,21,278,1,2,1,,36000,0,Gerardo Adolfo/Jose Rodolfo/Yanira Zamaria Coca Rivas Mexican Visa,2022-01-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-27,,,0
+EN,2,9306-221,9306,888888,6,21,273,1,2,1,,5000,750,Diana Carvajal Ortega Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,4000
+EN,2,9306-222,9306,888888,6,21,120,1,2,1,,5000,750,Diana Carvajal Ortega U Certification and U Visa Process,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,4000
+EN,2,8561-221,8561,888888,6,15,303,2,3,1,,500,75,Nely Olivia Sanchez Maradiago  & Jesler Said Solis Sanchez EAD,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,500
+EN,2,8561-222,8561,888888,6,22,273,2,3,1,,500,75,Nely Olivia Sanchez Maradiago  & Jesler Said Solis Sanchez Out of Scope Wor,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,8560-221,8560,888888,6,15,303,2,3,1,,500,75,Luis Alberto Torres Martinez & Daniel Alberto Torres Sanchez EAD,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,500
+EN,2,8560-222,8560,888888,6,15,303,2,3,1,,500,75,Luis Alberto Torres Martinez & Daniel Alberto Torres Sanchez Out of Scope W,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,3594-221,3594,888888,6,15,80,2,3,1,,500,75,Martha Netro EAD Renewal,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,500
+EN,2,3594-222,3594,888888,6,22,273,2,3,1,,500,75,Martha Netro Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,3594-223,3594,888888,6,15,80,2,3,1,,500,75,Martha Netro Translations,2022-03-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-11,,,500
+EN,2,8391-221,8391,888888,6,15,303,2,3,1,,500,75,Celso Villegas Carranza EAD Renewal,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,500
+EN,2,8391-222,8391,888888,6,22,273,2,3,1,,500,75,Celso Villegas Carranza Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,7445-221,7445,888888,6,15,303,2,3,1,,500,75,Jose Manuel Landeros EAD Renewal,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,500
+EN,2,7445-222,7445,888888,6,22,273,2,3,1,,500,75,Jose Manuel Landeros Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,8864-221,8864,888888,6,15,303,2,3,1,,500,75,Abdenago Chavez Carreon EAD Renewal,2022-02-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-07,,,500
+EN,2,8864-222,8864,888888,6,15,303,2,3,1,,500,75,Abdenago Chavez Carreon Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,9051-211,9051,888888,6,12,279,2,3,1,Legal fees due pertaining to FOIA request with CBP for Ucrania Ibeth Portillo.,2000,350,Ucrania Ibeth Portillo de Vazquez FOIA-CBP and Review and Analysis,2021-03-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-23,,,2000
+EN,2,9227-211,9227,888888,6,21,190,2,3,1,Legal fees due pertaining to PIP for Indolfo Mondragon with U.S. Department of Homeland Security.,2700,405,Indolfo Mondragon Parole in Place,2021-10-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-26,,,1000
+EN,2,7513-221,7513,888888,6,15,303,2,3,1,Legal fees due pertaining to BIA Appeal for Maria de la Cruz Melendez.,2500,375,Maria de la Cruz Melendez BIA Appeal,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,1000
+EN,2,7513-222,7513,888888,6,15,80,2,3,1,Legal fees due pertaining to BIA Appeal for Maria de la Cruz Melendez.,2500,375,Maria de la Cruz Melendez Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,1000
+EN,2,7513-223,7513,888888,6,15,80,2,3,1,Legal fees due pertaining to BIA Appeal for Maria de la Cruz Melendez.,2500,375,Maria de la Cruz Melendez Removal Matter,2022-02-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-17,,,1000
+EN,2,9102-221,9102,888888,6,21,280,2,3,1,,2500,250,Channabasavaraj BARABARI EB3,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,0
+EN,2,9102-222,9102,888888,6,21,151,2,3,1,,2500,250,Channabasavaraj BARABARI I-140,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,0
+EN,2,3828-221,3828,888888,6,12,135,2,3,1,,750,112.5,Alberto Tinoco DACA Renewal,2022-02-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-11,,,750
+EN,2,7081-221,7081,888888,6,12,147,2,3,1,,500,75,Juan Ortiz EAD,2022-02-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-11,,,500
+EN,2,7081-222,7081,888888,6,12,133,2,3,1,,500,75,Juan Ortiz I-918 RFE,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,500
+EN,2,7428-221,7428,888888,6,12,233,2,3,1,,1500,100,Blanca Rodriguez N400 & Representation at Interview,2022-01-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-13,,,1500
+EN,2,7428-222,7428,888888,6,12,273,2,3,1,,1500,100,Blanca RodriguezOut of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1500
+EN,2,7092-221,7092,888888,6,12,147,2,3,1,,500,75,Rosalba Madrigal Leon EAD,2022-02-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-11,,,100
+EN,2,9312-221,9312,888888,6,21,53,2,3,1,,3000,250,Aarti Navinsingh NEGI,2022-02-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-11,,,0
+EN,2,7351-221,7351,888888,6,12,180,2,3,1,Legal fees due pertianing to Motion to Reopen for Hellen Idalia Morales Valeriano.,1500,225,Helen Idalia Morales MTR,2022-02-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-16,,,1500
+EN,2,5522-221,5522,888888,6,15,303,2,3,1,,500,75,Ricardo C. CASTILLO ROSALES EAD Renewal,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-14,,,500
+EN,2,3265-221,3265,888888,6,15,303,2,3,1,,,,Severo ORTIZ PASCUAL EAD Renewal,2022-02-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-15,,,
+EN,2,8283-221,8283,888888,6,15,303,2,3,1,,500,75,Jose Huber Hernandez Solis EAD Renewal,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-14,,,500
+EN,2,6085-221,6085,888888,6,15,303,2,3,1,,500,75,Maria Celenia Bonilla EAD Renewal,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,500
+EN,2,6085-222,6085,888888,6,15,303,2,3,1,,500,75,Maria Celenia Bonilla Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,5982-221,5982,888888,6,15,303,2,3,1,,500,75,Johnny Wilfredo Menjivar EAD Renewal,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-14,,,500
+EN,2,8350-221,8350,888888,6,15,303,2,3,1,,500,75,Mauricio Umul MATZIR EAD Renewal,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-14,,,500
+EN,2,8414-221,8414,888888,6,20,281,2,3,1,,3500,250,Arjun Dangre O1A Petition,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DT,2022-02-08,,,0
+EN,2,8414-222,8414,888888,6,20,133,2,3,1,,3500,250,Arjun Dangre Request for Evidence RFE,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,0
+EN,2,3846-221,3846,888888,6,12,135,2,3,1,,750,112.5,Aaron Torres DACA Renewal,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,750
+EN,2,9256-211,9256,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with USCIS for Aurora Shaikh.,500,75,Aurora G. Shaikh FOIA-USCIS,2021-11-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-30,,,500
+EN,2,3852-221,3852,888888,6,21,232,2,3,1,,2000,300,Martha Alicia Romo Ruvalcaba,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-02-14,,,2000
+EN,2,9268-211,9268,888888,6,12,120,2,3,1,Legal fees due pertianing to U Certification process for Ever Perez Vazquez.,2500,375,Ever Perez Vazquez U Certification,2021-12-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-22,,,0
+EN,2,9181-211,9181,888888,6,12,303,2,3,1,,1500,225,Alejandro Josue Arce Ortiz I-130,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,975
+EN,2,9182-211,9182,888888,6,12,303,2,3,1,,2000,225,Jose Daniel ARce Ortiz,2021-08-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-08-12,,,1050
+EN,2,9308-221,9308,888888,6,12,131,2,3,1,,2000,300,Esther Carrasco Reyes Family Petition,2022-02-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-02,,,2000
+EN,2,9308-222,9308,888888,6,12,273,2,3,1,,2000,300,Esther Carrasco Reyes Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2000
+EN,2,8450-221,8450,888888,6,12,131,2,3,1,,1800,300,Lizbeth Andrea ARDON CARRANZA Family Petition,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,1800
+EN,2,8450-222,8450,888888,6,12,273,2,3,1,,1800,300,Lizbeth Andrea ARDON CARRANZA Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1800
+EN,2,9305-221,9305,888888,6,21,273,1,2,1,,5000,750,Olga Maria Hernandez Campos Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,4000
+EN,2,9305-222,9305,888888,6,21,120,1,2,1,,5000,750,Olga Maria Hernandez Campos U Certification and U Visa Process,2022-01-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-31,,,4000
+EN,2,8918-221,8918,888888,6,12,273,1,1,1,,,,TWIN #2 Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,9329-221,9329,888888,6,21,249,2,3,1,,2000,250,Manasa Chinmayi Karra H-1B Original Submission - Registration Part 1,2022-03-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-01,,,0
+EN,2,9329-222,9329,888888,6,21,273,2,3,1,,2000,250,Manasa Chinmayi Karra Out of Scope work,2022-03-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-01,,,0
+EN,2,8447-221,8447,888888,6,21,142,2,3,1,,2500,250,Sharvari Kamat AOS,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,0
+EN,2,8447-222,8447,888888,6,21,30,2,3,1,,2500,250,Dharmil Jyotindra PITHWA EB-1 Petition & AOS,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,0
+EN,2,9341-221,9341,888888,6,15,183,1,2,1,,7500,0,Yingyan Li Jail Visit and Assessmen,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,7500
+EN,2,9341-222,9341,888888,6,15,183,1,2,1,,7500,0,Yingyan Li Out of Scope work,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,7500
+EN,2,5537-221,5537,888888,6,12,135,2,3,1,,750,112.5,Romana Saavedra DACA Renewal,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,750
+EN,2,7046-211,7046,888888,6,12,185,2,3,1,,,,Juana Salinas Arroyo I-130,2021-12-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-20,,,
+EN,2,8348-221,8348,888888,6,21,256,2,3,1,,750,250,Deepayan Mukhopadhyay H-4Extension,2022-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-02-28,,,0
+EN,2,8421-221,8421,888888,6,12,142,2,3,1,,4750,375,Vilma Gamez AOS,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,1125
+EN,2,8421-222,8421,888888,6,12,273,2,3,1,,4750,375,Vilma Gamez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1125
+EN,2,8421-223,8421,888888,6,12,190,2,3,1,,4750,375,Vilma Gamez PIP,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,1125
+EN,2,9319-221,9319,888888,6,12,233,2,3,1,,2500,375,Andres De Jesus Sanchez N400 with Interview Representation,2022-02-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-22,,,2500
+EN,2,8455-221,8455,888888,6,12,226,2,3,1,,1000,150,Irving REYNA GOMEZ Travel Document,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,1000
+EN,2,9217-221,9217,888888,6,21,273,1,2,1,,750,0,Miriam Gutierrez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9217-222,9217,888888,6,21,234,1,2,1,,750,0,Miriam Gutierrez TD with DOS - Family,2022-01-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-19,,,0
+EN,2,9302-221,9302,888888,6,21,31,2,3,1,,2500,300,Daniela Maria Zirion Urrutia de Kong B1/B2 Extension,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,2500
+EN,2,9302-222,9302,888888,6,21,273,2,3,1,,2500,300,Daniela Maria Zirion Urrutia de Kong Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2500
+EN,2,8818-221,8818,888888,6,20,42,2,3,1,Legal fees due pertaining to B-2 visa for Diana Sineva with U.S. Department of Homeland Security.,1500,250,Diana Sineva B1/B2 Visa,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DT,2022-03-09,,,0
+EN,2,8818-222,8818,888888,6,20,249,2,3,1,Legal fees due pertaining to B-2 visa for Diana Sineva with U.S. Department of Homeland Security.,1500,250,Diana Sineva H-1B Original Submission - Registration Part 1,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,8818-223,8818,888888,6,20,273,2,3,1,Legal fees due pertaining to B-2 visa for Diana Sineva with U.S. Department of Homeland Security.,1500,250,Diana Sineva Out of Scope Work,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,9345-221,9345,888888,6,12,180,2,3,1,Legal fees due pertaining to BIA Appeal for Heriberto Fuentes Gaspar.,500,75,Heriberto Fuentes Gaspar MTR,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,500
+EN,2,9345-222,9345,888888,6,12,273,2,3,1,Legal fees due pertaining to BIA Appeal for Heriberto Fuentes Gaspar.,500,75,Heriberto Fuentes Gaspar Out of Scope work,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,500
+EN,2,9345-223,9345,888888,6,12,41,2,3,1,Legal fees due pertaining to BIA Appeal for Heriberto Fuentes Gaspar.,500,75,Heriberto Fuentes Gaspar Request for Evidence,2022-03-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-29,,,500
+EN,2,3749-221,3749,888888,6,12,135,2,3,1,,750,112.5,Carlos O Acosta DACA Renewal,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,750
+EN,2,9309-221,9309,888888,6,22,4,2,2,1,,8500,500,Fred Hopson General Matters,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,8500
+EN,2,9309-222,9309,888888,6,22,273,2,2,1,,8500,500,Fred Hopson Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,8500
+EN,2,9324-221,9324,888888,6,15,187,2,3,1,,0,0,Maria Yasseli Paz Fajardo Asylum in Court,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,0
+EN,2,8795-501,8795,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Raisa Shlyakhovets.,,,Raisa Shlyakhovets CP,2020-04-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-30,,,
+EN,2,8795-502,8795,888888,6,12,131,2,3,1,Legal fees due pertaining to Consular Process for Raisa Shlyakhovets.,,,Raisa Shlyakhovets I130,2020-04-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-30,,,
+EN,2,8791-221,8791,888888,6,21,151,2,3,1,,1500,150,Jose Jacobo Eluani I140,2022-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-01,,,1500
+EN,2,8791-222,8791,888888,6,21,273,2,3,1,,1500,150,Jose Jacobo Eluani Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1500
+EN,2,8791-223,8791,888888,6,21,139,2,3,1,,1500,150,Jose Jacobo Eluani PERM Process,2022-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-01,,,1500
+EN,2,8791-224,8791,888888,6,21,68,2,3,1,,1500,150,Jose Jacobo Eluani TN - DOS Renewal,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,1500
+EN,2,3645-211,3645,888888,6,12,176,2,3,1,,1500,225,Leticia Margarita Sepulveda Benavides N400,2021-01-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-01-04,,,500
+EN,2,7567-201,7567,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Janelli Mandujano with Department of State.,,,Janeli Mandujano,2020-01-29,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-29,,,

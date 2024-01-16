@@ -1,0 +1,43 @@
+.filter_button{border-top: 2px !important;border-left: 2px !important;border-right: 2px !important; background-color: transparent !important;border-color: #d2d2d2  !important;width: 15rem !important;}
+.breadcrumb > li + li::before{color: #6c757d; content: ">";padding: 0 5px;}
+.breadcrumb {background-color: transparent !important;color: #222222 !important;}
+.breadcrumb-item.active {color: #181818;}
+.breadcrumb-item > a{color: #181818 !important; text-decoration: none !important;}
+
+
+
+::ng-deep .purple {background-color: #9c27b0;}
+::ng-deep .action-button{border-radius: 4px;min-width: 6rem; box-shadow: none !important;}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background {background-color: #006990 !important; }
+::ng-deep .mat-checkbox-ripple .mat-ripple-element {background-color: #006990 !important;}
+
+
+.table-bordered thead th, .table-bordered thead td {
+    border-bottom: 1px solid #dedede !important;
+}
+
+th {
+    text-align: center;
+    font-weight: 500 !important;
+}
+
+.table>thead {
+    vertical-align: bottom;
+    font-size: 14px;
+    font-weight: bold !important;
+    color: rgb(53, 53, 53);
+    background-color: #e2edf7;
+    border-bottom: 1px solid #dedede !important;
+}
+
+.input_field{width: 100%;border-color: #dee2e6 !important;}
+.input_field1{width: 30%;border-color: #dee2e6 !important;}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.7em 0 !important;
+}
+::ng-deep .mat-form-field-wrapper{padding-bottom: 0.5rem;}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgb(167 167 167 / 4%);
+}

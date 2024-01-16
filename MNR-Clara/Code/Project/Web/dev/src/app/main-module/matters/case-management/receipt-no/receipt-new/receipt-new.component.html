@@ -1,0 +1,283 @@
+<form [formGroup]="form">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">{{matter}}{{data.pageflow}} Receipt No</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 px-3 p-1">
+
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Document Type </p>
+              <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="documentType" placeholder="Select">
+                  <mat-option *ngFor="let food of documentTypelist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+              <!-- <angular2-multiselect [data]="multiselectdocumentList" [(ngModel)]="selectedItems"
+              [settings]="dropdownSettings" 
+               formControlName="documentType"></angular2-multiselect> -->
+
+               <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectdocumentList"
+               formControlName="documentType" [style]="{'width': '100%'}"></p-dropdown>
+
+              <mat-error *ngIf="errorHandling('documentType')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1" *ngIf="uploadbutton">
+            <div class="d-flex flex-column">
+              <p class="mb-1 py-0 required">Upload Receipt No</p>
+
+            
+
+              <input ngf type="file" accept="*" [(files)]="files" (click)="files =[]" class="form-control" id="" />
+
+              <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+            </div>
+
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-1 py-0 required"> Receipt No</p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter"   (keydown.space)="$event.preventDefault()" formControlName="receiptNo">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('receiptNo')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black ">Receipt Type </p>
+              <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                <mat-select formControlName="receiptType" placeholder="Select">
+                  <mat-option value="DOL Case Number">DOL Case Number</mat-option>
+                  <mat-option value="FOIA">FOIA</mat-option>
+                  <mat-option value="J Visa Application Number">J Visa Application Number</mat-option>
+                  <mat-option value="National Benefits Center">National Benefits Center</mat-option>
+                  <mat-option value="NVC Case Number">NVC Case Number</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                  <mat-option value="PERM Receipt">PERM Receipt</mat-option>
+                  <mat-option value="Service Center: California">Service Center: California</mat-option>
+                  <mat-option value="Service Center: Nebraska">Service Center: Nebraska</mat-option>
+                  <mat-option value="Service Center: Potomac">Service Center: Potomac</mat-option>
+                  <mat-option value="Service Center: Texas">Service Center: Texas</mat-option>
+                  <mat-option value="Service Center: Vermont">Service Center: Vermont</mat-option>
+                  <mat-option value="SWA Case Number">SWA Case Number</mat-option>
+                  <mat-option value="USCIS Receipt Number">USCIS Receipt Number</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('receiptType')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Date Sent to Goverment Agency</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker4" formControlName="dateGovtFE">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Receipt Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker23423" formControlName="receiptDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker23423"></mat-datepicker-toggle>
+                <mat-datepicker #picker23423></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('receiptDateFE')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Receipt No Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker1" formControlName="receiptNoticeDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('receiptNoticeDateFE')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Status</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+                <mat-select formControlName="statusId" placeholder="Select">
+                  <mat-option *ngFor="let food of statusIdlist" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1" *ngIf="form.value.receiptFile">
+            <p class="mb-0 py-0">Receipt No File</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput formControlName="receiptFile" readOnly placeholder="Enter">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1 my-auto"  *ngIf="this.form.controls.statusId.value == 10">
+            <mat-slide-toggle formControlName="toggleNotification">Send Notification</mat-slide-toggle>
+            <mat-error *ngIf="errorHandling('toggleNotification')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-12 mt-1" *ngIf="this.form.controls.toggleNotification.value == true">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 ">Mozeo SMS Notes</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <textarea matInput rows="7" placeholder="Enter" formControlName="receiptNote"></textarea>
+              </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel #panel2 hideToggle *ngIf="approved || data.pageflow == 'Display'">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Approval
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <!-- <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Approved On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date"[matDatepicker]="picker9" formControlName="approvedOn" >
+                <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                <mat-datepicker #picker9></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div> -->
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Approval Receipt Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker10"
+                  formControlName="approvalReceiptDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                <mat-datepicker #picker10></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Approval Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker11" formControlName="approvalDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                <mat-datepicker #picker11></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Expiration Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker12" formControlName="expirationDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                <mat-datepicker #picker12></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required" >Eligibility Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker6" formControlName="eligibiltyDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                <mat-datepicker #picker6></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Reminder Days</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="reminderDays">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Reminder Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker13" formControlName="reminderDateFE">
+                <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                <mat-datepicker #picker13></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="createdBy" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="createdOn" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{btntext}}</button>
+    </div>
+
+
+
+  </div>
+</form>

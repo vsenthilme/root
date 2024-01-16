@@ -1,0 +1,177 @@
+<form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+  <div class=" my-0 py-0">
+    <div class="row ms-3 me-3 px-1 smallscreen">
+      <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 ">
+        <h2 class="my-auto header-text fw-bolder ps-2">Check & Credit Card Request Form</h2>
+      </div>
+      <div class="auto">
+        <form [formGroup]="form">
+          <div class="scroll">
+            <div class="auto">
+              <div class="row">
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">Request Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="referenceField2">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">Required Date:</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Choose Date" [matDatepicker]="picker">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <p class="mb-0 py-0 fw-bolder ">(PLEASE CHECK ONE)</p>
+              <div class="auto">
+                <div class="col-6 col-4">
+                  <div class="input-container">
+                    <mat-radio-group formControlName="referFriendOrFamily" layout="row">
+                      <mat-radio-button color="primary" class="example-margin ml-4" value="Yes">CHECK <mat-form-field
+                          class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter">
+                        </mat-form-field>
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+
+                <div class="col-6 col-4">
+                  <mat-radio-group formControlName="referFriendOrFamily" layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" value="Yes">DEBIT CARD <mat-form-field
+                        class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" style="margin-left:100px">
+                      </mat-form-field>
+                    </mat-radio-button>
+
+                  </mat-radio-group>
+                </div>
+                <div class="col-6 col-4">
+                  <mat-radio-group formControlName="referFriendOrFamily" layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" value="Yes">CREDIT CARD
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter">
+                      </mat-form-field>
+                    </mat-radio-button>
+
+
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div class="row">
+                <p class="col-lg-3 col-md-4  ">Card Not Accepted:</p>
+                <div class="col-lg-3 col-md-4 py-2">
+                  <mat-checkbox color="primary" class="example-margin ml-4">Amex </mat-checkbox>
+                </div>
+                <div class="col-lg-3 col-md-4 py-2">
+                  <mat-checkbox color="primary" class="example-margin ml-4">Visa </mat-checkbox>
+                </div>
+                <div class="col-lg-3 col-md-4 py-2">
+                  <mat-checkbox color="primary" class="example-margin ml-4">Master Card </mat-checkbox>
+                </div>
+              </div>
+              <p class="col-lg-3 col-md-4  fw-bolder">VENDOR INFORMATION:</p>
+              <div class="Auto">
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4 ">PAYABLE TO(VENDOR'S NAME)</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4 ">VENDOR'S MAILING ADDRESS</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4 ">PHONE & FAX NUMBER</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4 ">NOTES or EMAIL</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="Auto">
+                <p class="col-lg-3 col-md-4  fw-bolder">CLIENT INFORMATION:</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">CLIENT'S NAME</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4   ">CASE or MATTER</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">BILLABLE TO CLIENT</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+              <div class="Auto">
+                <p class="col-lg-3 col-md-4  fw-bolder">MUST BE FILLED BY EMPLOYEE</p>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">YOUR NAME</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  ">QB DEPT</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white  fixed-bottom w-100">
+          <button mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            Submit</button>
+          <button mat-raised-button class="text-white mx-1 px-3" color="warn">
+            <mat-icon class="">close</mat-icon>Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

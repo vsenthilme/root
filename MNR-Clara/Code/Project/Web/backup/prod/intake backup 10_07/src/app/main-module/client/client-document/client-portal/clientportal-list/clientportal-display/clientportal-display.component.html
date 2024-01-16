@@ -1,0 +1,59 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Client Portal - New</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+  </div>
+  <div class="mt-2">
+    <div class="row p-1 mx-2">
+      <div class="col-lg-6 col-md-6 mt-1">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0 text-black">Client ID</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter" [(ngModel)]="data.clientDetails.clientId" disabled>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0 text-black">Client User ID</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter" [(ngModel)]="data.clientDetails.clientUserId" disabled>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1">
+        <p class="mb-0 py-0">First Name</p>
+        <mat-form-field class="form-group input_field mb-0" appearance="outline">
+          <input matInput placeholder="Enter" [(ngModel)]="data.clientDetails.firstName"
+            [disabled]="data.type == 'view'">
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1">
+        <p class="mb-0 py-0">Last Name</p>
+        <mat-form-field class="form-group input_field mb-0" appearance="outline">
+          <input matInput placeholder="Enter" [(ngModel)]="data.clientDetails.lastName"
+            [disabled]="data.type == 'view'">
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1">
+        <p class="mb-0 py-0">Mobile Number</p>
+        <mat-form-field class="form-group input_field mb-0" appearance="outline">
+          <input matInput placeholder="eg: 555-555-5555" [textMask]="{mask: mask}" [(ngModel)]="data.clientDetails.contactNumber"
+            [disabled]="data.type == 'view'">
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2" *ngIf="data.type == 'edit'">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button class="mx-2 bg-blue text-white" (click)="updateClient()"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+
+        Save</button>
+    </div>
+  </div>
+
+
+</div>

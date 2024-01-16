@@ -1,0 +1,423 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Billing</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Invoice</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">New</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Search" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+        class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class="disabled text-white mx-2 action-button  bg-red" type="button" mat-button>
+        <mat-icon class="">tune</mat-icon> Filter
+      </button>
+    </div>
+  </div>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <!-- <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+  <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div> 
+    <div class="row scroll2 mx-0">
+      <div class="col-12 mt-2">
+        <p class="mb-0 py-0">Class ID</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <input matInput placeholder="Enter">
+        </mat-form-field>
+      </div>
+      <div class="col-12 mt-2 2">
+        <p class="mb-0 py-0">Client ID </p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <input matInput placeholder="Enter">
+        </mat-form-field>
+      </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Partner </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Matter No </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Prebill Date </p>
+          <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+              <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2"
+                placeholder="Choose Date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Status </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Created By </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Prebill Batch No </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Prebill No </p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset();">
+        <mat-icon class="">restart_alt</mat-icon> Reset
+      </button>
+      <button mat-raised-button class="bg-blue text-white mx-1"  (click)="drawer.toggle()">
+        <mat-icon class="">done</mat-icon> Search
+      </button>
+    </div>
+  </mat-drawer> -->
+  <div class="d-flex justify-content-between align-items-center bg-white p-2 ps-4 mx-3">
+    <h2 class="my-auto header-text ps-2">Invoice New</h2>
+    <button mat-stroked-button (click)="showfilter();" *ngIf="isRun"
+      class="hoverbutton py-1 shadow-none  mx-2 px-4 d-inline mr-2 ">
+      <mat-icon class="">tune</mat-icon>Filter
+    </button>
+
+  </div>
+  <div class="example-sidenav-content" style="height: calc(100vh - 14.5rem);">
+    <mat-accordion>
+      <mat-expansion-panel #panel2 [expanded]="step === 0" (opened)="setStep(0)" hideToggle class="shadow-none"
+        *ngIf="filter">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont ps-2">
+            Filter
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="form">
+          <div class="row  mt-2 " [ngClass]="{'scroll7' : !isRun, 'scroll1': isRun}">
+            <!--[ngClass]="{'scroll7' : !expense, 'scroll1': expense, 'scroll9': filter,'scroll10': filter && expense}"
+               <div class="col-6 mt-2">
+              <p class="mb-0 py-0">Class ID</p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Client ID </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Partner </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div> -->
+
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Prebill Batch No </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100"
+                formControlName="preBillBatchNumber" [valuewithID]="false" apiMethod="accounting"
+                [filerbased]="searchStatusList">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectprebillbatchList" [(ngModel)]="selectedItems2"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                formControlName="preBillBatchNumber"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select" (onChange)="onItemSelect($event)" class="w-100 my-1 mb-2"
+                [options]="multiselectprebillbatchList" formControlName="preBillBatchNumber" [selectionLimit]="1"
+                [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}"></p-multiSelect>
+              <mat-error *ngIf="errorHandling('preBillBatchNumber')">{{getErrorMessage()}}</mat-error>
+            </div>
+
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Prebill No </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="preBillNumber"
+                [valuewithID]="false" apiMethod="accounting" [filerbased]="searchStatusList">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectprebillListList" [(ngModel)]="selectedItems1"
+                [settings]="dropdownSettings1" (onSelect)="onItemSelect($event,'PREBILL')" (onDeSelect)="OnItemDeSelect($event,'PREBILL')"
+                (onSelectAll)="onSelectAll($event,'PREBILL')" (onDeSelectAll)="onDeSelectAll($event,'PREBILL')"
+                formControlName="preBillNumber"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select" (onChange)="onItemSelect($event,'PREBILL')" class="w-100 my-1 mb-2"
+                [options]="multiselectprebillListList" formControlName="preBillNumber" [style]="{'width': '100%'}"
+                [panelStyle]="{'width':'100%'}"></p-multiSelect>
+              <mat-error *ngIf="errorHandling('preBillNumber')">{{getErrorMessage()}}</mat-error>
+            </div>
+
+
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Matter No </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="matterNumber"
+                [valuewithID]="false" apiMethod="matter">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectmatterListList" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings1" (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)"
+                (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                formControlName="matterNumber"></angular2-multiselect> -->
+              <p-multiSelect placeholder="Select" (onChange)="onItemSelect($event)" class="w-100 my-1 mb-2"
+                [options]="multimatterListList" formControlName="matterNumber" [style]="{'width': '100%'}"
+                [panelStyle]="{'width':'100%'}"></p-multiSelect>
+              <mat-error *ngIf="errorHandling('matterNumber')">{{getErrorMessage()}}</mat-error>
+            </div>
+
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Prebill Date </p>
+              <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                <mat-date-range-input [rangePicker]="pickers">
+                  <input matStartDate placeholder="Start date" formControlName="startPreBillDate">
+                  <input matEndDate placeholder="End date" formControlName="endPreBillDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                <mat-date-range-picker #pickers></mat-date-range-picker>
+              </mat-form-field>
+
+            </div>
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0 required">Invoice Date </p>
+              <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Choose Date" placeholder="Choose Date" [matDatepicker]="picker3"
+                  formControlName="invoiceDate" placeholder="Choose Date">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('invoiceDate')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+            <div class="col-16 mt-2">
+              <p class="mb-0 py-0">Invoice Remarks</p>
+              <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+                <textarea matInput rows="5" formControlName="referenceText" placeholder="Enter"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('referenceText')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+            <!-- <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Status </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-3 mt-2">
+              <p class="mb-0 py-0">Created By </p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div> -->
+
+          </div>
+        </form>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel3 [expanded]="step === 1" (opened)="setStep(1)" hideToggle class="shadow-none"
+        *ngIf="isRun">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="ps-2 d-flex justify-content-between collapsefont">
+            Details
+            <mat-icon class="text-primary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class=" my-0 py-0 ">
+
+          <div class="w-100   px-0 mt-1" [ngClass]="{'scroll8' : !filter, 'scroll5': filter}">
+            <div class="">
+              <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()" disabled
+                      [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="clientId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</th>
+                  <td mat-cell *matCellDef="let element"> {{element.clientname}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="matterNumber">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                  <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="preBillNumber">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Prebill No</th>
+                  <td mat-cell *matCellDef="let element"> {{element.preBillNumber}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="partnerAssigned">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Partner</th>
+                  <td mat-cell *matCellDef="let element"> {{element.partnerAssigned}} </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <!-- <ng-container matColumnDef="invoiceDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.invoiceDate}} </td>
+                </ng-container> -->
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="totalAmount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Amount </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="totalamount(element);" class="text-right">
+                      {{ element.addInvoiceLine_t[0].fAmount + element.addInvoiceLine_t[0].cAmount | currency}}
+                    </button>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                    class="text-right">{{getBillableAmount() | currency}} </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="nooftickets">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Amount </th>
+                  <td mat-cell *matCellDef="let element"> <button mat-icon-button (click)="totalamount(element);"
+                      class="text-right">  {{ element.addInvoiceLine_t[0].fAmount + element.addInvoiceLine_t[0].cAmount | currency}}
+                  </button> </td>
+                  <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;">$ xzx </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="prebillamount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Bill To</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- {{element.clientId}} -->
+                    <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100"
+                      [(ngModel)]="element.addInvoiceLine_t[0].clientId" singleSelection='true' apiMethod="client"
+                      apiName="clientId">
+                    </app-ng-multiselect-dropdown> -->
+                    <!-- <angular2-multiselect [data]="multiselectclientList"
+                      [(ngModel)]="element.addInvoiceLine_t[0].clientId" [settings]="dropdownSettings2">
+                    </angular2-multiselect> -->
+                    <input matInput placeholder="Enter"    [(ngModel)]="element.clientname">
+                    <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100"
+                      [(ngModel)]="element.clientId1" [valuewithID]="false" apiMethod="client" apiName="clientId">
+                    </app-ng-multiselect-dropdown> -->
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="billpert">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill Amount </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="totalamount(  element );" class="text-right">
+                      {{ element.addInvoiceLine_t[0].fAmount + element.addInvoiceLine_t[0].cAmount | currency}}
+                  </button>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                    class="text-right">{{getBillableAmount() | currency}} </td>
+                </ng-container>
+                <!-- Symbol Column -->
+                <!-- <ng-container matColumnDef="client2">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Client 2 Invoice Amt </th>
+                  <td mat-cell *matCellDef="let element">
+                    <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100"
+                      [(ngModel)]="element.clientId2" [valuewithID]="false" apiMethod="client" apiName="clientId">
+                    </app-ng-multiselect-dropdown>
+                  </td>
+                </ng-container> -->
+                <!-- Symbol Column -->
+                <!-- <ng-container matColumnDef="client22">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID 2% </th>
+                  <td mat-cell *matCellDef="let element"> {{element.clientId2per}} </td>
+                </ng-container> -->
+                <ng-container matColumnDef="client22">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Add Client </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="client2(element);">
+                      <mat-icon class="text-secondary">add</mat-icon>
+                    </button>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+              </table>
+
+            </div>
+          </div>
+          <div class="p-0 mx-1 d-none m-0">
+            <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="d-flex justify-content-center align-items-center py-2 bottombutton1">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2" (click)="back()"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" *ngIf="!isRun" (click)="Run()"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Run</button>
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" *ngIf="isRun" (click)="save()"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Save</button>
+    </div>
+  </div>
+
+</mat-drawer-container>

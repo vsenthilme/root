@@ -1,0 +1,124 @@
+<form [formGroup]="form">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext"> {{matter}} Document Checklist - New</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  mt-2 p-1 px-3">
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required  text-black">Check List No</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="checkListNo">
+              </mat-form-field>
+              <!-- <angular2-multiselect [data]="multiselectchecklistnoList" [(ngModel)]="selectedItems"[settings]="dropdownSettings" 
+               formControlName="checkListNoFE"></angular2-multiselect> -->
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Case Category</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="caseCategoryName">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required ">Case Sub Category</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="caseSubCategoryName">
+              </mat-form-field>
+            </div>
+
+            <!-- <div *ngIf="submitted">
+                <div class="alert alert-danger" *ngIf="!form.value.contactNumber">Phone Number Required</div>
+                <div *ngIf="form.value.contactNumber && form.controls['contactNumber'].errors">Invalid Phone Number
+                </div>
+              </div> -->
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  required">Matter ID</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="matterNumber" type="text">
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2">
+            <p class="mb-0 py-0 required ">Matter Description</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput formControlName="matterDescription" type="text">
+            </mat-form-field>
+          </div>
+
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Document Details
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-1 scroll bg-white">
+          <table mat-table [dataSource]="dataSource" class=" w-100">
+
+            <!-- Si No -->
+            <ng-container matColumnDef="sino">
+              <th mat-header-cell *matHeaderCellDef>S No</th>
+              <td mat-cell *matCellDef="let element;let i=index"> {{i + 1}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="documentName">
+              <th mat-header-cell *matHeaderCellDef>Document Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.documentName}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="checkListTemplate">
+              <th mat-header-cell *matHeaderCellDef>Checklist Template</th>
+              <td mat-cell *matCellDef="let element"> {{element.documentUrl}} </td>
+            </ng-container>
+
+       <!-- Symbol Column -->
+       <ng-container matColumnDef="matterName">
+        <th mat-header-cell *matHeaderCellDef>matter</th>
+        <td mat-cell *matCellDef="let element"> {{element.matterName}} </td>
+      </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+          </table>
+
+
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button mat-dialog-close color="warn" class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button class="mx-2 bg-blue text-white" (click)="saveMatterChecklist()"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Save</button>
+
+      <!-- <button mat-raised-button *ngIf="assigif" type="submit" class="mx-2 bg-blue text-white"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          Assign</button> -->
+    </div>
+  </div>
+</form>

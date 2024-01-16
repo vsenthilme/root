@@ -1,0 +1,237 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Client</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">List</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" (click)="downloadexcel()">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button disabled mat-mini-fab *ngIf="showFloatingButtons == true"
+        class=" disabled floating-buttons bg-yellow1 text-white mx-2" matTooltip="Delete" [disabled]="!RA.delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display" [disabled]="!RA.view" (click)="openDialog('Display')">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        (click)="openDialog('Edit')" matTooltip="Edit" [disabled]="!RA.createUpdate" matTooltip="Edit"
+        [disabled]="!RA.createUpdate">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab [disabled]="!RA.createUpdate" class="bg-darkblue text-white mx-2 action-button"
+        (click)="openDialog('New')">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button" color="warn" type="button" mat-button
+        (click)="drawer.toggle()">
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+    <form [formGroup]="searhform">
+      <div class="row scroll2 mx-0">
+<!--CLARA/AMS/2022/021-->
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Class ID</p>
+          <p-multiSelect placeholder="Select" class="w-100" [options]="multiselectClassList" formControlName="classId"
+            [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">
+          </p-multiSelect>
+        </div>
+<!--end of CLARA/AMS/2022/021-->
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Client ID</p>
+          <p-multiSelect placeholder="Select" class="w-100" [options]="clientList" formControlName="clientId"
+            [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">
+          </p-multiSelect>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Name</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter" formControlName="firstNameLastName">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Phone Number</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="eg: 555-555-5555" formControlName="contactNumber">
+          </mat-form-field>
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Email</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <input matInput placeholder="Enter" formControlName="emailId">
+          </mat-form-field>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Created Date</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" formControlName="startCreatedOnFE">
+              <input matEndDate placeholder="End date" formControlName="endCreatedOnFE">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Status </p>
+          <p-multiSelect placeholder="Select" class="w-100"  [options]="multiselectstatusList" formControlName="statusId"
+            [style]="{'width': '100%'}" [panelStyle]="{'width':'100%'}">
+          </p-multiSelect>
+        </div>
+
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset(); drawer.toggle();">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        <button mat-raised-button class="bg-blue text-white mx-1" (click)="search(); drawer.toggle();">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </form>
+  </mat-drawer>
+  <div class="example-sidenav-content">
+
+    <div class=" my-0 py-0">
+
+      <div class="ms-3 me-3 px-1 mt-1 scroll1">
+        <div class="scroll4">
+          <table mat-table [dataSource]="dataSource" matSort matSortActive="createdOn" matSortDirection="desc"
+            class=" w-100">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()" disabled
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="clientId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+              <td mat-cell *matCellDef="let element"> {{element.clientId}} </td>
+            </ng-container>
+            <!-- Weight Column -->
+            <ng-container matColumnDef="classID">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Class</th>
+              <td mat-cell *matCellDef="let element"> {{element.classId}} </td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="firstName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.firstNameLastName}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="emailId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+              <td mat-cell *matCellDef="let element"> {{element.emailId}} </td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="contactNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone </th>
+              <td mat-cell *matCellDef="let element"> {{element.contactNumber}} </td>
+            </ng-container>
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="corporationClientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Corporation </th>
+                <td mat-cell *matCellDef="let element"> {{element.corporationClientId}} </td>
+              </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="addressLine1">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+              <td mat-cell *matCellDef="let element">{{element.addressLine1}} {{element.suiteDoorNo}} {{element.city}} {{element.state}}
+                {{element.zipCode}}</td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="form">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Intake</th>
+              <td *matCellDef="let element" class="tableborder p-0 border-bottom">
+                <button [disabled]="!element.intakeFormNumber" mat-icon-button (click)="open_Intake(element)">
+                  <!-- <mat-icon class="text-secondary">attach_file</mat-icon> -->
+                  <img src="./assets/img/icons/pin.png" style="height: 30px;width:30px;" alt="" srcset="">
+                </button>
+              </td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="createdOnString">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+              <td mat-cell *matCellDef="let element"> {{element.createdOnString | date :'MM-dd-yyyy'}} </td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="statusId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+              <td mat-cell *matCellDef="let element"> {{element.statusId}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="clearselection(row);openDialog('Edit')">
+            </tr>
+          </table>
+        </div>
+
+      </div>
+      <div class="p-0 mx-1 m-0">
+        <!-- <mat-paginator class="mx-3 me-3" showFirstLastButtons [length]="totalRecords" [pageSize]=pageSize
+          [pageSizeOptions]="[10, 15, 20, 25]" aria-label="Select page of periodic elements"
+          (page)="pageHandler($event)" *ngIf="!showListByFilter">
+        </mat-paginator> -->
+        <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+        <!-- <div class="col-12 mt-2">
+          <p *ngIf="showListByFilter" style="text-align: right;font-weight: bold;">Number of Records : {{totalRecords}}
+          </p>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>

@@ -1,0 +1,476 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Case Information</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Immigration</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">{{pageflow}}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button disabled mat-mini-fab (click)="toggleFloat()" class=" disabled mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button disabled mat-mini-fab class=" disabled bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="table_shadow my-0 py-0 mt-3">
+  <div class="row ms-3 me-3 px-1">
+    <div class="d-flex justify-content-between align-items-center bg-white text-secondary header-box ">
+      <h2 class="my-auto ps-4">Case Information Sheet - {{code}}</h2>
+
+    </div>
+    <div class="col-md-12 px-0 mt-1">
+      <div class="scrolllong">
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. General Details
+                  <div class="d-flex align-items-center">
+                    <button [disabled]="isdisabled" mat-stroked-button (click)='open_Intake()'
+                      class="hoverbutton shadow-none py-1 mx-2 d-inline mr-2">
+                      <mat-icon class="">search</mat-icon>  Intake Form
+                    </button>
+                    <mat-icon class="my-auto text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2  mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Class </p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <mat-select formControlName="classId" placeholder="Select">
+                      <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                        {{food.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0 required">Client ID</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                    <mat-select formControlName="clientId" placeholder="Select">
+                      <mat-option *ngFor="let food of clientIdList" [value]="food.key">
+                        {{food.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <!-- <angular2-multiselect [data]="multiselectclientList" [(ngModel)]="selectedItems3"
+                  [settings]="dropdownSettings" (onSelect)="onItemSelect1($event)"  formControlName="clientIdFE"></angular2-multiselect> -->
+
+                  <p-dropdown [filter]="true"placeholder="Select"   appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectclientList" 
+                  formControlName="clientId"  [style]="{'width': '100%'}" (onChange)="onItemSelect1($event)"  [panelStyle]="{'width':'20%'}"></p-dropdown>
+
+                  <mat-error *ngIf="errorHandling('clientIdFE')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Prospective Client</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="potentialClientId">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('potentialClientId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Inquiry No</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="inquiryNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('inquiryNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0 required">Case Category</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    <!-- <angular2-multiselect [data]="multiselectcaseList" [(ngModel)]="selectedItems2"
+                    [settings]="dropdownSettings"  (onSelect)="onItemSelect($event)" 
+                     formControlName="caseCategoryIdFE"></angular2-multiselect> -->
+                     <p-dropdown  [filter]="true" placeholder="Select" (onChange)="onItemSelect($event)"   appendTo="body" class="w-100" [options]="multiselectcaseList" [(ngModel)]="selectedItems2"
+                     formControlName="caseCategoryId" [style]="{'width': '100%'}"></p-dropdown>
+                    <mat-error *ngIf="errorHandling('caseCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0 required">Case Sub Category</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseSubCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseSubCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    <!-- <angular2-multiselect [data]="multiselectcasesubList" [(ngModel)]="selectedItems"
+                    [settings]="dropdownSettings"
+                     formControlName="caseSubCategoryIdFE"></angular2-multiselect> -->
+                     <p-dropdown  [filter]="true" placeholder="Select"appendTo="body" class="w-100" [options]="multiselectcasesubList" [(ngModel)]="selectedItems"
+                     formControlName="caseSubCategoryId" [style]="{'width': '100%'}"></p-dropdown>
+                    <mat-error *ngIf="errorHandling('caseSubCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Intake Form No</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="intakeFormNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('intakeFormNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-1 col-md-1 my-auto mt-2">
+                  <div class="d-flex flex-column">
+
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2. Case Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2  mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0 required">Matter Description</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="matterDescription">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('matterDescription')">{{getErrorMessage()}}</mat-error>
+                  <mat-error *ngIf="form.controls.matterDescription.errors?.pattern"> Invalid Characters</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Location of File</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="locationOfFile">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('locationOfFile')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Name of Employer</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="nameOfEr">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('nameOfEr')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Alternate Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alternateEmailId">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('alternateEmailId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Alternate Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alternateTelephone1">
+                      <mat-error *ngIf="form.controls.alternateTelephone1.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.alternateTelephone1.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.alternateTelephone1.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('alternateTelephone1')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--MK added 01/03/33-->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Alternate Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alternateEmailId">
+                      <mat-error class="mt-1" *ngIf="form.controls.alternateEmailId.hasError('email')">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('alternateEmailId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Type of Matter</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="typeOfMatter">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('typeOfMatter')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--end-->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Alien Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alienNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('alienNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Country of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="countryOfBirth">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('countryOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2" formControlName="dateOfBirth">
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('dateOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Client Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" readOnly formControlName="firstNameLastName">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('firstNameLastName')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Title</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="title">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('title')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="emailId">
+                      <!-- <mat-error class="mt-1" *ngIf="form.controls.emailId.hasError('email')">Invalid Email </mat-error> -->
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('emailId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Company Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="companyName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('companyName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="adressLine1">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('adressLine1')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="city">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('city')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">State</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="state">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('state')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Country</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="country">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('country')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="zipCode">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('zipCode')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Direct Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="homeNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('homeNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Office Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="workNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('workNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Cell Phone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="contactNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Fax Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fax">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('fax')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel6 hideToggle *ngIf="pageflow == 'Edit'">
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4. Admin
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel6.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Created By</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="createdBy" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('createdBy')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Created On</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Auto-Populate" formControlName="createdOn" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('createdOn')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Updated By</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="updatedBy" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('updatedBy')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0  py-0">Updated On</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Auto-Populate" formControlName="updatedOn" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('updatedOn')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0  py-0">Status</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="statusIddes" readOnly>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('statusIddes')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </form>
+        </mat-accordion>
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white bottombutton1 w-100">
+          <button mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+          <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            {{btntext}}</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

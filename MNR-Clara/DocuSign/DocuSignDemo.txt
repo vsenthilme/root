@@ -1,0 +1,34 @@
+DocuSignDemo
+
+-- Create an App and create the below key and sec key
+
+Integration Key: b5d893d3-ad6e-4f49-91ad-8352fdf1cdd1
+Secret Key: 48b19aaa-9f79-451a-a521-ccb53a2ba58e
+
+Redirect Uril: http://localhost
+
+Syntax to create AuthRequest:
+https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=b5d893d3-ad6e-4f49-91ad-8352fdf1cdd1&redirect_uri=http://localhost
+
+-- Generated Code
+
+http://localhost/?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAYABwCAvvP05YPZSAgAgEp6POaD2UgCAHasHT6Zf6JFhtw393A8MzMVAAEAAAAYAAEAAAAFAAAADQAkAAAAYjVkODkzZDMtYWQ2ZS00ZjQ5LTkxYWQtODM1MmZkZjFjZGQxIgAkAAAAYjVkODkzZDMtYWQ2ZS00ZjQ5LTkxYWQtODM1MmZkZjFjZGQxNwD0gpXlAEu8SKBFIQ1v_E8LMAAA1UGY4IPZSA.QmR_CosACldlPvEUz7yY4GL0GpJguntJOXpPEUTP_55F_ku2kdVZc8ktVXJKx06vvtESm_XxKha4-6gpWVdS18_RHFsKIe69wg0_y2hG5joB59QRE_28so4YLvuygH4SfbGj31L5s7PbEL6HpqILgAfIMm0V6OoKq2cRzYYCJFOp8OcHOOe02qwtvLgmg1nXfARsLg3d1ix8zqNQlMJ8HiV0YTVMB5LB-QGd319_gzAd66p98WHefHLKE3PgwzVSsJzioZLM3t6rP4XmYhRgeolUzMTdkYTCgdFmQ6aTdCkmF_Omxd4k4xY2CvtYXUFZWFtQzBEXJqoCqZ_fO_3LFw
+
+-- To get Auth Token
+
+Steps:
+POST: https://account-d.docusign.com/oauth/token
+
+Header:
+Authorization: Basic {Integration Key:secret key, base64 encoded}
+
+Body: grant_type=authorization_code&code={<copy above code and paste it here}
+
+-- convert base64 encoded (integration:secret key)
+btoa('b5d893d3-ad6e-4f49-91ad-8352fdf1cdd1:48b19aaa-9f79-451a-a521-ccb53a2ba58e')
+
+converted base64 string - YjVkODkzZDMtYWQ2ZS00ZjQ5LTkxYWQtODM1MmZkZjFjZGQxOjQ4YjE5YWFhLTlmNzktNDUxYS1hNTIxLWNjYjUzYTJiYTU4ZQ==
+
+
+-- Hit the POST Request in PostMan
+"access_token": "eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAUABwCAW10v5oPZSAgAgJuAPSmE2UgCAHasHT6Zf6JFhtw393A8MzMVAAEAAAAYAAEAAAAFAAAADQAkAAAAYjVkODkzZDMtYWQ2ZS00ZjQ5LTkxYWQtODM1MmZkZjFjZGQxIgAkAAAAYjVkODkzZDMtYWQ2ZS00ZjQ5LTkxYWQtODM1MmZkZjFjZGQxMAAA1UGY4IPZSDcA9IKV5QBLvEigRSENb_xPCw.OYRFaFBN4gEXNhILhjSWdibiiFXfU8p3M5n9eXoYcG35l_FLTuzuywpv5ywL15WW04C1gvjd7KwMxB8zQaCTlt-qXdHVmZRw0VvalP1sNrtK620GYbLBnfgFkhStAofvUyfFSJzH8tXPeMMoSFcq2H8bE04RIUv53AF5au7_nJOV0WQDbZXWqgKvk15E0ulIodzovNW6qfpVHggrLUhK4xXuwK13zzOIamUzg3jNrgM4VPp-ZmymNYV2sUr8iQxfenZA_6w06QpSNHHFD2G68PSoPowZKOmcJapgbVJ0k5QuTttOMxPQcNiPSxV-fnS5tOvdijKsnB1fz4T4bGWhQw",

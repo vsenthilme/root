@@ -1,0 +1,51 @@
+
+<div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Invoice</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+<div class="row mx-1">
+    <div class="d-flex ml-auto"> <input (keyup)="applyFilter($event)" matInput
+        class="form-control filter_button mt-2 mt-2 mx-2 border-bottom" placeholder="Search" style="width:90%">
+    </div>
+  <div class="scroll2">
+      <table mat-table [dataSource]="dataSource" matSort class=" w-100 ">
+
+          <ng-container matColumnDef="clientId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+              <td mat-cell *matCellDef="let element"> {{element.clientId}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="clientName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.clientName}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="invoiceAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoive Amount</th>
+              <td mat-cell *matCellDef="let element"> {{element.invoiceAmount | currency}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="invoiceDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>invoiceDate</th>
+              <td mat-cell *matCellDef="let element"> {{element.invoiceDate | date :'MM-dd-yyyy'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="invoiceNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoive No</th>
+              <td mat-cell *matCellDef="let element"> {{element.invoiceNumber}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+      </table>
+  </div>
+
+</div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+    </div>
+
+
+  </div>

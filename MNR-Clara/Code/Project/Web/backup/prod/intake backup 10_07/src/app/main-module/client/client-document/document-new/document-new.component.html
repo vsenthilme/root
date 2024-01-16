@@ -1,0 +1,85 @@
+<form [formGroup]="form">
+  <div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">{{client}}{{data.pageflow}} Document</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="mt-2">
+      <div class="row p-1 px-4 ">
+        <!-- <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0  py-0 text-black">Matter No</p>
+
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+              <mat-select class="form-group input_field mb-0" formControlName="matterNumber" placeholder="Select">
+                <mat-option *ngFor="let food of matterNumberList" [value]="food.key">
+                  {{food.key}} / {{food.value}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('matterNumber')">{{getErrorMessage()}}</mat-error>
+
+
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0  py-0">Case Category</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+            <mat-select class="disabled form-group input_field mb-0" formControlName="caseCategoryId"
+              placeholder="Select">
+              <mat-option *ngFor="let food of caseCategoryIdList" disabled [value]="food.key">
+                {{food.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div> -->
+
+        <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 required py-0">Document No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+              <mat-select class="form-group input_field mb-0" formControlName="documentNo" placeholder="Select">
+                <mat-option *ngFor="let food of documentcodelist" [value]="food.key">
+                  {{food.value}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="errorHandling('documentNo')">{{getErrorMessage()}}</mat-error>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0  py-0">Document File </p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter" class="disabled" formControlName="documentUrl" readOnly>
+          </mat-form-field>
+        </div>
+        <!-- <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 required py-0">Client Portal ID </p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div> -->
+        <!-- <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 required py-0">Mail Merge</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div> -->
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+        <button mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          Submit</button>
+      </div>
+    </div>
+
+
+  </div>
+</form>

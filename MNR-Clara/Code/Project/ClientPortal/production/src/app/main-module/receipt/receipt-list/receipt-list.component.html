@@ -1,0 +1,57 @@
+<h1 class=" header-size fw-lighter text-blue xl-margin ml-4">Receipt No</h1>
+
+<div class="scroll2 xl-margin w-100 rowheight">
+  <table mat-table [dataSource]="dataSource" class="w-100">
+  
+
+
+  
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="matterNumber">
+      <th mat-header-cell *matHeaderCellDef>Document Type</th>
+      <td mat-cell *matCellDef="let element" class="text-left"> <div >{{element.documentType}} </div>
+       <!-- <div> {{element.product}}</div> -->
+      </td>
+ 
+    </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="receiptNo">
+      <th mat-header-cell *matHeaderCellDef>Receipt No</th>
+      <td mat-cell *matCellDef="let element"> {{element.receiptNo}} </td>
+    </ng-container>
+    <ng-container matColumnDef="receiptType">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">{{element.receiptType}} </td>
+    </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="receiptDate">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.receiptDate| date :'MM-dd-yyyy'}} </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="no" >
+        <th mat-header-cell *matHeaderCellDef >Doc </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button  class="hvr-wobble-horizontal" (click)="download(element)">
+             <p class="d-inline mr-2 text-blue hide-xs">Download</p> <mat-icon class="d-inline text-blue ">trending_flat</mat-icon>
+            </button>
+           </td>
+      </ng-container>
+      <ng-container matColumnDef="statusIddes" >
+        <th mat-header-cell *matHeaderCellDef >Status </th>
+        <td mat-cell *matCellDef="let element">{{element.statusIddes}} </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+  <div class="buttons border bg-white pb-1 w-100 d-flex justify-content-end">
+    <div class="p-0 mx-1 " style="background-color: #ffff;">
+      <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>

@@ -1,0 +1,100 @@
+
+@font-face {
+    font-family: Roboto Slab;
+    src: url(assets/font/Exo2.otf);
+  }
+  body{font-family: Roboto Slab;}
+.d-flex { display: flex !important;}
+.align-items-center { align-items: center !important; }
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important;}
+.justify-content-start { justify-content: flex-start !important;}
+.justify-content-end { justify-content: flex-end !important;}
+.mb-0 { margin-bottom: 0 !important;}
+.justify-content-between {justify-content: space-between !important;}
+.mx-5 {margin-right: 3rem !important; margin-left: 3rem !important;}
+.text-end {text-align: right !important;}
+.text-center {text-align: center !important;}
+.mb-1 { margin-bottom: 0.25rem !important;}
+.mt-1 { margin-top: 0.5rem !important;}
+.mt-2 { margin-top: 0.9rem !important;}
+.w-25 {width: 25% !important;}
+.w-35 {width: 35% !important;}
+.w-75 {width: 80% !important;}
+.pb-5 { padding-bottom: 3rem !important;}
+.my-0 { margin-top: 0 !important; margin-bottom: 0 !important;}
+.my-1 { margin-top: 0.3rem !important; margin-bottom: 0.3rem !important;}
+.py-2 { padding-top: 0.5rem !important; padding-bottom: 1rem !important;}
+.px-5 { padding-right: 2.5rem !important;padding-left: 2.5rem !important;}
+.mt-3 { margin-top: 0.7rem !important;}
+
+
+
+
+#table th { padding: 12px; width: 6rem !important;text-align: left;border: 1px solid #ddd;background-color: #006990;color: #fff;}
+#table {border-collapse: collapse;}
+#total {text-align:right !important;background-color: #fff !important;}
+#table td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table tr {background-color: #fff;}
+
+
+
+#table2 th { padding: 12px; width: 6rem !important;text-align: left;border: 1px solid #ddd;background-color: #f7f7f7;color: #5e5e5e;}
+#table2 {border-collapse: collapse;}
+#table2 td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table2 tr {background-color: #fff;}
+
+
+#table1{width: 100% !important; border-collapse: collapse;}
+#table1 td, #table1 th {  border: 1px solid #ddd;padding: 8px;}
+#table1 tr:nth-child(even){background-color: #f7f7f7;}     
+#table1 tr:hover {background-color: #fff;}
+#table1 th {padding-top: 12px;padding-bottom: 12px; text-align: left; color: rgb(53, 53, 53); background-color: #e2edf7;}
+
+#table3 th { padding: 12px; width: 8rem !important;text-align: left;border: 1px solid #ddd;background-color: #f7f7f7;color: #5e5e5e;}
+#table3 {border-collapse: collapse;}
+#table3 td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table3 tr {background-color: #fff;}
+
+
+.lightbg{background-color: #e2edf7 !important;}
+.text-blue{color: #006990 !important;}
+
+
+
+/* 
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+generatePDF() {  
+    let docDefinition = { 
+      content: [
+        {
+          columns: [
+            
+              { text: 'Monty & Ramirez LLP 150 W. Parker Rd Ste 300 Houston, TX 77076', style: 'address', width: '50%',},
+         
+          
+            { text: 'This is a header', style: 'header' },{ text: 'This is a header', style: 'header', width: '50%',  },
+         
+          
+           ],
+         }
+      ],
+      styles: {
+        address: {
+          color: '#006990',
+          fontSize: 10,
+          bold: true,
+          justify: 'start',
+      },
+      header: {
+        color: '#006990',
+        fontSize: 8,
+        bold: true,
+    },
+      }
+    };  
+   
+    pdfMake.createPdf(docDefinition).open();  
+  } */

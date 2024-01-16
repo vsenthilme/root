@@ -1,0 +1,12 @@
+LANG_ID,CLASS_ID,MATTER_NO,CLIENT_ID,INVOICE_NO,SERIAL_NO,INVOICE_FISCAL_YEAR,INVOICE_PERIOD,ITEM_NO,INVOICE_TEXT,BILL_AMOUNT,STATUS_ID,IS_DELETED,CTD_BY,CTD_ON
+EN,1,51142-02,51142,638,2,2019,6,2,Travel Expenses for Enrique Lopez from Aguascalientes to Houston roundtrip for family and consultant meetings. Arriving 6/5/18 leaving 6/7/18 via United.,1079.58,54,0,JI,2022-10-07
+EN,1,51142-02,51142,2266,2,2019,9,2,Travel Expenses Enrique Lopez Vazquez flight 9/18 Amigos Meeting,2546.16,54,0,JI,2022-10-07
+EN,1,51142-02,51142,7073,2,2020,11,2,Charter Flight Cost to Monterrey Mexico,11501.10,54,0,JI,2022-10-07
+EN,1,51142-02,51142,8005,2,2021,1,2,Travel Expenses - Monterey Mexico trip additional international fees and flight costs.,1550.32,54,0,JI,2022-10-07
+EN,1,51142-02,51142,9677,2,2021,4,2,"Invoice# 58137 from NAICS Association, LLC for company lookup record.",119.80,54,0,JI,2022-10-07
+EN,1,51142-02,51142,10621,2,2021,6,2,Record request from City of Houston for building permits related to Frio Cold Storage.,11.90,54,0,JI,2022-10-07
+EN,1,51142-02,51142,13490,2,2021,10,2,Check Number 1195 against Inv# 13058,3769.33,54,0,JI,2022-10-07
+EN,1,51142-02,51142,16078,2,2022,3,2,Outside Consultant Susman Godfrey - Flash Data,192.04,54,0,JI,2022-10-07
+EN,1,51142-02,51142,17174,2,2022,6,2,Federal Express fee shipment of cell phone,86.73,54,0,JI,2022-10-07
+EN,1,51142-02,51142,100091,2,2019,8,2,Hotel ($135.47) and flight ($972.50) expenses,1107.97,54,0,JI,2022-10-07
+EN,1,51142-02,51142,100092,2,2019,8,2,Expenses Jacob Monty and Enrique Lopez Vazquez Dinner $189 Lunch $50,239.00,54,0,JI,2022-10-07

@@ -1,0 +1,74 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Total Amount</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+  </div>
+  <!-- <div class="row w-25 mx-0 py-2 d-flex justify-content-end align-items-center">
+        <div> <input matInput (keyup)="applyFilter($event)" class="form-control filter_button mt-2 mt-2 mx-2 border-bottom"
+            placeholder="Search" style="width:90%">
+        </div>
+    
+      </div> -->
+  <div class=" my-0 py-0 ">
+    <div class="">
+      <table mat-table [dataSource]="dataSource" class="col-12 w-100">
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef class="pl-4">Legal Fees </th>
+          <td mat-cell *matCellDef="let element"  class="pl-4">
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" style=" margin: 0 0 !important;padding-bottom: 0px !important;"> 
+            <span matPrefix class="text-secondary "
+                  style="display: table-cell; vertical-align: middle;">$&nbsp;</span> <input matInput placeholder="Enter" [(ngModel)]="element.fAmount">
+            </mat-form-field>
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dimensions">
+          <th mat-header-cell *matHeaderCellDef class="pl-4">Legal Cost</th>
+          <td mat-cell *matCellDef="let element" class="pl-4"> 
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" style=" margin: 0 0 !important;padding-bottom: 0px !important;"> 
+            <span matPrefix class="text-secondary"
+            style="display: table-cell; vertical-align: middle;">$&nbsp;</span><input matInput placeholder="Enter" [(ngModel)]="element.positivecAmount " (ngModelChange)="onInputChange($event)">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+        </tr>
+      </table>
+    </div>
+    <!-- <div class="buttons border d-flex justify-content-end">
+          <div class="p-0 mx-1 " style="background-color: #ffff;">
+            <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div> -->
+  </div>
+  <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+    <button mat-raised-button mat-dialog-close class="text-white mr-1" color="warn">
+      <mat-icon class="">close</mat-icon> Cancel
+    </button>
+    <button mat-raised-button (click)="submit()" class="mx-2 px-4 bg-blue text-white"> <i
+        class="bi bi-check2 me-1 font-size-1_5rem"></i>
+      Save</button>
+  </div>
+
+</div>

@@ -1,0 +1,70 @@
+<form [formGroup]="form">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Client Portal Credentials</h2>
+      <a (click)=cancel()><i class="bi bi-x-lg px-3"></i></a>
+    </div>
+    <div class="mt-2">
+      <div class="row scroll p-1 mr-1 px-4 ">
+        <div class="col-12 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 required  text-black">From</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="fromAddress" readOnly>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 required ">To</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="toAddress">
+              <mat-error class="mt-1" *ngIf="form.controls.toAddress.errors?.required">Field Should not be Blank </mat-error>
+              <mat-error class="mt-1" *ngIf="form.controls.toAddress.errors?.pattern">Invalid Email </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 required ">Cc</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="ccAddress">
+              <mat-error class="mt-1" *ngIf="form.controls.ccAddress.errors?.pattern">Invalid Email </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+          <p class="mb-0 py-0 required ">Date & Time</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter"value="{{datetday}}">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 mt-1">
+          <p class="mb-0 py-0 required ">Subject</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput formControlName="subject" readOnly>
+          </mat-form-field>
+          <mat-error *ngIf="errorHandling('subject')">{{getErrorMessage()}}</mat-error>
+        </div>
+        <div class="col-sm-12 mt-1 mb-2 mh-100">
+          <p class="mb-0 py-0 required  ">Body</p>
+            <ngx-editor [editor]="editor" formControlName="bodyText" placeholder="Type here ...">
+            </ngx-editor>
+          <mat-error *ngIf="errorHandling('bodyText')">{{getErrorMessage()}}</mat-error>
+        </div>
+      </div>
+      <div class=" d-flex justify-content-center align-items-center py-1">
+        <button mat-raised-button color="warn" (click)="cancel()" class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+        <button mat-raised-button type="submit" (click)="submit()" class="mx-2 bg-blue text-white"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          Send</button>
+      </div>
+    </div>
+
+
+  </div>
+</form>

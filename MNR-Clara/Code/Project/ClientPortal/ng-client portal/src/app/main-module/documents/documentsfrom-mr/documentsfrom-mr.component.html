@@ -1,0 +1,69 @@
+<h1 class=" header-size fw-lighter text-blue xl-margin ml-4">Document</h1>
+
+<div class="d-flex justify-content-end align-items-center mb-2">
+  <button mat-raised-button (click)="upload()" class="mx-2 bg-yellow text-white"> <i
+    class="bi bi-plus me-1 font-size-1_5rem"></i>
+  Upload</button>
+</div>
+<div class="scroll2 xl-margin1">
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="createdOn" matSortDirection="desc" class=" w-100 rowheight">
+  
+
+
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="lineno">
+     <th mat-header-cell *matHeaderCellDef mat-sort-header >Matter No</th>
+     <td mat-cell *matCellDef="let element" class="text-left">{{element.matterNumber}} 
+     </td>
+   
+   </ng-container>
+   <!-- Weight Column -->
+   <ng-container matColumnDef="partner">
+     <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+     <td mat-cell *matCellDef="let element"> {{element.matterName}} </td>
+   </ng-container>
+       <ng-container matColumnDef="createdOn">
+         <th mat-header-cell *matHeaderCellDef mat-sort-header>Received Date    </th>
+         <td mat-cell *matCellDef="let element"> {{element.createdOn | date : 'MM-dd-yyyy':'UTC 0'}} </td>
+       </ng-container>
+       <ng-container matColumnDef="uploadedBy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded By    </th>
+        <td mat-cell *matCellDef="let element"> {{element.createdBy == this.auth.clientUserId ? 'YOU' : 'M&R'}} </td>
+      </ng-container>
+       <!-- Symbol Column -->
+       <ng-container matColumnDef="product">
+         <th mat-header-cell *matHeaderCellDef mat-sort-header>Document Name</th>
+         <td mat-cell *matCellDef="let element"> {{element.documentUrl}} </td>
+         <!-- <td mat-cell *matCellDef="let element"> 
+          <i class="fas fa-check text-success"></i>
+            </td> -->
+       </ng-container>
+         <!-- Symbol Column -->
+         <ng-container matColumnDef="no" >
+           <th mat-header-cell *matHeaderCellDef mat-sort-header >Actions </th>
+           <td mat-cell *matCellDef="let element">
+             <button mat-icon-button  class="hvr-wobble-horizontal" (click)="open_link(element)">
+                <p class="d-inline mr-2 text-blue hide-xs">View</p> <mat-icon class="d-inline text-blue ">trending_flat</mat-icon>
+               </button>
+              </td>
+         </ng-container>
+   
+       <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+       </tr>
+     </table>
+</div>
+  <div class="buttons border bg-white pb-1 w-100 d-flex justify-content-end">
+    <div class="p-0 mx-1 " style="background-color: #ffff;">
+      <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+
+
+  <!-- <mat-form-field class="form-group input_field mb-0 w-25" appearance="outline">
+    <input required name="firstname" minlength="3" maxlength="10" ngModel #firstname="ngModel" matInput placeholder="Enter">
+  </mat-form-field>
+  <mat-error *ngIf="firstname.errors?.minlength">Required</mat-error> -->

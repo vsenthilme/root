@@ -1,0 +1,32 @@
+ - Drop box Basic account needs to be created - Arun
+ - Aspose sample - Muru
+ - Mozeo SMS - Muru
+
+**********************************
+
+ - Wordpress DB query - Muru
+
+During Save, pass the entered values and insert a record in NOTES table, 
+	where TRANS_ID=01 <hard code>, 
+	TRANS_NO=INQ_NO <generated newly INQ_NO of Inquiry Table>, 
+NOTE_TYP_ID=01 <hard coded>, 
+NOTE_TEXT = entered values in this field 
+and NOTE_NO = Pass CLASS_ID=03,NUM_RAN_CODE=02 and fetch NUM_RAN_CURRENT values and add+1 from Setup..Number Range Table
+
+
+After successful insertion of record fetch NOTE_NO and insert in INQUIRY table in INQ_NOTE_NO field 
+
+
+package com.mnrclara.api.setup.service;
+
+
+INQ_MODE_ID -> Fetch REFERRAL_ID/SUB_REFERRAL_ID/REFERRAL_TEXT/SUB_REFERRAL_TEXT/ INQ_MODE_STATUS = ACTIVE values from INQUIRYMODE table and display in dropdown as 		combination	
+		Dropdown Field(Single select)
+
+https://www.example.com/callback
+
+https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=62d3d995-c645-4595-aa28-e5778be21986&redirect_uri=https://www.example.com/callback
+
+
+
+https://www.example.com/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAYABwAArsrDU4PZSAgAADpRC1SD2UgCAHasHT6Zf6JFhtw393A8MzMVAAEAAAAYAAEAAAAFAAAADQAkAAAANjJkM2Q5OTUtYzY0NS00NTk1LWFhMjgtZTU3NzhiZTIxOTg2IgAkAAAANjJkM2Q5OTUtYzY0NS00NTk1LWFhMjgtZTU3NzhiZTIxOTg2NwD0gpXlAEu8SKBFIQ1v_E8LMACAaYszUYPZSA.vYxWbQ-I4D1Tv2KDJwDastStarCOycOJ2knoJjo51DRr15f9P45y0dQK8gIvdwqMDQ-a14itC-2hM8sSwdJi4vTUBnsEMWi8hWSrfrf3s1nLdvQNcAOrVZow5kZhTHXZzirwJNsmB7WIumfJSwxoDHqt2FITMi9BffL0IwxjDXfM3F5Yhk-7YXRX1vbBjhMV8uW_Qph91yZLsf0We5CF_Id9wMi2nn9i1booZ52kwhpf_1Qc6APxdl90Mc7ZQC4FSrd4a2NMeEp7seZKUSqUZNykZlEXwQXGwI5As-QnK8HUIlk0MP0UuKPRITCSX23yhwO7Gx08wdYdxHZRFK9IWQ

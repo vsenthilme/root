@@ -1,0 +1,131 @@
+LANG_ID,CLASS_ID,MATTER_NO,CLIENT_ID,CASEINFO_NO,TRANS_ID,CASE_CATEGORY_ID,CASE_SUB_CATEGORY_ID,BILL_MODE_ID,BILL_FORMAT_ID,BILL_FREQ_ID,BILL_REMARK,FLAT_FEE,ADMIN_COST,MATTER_TEXT,CASE_OPEN_DATE,CASE_CLOSED_DATE,CASE_FILED_DATE,PRIORITY_DATE,RECEIPT_NOT_NO,RECEIPT_DATE,EXPIRATION_DATE,COURT_DATE,APPROVAL_DATE,BILL_MODE_ID,BILL_FREQ_ID,BILL_FORMAT_ID,BILL_REMARK,AR_ACCOUNT_NO,TRUST_DEPOSIT_NO,FLAT_FEE,ADMIN_COST,CONTIG_FEE,RATE_UNIT,DIR_PHONE_NO,STATUS_ID,Isdeleted,CTD_BY,CTD_ON,UTD_BY,UTD_ON,REF_FIELD_25
+Language ID,Class ID,Matter Number,Client ID,Case Information No,Transaction ID,Case Category ID,Case Sub Category ID,Billing Mode ,Billing Format,Billing Frequency ,Billing Remarks,Flat Fee Amount,Administrative Cost,Matter Description,Case Opened Date,Case Closed Date,Case Filed Date,Priority Date,Receipt Notice No,Receipt Date,Expiration Date,Court Date,Approval Date,Billing Mode ID,Billing Frequency ID,Billing Format ID,Billing Remarks,AR Account Number,Trust Deposit No,Flat Fee Amount,Administrative Cost,Contigency Fee Amount,Rate Unit,Direct Phone Number,STATUS ID,Deletion Indicator,created by,created on,updated by,updated on,Retainer Paid
+EN,2,9040-222,9040,888888,6,12,273,2,3,1,,5000,400,Maria del Rosario Guerrero Hinojosa Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1100
+EN,2,9053-211,9053,888888,6,12,143,2,3,1,,4000,2600,Luis M. Ramirez Removal of Conditions with Waiver,2021-03-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-29,,,2000
+EN,2,9055-211,9055,888888,6,20,4,1,2,1,,0,0,Parkland Health & Hospital System Gneral Matter,2021-04-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-06,,,0
+EN,2,9056-211,9056,888888,6,12,185,2,3,1,,0,0,David Manuel Velazco I-130,2021-03-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-30,,,0
+EN,2,9057-211,9057,888888,6,12,185,2,3,1,,0,0,Fernando Issac Velazco I-130,2021-03-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-30,,,0
+EN,2,9060-211,9060,888888,6,12,4,2,7,1,,0,0,Ortega -Courtesy Matters,2021-04-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-05,,,0
+EN,2,9064-211,9064,888888,6,15,303,2,3,1,,1500,0,Antonio Zavala Pantoja,2021-03-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-31,,,0
+EN,2,9070-221,9070,888888,6,15,187,2,3,1,,,,Erick Moran Asylum with USCIS/PD/(1) MC,2022-02-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-15,,,
+EN,2,9079-211,9079,888888,6,12,142,1,1,1,,4500,675,Sandra Maria Cecilia Heminger AOS with Interview,2021-05-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-05,,,4500
+EN,2,9081-211,9081,888888,6,12,185,2,3,1,,4000,600,Jose Rivera I-130,2021-05-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-04,,,2100
+EN,2,9103-211,9103,888888,6,21,4,1,1,1,,0,0,Krishna KORLEPARA General Matter,2021-05-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-28,,,0
+EN,2,9103-212,9103,888888,6,21,298,1,1,1,,0,0,Krishna KORLEPARA Withdrawal of H-1B,2021-07-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-30,,,0
+EN,2,9105-221,9105,888888,6,20,299,1,2,1,,,,Prasanna VICTORPRASAD 9141,2022-02-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-02-23,,,
+EN,2,9105-222,9105,888888,6,20,158,1,2,1,,,,Prasanna VICTORPRASAD PERM Audit,2022-02-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-23,,,
+EN,2,9106-221,9106,888888,6,20,50,2,3,1,,,,Gopu Vinodkannan H-1B Extension,2022-03-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-17,,,
+EN,2,9116-211,9116,888888,6,21,4,1,1,1,,0,0,Karsen Ponto General Matter,2021-06-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-08,,,0
+EN,2,9117-211,9117,888888,6,21,4,1,1,1,,3000,250,Ugandhar Moturi General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,0
+EN,2,9117-212,9117,888888,6,21,52,1,1,1,,3000,250,Ugandhar Moturi H-1B Petition Transfer,2021-06-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-08,,,0
+EN,2,9122-211,9122,888888,6,21,4,1,1,1,,0,0,Radhakrishnan  CHINNAIAH General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9123-211,9123,888888,6,21,4,1,1,1,,0,0,Madhurima CHINTALA General Matter,2021-06-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-10,,,0
+EN,2,9124-221,9124,888888,6,21,133,1,1,1,,,,Arindam Debnath - RFE - H1B Amendment,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,
+EN,2,9125-211,9125,888888,6,21,4,2,3,1,,0,0,Narmada Harish General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9126-211,9126,888888,6,21,4,2,3,1,,0,0,Biren Jahaveri General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9127-211,9127,888888,6,21,4,2,3,1,,0,0,An-Ti Lee General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9128-211,9128,888888,6,21,4,1,1,1,,0,0,Mano Vignesh Manoharan General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9129-211,9129,888888,6,21,4,1,1,1,,0,0,Supriya Narne General Matter,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,0
+EN,2,9140-211,9140,888888,6,12,199,2,3,1,Legal fees due pertaining to FOIA request for Juan F. Hernandez Flores with USCIS and EOIR.,1250,187.5,Juan Francisco Hernandez Flores FOIA-USCIS/EOIR,2021-06-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-11,,,1250
+EN,2,9141-221,9141,888888,6,12,158,2,3,1,,,,Laura Patricia Barrios PERM Audit,2022-02-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-23,,,
+EN,2,9145-211,9145,888888,6,21,150,2,3,1,Legal feed due pertaining to I-485J for Ventaka Kutada with U.S. Department of Homeland Security.,750,0,Venkata Kutada I485J,2021-06-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-17,,,750
+EN,2,9146-211,9146,888888,6,12,139,2,3,1,,0,0,Ricardo Natividad PERM,2021-06-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-17,,,0
+EN,2,9149-221,9149,888888,6,12,54,1,1,1,,1500,150,Nikhil Nityanand Pai H-1B Registration,2022-01-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-21,,,0
+EN,2,9149-222,9149,888888,6,12,273,1,1,1,,1500,150,Nikhil Nityanand Pai Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9152-211,9152,888888,6,12,185,2,3,1,,4000,600,Riad Chakir B1/B2 & I-130,2021-06-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-28,,,2000
+EN,2,9160-211,9160,888888,6,12,233,2,3,1,,2000,300,Martha Perez N400&Interview,2021-07-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-14,,,750
+EN,2,9161-211,9161,888888,6,12,38,2,3,1,,0,0,Yael M. Ricci Represtation at Interview,2021-07-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-14,,,0
+EN,2,9163-211,9163,888888,6,12,226,2,3,1,,1500,225,Jose Eduardo Rodriguez Travel Document and Monitor NVC matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,1000
+EN,2,9165-211,9165,888888,6,12,216,2,3,1,Legal fees due pertaining to EOIR/ICE FOIA request for Blessing P. Henriquez Dominguez.,,,Blessing P. Henriquez Dominguez FOIA- ICE/EOIR,2021-07-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-21,,,
+EN,2,9178-221,9178,888888,6,12,119,2,3,1,Legal fees due pertaining to Change of Address for Cinthia Reyes.,250,37.5,Cynthia Mayela Martinez  Change of Address,2022-03-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-16,,,250
+EN,2,9178-222,9178,888888,6,12,273,2,3,1,Legal fees due pertaining to Change of Address for Cinthia Reyes.,250,37.5,Cynthia Mayela Martinez Out of Scope Work,2022-03-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-16,,,250
+EN,2,9188-211,9188,888888,6,10,303,1,1,1,,0,0,Cerveceria Chapultepec - General Matter,2021-05-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-05-01,,,0
+EN,2,9189-211,9189,888888,6,10,303,1,1,1,,0,0,Clean Scapes General Matter,2021-08-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-31,,,0
+EN,2,9194-211,9194,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with USCIS for Abel Saenz Garcia.,500,75,Abel Saenz Garcia FOIA-USCIS,2021-09-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-03,,,500
+EN,2,9201-221,9201,888888,6,15,303,2,3,1,Legal fees due pertaining to Change of Address for Nery Obdulio Castro Mejia.,250,37.5,Nery Obdulio Castro Mejia Change of Address,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,250
+EN,2,9201-222,9201,888888,6,15,303,2,3,1,Legal fees due pertaining to Change of Address for Nery Obdulio Castro Mejia.,250,37.5,Nery Obdulio Castro Mejia Out of Scope work,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,250
+EN,2,9206-211,9206,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Eduardo Ramos.,2700,0,Eduardo Ramos CP,2021-09-27,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-27,,,750
+EN,2,9208-211,9208,888888,6,12,199,2,3,1,,1250,150,Claudia G. Moncada Carballo FOIA - EOIR and EAD,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,1250
+EN,2,9215-211,9215,888888,6,12,268,2,3,1,,4750,712.5,Jose Manuel Urioste I-130/AOS,2021-10-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-06,,,1450
+EN,2,9220-221,9220,888888,6,12,273,1,2,1,,4750,712.5,Elisa Hernandez Delgado Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,4750
+EN,2,9220-222,9220,888888,6,12,191,1,2,1,,4750,712.5,Elisa Hernandez Delgado I-130/AOS,2022-01-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-17,,,4750
+EN,2,9224-221,9224,888888,6,21,4,1,2,1,,,,Miguel Masso General Matter,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,
+EN,2,9224-222,9224,888888,6,21,151,1,2,1,,,,Miguel Masso I140,2022-04-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-07,,,
+EN,2,9224-223,9224,888888,6,21,139,1,2,1,,,,Miguel Masso PERM,2022-04-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-07,,,
+EN,2,9232-211,9232,888888,6,21,4,1,2,1,,,,"JEB Brown, Attorney At Law General Matter",2021-10-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-26,,,
+EN,2,9236-221,9236,888888,6,21,119,2,3,1,,1000,150,Victor Ibrahim Change of Address,2022-03-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-24,,,0
+EN,2,9240-211,9240,888888,6,12,247,2,3,1,,750,112.5,Longino Garcia I-90 Renewal,2021-11-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-09,,,0
+EN,2,9243-211,9243,888888,6,22,4,1,2,1,,0,0,University of Houston General Matter,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,0
+EN,2,9244-221,9244,888888,6,21,273,1,2,1,,,,Nishant SHARMA Out of Scope work,2022-03-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-29,,,
+EN,2,9251-211,9251,888888,6,21,4,2,3,1,,0,0,Carolyn Gartner General Matter,2021-11-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-23,,,0
+EN,2,9255-211,9255,888888,6,12,142,2,3,1,,2500,375,Violetta Somova AOS with USCIS,2021-11-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-30,,,2500
+EN,2,9256-221,9256,888888,6,12,199,2,3,1,Legal fees due pertaining to EOIR FOIA for Aurora Gulpan Shaikh.,2500,375,Aurora G. Shaikh FOIA - EOIR &  Family Petition,2022-03-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-07,,,2500
+EN,2,9256-222,9256,888888,6,12,273,2,3,1,Legal fees due pertaining to EOIR FOIA for Aurora Gulpan Shaikh.,2500,375,Aurora G. Shaikh Out of Scope work,2022-03-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-07,,,2500
+EN,2,9261-211,9261,888888,6,12,176,2,3,1,,2500,350,Eduardo Betancourt N400,2021-12-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-06,,,1375
+EN,2,9263-211,9263,888888,6,21,54,1,1,1,,2000,250,Alaa Abdalla Hegazy Salem H-1B Registraton,2021-12-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-12-10,,,0
+EN,2,9264-211,9264,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with CBP for Enrique Murillo Silva,750,112.5,Enrique Murillo Silva FOIA,2021-12-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-12-10,,,750
+EN,2,9265-211,9265,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with CBP for Rosa Elia Palacios,750,112.5,Rosa Elia Palacios Contreras,2021-12-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-12-10,,,750
+EN,2,9271-211,9271,888888,6,21,134,2,3,1,,10500,1150,Patricia Erendira Vides de Serrano DOS Process,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,9271-212,9271,888888,6,21,134,2,3,1,,10500,1150,Patricia Erendira Vides de Serrano DOS for Family,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,9271-213,9271,888888,6,21,137,2,3,1,,10500,1150,Patricia Erendira Vides de Serrano L-1A with USCIS,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,9271-214,9271,888888,6,21,134,2,3,1,,10500,1150,Patricia Erendira Vides de Serrano DOS for Nany,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,0
+EN,2,9275-211,9275,888888,6,20,4,1,2,1,,,,Vinay Kumar RADHARAPU General Matter,2022-01-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-04,,,
+EN,2,9276-221,9276,888888,6,12,4,1,2,1,,,,Joe Kahi General Matter,2022-01-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-07,,,
+EN,2,9276-222,9276,888888,6,22,273,1,2,1,,,, Joe Kahi Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,9280-221,9280,888888,6,21,142,2,3,1,,9500,0,Fritz Roux AOS,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,0
+EN,2,9280-222,9280,888888,6,21,151,2,3,1,,9500,0,Fritz Roux I140,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,0
+EN,2,9280-223,9280,888888,6,21,273,2,3,1,,9500,0,Fritz Roux Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9280-224,9280,888888,6,21,139,2,3,1,,9500,0,Fritz Roux PERM,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,0
+EN,2,9283-221,9283,888888,6,12,300,1,1,1,,0,0,Guillermo Pous Fernandez Assessment,2022-01-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-11,,,0
+EN,2,9283-222,9283,888888,6,12,273,1,1,1,,0,0,Guillermo Pous Fernandez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9285-221,9285,888888,6,21,52,2,3,1,Not moving forward with matter,3500,250,Khue Phan H-1B Petition,2022-01-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-12,,,0
+EN,2,9285-222,9285,888888,6,21,273,2,3,1,Not moving forward with matter,3500,250,Khue Phan Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9286-221,9286,888888,6,21,52,2,3,1,,3500,250,Hillary Ajifa H-1B Petition,2022-01-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-12,,,0
+EN,2,9286-222,9286,888888,6,21,273,2,3,1,,3500,250,Hillary Ajifa Out of Scope Work,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,0
+EN,2,9288-221,9288,888888,6,12,202,2,3,1,,2000,300,Bernarda Flores I-130/AOS,2022-01-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-12,,,1000
+EN,2,9288-222,9288,888888,6,12,273,2,3,1,,2000,300,Bernarda Flores Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,9292-221,9292,888888,6,12,233,2,3,1,,3000,0,Sergio Ismael Gonzalez Perez N400 & Representation at Interview,2022-01-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-17,,,1000
+EN,2,9292-222,9292,888888,6,12,273,2,3,1,,3000,0,Sergio Ismael Gonzalez Perez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,9295-221,9295,888888,6,12,131,2,3,1,,2000,300,Josue Grimaldo Lopez Family Petition,2022-01-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-18,,,1000
+EN,2,9295-222,9295,888888,6,12,273,2,3,1,,2000,300,Josue Grimaldo Lopez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1000
+EN,2,9296-221,9296,888888,6,21,53,2,3,1,,1980,0,Virali Soni H-1B Transfer,2022-01-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-19,,,0
+EN,2,9296-222,9296,888888,6,21,273,2,3,1,,1980,0,Virali Soni Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9298-221,9298,888888,6,12,233,2,3,1,,2500,0,Leanne Susan Machowski N400 & Representation at Interview,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,2500
+EN,2,9298-222,9298,888888,6,12,273,2,3,1,,2500,0,Leanne Susan Machowski Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2500
+EN,2,9307-221,9307,888888,6,12,176,2,3,1,,0,0,Saif Ali N400,2022-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-01,,,0
+EN,2,9311-221,9311,888888,6,12,243,2,3,1,Mater Cancelled,2000,300,Yadira Del Carmen Planos Hechavarria Expedite Request on Interview,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,2000
+EN,2,9311-222,9311,888888,6,12,273,2,3,1,Mater Cancelled,2000,300,Yadira Del Carmen Planos Hechavarria Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2000
+EN,2,9313-221,9313,888888,6,12,226,2,3,1,,1500,150,Margarita Rodriguez Travel Document,2022-02-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-14,,,1500
+EN,2,9314-221,9314,888888,6,12,4,1,2,1,,0,0,Hello Alice General Matters,2022-02-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-15,,,0
+EN,2,9316-221,9316,888888,6,21,68,2,3,1,,2500,250,Israel Gonzalez TN Visa,2022-02-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-17,,,0
+EN,2,9317-221,9317,888888,6,21,68,2,3,1,,2500,250,Enoc Sanchez TN Visa,2022-02-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-17,,,0
+EN,2,9320-221,9320,888888,6,12,208,2,3,1,Legal fees due pertaining to FOIA Request with CBP and USCIS for Rufino Martinez Vega.,1250,187.5,Rufino Martinez Vega FOIA - CBP/USCIS,2022-02-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-24,,,1250
+EN,2,9322-221,9322,888888,6,12,142,2,3,1,Legal fees due pertaining to Adjustment of Status for Dayrot Pedroso.,0,0,Dayrot Pedroso AOS with USCIS,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,0
+EN,2,9322-222,9322,888888,6,12,187,2,3,1,Legal fees due pertaining to Adjustment of Status for Dayrot Pedroso.,0,0,Dayrot Pedroso Asylum with USCIS and Court,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,0
+EN,2,9323-221,9323,888888,6,12,160,2,3,1,,9500,525,Danis Sosa I-212 Waiver and CP,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,3500
+EN,2,9325-221,9325,888888,6,15,187,2,3,1,,0,0,Luis Edgardo Borjas Asylum Matter in Court,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,0
+EN,2,9326-221,9326,888888,6,12,187,2,3,1,,7500,1125,Elisa Valentina Perez Asylum Matter in Court,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,2125
+EN,2,9328-221,9328,888888,6,12,42,2,3,1,,4000,375,Ana Karen MEZA Orozco B1/B2 Visa Daughter's Visa,2022-02-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-28,,,4000
+EN,2,9340-221,9340,888888,6,12,301,2,3,1,,7500,1125,"Ileana Maria Marquez, Emmanuel Mendoza Marquez, Isaac Mendoza Marquez",2022-03-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-04,,,7500
+EN,2,9340-222,9340,888888,6,12,273,2,3,1,,7500,1125,"Ileana Maria Marquez, Emmanuel Mendoza Marquez, Isaac Out of Scope work",2022-03-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-04,,,7500
+EN,2,9342-221,9342,888888,6,21,273,2,3,1,,1500,0,Sam Gonzalez Out of Scope work,2022-03-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-04,,,0
+EN,2,9342-222,9342,888888,6,21,68,2,3,1,,1500,0,Sam Gonzalez TN DOS,2022-03-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-03-04,,,0
+EN,2,9343-221,9343,888888,6,21,236,2,3,1,,8600,450,Mitzi Y. Rivera del Rio Change of Status to B1,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,6600
+EN,2,9343-222,9343,888888,6,21,200,2,3,1,,8600,450,Mitzi Y. Rivera del Rio E-2 Process with USCIS,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,6600
+EN,2,9343-223,9343,888888,6,21,273,2,3,1,,8600,450,Mitzi Y. Rivera del Rio Out of Scope Work,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,6600
+EN,2,9347-221,9347,888888,6,21,273,2,3,1,,2500,375,Olga Camacho Out of Scope Work,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,9347-222,9347,888888,6,21,68,2,3,1,,2500,375,Olga Camacho TN VISA DOS,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,9348-221,9348,888888,6,12,191,2,3,1,,5750,862.5,Jennifer Mercado I-130/AOS/Interview,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,3000
+EN,2,9348-222,9348,888888,6,12,273,2,3,1,,5750,862.5,Jennifer Mercado Out of Scope Work,2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,3000
+EN,2,9351-221,9351,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA Request with USCIS for Minerva Rubio.,750,112.5,Minerva Rubio Martinez FOIA- USCIS,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,750
+EN,2,9351-222,9351,888888,6,12,273,2,3,1,Legal fees due pertaining to FOIA Request with USCIS for Minerva Rubio.,750,112.5,Minerva Rubio Martinez Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,750
+EN,2,9354-221,9354,888888,6,15,303,2,3,1,,750,112.5,Maria N. Gonzalez Castro I90 Renewal Process with USCIS,2022-03-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-17,,,750
+EN,2,9354-222,9354,888888,6,15,303,2,3,1,,750,112.5,Maria N. Gonzalez Castro Out of Scope Work,2022-03-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-17,,,750
+EN,2,9359-221,9359,888888,6,12,302,2,3,1,,6800,1020,Silvia Perez Rodriguez I-601 Waiver and CP,2022-03-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-25,,,4050
+EN,2,9363-221,9363,888888,6,21,53,2,3,1,,3000,250,Nandkumar Narain BUXANI H-1B Transfer,2022-04-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-04-04,,,0
+EN,2,9364-221,9364,888888,6,12,303,2,3,1,,2500,375,Amin Mohammd FOIAs and FBI Request,2022-04-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-04,,,2500
+EN,2,9366-221,9366,888888,6,12,263,2,3,1,,5200,780,Serafin Rubio Flores VAWA/AOS,2022-04-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-07,,,2525
+EN,2,9367-221,9367,888888,6,21,42,2,3,1,,,,Vlad Andrei B1/B2,2022-04-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-04-12,,,
+EN,2,9368-221,9368,888888,6,21,42,2,3,1,,,,Henry Wazne B1/B2,2022-04-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-04-12,,,
+EN,2,9368-222,9368,888888,6,21,109,2,3,1,,,,Henry Wazne FOIA,2022-04-12,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-04-12,,,
+EN,2,9369-221,9369,888888,6,21,68,2,3,1,,,,Maria del Jesus Barboza Solis TN with DOS,2022-04-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-14,,,

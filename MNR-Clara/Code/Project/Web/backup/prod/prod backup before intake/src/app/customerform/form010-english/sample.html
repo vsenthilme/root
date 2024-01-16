@@ -1,0 +1,403 @@
+
+<div formGroupName="priorSpouseMarriageDetails" class="row">
+  <p class="mb-0 pb-2  mt-3 fw-bolder px-3">Prior Spouse Details</p>
+  <p class="mb-0 pb-2  mt-3 px-3">If you were married before, provide the following information about
+    your
+    prior spouse. If you have more than one previous marriage, use separate page to provide the
+    information
+    requested about each marriage.</p>
+  <div class="col-lg-4 col-md-6 mt-2">
+    <p class="mb-0 py-0">Prior Spouse’s Family/Last Name</p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+      <input matInput placeholder="Enter" formControlName="familyOrLastName">
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-6 mt-2">
+    <p class="mb-0 py-0">Prior Spouse’s Given/First Name</p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+      <input matInput placeholder="Enter" formControlName="givenOrFirstName">
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-6 mt-2">
+    <p class="mb-0 py-0">Prior Spouse’s Middle Name</p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+      <input matInput placeholder="Enter" formControlName="middleName">
+    </mat-form-field>
+  </div>
+  <div formGroupName="spousesUSImmigrationStatus" class="row">
+    <div class="col-lg-4 col-md-6 mt-2">
+      <p class="mb-0 py-0">Prior Spouse’s U.S. Immigration Status</p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+        <mat-select placeholder="Select" formControlName="citizenOfUS">
+          <mat-option value="volvo"> U.S. Citizen </mat-option>
+          <mat-option value="volvo2">Permanent Resident </mat-option>
+          <mat-option value="volvo3">Other </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-4 col-md-6 mt-2">
+      <p class="mb-0 py-0">Other</p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+        <input matInput placeholder="Enter" formControlName="other">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4 mt-2">
+    <p class="mb-0 py-0">Prior Spouse’s Date of Birth </p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker42" formControlName="dateOfBirth">
+      <mat-datepicker-toggle matSuffix [for]="picker42"></mat-datepicker-toggle>
+      <mat-datepicker #picker42></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-6 mt-2">
+    <p class="mb-0 py-0">Your Prior Spouse’s Country of Birth</p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+      <input matInput placeholder="Enter" formControlName="countryOfBirth">
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-6 mt-2">
+    <p class="mb-0 py-0">Your Prior Spouse’s Country of Citizenship or Nationality</p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+      <input matInput placeholder="Enter" formControlName="countryOfCitizenshipOrNationality">
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-4 mt-2">
+    <p class="mb-0 py-0">Date of Marriage with Prior Spouse </p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker43" formControlName="dateOfMarriage">
+      <mat-datepicker-toggle matSuffix [for]="picker43"></mat-datepicker-toggle>
+      <mat-datepicker #picker43></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-4 col-md-4 mt-2">
+    <p class="mb-0 py-0">Date Marriage Ended with Prior Spouse </p>
+    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker44" formControlName="dateOfEnded">
+      <mat-datepicker-toggle matSuffix [for]="picker44"></mat-datepicker-toggle>
+      <mat-datepicker #picker44></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div formGroupName="howMarriageEnded" class="row">
+    <div class="col-lg-4 col-md-6 mt-2">
+      <p class="mb-0 py-0">How Marriage ended:</p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+        <mat-select formControlName="annulled">
+          <mat-option value="volvo"> Annulled </mat-option>
+          <mat-option value="volvo2">Divorced </mat-option>
+          <mat-option value="volvo3"> Spouse Deceased </mat-option>
+          <mat-option value="volvo3"> Other </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-4 col-md-6 mt-2">
+      <p class="mb-0 py-0">Other</p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+        <input matInput placeholder="Enter" formControlName="other">
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- missing fields -->
+
+
+<div formGroupName="additionalQuestions">
+  <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+    <p class="mb-0 pb-2  mt-3 px-3">I) Made any misrepresentation to obtain any public benefit in the
+      United
+      States?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverBeenMadeAnyMisrepresentationToObtainAnyPublicBenefitInTheUS">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever given any U.S. Government official(s) any information
+      that
+      was false, fraudulent or misleading?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverGivenFalseOrMisleadedInformationAboutUSGovernmentOfficials">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever lied to any U.S. Government official to gain entry or
+      admission into the United States or to gain immigration benefits while in the United States?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverLiedToAnyUSGovernmentOfficialToGainEntryOrAdmissionIntoTheUS">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever been removed, excluded, or deported from the United
+      States?
+    </p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverBeenRemovedExcludedOrDeportedFromTheUS">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever been ordered removed, excluded, or deported from the
+      United
+      States?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverBeenOrderedRemovedExcludedOrDeportedFromTheUS">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever been placed in removal, exclusion, rescission, or
+      deportation proceedings?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverBeenPlacedInRemovalExclusionRescissionOrDeportationProceedings">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Are removal, exclusion, rescission or deportation proceedings
+      (including
+      administratively closed proceedings) currently pending against you?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="areRemovalExclusionRescissionOrDeportationProceedingsCurrentlyPendingAgainstYou">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever served in the U.S. Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverServedInTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Are you currently a member of the U.S. Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="areYouCurrentlyAMemberOfTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If you are currently a member of the U.S. Armed Forces, are you
+      scheduled
+      to deploy overseas, including to a vessel, within the next 3 months?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="areYouScheduledToDeployOverseasWithinTheNext3Months">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If you are currently a member of the U.S. Armed Forces, are you
+      currently
+      stationed overseas?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="areYouCurrentlyStationedOverseas">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever been court-martialed, administratively separated, or
+      disciplined, or have you received an other than honorable discharge, while in the U.S. Armed Forces?
+    </p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverBeenCourtMartialedAdministrativelySeparatedOrDisciplinedInTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever been discharged from training or service in the U.S.
+      Armed
+      Forces because you were an alien?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row"formControlName="haveYouEverBeenDischargedFromTrainingOrServiceInTheUSArmedForcesBecauseYouWereAnAlien">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever left the United States to avoid being drafted into the
+      U.S.
+      Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverLeftTheUSToAvoidBeingDraftedIntoTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever applied for any kind of exemption from military service
+      in
+      the U.S. Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverappliedForAnyKindOfExemptionFromMilitaryServiceInTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Have you ever deserted from the U.S. Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="haveYouEverDesertedFromTheUSArmedForces">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Are you a male who lived in the United States at any time between your
+      18th and 26th birthdays? (This does not include living in the United States as a lawful
+      nonimmigrant.)
+    </p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName="areYouAMaleWhoLivedInTheUSAtAnyTimeBetweenYour18thAnd26thBirthdays">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If you answered “YES,” and have registered with selective the
+      Selective
+      Service System, provide the date that you registered and your Selective Service Number: </p>
+    <div class="col-lg-4 col-md-4 mt-2">
+      <p class="mb-0 py-0">Date you returned to the U.S. </p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+        <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker61" formControlName="selectiveServiceSystemRegisteredDate">
+        <mat-datepicker-toggle matSuffix [for]="picker61"></mat-datepicker-toggle>
+        <mat-datepicker #picker61></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mt-2">
+      <p class="mb-0 py-0">Selective Service Number</p>
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+        <input matInput placeholder="Enter"formControlName="selectiveServiceNumber">
+      </mat-form-field>
+    </div>
+    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">If you answered “YES,” but you did NOT register with the
+      Selective Service System and are still under 26 years of age, you must register before you apply for
+      naturalization, so that you can provide the information above. </p>
+
+    <p class="mb-0 pb-2  mt-3 px-3">If you answered “YES,” but you did NOT register with the Selective
+      Service
+      System and you are now 26 years old or older, explain why you did not register</p>
+
+    <div class="col-lg-4 col-md-6 mt-2">
+      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+        <input matInput placeholder="Enter" formControlName="reasonForNotRegisteringSelectiveServiceSystem">
+      </mat-form-field>
+    </div>
+    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">The following questions pertain to the Oath of Allegiance
+      immediately prior to becoming a U.S. citizen. The text of the oath is provided below</p>
+
+    <p class="mb-0 pb-2  mt-3 px-3">Do you support the Constitution and form of government of the United
+      States?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row" formControlName>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Do you understand the full Oath of Allegiance to the United States?
+    </p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">Are you willing to take the full Oath of Allegiance to the United
+      States?
+    </p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If the law requires it, are you willing to bear arms on behalf of the
+      United States?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If the law requires it, are you willing to perform noncombatant
+      services
+      in the U.S. Armed Forces?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">If the law requires it, are you willing to perform work of national
+      importance under civilian direction?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <p class="mb-0 pb-2  mt-3 px-3">At your naturalization ceremony, are you willing to give up any
+      inherited
+      title(s) or order(s) of nobility that you have in a foreign country?</p>
+    <div class="row mt-2">
+      <mat-radio-group layout="row">
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+        </mat-radio-button>
+        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+</div>

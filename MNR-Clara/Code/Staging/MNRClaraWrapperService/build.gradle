@@ -1,0 +1,68 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+		//compileOnly 'org.projectlombok:lombok:1.18.16'
+		compileOnly("org.springframework.boot:spring-boot-devtools")
+		
+		//annotationProcessor 'org.projectlombok:lombok:1.18.16'
+		
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.4.1'
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.4.1'
+		compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.0.RELEASE'
+		compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.2.RELEASE'
+		compile group: 'com.opencsv', name: 'opencsv', version: '4.4'
+		
+		compile("io.springfox:springfox-swagger2:2.9.2") {
+		    exclude module: 'mapstruct' // necessary in my case to not end up with multiple mapstruct versions
+		}
+		compile "io.springfox:springfox-bean-validators:2.9.2"
+		compile "io.springfox:springfox-swagger-ui:2.9.2"
+		compile 'org.apache.httpcomponents:httpclient:4.5.13'
+		compile 'org.apache.logging.log4j:log4j-to-slf4j:2.13.3'
+		
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.json:json:20171018'
+		implementation 'com.dropbox.core:dropbox-core-sdk:4.0.1'
+		implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+		implementation 'org.springframework.boot:spring-boot-starter-batch:2.6.2'
+	
+		///////////////////////////////////////////////////////
+		// https://mvnrepository.com/artifact/javax.mail/javax.mail-api
+		implementation group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+		implementation group: 'com.sun.mail', name: 'smtp', version: '1.4.5'
+		
+		/////////////////////////////////////////////////////////
+
+		runtimeOnly 'mysql:mysql-connector-java'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
+		developmentOnly("org.springframework.boot:spring-boot-devtools")
+		
+		// https://projectlombok.org
+	    compileOnly 'org.projectlombok:lombok:1.18.4'
+	    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+	}
+
+	bootJar {
+	   archiveName = 'MNRClaraWrapperService.jar'
+	}
+
+test {
+	useJUnitPlatform()
+}

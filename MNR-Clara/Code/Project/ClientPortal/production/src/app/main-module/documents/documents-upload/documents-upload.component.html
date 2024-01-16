@@ -1,0 +1,132 @@
+<h1 class=" header-size fw-lighter text-blue xl-margin ml-4">Document Upload</h1>
+
+<!-- <div class="row px-0 mx-0">
+  <mat-list>
+    <div mat-subheader>Aldi Arias Lopez - H1B EXT</div>
+    <mat-list-item >
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line class="text-muted">Signature card</div>
+    </mat-list-item>
+    <mat-list-item >
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line class="text-muted">Passport</div>
+    </mat-list-item>
+    <mat-list-item >
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line class="text-muted">VISA</div>
+    </mat-list-item>
+    <mat-list-item >
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line class="text-muted">Form I-115</div>
+    </mat-list-item>
+    <mat-list-item >
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line class="text-muted">US Federal income tax returns filing document</div>
+    </mat-list-item>
+  </mat-list>
+    
+</div> -->
+<div class="scroll2">
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="updatedOn" matSortDirection="desc" class="xl-margin w-100  rowheight">
+
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="updatedOn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Upload</th>
+      <td mat-cell *matCellDef="let element"> {{element.updatedOn | date : 'MM-dd-yyyy'}} </td>
+
+    </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="partner">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Document</th>
+      <td mat-cell *matCellDef="let element">
+        <div>{{element.documentName}} </div>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Attachment</th>
+      <td mat-cell *matCellDef="let element"> {{element.documentUrl}}  </td>
+    </ng-container>
+    <ng-container matColumnDef="statusId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let element"> {{element.statusId == 22 ? 'PENDING' : element.statusId == 23 ? 'SENT' : 'UPLOADED'}}  </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Choose File </th>
+      <td mat-cell *matCellDef="let element">
+        <!-- <button mat-icon-button  class="hvr-wobble-horizontal" routerLink="/main/documents/document-upload">
+                <p class="d-inline mr-2 text-blue hide-xs">View</p> <mat-icon class="d-inline text-blue ">trending_flat</mat-icon>
+               </button> -->
+        <input ngf type="file" accept="*" [(files)]="element.files" (click)="element.files =[]" [disabled]="element.statusId == 23" [ngClass]="element.statusId == 23 ? 'disabled form-control w-100' : 'form-control w-100'"
+          id="" required />
+        <ngfFormData [files]="element.files" [(FormData)]="element.myFormData" postName="file"></ngfFormData>
+      
+        <!-- <button mat-icon-button class="mx-2">
+          <mat-icon class="text-secondary hvr-wobble-horizontal">download</mat-icon>
+        </button> -->
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Upload</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button class="mx-2" (click)="uploadDocument(element, 'upload')" *ngIf="element.files.length > 0 && element.statusId != 60">
+          <mat-icon class="text-secondary hvr-wobble-horizontal"  matTooltip="Upload">file_upload</mat-icon>
+        </button>
+        <button mat-icon-button class="mx-2" (click)="uploadDocument(element, 'reupload')" *ngIf="element.files.length > 0 && element.statusId == 60">
+          <mat-icon class="text-secondary hvr-wobble-horizontal" matTooltip="Re-Upload">upload_filetool</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="download">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Download</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button class="mx-2" (click)="download(element)"  *ngIf="element.documentUrl.length > 0">
+          <mat-icon class="text-secondary hvr-wobble-horizontal ml-2">download</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+<!-- <div class="buttons border bg-white pb-1 w-100 d-flex justify-content-end">
+      <div class="p-0 mx-1 " style="background-color: #ffff;">
+        <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div> -->
+
+<div class=" pb-1 w-100 d-flex justify-content-end bottombutton2 bg-white">
+  <div class=" pt-3  mr-5 pr-5">
+    <button mat-raised-button class="text-white mr-1 px-4" color="warn" routerLink="/main/documents/documents">
+      <mat-icon class="">close</mat-icon> Close
+    </button>
+    <!-- <button mat-raised-button class="bg-darkblue px-4 text-white ml-1" [disabled]="disableSubmit" [ngClass]="disableSubmit ? 'disabled' : ''" (click)="upload();"> -->
+      <button mat-raised-button class="bg-darkblue px-4 text-white ml-1"  (click)="upload();"  *ngIf="submitDone">
+      <mat-icon class="">done</mat-icon> Submit
+    </button>
+  </div>
+  <div class="p-0 mx-1 d-none d-md-block">
+    <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>

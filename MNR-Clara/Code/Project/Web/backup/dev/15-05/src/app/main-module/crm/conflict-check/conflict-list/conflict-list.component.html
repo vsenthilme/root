@@ -1,0 +1,100 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 " aria-current="page">CRM</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Conflict Check</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Results</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end ">
+    <div> <input matInput class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+    </div>
+    <button mat-raised-button class="text-white mx-1" color="warn" (click)="back()">
+      <mat-icon class="">close</mat-icon> Cancel
+    </button>
+    <button mat-raised-button class="bg-yellow text-white mx-1" (click)="openDocument()">
+      <mat-icon class="">search</mat-icon> Display
+    </button>
+  </div>
+
+
+</div>
+
+<div class=" my-0 py-0">
+  <div class="horizontal">
+    <div class="ms-3 me-3 px-1 mt-1    scroll1 ">
+      <table mat-table [dataSource]="dataSource" matSort class="w-100 ">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <!-- Weight Column -->
+
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> S.No </th>
+          <td mat-cell *matCellDef="let element"> {{element.no}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>FirstName </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email </th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="exited">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Module </th>
+          <td mat-cell *matCellDef="let element"> {{element.exited}} </td>
+        </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="document">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference No </th>
+          <td mat-cell *matCellDef="let element"> {{element.document}} </td>
+        </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+    </div>
+    <div class="p-0 mx-1 m-0">
+      <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

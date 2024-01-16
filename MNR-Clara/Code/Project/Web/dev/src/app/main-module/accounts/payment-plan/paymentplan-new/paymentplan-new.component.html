@@ -1,0 +1,329 @@
+
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Billing</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Payment Plan</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">{{this.path}}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input disabled matInput class=" disabled form-control filter_button mx-2 border-bottom"
+        placeholder="Search" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+        class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class=" bg-darkblue disabled text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class="text-white mx-2 action-button disabled  bg-red" type="button" mat-button>
+        <mat-icon class="">tune</mat-icon> Filter
+      </button>
+    </div>
+  </div>
+</div>
+<div class=" bg-white ">
+  <div class="d-flex mx-3 justify-content-between align-items-center bg-white p-2 py-3  ">
+    <h2 class="my-auto header-text ms-4 ps-2">Payment Plan {{pageflow}}</h2>
+  </div>
+
+    <mat-accordion>
+      <form [formGroup]="form" class="mx-3">
+      <mat-expansion-panel class="shadow-none" #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex ms-3 justify-content-between collapsefont">
+            Header
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row scroll mt-2 ">
+
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Client ID </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100  pb-2" formControlName="clientId"
+                [singleSelection]="true" apiMethod="client">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectclientList" [(ngModel)]="selectedItems"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'CLIENT')" formControlName="clientIdFE">
+              </angular2-multiselect> -->
+              <p-dropdown placeholder="Select"  [filter]="true" (onChange)="onItemSelect($event,'CLIENT')" class="w-100 my-1 mb-2" [options]="multiselectclientList" 
+              formControlName="clientId" [style]="{'width': '100%'}" apppendTo="body"></p-dropdown>
+              <mat-error *ngIf="errorHandling('clientId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Matter No </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100  pb-2"
+                formControlName="matterNumber" [valuewithID]="false" apiMethod="matter" [singleSelection]="true"
+                [filerbased]="apiClientfileter">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectmatterList" [(ngModel)]="selectedItems2"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'MATTER')"
+                formControlName="matterNumberFE"></angular2-multiselect> -->
+                <p-dropdown placeholder="Select"  (onChange)="onItemSelect($event,'MATTER')" class="w-100 my-1 mb-2" [options]="multiselectmatterList" 
+                formControlName="matterNumber" [filter]="true" [style]="{'width': '100%'}" apppendTo="body"></p-dropdown>
+              <mat-error *ngIf="errorHandling('matterNumber')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 ">Quote No </p>
+              <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 pb-2" formControlName="quotationNo"
+                [valuewithID]="false" [singleSelection]="true" apiMethod="accounting" [filerbased]="apiquotefileter">
+              </app-ng-multiselect-dropdown> -->
+              <!-- <angular2-multiselect [data]="multiselectquotationList" [(ngModel)]="selectedItems3"
+                [settings]="dropdownSettings" (onSelect)="onItemSelect($event,'QUOTE')" formControlName="quotationNoFE">
+              </angular2-multiselect> -->
+              <p-dropdown placeholder="Select" [filter]="true"  (onChange)="onItemSelect($event,'QUOTE')" class="w-100 my-1 mb-2" [options]="multiselectquotationList" 
+              formControlName="quotationNo" [style]="{'width': '100%'}"apppendTo="body"></p-dropdown>
+              <mat-error *ngIf="errorHandling('quotationNo')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Payment Plan Amount </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="paymentPlanTotalAmount">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentPlanTotalAmount')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Installment  Amount </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="dueAmount">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('dueAmount')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Balance Amount</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="balanceAmount">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('balanceAmount')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Start Date</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker7" placeholder="Choose Date"
+                  formControlName="paymentPlanStartDate">
+                <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                <mat-datepicker #picker7></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentPlanStartDate')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Payment due on which day of the month? </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="paymentCalculationDayDate">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentCalculationDayDate')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Payment Plan Date </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Choose Date" [matDatepicker]="picker6" placeholder="Choose Date"
+                  formControlName="paymentPlanDate">
+                <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                <mat-datepicker #picker6></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentPlanDate')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 mt-2" *ngIf="pageflow != 'New'">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Status</p>
+              <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                <mat-select formControlName="statusId" placeholder="Select">
+                  <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mt-2 my-auto">
+            <button mat-stroked-button class="mt-2  action-button py-1" (click)="calculate()"
+              [ngClass]="{'bg-white' : calcdues, 'hoverbutton': !calcdues}" [disabled]="calcdues">
+              <mat-icon class="">calculate</mat-icon> Calculate Dues
+            </button>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Reminder Notes </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <textarea matInput rows="7" placeholder="Enter" formControlName="paymentPlanText"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('paymentPlanText')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+
+
+        </div>
+      </mat-expansion-panel>
+    </form>
+      <mat-expansion-panel class="shadow-none" [expanded]="panelOpenState" #panel2 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex ms-3 justify-content-between collapsefont">
+            Lines
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  mt-2 ">
+
+          <div class="scroll3">
+            <table mat-table [dataSource]="dataSource" class="col-12 w-100">
+
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="itemNumber">
+                <th mat-header-cell *matHeaderCellDef>Installment  No </th>
+                <td mat-cell *matCellDef="let element"> {{element.itemNumber}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+              <!-- Weight Column -->
+              <ng-container matColumnDef="dueDate">
+                <th mat-header-cell *matHeaderCellDef>Due Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.dueDate | date : 'MM-dd-yyyy'}} </td>
+                <td mat-footer-cell *matFooterCellDef> </td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="dueAmount">
+                <th mat-header-cell *matHeaderCellDef> Installment Amount</th>
+                <td mat-cell *matCellDef="let element"class="text-right">{{element.dueAmount | currency}} </td>
+                <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                class="text-right">{{getInstallementAmount() | currency}} </td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="remainingDueNow">
+                <th mat-header-cell *matHeaderCellDef>Planned Balance Amt</th>
+                <td mat-cell *matCellDef="let element"class="text-right">{{element.remainingDueNow | currency}} </td>
+                <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                class="text-right">{{getBalanceAmount() | currency}} </td>
+              </ng-container>
+
+                    <ng-container matColumnDef="paymentReminderDays">
+                            <th mat-header-cell *matHeaderCellDef>Reminder Days</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <mat-form-field class="input_field mb-0" appearance="outline">
+                                <input matInput placeholder="Enter" [(ngModel)]="element.paymentReminderDays" (ngModelChange)="datecalculate(element)">
+                              </mat-form-field>
+                             </td>
+                             <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+                 
+                          <ng-container matColumnDef="paidAmount">
+                            <th mat-header-cell *matHeaderCellDef>Actual Paid Amount</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <mat-form-field class="input_field mb-0" appearance="outline">
+                                <input matInput style="text-align:right;" placeholder="Enter" [(ngModel)]="element.paidAmount"  (ngModelChange)="calculatePaidAmount(element)">
+                              </mat-form-field>
+                             </td>
+                             <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                             class="text-right">{{getPaidAmount() | currency}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="balanceAmount">
+                            <th mat-header-cell *matHeaderCellDef>Actual Bal Amount</th>
+                            <td mat-cell *matCellDef="let element"> 
+                              <mat-form-field class="input_field mb-0" appearance="outline">
+                                <input matInput style="text-align:right;" placeholder="Enter" disabled="true" [(ngModel)]="element.balanceAmount">
+                                <!-- <span matPrefix class="text-secondary"
+                                style="display: table-cell; text-align:right; vertical-align: middle;">$&nbsp;</span> -->
+                              </mat-form-field>
+                             </td>
+                             <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"
+                             class="text-right">{{getActualBalanceAmount() | currency}} </td>
+                          </ng-container>
+
+
+                    
+
+                        <ng-container matColumnDef="reminderDate">
+                            <th mat-header-cell *matHeaderCellDef>Reminder Date</th>
+                            <td mat-cell *matCellDef="let element">{{element.reminderDate | date : 'MM-dd-yyyy'}}</td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                          </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+            </table>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2 bg-white bottombutton">
+      <button mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{btntext}}</button>
+      <!-- <button *ngIf="isbtntexts" mat-raised-button (click)="submit(12)" class="mx-2 bg-blue text-white"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Send to Client</button> -->
+    </div>
+
+
+
+</div>

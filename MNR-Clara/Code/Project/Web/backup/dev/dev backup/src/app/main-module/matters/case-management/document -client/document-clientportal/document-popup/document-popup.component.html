@@ -1,0 +1,81 @@
+<form [formGroup]="form">
+  <div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">{{matter}} Documents - New</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="mt-2">
+      <div class="row  mt-2 px-3 p-1">
+        <div class="col-lg-6 col-md-6 mt-1">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 text-black">Matter No</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="matterNumberFE">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Case Category</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <mat-select class="disabled form-group input_field mb-0" formControlName="caseCategoryId"
+              placeholder="Select">
+              <mat-option *ngFor="let category of caseCategoryIdList" [value]="category.key" disabled>
+                {{category.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <!-- <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Mail Merge</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <mat-select formControlName="mailMerge">
+              <mat-option value="true"> Yes </mat-option>
+              <mat-option value="false">No </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Case Sub Category</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <mat-select class="disabled form-group input_field mb-0" formControlName="caseSubCategoryId"
+              placeholder="Select">
+              <mat-option *ngFor="let subCategory of caseSubCategoryIdList" [value]="subCategory.key" disabled>
+                {{subCategory.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Document No</p>
+          <!-- <angular2-multiselect [data]="multiselectdoList" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
+            (onSelect)="onItemSelect($event)" formControlName="documentNoFE"></angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" [selectionLimit]="1" appendTo="body"  (onChange)="onItemSelect($event)"  class="w-100" [options]="multiselectdoList" [(ngModel)]="selectedItems"
+            formControlName="documentNoFE" [style]="{'width': '100%'}"></p-multiSelect>
+
+          <mat-error *ngIf="errorHandling('documentNoFE')">{{getErrorMessage('documentNo')}}</mat-error>
+        </div>
+        <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Document File</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter" class="disabled" formControlName="documentUrl" readOnly>
+          </mat-form-field>
+        </div>
+        <!-- <div class="col-lg-6 col-md-6 mt-1">
+          <p class="mb-0 py-0">Account No</p>
+          <mat-form-field class="form-group input_field mb-0" appearance="outline">
+            <input matInput placeholder="Enter">
+          </mat-form-field>
+        </div> -->
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+        <button mat-raised-button class="mx-2 bg-blue text-white" (click)="submit()"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
+
+          Save</button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,23 @@
+
+// WordPress (API JSON Structure)
+{
+  "language": "",
+  "email": "",
+  "phone": "",
+  "name"": "",
+  "legalIssueDescription": "",
+  "zipCode": "",
+  "preferableCommunicationMedium": "",
+  "department": "",
+  "message": ""
+}
+
+
+
+
+
+
+
+
+
+

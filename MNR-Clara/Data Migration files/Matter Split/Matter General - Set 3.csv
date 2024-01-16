@@ -1,0 +1,504 @@
+LANG_ID,CLASS_ID,MATTER_NO,CLIENT_ID,CASEINFO_NO,TRANS_ID,CASE_CATEGORY_ID,CASE_SUB_CATEGORY_ID,BILL_MODE_ID,BILL_FORMAT_ID,BILL_FREQ_ID,BILL_REMARK,FLAT_FEE,ADMIN_COST,MATTER_TEXT,CASE_OPEN_DATE,CASE_CLOSED_DATE,CASE_FILED_DATE,PRIORITY_DATE,RECEIPT_NOT_NO,RECEIPT_DATE,EXPIRATION_DATE,COURT_DATE,APPROVAL_DATE,BILL_MODE_ID,BILL_FREQ_ID,BILL_FORMAT_ID,BILL_REMARK,AR_ACCOUNT_NO,TRUST_DEPOSIT_NO,FLAT_FEE,ADMIN_COST,CONTIG_FEE,RATE_UNIT,DIR_PHONE_NO,STATUS_ID,Isdeleted,CTD_BY,CTD_ON,UTD_BY,UTD_ON,REF_FIELD_25
+Language ID,Class ID,Matter Number,Client ID,Case Information No,Transaction ID,Case Category ID,Case Sub Category ID,Billing Mode ,Billing Format,Billing Frequency ,Billing Remarks,Flat Fee Amount,Administrative Cost,Matter Description,Case Opened Date,Case Closed Date,Case Filed Date,Priority Date,Receipt Notice No,Receipt Date,Expiration Date,Court Date,Approval Date,Billing Mode ID,Billing Frequency ID,Billing Format ID,Billing Remarks,AR Account Number,Trust Deposit No,Flat Fee Amount,Administrative Cost,Contigency Fee Amount,Rate Unit,Direct Phone Number,STATUS ID,Deletion Indicator,created by,created on,updated by,updated on,Retainer Paid
+EN,2,3472-191,3472,888888,6,12,136,2,3,1,,500,50,Leobel Benitez,2019-06-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-06-25,,,500
+EN,2,8518-191,8518,888888,6,12,191,2,3,1,Legal feees due pertaining to Attorney Representation at Interview,3420,340,Nicolas Andres Olivares,2019-07-24,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-07-24,,,1000
+EN,2,8522-191,8522,888888,6,12,211,2,3,1,"Legal fees due pertaining to FOIA requests with ICE, EOIR and CBP for Edith Vera Velasquez Flores.",1800,180,Edith Vera Velasquez Flores,2019-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-21,,,500
+EN,2,8522-192,8522,888888,6,12,185,2,3,1,"Legal fees due pertaining to FOIA requests with ICE, EOIR and CBP for Edith Vera Velasquez Flores.",1800,180,Edith Vera Velasquez Flores,2019-07-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-25,,,500
+EN,2,3815-191,3815,888888,6,12,135,2,3,1,,500,50,Jonathan Molgado,2019-07-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-25,,,500
+EN,2,8513-191,8513,888888,6,12,185,2,3,1,,500,50,Manuel Irigoyen Murillo,2019-07-17,,,,,,,,,,,,,,,,,,,,26,0,JI,2019-07-17,,,500
+EN,2,8513-192,8513,888888,6,12,142,2,3,1,,500,50,Manuel Irigoyen Murillo,2019-07-17,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-17,,,500
+EN,2,8513-193,8513,888888,6,12,108,2,3,1,,500,50,Manuel Irigoyen Murillo,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-31,,,500
+EN,2,6878-191,6878,888888,6,20,212,1,2,1,Response to Request for Evidence.,0,0,Anwar Barbouti,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-03,,,15000
+EN,2,8529-191,8529,888888,6,12,196,2,3,1,,2500,250,Hector Antonio Diaz,2019-07-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-30,,,1350
+EN,2,5068-191,5068,888888,6,21,213,1,2,1,Request for Evidence.,,,Alfredo Salinas,2019-07-10,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-10,,,
+EN,2,3955-191,3955,888888,6,15,80,2,3,1,,500,50,Adrian Rodriguez,2019-12-23,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-12-23,,,500
+EN,2,5991-191,5991,888888,6,12,135,2,3,1,,500,50,Jendy Mireida Marquez,2019-07-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-27,,,500
+EN,2,56581,5658,888888,6,22,303,2,3,1,,,,Gladys Labarca,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-15,,,
+EN,2,3854-191,3854,888888,6,12,135,2,3,1,,500,50,Macthiel A. Mendoza,2019-07-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-22,,,500
+EN,2,7384-191,7384,888888,6,12,196,2,1,1,,3500,0,Mario ROQUE DE LEON,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-07-31,,,0
+EN,2,7384-192,7384,888888,6,12,167,2,1,1,,3500,0,Mario ROQUE DE LEON,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,0
+EN,2,8509-191,8509,888888,6,12,87,2,3,1,Legal fees due pertaining to FOIA Request for USICS and CBP for Mr. Hewitt Woolner,3800,380,Hewitt Woolner,2019-07-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-15,,,3800
+EN,2,53671,5367,888888,6,22,303,1,2,1,,,,Pedro Jose Salmeron,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-15,,,
+EN,2,6835-191,6835,888888,6,15,105,2,3,1,,500,75,Laura Luz Ramirez,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,500
+EN,2,8524-191,8524,888888,6,15,204,2,3,1,Legal fees due pertaining to InfoPass Appointment for Antonio Garcia Santiago.,5000,500,Antonio Garcia Santiago,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,MG,2019-09-03,,,0
+EN,2,8524-192,8524,888888,6,15,204,2,3,1,Legal fees due pertaining to InfoPass Appointment for Antonio Garcia Santiago.,5000,500,Antonio Santiago Garcia,2019-07-29,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-29,,,0
+EN,2,5116-191,5116,888888,6,12,135,2,3,1,,500,50,Raul A. Conde,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,500
+EN,2,8588-201,8588,888888,6,21,56,1,2,1,,8000,825,"Cost Center 0840825-02400""",2020-08-14,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-14,,,0
+EN,2,8588-202,8588,888888,6,21,139,1,2,1,,8000,825,Hemant Deshmukh PERM/I-140,2020-12-17,,,,,,,,,,,,,,,,,,,,26,0,DT,2020-12-17,,,0
+EN,2,8525-191,8525,888888,6,15,183,2,3,1,Legal fees due pertaining to Written Pleading for Jesus Verastegui Rivera with Immigration Court.,6600,660,Jesus Verastegui Rivera EAD,2019-07-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2019-07-18,,,1000
+EN,2,8525-192,8525,888888,6,15,183,2,3,1,Legal fees due pertaining to Written Pleading for Jesus Verastegui Rivera with Immigration Court.,6600,660,Jesus Verastegui Rivera,2019-08-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-27,,,1000
+EN,2,8525-193,8525,888888,6,15,183,2,3,1,Legal fees due pertaining to Written Pleading for Jesus Verastegui Rivera with Immigration Court.,6600,660,Jesus Verastegui Rivera,2019-07-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-30,,,1000
+EN,2,8525-194,8525,888888,6,15,183,2,3,1,Legal fees due pertaining to Written Pleading for Jesus Verastegui Rivera with Immigration Court.,6600,660,Jesus Verastegui Rivera,2019-08-27,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-08-27,,,1000
+EN,2,6951-191,6951,888888,6,22,120,2,3,1,Legal fees due pertaining to U Certification for Kassandra Perez.,2000,200,Kassandra Perez Rodriguez,2019-08-02,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-02,,,480
+EN,2,8538-191,8538,888888,6,15,303,2,3,1,Legal fees due pertaining to Visit to Detainee Jimmy Quiroz Guitierrez.,1000,100,Jimmy Quiroz Gutierrez,2019-08-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-05,,,1000
+EN,2,3865-191,3865,888888,6,15,80,2,3,1,,375,0,Celso Mata-Zapata,2019-08-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-08-03,,,375
+EN,2,5117-191,5117,888888,6,12,135,2,3,1,,500,50,Brandon Conde,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,500
+EN,2,7340-191,7340,888888,6,12,149,2,3,1,,500,75,Juana Alicia CASTRO,2019-08-05,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-08-05,,,125
+EN,2,7340-192,7340,888888,6,15,57,2,3,1,,500,75,Juana Alicia CASTRO,2019-11-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-09,,,125
+EN,2,3860-191,3860,888888,6,21,180,1,2,1,,,,Mohamed Kassoumeh - Mandamus Complaint,2019-07-01,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-01,,,
+EN,2,3860-192,3860,888888,6,21,214,1,2,1,,,,Mohamed Kassoumeh,2019-07-01,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-01,,,
+EN,2,8539-191,8539,888888,6,12,176,2,3,1,,2500,0,Kamrun Nezami,2019-08-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-07,,,2500
+EN,2,6790-191,6790,888888,6,22,135,2,3,1,,500,50,Estefania Guadalupe Martinez Garza,2019-08-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-08-03,,,205
+EN,2,8026-191,8026,888888,6,15,185,2,3,1,,1800,180,Jennifer Paola RODRIGUEZ ALCANTARA,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-31,,,500
+EN,2,8523-191,8523,888888,6,12,215,2,3,1,"Legal fees due pertaining to FOIA requests with CPB, USCIS and EOIR for Eduardo Hernandez.",1000,0,Eduardo V Hernandez,2019-07-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-25,,,500
+EN,2,70901,7090,888888,6,22,303,2,3,1,,,,Leny Mariela LOPEZ,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-15,,,
+EN,2,5513-191,5513,888888,6,12,135,2,3,1,,500,50,Irwin Amaya Escobar,2019-08-02,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-02,,,500
+EN,2,5634-191,5634,888888,6,12,150,2,3,1,,2500,250,Mario Sosa,2019-08-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-06,,,750
+EN,2,4018-191,4018,888888,6,22,135,2,3,1,,500,50,Jonathan Velazquez,2019-08-02,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-02,,,500
+EN,2,8541-191,8541,888888,6,15,303,2,1,1,,500,75,Jose Guadalupe Rodriguez - Torres,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-09-03,,,500
+EN,2,8541-192,8541,888888,6,15,303,2,1,1,,500,75,Jose Guadalupe Rodriguez - Torres,2019-08-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-10,,,500
+EN,2,8541-193,8541,888888,6,15,100,2,1,1,,500,75,Jose Guadalupe Rodriguez - Torres,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-05,,,500
+EN,2,8541-194,8541,888888,6,15,100,2,1,1,,500,75,Jose Guadalupe Rodriguez - Torres,2019-08-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-08-13,,,500
+EN,2,8536-191,8536,888888,6,12,207,2,3,1,Legal fees due pertianing to Plan Preparate for Mauro Palafox.,650,0,Mauro Palafox,2019-08-02,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-02,,,650
+EN,2,8535-191,8535,888888,6,12,207,2,3,1,,300,0,Deira Barrientos,2019-08-02,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-02,,,300
+EN,2,8540-191,8540,888888,6,12,216,2,3,1,Legal fees due pertaining to FOIA request with EOIR and ICE for Henry Solorzano.,1000,100,Henry Solorzano,2019-08-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-08,,,1000
+EN,2,85451,8545,888888,6,10,303,1,2,1,,,,Mark A. Carr Enterprises (M.A.C.E.),2019-08-12,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-12,,,
+EN,2,6163-201,6163,888888,6,12,80,2,3,1,,500,75,Luis Armando Maldonado EAD Renewal,2020-09-29,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-29,,,500
+EN,2,81651,8165,888888,6,21,4,1,2,1,,,,Pengju Xing - General Matters,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-31,,,
+EN,2,7366-191,7366,888888,6,12,135,2,3,1,,500,50,Levis Juarez,2019-08-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-10,,,500
+EN,2,7099-191,7099,888888,6,12,143,2,3,1,,,160,Flor Lilia Yanez,2019-07-22,,,,,,,,,,,,,,,,,,,,26,0,VR,2019-07-22,,,0
+EN,2,8546-191,8546,888888,6,20,151,2,3,1,,8000,0,Juan Pierre Van Staden,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,8546-192,8546,888888,6,20,139,2,3,1,,8000,0,Juan Pierre Van Staden,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,7993-191,7993,888888,6,20,151,1,2,1,Khaled El Assir,3500,250,Khaled El Assir Hawa,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,7993-192,7993,888888,6,20,129,1,2,1,Khaled El Assir,3500,250,Khaled El Assir Hawa,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,7993-193,7993,888888,6,21,133,1,2,1,Khaled El Assir,3500,250,Khaled El Assir Hawa,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-23,,,0
+EN,2,8130-201,8130,888888,6,12,149,2,3,1,,750,75,Joanna Jaqueline Robertson,2020-03-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-05,,,750
+EN,2,8542-191,8542,888888,6,12,209,2,3,1,Legal fees due prtaining to Review and Analysis of Criminal Record for Ever Zambrano.,500,50,Ever Emilio Zambrano,2019-08-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-10,,,500
+EN,2,6271-191,6271,888888,6,12,191,2,3,1,Legal fees due pertaining to Attorney Representation at Interview with Gregoria Arechiga Barragan.,3800,380,Gregoria ARECHIGA BARRAGAN,2019-08-06,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-06,,,1000
+EN,2,6271-192,6271,888888,6,12,38,2,3,1,Legal fees due pertaining to Attorney Representation at Interview with Gregoria Arechiga Barragan.,3800,380,Gregoria ARECHIGA BARRAGAN,2019-08-06,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-06,,,1000
+EN,2,8532-191,8532,888888,6,12,192,2,3,1,,400,40,Alvaro Ventura Ruiz,2019-08-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-03,,,400
+EN,2,8532-192,8532,888888,6,15,217,2,3,1,,400,40,Alvaro Ventura Ruiz,2019-08-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-30,,,400
+EN,2,8532-193,8532,888888,6,15,217,2,3,1,,400,40,Alvaro Ventura Ruiz,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-14,,,400
+EN,2,8437-191,8437,888888,6,12,218,2,3,1,,0,0,Maria Concepcion Alcantar Duarte,2019-05-08,,,,,,,,,,,,,,,,,,,,26,0,REC,2019-05-08,,,0
+EN,2,8438-191,8438,888888,6,12,99,2,3,1,,0,0,Artemio Rivera Andaya,2019-05-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-05-08,,,0
+EN,2,7353-191,7353,888888,6,12,135,2,3,1,,500,50,Florentino Borjas Jr.,2019-08-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-12,,,500
+EN,2,31391,3139,888888,6,10,303,1,1,1,,,,Alfredo Salinas & Co. - General Matters,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-15,,,
+EN,2,8576-191,8576,888888,6,21,213,2,3,1,Legal fees due pertaining to E-1 Visa process for Juan Javier Salinas with Department of State.,3500,0,Juan Javier Salinas Jacobo,2019-09-09,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-09,,,0
+EN,2,8530-191,8530,888888,6,12,177,2,3,1,,600,60,Perla Galvan,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,300
+EN,2,8556-191,8556,888888,6,12,191,2,3,1,Legal fees due pertaining to Translator at Adjustment of Status Interview for Elifoncia Dialmonte.,500,75,Elifoncia Dialmonte,2019-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-21,,,500
+EN,2,3750-191,3750,888888,6,12,136,2,3,1,,500,50,Alvaro Collao,2019-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-21,,,500
+EN,2,8551-191,8551,888888,6,12,115,2,3,1,,3000,300,Mario Morales,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,Credit of $1000.00
+EN,2,8551-192,8551,888888,6,12,193,2,3,1,,3000,300,Mario Morales,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,Credit of $1000.00
+EN,2,8526-191,8526,888888,6,21,68,2,3,1,,3500,350,Ivonne Garcia Ovilla,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-07-31,,,1500
+EN,2,3620-201,3620,888888,6,12,135,2,3,1,,500,50,Janeth Alejandara Rodriguez Quiroga,2020-02-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-03,,,500
+EN,2,3459-191,3459,888888,6,12,129,2,3,1,Attorney Fees for reconciliation for 2019.,5600,560,Norberto Escalera,2019-04-30,,,,,,,,,,,,,,,,,,,,26,0,DD,2019-04-30,,,1000
+EN,2,3459-192,3459,888888,6,12,178,2,3,1,Attorney Fees for reconciliation for 2019.,5600,560,Norberto Escalera,2019-04-30,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-30,,,1000
+EN,2,8543-191,8543,888888,6,12,207,2,3,1,Legal fees due pertaining to Plan Preparate for Humberto Garcia Hernandez.,650,0,Humberto Garcia Hernandez,2020-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-08-21,,,400
+EN,2,8382-191,8382,888888,6,12,185,2,3,1,,1800,180,Roberto NAVARRO,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-05,,,500
+EN,2,4096-191,4096,888888,6,12,143,2,3,1,Legal fees due pertaining to Attorney Representation at Interview with Josselin Morelia Villatoro.,650,90,Yosselin Morelia VILLATORO ALVAREZ,2019-08-28,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-28,,,400
+EN,2,4096-192,4096,888888,6,12,157,2,3,1,Legal fees due pertaining to Attorney Representation at Interview with Josselin Morelia Villatoro.,650,90,Yosselin Morelia VILLATORO ALVAREZ,2019-09-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-17,,,400
+EN,2,3727-191,3727,888888,6,12,136,2,3,1,,500,50,Alexis Martinez,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-16,,,500
+EN,2,6829-191,6829,888888,6,12,135,2,3,1,,500,50,Cristian Cortes,2019-08-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-14,,,500
+EN,2,8553-191,8553,888888,6,12,209,2,3,1,Legal fees due pertaining to request of Police Report for Ana Trejo.,250,25,Ana Trejo,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-16,,,250
+EN,2,8550-191,8550,888888,6,12,115,2,3,1,,3000,300,David Morales,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,Credit Of $1000.00
+EN,2,8550-192,8550,888888,6,12,193,2,3,1,,3000,300,David Morales,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,Credit Of $1000.00
+EN,2,8559-191,8559,888888,6,12,133,2,3,1,Legal fees due pertaining to Review and Analyis on Pablo Calderon Galaviz Criminal Record.,1000,100,Pablo Calderon Galaviz,2019-08-29,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-08-29,,,500
+EN,2,8557-191,8557,888888,6,12,176,2,3,1,,2500,250,Maria Torres Arreguin,2019-08-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-26,,,1000
+EN,2,8531-191,8531,888888,6,12,219,2,3,1,,1800,180,Nahomy Estela Melgar,2019-07-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-31,,,500
+EN,2,3833-191,3833,888888,6,12,135,2,3,1,Legal fees due pertaining to DACA Renewal with U.S. Department of Homeland Security.,500,50,Carlos Sandoval,2019-08-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-28,,,500
+EN,2,3863-191,3863,888888,6,12,135,2,3,1,,500,50,Marcos Sandoval,2019-08-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-28,,,500
+EN,2,8549-191,8549,888888,6,20,151,2,3,1,,8000,0,Alex Kinderknecht,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,8549-192,8549,888888,6,20,139,2,3,1,,8000,0,Alex Kinderknecht,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,7355-191,7355,888888,6,12,135,2,3,1,,750,112.5,Luis Moreno,2019-08-29,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-29,,,750
+EN,2,8561-191,8561,888888,6,15,303,2,3,1,,,0,Nely Olivia Sanchez Maradiaga,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,MG,2019-09-03,,,0
+EN,2,8561-192,8561,888888,6,15,303,2,3,1,,,0,Jesler Said Solis  Sanchez,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,MG,2019-09-03,,,0
+EN,2,8575-191,8575,888888,6,12,119,2,3,1,,1150,115,Maria Margarita Colmenero,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,250
+EN,2,8575-192,8575,888888,6,12,99,2,3,1,,1150,115,Maria Margarita Colmenero,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,250
+EN,2,8575-193,8575,888888,6,12,212,2,3,1,,1150,115,Maria Margarita Colmenero,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,250
+EN,2,8560-191,8560,888888,6,15,303,2,3,1,,6000,450,Luis Alberto Torres Martinez,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-03,,,1000
+EN,2,8560-192,8560,888888,6,15,303,2,3,1,,6000,450,Daniel Alberto Torres Sanchez,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,MG,2019-09-03,,,1000
+EN,2,39031,3903,888888,6,12,303,2,3,1,,,,Yahaira AGuilar,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,JI,2019-10-31,,,
+EN,2,8573-191,8573,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Jorge Marin Saucedo.,1800,180,Jorge Antonio Marin Saucedo,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-07,,,500
+EN,2,8571-191,8571,888888,6,12,303,2,3,1,,1800,180,Sonia Nelly Huaroto Amayo,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-05,,,500
+EN,2,5506-191,5506,888888,6,12,176,2,3,1,,1620,162,Rosalinda Lara,2019-08-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-27,,,638
+EN,2,8566-191,8566,888888,6,12,176,2,3,1,,0,0,Guillermina Del Rio Solorzano,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-05,,,0
+EN,2,8554-191,8554,888888,6,12,185,2,3,1,,1800,180,Lilelia Castidada Reneao,2019-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-21,,,500
+EN,2,8581-191,8581,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with CBP for Yesenia Acosta.,2300,230,Yessenia Acosta,2019-09-12,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-09-12,,,500
+EN,2,8581-192,8581,888888,6,12,185,2,3,1,Legal fees due pertaining to FOIA request with CBP for Yesenia Acosta.,2300,230,Yessenia Acosta,2019-09-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-12,,,500
+EN,2,7491-191,7491,888888,6,20,159,2,3,1,,750,0,Samiuddin Arif Shaik,2019-11-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-13,,,0
+EN,2,7491-192,7491,888888,6,20,151,2,3,1,,750,0,Samiuddin Arif Shaik,2019-09-11,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-11,,,0
+EN,2,7491-193,7491,888888,6,20,4,2,3,1,,750,0,Samiuddin Arif Shaik,2019-12-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-09,,,0
+EN,2,7491-194,7491,888888,6,20,133,2,3,1,,750,0,Samiuddin Arif Shaik,2019-10-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-10-22,,,0
+EN,2,7990-191,7990,888888,6,12,143,2,3,1,,1600,160,Maria Eugenia Esteller,2019-08-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-27,,,500
+EN,2,3615-191,3615,888888,6,12,80,2,3,1,,375,37.5,Isidoro de los Santos,2019-09-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-17,,,375
+EN,2,8582-191,8582,888888,6,15,303,2,3,1,Legal fees ddue pertaining to Bondd Motion for Karen Ivette Torres Gonzalez.,2500,250,Karen Ivette Torres,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,2500
+EN,2,8544-191,8544,888888,6,12,191,2,3,1,,3400,340,Maria Guadalupe Rodriguez,2019-08-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-12,,,500
+EN,2,3629-191,3629,888888,6,12,135,2,3,1,,500,50,Jorge Daniel Romero,2019-09-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-14,,,500
+EN,2,8248-191,8248,888888,6,12,191,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Lugas Medellin Noyola.,3800,380,Lucas Medellin Noyola,2019-08-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-12,,,500
+EN,2,8574-191,8574,888888,6,12,185,2,3,1,,1800,180,Janett Eloisa Saucedo Rodriguez,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,500
+EN,2,8572-191,8572,888888,6,12,220,2,3,1,Legal fees due pertaining to Attorney Representation for Hilda M. Cuellar's Naturalization process.,1800,180,Hilda Merino Cuellar,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,500
+EN,2,8577-191,8577,888888,6,12,191,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Sandra Chavez.,3800,380,Sandra Janeth Chavez Hernandez,2019-09-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-07,,,1000
+EN,2,7111-191,7111,888888,6,12,142,2,3,1,Legal fees due pertaining to Adjustment of Status Interview Prep for Derick Dominguez.,2225,225,Derick Octavio DOMINGUEZ,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,2225
+EN,2,7111-192,7111,888888,6,12,99,2,3,1,Legal fees due pertaining to Adjustment of Status Interview Prep for Derick Dominguez.,2225,225,Derick Octavio DOMINGUEZ,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,2225
+EN,2,8584-191,8584,888888,6,15,303,2,3,1,,2500,250,Laura Sofia Chavez,2019-09-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-19,,,1000
+EN,2,8517-191,8517,888888,6,21,303,2,3,1,Legal fees due pertaining to E-2 process for Uriel Avidan and Family with Department of State.,8000,500,Uriel Avidan & Wife,2019-07-26,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-26,,,8000
+EN,2,8514-191,8514,888888,6,12,191,2,3,1,,500,75,Sonia Elizabeth Munoz Reyes,2020-07-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-07-24,,,0
+EN,2,7428-171,7428,888888,6,12,38,2,3,1,,,,Blanca Estela FLORES DE RODRIGUEZ,2019-09-30,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-09-30,,,
+EN,2,8570-191,8570,888888,6,12,303,2,3,1,,1620,180,Angie Sofia Vidal Huaroto,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-05,,,500
+EN,2,8564-191,8564,888888,6,15,187,2,3,1,,2500,250,Nathaly Andrea Guillen,2019-09-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-04,,,750
+EN,2,8565-191,8565,888888,6,15,303,2,3,1,,2500,250,Jennifer Dayani Guillen,2019-09-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-04,,,750
+EN,2,5411-201,5411,888888,6,12,159,2,3,1,,3150,472.5,Aldair A. Ramirez Sandoval,2020-01-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-31,,,1000
+EN,2,5411-202,5411,888888,6,12,142,2,3,1,,3150,472.5,Larry Ramirez AOS,2020-09-14,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-14,,,1000
+EN,2,5411-203,5411,888888,6,12,159,2,3,1,,3150,472.5,Larry F. Ramirez,2020-01-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-31,,,1000
+EN,2,5411-204,5411,888888,6,12,142,2,3,1,,3150,472.5,Larry Ramirez Translations,2021-01-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-25,,,1000
+EN,2,8583-191,8583,888888,6,15,303,2,3,1,Legal Fees due pertaining to Detainee Visit for Sergio Landeros Perez.,1250,125,Sergio Landeros Perez,2019-09-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-16,,,1250
+EN,2,7530-191,7530,888888,6,12,57,2,1,1,,500,50,Pedro Aguirre Enriquez,2019-08-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-24,,,500
+EN,2,8587-191,8587,888888,6,15,303,2,3,1,Legal fees due pertaining to Bond Hearing for Elsy Johana Pineda-Santos.,2500,250,Elsy Johana Pineda-Santos,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,1050
+EN,2,7112-191,7112,888888,6,12,142,2,3,1,,2225,225,Myriam C. DOMINGUEZ,2019-09-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-25,,,2225
+EN,2,7112-192,7112,888888,6,12,99,2,3,1,,2225,225,Myriam C. DOMINGUEZ,2019-09-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-25,,,2225
+EN,2,7110-191,7110,888888,6,12,142,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Miriam J. Velazquez.,4750,475,Miriam Judith VELAZQUEZ (nee PEREZ),2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,4750
+EN,2,7110-192,7110,888888,6,12,99,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Miriam J. Velazquez.,4750,475,Miriam Judith VELAZQUEZ (nee PEREZ),2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,4750
+EN,2,7110-193,7110,888888,6,12,196,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Miriam J. Velazquez.,4750,475,Miriam Judith VELAZQUEZ (nee PEREZ),2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,4750
+EN,2,6904-191,6904,888888,6,12,135,2,3,1,,500,50,Yomara Gonzalez,2019-09-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-17,,,500
+EN,2,8558-191,8558,888888,6,12,176,2,3,1,Legal Fees due pertaining to Attorney Representation at Interview with Veronica Hernandez.,1800,180,Veronica Hernandez,2019-08-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-28,,,500
+EN,2,8588-191,8588,888888,6,21,52,1,2,1,,3500,0,"Cost Center 0840825-02400""",2019-09-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-25,,,0
+EN,2,8579-191,8579,888888,6,21,73,2,3,1,Legal fees due pertaining to O Petition for Eliseo Tapia with U.S. Department of Homeland Security.,9500,500,Eliseo Abisai Tapia Olivares,2019-09-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-11,,,9500
+EN,2,8579-192,8579,888888,6,21,133,2,3,1,Legal fees due pertaining to O Petition for Eliseo Tapia with U.S. Department of Homeland Security.,9500,500,Eliseo Abisai Tapia Olivares,2019-12-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-30,,,9500
+EN,2,8579-193,8579,888888,6,21,73,2,3,1,Legal fees due pertaining to O Petition for Eliseo Tapia with U.S. Department of Homeland Security.,9500,500,Eliseo Abisai Tapia Olivares,2019-11-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-11-05,,,9500
+EN,2,8612-191,8612,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA - CBP request for Martha Moreno.,500,50,Martha Moreno,2019-10-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-16,,,500
+EN,2,8618-191,8618,888888,6,15,187,2,3,1,,5000,500,Jesus Angel Ruza,2019-10-26,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-10-26,,,500
+EN,2,8597-191,8597,888888,6,12,99,2,3,1,"Legal fees due pertaining to FOIAs request with ICE, CBP and FBI for Margarito Sanchez.",1000,100,Margarito Sanchez,2019-10-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-02,,,550
+EN,2,8476-191,8476,888888,6,20,139,2,3,1,Legal fees due pertaining to Prevailing Wage for Humberto Patio with Department of Labor.,7500,0,Humberto Patiño,2019-10-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-10-04,,,0
+EN,2,8600-191,8600,888888,6,12,218,2,3,1,Legal fees due pertaining to Leticia Cortes Lopez - FBI Record Request.,500,50,Leticia Cortes,2019-10-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-02,,,500
+EN,2,8580-191,8580,888888,6,12,191,2,3,1,,3800,380,Perla Yuriana Rodriguez Lopez,2019-09-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-10,,,500
+EN,2,6333-191,6333,888888,6,12,135,2,3,1,Legal fees due prtaining to DACA Renewal process with U.S. Department of Homeland Security,500,50,Jose A Martinez,2019-09-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-25,,,225
+EN,2,5630-191,5630,888888,6,12,135,2,3,1,,750,112.5,Ruben Vargas Guzman,2019-04-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-04-24,,,750
+EN,2,8602-191,8602,888888,6,20,139,2,3,1,,,,Sesha Madhu Sudhan MEDURY,2019-10-07,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-10-07,,,
+EN,2,8602-192,8602,888888,6,21,221,2,3,1,,,,Sesha Madhu Sudhan MEDURY,2019-12-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-02,,,
+EN,2,3416-191,3416,888888,6,12,80,2,3,1,,375,37.5,Alfredo Aparicio,2019-09-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-28,,,375
+EN,2,8603-191,8603,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA-USCIS request for Josue Manriquez.,500,50,Josue Ulises Manriguez Mata,2019-10-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-05,,,500
+EN,2,8589-191,8589,888888,6,12,120,2,3,1,Legal fees due pertaining to U Certification process for Arely Rodriguez Jimenez.,5000,500,Arely Rodriguez Jimenez,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-24,,,500
+EN,2,8589-192,8589,888888,6,12,121,2,3,1,Legal fees due pertaining to U Certification process for Arely Rodriguez Jimenez.,5000,500,Arely Rodriguez Jimenez,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,500
+EN,2,7180-191,7180,888888,6,12,135,2,3,1,,500,50,Jonathan Arias,2019-09-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-30,,,500
+EN,2,8598-191,8598,888888,6,12,185,2,3,1,,1800,180,Imelda Miranda Maldonado,2019-10-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-03,,,750
+EN,2,5566-191,5566,888888,6,12,135,2,3,1,,500,50,Heriberto Gonzalez,2019-10-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-05,,,500
+EN,2,8528-191,8528,888888,6,12,129,2,1,1,,7000,700,Esteban Hernandez,2019-07-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-30,,,1250
+EN,2,8528-192,8528,888888,6,12,185,2,1,1,,7000,700,Esteban Hernandez,2019-07-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-30,,,1250
+EN,2,8528-193,8528,888888,6,12,196,2,1,1,,7000,700,Esteban Hernandez,2019-07-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-07-30,,,1250
+EN,2,8608-191,8608,888888,6,15,303,2,3,1,,3000,300,Melissa Alexandra Hernandez,2019-10-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-10,,,1000
+EN,2,5680-191,5680,888888,6,12,135,2,3,1,,500,50,Isaias Rivera,2019-09-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-28,,,500
+EN,2,3958-191,3958,888888,6,12,135,2,3,1,,500,50,Romina Lopez,2019-10-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-08,,,500
+EN,2,3601-191,3601,888888,6,12,135,2,3,1,,2200,220,"Navarro, Oscar",2019-10-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-08,,,600
+EN,2,3601-192,3601,888888,6,12,185,2,3,1,,2200,220,"Navarro, Oscar",2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-10-31,,,600
+EN,2,72081,7208,888888,6,12,142,2,3,1,,,,Martin RICO,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-04-23,,,
+EN,2,8590-191,8590,888888,6,12,177,2,3,1,,500,65,Maria Juana Hernandez,2019-09-27,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-09-27,,,500
+EN,2,8611-191,8611,888888,6,12,129,2,1,1,"Case Opening fee, matter cancelled did not proceed with matter.",9500,500,Victor Heli Llaury Montes,2019-10-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-15,,,2500
+EN,2,8605-191,8605,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Hele Chanchavac.,3800,380,Helen Escarleth Chanchavac Chach,2019-10-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-05,,,500
+EN,2,8605-192,8605,888888,6,12,185,2,3,1,Legal fees due pertaining to Consular Process for Hele Chanchavac.,3800,380,Helen Escarleth Chanchavac Chach,2019-10-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-05,,,500
+EN,2,8607-191,8607,888888,6,15,183,2,3,1,Legal fees due pertaining to Visit to Detainee Vicente Guerra Erazo.,1250,125,Vicenta Guerra Erazo,2019-10-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-07,,,1250
+EN,2,8599-191,8599,888888,6,12,218,2,3,1,Legal fees due prtaining to FOIA Request with CBP for Osvaldo Valadez Aguilar.,500,50,Osvaldo Valadez Aguilar,2019-10-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-02,,,500
+EN,2,5403-191,5403,888888,6,12,80,2,3,1,,375,37.5,Liliana Rebolledo,2019-10-14,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-10-14,,,375
+EN,2,7323-191,7323,888888,6,12,131,2,3,1,,5200,520,Miguel Rodriguez,2019-09-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-03,,,1060
+EN,2,60691,6069,888888,6,22,166,1,1,1,,,,Ingrid  Y. Alvarado,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,LV,2019-04-23,,,
+EN,2,3870-191,3870,888888,6,12,135,2,3,1,,500,50,Karla Garcia,2019-10-16,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-16,,,500
+EN,2,5052-191,5052,888888,6,12,88,2,3,1,Legal fees due pertaining to Record request for Vanessa Palladina.,250,50,Vanessa Dayanir,2019-10-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-10,,,250
+EN,2,8516-191,8516,888888,6,21,47,2,3,1,Legal fees due pertaining to E-2 Visa Process for Melanie Ann Ferris with Department of State.,3500,350,Melanie Ferris,2019-07-26,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-07-26,,,0
+EN,2,84841,8484,888888,6,21,303,1,2,1,,,,Kruthi MURTHY - General Matters,2019-05-29,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-05-29,,,
+EN,2,8604-191,8604,888888,6,12,191,2,3,1,,3450,380,Rebeca Hernandez Garcia,2019-10-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-05,,,500
+EN,2,8591-191,8591,888888,6,12,117,2,3,1,,2500,250,Oliver Urcia,2019-09-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-26,,,2500
+EN,2,8591-192,8591,888888,6,12,176,2,3,1,,2500,250,Oliver Urcia,2019-09-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-26,,,2500
+EN,2,8591-193,8591,888888,6,12,178,2,3,1,,2500,250,Oliver Urcia,2019-09-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-26,,,2500
+EN,2,8031-191,8031,888888,6,15,161,2,3,1,,375,37.5,Felix Andres Cruz Alvarez,2019-10-14,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-10-14,,,375
+EN,2,8031-192,8031,888888,6,15,161,2,3,1,,375,37.5,Felix Andres Cruz Alvarez,2019-10-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-14,,,375
+EN,2,5336-191,5336,888888,6,12,135,2,3,1,,500,50,Rubi Lara,2019-10-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-15,,,500
+EN,2,8610-201,8610,888888,6,12,38,2,3,1,"Legal fees due pertaining to FOIA Request with USCIS, EOIR, ICE and CBP for Epimenia Diaz.",750,112.5,Epimenia Diaz Representation at Interview,2020-03-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-24,,,750
+EN,2,8196-181,8196,888888,6,12,142,2,3,1,Legal fees due pertaining to Interpreter Fee at Adjustment of Status Interview for Luisa Zepeda.,2000,0,Luisa Zepeda,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-05,,,650
+EN,2,3838-191,3838,888888,6,12,135,2,3,1,Legal fees due pertaining to DACA Renewal for Alan Tinoco with U.S. Department of Homeland Security.,500,50,Alan Tinoco,2019-10-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-10-16,,,500
+EN,2,8609-191,8609,888888,6,12,303,2,3,1,"Legal Fees due pertaining to FOIAs request from USCIS, EOIR and CBP for Carlos Baltaza.r",1500,150,Carlos Baltazar Martinez,2019-10-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-08,,,1500
+EN,2,8596-191,8596,888888,6,12,303,2,3,1,Legal fees due pertaining to Attorney Representation at Inteview for Salvador R. Andino.,1750,175,Salvador R. Andino,2019-10-01,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-10-01,,,500
+EN,2,8586-191,8586,888888,6,12,99,2,3,1,Legal fees due prtaining to FOIA request with CBP for Ma. Guadalupe Contreras de Acuna.,500,50,Ma. Guadalupe CONTRERAS DE ACUNA,2019-09-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-25,,,500
+EN,2,8148-191,8148,888888,6,12,142,2,3,1,Legal fees due pertianing to Adjustment of Status Interview Representation.,,,Eunice GUILLORY,2019-10-18,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-10-18,,,
+EN,2,8615-191,8615,888888,6,21,58,2,3,1,,7500,500,Marco Veldhuizen,2019-10-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-10-22,,,3750
+EN,2,7351-191,7351,888888,6,12,80,2,3,1,Legal fees due pertaining to Appeal Brief to Board of Immigratoin Appeals for Hellen Morales.,375,37.5,Hellen Idalia MORALES-VALERIANO,2019-10-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-02,,,375
+EN,2,8567-191,8567,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Jose Mandujano Acosta.,1600,180,Jose Mandujano Acosta,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-05,,,500
+EN,2,8568-191,8568,888888,6,12,129,2,3,1,Legal fees due pertaining to Consula Process for Gabriel Mandujano Acosta.,1800,180,Gabriel  Mandujano Acosta,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-05,,,500
+EN,2,8569-191,8569,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular PRocess for Maria del Carmen Mandujano Acosta.,1600,180,Maria Del Carmen Mandujano Acosta,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-05,,,500
+EN,2,7349-191,7349,888888,6,12,222,2,3,1,,4800,480,Benjamin Hernandez,2019-04-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-04-25,,,"Credit of $1,600.00. Down Payment $50.00"
+EN,2,7338-191,7338,888888,6,15,166,2,3,1,,375,37.5,Steven H. Esquivel,2019-10-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-19,,,375
+EN,2,6066-191,6066,888888,6,12,135,2,3,1,,500,50,Diana Del Rio,2019-10-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-18,,,500
+EN,2,8547-191,8547,888888,6,20,151,2,3,1,,8000,0,Francois Vorster,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,8547-192,8547,888888,6,20,139,2,3,1,,8000,0,Francois Vorster,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-16,,,0
+EN,2,5459-191,5459,888888,6,12,135,2,3,1,,500,50,Juan Ramon Mejia,2019-10-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-17,,,500
+EN,2,8621-191,8621,888888,6,15,303,2,3,1,Legal fees due pertaining to Representation at Bond Hearing for Marvin Galo Zambrano.,2600,260,Marvin Geovany Galo Zambrano,2019-10-28,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-28,,,1150
+EN,2,8592-191,8592,888888,6,12,191,2,3,1,,75,0,Ana Hernandez,2019-09-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-27,,,75
+EN,2,8592-192,8592,888888,6,12,196,2,3,1,,75,0,Ana Hernandez,2019-09-27,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-27,,,75
+EN,2,8592-193,8592,888888,6,12,223,2,3,1,,75,0,Ana Hernandez,2019-10-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-11,,,75
+EN,2,8220-191,8220,888888,6,15,161,2,3,1,,375,37.5,Israel Antonio Aparicio,2019-10-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-24,,,375
+EN,2,8601-191,8601,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA-FBI request for Juan Lopez Arvizu.,1000,100,Juan Lopez Arvizu,2019-10-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-02,,,1000
+EN,2,8632-191,8632,888888,6,15,303,2,3,1,,5500,550,Maria Milagro Aguiluz -Zaldana,2019-11-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-02,,,50
+EN,2,8616-191,8616,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Visa process for Roberto Gonzalez with Department of State.,2500,0,Roberto Carlos Gonzalez Puente,2019-10-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-10-22,,,0
+EN,2,8271-191,8271,888888,6,21,50,2,3,1,,750,75,Rakesh Kriplani,2019-11-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-04,,,0
+EN,2,8271-192,8271,888888,6,20,139,2,3,1,,750,75,Rakesh Kriplani,2019-09-23,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-09-23,,,0
+EN,2,8271-193,8271,888888,6,21,56,2,3,1,,750,75,Rakesh Kriplani,2019-11-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-04,,,0
+EN,2,8613-191,8613,888888,6,12,185,2,3,1,,1800,180,Jesus Martinez - Orocio,2019-10-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2019-10-19,,,650
+EN,2,8595-191,8595,888888,6,12,191,2,3,1,,3800,380,Jaime Leon Huerta,2019-09-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-30,,,1000
+EN,2,6846-191,6846,888888,6,12,135,2,3,1,,500,50,Jesus Villareal,2019-11-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-07,,,500
+EN,2,8629-191,8629,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Petition for Alfredo Farias de los Santos with Department of State.,2500,250,Alfredo FARIAS DE LOS SANTOS,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,IR,2019-10-31,,,0
+EN,2,8022-191,8022,888888,6,12,129,2,3,1,,5200,520,Miguel Aguilar,2019-11-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-11,,,$1000.00 Credit from previous contract 
+EN,2,8022-192,8022,888888,6,12,196,2,3,1,,5200,520,Miguel Aguilar,2019-11-11,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-11,,,$1000.00 Credit from previous contract 
+EN,2,8619-191,8619,888888,6,12,209,2,3,1,,300,50,Yader Antonio Gutierrez,2019-10-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-24,,,300
+EN,2,6097-191,6097,888888,6,12,133,2,3,1,Legal Fees due pertaining to Request for Evidence on U Certification for Jessica Garcia.,500,50,Jessica Garcia,2019-10-23,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-23,,,250
+EN,2,6160-191,6160,888888,6,12,135,2,3,1,,500,50,Juan R. Castro,2019-11-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-12,,,500
+EN,2,3513-191,3513,888888,6,12,224,2,3,1,,900,100,Juanita Hernandez Perez,2019-11-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-12,,,400
+EN,2,3513-192,3513,888888,6,12,193,2,3,1,,900,100,Juanita Hernandez Perez,2019-11-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-12,,,400
+EN,2,6872-191,6872,888888,6,12,135,2,3,1,,500,50,Luis Cortez,2019-11-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-02,,,500
+EN,2,8630-191,8630,888888,6,15,303,2,3,1,,50,0,Doris Yessenia Maldonado Garcia,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-31,,,50
+EN,2,8630-192,8630,888888,6,15,303,2,3,1,,50,0,Doris Yessenia Maldonado Garcia,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-14,,,50
+EN,2,7462-191,7462,888888,6,15,187,2,3,1,,625,62.5,Gilson Rene TIU RIVERA,2019-11-06,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-11-06,,,375
+EN,2,5780-191,5780,888888,6,12,303,2,3,1,,500,50,Ericka Paola Padilla Quiroz,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-14,,,500
+EN,2,8637-191,8637,888888,6,15,303,2,3,1,,500,75,Oscar Gabriel Salazar-Arredondo,2019-12-02,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-02,,,500
+EN,2,8637-192,8637,888888,6,15,303,2,3,1,,500,75,Oscar Gabriel Salazar-Arredondo,2019-11-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-13,,,500
+EN,2,8641-191,8641,888888,6,12,99,2,3,1,,1800,180,Mercedes Hernandez Rodriguez,2019-11-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-15,,,650
+EN,2,8641-192,8641,888888,6,12,185,2,3,1,,1800,180,Mercedes Hernandez Rodriguez,2019-11-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-15,,,650
+EN,2,8639-191,8639,888888,6,12,209,2,3,1,Legal fees due pertaining to HPD Police Report for Maria Amparo Torres Sustita.,1800,180,Maria Amparo Torres Sustaita,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-14,,,500
+EN,2,8639-192,8639,888888,6,12,120,2,3,1,Legal fees due pertaining to HPD Police Report for Maria Amparo Torres Sustita.,1800,180,Maria Amparo Torres Sustaita,2019-12-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-19,,,500
+EN,2,6882-191,6882,888888,6,12,133,2,3,1,,750,75,Jael Berenice Grimaldo,2019-11-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-11,,,375
+EN,2,8172-191,8172,888888,6,15,187,2,3,1,,1500,150,Flor de Maria Abrego,2019-08-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-15,,,750
+EN,2,8172-192,8172,888888,6,15,187,2,3,1,,1500,150,Flor de Maria Abrego,2019-12-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-10,,,750
+EN,2,8648-191,8648,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Jesus Aguilar.,1600,185,Jesus Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,DT,2019-11-18,,,1000
+EN,2,8648-192,8648,888888,6,12,168,2,3,1,Legal fees due pertaining to Consular Process for Jesus Aguilar.,1600,185,Jesus Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,1000
+EN,2,7253-191,7253,888888,6,12,119,2,1,1,,,,Abner E. Matul,2019-11-12,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-11-12,,,
+EN,2,8647-191,8647,888888,6,12,129,2,3,1,,1850,185,Josefina Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,DT,2019-11-18,,,1000
+EN,2,8647-192,8647,888888,6,12,168,2,3,1,,1850,185,Josefina Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,1000
+EN,2,5143-191,5143,888888,6,12,135,2,3,1,,500,50,Muriel Palomino,2019-11-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-13,,,500
+EN,2,8649-191,8649,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Ricardo Aguilar.,1600,185,Ricardo Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,DT,2019-11-18,,,1000
+EN,2,8649-192,8649,888888,6,12,168,2,3,1,Legal fees due pertaining to Consular Process for Ricardo Aguilar.,1600,185,Ricardo Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,1000
+EN,2,8650-191,8650,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process with 5 Derivatives for Maria De Lourdes Aguilar.,7450,885,Maria De Lourdes Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,DT,2019-11-18,,,5000
+EN,2,8650-192,8650,888888,6,12,168,2,3,1,Legal fees due pertaining to Consular Process with 5 Derivatives for Maria De Lourdes Aguilar.,7450,885,Maria De Lourdes Aguilar,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,5000
+EN,2,8651-191,8651,888888,6,15,303,2,3,1,,5000,500,Mayra Lizeth Fuentes Reyes,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,200
+EN,2,8651-192,8651,888888,6,15,303,2,3,1,,5000,500,Ariana Fuentes,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,200
+EN,2,8642-191,8642,888888,6,12,143,2,3,1,,3100,310,Blanca Aurora Oyarvide Rocha,2019-11-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-15,,,500
+EN,2,8278-191,8278,888888,6,20,159,2,3,1,,5500,0,Anoop Vijayan,2019-11-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-13,,,0
+EN,2,8278-192,8278,888888,6,21,155,2,3,1,,5500,0,Anoop Vijayan,2019-09-11,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-11,,,0
+EN,2,8656-191,8656,888888,6,12,191,2,3,1,,6300,630,Jafet Emanuel Vazquez,2019-11-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-22,,,4370
+EN,2,8656-192,8656,888888,6,12,167,2,3,1,,6300,630,Jafet Emanuel Vazquez,2019-11-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-22,,,4370
+EN,2,8646-191,8646,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA-CBP request for Armando Cadena.,500,50,Armando Cadena Vazquez,2019-11-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-15,,,500
+EN,2,8673-191,8673,888888,6,20,139,2,3,1,Legal fees due pertaining to green card process for Leticia Rodriguez.,7000,0,Leticia Rodriguez,2019-12-26,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-26,,,2000
+EN,2,8391-191,8391,888888,6,15,105,2,3,1,Legal fees due pertaining to Written Pleading for Celso Villegas with Immigration Court.,6600,660,Celso Villegas Carranza,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-18,,,1000
+EN,2,8391-192,8391,888888,6,15,100,2,3,1,Legal fees due pertaining to Written Pleading for Celso Villegas with Immigration Court.,6600,660,Celso Villegas Carranza,2019-12-01,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-01,,,1000
+EN,2,8644-191,8644,888888,6,21,73,2,3,1,,0,0,Bejoy Balan,2019-11-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-20,,,0
+EN,2,8658-191,8658,888888,6,15,204,2,3,1,Legal fees due pertaining to Detainee Visit and Bond Motion for Antonio Itzep Caripel.,2500,250,Antonio Itzep CAPRIEL,2019-11-26,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-11-26,,,1750
+EN,2,8624-191,8624,888888,6,21,73,2,3,1,,6500,0,Janina Maria Patsch,2019-10-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-30,,,0
+EN,2,8660-191,8660,888888,6,12,129,2,3,1,,3800,380,Javier Macias Medina,2019-11-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-26,,,520
+EN,2,8660-192,8660,888888,6,12,185,2,3,1,,3800,380,Javier Macias Medina,2019-11-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-26,,,520
+EN,2,8655-191,8655,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Transfer Petition for Hectro Montano with Department of State.,0,0,Hector Montano,2019-11-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-22,,,0
+EN,2,8627-191,8627,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Petition for Alejandro Uribes Cuevas with Department of Labor.,2500,250,Alejandro URIBES CUEVAS,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-10-31,,,0
+EN,2,8657-191,8657,888888,6,12,133,2,3,1,,1000,100,Jairo Ordonez,2019-11-23,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-23,,,500
+EN,2,6828-191,6828,888888,6,12,135,2,3,1,,500,50,Felipe de Jesus Barbosa,2019-11-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-07,,,500
+EN,2,6029 H-1,6029 H,888888,6,21,50,,,,,,,"Cost Center 0840825-02300""",2019-11-19,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-19,,,
+EN,2,7036-191,7036,888888,6,12,135,2,3,1,,500,50,Ariana Garcia M,2019-12-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-04,,,500
+EN,2,8040-201,8040,888888,6,21,54,2,3,1,Legal fees due pertaining to TN Visa Petition for Marcelo Sada with Department of State.,0,0,Marcelo Sada Translations,2021-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-01,,,0
+EN,2,6983-191,6983,888888,6,12,135,,,,,500,50,Chelsym Gonzale,2019-12-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-06,,,500
+EN,2,5196-191,5196,888888,6,12,303,2,3,1,,500,50,Ramiro Motta,2019-12-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-06,,,225
+EN,2,8665-191,8665,888888,6,12,133,2,3,1,,1500,150,Hilda Melissa Martinez Castillo,2019-12-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-07,,,250
+EN,2,8654-191,8654,888888,6,21,225,2,3,1,,3500,0,Marvin Molinar,2019-11-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-20,,,0
+EN,2,5453-191,5453,888888,6,12,135,2,3,1,,500,50,Rey Hernandez,2019-12-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-10,,,500
+EN,2,6985-191,6985,888888,6,15,80,2,3,1,,,,Martin Hilario Rosales,2019-12-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-04,,,
+EN,2,7275-201,7275,888888,6,15,142,2,3,1,,3000,450,Firas H. Aziz AOS,2020-10-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-20,,,1000
+EN,2,7397-191,7397,888888,6,12,80,2,3,1,,,,Santos PELICO ARGUETA,2019-11-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-21,,,
+EN,2,7397-192,7397,888888,6,15,105,2,3,1,,,,Santos PELICO ARGUETA,2019-11-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-21,,,
+EN,2,8636-191,8636,888888,6,21,68,2,3,1,,5500,0,Abraham Diaz,2019-11-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-13,,,5500
+EN,2,8638-191,8638,888888,6,12,226,2,3,1,,400,40,Guadalupe Arias Moreno,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-14,,,400
+EN,2,7514-191,7514,888888,6,12,209,2,3,1,,0,0,Yazmin Medrano,2019-12-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-07,,,0
+EN,2,7514-192,7514,888888,6,12,120,2,3,1,,0,0,Yazmin Medrano,2019-12-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-07,,,0
+EN,2,7514-193,7514,888888,6,12,121,2,3,1,,0,0,Yazmin Medrano,2019-12-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-07,,,0
+EN,2,8620-191,8620,888888,6,12,191,2,3,1,,3420,380,Marta Elida Gutierrez,2019-10-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-24,,,500
+EN,2,3474-191,3474,888888,6,21,227,2,3,1,,2500,0,El Chapo,2019-12-06,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-06,,,0
+EN,2,6906-191,6906,888888,6,12,135,2,3,1,,500,50,Diana Gomez,2019-12-13,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-13,,,500
+EN,2,8668-191,8668,888888,6,10,303,1,1,1,,0,0,National Prairie Dairy Farms -General Matter,2019-12-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-16,,,0
+EN,2,7212-191,7212,888888,6,15,157,2,3,1,Legal fees due pertaining to translations services at Interview with Melvin Gabriel Mejia.,150,15,Melvin Gabriel Mejia,2019-12-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-11,,,150
+EN,2,5995-191,5995,888888,6,22,105,2,3,1,,500,50,Juan Carlos PEREZ AGUIRRE,2019-12-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-12-31,,,500
+EN,2,3849-191,3849,888888,6,12,135,2,3,1,,500,50,Luis Zuluaga,2019-12-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-09,,,250
+EN,2,3613-191,3613,888888,6,12,135,2,3,1,,500,50,Carlos Martinez,2019-12-10,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-10,,,500
+EN,2,5818-191,5818,888888,6,12,119,2,3,1,,150,50,Derly Aguilar,2019-12-27,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-27,,,150
+EN,2,5818-192,5818,888888,6,12,135,2,3,1,,150,50,Derly Aguilar,2019-12-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-17,,,150
+EN,2,6164-191,6164,888888,6,12,303,2,3,1,,500,50,Esli PEREZ,2019-12-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-23,,,500
+EN,2,8628-191,8628,888888,6,21,68,1,2,1,Legal fees due pertaining to TN Petition for Evelio Castillo Payro with Department of State.,2500,250,Evelio Castillo Payró,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-10-31,,,0
+EN,2,3695-191,3695,888888,6,12,135,2,3,1,,500,50,Antonio De Jesu,2019-12-12,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-12,,,500
+EN,2,5555-191,5555,888888,6,12,119,2,3,1,,150,15,MiguelAngel Cisneros,2019-12-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-30,,,150
+EN,2,8224-191,8224,888888,6,12,129,2,3,1,,5200,520,Obispo Vicente Flores,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-11-18,,,500
+EN,2,8224-192,8224,888888,6,12,196,2,3,1,,5200,520,Obispo Vicente Flores,2019-11-18,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-11-18,,,500
+EN,2,5377-191,5377,888888,6,12,303,2,3,1,,500,50,Brenda Juarez,2019-12-27,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-27,,,500
+EN,2,8225-191,8225,888888,6,12,303,2,3,1,,,,Bianca Viridiana Martinez Alegria,2019-12-23,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-12-23,,,
+EN,2,7122-191,7122,888888,6,12,119,2,3,1,,150,15,Carlos Escalante,2019-12-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-31,,,150
+EN,2,7122-192,7122,888888,6,12,129,2,3,1,,150,15,Carlos Escalante,2019-12-31,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-31,,,150
+EN,2,8671-191,8671,888888,6,15,183,2,3,1,Legal Fees due pertaining to Detainee Visit to Cesar Amilcar Fuentes.,7000,700,Cesar Amilcar Fuentes,2019-12-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-23,,,1000
+EN,2,5855-191,5855,888888,6,12,135,2,3,1,,500,50,Gerardo Penaloz,2019-12-30,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-30,,,500
+EN,2,8552-191,8552,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA request with USCIS for Elizabeth Alvarez and father Raul Ayala.,800,80,Elizabeth Alvarez,2019-08-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2019-08-19,,,800
+EN,2,7202-201,7202,888888,6,12,143,2,3,1,,1800,270,Francis Batista I-751,2020-06-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-25,,,300
+EN,2,3587-201,3587,888888,6,12,117,2,3,1,Legal fees due pertaining to InfoPass Appointment for Mr. Evodio Colchado.,500,50,Evodio Colchado,2020-01-03,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-03,,,500
+EN,2,5663-201,5663,888888,6,12,135,2,3,1,,500,50,Martin Agulera,2020-01-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-03,,,500
+EN,2,8674-201,8674,888888,6,15,187,2,3,1,,4500,675,Milton Boudier Asylum in Court,2020-12-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2020-12-18,,,0
+EN,2,8674-202,8674,888888,6,12,149,2,3,1,,4500,675,Milton Boudier EAD,2020-06-08,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-08,,,0
+EN,2,8674-203,8674,888888,6,12,149,2,3,1,,4500,675,Milton Boudier ICE Supervision,2020-06-08,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-08,,,0
+EN,2,8674-204,8674,888888,6,12,180,2,3,1,,4500,675,Milton Boudier MTR,2020-06-08,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-08,,,0
+EN,2,2673-101,2673,888888,6,12,80,2,3,1,,,,Dean Allen,2019-12-27,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-12-27,,,
+EN,2,6746-191,6746,888888,6,12,135,2,3,1,,500,50,David Briones,2019-12-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-13,,,500
+EN,2,8671-201,8671,888888,6,15,183,2,3,1,Legal fees due pertaining to Attorney Representation at HOM hearing for Mr. Cesar Amilcar Fuentes.,,,Cesar Amilcar Fuentes,2020-01-02,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-02,,,
+EN,2,8555-191,8555,888888,6,12,191,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Margarito Perez.,3800,380,Margarito Perez,2019-08-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-08-21,,,500
+EN,2,8678-201,8678,888888,6,15,303,2,3,1,,4275,450,Cristian Briyan SALAZAR ARREDONDO,2020-01-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-06,,,1000
+EN,2,7986-201,7986,888888,6,12,129,2,3,1,Legal fees due pertaining to I-601A Waiver for Martha Rodriguez.,5600,560,Martha Otero Santana,2020-01-08,,,,,,,,,,,,,,,,,,,,26,0,IR,2020-01-08,,,1000
+EN,2,7986-201,7986,888888,6,12,162,2,3,1,Legal fees due pertaining to I-601A Waiver for Martha Rodriguez.,5600,560,Martha Otero Santana,2020-01-08,,,,,,,,,,,,,,,,,,,,26,0,IR,2020-01-08,,,1000
+EN,2,7986-201,7986,888888,6,12,162,2,3,1,Legal fees due pertaining to I-601A Waiver for Martha Rodriguez.,5600,560,Martha Otero Santana Translation,2021-01-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-26,,,1000
+EN,2,7279-201,7279,888888,6,20,142,1,2,1,Mario Alberto Ramirez Gil,9000,1350,Mario Alberto Ramirez Gil - AOS,2020-11-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-18,,,0
+EN,2,8681-201,8681,888888,6,12,192,2,3,1,Legal fees due pertaining to FOIA requests submitted for Gabriel Aguirre.,17500,750,Gabriel Aguirre,2020-01-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-09,,,4500
+EN,2,8681-202,8681,888888,6,21,200,2,3,1,Legal fees due pertaining to FOIA requests submitted for Gabriel Aguirre.,17500,750,Gabriel Aguirre,2020-02-19,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-19,,,4500
+EN,2,8684-201,8684,888888,6,12,191,2,1,1,Attorney Fees - to Adjuast AR Balance,5500,560,Carlos Eduardo Morales Castillo,2020-01-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-11,,,500
+EN,2,8684-202,8684,888888,6,12,209,2,1,1,Attorney Fees - to Adjuast AR Balance,5500,560,Carlos Eduardo Morales Castillo,2020-01-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-11,,,500
+EN,2,8684-203,8684,888888,6,12,99,2,1,1,Attorney Fees - to Adjuast AR Balance,5500,560,Carlos Eduardo Morales Castillo,2020-01-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-11,,,500
+EN,2,5448-191,5448,888888,6,15,149,2,3,1,,375,37.5,Julieta Casilda PAR GARCIA,2019-12-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-09,,,375
+EN,2,8191-191,8191,888888,6,12,129,2,3,1,,5600,560,Victor Hugo Cisneros,2019-11-16,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-11-16,,,500
+EN,2,8191-192,8191,888888,6,12,162,2,3,1,,5600,560,Victor Hugo Cisneros,2019-11-16,,,,,,,,,,,,,,,,,,,,26,0,BS,2019-11-16,,,500
+EN,2,5074-201,5074,888888,6,12,119,2,3,1,,500,50,Erick Enrique Chambasis,2020-01-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-09,,,500
+EN,2,5074-202,5074,888888,6,12,135,2,3,1,,500,50,Erick Enrique Chambasis,2020-01-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-09,,,500
+EN,2,8686-201,8686,888888,6,15,303,2,3,1,Legal fees due pertaining to Visit and Bond Motion for Fernando Jose Hernandez.,4000,400,Fernando Jose Hernandez Torres,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-21,,,750
+EN,2,8686-202,8686,888888,6,15,303,2,3,1,Legal fees due pertaining to Visit and Bond Motion for Fernando Jose Hernandez.,4000,400,Fernando Jose Hernandez Torres,2020-01-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-15,,,750
+EN,2,3860-201,3860,888888,6,21,228,1,1,1,,0,0,Mohamed Kassoumeh - Resp NOID 485,2020-01-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-16,,,0
+EN,2,3860-202,3860,888888,6,21,150,1,1,1,,0,0,Mohamed Kassoumeh - I-485,2020-10-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-09,,,0
+EN,2,8327-201,8327,888888,6,12,121,2,3,1,,5000,500,Jose Virgilio Martinez,2020-01-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-13,,,1000
+EN,2,8327-202,8327,888888,6,12,121,2,3,1,,5000,500,Rubi Lara Montoya,2020-01-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-13,,,1000
+EN,2,8685-201,8685,888888,6,15,303,2,3,1,Legal fees due pertaining to Bond Motion for Carlos Alberto Murcia Gomez.,3500,250,Carlos Alberto Murcia Gomez,2020-01-13,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-13,,,2500
+EN,2,7549-201,7549,888888,6,12,80,2,3,1,,0,50,Jorge Luis OLIVO TORRES,2020-01-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-14,,,0
+EN,2,8640-191,8640,888888,6,12,185,2,3,1,,1800,180,Maria Leticia Rico Herrera,2019-11-14,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-14,,,620
+EN,2,8677-201,8677,888888,6,12,129,2,3,1,,3000,450,Juan Manuel Perez Guzman CP,2020-11-17,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-17,,,1000
+EN,2,8677-202,8677,888888,6,12,160,2,3,1,,3000,450,Juan Manuel Perez Guzman,2020-03-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-04,,,1000
+EN,2,8677-203,8677,888888,6,10,303,2,3,1,,3000,450,General Matter,2020-03-11,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-11,,,1000
+EN,2,8677-204,8677,888888,6,12,212,2,3,1,,3000,450,Juan Manuel Perez Guzman,2020-01-23,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-23,,,1000
+EN,2,8677-205,8677,888888,6,12,129,2,3,1,,3000,450,Juan Manuel Perez Guzman Translation,2021-01-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-26,,,1000
+EN,2,5871-201,5871,888888,6,21,4,1,1,1,,,,GAMMA General Matter,2020-01-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-21,,,
+EN,2,3176-191,3176,888888,6,12,129,2,3,1,Legal fees due pertainig to Consular Process for Carlo Merlo and Son with Department of State.,,450,Carlo Merlo Cabrera,2019-12-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-12-18,,,1000
+EN,2,8690-201,8690,888888,6,12,191,2,3,1,,4500,675,Martha Artega I-130/AOS,2020-10-01,,,,,,,,,,,,,,,,,,,,26,0,DT,2020-10-01,,,1000
+EN,2,8690-202,8690,888888,6,12,190,2,3,1,,4500,675,Martha Artega,2020-01-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-21,,,1000
+EN,2,7372-201,7372,888888,6,15,187,2,3,1,Legal fees due due pertaining to Nilson Gabriel RAMIREZ visit.,5000,750,Nilson Gabriel RAMIREZ Asylum Matter,2020-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-15,,,1000
+EN,2,8210-201,8210,888888,6,15,131,2,3,1,Legal fees due pertaining to attorney representation during HOM Hearing for Uriel Gomez.,500,75,Uriel Gomez Olivas,2020-01-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-22,,,500
+EN,2,8210-202,8210,888888,6,12,80,2,3,1,Legal fees due pertaining to attorney representation during HOM Hearing for Uriel Gomez.,500,75,Uriel Gomez Olivas EAD Renewal,2020-09-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-24,,,500
+EN,2,8210-203,8210,888888,6,12,131,2,3,1,Legal fees due pertaining to attorney representation during HOM Hearing for Uriel Gomez.,500,75,Uriel Gomez Olivas,2020-01-22,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-22,,,500
+EN,2,8680-201,8680,888888,6,12,185,2,3,1,,1800,180,Antonia Brito Trujillo,2020-01-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-06,,,500
+EN,2,8691-201,8691,888888,6,15,204,2,3,1,Legal fees due pertaining toHearing for  Bond Motion for Edgar Rafael Martinez Mendoza.,2600,260,Edgar Rafael Martinez Mendoza,2020-01-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-24,,,1125
+EN,2,5536-201,5536,888888,6,12,303,2,3,1,,500,50,Lizeth Perez,2020-01-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-24,,,500
+EN,2,8672-191,8672,888888,6,12,190,2,3,1,,2000,200,Mariseydi Gutierrez,2019-12-23,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-23,,,750
+EN,2,7170-161,7170,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Interview Prep for Magdaleno Ortega.,,,Magdaleno Ortega,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-04-23,,,
+EN,2,3680-201,3680,888888,6,12,303,2,3,1,,500,50,Uri Samantha Re,2020-01-30,,,,,,,,,,,,,,,,,,,,26,0,BS,2020-01-30,,,500
+EN,2,3680-202,3680,888888,6,12,135,2,3,1,,500,50,Uri Samantha Reyes,2020-01-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-22,,,500
+EN,2,4094-201,4094,888888,6,12,229,2,3,1,,2500,250,Blanca Dina RODRIGUEZ,2020-01-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-07,,,500
+EN,2,4094-202,4094,888888,6,15,180,2,3,1,,2500,250,Blanca Dina RODRIGUEZ  TR,2020-07-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-13,,,500
+EN,2,7210-201,7210,888888,6,12,119,2,3,1,,625,62.5,David Torres,2020-01-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-10,,,625
+EN,2,7210-202,7210,888888,6,12,149,2,3,1,,625,62.5,David Torres,2020-01-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-10,,,625
+EN,2,71341,7134,888888,6,12,303,2,3,1,,,,Jose Lopez,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-04-15,,,
+EN,2,71331,7133,888888,6,12,303,2,3,1,,,,Diana Lopez,2020-04-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-30,,,
+EN,2,8420-201,8420,888888,6,15,129,2,3,1,Legal fees due pertaining to Prosecutorial Discretion for Nicolas Morales Orbe.,7500,750,Nicolas Morales Orbe,2020-01-17,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-17,,,"Client has a credit of $5,600.00"
+EN,2,8696-201,8696,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Brian Mejia.,1620,0,Brian Mejia Barriga,2020-01-29,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-29,,,500
+EN,2,8274-191,8274,888888,6,22,230,2,3,1,,250,25,Willian Efrain Vasquez Tumax,2019-06-12,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-06-12,,,0
+EN,2,5854-191,5854,888888,6,12,80,2,3,1,,375,37.5,Julio Rene Castillo,2019-05-08,,,,,,,,,,,,,,,,,,,,26,0,LV,2019-05-08,,,168.75
+EN,2,8683-201,8683,888888,6,12,191,2,3,1,,2500,250,Sara Chairez Alba,2020-01-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-11,,,0
+EN,2,8683-202,8683,888888,6,12,167,2,3,1,,2500,250,Sara Chairez Alba,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-21,,,0
+EN,2,8700-191,8700,888888,6,12,191,2,3,1,,,,Timothy James Lotze,2020-01-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-30,,,
+EN,2,7053-201,7053,888888,6,12,303,2,3,1,,500,50,Cecilia V. Gonz,2020-01-22,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-22,,,500
+EN,2,6659-201,6659,888888,6,12,159,2,3,1,,500,75,Reyna  Basabe EAD,2020-07-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-13,,,500
+EN,2,6659-202,6659,888888,6,12,133,2,3,1,,500,75,Reyna  Basabe,2020-01-28,,,,,,,,,,,,,,,,,,,,26,0,IR,2020-01-28,,,500
+EN,2,8703-201,8703,888888,6,12,99,2,3,1,Legal Fees due pertaining to Martin Sarabia's FOIA request with USCIS.,500,50,Martin Sarabia,2020-01-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-31,,,500
+EN,2,6128-191,6128,888888,6,12,185,2,3,1,,5300,530,Albina Torres,2019-12-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-19,,,500
+EN,2,6128-192,6128,888888,6,12,180,2,3,1,,5300,530,Albina Torres,2019-12-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-19,,,500
+EN,2,8699-201,8699,888888,6,21,200,2,3,1,,8500,850,Thuraya Alramah,2020-01-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-30,,,4250
+EN,2,5953-201,5953,888888,6,12,149,2,3,1,,375,37.5,Miguel Angel BELTRAN TELLO,2020-02-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-05,,,375
+EN,2,3265-201,3265,888888,6,15,80,2,3,1,,375,37.5,Severo Ortiz Pascual,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-04,,,375
+EN,2,8274-201,8274,888888,6,15,119,2,3,1,Legal fees due pertaining to Motion to Reopen for Wiliam Efrain Vasquez Tumax.,1500,150,Willian Efrain Vasquez Tumax,2020-01-20,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-20,,,0
+EN,2,8688-201,8688,888888,6,15,105,2,3,1,,6500,700,Mario A Portales Portillo,2020-01-20,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-20,,,1150
+EN,2,3888-201,3888,888888,6,12,135,2,3,1,,500,50,Josue Duarte,2020-02-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-03,,,500
+EN,2,7238-191,7238,888888,6,20,151,2,3,1,,2500,0,Aryendra CHAKRAVARTTY,2019-05-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-05-01,,,0
+EN,2,8692-201,8692,888888,6,12,185,2,3,1,,2000,200,Hector Hernandez,2020-01-27,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-27,,,2000
+EN,2,7387-201,7387,888888,6,21,47,2,3,1,Sebastian Quintero,,250,Sebastian QUINTERO,2020-01-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-23,,,1000
+EN,2,5483-201,5483,888888,6,12,135,2,3,1,Legal fees due pertaining to Francisco Omar Flores with U.S. Department of Homeland Security.,500,50,Francisco Omar,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-04,,,500
+EN,2,8645-191,8645,888888,6,20,4,1,1,1,,0,0,Jesus Esquivel Luna,2019-11-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-11-20,,,0
+EN,2,8682-201,8682,888888,6,21,31,2,3,1,,2000,250,Joel Garza Rincon,2020-02-19,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-19,,,1000
+EN,2,8682-202,8682,888888,6,21,99,2,3,1,,2000,250,Joel Garza Rincon,2020-01-09,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-09,,,1000
+EN,2,8714-201,8714,888888,6,15,303,2,3,1,Legal fees due pertaining to Motion to Stay for Mr. Julio Rivera.,2500,250,Julio Antonio Rivera,2020-02-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-12,,,1900
+EN,2,8581-201,8581,888888,6,12,185,2,3,1,,3800,380,Yessenia Acosta,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-02-04,,,1500
+EN,2,8720-201,8720,888888,6,21,70,2,3,1,Legal fees due pertaining to Nik Kicovic's TN Management Consultant at Port of Entry.,3700,0,Nik Kicovic TN Management Ext.,2020-07-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-31,,,0
+EN,2,8720-202,8720,888888,6,21,70,2,3,1,Legal fees due pertaining to Nik Kicovic's TN Management Consultant at Port of Entry.,3700,0,Nik Kicovic,2020-02-14,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-14,,,0
+EN,2,3676-201,3676,888888,6,12,136,2,3,1,,500,275,Gabriela Sanchez,2020-02-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-10,,,500
+EN,2,8512-201,8512,888888,6,15,303,1,1,1,,750,112.5,Ilsia Elizabeth Mejia Rubios,2020-02-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-25,,,0
+EN,2,3646-201,3646,888888,6,12,135,2,3,1,,500,50,Orlando dela Rosa,2020-02-10,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-10,,,500
+EN,2,8707-201,8707,888888,6,15,303,2,3,1,Legal fees due pertaining to Detainee Visit for Jorge Mata Mata.,1250,250,Jorge Alberto Mata Mata,2020-02-03,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-03,,,1000
+EN,2,8715-201,8715,888888,6,15,303,2,3,1,Legal fees due pertaining to Detainee Visit for Salvador Lopez.,1750,175,Salvador Lopez,2020-02-12,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-12,,,1750
+EN,2,8036-201,8036,888888,6,15,231,2,3,1,Carolos Calzada,7000,700,Carlos Calzada,2020-02-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-18,,,1000
+EN,2,5381-201,5381,888888,6,12,119,2,3,1,,625,62.5,Gerson Leonel Martinez,2020-02-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-11,,,625
+EN,2,5381-202,5381,888888,6,12,149,2,3,1,,625,62.5,Gerson Leonel Martinez,2020-02-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-11,,,625
+EN,2,8730-201,8730,888888,6,21,232,1,2,1,,,,Halima Sadiya Syeda,2020-02-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-25,,,
+EN,2,3651-201,3651,888888,6,12,119,2,3,1,,625,62.5,Jose Soledadd Onofre,2020-02-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-11,,,375
+EN,2,3651-202,3651,888888,6,12,80,2,3,1,,625,62.5,Jose Soledadd Onofre,2020-02-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-11,,,375
+EN,2,8612-201,8612,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA with USCIS for Martha Moreno.,,,Martha Moreno,2020-02-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-26,,,
+EN,2,8709-201,8709,888888,6,21,68,2,3,1,Legal fees due pertaining to TN Petition with Department of State for Jazmin Valenzuela.,2500,250,Jazmin Valenzuela,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-04,,,2500
+EN,2,4030-201,4030,888888,6,12,135,2,3,1,,650,165,Juan Luis Onofre,2020-01-21,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-01-21,,,500
+EN,2,8710-201,8710,888888,6,12,129,2,3,1,,3000,450,Olga Lidia Gutierrez - Consular Process,2020-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-15,,,1000
+EN,2,8710-202,8710,888888,6,12,185,2,3,1,,3000,450,Olga Lidia Gutierrez,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-04,,,1000
+EN,2,3658-201,3658,888888,6,12,136,2,3,1,,500,50,Rodrigo Nolasco,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-21,,,500
+EN,2,6650-201,6650,888888,6,12,303,2,3,1,,1620,160,Ignacio H. Domi,2020-02-25,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-25,,,540
+EN,2,7313-201,7313,888888,6,12,135,2,3,1,,500,50,Maria del Rocio Balboa,2020-02-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-14,,,500
+EN,2,8733-201,8733,888888,6,21,52,2,3,1,,2000,250,Robin Treacy H-1B Original,2020-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-28,,,2000
+EN,2,8733-202,8733,888888,6,20,151,2,3,1,,2000,250,Robin Treacy I-140,2020-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-28,,,2000
+EN,2,8733-203,8733,888888,6,20,139,2,3,1,,2000,250,Robin Treacy PERM,2020-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-28,,,2000
+EN,2,8721-201,8721,888888,6,12,176,2,3,1,,1800,180,Lizeth Valenzuela Salazar,2020-02-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-14,,,1800
+EN,2,7203-201,7203,888888,6,12,143,2,3,1,,1600,160,Francisco Herrera,2020-02-29,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-29,,,500
+EN,2,7483-201,7483,888888,6,20,150,1,2,1,,8500,1275,Gerardo Gutierrez AOS,2020-10-06,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-06,,,0
+EN,2,7483-202,7483,888888,6,21,200,1,2,1,,8500,1275,Gerardo Gutierrez,2020-05-11,,,,,,,,,,,,,,,,,,,,26,0,SM,2020-05-11,,,0
+EN,2,7483-203,7483,888888,6,20,129,1,2,1,,8500,1275,Gerardo Gutierrez & Family Consular Process,2020-09-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-24,,,0
+EN,2,7483-204,7483,888888,6,21,200,1,2,1,,8500,1275,Gerardo Gutierrez E2 COA PP Upgrade,2020-06-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-03,,,0
+EN,2,7483-205,7483,888888,6,21,200,1,2,1,,8500,1275,Gerardo Gutierrez,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-21,,,0
+EN,2,7483-206,7483,888888,6,21,52,1,2,1,,8500,1275,Gerardo Gutierrez,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-21,,,0
+EN,2,5157-201,5157,888888,6,12,135,2,3,1,,500,50,Margarito Rueda,2020-02-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-22,,,500
+EN,2,3720-201,3720,888888,6,12,136,2,3,1,,650,65,Mayra Salazar,2020-02-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-14,,,650
+EN,2,3851-201,3851,888888,6,12,135,2,3,1,,500,50,Kelle Aguilar,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-21,,,500
+EN,2,7576-201,7576,888888,6,12,143,2,3,1,,1600,160,Midbeth Ortiz I-751 Removal,2020-04-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-02,,,1600
+EN,2,8723-201,8723,888888,6,12,112,2,3,1,Legal fees due pertaining to FOIA requests for Mr. Jesus Aguilar.,1500,150,Jesus Aguilar Camacho,2020-02-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-15,,,500
+EN,2,8704-201,8704,888888,6,21,303,2,3,1,Legal fees due pertaining to TN Petition with Department of State for Jorge Valenzuela.,2500,250,Jorge Arturo Valenzuela Jurado,2020-02-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-01,,,2500
+EN,2,7419-201,7419,888888,6,15,105,2,3,1,Legal fees due pertaining to Bond Motion and Hearing representation for Nelson Sosa.,7000,1050,Nelson Geovany SOSA 42B Removal,2020-04-06,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-06,,,2595
+EN,2,8695-201,8695,888888,6,21,206,2,3,1,,4500,450,Michelle Ashley Aguilar Torres,2020-01-29,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-29,,,2250
+EN,2,8717-201,8717,888888,6,21,52,1,2,1,Nanda Karri.,2500,250,Nanda G. Karri,2020-04-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-02,,,2500
+EN,2,8717-202,8717,888888,6,21,52,1,2,1,Nanda Karri.,2500,250,Nanda G. Karri PP Upgrade,2020-07-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-30,,,2500
+EN,2,3731-201,3731,888888,6,12,135,2,3,1,,500,50,Frida Melendez,2020-02-19,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-19,,,500
+EN,2,8601-201,8601,888888,6,12,176,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Juan Lopez Arvizu.,2300,230,Juan Lopez Arvizu N400,2020-01-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-21,,,2300
+EN,2,8601-202,8601,888888,6,12,209,2,3,1,Legal fees due pertaining to Attorney Representation at Interview for Juan Lopez Arvizu.,2300,230,Juan Lopez Arvizu Record,2020-01-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-21,,,2300
+EN,2,8722-201,8722,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA-USCIS request for Susan E. Lopez.,1800,270,Susan Eliuth Lopez,2020-02-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-15,,,500
+EN,2,8722-202,8722,888888,6,12,176,2,3,1,Legal fees due pertaining to FOIA-USCIS request for Susan E. Lopez.,1800,270,Susan Eliuth Lopez N400,2020-08-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-25,,,500
+EN,2,8727-201,8727,888888,6,12,233,2,3,1,,1800,180,Adriana Siller,2020-02-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-02-21,,,500
+EN,2,8142-201,8142,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Interview Prep for Jesus Trevino.,1800,180,Jesus Alejandro Treviño,2020-02-04,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-02-04,,,500
+EN,2,8301-201,8301,888888,6,20,151,2,3,1,,2500,250,Chetan Sharma I-140,2020-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-28,,,0
+EN,2,7217-171,7217,888888,6,12,129,1,1,1,,,,Jesus Montes,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,DT,2019-04-23,,,
+EN,2,7132-201,7132,888888,6,21,54,1,2,1,Legal fees due pertaining to H-1B1 Petition with Department of State for Christian Bolton.,"2500.00
+",375,Cristian Bolton COE -H-1B1,2020-06-25,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-25,,,2500
+EN,2,7132-202,7132,888888,6,21,54,1,2,1,Legal fees due pertaining to H-1B1 Petition with Department of State for Christian Bolton.,"2500.00
+",375,Cristian Bolton,2020-02-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-20,,,2500
+EN,2,8736-201,8736,888888,6,12,196,2,3,1,,1600,150,Maria de los Angeles Muñoz I-601 Waiver,2020-11-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-18,,,1600
+EN,2,8736-202,8736,888888,6,12,234,2,3,1,,1600,150,Aurora Yiribeth Orozco,2020-03-05,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-05,,,1600
+EN,2,5118-201,5118,888888,6,12,199,2,3,1,,500,50,Norma Reyes,2020-03-07,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-07,,,500
+EN,2,3011-201,3011,888888,6,20,235,2,3,1,Legal fees due pertaining to FOIA with USCIS for Jose Briseno.,3500,350,Jose Briseno,2020-02-12,,,,,,,,,,,,,,,,,,,,26,0,SM,2020-02-12,,,1500
+EN,2,8701-201,8701,888888,6,12,88,2,3,1,,500,50,Julio Omar Ascencio Vazquez,2020-01-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-31,,,500
+EN,2,7171-201,7171,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Interview for Narges Dehdari.,2500,300,Darya Bahrami,2020-03-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-11,,,1050
+EN,2,8751-201,8751,888888,6,21,31,2,3,1,,,,Karen Martin Extension of Stay,2020-03-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-18,,,
+EN,2,6138-201,6138,888888,6,12,135,2,3,1,,500,50,Arleth Gonzale,2020-03-14,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-14,,,500
+EN,2,5608-201,5608,888888,6,12,135,2,3,1,,500,50,Fabian Gonzalez,2020-03-06,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-06,,,500
+EN,2,3664-201,3664,888888,6,12,135,2,3,1,,500,50,Sandra Yuliana Munoz,2020-02-29,,,,,,,,,,,,,,,,,,,,26,0,RGC,2020-02-29,,,500
+EN,2,3689-201,3689,888888,6,12,135,2,3,1,,500,50,Roxy J. Murillo,2020-03-11,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-11,,,500
+EN,2,8791-201,8791,888888,6,21,134,2,3,1,Legal fees due pertaining t TN Petition with Department of State for Jose Jacobo Eluani.,1500,225,Jose Jacobo Eluani DOS Process,2020-09-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-01,,,1500
+EN,2,8791-202,8791,888888,6,21,4,2,3,1,Legal fees due pertaining t TN Petition with Department of State for Jose Jacobo Eluani.,1500,225,Jose Jacobo Eluani General Matter,2020-09-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-15,,,1500
+EN,2,8791-203,8791,888888,6,21,68,2,3,1,Legal fees due pertaining t TN Petition with Department of State for Jose Jacobo Eluani.,1500,225,Jose Jacobo Eluani PP -Upgrade,2020-06-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-01,,,1500
+EN,2,8791-204,8791,888888,6,21,133,2,3,1,Legal fees due pertaining t TN Petition with Department of State for Jose Jacobo Eluani.,1500,225,Jose Jacobo Eluani RFE,2020-06-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-23,,,1500
+EN,2,8791-205,8791,888888,6,21,68,2,3,1,Legal fees due pertaining t TN Petition with Department of State for Jose Jacobo Eluani.,1500,225,Jose Jacobo Eluani TN Pet. USCIS,2020-04-29,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-29,,,1500
+EN,2,5916-201,5916,888888,6,12,135,2,3,1,,500,50,Cecilia Alvarado,2020-03-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-09,,,500
+EN,2,6743-201,6743,888888,6,12,135,2,1,1,,500,75,Manuel AlejandraCruz Menchaca,2020-03-18,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-03-18,,,500
+EN,2,6743-202,6743,888888,6,12,135,2,1,1,,500,75,Manuel AlejandraCruz Menchaca,2020-03-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-23,,,500
+EN,2,8753-201,8753,888888,6,21,303,1,2,1,Kevin Myslicki,0,0,Kevin Myslicki,2020-03-24,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-24,,,0
+EN,2,8659-191,8659,888888,6,12,129,2,3,1,,3800,380,Teresa Garcia Perez,2019-11-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-26,,,520
+EN,2,8659-192,8659,888888,6,12,185,2,3,1,,3800,380,Teresa Garcia Perez,2019-11-26,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-11-26,,,520
+EN,2,8754-201,8754,888888,6,21,70,2,3,1,,4700,250,Jerry Mason TN Management,2020-03-26,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-26,,,0
+EN,2,8752-201,8752,888888,6,21,205,2,3,1,,3500,0,Rodrigo Coronado TN Ext,2020-03-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-20,,,0
+EN,2,3963-201,3963,888888,6,20,142,2,3,1,Resubmission of Adjustment of Status with U.S. Department of Homeland Security.,6500,400,Claudia Rodriguez Ozuna & Family,2020-03-05,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-05,,,1500
+EN,2,3963-202,3963,888888,6,21,133,2,3,1,Resubmission of Adjustment of Status with U.S. Department of Homeland Security.,6500,400,Claudia Rodriguez Ozuna & FI-140 RFE,2020-08-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-01,,,1500
+EN,2,5634-201,5634,888888,6,12,133,1,1,1,,,,Mario Sosa RFE,2020-03-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-30,,,
+EN,2,8419-201,8419,888888,6,12,133,1,1,1,,4000,6000,Margarita Martinez RFE,2020-03-30,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-30,,,1000
+EN,2,8419-202,8419,888888,6,12,191,1,1,1,,4000,6000,Margarita Martinez I-130/AOS,2020-09-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-01,,,1000
+EN,2,8702-201,8702,888888,6,12,218,2,3,1,Legal fees due pertaining to FBI Record Request for Carlos Espinosa.,500,50,Carlos A. Espinosa,2020-02-01,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-02-01,,,500
+EN,2,8687-201,8687,888888,6,12,191,2,3,1,,3800,380,Maria  Dijkstra,2020-01-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-15,,,500
+EN,2,8579-201,8579,888888,6,21,236,1,2,1,Legal fees due pertaining to Response to Request for Evidence.,4500,675,Eliseo Abisai Tapia Olivares Family COS,2020-08-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-08-03,,,0
+EN,2,8579-202,8579,888888,6,21,134,1,2,1,Legal fees due pertaining to Response to Request for Evidence.,4500,675,Eliseo Abisai Tapia Olivares's DOS,2020-03-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-03-31,,,0

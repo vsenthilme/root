@@ -1,0 +1,355 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Case Management</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Resource Assignment</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div> <input matInput class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+    </div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab class="bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+
+
+</div>
+<div class="d-flex justify-content-between  mt-1 mx-3 align-items-center text-secondary" style="height: 3.1rem;">
+  <h3 class="my-auto ml-4 mb-0 text-dark" style="font-size:22px;">MATTER - {{matterNumber}}</h3>
+    <!-- <button mat-icon-button
+      class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+      matTooltip="Fullscreen">
+      <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">launch
+      </mat-icon>
+    </button> 
+  <button mat-icon-button 
+  class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+  matTooltip="Back">
+  <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">arrow_back
+  </mat-icon>
+</button> -->
+</div>
+<div class=" my-0 py-0">
+  <div class="row ms-3 me-3 px-1">
+    <div class="col-md-12 px-0 mt-1">
+      <div class="scrolllong">
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. General Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  mt-2 ">
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Client ID</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="clientId" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Matter No</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="matterNumber" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Matter Description</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="matterDescription" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div> -->
+                <!--
+                  <div class=" col-lg-3 col-md-6   mt-2">
+                    <div class="d-flex flex-column">
+                      <p class="mb-0 py-0 text-black">Petitioner Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                     -->
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Case Category</p>
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('caseCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Case Sub Category</p>
+
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseSubCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseSubCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('caseSubCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black required">Partner</p>
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="partner" placeholder="Select">
+                        <mat-option *ngFor="let food of partnerList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('partner')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                    <div class=" col-lg-3 col-md-6   mt-2">
+                    <div class="d-flex flex-column">
+                      <p class="mb-0 py-0 text-black">Contact Details</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                 -->
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Case Open Date</p>
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker"
+                        formControlName="caseOpenedDate" placeholder="Choose Date">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('caseOpenedDate')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont">
+                  2. Fee Details
+                  <mat-icon class="text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row mt-2 ">
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Fees Type</p>
+
+                    <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="billingModeId" placeholder="Select">
+                        <mat-option *ngFor="let food of billingModeIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('billingModeId')">{{getErrorMessage()}}</mat-error>
+
+
+                  </div>
+                </div>
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Flat Fee</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="flatFeeAmount" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class=" col-lg-3 col-md-6   mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 text-black">Admin Cost</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="administrativeCost" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </form>
+
+          <mat-expansion-panel #panel4 hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont">
+                3. Resource Details
+                <mat-icon class="text-primary">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="scroll5  px-1 mt-1">
+              <div class="scroll4">
+                <table mat-table [dataSource]="dataSource" matSort class=" w-100 ">
+
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()" disabled
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="assign">
+                    <th mat-header-cell *matHeaderCellDef>Assign</th>
+                    <td mat-cell *matCellDef="let element" class="align-middle my-auto stick">
+                      <!-- <mat-form-field class="form-group input_field mb-0" appearance="outline">multiple -->
+                      <mat-select *ngIf="element.type == '1'" multiple placeholder="Select" [(value)]="element.assign"
+                        (selectionChange)="assigntimekeeping($event, element.code)">
+                        <mat-option value="1">Assigned Time Keeper</mat-option>
+                        <mat-option value="2">Originating Time Keeper </mat-option>
+                        <mat-option value="3">Responsible Time Keeper</mat-option>
+                      </mat-select>
+                      <mat-select *ngIf="element.type == '2'" multiple placeholder="Select" [(value)]="element.assign"
+                      (selectionChange)="assigntimekeeping($event, element.code)">
+                      <mat-option value="1">Assigned Time Keeper</mat-option>
+                      <mat-option value="2">Originating Time Keeper </mat-option>
+                      <mat-option value="3">Responsible Time Keeper</mat-option>
+                    </mat-select>
+                      <mat-select *ngIf="element.type == '3'" placeholder="Select" [(value)]="element.assignL"
+                        (selectionChange)="assigntimekeeping($event, element.code)">
+
+                        <mat-option value="4">Legal Assistant</mat-option>
+                      </mat-select>
+                      <mat-select *ngIf="element.type == '4'" placeholder="Select" [(value)]="element.assignL"
+                        (selectionChange)="assigntimekeeping($event, element.code)">
+
+                        <mat-option value="5">Law Clerk</mat-option>
+                      </mat-select>
+                      <mat-select *ngIf="element.type == '5'" placeholder="Select" [(value)]="element.assignL"
+                      (selectionChange)="assigntimekeeping($event, element.code)">
+
+                      <mat-option value="6">Paralegal</mat-option>
+                    </mat-select>
+                      <!-- </mat-form-field> -->
+                    </td>
+                  </ng-container>
+
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="typedes">
+                    <th mat-header-cell *matHeaderCellDef> Time Keeper Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.typedes}} </td>
+                  </ng-container>
+
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef> Time Keeper Code </th>
+                    <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef>Total </th>
+                    <td mat-cell *matCellDef="let element"> {{element.total}}
+                      <!-- <button mat-icon-button matTooltip="Case Details">
+                        <mat-icon class="text-secondary">info_outline</mat-icon>
+                      </button> -->
+                    </td>
+                  </ng-container>
+
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef> Case Amount </th>
+                    <td mat-cell *matCellDef="let element"class="text-right">{{element.amount | currency}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </table>
+
+              </div>
+            </div>
+            <!--
+                <div class="p-0 mx-1 m-0">
+                <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+             -->
+          </mat-expansion-panel>
+
+        </mat-accordion>
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white w-100 bottombutton1">
+          <button mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+          <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            Assign</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

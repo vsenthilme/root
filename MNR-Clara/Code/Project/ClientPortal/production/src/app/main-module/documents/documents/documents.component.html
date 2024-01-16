@@ -1,0 +1,70 @@
+<h1 class=" header-size fw-lighter text-blue xl-margin ml-4">Document</h1>
+
+<div class="scroll2 xl-margin1">
+  <table mat-table matSort matSortActive="updatedOn" matSortDirection="desc" [dataSource]="dataSource" class=" w-100 rowheight">
+
+
+
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="lineno">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+      <td mat-cell *matCellDef="let element" class="text-left">
+        <div>{{element.matterNumber}} </div>
+      </td>
+
+    </ng-container>
+    <ng-container matColumnDef="checklist">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>checklist No</th>
+      <td mat-cell *matCellDef="let element" class="text-left">
+        <div>{{element.checkListNo}} </div>
+      </td>
+
+    </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="partner">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+    </ng-container>
+    <ng-container matColumnDef="updatedOn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let element"> {{element.updatedOn | date: 'MM-dd-yyyy'}} </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="product">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <!-- <td mat-cell *matCellDef="let element"> {{element.product}} </td> -->
+      <td mat-cell *matCellDef="let element">
+        <!-- <i class="fas fa-check text-success" *ngIf="element.statusId != 22"></i> -->
+        {{element.statusId == 22 ? 'RECEIVED' : ''}}
+        {{element.statusId == 23 ? 'SENT' : ''}}
+      </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button class="hvr-wobble-horizontal" [routerLink]="['/main/documents/document-upload',element.matterNumber,element.clientId, element.checkListNo, element.matterHeaderId]">
+          <p class="d-inline mr-2 text-blue hide-xs">View</p>
+          <mat-icon class="d-inline text-blue ">trending_flat</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</div>
+<div class="buttons border bg-white pb-1 w-100 d-flex justify-content-end">
+  <div class="p-0 mx-1 " style="background-color: #ffff;">
+    <mat-paginator class="" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>
+
+
+<!-- <mat-form-field class="form-group input_field mb-0 w-25" appearance="outline">
+    <input required name="firstname" minlength="3" maxlength="10" ngModel #firstname="ngModel" matInput placeholder="Enter">
+  </mat-form-field>
+  <mat-error *ngIf="firstname.errors?.minlength">Required</mat-error> -->

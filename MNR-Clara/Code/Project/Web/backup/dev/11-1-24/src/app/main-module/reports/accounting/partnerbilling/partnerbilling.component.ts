@@ -1,0 +1,608 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Validators } from 'ngx-editor';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { CommonApiService } from 'src/app/common-service/common-api.service';
+import { CommonService } from 'src/app/common-service/common-service.service';
+import { ExcelService } from 'src/app/common-service/excel.service';
+import { AuthService } from 'src/app/core/core';
+import { ReportServiceService } from '../../report-service.service';
+
+@Component({
+  selector: 'app-partnerbilling',
+  templateUrl: './partnerbilling.component.html',
+  styleUrls: ['./partnerbilling.component.scss']
+})
+export class PartnerbillingComponent implements OnInit {
+  screenid = 1194;
+  public icon = 'expand_more';
+  isShowDiv = false;
+  table = true;
+  fullscreen = false;
+  search = true;
+  back = false;
+  showFloatingButtons: any;
+  toggle = true;
+  RA: any = {};
+  startDate: any;
+  currentDate: Date;
+
+
+  displayedColumns: string[] = [
+    "select",
+    "clientId",
+    "clientName",
+    "matterNumber",
+    "matterDescription",
+   // "billingDate",
+    "partner",
+    "responsibleTimekeeper",
+    "assignedTimekeeper",
+    "feeBilled",
+   "totalCost",
+    "paidAmount",
+    "totalBilled",
+    "balance"
+  ];
+
+  dataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<any>(true, []);
+
+  sub = new Subscription();
+
+  multiClassList: any[] = [];
+  selectedClassId: any[] = [];
+  multiSelectClassList: any[] = [];
+
+  selectedClient: any[] = [];
+  multiselectclientList: any[] = [];
+  multiclientList: any[] = [];
+
+  multiSelectStatusList: any[] = [];
+  multiStatusList: any[] = [];
+  selectedStatusId: any[] = [];
+
+  caseCategoryIdList: any[] = [];
+  selectedCaseCategoryItems: any[] = [];
+  multiSelectCaseCategoryList: any[] = [];
+  multiCaseCategoryList: any[] = [];
+
+  caseSubCategoryIdList: any[] = [];
+  selectedSubCaseCategoryItems: any[] = [];
+  multiSelectSubCaseCategoryList: any[] = [];
+  multiSubCaseCategoryList: any[] = [];
+
+  multiSelectTimeKeeperIdList: any[] = [];
+  multiTimeKeeperIdList: any[] = [];
+  selectedTimeKeeperId: any[] = [];
+
+  selectedMatter: any[] = [];
+  multiSelectMatterList: any[] = [];
+  multiMatterList: any[] = [];
+
+  submitted = false;
+
+  statusIdList: any[] = [];
+  matterIdList: any[] = [];
+  timeKeeperIdList: any[] = [];
+  clientIdList: any[] = [];
+
+  dropdownSettings = {
+    singleSelection: true,
+    text: "Select",
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    enableSearchFilter: true,
+    badgeShowLimit: 2
+  };
+
+  dropdownSettings1 = {
+    singleSelection: false,
+    text: "Select",
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    enableSearchFilter: true,
+    badgeShowLimit: 2
+  };
+
+  form = this.fb.group({
+    classId: [[],[Validators.required]],
+    clientId: [[],],
+    caseCategoryId: [[],],
+    caseSubCategoryId: [[],],
+    statusId: [,],
+    partner:[,],
+    timeKeepers: [,],
+    assignedTimeKeeper:[,],
+    responsibleTimeKeeper:[,],
+    matterNumber: [[],],
+   // fromBillingDate: [,],
+   // toBillingDate: [,],
+    fromPostingDate: [,],
+    toPostingDate: [,],
+   // fromBillingDateFE: [,],
+   // toBillingDateFE: [,],
+    fromPostingDateFE: [new Date("01/01/00 "),[Validators.required]],
+    toPostingDateFE: [this.cs.todayapi(),[Validators.required]],
+  });
+  
+  dispList: any[] = [];
+  selectedDisplay: any[] = [];
+
+  constructor(
+    private service: ReportServiceService,
+    private cs: CommonService,
+    private spin: NgxSpinnerService,
+    private fb: FormBuilder,
+    public toastr: ToastrService,
+    private excel: ExcelService,
+    private cas: CommonApiService,
+    private auth: AuthService,
+    public datepipe: DatePipe,
+    private decimalPipe: DecimalPipe,
+  ) { 
+   
+  }
+
+  //RA: any = {};
+
+  ngOnInit(): void {
+
+    this.RA = this.auth.getRoleAccess(this.screenid);
+    // this.RA = this.auth.getRoleAccess(this.screenid);
+    this.getAllDropDown();
+    this.currentDate = new Date();
+    let yesterdayDate = new Date();
+    let currentMonthStartDate = new Date();
+    yesterdayDate.setDate(this.currentDate.getDate() - 1);
+    this.startDate = this.datepipe.transform(yesterdayDate, 'dd');
+   currentMonthStartDate.setDate(this.currentDate.getDate() - this.startDate);
+  this.form.controls.fromPostingDateFE.patchValue(currentMonthStartDate);
+  }
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort)
+  sort: MatSort;
+  toggleFloat() {
+    this.isShowDiv = !this.isShowDiv;
+    this.toggle = !this.toggle;
+    if (this.icon === 'expand_more') {
+      this.icon = 'chevron_left';
+    } else {
+      this.icon = 'expand_more'
+    }
+    this.showFloatingButtons = !this.showFloatingButtons;
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+
+    this.selection.select(...this.dataSource.data);
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.name + 1}`;
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+  filtersearch() {
+    this.submitted = true;
+    if (this.form.invalid) {
+      this.toastr.error(
+        "Please fill the required fields to continue",
+        "Notification", {
+        timeOut: 2000,
+        progressBar: false,
+      }
+      );
+      this.cs.notifyOther(true);
+      return;
+    }
+console.log(this.matterAssignmentIdList);
+console.log(this.multiSelectMainAttorneyIdList);
+console.log(this.multiSelectAssignedTKIdList);
+let obj: any = { searchpartnerReport: {} };
+    if (this.form.controls.assignedTimeKeeper.value && this.form.controls.assignedTimeKeeper.value.length > 0) {
+      let data: any[] = []
+      this.form.controls.assignedTimeKeeper.value.forEach((a: any) => data.push(a));
+
+    }
+     if (this.form.controls.responsibleTimeKeeper.value && this.form.controls.responsibleTimeKeeper.value.length > 0) {
+      let data: any[] = []
+      this.form.controls.responsibleTimeKeeper.value.forEach((a: any) => data.push(a))
+     
+    }
+    // if (this.selectedMatter && this.selectedMatter.length > 0) {
+    //   this.selectedMatter.forEach(data => {
+    //     this.form.controls.matterNumber.value.push(data.id);
+    //   })
+    // }
+
+    // if (this.selectedCaseCategoryItems && this.selectedCaseCategoryItems.length > 0) {
+    //   this.selectedCaseCategoryItems.forEach(data => {
+    //     this.form.controls.caseCategoryId.value.push(data.id);
+    //   })
+    // }
+    // if (this.selectedSubCaseCategoryItems && this.selectedSubCaseCategoryItems.length > 0) {
+    //   this.selectedSubCaseCategoryItems.forEach(data => {
+    //     this.form.controls.caseSubCategoryId.value.push(data.id);
+    //   })
+    // }
+
+    // if (this.selectedStatusId && this.selectedStatusId.length > 0) {
+    //   this.form.controls.statusId.patchValue(this.selectedStatusId[0].id);
+    // }
+
+    // if (this.selectedTimeKeeperId && this.selectedTimeKeeperId.length > 0) {
+    //   this.form.controls.timeKeepers.patchValue(this.selectedTimeKeeperId[0].id);
+    // }
+
+    // this.form.controls.fromBillingDate.patchValue(this.cs.dateNewFormat(this.form.controls.fromBillingDateFE.value));
+    // this.form.controls.toBillingDate.patchValue(this.cs.dateNewFormat(this.form.controls.toBillingDateFE.value));
+    this.form.controls.fromPostingDate.patchValue(this.cs.dateNewFormat1(this.form.controls.fromPostingDateFE.value));
+    this.form.controls.toPostingDate.patchValue(this.cs.dateNewFormat1(this.form.controls.toPostingDateFE.value));
+
+    this.spin.show();
+    this.sub.add(this.service.getBillingPartnerReport(this.form.getRawValue()).subscribe(res => {
+
+      res.forEach((x:any)=>{
+       // x['totalAmout'] =  x.hardCost + x.softCost + x.feeBilled;
+        x['positiveSoftCost'] = (x.softCost < 0 ? x.softCost * -1 : x.softCost);
+        x['positiveHardCost'] = (x.hardCost < 0 ? x.hardCost * -1 : x.hardCost);
+        x['positiveAdminCost'] = (x.adminCost < 0 ? x.adminCost * -1 : x.adminCost);
+      })
+
+      this.dataSource.data = res;
+      this.dataSource.sort = this.sort;
+      //console.log(this.sort)
+      //console.log(this.paginator)
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.data.forEach((data: any) => {
+        data.statusId = this.statusIdList.find(y => y.key == data.statusId)?.value;
+      })
+      this.spin.hide();
+      this.table = true;
+      this.search = false;
+      //this.fullscreen = true;
+      this.back = true;
+    },
+      err => {
+        this.submitted = false;
+        this.cs.commonerror(err);
+        this.spin.hide();
+      }));
+
+  }
+  togglesearch() {
+    this.search = false;
+    this.table = true;
+    this.fullscreen = false;
+    this.back = true;
+  }
+  backsearch() {
+    this.table = true;
+    this.search = true;
+    this.fullscreen = true;
+    this.back = false;
+  }
+  reset() {
+    this.form.reset();
+  }
+partnerIdList:any[]=[];
+multipartnerList:any[]=[];
+matterAssignmentIdList:any[]=[];
+userIdList:any[]=[];
+multiMainAttorneyIdList:any[]=[];
+multiAssignedTKIdList:any[]=[];
+multiSelectMainAttorneyIdList:any[]=[];
+multiSelectAssignedTKIdList:any[]=[];
+  getAllDropDown() {
+    this.spin.show;
+    this.cas.getalldropdownlist([
+      // this.cas.dropdownlist.setup.classId.url,
+      // this.cas.dropdownlist.client.clientId.url,
+      // this.cas.dropdownlist.matter.matterNumber.url,
+      // this.cas.dropdownlist.setup.caseCategoryId.url,
+      // this.cas.dropdownlist.setup.caseSubcategoryId.url,
+      this.cas.dropdownlist.matter.dropdown.url,
+      this.cas.dropdownlist.setup.statusId.url,
+      this.cas.dropdownlist.accounting.partnerAssigned.url,
+      this.cas.dropdownlist.matter.matterAssignment.url,
+      this.cas.dropdownlist.setup.userId.url,
+      this.cas.dropdownlist.setup.timeKeeperCode.url,
+    ]).subscribe((results: any) => {
+
+   
+      results[0].classList.forEach((x: any) => {
+        this.multiSelectClassList.push({ value: x.key, label: x.key + '-' + x.value });
+      }) 
+      results[0].clientNameList.forEach((x: any) => {
+        this.multiselectclientList.push({ value: x.key, label: x.key + '-' + x.value });
+      }) 
+      results[0].matterList.forEach((x: any) => {
+        this.multiSelectMatterList.push({ value: x.key, label: x.key + '-' + x.value });
+      }) 
+      results[0].caseCategoryList.forEach((x: any) => {
+        this.multiSelectCaseCategoryList.push({ value: x.key, label: x.key + '-' + x.value });
+      }) 
+      results[0].subCaseCategoryList.forEach((x: any) => {
+        this.multiSelectSubCaseCategoryList.push({ value: x.key, label: x.key + '-' + x.value });
+      }) 
+
+      // results[0].forEach((classData: any) => {
+      //   if(classData.classId == 1 || classData.classId == 2){
+      //     this.multiClassList.push({ value: classData.classId, label: classData.classId + ' - ' + classData.classDescription })
+      //   }
+      // })
+      // this.multiSelectClassList = this.multiClassList;
+
+
+      // this.clientIdList = results[1];
+      // this.clientIdList.forEach((client: any) => {
+      //   this.multiclientList.push({ value: client.clientId, label: client.clientId + ' - ' + client.firstNameLastName });
+      // })
+      // this.multiselectclientList = this.multiclientList;
+
+      // this.matterIdList = results[2];
+      // this.matterIdList.forEach((matter: any) => {
+      //   this.multiMatterList.push({ value: matter.matterNumber, label: matter.matterNumber + ' - ' + matter.matterDescription });
+      // })
+      // this.multiSelectMatterList = this.multiMatterList;
+
+
+      // this.caseCategoryIdList = this.cas.foreachlist(results[3], this.cas.dropdownlist.setup.caseCategoryId.key);
+      // this.caseCategoryIdList.forEach(category => {
+      //   for (let i = 0; i < this.matterIdList.length; i++) {
+      //     if (category.key == this.matterIdList[i].caseCategoryId) {
+      //       this.multiCaseCategoryList.push({ value: category.key, label: category.value })
+      //       break;
+      //     }
+      //   }
+      // })
+      // this.multiSelectCaseCategoryList = this.multiCaseCategoryList;
+
+
+      // this.caseSubCategoryIdList = this.cas.foreachlist(results[4], this.cas.dropdownlist.setup.caseSubcategoryId.key);
+      // this.caseSubCategoryIdList.forEach(subCategory => {
+      //   for (let i = 0; i < this.matterIdList.length; i++) {
+      //     if (subCategory.key == this.matterIdList[i].caseSubCategoryId) {
+      //       this.multiSubCaseCategoryList.push({ value: subCategory.key, label: subCategory.value })
+      //       break;
+      //     }
+      //   }
+      // })
+      // this.multiSelectSubCaseCategoryList = this.multiSubCaseCategoryList;
+
+      //status
+      this.statusIdList = this.cas.foreachlist(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [51, 52, 53, 54].includes(s.key));
+      //console.log(this.statusIdList);
+      this.statusIdList.forEach(status => {
+        // for (let i = 0; i < this.matterIdList.length; i++) {
+        //   if (status.key == this.matterIdList[i].statusId) {
+        //     this.multiStatusList.push({ value: status.key, label: status.value })
+        //     break;
+        //   }
+        // }
+        //console.log(status);
+        this.multiStatusList.push({ value: status.key, label: status.value
+        
+        })
+      })
+      this.multiSelectStatusList = this.multiStatusList;
+      this.partnerIdList = this.cas.foreachlist(results[2], this.cas.dropdownlist.accounting.partnerAssigned.key);
+      this.partnerIdList.forEach((x: {
+        key: string;value: string;
+      }) => this.multipartnerList.push({
+        value: x.key,
+        label: x.value
+      }))
+      this.matterAssignmentIdList = results[3];
+      let filterMatterAssignment: any[] = [];
+      this.matterAssignmentIdList.forEach(matterAssignment => {
+          filterMatterAssignment.push(matterAssignment);
+      })
+      this.matterAssignmentIdList = filterMatterAssignment;
+
+      this.userIdList = this.cas.foreachlist(results[4], this.cas.dropdownlist.setup.userId.key);
+
+      this.userIdList.forEach(user => {
+
+        //mainAttorney
+        for (let i = 0; i < this.matterAssignmentIdList.length; i++) {
+          if (user.key == this.matterAssignmentIdList[i].responsibleTimeKeeper) {
+            this.multiMainAttorneyIdList.push({ value: user.key, label: user.value })
+            break;
+          }
+        }
+        //assignedTK
+        for (let i = 0; i < this.matterAssignmentIdList.length; i++) {
+          if (user.key == this.matterAssignmentIdList[i].assignedTimeKeeper) {
+            this.multiAssignedTKIdList.push({ value: user.key, label: user.value })
+            break;
+          }
+        }
+      
+      })
+        
+      
+      //console.log(this.multiTimeKeeperIdList)
+      this.multiSelectTimeKeeperIdList = this.multiTimeKeeperIdList;
+      this.multiSelectMainAttorneyIdList = this.multiMainAttorneyIdList;
+      this.multiSelectAssignedTKIdList = this.multiAssignedTKIdList;
+      this.spin.hide;
+    }, (err) => {
+      this.spin.hide;
+      this.toastr.error(err, "");
+    });
+  }
+
+  public errorHandling = (control: string, error: string = "required") => {
+
+    if (control.includes('.')) {
+      const controls = this.form.get(control);
+      return controls ? controls.hasError(error) : false;
+
+    }
+    return this.form.controls[control].hasError(error);
+  }
+  getErrorMessage(type: string) {
+    if (!this.form.valid && this.submitted) {
+      if (this.form.controls[type].hasError('required')) {
+        return 'Field should not be blank';
+      } else {
+        return '';
+      }
+    } else {
+      return '';
+    }
+  }
+
+  downloadexcel() {
+    // if (excel)
+    var res: any = [];
+    let sortedData = this.dataSource.data.sort((a, b) => (a.postingDate > b.postingDate) ? -1 : 1)
+    this.dataSource.data.forEach(x => {
+      res.push({
+        'Client ID ': x.clientId,
+        'Client Name ': x.clientName,
+        'Matter No':  x.matterNumber,
+        'Matter Description':  x.matterDescription,
+        'Partner': x.partner,
+        'Responsbile Timekeeper': x.responsibleTimekeeper,
+        'Assigned Timekeeper': x.assignedTimekeeper,
+        "Sum of Fee Billed":x.feeBilled,
+        'Sum of Cost Billed': x.totalCost,
+        'Total Paid': x.paidAmount,
+        'Sum of Total Billed': x.totalBilled,
+        'Balance':x.balance,
+       // ' Remaining Balance': (x.remainingBalance != null ? this.decimalPipe.transform(x.remainingBalance, "1.2-2") : '0.00'),
+  
+      
+      });
+
+    })
+      res.push({
+        'Client ID ': '',
+        'Client Name ': '',
+        'Matter No':  '',
+        'Matter Desc':  '',
+         'Partner':'',
+         'Responsible Timekeeper':'',
+         'Assigned Timekeeper':'',
+         "Sum of Fee Billed": this.getBillableAmount(),
+        'Sum of Cost Billed': this.getcosttotal(),
+        'Total Paid':  this.paidAmount(),
+        'Sum of Total Billed': this.totalbilledAmount() ,
+        'Balance':this.getbalancetotal(),
+       // ' Remaining Balance': (x.remainingBalance != null ? this.decimalPipe.transform(x.remainingBalance, "1.2-2") : '0.00'),
+  
+      
+      });
+
+    this.excel.exportAsExcel(res, "Partner Billing Report");
+  }
+  getBillableAmount() {
+     let total = 0;
+    this.dataSource.data.forEach(element => {
+      total = total + (element.feeBilled != null ? element.feeBilled : 0);
+    })
+     return total;
+   }
+ totalbilledAmount() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.totalBilled != null ? element.totalBilled : 0);
+ })
+  return total;
+  }
+totalhrs() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.totalHours != null ? element.totalHours : 0);
+ })
+  return total;
+  }
+softcost() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.softCost != null ? element.softCost : 0);
+ })
+  return total;
+  }
+adminCost() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.adminCost != null ? element.adminCost : 0);
+ })
+  return total;
+  }
+Hardcost() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.hardCost != null ? element.hardCost : 0);
+ })
+  return total;
+  }
+
+paidAmount(){
+  let total = 0;
+  this.dataSource.data.forEach(element => {
+    total = total + (element.paidAmount != null ? element.paidAmount : 0);
+  })
+   return total;
+   }
+miscdebt() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.miscDebits != null ? element.miscDebits : 0);
+ })
+ return total;
+  }
+getbalancetotal() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.balance != null ? element.balance : 0);
+ })
+ return total;
+  }
+getcosttotal() {
+  let total = 0;
+ this.dataSource.data.forEach(element => {
+   total = total + (element.totalCost != null ? element.totalCost : 0);
+ })
+ return total;
+  }
+
+
+
+}
+
+

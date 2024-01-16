@@ -1,0 +1,62 @@
+<div class="card bg-white ">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Search Parameter</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+  </div>
+  <div class="mt-2">
+    <form [formGroup]="searhform">
+
+      <div class="row scroll2 mx-0">
+        <div class="col-6 mt-2">
+          <p class="mb-0 py-0">Class </p>
+          <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" [forsearch]="true"
+            formControlName="classId" [valuewithID]="false">
+          </app-ng-multiselect-dropdown>
+        </div>
+        <div class="col-6 mt-2 2">
+          <p class="mb-0 py-0">Case Category</p>
+          <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="caseCategoryId">
+          </app-ng-multiselect-dropdown>
+        </div>
+        <div class="col-6 mt-2 2">
+          <p class="mb-0 py-0">Status</p>
+          <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" [forsearch]="true"
+            [valuewithID]="false" formControlName="classStatus" [dropdownList]="StatusList">
+          </app-ng-multiselect-dropdown>
+        </div>
+
+        <div class="col-6 mt-2">
+          <p class="mb-0 py-0">Created By</p>
+          <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="createdBy"
+            [valuewithID]="false" apiName="userId">
+          </app-ng-multiselect-dropdown>
+        </div>
+        <div class="col-6 mt-2">
+          <p class="mb-0 py-0">Created On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+         
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" formControlName="createdOn_from">
+              <input matEndDate placeholder="End date" formControlName="createdOn_to">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1 px-4">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        <button mat-raised-button class="bg-blue text-white mx-1">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </form>
+
+  </div>
+
+
+</div>

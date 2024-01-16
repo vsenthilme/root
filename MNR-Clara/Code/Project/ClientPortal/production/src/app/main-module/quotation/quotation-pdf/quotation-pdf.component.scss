@@ -1,0 +1,72 @@
+
+#table th { padding: 12px; width: 8rem !important;text-align: left;border: 1px solid #ddd;background-color: #006990;color: #fff;}
+#table {border-collapse: collapse;}
+#total {text-align:right !important;background-color: #fff !important;}
+#table td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table tr {background-color: #fff;}
+
+
+
+#table2 th { padding: 12px; width: 6rem !important;text-align: left;border: 1px solid #ddd;background-color: #f7f7f7;color: #5e5e5e;}
+#table2 {border-collapse: collapse;}
+#table2 td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table2 tr {background-color: #fff;}
+
+
+#table1{width: 100% !important; border-collapse: collapse;}
+#table1 td, #table1 th {  border: 1px solid #ddd;padding: 8px;}
+#table1 tr:nth-child(even){background-color: #f7f7f7;}     
+#table1 tr:hover {background-color: #fff;}
+#table1 th {padding-top: 12px;padding-bottom: 12px; text-align: left; color: rgb(53, 53, 53); background-color: #e2edf7;}
+
+#table3 th { padding: 12px; width: 10rem !important;text-align: left;border: 1px solid #ddd;background-color: #f7f7f7;color: #5e5e5e;}
+#table3 {border-collapse: collapse;}
+#table3 td, #table th { border: 1px solid #ddd;padding: 8px;}
+#table3 tr {background-color: #fff;}
+
+
+.lightbg{background-color: #e2edf7 !important;}
+.text-blue{color: #006990 !important;}
+
+.button {
+    background-color: #006990; /* Green */
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+
+
+  .me-auto {
+    margin-right: auto !important;
+  }
+
+
+  .page {
+    width: 21cm;
+    min-height: 29.7cm;
+    margin: 1cm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white !important;
+  }
+
+
+  .filter_button{border-top: 2px !important;border-left: 2px !important;border-right: 2px !important; background-color: transparent !important;border-color: grey !important;width: 15rem !important;}
+.breadcrumb > li + li::before{color: #6c757d; content: ">";padding: 0 5px;}
+.breadcrumb {background-color: transparent !important;color: #222222 !important;}
+.breadcrumb-item.active {color: #181818;}
+::ng-deep .purple {background-color: #9c27b0;}
+::ng-deep .action-button{border-radius: 4px;min-width: 6rem;}
+
+
+.scroll{height: calc(100vh - 6rem);overflow-y: scroll;overflow-x: hidden;}
+
+
+.break{page-break-before: always !important;}

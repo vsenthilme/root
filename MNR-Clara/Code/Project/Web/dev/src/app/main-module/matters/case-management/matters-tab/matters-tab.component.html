@@ -1,0 +1,96 @@
+<!--
+<div class="bg-white p-1 d-flex justify-content-around mx-3 px-4 tabbar mt-1 pb-1">
+    <div class="mt-1 active d-flex flex-column justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center py-1">
+            <mat-icon class="red-text">description</mat-icon>
+        </div>
+        <p class="mb-0 red-text">General</p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon blue d-flex justify-content-center align-items-center">
+            <mat-icon class="blue-text">description</mat-icon>
+        </div>
+        <p class="mb-1 blue-text">Accounting </p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon purple1 d-flex justify-content-center align-items-center">
+            <mat-icon class="purple-text">description</mat-icon>
+        </div>
+        <p class="mb-1 purple-text">Rates</p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon green d-flex justify-content-center align-items-center">
+            <mat-icon class="green-text">description</mat-icon>
+        </div>
+        <p class="mb-1 green-text">Fees Sharing</p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon red d-flex justify-content-center align-items-center">
+            <mat-icon class="red-text">description</mat-icon>
+        </div>
+        <p class="mb-1 red-text">Emails</p>
+    </div>
+
+    <div class=" mt-1 px-4 ">
+        <div class="icon yellow d-flex justify-content-center align-items-center">
+            <mat-icon class="yellow-text">description</mat-icon>
+        </div>
+        <p class="mb-1 yellow-text">Notes</p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon blue d-flex justify-content-center align-items-center">
+            <mat-icon class="blue-text">description</mat-icon>
+        </div>
+        <p class="mb-1 blue-text">Documents</p>
+    </div>
+   <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon pink d-flex justify-content-center align-items-center">
+            <mat-icon class="pink-text">description</mat-icon>
+        </div>
+        <p class="mb-1 pink-text">Task</p>
+    </div>
+    <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon blue d-flex justify-content-center align-items-center">
+            <mat-icon class="blue-text">description</mat-icon>
+        </div>
+        <p class="mb-1 blue-text ">Time Ticket</p>
+    </div>
+    <div class=" mt-1 px-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="icon purple1 d-flex justify-content-center align-items-center">
+            <mat-icon class="purple-text">description</mat-icon>
+        </div>
+        <p class="mb-1 purple-text ">Expenses</p>
+    </div>
+    </div>
+
+<div class="d-flex justify-content-between align-items-center bg-white text-secondary mt-1 mx-3 header-box shadow"
+    style="height: 3.1rem;filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15));">
+    <h3 class="ps-4 my-auto mb-0 text-dark" style="font-size:19px;">MATTER - (10001-01)</h3>
+</div>
+<div class="tabbar bg-white ms-3 me-3 mt-1">
+    <nav mat-tab-nav-bar class="scroll2 d-flex justify-content-start ">
+        <a mat-tab-link *ngFor=" let link of listmenu" [ngClass]="link.class" (click)="activeLink = link.url"
+            [active]="activeLink == link.url" [routerLink]="link.url">
+            <i [ngClass]="link.icon"></i> {{link.title}} </a>
+    </nav>
+</div>
+-->
+
+<div class="header-section">
+    <div class="d-flex justify-content-between  mt-1 align-items-center text-secondary mx-3" style="height: 3.1rem;">
+        <h3 class="my-auto mb-0 text-dark" style="font-size:22px;">{{code}} / {{code1}}</h3>
+        <!-- <button mat-flat-button 
+        class="bg-darkblue shadow-none text-white mx-2 d-inline mr-2 ">
+        Case Info Sheet
+      </button> -->
+    </div>
+
+    <div class="tabbar bggrey1 ms-3 me-3">
+        <nav mat-tab-nav-bar class="scroll2 d-flex justify-content-start ">
+            <a mat-tab-link *ngFor=" let link of listmenu" [ngClass]="link.class" (click)="activeLink = link.title"
+                [active]="activeLink == link.title" [routerLink]="link.url" [disabled]="isdiabled(link.screenid)">
+                <i [ngClass]="link.icon"></i> {{link.title}} </a>
+        </nav>
+    </div>
+</div>
+<router-outlet></router-outlet>

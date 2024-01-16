@@ -1,0 +1,248 @@
+Response : {"QBXML": {"QBXMLMsgsRs": {"InvoiceQueryRs": {
+    "InvoiceRet": [
+        {
+            "BalanceRemaining": 2824,
+            "TxnDate": "2022-05-15",
+            "RefNumber": 800004,
+            "EditSequence": 1653070450,
+            "Subtotal": 2824,
+            "AppliedAmount": 0,
+            "ShipDate": "2022-05-15",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": true,
+            "TimeCreated": "2022-05-15T04:59:29-06:00",
+            "TimeModified": "2022-05-20T13:14:10-06:00",
+            "TxnID": "1-1652608769",
+            "SalesTaxTotal": 0,
+            "IsPaid": false,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000003-1653070431",
+                "FullName": 1009
+            },
+            "DueDate": "2022-05-15",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 1,
+            "SalesTaxPercentage": 0
+        },
+        {
+            "BillAddressBlock": {
+                "Addr3": null,
+                "Addr1": "1701 Hermann Dr.",
+                "Addr2": "null, null null"
+            },
+            "BalanceRemaining": 0,
+            "TxnDate": "2022-05-17",
+            "RefNumber": 1,
+            "EditSequence": 1652806350,
+            "Subtotal": 500,
+            "AppliedAmount": -500,
+            "ShipDate": "2022-05-17",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": true,
+            "BillAddress": {
+                "Addr1": "1701 Hermann Dr.",
+                "Addr2": "null, null null",
+                "City": null
+            },
+            "TimeCreated": "2022-05-17T11:38:47-06:00",
+            "TimeModified": "2022-05-19T18:09:12-06:00",
+            "TxnID": "D-1652805527",
+            "SalesTaxTotal": 0,
+            "IsPaid": true,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000001-1652604630",
+                "FullName": 10008
+            },
+            "DueDate": "2022-05-17",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 3,
+            "SalesTaxPercentage": 0
+        },
+        {
+            "BalanceRemaining": 1,
+            "TxnDate": "2022-05-18",
+            "RefNumber": 3,
+            "EditSequence": 1653003248,
+            "Subtotal": 1,
+            "AppliedAmount": 0,
+            "ShipDate": "2022-05-18",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": true,
+            "TimeCreated": "2022-05-19T18:16:10-06:00",
+            "TimeModified": "2022-05-19T18:34:08-06:00",
+            "TxnID": "3A-1653002170",
+            "SalesTaxTotal": 0,
+            "IsPaid": false,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000002-1652604636",
+                "FullName": "10008:10008-01"
+            },
+            "DueDate": "2022-05-18",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 12,
+            "SalesTaxPercentage": 0
+        },
+        {
+            "BillAddressBlock": {
+                "Addr3": null,
+                "Addr1": "1701 Hermann Dr.",
+                "Addr2": "null, null null"
+            },
+            "BalanceRemaining": 11,
+            "TxnDate": "2022-05-19",
+            "RefNumber": 2,
+            "EditSequence": 1652950520,
+            "Subtotal": 11,
+            "AppliedAmount": 0,
+            "ShipDate": "2022-05-19",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": false,
+            "BillAddress": {
+                "Addr1": "1701 Hermann Dr.",
+                "Addr2": "null, null null",
+                "City": null
+            },
+            "TimeCreated": "2022-05-19T03:41:14-06:00",
+            "TimeModified": "2022-05-19T03:55:20-06:00",
+            "TxnID": "10-1652949674",
+            "SalesTaxTotal": 0,
+            "IsPaid": false,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000001-1652604630",
+                "FullName": 10008
+            },
+            "DueDate": "2022-05-19",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 4,
+            "SalesTaxPercentage": 0
+        },
+        {
+            "BalanceRemaining": 5,
+            "TxnDate": "2022-05-20",
+            "RefNumber": 4,
+            "EditSequence": 1653070706,
+            "Subtotal": 5,
+            "AppliedAmount": 0,
+            "ShipDate": "2022-05-20",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": false,
+            "TimeCreated": "2022-05-20T12:37:02-06:00",
+            "TimeModified": "2022-05-20T13:18:26-06:00",
+            "TxnID": "3D-1653068222",
+            "SalesTaxTotal": 0,
+            "IsPaid": false,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000002-1652604636",
+                "FullName": "10008:10008-01"
+            },
+            "DueDate": "2022-05-20",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 13,
+            "SalesTaxPercentage": 0
+        },
+        {
+            "BalanceRemaining": 10,
+            "TxnDate": "2022-05-20",
+            "RefNumber": 5,
+            "EditSequence": 1653068608,
+            "Subtotal": 10,
+            "AppliedAmount": 0,
+            "ShipDate": "2022-05-20",
+            "IsFinanceCharge": false,
+            "IsToBeEmailed": true,
+            "TimeCreated": "2022-05-20T12:42:03-06:00",
+            "TimeModified": "2022-05-20T12:43:28-06:00",
+            "TxnID": "40-1653068523",
+            "SalesTaxTotal": 0,
+            "IsPaid": false,
+            "IsToBePrinted": true,
+            "ARAccountRef": {
+                "ListID": "80000024-1652606248",
+                "FullName": "Accounts Receivable"
+            },
+            "CustomerRef": {
+                "ListID": "80000002-1652604636",
+                "FullName": "10008:10008-01"
+            },
+            "DueDate": "2022-05-20",
+            "TemplateRef": {
+                "ListID": "8000000B-1626196482",
+                "FullName": "Time & Expense Invoice"
+            },
+            "IsPending": false,
+            "TxnNumber": 14,
+            "SalesTaxPercentage": 0
+        }
+    ],
+    "requestID": 800004,
+    "statusSeverity": "Info",
+    "statusMessage": "Status OK",
+    "statusCode": 0
+}}}}
+Access Token Response ---------ClientGeneral(languageId=EN, classId=1, clientId=500050, clientCategoryId=2, firstName=stone, lastName=cold, firstNameLastName=stone cold, lastNameFirstName=cold stone, corporationClientId=null, emailId=vsenthil@hotmail.co.in, contactNumber=987654321045, addressLine1=21, Erode Road, Perundurai, city=Erode, state=Tamil Nadu, country=null, zipCode=638 052, consultationDate=2022-05-20T16:11:11.236Z, socialSecurityNo=null, mailingAddress=21, Erode Road, Perundurai, occupation=null, suiteDoorNo=null, workNo=null, homeNo=null, fax=null, alternateEmailId=null, isMailingAddressSame=true, referenceField1=null)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

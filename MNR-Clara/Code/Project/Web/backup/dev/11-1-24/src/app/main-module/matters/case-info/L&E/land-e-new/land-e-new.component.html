@@ -1,0 +1,1005 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Case Information</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">L&E</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">{{pageflow}}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success1"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button disabled mat-mini-fab (click)="toggleFloat()" class=" disabled mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button disabled mat-mini-fab class=" disabled bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="table_shadow my-0 py-0 mt-3">
+  <div class="row ms-3 me-3 px-1">
+    <div class="d-flex justify-content-between align-items-center bg-white text-secondary header-box">
+      <h2 class="my-auto ps-4">Case Information Sheet - {{code}}</h2>
+
+    </div>
+    <div class="col-md-12 px-0 mt-1">
+      <div class="scrolllong">
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. General Details
+                  <div class="d-flex align-items-center">
+                    <button [disabled]="isdisabled" mat-stroked-button (click)='open_Intake()'
+                      class="hoverbutton shadow-none py-1 mx-2 d-inline mr-2">
+                      <mat-icon class="">search</mat-icon>   Intake Form
+                    </button>
+                    <mat-icon class="my-auto text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2  mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Class ID</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <mat-select formControlName="classId" placeholder="Select">
+                      <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                        {{food.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  required">Client ID</p>
+                  <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="clientId"
+                    [singleSelection]="true" apiMethod="client" [filerbased]="apiClientfileter">
+                  </app-ng-multiselect-dropdown> -->
+                <!-- <angular2-multiselect [data]="multiselectclientList" [(ngModel)]="selectedItems"
+                  [settings]="dropdownSettings" (onSelect)="onItemSelect1($event)"  formControlName="clientIdFE"></angular2-multiselect> -->
+
+                  
+                  <p-dropdown [filter]="true"placeholder="Select" appendTo="body"    class="w-100 my-1 mb-2" [options]="multiselectclientList" 
+                  formControlName="clientId"  [style]="{'width': '100%'}" (onChange)="onItemSelect1($event)"  [panelStyle]="{'width':'20%'}"></p-dropdown>
+                  <mat-error *ngIf="errorHandling('clientId')">{{getErrorMessage()}}</mat-error> 
+                  <!-- 
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select formControlName="clientId" placeholder="Select">
+                      <mat-option *ngFor="let food of clientIdList" [value]="food.key">
+                        {{food.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <mat-error *ngIf="errorHandling('clientId')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Prospective Client</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="potentialClientId">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('potentialClientId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Inquiry No</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="inquiryNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('inquiryNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  required">Case Category</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    <!-- <angular2-multiselect [data]="multiselectcaseList" [(ngModel)]="selectedItems2"
+                    [settings]="dropdownSettings"  (onSelect)="onItemSelect($event)" 
+                     formControlName="caseCategoryIdFE"></angular2-multiselect> -->
+                     <p-dropdown placeholder="Select" [filter]="true" (onChange)="onItemSelect($event)" appendTo="body" class="w-100" [options]="multiselectcaseList" [(ngModel)]="selectedItems2"
+                     formControlName="caseCategoryId" [style]="{'width': '100%'}"></p-dropdown>
+                    <mat-error *ngIf="errorHandling('caseCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0 required ">Case Sub Category</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <mat-select formControlName="caseSubCategoryId" placeholder="Select">
+                        <mat-option *ngFor="let food of caseSubCategoryIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+                    <!-- <angular2-multiselect [data]="multiselectcasesubList" [(ngModel)]="selectedItems3"
+                    [settings]="dropdownSettings"
+                     formControlName="caseSubCategoryIdFE"></angular2-multiselect> -->
+                     <p-dropdown placeholder="Select"  [filter]="true" appendTo="body" class="w-100" [options]="multiselectcasesubList" [(ngModel)]="selectedItems3"
+                     formControlName="caseSubCategoryId" [style]="{'width': '100%'}"></p-dropdown>
+                    <mat-error *ngIf="errorHandling('caseSubCategoryId')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column ">
+                    <p class="mb-0 py-0  ">Intake Form No</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="intakeFormNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('intakeFormNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2. Case Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2  mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0 required ">Matter Description</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="matterDescription">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('matterDescription')">{{getErrorMessage()}}</mat-error>
+                  <mat-error *ngIf="form.controls.matterDescription.errors?.pattern"> Invalid Characters</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Matter Type</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="typeOfMatter">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('typeOfMatter')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Cause Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="causeNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('causeNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Plaintiff</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="plaintiffs">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('plaintiffs')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Defendant</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="defendants">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('defendants')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Reference</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="reference">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('reference')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Location of File</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="locationOfFile">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('locationOfFile')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Client Details
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="firstNameLastName">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('firstNameLastName')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Title</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="title">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('title')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="emailId">
+                      <mat-error *ngIf="form.controls.email.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('email')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Company Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="companyName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('companyName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="adressLine1">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('adressLine1')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">City</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="city">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('city')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">State</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="state">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('state')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Country</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="country">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('country')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="zipCode">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('zipCode')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Direct Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="homeNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('homeNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Office Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="workNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('workNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Cell Phone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="contactNumber">
+                      <!-- <mat-error *ngIf="form.controls.contactNumber.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.contactNumber.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.contactNumber.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.contactNumber.errors?.pattern"> Invalid Phone No </mat-error> -->
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <!--
+                  <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Fax Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="faxNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('faxNumber')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+               -->
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel3 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4. Opposing Party
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1Name">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1Name')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Email</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1Email">
+                    <mat-error *ngIf="form.controls.email.errors?.pattern">Invalid Email </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1Email')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Company Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="advParty1CompanyName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('advParty1CompanyName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Street Address</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1StreetAddress">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1StreetAddress')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">City</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1City">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1City')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">State</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1State">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1State')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Zip Code</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1PostalZipCode">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1PostalZipCode')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Direct Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1DirectTelephone">
+                    <mat-error *ngIf="form.controls.advParty1DirectTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1DirectTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1DirectTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty1DirectTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1DirectTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Office Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1OfficeTelephone">
+                    <mat-error *ngIf="form.controls.advParty1OfficeTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1OfficeTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1OfficeTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty1OfficeTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1OfficeTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Cell Phone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1CellPhone">
+                    <mat-error *ngIf="form.controls.advParty1CellPhone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1CellPhone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty1CellPhone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty1CellPhone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1CellPhone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Fax Number</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty1FaxNumber">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty1FaxNumber')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel4 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  5. Opposing Counsel
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2Name">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2Name')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Email</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2Email">
+                    <mat-error *ngIf="form.controls.advParty2Email.errors?.pattern">Invalid Email </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2Email')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Company Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="advParty2CompanyName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('advParty2CompanyName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Street Address</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2StreetAddress">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2StreetAddress')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">City</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2City">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2City')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">State</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2State">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2State')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Zip Code</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2PostalZipCode">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2PostalZipCode')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Direct Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2DirectTelephone">
+                    <mat-error *ngIf="form.controls.advParty2DirectTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2DirectTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2DirectTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty2DirectTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2DirectTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Office Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2OfficeTelephone">
+                    <mat-error *ngIf="form.controls.advParty2OfficeTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2OfficeTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2OfficeTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty2OfficeTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2OfficeTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Cell Phone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2CellPhone">
+                    <mat-error *ngIf="form.controls.advParty2CellPhone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2CellPhone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.advParty2CellPhone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.advParty2CellPhone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2CellPhone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Fax Number</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="advParty2FaxNumber">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('advParty2FaxNumber')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  6. Court Information
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Judge Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="judgeName">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('judgeName')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Court</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="courtNo">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('courtNo')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="email">
+                      <mat-error *ngIf="form.controls.email.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('email')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Street Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="adressLine2">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('adressLine2')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">City </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="courtCity">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('courtCity')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">State</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="courtState">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('courtState')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Postal/Zip Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="postalZipCode">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('postalZipCode')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Court  Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="officeTelephone">
+                      <mat-error *ngIf="form.controls.officeTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.officeTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.officeTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.officeTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('officeTelephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Fax Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="fax">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('fax')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Clerk Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="clerkName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('clerkName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Clerk Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="clerkTelephone">
+                      <mat-error *ngIf="form.controls.clerkTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.clerkTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.clerkTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.clerkTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('clerkTelephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Clerk Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="clerkEmail">
+                      <mat-error *ngIf="form.controls.clerkEmail.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('clerkEmail')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Assistant Clerk Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="assistantClerkName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('assistantClerkName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Assistant Clerk Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="assistantClerkTelephone">
+                      <mat-error *ngIf="form.controls.assistantClerkTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.assistantClerkTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.assistantClerkTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.assistantClerkTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('assistantClerkTelephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Assistant Clerk Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="assistantClerkEmail">
+                      <mat-error *ngIf="form.controls.assistantClerkEmail.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('assistantClerkEmail')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Section Coordinator Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="sectionCoorinatorName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('sectionCoorinatorName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Section Coordinator Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="sectionCoorinatorTelephone">
+                      <mat-error *ngIf="form.controls.sectionCoorinatorTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.sectionCoorinatorTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.sectionCoorinatorTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.sectionCoorinatorTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('sectionCoorinatorTelephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Section Coordinator Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="sectionCoorinatorEmail">
+                      <mat-error *ngIf="form.controls.sectionCoorinatorEmail.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('sectionCoorinatorEmail')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Court Reporter Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="baliffCourtReporterName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('baliffCourtReporterName')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Court Reporter Telephone</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="baliffCourtReporterTelephone">
+                      <mat-error *ngIf="form.controls.baliffCourtReporterTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.baliffCourtReporterTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                      <mat-error *ngIf="form.controls.baliffCourtReporterTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                      <mat-error *ngIf="form.controls.baliffCourtReporterTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('baliffCourtReporterTelephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Court Reporter Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="sectionCoorinatorEmail">
+                      <mat-error *ngIf="form.controls.sectionCoorinatorEmail.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('baliffCourtReporterEmail')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  7. Administrative Agency
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1  px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Agency Name</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agencyName">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agencyName')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Agent Name</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agentName">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agentName')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Agent Email</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="agentEmail">
+                      <mat-error *ngIf="form.controls.agentEmail.errors?.pattern">Invalid Email </mat-error>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('agentEmail')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Street Address</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agrentStreetAddress">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agrentStreetAddress')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">City</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agrentCity">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agrentCity')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">State</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agentState">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agentState')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Zip Code</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agentPostalZipCode">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agentPostalZipCode')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Direct Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="directTelephone">
+                    <mat-error *ngIf="form.controls.directTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.directTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.directTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.directTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('directTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Office Telephone</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agentOfficeTelephone">
+                    <mat-error *ngIf="form.controls.agentOfficeTelephone.errors?.maxlength">Number should Maximum 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.agentOfficeTelephone.errors?.minlength">Number should be 12 Characters</mat-error>
+                    <mat-error *ngIf="form.controls.agentOfficeTelephone.errors?.required"> Field Should not be Blank </mat-error>
+                    <mat-error *ngIf="form.controls.agentOfficeTelephone.errors?.pattern"> Invalid Phone No </mat-error>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agentOfficeTelephone')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Fax Number</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="agentFaxNumber">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('agentFaxNumber')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel7 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  8. Others
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel7.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 scroll px-2 mt-2">
+                <div class="col-12 mt-2">
+                  <p class="mb-0 py-0  ">Schedule</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <textarea matInput rows="7" placeholder="Enter" formControlName="schedule"></textarea>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('schedule')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Schedule Date</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker" formControlName="scheduleDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('scheduleDate')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-12 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Notes</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <textarea matInput rows="7" placeholder="Enter" formControlName="notes"></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('notes')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel9 hideToggle *ngIf="pageflow == 'Edit'">
+              <mat-expansion-panel-header class="border-bottom padding-space border-top bg-white">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  9. Admin
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="my-auto text-primary">{{panel9.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 px-2 mt-2">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Created By</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="createdBy" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('createdBy')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Created On</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="createdOn" readOnly>
+                  </mat-form-field>
+                  <!-- <mat-error *ngIf="errorHandling('createdOn')">{{getErrorMessage()}}</mat-error> -->
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Updated By</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="updatedBy" readOnly>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('updatedBy')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Updated On</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="updatedOn" readOnly>
+                  </mat-form-field>
+                  <!-- <mat-error *ngIf="errorHandling('updatedOn')">{{getErrorMessage()}}</mat-error> -->
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0  ">Status</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="statusIddes" readOnly>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('statusIddes')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </form>
+        </mat-accordion>
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white bottombutton1 w-100">
+          <button mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+          <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            {{btntext}}</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,2073 @@
+<div class="table_shadow my-0 py-0 mt-3">
+  <div class="row ms-3 me-3 px-1 smallscreen">
+    <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 shadow">
+      <h2 class="my-auto header-text ps-2">E-42B Biographic Questionnaire - {{itformno}} </h2>
+    </div>
+    <div class="col-md-12 px-0 mt-1">
+      <div class="">
+
+
+        <mat-accordion>
+          <form [formGroup]="form">
+            <mat-expansion-panel #panel10 [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  1. Personal Details (Beneficiary)
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel10.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="personalInfo" class="row">
+                  <div formGroupName="name" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Full Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="name">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.name.name')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Other Name used</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="otherNamesUsed">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.name.otherNamesUsed')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <p class="mb-0"></p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Include your exact legal name as it appears on your passport or birth
+                        certificate</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter"
+                          formControlName="legalNameAsItAppearsInPassportOrBirthCertificate">
+                      </mat-form-field>
+                      <mat-error
+                        *ngIf="errorHandling('personalInfo.name.legalNameAsItAppearsInPassportOrBirthCertificate')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Sex</p>
+                  <div class="row mt-2">
+                    <mat-radio-group layout="row" formControlName="female">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Male
+                      </mat-radio-button>
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">Female
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error *ngIf="errorHandling('personalInfo.female')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Height </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="height">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.height')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Weight </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="weight">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.weight')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Eye Color </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="eyeColor">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.eyeColor')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Hair Color </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="hairColor">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.hairColor')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" formControlName="dateOfBirth" placeholder="Choose Date"[matDatepicker]="picker1">
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.dateOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Nationality </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="nationality">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.nationality')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0"> Social Security Number </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="socialSecurityNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.socialSecurityNumber')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div formGroupName="placeOfBirth" class="row mx-0 px-0">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> City </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.placeOfBirth.city')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> State </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.placeOfBirth.State')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Country</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="country">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.placeOfBirth.Country')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                  </div>
+
+                  <div formGroupName="passport" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">Passport Details</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Passport Number </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="passportNumber">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.passport.passportNumber')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> City/Country of Passport issuance </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="cityOfIssuance">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.passport.cityOfIssuance')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Date of issuance </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="dateOfIssuance"
+                          placeholder="Choose Date"[matDatepicker]="dateOfIssuance">
+                        <mat-datepicker-toggle matSuffix [for]="dateOfIssuance"></mat-datepicker-toggle>
+                        <mat-datepicker #dateOfIssuance></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.passport.dateOfIssuance')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Expiration Date </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="expirationDate"
+                          placeholder="Choose Date"[matDatepicker]="picker48">
+                        <mat-datepicker-toggle matSuffix [for]="picker48"></mat-datepicker-toggle>
+                        <mat-datepicker #picker48></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.passport.expirationDate')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="phoneNumber" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">Telephone</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone Number </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="eg: 555-555-5555" formControlName="telephoneNumber">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.phoneNumber.telephoneNumber')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Cell Phone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="cellPhone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.phoneNumber.cellPhone')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Work </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="work">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.phoneNumber.work')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="entryInfo" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">When is the first time you visited the U.S.? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="monthOfFirstVisit"
+                          placeholder="Choose Date"[matDatepicker]="picker2">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.entryInfo.monthOfFirstVisit')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Place Of Entry </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="placeOfFirstVisit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.entryInfo.placeOfFirstVisit')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">When was your last entry into the U.S.? </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="monthOfLastVisit"
+                          placeholder="Choose Date"[matDatepicker]="picker3">
+                        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                        <mat-datepicker #picker3></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.entryInfo.monthOfFirstVisit')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Place Of Entry </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="placeOfLastVisit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.entryInfo.placeOfLastVisit')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="visaDenied" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Have you ever been denied a visa to enter the U.S.A ?</p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="haveYouEverbeenDeniedVisa">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaDenied.haveYouEverbeenDeniedVisa')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> When </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="when" placeholder="Choose Date"[matDatepicker]="picker4">
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaDenied.when')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Where </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="where">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaDenied.where')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Type of visa </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="typeOfVisa">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaDenied.typeOfVisa')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="visaImmigrant" class="row">
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Has anyone ever filed an Immigrant visa on your behalf?
+                    </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="hasAnyoneEverFiledImmigrantVisa">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaImmigrant.hasAnyoneEverFiledImmigrantVisa')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> When </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="when" placeholder="Choose Date"[matDatepicker]="picker5">
+                        <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                        <mat-datepicker #picker5></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaImmigrant.when')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Was the visa granted? </p>
+                    <div class="row mt-2">
+                      <mat-radio-group layout="row" formControlName="wasVisaGranted">
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                        </mat-radio-button>
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                      <mat-error *ngIf="errorHandling('personalInfo.visaImmigrant.wasVisaGranted')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <p class="mb-0 py-0  mt-2 ps-3">In case of denial, what was the basis of this decision? Please,
+                      explain:
+                    </p>
+                    <mat-form-field class="form-group input_field w-100 mb-0 ps-3" appearance="outline">
+                      <textarea matInput rows="5" placeholder="Enter" formControlName="reasonForVisaDenial"></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('personalInfo.visaImmigrant.reasonForVisaDenial')">
+                      {{getErrorMessage()}}</mat-error>
+
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel1 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  2. Residential History (For the Last 10 Years)
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="residentialHistory" class="row">
+                  <div formGroupName="currentAddress" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">A. Current Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.currentAddress.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker6">
+                          <input matStartDate formControlName="fromMonthYear" placeholder="Start date">
+                          <input matEndDate formControlName="toMonthYear" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker6></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.currentAddress.toMonthYear')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousAddress1" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">B. Previous Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress1.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker7">
+                          <input matStartDate formControlName="fromMonthYear" placeholder="Start date">
+                          <input matEndDate formControlName="toMonthYear" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker7></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress1.workNo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousAddress2" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">C. Previous Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress2.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker8">
+                          <input matStartDate formControlName="fromMonthYear" placeholder="Start date">
+                          <input matEndDate formControlName="toMonthYear" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker8></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress2.workNo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousAddress3" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">D. Previous Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress3.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker9">
+                          <input matStartDate formControlName="fromMonthYear" placeholder="Start date">
+                          <input matEndDate formControlName="toMonthYear" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker9></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress3.workNo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousAddress4" class="row">
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0">E. Previous Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress4.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Date</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker10">
+                          <input matStartDate formControlName="fromMonthYear" placeholder="Start date">
+                          <input matEndDate formControlName="toMonthYear" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker10></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('residentialHistory.previousAddress4.workNo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  3. Employment History
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="employmentHistory" class="row">
+                  <div formGroupName="currentEmployment" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">A. Current Employment:</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Company and Wages per Hour </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="companyAndWagesPerHour">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.currentEmployment.companyAndWagesPerHour')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Address </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.currentEmployment.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="telephone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.currentEmployment.telephone')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Occupation </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="occupation">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.currentEmployment.occupation')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Dates of Employment </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker11">
+                          <input matStartDate formControlName="employmentDateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="employmentDateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker11></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.currentEmployment.employmentDateTo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousEmployment1" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">B. Previous Employment:</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Company and Wages per Hour </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="companyAndWagesPerHour">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment1.companyAndWagesPerHour')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Address </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment1.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="telephone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment1.telephone')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Occupation </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="occupation">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment1.occupation')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Dates of Employment </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker12">
+                          <input matStartDate formControlName="employmentDateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="employmentDateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker12></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment1.employmentDateTo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+
+                  <div formGroupName="previousEmployment2" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">C. Previous Employment:</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Company and Wages per Hour </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="companyAndWagesPerHour">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment2.companyAndWagesPerHour')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Address </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment2.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="telephone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment2.telephone')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Occupation </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="occupation">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment2.occupation')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Dates of Employment </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker13">
+                          <input matStartDate formControlName="employmentDateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="employmentDateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker13></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment2.employmentDateTo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+
+                  <div formGroupName="previousEmployment3" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">D. Previous Employment:</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Company and Wages per Hour </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="companyAndWagesPerHour">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment3.companyAndWagesPerHour')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Address </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment3.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="telephone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment3.telephone')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Occupation </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="occupation">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment3.occupation')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Dates of Employment </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker14">
+                          <input matStartDate formControlName="employmentDateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="employmentDateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker14"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker14></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment3.employmentDateTo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="previousEmployment4" class="row">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">E. Previous Employment:</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Company and Wages per Hour </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="companyAndWagesPerHour">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment4.companyAndWagesPerHour')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-8 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Address </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="address">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment4.address')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Telephone </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="telephone">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment4.telephone')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Occupation </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="occupation">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment4.occupation')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Dates of Employment </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-date-range-input [rangePicker]="picker15">
+                          <input matStartDate formControlName="employmentDateFrom" placeholder="Start date">
+                          <input matEndDate formControlName="employmentDateTo" placeholder="End date">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker15"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker15></mat-date-range-picker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('employmentHistory.previousEmployment4.employmentDateTo')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel4 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  4. Use of Public Benefits
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel4.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row  mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="publicBenefits" class="row">
+                  <div formGroupName="benefit1" class="row">
+                    <p class="mb-0 py-0 mt-3 pb-2">Have your children or spouse used any public benefits? If so, please
+                      provide the following information</p>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Type of Public Benefit</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="typeOfPublicBenefit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit1.typeOfPublicBenefit')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Dates Public Benefit received</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="datesPublicBenefitReceived"
+                          placeholder="Choose Date"[matDatepicker]="datesPublicBenefitReceived">
+                        <mat-datepicker-toggle matSuffix [for]="datesPublicBenefitReceived"></mat-datepicker-toggle>
+                        <mat-datepicker #datesPublicBenefitReceived></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit1.datesPublicBenefitReceived')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Name of Person Receiving Benefit</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="nameOfPersonReceivingBenefit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit1.nameOfPersonReceivingBenefit')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="benefit2" class="row">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Type of Public Benefit</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="typeOfPublicBenefit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit2.typeOfPublicBenefit')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Dates Public Benefit received</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="datesPublicBenefitReceived"
+                          placeholder="Choose Date"[matDatepicker]="datesPublicBenefitReceived1">
+                        <mat-datepicker-toggle matSuffix [for]="datesPublicBenefitReceived1"></mat-datepicker-toggle>
+                        <mat-datepicker #datesPublicBenefitReceived1></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit2.datesPublicBenefitReceived')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Name of Person Receiving Benefit</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="nameOfPersonReceivingBenefit">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('publicBenefits.benefit2.nameOfPersonReceivingBenefit')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  5. Information About your Spouse
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll  mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="spouseInformation" class="row">
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="name">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.name')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Name before marriage</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="namebeforeMarriage">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.namebeforeMarriage')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Place of marriage</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="placeOfMarriage">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.placeOfMarriage')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Marriage</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" formControlName="dateOfMarriage"
+                        placeholder="Choose Date"[matDatepicker]="picker16">
+                      <mat-datepicker-toggle matSuffix [for]="picker16"></mat-datepicker-toggle>
+                      <mat-datepicker #picker16></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.dateOfMarriage')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Spouse’s Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="spouseAddress">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.spouseAddress')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                        placeholder="Choose Date"[matDatepicker]="picker17">
+                      <mat-datepicker-toggle matSuffix [for]="picker17"></mat-datepicker-toggle>
+                      <mat-datepicker #picker17></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.dateOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Place of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.placeOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Alien Registration Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.alienRegistrationNumber')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Immigration Status</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.immigrationStatus')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Place of Arrival into the US</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="placeOfArrivalIntoTheUS">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.placeOfArrivalIntoTheUS')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date of Arrival</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" formControlName="dateOfArrival"
+                        placeholder="Choose Date"[matDatepicker]="picker18">
+                      <mat-datepicker-toggle matSuffix [for]="picker18"></mat-datepicker-toggle>
+                      <mat-datepicker #picker18></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.dateOfArrival')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Date he/she was Naturalized</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" formControlName="dateHeOrSheWasNaturalized"
+                        placeholder="Choose Date"[matDatepicker]="picker19">
+                      <mat-datepicker-toggle matSuffix [for]="picker19"></mat-datepicker-toggle>
+                      <mat-datepicker #picker19></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.dateHeOrSheWasNaturalized')">
+                      {{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Employer’s Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="employersName">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.employersName')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-8 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Employer’s Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="employersAddress">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.employersAddress')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Earnings Per Week</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="earingsPerWeek">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('spouseInformation.earingsPerWeek')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                </div>
+
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  6. Information About your children
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="childrenInformation" class="row">
+                  <div formGroupName="childrenInfo" class="row px-0 mx-0">
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="name">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.name')">{{getErrorMessage()}}
+                      </mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0"> Date of Birth</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                          placeholder="Choose Date"[matDatepicker]="picker20">
+                        <mat-datepicker-toggle matSuffix [for]="picker20"></mat-datepicker-toggle>
+                        <mat-datepicker #picker20></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.dateOfBirth')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Place of Birth </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.placeOfBirth')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Place of Residence</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.placeOfResidence')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Alien Registration Number</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.alienRegistrationNumber')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mt-2">
+                      <p class="mb-0 py-0">Immigration Status</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('childrenInformation.childrenInfo.immigrationStatus')">
+                        {{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Estimated Total Assets</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="estimatedTotalAssets">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('childrenInformation.estimatedTotalAssets')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-4 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Estimated Average Weekly Earnings</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="estimatedAverageWeeklyEarnings">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('childrenInformation.estimatedAverageWeeklyEarnings')">
+                      {{getErrorMessage()}}</mat-error>
+                  </div>
+
+                </div>
+              </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel5 hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+                  7. Information About your Family
+                  <div class="d-flex align-items-center">
+                    <mat-icon class="text-primary my-auto">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row scroll mt-2 mx-1 px-4 smallscreen">
+                <div formGroupName="familyInformation" class="row">
+                  <p class="mb-0 py-0 mt-3 pb-2">Please provide the following information about your Mother, Father,
+                    Brothers, Sisters, Grandparents, Uncles, Aunts (Living or Deceased):</p>
+                  <div formGroupName="mother" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Mother</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker21">
+                          <mat-datepicker-toggle matSuffix [for]="picker21"></mat-datepicker-toggle>
+                          <mat-datepicker #picker21></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.mother.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.mother.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="father" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">Father</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker22">
+                          <mat-datepicker-toggle matSuffix [for]="picker22"></mat-datepicker-toggle>
+                          <mat-datepicker #picker22></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.father.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate1">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate1"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate1></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.father.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="brotherOrSister1" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">A. Brother Or Sister</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker33">
+                          <mat-datepicker-toggle matSuffix [for]="picker33"></mat-datepicker-toggle>
+                          <mat-datepicker #picker33></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister1.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate2">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate2"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate2></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister1.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister1.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="brotherOrSister2" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">B. Brother Or Sister</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker23">
+                          <mat-datepicker-toggle matSuffix [for]="picker23"></mat-datepicker-toggle>
+                          <mat-datepicker #picker23></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister2.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate3">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate3"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate3></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister2.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister2.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formGroupName="brotherOrSister3" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">C. Brother Or Sister</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker25">
+                          <mat-datepicker-toggle matSuffix [for]="picker25"></mat-datepicker-toggle>
+                          <mat-datepicker #picker25></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister3.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate6">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate6"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate6></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister3.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister3.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="brotherOrSister4" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">D. Brother Or Sister</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker26">
+                          <mat-datepicker-toggle matSuffix [for]="picker26"></mat-datepicker-toggle>
+                          <mat-datepicker #picker26></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.brotherOrSister4.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate4">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate4"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate4></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister4.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.brotherOrSister4.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formGroupName="grandParents1" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">A. Grandparents</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents1.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker27">
+                          <mat-datepicker-toggle matSuffix [for]="picker27"></mat-datepicker-toggle>
+                          <mat-datepicker #picker27></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents1.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents1.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents1.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents1.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents1.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate7">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate7"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate7></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents1.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents1.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formGroupName="grandParents2" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">B. Grandparents</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents2.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker28">
+                          <mat-datepicker-toggle matSuffix [for]="picker28"></mat-datepicker-toggle>
+                          <mat-datepicker #picker28></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents2.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents2.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents2.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents2.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents2.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate8">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate8"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate8></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents2.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents2.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="grandParents3" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">C. Grandparents</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents3.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker29">
+                          <mat-datepicker-toggle matSuffix [for]="picker29"></mat-datepicker-toggle>
+                          <mat-datepicker #picker29></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents3.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents3.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents3.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents3.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.grandParents3.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate9">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate9"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate9></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents3.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.grandParents3.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div formGroupName="auntOrUncle1" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">A. Aunt or Uncle</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker30">
+                          <mat-datepicker-toggle matSuffix [for]="picker30"></mat-datepicker-toggle>
+                          <mat-datepicker #picker30></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle1.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate20">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate20"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate20></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle1.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle1.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formGroupName="auntOrUncle2" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">B. Aunt or Uncle</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker31">
+                          <mat-datepicker-toggle matSuffix [for]="picker31"></mat-datepicker-toggle>
+                          <mat-datepicker #picker31></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle2.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate22">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate22"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate22></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle2.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle2.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div formGroupName="auntOrUncle3" class="row">
+                    <div formGroupName="personDetails" class="row">
+                      <p class="mb-0 pb-2 fw-bolder mt-3 px-3">C. Aunt or Uncle</p>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Name</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="name">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.name')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> Date of Birth</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="dateOfBirth"
+                            placeholder="Choose Date"[matDatepicker]="picker32">
+                          <mat-datepicker-toggle matSuffix [for]="picker32"></mat-datepicker-toggle>
+                          <mat-datepicker #picker32></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.dateOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Birth </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfBirth">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.placeOfBirth')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Residence</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.placeOfResidence')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Alien Registration Number</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="alienRegistrationNumber">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.alienRegistrationNumber')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Immigration Status</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="immigrationStatus">
+                        </mat-form-field>
+                        <mat-error
+                          *ngIf="errorHandling('familyInformation.auntOrUncle3.personDetails.immigrationStatus')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div formGroupName="deceased" class="row">
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0"> If Deceased, Date of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Choose Date" formControlName="deceasedDate"
+                            placeholder="Choose Date"[matDatepicker]="deceasedDate23">
+                          <mat-datepicker-toggle matSuffix [for]="deceasedDate23"></mat-datepicker-toggle>
+                          <mat-datepicker #deceasedDate23></mat-datepicker>
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle3.deceased.deceasedDate')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                      <div class="col-lg-4 col-md-6 mt-2">
+                        <p class="mb-0 py-0">Place of Death: </p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="placeOfDeath">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('familyInformation.auntOrUncle3.deceased.placeOfDeath')">
+                          {{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </form>
+          <form [formGroup]="intakefg">
+            <mat-expansion-panel #panel7 *ngIf="pageflow == 'validate' || pageflow == 'Display'" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont text-secondary ">
+                  8. Validation
+                  <mat-icon class="text-primary">{{panel7.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row mt-2 mx-1 px-4">
+                <div class="col-lg-4 col-md-6 mt-2">
+                  <p class="mb-0 py-0">Intake Status</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <mat-select placeholder="select" formControlName="statusId" placeholder="Select">
+                      <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                        {{food.value}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling_admin('statusId')">{{getErrorMessage()}}</mat-error>
+
+
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </form>
+        </mat-accordion>
+
+
+
+
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+
+          <button *ngIf="!btncancel" mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>
+            Cancel</button>
+          <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            {{btntext}}</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

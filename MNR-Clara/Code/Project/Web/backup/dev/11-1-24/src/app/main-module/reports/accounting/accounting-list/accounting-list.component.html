@@ -1,0 +1,104 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Reports</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Accounting </li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput class="form-control filter_button mx-2 border-bottom"
+        placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+        matTooltip="Delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+        matTooltip="Copy">
+        <mat-icon class="">content_copy</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+        class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button disabled mat-mini-fab class=" disabled  bg-darkblue text-white mx-2 action-button">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button disabled mat-mini-fab class=" disabled text-white mx-2 action-button  bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <div class="example-sidenav-content" style="overflow: hidden !important;">
+    <div class="tabbar1 px-0 bg-white my-auto col d-flex align-items-center" style="height: 3rem;  ">
+      <h2 class="my-auto mb-0 mx-4  whs-text-grey ">CLIENT REPORTS</h2>
+    </div>
+    <mat-nav-list class="mt-2">
+      <!-- <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/lande"
+          style="font-size: 16px;"><img src="./assets/img/icons1/one.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">NEW CLIENT INFO - L&E</p>
+        </a>
+      </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/immigration"
+          style="font-size: 16px;"><img src="./assets/img/icons1/two.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">NEW CLIENT INFO - IMMIGRATION</p>
+        </a>
+      </mat-list-item> -->
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/wipagedpb"
+        style="font-size: 16px;"><img src="./assets/img/icons1/one.png" class="mb-1 mx-3" alt="" srcset=""
+          style="height: 25px;width: 25px;">
+        <div class="vertical d-inline"></div>
+        <p class="mb-0 d-inline pr-3 mx-4">WIP AGED REPORT FOR PREBILLS VALIDATION</p>
+      </a>
+    </mat-list-item>
+      <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/araging"
+          style="font-size: 16px;"><img src="./assets/img/icons1/two.png" class="mb-1 mx-3" alt="" srcset=""
+            style="height: 25px;width: 25px;">
+          <div class="vertical d-inline"></div>
+          <p class="mb-0 d-inline pr-3 mx-4">AR AGING</p>
+        </a>
+      </mat-list-item>
+  
+    <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/billing"
+      style="font-size: 16px;"><img src="./assets/img/icons1/three.png" class="mb-1 mx-3" alt="" srcset=""
+        style="height: 25px;width: 25px;">
+      <div class="vertical d-inline"></div>
+      <p class="mb-0 d-inline pr-3 mx-4">BILLING REPORT</p>
+    </a>
+  </mat-list-item>
+  <mat-list-item class=" border "> <a matLine href="..." routerLink="/main/reports/partnerbilling"
+    style="font-size: 16px;"><img src="./assets/img/icons1/three.png" class="mb-1 mx-3" alt="" srcset=""
+      style="height: 25px;width: 25px;">
+    <div class="vertical d-inline"></div>
+    <p class="mb-0 d-inline pr-3 mx-4">Partner BILLING REPORT</p>
+  </a>
+</mat-list-item>
+    </mat-nav-list>
+  </div>
+</mat-drawer-container>

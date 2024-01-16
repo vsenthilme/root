@@ -1,0 +1,37 @@
+LANG_ID,CLASS_ID,matterExpenseId,CLIENT_ID,MATTER_NO,CASEINFO_NO,EXP_CODE,EXP_AMOUNT,EXP_TEXT,EXP_TYPE,BILL_TYPE,STATUS_ID,Isdeleted,CTD_BY,CTD_ON
+EN,2,1,9086,9086-211,888888,FF4,460,"Filing fee for I-129 Petition for Nonimmigrant payable to ""U.S. Department of Homeland Security""",Debit,Billable,38,0,admin,4/13/2022
+EN,2,2,9086,9086-211,888888,FF1,1500,"H-1B Education and Training Fee payable to ""U.S. Department of Homeland Security""",Debit,Billable,38,0,admin,4/13/2022
+EN,2,3,9086,9086-211,888888,FED,42.94,Federal Express fee for package mailed on 03.31.2022 to Attn: NFB (Box 660867)  USCIS  (Tracking No.:776436586575),Debit,Billable,38,0,admin,4/7/2022
+EN,2,4,9086,9086-211,888888,FED,33.88,Federal Express fee for package mailed on 03.31.2022  to Indianapolis Field Office  US Citizenship and Immigration (Tracking No.:776455556523),Debit,Billable,38,0,admin,4/7/2022
+EN,2,5,9086,9086-211,888888,LA,2572,Legal Advertisement payable to ADNET Advertising Agency,Debit,Billable,38,0,admin,4/1/2022
+EN,2,6,9086,9086-211,888888,FED,12.89,Federal Express fee for package mailed on 03.31.2022  to Evelyn Nunez (Tracking No.:776455438576),Debit,Billable,38,0,admin,4/7/2022
+EN,2,7,9086,9086-211,888888,FF3,2500,"Filing fee for I-907 Premium Processing payable to ""U.S. Department of Homeland Security""",Debit,Billable,38,0,admin,4/13/2022
+EN,2,8,9086,9086-211,888888,FED,12.89,Federal Express fee for package mailed on 03.31.2022  to Evelyn Nunez (Tracking No.:776455438576),Debit,Billable,38,0,admin,4/7/2022
+EN,2,9,9086,9086-211,888888,FED,24.59,Federal Express fee for package mailed on 03.29.2022  to RFE/NOID  (Tracking No.:776436037827),Debit,Billable,38,0,admin,4/7/2022
+EN,2,10,9086,9086-211,888888,FF2,500,"Fraud Prevention and Detection Fee payable to ""U.S. Department of Homeland Security""",Debit,Billable,38,0,admin,4/13/2022
+EN,2,11,9086,9086-211,888888,ADS,2572,"Recruitment Fees for PERM process payable to "" Adnet Advertising Agency, Inc""",Debit,Billable,38,0,admin,4/19/2022
+EN,2,12,3762,3762-211,888888,FED,18.68,Federal Express fee for package mailed on 04.04.2022 to Office of the Chief Counsel (Tracking No.:776468331888),Debit,Billable,38,0,admin,4/7/2022
+EN,2,13,9361,9361-221,888888,MI,15.04,Total mileage for the trips was 27.60 miles.,Debit,Billable,38,0,admin,4/6/2022
+EN,2,14,8712,8712-201,888888,FED,20.26,Federal Express fee for package mailed on 03.30.2022 to USCIS Field Office  US Department of Homeland Secu (Tracking No.:776448674935),Debit,Billable,38,0,admin,4/7/2022
+EN,1,15,50363,50363-02,888888,INV,693.75,Invoice# 7347 Shauna Beach Company for Original Transcript for Clarence Carr,Debit,Billable,38,0,admin,4/13/2022
+EN,2,18,8818,8818-201,888888,B1,164.43,"Filing Fee for B1  Nonimmigrant Visa Process payable to ""U.S. Department of State""",Debit,Billable,38,0,admin,4/12/2022
+EN,2,19,9220,9220-211,888888,FED,59.08,Federal Express fee for package mailed on 03.29.2022  to Adjustment of Status USCIS (Tracking No.:776435255803),Debit,Billable,38,0,admin,4/7/2022
+EN,2,20,9300,9300-221,888888,I90,540,"Filing fee for I-90; Application to Replace Permanent Resident Card payable to ""U.S. Department of Homeland Security",Debit,Billable,38,0,admin,4/19/2022
+EN,2,21,9345,9345-221,888888,FED,21.21,Federal Express fee for package mailed on 03.30.2022 to Attn: Adjudication - Ancillari  USCIS National Benefits Center (Tracking No.:776436746290),Debit,Billable,38,0,admin,4/7/2022
+EN,2,22,9360,9360-221,888888,FED,16.9,Federal Express fee for package mailed on 04.01.2022 to Attn: Office of Chief Counsel  USCIS  (Tracking No.:776469154927),Debit,Billable,38,0,admin,4/7/2022
+EN,2,23,9360,9360-221,888888,FED,34.55,Federal Express fee for package mailed on 04.01.2022 to Office of he Clerk (Tracking No.:776469141228),Debit,Billable,38,0,admin,4/7/2022
+EN,2,24,5389,5389-221,888888,PW,715,"Filing fee for I-601A Application for Provisional Unlawful Presence Waiver  payable to ""U.S. Department of Homeland Security",Debit,Billable,38,0,admin,4/25/2022
+EN,2,25,5389,5389-221,888888,NVC,325,"National Visa Center Immigrant Visa Payment payable to ""U.S. Department of State""",Debit,Billable,38,0,admin,4/4/2022
+EN,2,26,3852,3852-211,888888,FED,24.59,Federal Express fee for package mailed on 03.31.2022 to I-539 (Box 660166) USCIS (Tracking No.:776449522953),Debit,Billable,38,0,admin,4/7/2022
+EN,1,27,53920,53920-01,888888,ADV,500,Advance paid on Client's Behalf Marcos Hinojosa,Debit,Billable,38,0,admin,4/8/2022
+EN,2,28,3987,53987-01,888888,BC,1,"Criminal Background Check payable to "" Harris County District Clerk""",Debit,Billable,38,0,admin,4/18/2022
+EN,1,29,50963,50963-03,888888,MI,33.9,Drop off items to Ammy Huddleston.,Debit,Billable,38,0,admin,4/2/2022
+EN,1,30,50963,50963-03,888888,MI,33.9,Drop off Items to Amy Huddleston.,Debit,Billable,38,0,admin,4/9/2022
+EN,1,31,51054,51054-11,888888,SOP,126.8,"Service of Process of Writ of Scire Facias to Michelle Carter in Huffman, Texas. Invoice No. 6928494.",Debit,Billable,38,0,admin,4/13/2022
+EN,1,32,51054,51054-11,888888,MED,1100,Mediation services per party for a full-day session.  Mediator Suzanne Johnson.,Debit,Billable,38,0,admin,4/18/2022
+EN,2,34,5948,5948-201,888888,FED,17.57,Federal Express fee for package mailed on 03.31.2022  to Office of the Chief Counsel (Tracking No.:776443328785),Debit,Billable,38,0,admin,4/7/2022
+EN,2,35,8608,8608-211,888888,NVC,445,"National Visa Center Immigrant Visa Payment payable to ""U.S. Department of State""",Debit,Billable,38,0,admin,4/19/2022
+EN,2,37,6838,6838-211,888888,FED,23.08,Federal Express fee for package mailed on 03.29.2022  to Noe Jaimes (Tracking No.:776247581185),Debit,Billable,38,0,admin,4/7/2022
+EN,2,39,9187,9187-211,888888,FED,26.43,Federal Express fee for package mailed on 04.01.2022 to Josefina Santoyo (Tracking No.:776471491893),Debit,Billable,38,0,admin,4/7/2022
+EN,2,40,8382,8382-211,888888,PW,715,"Filing fee for I-601A Application for Provisional Unlawful Presence Waiver  payable to ""U.S. Department of Homeland Security",Debit,Billable,38,0,admin,4/5/2022
+EN,2,55,9231,9231-221,888888,TN,338.73,"Filing Fee for TN/TD Nonimmigrant Visa Process payable to ""U.S. Department of State""",Debit,Billable,38,0,admin,4/5/2022

@@ -1,0 +1,71 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+    <h2 class="my-auto headertext">Selection Parameter</h2>
+    <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+  </div>
+  <div class="mt-2">
+    <div class="row p-1 px-3">
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0 required">Prebill Batch No</p>
+        <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="">
+        </app-ng-multiselect-dropdown>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0 required">Prebill Number</p>
+        <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="">
+        </app-ng-multiselect-dropdown>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0 required">Prebill Date</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <mat-date-range-input [rangePicker]="picker1">
+            <input matStartDate placeholder="Start date">
+            <input matEndDate placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker1></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0">Client ID</p>
+        <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="">
+        </app-ng-multiselect-dropdown>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0">Matter No</p>
+        <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="">
+        </app-ng-multiselect-dropdown>
+      </div>
+
+
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0">Partner Assigned</p>
+        <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100" formControlName="">
+        </app-ng-multiselect-dropdown>
+      </div>
+      <div class="col-lg-6 col-md-6 mt-1 mb-1">
+        <p class="mb-0 py-0 required">Invoice Date</p>
+        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+          <input matInput placeholder="Choose Date" [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 mt-1">
+        <p class="mb-0 py-0 ">Invoice Remarks</p>
+        <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+          <textarea matInput rows="5" placeholder="Enter"></textarea>
+        </mat-form-field>
+
+      </div>
+
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button mat-dialog-close color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button mat-dialog-close class="mx-2 bg-blue text-white"
+        routerLink="/main/accounts/newbilllist"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Run</button>
+    </div>
+</div>

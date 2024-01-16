@@ -1,0 +1,100 @@
+<div class="row bg-white mx-0">
+    <mat-accordion class="scrolllong">
+      <mat-expansion-panel class="shadow-none" #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Payment Plan Details
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row py-2 pt-4 p-1 px-1">
+          <!-- <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Client Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+          </div> -->
+          <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+            <p class="mb-0 fw-bold ml-4 darkgrey label">Matter No</p>
+            <p class="mb-0 ml-4 lightgrey label1">{{matterdesc}}</p>
+          </label>
+          <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+            <p class="mb-0 fw-bold ml-4 darkgrey label">Payment Plan No</p>
+            <p class="mb-0 ml-4 lightgrey label1">{{paymentPlanNumber}}</p>
+          </label>
+          <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+            <p class="mb-0 fw-bold ml-4 darkgrey label">Payment Plan Amount</p>
+            <p class="mb-0 ml-4 lightgrey label1">$ {{paymentPlanTotalAmount}}</p>
+          </label>
+          <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+            <p class="mb-0 fw-bold ml-4 darkgrey label">No Of Installments</p>
+            <p class="mb-0 ml-4 lightgrey label1">{{noofinstallment}}</p>
+          </label>
+          <label class="col-12 d-flex justify-content-between col-md-4 px-4 py-2">
+            <p class="mb-0 fw-bold ml-4 darkgrey label">Installment Amount</p>
+            <p class="mb-0 ml-4 lightgrey label1">$ {{Installmentamt}}</p>
+          </label>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="shadow-none" #panel1 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Lines
+            <mat-icon class="text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  px-0">
+          <div class="scroll1">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+              <!-- Weight Column -->
+              <ng-container matColumnDef="lineno">
+                <th mat-header-cell *matHeaderCellDef>Installment No</th>
+                <td mat-cell *matCellDef="let element"> {{element.itemNumber}} </td>
+              </ng-container>
+          
+              <!-- Weight Column -->
+              <ng-container matColumnDef="partner">
+                <th mat-header-cell *matHeaderCellDef>Due Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.dueDate | date : 'MM-dd-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Installment Amt</th>
+                <td mat-cell *matCellDef="let element">$ {{element.dueAmount}} </td>
+              </ng-container>
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>Balance Amt</th>
+                  <td mat-cell *matCellDef="let element">$ {{element.remainingDueNow}} </td>
+                </ng-container>
+                <!-- Symbol Column -->
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+              </tr>
+            </table>
+          </div>
+      
+              
+        </div>
+      
+      
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class=" pb-1 w-100 d-flex justify-content-end bottombutton2 bg-white">
+      <div class=" pt-3  mr-5 pr-5">
+        <button mat-raised-button class="text-white mr-1 px-4" color="warn" routerLink="/main/payment/payment">
+          <mat-icon class="">close</mat-icon> Close
+        </button>
+      </div>
+      <div class="p-0 mx-1 d-none d-md-block">
+        <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  
+  
+  </div>

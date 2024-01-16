@@ -1,0 +1,396 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3"><a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a></li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Reports
+        </li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page"><a
+            routerLink="/main/reports/accountlist">Accounting</a>
+        </li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">WIP aged report for prebill validation</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <form [formGroup]="form">
+      <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+          class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+      </div>
+    </form>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" (click)="downloadexcel()">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons bg-yellow1 text-white mx-2 "
+        matTooltip="Delete" [disabled]="!RA.delete">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display" [disabled]="!RA.view">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true"
+        class="floating-buttons text-white mx-2 me-3 bg-darkblue1  " matTooltip="Edit" [disabled]="!RA.createUpdate">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button  "
+        [disabled]="!RA.createUpdate">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button bg-red   " (click)="searchkeyboard()" type="button"
+        mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="d-flex align-items-center justify-content-between pb-2"
+  style="height: 3rem !important;background-color: #f5f5f5 !important;">
+  <div>
+    <h2 class="my-auto mb-0 mx-4 ps-3 font-weight-bold text-blue">WIP AGED REPORT FOR PREBILLS VALIDATION</h2>
+  </div>
+  <div *ngIf="back">
+    <button mat-icon-button (click)="backsearch()"
+      class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+      matTooltip="Back">
+      <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">arrow_back
+      </mat-icon>
+    </button>
+  </div>
+</div>
+<form [formGroup]="form">
+  <div class="mt-3 mb-0 " *ngIf="search">
+    <div class="row  mx-4">
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Class </p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="onItemSelect($event)" class="w-100 my-1 mb-2"
+            [options]="multiClassList" formControlName="classId" [style]="{'width': '100%'}"
+            [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Client ID </p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="OnSelectClient($event)"  class="w-100 my-1 mb-2" [options]="multiClientList"
+            formControlName="clientId" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Matter No </p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="OnSelectMatter($event)"  class="w-100 my-1 mb-2" [options]="multiMatterList"
+            formControlName="matterNumber" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Case Category </p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="OnSelectCase($event)"  class="w-100 my-1 mb-2" [options]="multiCaseCategoryList"
+            formControlName="caseCategoryId" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Case Sub Category </p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="OnSelectCaseSub($event)"  class="w-100 my-1 mb-2"
+            [options]="multiCaseSubCategoryList" formControlName="caseSubCategoryId" [style]="{'width': '100%'}"
+            [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+   
+      <!-- <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Status</p>
+              <p-multiSelect  [filter]="true"placeholder="Select"    class="w-100 my-1 mb-2" [options]="multiSelectStatusList" 
+                    formControlName="statusId"  [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+          <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage('statusId')}}</mat-error>
+        </div>
+      </div> -->
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Partner</p>
+          <p-multiSelect [filter]="true" placeholder="Select" (onChange)="OnSelectPartner($event)"  class="w-100 my-1 mb-2" [options]="multiPartnerList"
+            formControlName="partner" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0 required">Date</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <mat-date-range-input [rangePicker]="picker20">
+              <input formControlName="fromDateFE" matStartDate placeholder="Choose Date">
+              <input formControlName="toDateFE" matEndDate placeholder="Choose Date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker20"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker20></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+      <button mat-raised-button class=" bg-danger px-4 text-white mb-2 mx-2" (click)="reset()"> <i
+          class="bi bi-arrow-counterclockwise me-1 font-size-1_5rem pr-2"></i>Reset</button>
+      <button mat-raised-button class=" bg-darkblue text-white mb-2 mx-2" (click)="filtersearch()"> <i
+          class="bi bi-gear-fill me-1 font-size-1_5rem pr-2"></i>Execute</button>
+    </div>
+  </div>
+</form>
+<div class=" my-0 py-0" *ngIf="table">
+  <div class="ms-3 me-3 px-1" [ngClass]="{'scroll20' : !search, 'scroll2': search}">
+    <div class="scroll4">
+      <!-- <h4 class="text-secondary noresult" *ngIf="this.dataSource.data.length == 0">No Results Found</h4> -->
+      <table mat-table [dataSource]="dataSource" matSort class=" w-100 ">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="classId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Class ID</th>
+          <td mat-cell *matCellDef="let element"> {{element.classId == 1 ? 'Labor & Employement' : 'Immigration'}}</td>
+        </ng-container>
+
+    
+
+        <ng-container matColumnDef="billingModeId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Client / Matter</th>
+          <td mat-cell *matCellDef="let element">
+            <div>{{element.clientNumber}} / {{element.matterNumber}} </div>
+            <!-- <div> {{element.matterNumber}} </div> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="clientName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name / Matter Desc</th>
+          <td mat-cell *matCellDef="let element">
+            <div> {{element.clientName}} / {{element.matterName}} </div>
+            <!-- <div>  {{element.matterName}} </div> -->
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="fees">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Billing Mode </th>
+          <td mat-cell *matCellDef="let element">
+            <div>{{element.billingModeId}} </div>
+            <div class="d-flex">
+              <p class="mb-0 fw-bold mr-2">Prior Balance:</p>
+              <p class="mb-0"> {{element.priorBalance != null ? (element.priorBalance | currency) : '$ 0.00'}} </p>
+            </div>
+        </ng-container>
+
+
+        <ng-container matColumnDef="hardCost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fixed Fee</th>
+          <td mat-cell *matCellDef="let element">{{element.current != null ? element.current.timeTicketHours : '0'}}
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="matterName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Resp</th>
+          <td mat-cell *matCellDef="let element"> {{element.responsibleAttorneys}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="partners">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Partners</th>
+          <td mat-cell *matCellDef="let element"> {{element.partners}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="priorBalance">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Details</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex">
+              <p class="mb-0 fw-bold mr-2">Hours:</p>
+            </div>
+            <div class="d-flex">
+              <p class="mb-0 fw-bold mr-2">Fees:</p>
+            </div>
+            <div class="d-flex">
+              <p class="mb-0 fw-bold mr-2">Hard Cost:</p>
+            </div>
+            <div class="d-flex">
+              <p class="mb-0 fw-bold mr-2">Soft Cost:</p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="responsibleAttorneys">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Current</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.current != null ? element.current.timeTicketHours != null ?
+                (element.current.timeTicketHours | number:'1.1-1') : '0.0' : '0.0' }} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.current != null ? element.current.fees != null ?
+                (element.current.fees | currency) : '$ 0.00' : '$ 0.00' }} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.current != null ? element.current.hardCost != null ?
+                (element.current.hardCost | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right"> {{element.current != null ? element.current.softCosts != null ?
+                (element.current.softCosts | currency) : '$ 0.00' : '$ 0.00' }} </p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="softCosts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>31-60 Days</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from30To60Days !=null ? element.from30To60Days.timeTicketHours !=
+                null ? (element.from30To60Days.timeTicketHours | number:'1.1-1') : '0.0' : '0.00' }} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from30To60Days !=null ? element.from30To60Days.fees != null ?
+                (element.from30To60Days.fees | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from30To60Days !=null ? element.from30To60Days.hardCost != null ?
+                (element.from30To60Days.hardCost | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right"> {{element.from30To60Days !=null ? element.from30To60Days.softCosts != null ?
+                (element.from30To60Days.softCosts | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="timeTicketAmount30To60Days">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>61-90 Days</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from61To90Days != null ? element.from61To90Days.timeTicketHours !=
+                null ? (element.from61To90Days.timeTicketHours | number:'1.1-1') : '0.0' : '0.0'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from61To90Days != null ? element.from61To90Days.fees != null ?
+                (element.from61To90Days.fees | currency) : '$ 0.00' : '$ 0.00' }} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from61To90Days != null ? element.from61To90Days.hardCost != null ?
+                (element.from61To90Days.hardCost | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right"> {{element.from61To90Days != null ? element.from61To90Days.softCosts != null ?
+                (element.from61To90Days.softCosts | currency) : '$ 0.00' : '$ 0.00' }} </p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="timeTicketAmount61To90Days">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 91-120 Days</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from91To120DDays != null ? element.from91To120DDays.timeTicketHours
+                != null ? (element.from91To120DDays.timeTicketHours | number:'1.1-1') : '0.0' : '0.00'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from91To120DDays != null ? element.from91To120DDays.fees != null ?
+                (element.from91To120DDays.fees | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.from91To120DDays != null ? element.from91To120DDays.hardCost != null
+                ? (element.from91To120DDays.hardCost | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right"> {{element.from91To120DDays != null ? element.from91To120DDays.softCosts !=
+                null ? (element.from91To120DDays.softCosts | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="timeTicketAmount91DaysTo120Days">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Over 120 Days</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.over120Days != null ? element.over120Days.timeTicketHours != null ?
+                (element.over120Days.timeTicketHours | number:'1.1-1') : '0.0' : '0.00'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.over120Days != null ? element.over120Days.fees != null ?
+                (element.over120Days.fees | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right"> {{element.over120Days != null ? element.over120Days.hardCost != null ?
+                (element.over120Days.hardCost | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right"> {{element.over120Days != null ? element.over120Days.softCosts != null ?
+                (element.over120Days.softCosts | currency) : '$ 0.00' : '$ 0.00'}} </p>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right fw-bold"> {{totalcurrency(element) | number:'1.1-1'}}</p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right fw-bold"> {{totalfees(element) | currency}}</p>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <p class="mb-0 text-right fw-bold"> {{totalhardCost(element) | currency}}</p>
+            </div>
+            <div class="d-flex justify-content-end">
+              <p class="mb-0 text-right fw-bold"> {{totalsoftCosts(element) | currency}}</p>
+            </div>
+          </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="timeTicketAmountCurrent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>TimeTicket Amount Current</th>
+          <td mat-cell *matCellDef="let element"> {{element.timeTicketAmountCurrent}} </td>
+        </ng-container>
+        <ng-container matColumnDef="timeTicketAmountOver120">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>TimeTicket Amount Over 120</th>
+          <td mat-cell *matCellDef="let element"> {{element.timeTicketAmountOver120}} </td>
+        </ng-container> -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="p-0 mx-1 m-0">
+    <!-- <mat-paginator class="mx-3 me-3" showFirstLastButtons [length]="totalRecords" [pageSize]=pageSize
+    [pageSizeOptions]="[250, 500, 750, 1000]" aria-label="Select page of periodic elements"
+    (page)="pageHandler($event)" *ngIf="table">
+  </mat-paginator>  -->
+  <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250, 300]"
+  aria-label="Select page of periodic elements">
+</mat-paginator>
+    <!-- <div class="col-12 mt-2">
+      <p *ngIf="table" style="text-align: right;font-weight: bold;" class="mt-2">Number of Records : {{totalRecords}}
+      </p>
+    </div> -->
+  </div>
+</div>
+
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-aliasMenuItems="element">
+    <button mat-menu-item>Edit</button>
+    <button mat-menu-item>Display</button>
+    <button mat-menu-item>Delete</button>
+    <!-- <button mat-menu-item (click)="open_ClientCreation(aliasMenuItems)">Client Creation</button>  -->
+  </ng-template>
+</mat-menu>

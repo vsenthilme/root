@@ -1,0 +1,344 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+      <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 d-flex align-items-center">
+          <li class="breadcrumb-item mb-0 ms-3"><a >
+              <mat-icon class="text-secondary align-middle">home</mat-icon>
+            </a></li>
+          <div class="divider mx-3 border-end"></div>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Reports
+          </li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page"><a
+              routerLink="/main/reports/accountlist">Accounting</a>
+          </li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Partner Billing Report</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+      <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+          class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+      </div>
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel" (click)="downloadexcel()">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons bg-yellow1 text-white mx-2 "
+          matTooltip="Delete" [disabled]="!RA.delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons text-white mx-2 bg-lightblue"
+          matTooltip="Display" [disabled]="!RA.view">
+          <mat-icon class="">search</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true"
+          class="floating-buttons text-white mx-2 me-3 bg-darkblue1  " matTooltip="Edit" [disabled]="!RA.createUpdate">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+          [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon>{{icon}}</mat-icon>Options
+        </button>
+        <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button  "
+          [disabled]="!RA.createUpdate">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button mat-mini-fab disabled class="text-white mx-2 action-button bg-red disabled  " type="button" mat-button>
+          <mat-icon class="">search</mat-icon> Search
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center justify-content-between pb-2"
+    style="height: 3rem !important;background-color: #f5f5f5 !important;">
+    <div>
+      <h2 class="my-auto mb-0 mx-4 ps-3 font-weight-bold text-blue">Partner Billing Report</h2>
+    </div>
+    <div *ngIf="back" class="d-flex w-45">
+      <button mat-icon-button (click)="backsearch()"
+        class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+        matTooltip="Back">
+        <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">
+          arrow_back
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="form">
+    <div class="mt-3 mb-0 " *ngIf="search">
+      <div class="row  mx-4">
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 required">Class </p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiSelectClassList" [(ngModel)]="selectedClassId"
+              [settings]="dropdownSettings1" formControlName="classIdFE">
+            </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" class="w-100 my-1 mb-2" [selectionLimit]="1" [options]="multiSelectClassList"
+              formControlName="classId" [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Client ID </p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiselectclientList" [(ngModel)]="selectedClient"
+              [settings]="dropdownSettings1" formControlName="clientIdFE">
+            </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" class="w-100 my-1 mb-2" [options]="multiselectclientList"
+              formControlName="clientId" [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Matter No </p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiSelectMatterList" [(ngModel)]="selectedMatter"
+              [settings]="dropdownSettings1" formControlName="matterNumberFE">
+            </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" class="w-100 my-1 mb-2" [options]="multiSelectMatterList"
+              formControlName="matterNumber" [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Partner </p>
+            <!-- <angular2-multiselect [data]="multiSelectCaseCategoryList" [(ngModel)]="selectedCaseCategoryItems"
+              [settings]="dropdownSettings1" formControlName="caseCategoryIdFE"></angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" class="w-100 my-1 mb-2" [options]="multipartnerList"
+              formControlName="partner" [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+          </div>
+        </div>
+  <!-- 02/12/2022 -->
+        <!-- <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Billing Date </p>
+            <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+              <mat-date-range-input [rangePicker]="picker1">
+                <input matStartDate placeholder="Start date" formControlName="fromBillingDateFE">
+                <input matEndDate placeholder="End date" formControlName="toBillingDateFE">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker1></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div> -->
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 required">Posting Date </p>
+            <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+              <mat-date-range-input [rangePicker]="picker2">
+                <input matStartDate placeholder="Start date" formControlName="fromPostingDateFE">
+                <input matEndDate placeholder="End date" formControlName="toPostingDateFE">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker2></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Status</p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiSelectStatusList" [(ngModel)]="selectedStatusId"
+              [settings]="dropdownSettings" formControlName="statusIdFE">
+            </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" [filter]="true" class="w-100 my-1 mb-2" [options]="multiSelectStatusList"
+              formControlName="statusId" [style]="{'width': '100%'}"  [panelStyle]="{'width':'20%'}"></p-multiSelect>
+            <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage('statusId')}}</mat-error>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Responsible TimeKeeper</p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiSelectMainAttorneyIdList" [(ngModel)]="selectedMainAttorneyId"
+                [settings]="dropdownSettings" formControlName="responsibleTimeKeeperFE">
+              </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+              [options]="multiSelectMainAttorneyIdList" formControlName="responsibleTimeKeeper"
+              [style]="{'width': '100%'}"></p-multiSelect>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Assigned TimeKeeper</p>
+            <!-- <angular2-multiselect class="mb-2" [data]="multiSelectAssignedTKIdList" [(ngModel)]="selectedAssignedTKId"
+                [settings]="dropdownSettings" formControlName="assignedTimeKeeperFE">
+              </angular2-multiselect> -->
+            <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+              [options]="multiSelectAssignedTKIdList" formControlName="assignedTimeKeeper" [style]="{'width': '100%'}">
+            </p-multiSelect>
+          </div>
+        </div>
+  
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <button mat-raised-button class=" bg-danger px-4 text-white mb-2 mx-2" (click)="reset()"> <i
+            class="bi bi-arrow-counterclockwise me-1 font-size-1_5rem pr-2"></i>Reset</button>
+        <button mat-raised-button class=" bg-darkblue text-white mb-2 mx-2" (click)="filtersearch()"> <i
+            class="bi bi-gear-fill me-1 font-size-1_5rem pr-2"></i>Execute</button>
+  
+      </div>
+    </div>
+  </form>
+  <div class=" my-0 py-0" *ngIf="table">
+    <div class="ms-3 me-3 px-1" [ngClass]="{'scroll20' : !search, 'scroll2': search}">
+      <div class="scroll4">
+        <table mat-table [dataSource]="dataSource"  matSort matSortActive="postingDate" matSortDirection="asc" class=" w-100 ">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(row)"
+                [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="billingDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Billing Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.billingDate | date : 'MM-dd-yyyy' }} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="billingModeDescription">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Billing Mode </th>
+            <td mat-cell *matCellDef="let element"> {{element.billingModeDescription}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="classIdDescription">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+            <td mat-cell *matCellDef="let element"> {{element.classIdDescription}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="clientId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Client ID</th>
+            <td mat-cell *matCellDef="let element"> {{element.clientId}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="clientName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Client Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.clientName}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+  
+          <ng-container matColumnDef="feeBilled">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sum of Fee Billed </th>
+            <td mat-cell *matCellDef="let element"  class="text-right"> {{element.feeBilled | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{ getBillableAmount() | currency}} </td>
+          </ng-container>
+          <ng-container matColumnDef="hardCost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Hard Cost</th>
+            <td mat-cell *matCellDef="let element"  class="text-right"> {{element.hardCost | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{ Hardcost() | currency}}  </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="paidAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Paid</th>
+            <td mat-cell *matCellDef="let element"  class="text-right"> {{element.paidAmount | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"> {{paidAmount() | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="responsibleTimekeeper">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Responsible Timekeeper</th>
+            <td mat-cell *matCellDef="let element"> {{element.responsibleTimekeeper}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="totalCost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sum of Cost billed</th>
+            <td mat-cell *matCellDef="let element" class="text-right"> {{element.totalCost | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{getcosttotal() | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="assignedTimekeeper">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned Timekeeper</th>
+            <td mat-cell *matCellDef="let element"> {{element.assignedTimekeeper}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="balance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
+            <td mat-cell *matCellDef="let element" class="text-right"> {{element.balance | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{getbalancetotal() | currency}}</td>
+          </ng-container>
+         
+          <ng-container matColumnDef="invoiceNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</th>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceNumber}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="matterDescription">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter Description</th>
+            <td mat-cell *matCellDef="let element"> {{element.matterDescription}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="matterNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+            <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="partner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Partner</th>
+            <td mat-cell *matCellDef="let element"> {{element.partner}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="miscDebits">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Misc Debits</th>
+            <td mat-cell *matCellDef="let element"> {{element.miscDebits }} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{miscdebt() | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="postingDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Posting Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.postingDate | date : 'MM-dd-yyyy'}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="remainingBalance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Remaining Balance</th>
+            <td mat-cell *matCellDef="let element" class="text-right"> {{element.remainingBalance | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+          </ng-container>
+          <ng-container matColumnDef="softCost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Soft Cost</th>
+            <td mat-cell *matCellDef="let element" class="text-right"> {{element.softCost | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{softcost() | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="adminCost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin Cost</th>
+            <td mat-cell *matCellDef="let element" class="text-right"> {{element.adminCost | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{adminCost() | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="totalBilled">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sum of Total Billed</th>
+            <td mat-cell *matCellDef="let element"  class="text-right"> {{element.totalBilled | currency}} </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">{{ totalbilledAmount()  | currency}}</td>
+          </ng-container>
+          <ng-container matColumnDef="totalHours">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Hrs</th>
+            <td mat-cell *matCellDef="let element"  class="text-right"> {{element.totalHours | number:'1.1-1'}}  </td>
+            <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right">Total hrs: {{totalhrs() | number:'1.1-1'}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+        </table>
+      </div>
+    </div>
+    <div class="p-0 mx-1 m-0">
+      <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="500" [pageSizeOptions]="[500, 600, 700, 800]"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+  
+  
+  
+  <mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-aliasMenuItems="element">
+      <button mat-menu-item>Edit</button>
+      <button mat-menu-item>Display</button>
+      <button mat-menu-item>Delete</button>
+      <!-- <button mat-menu-item (click)="open_ClientCreation(aliasMenuItems)">Client Creation</button>  -->
+    </ng-template>
+  </mat-menu>
+  

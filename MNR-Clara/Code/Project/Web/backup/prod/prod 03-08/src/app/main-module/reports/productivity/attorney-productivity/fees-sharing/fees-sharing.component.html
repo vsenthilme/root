@@ -1,0 +1,44 @@
+
+<div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Fees Sharing </h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+<div class="row mx-1">
+  <div class="scroll2">
+      <table mat-table [dataSource]="dataSource" matSort class=" w-100 ">
+
+          <ng-container matColumnDef="matterNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+              <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="timeKeeperCode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>TimeKeeper Code</th>
+              <td mat-cell *matCellDef="let element"> {{element.timeKeeperCode}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="feeSharingAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Fees Sharing Amount</th>
+              <td mat-cell *matCellDef="let element"> {{element.feeSharingAmount | currency}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="feeSharingPercentage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Fee Sharing %</th>
+              <td mat-cell *matCellDef="let element"> {{element.feeSharingPercentage}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+      </table>
+  </div>
+
+</div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+    </div>
+
+
+  </div>

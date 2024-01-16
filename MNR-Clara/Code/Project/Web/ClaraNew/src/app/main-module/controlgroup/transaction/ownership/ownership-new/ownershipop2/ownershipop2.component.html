@@ -1,0 +1,46 @@
+<form [formGroup]="form">
+<div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Ownership</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="row  p-2 mx-0">
+        <div class="col-lg-4 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Group Type ID</p>
+              <p-dropdown placeholder="Select" class="w-100" [filter]="true" #groupTypeId (onChange)="ongrouptypeChange(groupTypeId.selectedOption)"
+                [options]="dropdownSelectcontrolgroupID" formControlName="groupTypeId"
+                [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                <mat-error *ngIf="errorHandling('groupTypeId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Sub Group Type ID</p>
+              <p-dropdown placeholder="Select" class="w-100" [filter]="true" #subGroupId (onChange)="onsubgroupTypechange(subGroupId.selectedOption)" [options]="dropdownSelectsubgrouptypeID" formControlName="subGroupId"
+                [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
+                [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+            </div>
+            <mat-error *ngIf="errorHandling('subGroupId')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-4 col-md-6 mt-2 my-auto">
+            <p></p>
+              <button mat-stroked-button class="mt-1  action-button py-1" (click)="createSubgroup('New')"
+              [ngClass]="{'bg-white' : calcdues, 'hoverbutton': !calcdues}" [disabled]="calcdues" >
+              <mat-icon class="">add</mat-icon> Add Sub Group Type Id
+            </button>
+          </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem" routerLink="/main/controlgroup/master/controlgrouptype"></i>Cancel</button>
+      <button  mat-raised-button class="mx-2 bg-blue text-white" (click)="submit()"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem" ></i>
+       Confirm</button>
+    </div>
+  </div>
+</form>
+
+

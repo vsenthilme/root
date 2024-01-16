@@ -1,0 +1,21 @@
+<div class="">
+	<div class="d-flex justify-content-start align-items-center">
+		<div class="timer-counter-label">
+			<div *ngIf="counter" [ngClass]="{blink: !running}" class="bordertimer p-2  text-center"style="width: 10rem !important;">	
+				<span>{{hours}}:</span><span>{{minutes}}:</span><span>{{seconds}}</span>
+			</div>
+			<div *ngIf="!counter" class="bordertimer p-2 text-center"style="width: 10rem !important;">	
+				<span>{{hours}}</span>:<span>{{minutes}}</span>:<span>{{seconds}}</span>
+			</div>
+		</div>
+		<div class="timer-button-container ml-2" *ngIf="showTimerControls">
+			<button mat-mini-fab  (click)="startTimer()" class="controlbutton mx-2 shadow-none border bg-blue">
+				<mat-icon class="text-white">{{ startText }}</mat-icon>
+			</button>
+			<button mat-mini-fab  (click)="clearTimer()" class="controlbutton mx-2 shadow-none bg-danger ">
+				<mat-icon class="text-white">replay</mat-icon>
+			</button>
+			<br>
+		</div>
+	</div>
+</div> 

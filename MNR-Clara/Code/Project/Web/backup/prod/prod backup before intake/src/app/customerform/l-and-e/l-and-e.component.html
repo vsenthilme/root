@@ -1,0 +1,460 @@
+<div class="container vw-100 mw-100 px-0">
+  <div class="my-0 py-0 mt-3">
+    <div class="row ms-3 me-3 px-1">
+      <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 ">
+        <h2 class="my-auto header-text fw-bold ps-2">New Client Information Sheet - {{itformno}}</h2>
+      </div>
+      <div class="col-md-12 px-0 mt-1 ml-2">
+        <div class="">
+          <mat-tab-group animationDuration="0ms">
+            <form [formGroup]="form">
+              <mat-tab label="Personal Details"> 
+                <div class="row mt-2  scroll px-1">
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0 required  required">Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker1" formControlName="date"
+                        [max]="todaydate" placeholder="Choose Date">
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('date')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0 required  required">Client Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="name">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('name')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0 required  required">Company Contact</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="authorizedAgent">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('authorizedAgent')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0 required  required">Email Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="emailAddress">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('emailAddress')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div formGroupName="contactNumber" class="row px-0 mx-0">
+                    <p class="mb-0 pb-2  fw-bolder mt-3">Telephone</p>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0 required  required">Office</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input type="number" matInput placeholder="Enter" formControlName="workNo">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('contactNumber.workNo')">{{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0 required  required">Cell</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input type="number"  matInput placeholder="Enter" formControlName="cellNo">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('contactNumber.cellNo')">{{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0 required  required">Direct / Home</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input type="number"  matInput placeholder="Enter" formControlName="homeNo">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('contactNumber.homeNo')">{{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 py-0">Fax</p>
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input type="number"  matInput placeholder="Enter" formControlName="faxNo">
+                        </mat-form-field>
+                        <mat-error *ngIf="errorHandling('contactNumber.faxNo')">{{getErrorMessage()}}</mat-error>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2"></div>
+                  <div class="col-lg-3 col-md-6   mt-2"></div>
+                  <div formGroupName="address" class="row px-0 mx-0">
+                    <p class="mb-0 pb-2 fw-bolder mt-3">Address:</p>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required  required">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('address.streetAddress')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required  required">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('address.city')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required  required">State</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('address.state')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required  required">Postal / Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input type="number"  matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('address.zipCode')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                  <div formGroupName="billingAddress" class="row px-0 mx-0">
+                    <p class="mb-0 pb-2 fw-bolder mt-3">Billing Address:</p>
+                    <!-- <div class="col-lg-9 col-md-6 mt-2">
+                      <p class="mb-0 py-0 ">Corporation Name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="referenceField4">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.referenceField4')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-9 col-md-6 mt-2">
+                      <p class="mb-0 py-0 ">Company Details</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="referenceField5">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.referenceField5')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-9 col-md-6 mt-2">
+                      <p class="mb-0 py-0 ">Company Contact</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="referenceField6">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.referenceField6')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-9 col-md-6 mt-2">
+                      <p class="mb-0 py-0 ">Billing Contact</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="referenceField7">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.referenceField7')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-9 col-md-6 mt-2">
+                      <p class="mb-0 py-0 "> Owner's name</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="referenceField8">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.referenceField8')">{{getErrorMessage()}}</mat-error>
+                    </div> -->
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required">Street Address</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="streetAddress">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.streetAddress')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0   required">City</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="city">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.city')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0  required ">State</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Enter" formControlName="state">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingaddress.state')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                    <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0  required ">Postal / Zip Code</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input type="number"  matInput placeholder="Enter" formControlName="zipCode">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('billingAddress.zipCode')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Case Details"> 
+                <div class="row mt-2 scroll  px-1" style="overflow-x: hidden !important">
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0 required  required">This consultation is for</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                      <mat-select placeholder="select" formControlName="consulationFor">
+                        <mat-option value="Myself">Myself</mat-option>
+                        <mat-option value="Family">Family</mat-option>
+                        <mat-option value="Friend">Friend </mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('consulationFor')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-sm-12 mt-3 mb-2">
+                    <p class="mb-0 py-0 required  required">Objective of Visit. What is the purpose of your visit? </p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <textarea rows="5" matInput placeholder="Enter" formControlName="purposeOfVisit"></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('purposeOfVisit')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div formGroupName="clientReferenceMedium" class="row mx-2">
+                    <div class="col-lg-3 col-md-6   mt-2 px-0 mb-2">
+                      <p class="mb-0 py-0 required  required">How did you hear about our firm?</p>
+
+                      <!-- <app-ng-multiselect-dropdown class="form-group input_field mb-0 w-100"
+                        formControlName="listOfMediumAboutFirm" apiName="referralId" [filerbased]="languageIdList">
+                      </app-ng-multiselect-dropdown> -->
+                      <angular2-multiselect [data]="multiselectreferralList" [(ngModel)]="selectedItems"
+                      [settings]="dropdownSettings" formControlName="mediumAboutFirmFilter"></angular2-multiselect>
+                      <mat-error *ngIf="errorHandling('clientReferenceMedium.mediumAboutFirmFilter')">{{getErrorMessage()}}</mat-error>
+                      <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <mat-select placeholder="select" formControlName="listOfMediumAboutFirm" placeholder="Select">
+                          <mat-option *ngFor="let food of referenceList" [value]="food.key">
+                            {{food.value}}
+                          </mat-option>
+                        </mat-select> 
+                      </mat-form-field> -->
+                      <!--
+                          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                            <mat-select placeholder="select" formControlName="listOfMediumAboutFirm">
+                          </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('clientReferenceMedium.listOfMediumAboutFirm')">{{getErrorMessage()}}</mat-error>
+                        -->
+                    </div>
+                    <!--
+                      <div class="col-lg-3 col-md-6   mt-2">
+                      <p class="mb-0 py-0 required ">Sub Referral</p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                        <mat-select placeholder="select" formControlName="referredByOthers">
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('clientReferenceMedium.referredByOthers')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                   -->
+                  </div>
+                  <p class="mb-0 py-0 required  mt-1 required">Do you already have an attorney? </p>
+                  <div class="row mt-2">
+
+                    <div class="col-lg-4 col-md-4 mt-2">
+                      <mat-radio-group formControlName="doYouAlreadyHaveAnAttorney" layout="row">
+
+
+                        <mat-radio-button color="primary" class="example-margin ml-4" #nameofattorney [value]="true">Yes
+                        </mat-radio-button>
+
+                        <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                        </mat-radio-button>
+
+                      </mat-radio-group>
+                      <mat-error *ngIf="errorHandling('doYouAlreadyHaveAnAttorney')">{{getErrorMessage()}}</mat-error>
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-4" [hidden]="!nameofattorney.checked">
+                      <p class="mb-0 py-0 required  ">If Yes, Fill the Name of the Attorney </p>
+                      <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                        <input matInput placeholder="Name of attorney" formControlName="nameOfAttorney">
+                      </mat-form-field>
+                      <mat-error *ngIf="errorHandling('nameOfAttorney')">{{getErrorMessage()}}</mat-error>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+            </form>
+            <form [formGroup]="intakefg">
+                <mat-tab label="Assign" *ngIf="pageflow == 'validate' || pageflow == 'update' || pageflow == 'Display'"> 
+                <div class="row mt-2 scroll px-1">
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0 required ">Consultation Date</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker123" [min]="todaydate"
+                        formControlName="referenceField1">
+                      <mat-datepicker-toggle matSuffix [for]="picker123"></mat-datepicker-toggle>
+                      <mat-datepicker #picker123></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling_admin('referenceField1')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0 required ">Assigned Attorney</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                      <mat-select placeholder="select" formControlName="referenceField2" placeholder="Select">
+                        <mat-option *ngFor="let food of useridList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field> -->
+
+                    <angular2-multiselect [data]="multiselectuseridList" [(ngModel)]="selectedItems2"
+                    [settings]="dropdownSettings1" formControlName="referenceField2FE"></angular2-multiselect>
+                    <mat-error *ngIf="errorHandling_admin('referenceField2FE')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                </div>
+                </mat-tab>
+            </form>
+            <form [formGroup]="form">
+                <mat-tab label="Office Use" *ngIf="pageflow == 'validate'|| pageflow == 'Display'  " > 
+                <div class="row  mt-2 scroll px-1">
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0  ">Partner in Charge</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="partnerInCharge">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('partnerInCharge')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0  ">Attorney(s)</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="attorney">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('attorney')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+
+                    <p class="mb-0 py-0  ">Legal Assistant</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="legalAssistant">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('legalAssistant')">{{getErrorMessage()}}</mat-error>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Type of Cases</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                      <mat-select placeholder="select" formControlName="typeOfCase">
+                        <mat-option value="Business Immigration"> Business Immigration </mat-option>
+                        <mat-option value="Family Immigration">Family Immigration </mat-option>
+                        <mat-option value="Labor & Employment"> Labor & Employment</mat-option>
+                        <mat-option value="Other">Other</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('typeOfCase')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Case Subcategory</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="othersInCaseType">
+                    </mat-form-field> -->
+                    <angular2-multiselect [data]="multiselectcasesubList" [(ngModel)]="selectedItems3"
+                    [settings]="dropdownSettings1" formControlName="othersInCaseTypeFE"></angular2-multiselect>
+                    <mat-error *ngIf="errorHandling('othersInCaseType')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Billing Type</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" required>
+
+                      <mat-select placeholder="select" formControlName="billingType">
+                        <mat-option value="Flat Rate"> Flat Rate </mat-option>
+                        <mat-option value="HR">HR </mat-option>
+                        <mat-option value="Contingency">Contingency</mat-option>
+                        <mat-option value="3rd Party">3rd Party </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="form.controls.billingType.errors?.required">Field Should not be Blank </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-error *ngIf="errorHandling('billingType')">{{getErrorMessage()}}</mat-error> -->
+                  </div>
+                  <p class="mb-0 pb-2 mt-3 fw-bold">3rd Party Billing Information: </p>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Name</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="nameOfThirdPartyBilling">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('nameOfThirdPartyBilling')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Company Contact</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="authorizedAgentOfThirdPartyBilling">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('authorizedAgentOfThirdPartyBilling')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Phone Number</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="eg: 555-555-5555" formControlName="telephone">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('telephone')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0  ">Address</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="addressOfThirdPartyBilling">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('addressOfThirdPartyBilling')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <p></p>
+                  <p class="mb-0 py-0   mt-2">Signed Agreement</p>
+                  <div class="row">
+                    <mat-radio-group formControlName="agreementSigned" layout="row mt-2">
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                      </mat-radio-button>
+
+                      <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error *ngIf="errorHandling('agreementSigned')">{{getErrorMessage()}}</mat-error>
+                  </div>
+
+                </div>
+                </mat-tab>
+            </form>
+            <form [formGroup]="intakefg">
+                <mat-tab label="Status" *ngIf="pageflow == 'validate'|| pageflow == 'Display'" > 
+                <div class="row mt-2 scroll px-1">
+                  <div class="col-lg-3 col-md-6   mt-2">
+                    <p class="mb-0 py-0 required ">Intake Status</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline" required>
+                      <mat-select placeholder="select" formControlName="statusId" placeholder="Select">
+                        <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                          {{food.value}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="intakefg.controls.statusId.errors?.required">Field Should not be Blank </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-error *ngIf="errorHandling_admin('statusId')">{{getErrorMessage()}}</mat-error> -->
+
+
+                  </div>
+                </div>
+                </mat-tab>
+            </form>
+          </mat-tab-group>
+          <div class="d-flex justify-content-center align-items-center py-2 bg-white w-100 fixed-bottom">
+
+            <button *ngIf="!btncancel" mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+                class="bi bi-x me-1 font-size-1_5rem"></i>
+              Cancel</button>
+            <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+                class="bi bi-check2 me-1 font-size-1_5rem"></i>
+              {{btntext}}</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

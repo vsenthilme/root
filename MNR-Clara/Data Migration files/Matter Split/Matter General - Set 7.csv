@@ -1,0 +1,502 @@
+LANG_ID,CLASS_ID,MATTER_NO,CLIENT_ID,CASEINFO_NO,TRANS_ID,CASE_CATEGORY_ID,CASE_SUB_CATEGORY_ID,BILL_MODE_ID,BILL_FORMAT_ID,BILL_FREQ_ID,BILL_REMARK,FLAT_FEE,ADMIN_COST,MATTER_TEXT,CASE_OPEN_DATE,CASE_CLOSED_DATE,CASE_FILED_DATE,PRIORITY_DATE,RECEIPT_NOT_NO,RECEIPT_DATE,EXPIRATION_DATE,COURT_DATE,APPROVAL_DATE,BILL_MODE_ID,BILL_FREQ_ID,BILL_FORMAT_ID,BILL_REMARK,AR_ACCOUNT_NO,TRUST_DEPOSIT_NO,FLAT_FEE,ADMIN_COST,CONTIG_FEE,RATE_UNIT,DIR_PHONE_NO,STATUS_ID,Isdeleted,CTD_BY,CTD_ON,UTD_BY,UTD_ON,REF_FIELD_25
+Language ID,Class ID,Matter Number,Client ID,Case Information No,Transaction ID,Case Category ID,Case Sub Category ID,Billing Mode ,Billing Format,Billing Frequency ,Billing Remarks,Flat Fee Amount,Administrative Cost,Matter Description,Case Opened Date,Case Closed Date,Case Filed Date,Priority Date,Receipt Notice No,Receipt Date,Expiration Date,Court Date,Approval Date,Billing Mode ID,Billing Frequency ID,Billing Format ID,Billing Remarks,AR Account Number,Trust Deposit No,Flat Fee Amount,Administrative Cost,Contigency Fee Amount,Rate Unit,Direct Phone Number,STATUS ID,Deletion Indicator,created by,created on,updated by,updated on,Retainer Paid
+EN,2,5377-221,5377,888888,6,12,135,2,3,1,,750,112.5,Brenda Juarez DACA Renewal,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,750
+EN,2,5377-222,5377,888888,6,12,273,2,3,1,,750,112.5,Brenda Juarez Out of Scope Work,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,750
+EN,2,9352-221,9352,888888,6,21,53,2,3,1,,3000,250,9352-22 Abu Hasin ANSARI H-1B Transfer,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-03-10,,,0
+EN,2,9352-222,9352,888888,6,21,273,2,3,1,,3000,250,Abu Hasin ANSARI Out of Scope work,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,0
+EN,2,9353-221,9353,888888,6,21,273,2,3,1,,2500,375,Seth Hermosillo Out of Scope Work,2022-03-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-11,,,0
+EN,2,9353-222,9353,888888,6,21,68,2,3,1,,2500,375,Seth Hermosillo TN,2022-03-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-11,,,0
+EN,2,5797-221,5797,888888,6,15,80,2,3,1,,500,75,Jose Antonio MAZARIEGOS LOPEZ EAD Renewal,2022-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-18,,,500
+EN,2,5797-222,5797,888888,6,15,80,2,3,1,,500,75,Jose Antonio MAZARIEGOS LOPEZ Out of Scope Work,2022-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-18,,,500
+EN,2,5916-221,5916,888888,6,12,135,2,3,1,,750,112.5,Cecilia Alvarado DACA Renewal,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,750
+EN,2,5916-222,5916,888888,6,12,273,2,3,1,,750,112.5,Cecilia Alvarado Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,750
+EN,2,3700-221,3700,888888,6,12,135,2,3,1,,750,112.5,Daniel Sanchez Martinez DACA Renewal,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,750
+EN,2,3700-222,3700,888888,6,12,273,2,3,1,,750,112.5,Daniel Sanchez Martinez Out of Scope Work,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,750
+EN,2,3987-221,3987,888888,6,12,273,2,3,1,,1500,275,Leslie Briseida Amaro Out of Scope work,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,1500
+EN,2,3987-222,3987,888888,6,12,133,2,3,1,,1500,275,Leslie Briseida Amaro Response to RFE,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,1500
+EN,2,8821-221,8821,888888,6,12,38,2,3,1,Legal fees due pertaining to Translations on Pedro Albin Cubillas's Interview.,850,112.5,Pedro Albin-Cubillas Interview Representation & Translations,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,850
+EN,2,8821-222,8821,888888,6,12,273,2,3,1,Legal fees due pertaining to Translations on Pedro Albin Cubillas's Interview.,850,112.5,Pedro Albin-Cubillas Out of Scope Work,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,850
+EN,2,6743-211,6743,888888,6,12,135,2,3,1,,,,Manuel AlejandraCruz Menchaca DACA Renewal,2021-12-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-20,,,
+EN,2,9357-221,9357,888888,6,21,53,2,3,1,,3500,250,Hozefa Boriwala H-1B Transfer,2022-03-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-25,,,0
+EN,2,9241-211,9241,888888,6,22,4,1,2,1,,0,0,Sunnova Energy International General Matter,2021-11-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-10,,,0
+EN,2,9356-221,9356,888888,6,10,303,1,1,1,,0,0,Avangard Innovative LP General Matter,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,2500
+EN,2,8574-211,8574,888888,6,12,129,2,3,1,Legal fees due pertaining to Consular Process for Janett Eloisa Saucedo Rodriguez.,4000,600,Janett E. Saucedo Rodriguez  Consular Process with Expedite,2021-12-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-28,,,1600
+EN,2,9344-221,9344,888888,6,21,273,2,3,1,,2500,375,Pulari Krishnankutty Nair Out of Scope work,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,0
+EN,2,9344-222,9344,888888,6,21,68,2,3,1,,2500,375,Pulari Krishnankutty Nair TN,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,0
+EN,2,9360-221,9360,888888,6,15,230,2,3,1,Legal fees due pertaining to BIA Appeal for Jacson Alexander Martinez Arauz.,4500,675,Jacson Martinez Arauz Appeal with BIA,2022-03-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-30,,,1500
+EN,2,9290-221,9290,888888,6,12,99,2,3,1,Legal fees due pertaining to FOIA-USCIS Request for Andrew Okonkwo.,750,112.5,Andrew Okonkwo FOIA-USCIS,2022-01-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-13,,,750
+EN,2,9290-222,9290,888888,6,12,273,2,3,1,Legal fees due pertaining to FOIA-USCIS Request for Andrew Okonkwo.,750,112.5,Andrew Okonkwo Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,9050-221,9050,888888,6,21,54,2,3,1,,1500,150,Manvendra Singh H-1B Registration,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,0
+EN,2,9281-221,9281,888888,6,21,54,2,3,1,,1750,250,Franco Artola H-1B Registration,2022-01-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-11,,,0
+EN,2,9281-222,9281,888888,6,21,273,2,3,1,,1750,250,Franco Artola Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9282-221,9282,888888,6,21,54,2,3,1,,1750,250,Haritha Pakanati H-1B Registration,2022-01-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-11,,,0
+EN,2,9282-222,9282,888888,6,22,273,2,3,1,,1750,250,Haritha Pakanati Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8894-221,8894,888888,6,21,249,2,3,1,,1000,0,Roshni Manwani H-1B Original Submission - Registration Part1,2022-02-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-03,,,0
+EN,2,8894-222,8894,888888,6,21,273,2,3,1,,1000,0,Roshni Manwani Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9315-551,9315,888888,6,12,249,2,3,1,,,,Thao Phuong VU H-1B Original Submission - Registration Part 1,2022-02-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-22,,,
+EN,2,9318-221,9318,888888,6,12,249,2,3,1,,1500,350,Jung Ah SHIN H-1B Original Submission - Registration Part 1,2022-02-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-22,,,0
+EN,2,9349-221,9349,888888,6,21,249,2,3,1,,1750,150,"Wang, Ching-Ya H-1B Original Submission - Registration Part 1",2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,9349-222,9349,888888,6,21,273,2,3,1,,1750,150,"Wang, Ching-Ya Out of Scope Work",2022-03-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-09,,,0
+EN,2,9350-221,9350,888888,6,21,54,2,3,1,,1750,250,Maryum Kasbati H-1B Registration,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,0
+EN,2,9350-222,9350,888888,6,21,273,2,3,1,,1750,250,Maryum Kasbati Out of Scope Work,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,0
+EN,2,9191-221,9191,888888,6,21,54,2,3,1,,1750,250,Venkatrathnam NARADASU SUBBARAYULU H-1B Registration,2022-03-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-11,,,0
+EN,2,9142-221,9142,888888,6,21,54,2,3,1,,1500,150,Emilio Gutierrez Rangel H-1B Registration,2022-03-11,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-11,,,0
+EN,2,9321-221,9321,888888,6,21,53,2,3,1,,3000,250,Lazer Jeba Prakash Paularaj H-1B Transfer Petition,2022-02-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-25,,,0
+EN,2,9327-221,9327,888888,6,21,52,2,3,1,,3500,250,Kamsiyochukwu Daniel H-1B Petition,2022-02-28,,,,,,,,,,,,,,,,,,,,26,0,CR,2022-02-28,,,0
+EN,2,8988-221,8988,888888,6,21,73,1,1,1,,0,0,Neil Anthony Morgan O Petition,2022-03-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-25,,,0
+EN,2,8229-221,8229,888888,6,12,142,2,3,1,,3500,350,Leslie Lizzet Craig AOS,2022-02-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-15,,,3500
+EN,2,8337-221,8337,888888,6,20,50,2,3,1,,2500,250,Vivek Reddy Banka H-1B Extension,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,0
+EN,2,8337-222,8337,888888,6,20,273,2,3,1,,2500,250,Vivek Reddy Banka Out of Scope Work,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,0
+EN,2,8465-221,8465,888888,6,21,50,1,2,1,,3700,250,Liang Dong Chen H-1B Extension,2022-01-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-24,,,0
+EN,2,8465-222,8465,888888,6,21,273,1,2,1,,3700,250,Liang Dong Chen Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,8465-223,8465,888888,6,21,68,1,2,1,,3700,250,Liang Dong Chen Request to Move to TN,2022-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-18,,,0
+EN,2,8959-221,8959,888888,6,12,142,2,3,1,,3000,450,Cistal Gallegos AOS and Representation at Interview,2022-02-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-16,,,3000
+EN,2,8959-222,8959,888888,6,12,119,2,3,1,,3000,450,Cistal Gallegos COA,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,3000
+EN,2,8959-223,8959,888888,6,12,273,2,3,1,,3000,450,Cistal Gallegos Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,3000
+EN,2,8951-221,8951,888888,6,15,303,2,3,1,,450,75,Hector Antunez EAD Renewal,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,450
+EN,2,8951-222,8951,888888,6,15,303,2,3,1,,450,75,Hector Antunez Out of Scope Work,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,450
+EN,2,5413-221,5413,888888,6,12,129,2,3,1,,500,75,Francisco Javier Delgado CP and I-601 Waiver,2022-01-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-21,,,500
+EN,2,5413-222,5413,888888,6,15,149,2,3,1,,500,75,Francisco Javier Delgado EAD Renewal,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,500
+EN,2,5413-223,5413,888888,6,12,273,2,3,1,,500,75,Francisco Javier Delgado Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,7080-221,7080,888888,6,15,147,2,3,1,,,,Andy Montiagudo EAD,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,
+EN,2,7080-222,7080,888888,6,15,147,2,3,1,,,,Andy Montiagudo Out of Scope Work,2022-03-14,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-14,,,
+EN,2,6128-221,6128,888888,6,15,303,2,3,1,,500,75,Albina Torres EAD Renewal,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,500
+EN,2,6128-222,6128,888888,6,15,303,2,3,1,,500,75,Albina Torres Out of Scope work,2022-03-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-03,,,500
+EN,2,7994-221,7994,888888,6,12,119,2,3,1,Legal fees due pertaining to Change of Address for U-Visa for Helen B. Rivera Ruano.,250,37.5,Helen B. Rivera Change of Address,2022-03-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-24,,,250
+EN,2,9361-221,9361,888888,6,12,129,2,3,1,,500,75,Alvaro de Marichalar Consular Process,2022-04-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-04,,,500
+EN,2,9362-221,9362,888888,6,12,282,2,3,1,,0,0,Rafael Salgado Monitoring of  I-130,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,0
+EN,2,9294-221,9294,888888,6,21,273,1,2,1,,8000,0,Timothy Enright Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,0
+EN,2,9294-222,9294,888888,6,21,139,1,2,1,,8000,0,Timothy Enright PERM/I-140,2022-01-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-18,,,0
+EN,2,9355-221,9355,888888,6,21,283,2,3,1,,1980,0,Abdulazeez Shaik H-1B Cap Exempt - Changeof Status,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,0
+EN,2,9355-222,9355,888888,6,21,273,2,3,1,,1980,0,Abdulazeez Shaik Out of Scope Work,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,0
+EN,2,9231-221,9231,888888,6,21,273,2,3,1,,,,Arturo Santiago Scotto Guzman-Out of Scope Work,2022-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-18,,,
+EN,2,9231-222,9231,888888,6,21,68,2,3,1,,,,Arturo Santiago Scotto Guzman-2 Step Daughters TN with DOS,2022-03-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-18,,,
+EN,2,8482-221,8482,888888,6,15,180,2,3,1,,1500,225,Yesenia L. ROMERO MTR,2022-02-18,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-18,,,1500
+EN,2,5389-221,5389,888888,6,12,167,2,3,1,,,,Jimmy Alexander VASQUEZ I-601 & CP,2022-01-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-19,,,
+EN,2,5389-222,5389,888888,6,12,273,2,3,1,,,,Jimmy Alexander VASQUEZ Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,
+EN,2,3748-221,3748,888888,6,12,135,2,3,1,,750,112.5,Janna Y. Pinda DACA Renewal,2022-03-31,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-31,,,750
+EN,2,6982-221,6982,888888,6,12,135,2,3,1,,750,113,Maria Guadalupe Montes DACA Renewal,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,750
+EN,2,5024-221,5024,888888,6,12,135,2,3,1,,750,112.5,Alejos RESENDEZ VILLANUEVA DACA Renewal,2022-04-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-04,,,750
+EN,2,9303-221,9303,888888,6,21,31,2,3,1,,1500,150,Olga Estela PALMA ORELLANA MORALES B1/B2 Extension,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,1500
+EN,2,9303-222,9303,888888,6,21,273,2,3,1,,1500,150,Olga Estela PALMA ORELLANA MORALES Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,1500
+EN,2,9310-221,9310,888888,6,15,265,2,3,1,Legal fees due pertaining to Application for Asylum with Court for Fredis Orellana Iraheta.,2000,375,Fredy Orellana Iraheta Representation in (2) Court Hearings and Prosecutori,2022-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-08,,,2000
+EN,2,8985-221,8985,888888,6,12,38,2,3,1,,1150,0,Claudio Rolando Cruz Campos Interview Representation & Translator,2022-03-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-28,,,1150
+EN,2,7057-221,7057,888888,6,21,120,1,2,1,,2000,300,Guillermo Proestakis U Certification,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,2000
+EN,2,7057-222,7057,888888,6,21,273,1,2,1,,2000,300,Guillermo Proestakis Out of Scope Work,2022-03-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-23,,,2000
+EN,2,7057-223,7057,888888,6,21,192,1,2,1,,2000,300,Guillermo Proestakis Review and Analysis,2022-03-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-23,,,2000
+EN,2,7057-224,7057,888888,6,21,120,1,2,1,,2000,300,Maximo Proestakis Terrazas U Certification,2022-04-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-01,,,2000
+EN,2,8849-201,8849,888888,6,12,133,2,3,1,,500,75,Alexander Alberto Valdes RFE - I-90,2020-07-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-23,,,500
+EN,2,7339-221,7339,888888,6,12,135,2,3,1,,,,Emanuel Pacheco DACA Renewal,2022-04-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-12,,,
+EN,2,2020-201,2020,888888,6,22,284,1,1,1,,,,SDM 2020 Immigration Prospective Client,2020-01-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-01-02,,,
+EN,2,2123-211,2123,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Jose Cordero Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2246-211,2246,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Alfredo Tinajero Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2630-211,2630,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jorge Bonilla Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2656-RI1,2656,888888,6,21,4,1,1,1,,,,"Schreiber Foods, Inc. Richland Center H-2B Cost Center 0840825-01330",2020-10-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-22,,,
+EN,2,2656-UK1,2656,888888,6,21,4,1,1,1,,,,"Schreiber Foods, Inc. - Ukti Joshi Cost Center 0840825-08200",2020-10-22,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-22,,,
+EN,2,2675-211,2675,888888,6,21,147,2,3,1,,500,75,Ivonne Lesser (Alfredo Tinajero's Wife) EAD for spouse,2021-10-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-05,,,0
+EN,2,2691-211,2691,888888,6,22,244,2,3,1,,,,Luz Maria Fonseca Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2693-211,2693,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Ruben Rafful Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2725-211,2725,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Simon Suarez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2743-211,2743,888888,6,22,244,2,3,1,,,,FER Properties Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2806-211,2806,888888,6,22,244,2,3,1,,,,Energy Alloys - K. Shroff Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2892-211,2892,888888,6,22,244,2,3,1,,,,Sandoval Felipe Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2938-211,2938,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Ted Hamanaka Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,2986-201,2986,888888,6,12,80,2,3,1,,500,75,Alejandro de la Rosa EAD Renewal,2020-07-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-31,,,500
+EN,2,2986-221,2986,888888,6,12,131,2,3,1,,3500,525,Alejandro de la Rosa Family Petition,2022-02-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-02,,,2000
+EN,2,2986-222,2986,888888,6,12,273,2,3,1,,3500,525,Alejandro de la Rosa Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2000
+EN,2,2986-223,2986,888888,6,12,265,2,3,1,,3500,525,Alejandro de la Rosa Prosecutorial Discretion,2022-02-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-02,,,2000
+EN,2,2995-211,2995,888888,6,22,244,2,3,1,,,,Guadalupe Jimenez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3012-211,3012,888888,6,22,244,2,3,1,,,,Alexander Rincon Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3029-211,3029,888888,6,22,244,2,3,1,,,,Progreso Carlos Beltran Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3040-211,3040,888888,6,22,244,2,3,1,,,,Julio Martinez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3065-211,3065,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,The Camaleon System Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3069-191,3069,888888,6,10,4,1,1,1,,,,General Matter,2019-09-05,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-09-05,,,
+EN,2,3100-211,3100,888888,6,22,244,2,3,1,,,,Arturo Aquino Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3129-211,3129,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Express Energy Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3153-211,3153,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Altaf Ismael Rangwala Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3159-211,3159,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Samuel Tamez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3169-211,3169,888888,6,22,244,2,3,1,,,,Marcela Campa Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3183-211,3183,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Adriana Diaz Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3193-211,3193,888888,6,22,244,2,3,1,,,,Manish Mehta Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3213-211,3213,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jess Chawda Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3215-211,3215,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Dino Russo Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3241-211,3241,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jorge Mendoza Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3264-211,3264,888888,6,22,244,2,3,1,,,,Eva Cervantes Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3265-211,3265,888888,6,15,303,2,3,1,,500,75,Severo ORTIZ PASCUAL EAD Renewal,2021-03-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-04,,,500
+EN,2,3274-211,3274,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Christian Gonzalez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3278-211,3278,888888,6,22,244,2,3,1,,,, Aurora Huitron Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3286-211,3286,888888,6,22,244,2,3,1,,,,Jorge Rodriguez Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3288-211,3288,888888,6,22,244,2,3,1,,,,Aja Jegadeesan Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3302-191,3302,888888,6,15,80,2,3,1,,375,37.5,Isac Villaseñor,2019-08-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-08-16,,,375
+EN,2,3312-221,3312,888888,6,15,303,2,3,1,Legal fees due pertaining to BIA Appeal for Adrian Monsivais.,1500,150,Adrian Monsivais Appeal to Court's Decision on Motion to Terminate,2022-01-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-10,,,500
+EN,2,3312-222,3312,888888,6,22,303,2,3,1,Legal fees due pertaining to BIA Appeal for Adrian Monsivais.,1500,150,Adrian Monsivais Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,3325-211,3325,888888,6,12,4,2,3,1,,0,0,Daniel Flores General matters,2021-07-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-15,,,0
+EN,2,3330-211,3330,888888,6,15,303,2,3,1,,500,37.5,Juan Rendon Moya EAD Renewal,2021-07-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-26,,,300
+EN,2,3423-211,3423,888888,6,22,244,2,3,1,,,,Jose Antonio Dimas Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3490-211,3490,888888,6,22,244,2,3,1,,,, Trican Andrew H. Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3509-211,3509,888888,6,22,244,2,3,1,,,,Audubon A. Shaik Immigration 2019 Reconciliation,2021-04-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-29,,,
+EN,2,3514-191,3514,888888,6,15,285,2,3,1,Legal fees due pertaining to Attorney representation at Hearing for Maria Barajas.,550,50,Maria Barajas,2019-07-17,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-07-17,,,500
+EN,2,3515-211,3515,888888,6,22,244,2,3,1,,,,Audubon Fahard R. Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3528-211,3528,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Audubon Varun J. Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3541-211,3541,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Yadira Mujica Diaz Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3559-211,3559,888888,6,22,244,2,3,1,,,,Claudia I. Flores Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3563-211,3563,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jose Guillen Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3578-211,3578,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Discovery David Ozura Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3582-211,3582,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Christian Serrano Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3586-211,3586,888888,6,22,244,2,3,1,,,,Elizabeth Nieto Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3618-201,3618,888888,6,12,135,2,3,1,,750,112.5,LAURA JAIMES DACA RENEWAL,2020-11-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-18,,,750
+EN,2,3620-211,3620,888888,6,12,135,2,3,1,,,,Janeth Alejandara Rodriguez Quiroga DACA Renewal,2021-01-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-03,,,
+EN,2,3620-221,3620,888888,6,22,273,1,2,1,,750,112.5,Janeth Alejandara Rodriguez Quiroga Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,3643-211,3643,888888,6,22,244,2,3,1,,,,Maria Ester Castillo Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3649-191,3649,888888,6,12,135,2,3,1,,500,75,Yesenia CHAPA,2019-10-18,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-10-18,,,500
+EN,2,3649-211,3649,888888,6,12,135,2,3,1,,750,112.5,Yesenia Martinez DACA Renewal,2021-10-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-05,,,750
+EN,2,3656-211,3656,888888,6,22,244,2,3,1,,,,Antonio Ramirez Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3659-211,3659,888888,6,22,244,2,3,1,,,,Yareli Silva Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3673-211,3673,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Carlos Abedrop Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3677-211,3677,888888,6,22,244,2,3,1,,,,Maria Guadalupe Silva Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3686-211,3686,888888,6,12,135,2,3,1,,750,112.5,David Montez Jimenez DACA Renewal,2021-02-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-08,,,750
+EN,2,3688-201,3688,888888,6,12,135,2,3,1,,,,Enrique Asiel Murillo DACA Renewal,2020-04-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-16,,,
+EN,2,3689-211,3689,888888,6,12,135,2,3,1,,750,112.5,Roxy Murillo DACA Renewal,2021-12-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-20,,,750
+EN,2,3690-211,3690,888888,6,12,135,2,3,1,Legal fees due pertaining to DACA Renewal for Ruben Perez with U.S. Department of Homeland Security.,750,112.5,Ruben Perez DACA Renewal,2021-10-13,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-13,,,750
+EN,2,3694-211,3694,888888,6,22,244,2,3,1,,,,Eduardo Martinez Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3711-221,3711,888888,6,12,135,2,3,1,Legal fees due pertaining to DACA Renewal for Pablo Perez with U.S. Department of Homeland Security.,750,112.5,Pablo  E. Perez DACA Renewal,2022-01-17,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-17,,,750
+EN,2,3711-222,3711,888888,6,12,273,2,3,1,Legal fees due pertaining to DACA Renewal for Pablo Perez with U.S. Department of Homeland Security.,750,112.5,Pablo Perez Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,750
+EN,2,3717-211,3717,888888,6,12,135,2,3,1,,750,112.5,Ariadna Montez DACA Renewal,2021-02-05,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-05,,,750
+EN,2,3717-212,3717,888888,6,22,244,2,3,1,,750,112.5, Ariadna Montez Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,750
+EN,2,3720-211,3720,888888,6,12,135,1,1,1,,750,112.5,Mayra Salazar DACA Renewal,2021-10-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-28,,,750
+EN,2,3727-211,3727,888888,6,12,135,2,3,1,,750,112.5,Alexis Martinez DACA Renewal,2021-07-23,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-23,,,750
+EN,2,3728-211,3728,888888,6,22,244,2,3,1,,,,Samuel Lopez Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3731-211,3731,888888,6,22,244,2,3,1,,,, Frida Melendez Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3741-221,3741,888888,6,12,197,2,3,1,,500,75,Melissa Margot Gonzalez MENCHACA I-90 Replacement,2022-01-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-28,,,500
+EN,2,3741-222,3741,888888,6,12,273,2,3,1,,500,75,Melissa Margot Gonzalez MENCHACA Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,500
+EN,2,3742-221,3742,888888,6,12,119,2,3,1,Legal fees due pertaining to Change of Address for U-Visa for Martha Matute.,250,37.5,Martha Matute Change of Address,2022-03-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-24,,,250
+EN,2,3774-211,3774,888888,6,22,244,2,3,1,,,,Jonathan Sierra Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3796-211,3796,888888,6,22,244,2,3,1,,,, Miguel Armando Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3802-201,3802,888888,6,12,135,2,3,1,,750,113,Luis A Barbosa DACa Renewal,2020-04-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-04-02,,,750
+EN,2,3812-221,3812,888888,6,12,135,2,3,1,,750,112.5,Gloria Y. Corrales Ramirez DACA Renewal,2022-03-10,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-10,,,750
+EN,2,3812-222,3812,888888,6,12,273,2,3,1,,750,112.5,Gloria Y. Corrales Ramirez Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,750
+EN,2,3817-201,3817,888888,6,12,226,2,3,1,,1000,150,Jose Manuel SILVESTRE ACUNA -Travel Doc.,2020-07-06,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-06,,,1000
+EN,2,3818-211,3818,888888,6,22,244,2,3,1,,,,Villa Luz Meza Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3822-201,3822,888888,6,12,135,,,,,1500,150,Himanshi Ahir DACA Renewal,2020-09-23,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-23,,,1500
+EN,2,3822-211,3822,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,"Ahir, Himahshi Immigration 2019 Reconciliation",2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3836-201,3836,888888,6,12,150,2,3,1,,3000,450,Monica Saloma AOS,2020-12-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-12-15,,,1500
+EN,2,3843-211,3843,888888,6,22,244,2,3,1,,,,Cristina Galushki Immigration 2019 Reconciliation,2021-05-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-08,,,
+EN,2,3849-211,3849,888888,6,12,135,2,3,1,,750,112.5,Luis Zuluaga DACA Renewal,2021-08-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-24,,,487.5
+EN,2,3868-211,3868,888888,6,22,244,2,3,1,,,,Juan Pable Almarez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3870-211,3870,888888,6,12,135,2,3,1,,750,112.5,Karla M. Garcia DACA Renewal,2021-09-28,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-09-28,,,487.5
+EN,2,3883-211,3883,888888,6,22,244,2,3,1,,,,Josue Galaviz Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3889-211,3889,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Grecia Menchaca Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3892-211,3892,888888,6,22,244,2,3,1,,,,Alfonso Vega Cerda Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3894-211,3894,888888,6,22,244,2,3,1,,,,Lilibeth Martinez Vargas Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3903-191,3903,888888,6,12,119,2,1,1,,650,50,Yahaira AGuilar,2019-10-21,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-10-21,,,650
+EN,2,3903-192,3903,888888,6,12,135,2,1,1,,650,50,Yahaira AGuilar,2019-10-31,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-10-31,,,650
+EN,2,3908-201,3908,888888,6,12,135,2,3,1,,750,112.5,Luis Santiago DACA Renewal,2020-10-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-02,,,750
+EN,2,3912-211,3912,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Juan Medina Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3917-211,3917,888888,6,22,244,2,3,1,,,,Yahaira V. Uribe Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3919-211,3919,888888,6,22,244,2,3,1,,,,Cecilia Sanchez Garcia Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3933-211,3933,888888,6,22,244,2,3,1,,,, Lesley Asalea Ramirez Flores Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3937-211,3937,888888,6,22,244,2,3,1,,,,Flor Elvia Turrubiates Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3944-211,3944,888888,6,22,244,2,3,1,,,,Luz Angelica Hernandez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3946-211,3946,888888,6,22,244,2,3,1,,,,Laura Remedios Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3963-221,3963,888888,6,20,4,2,2,1,,,,Claudia Rodriguez Ozuna General Matter,2022-01-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-07,,,
+EN,2,3981-211,3981,888888,6,22,244,2,3,1,,,,Claudia Martinez Hernandez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3985-211,3985,888888,6,22,244,2,3,1,,,, Karina Mares Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,3994-211,3994,888888,6,22,244,2,3,1,,,,Gsly Homes Health Care Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,40111,4011,888888,6,22,303,2,3,1,,,,Alexa Carolina Magdaleno,2019-05-02,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-05-02,,,
+EN,2,4022-191,4022,888888,6,12,135,1,3,1,Cost Fees Pertaining to Carlos VARGAS VALENTIN.,500,50,Carlos VARGAS VALENTIN,2019-04-08,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-04-08,,,500
+EN,2,4023-211,4023,888888,6,22,244,2,3,1,,,,Jorge Jimenez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4026-211,4026,888888,6,22,244,2,3,1,,,, Beatriz Mendoza Gonzalez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4048-211,4048,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,The Ambrose Group Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4056-211,4056,888888,6,22,244,2,3,1,,,,Sharo Ariday  Hernandez Ramirez Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4061-211,4061,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Marco Antonio Peralta Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4074-211,4074,888888,6,22,244,2,3,1,,,,Claudia Cristina Reyes Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4078-211,4078,888888,6,22,244,2,3,1,,,,Cesar Eduardo Najera Hernandez  Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4080-201,4080,888888,6,12,135,2,3,1,,500,75,Alexa Najera DACA Renewal,2020-07-13,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-13,,,500
+EN,2,4080-211,4080,888888,6,22,244,2,3,1,,,,Alexa Cecilia Najera Hernandez  Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,4082-211,4082,888888,6,22,244,2,3,1,,,, Saranya Gowari Rajendran Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,5004-211,5004,888888,6,22,244,2,3,1,,,,Maria Polanco  Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,5005-211,5005,888888,6,22,244,2,3,1,,,,Maria Ether Garcia  Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,5006-211,5006,888888,6,22,244,2,3,1,,,,Jose Manuel Polanco  Immigration 2019 Reconciliation,2021-05-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-09,,,
+EN,2,5009-211,5009,888888,6,22,244,2,3,1,,,,Humberto Ortega  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5012-201,5012,888888,6,12,135,2,3,1,,750,112.5,Edgardo Escoto DACA Renewal,2020-07-20,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-20,,,750
+EN,2,5012-211,5012,888888,6,22,244,2,3,1,,,, Edgardo Antonio Escoto Duran  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5021-211,5021,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Jonathan Alvarado  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5025-211,5025,888888,6,22,244,2,3,1,,,, Arturo Ortiz  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5047-211,5047,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Francisco Abraha Tob  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5048-211,5048,888888,6,22,244,2,3,1,,,,Aaron Gomez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5052-211,5052,888888,6,22,244,2,3,1,,,,Vanessa Deyanira Palladina  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5054-211,5054,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Jose L Martinez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5055-201,5055,888888,6,12,135,2,3,1,,750,112.5,Enrique Jair Garcia DACARenewal,2020-11-18,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-11-18,,,750
+EN,2,5055-211,5055,888888,6,22,244,2,3,1,,,,Enrique Jair Garcia  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5058-201,5058,888888,6,12,135,2,3,1,,750,112.5,Airam Ramirez DACA Renewal,2021-01-07,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-07,,,750
+EN,2,5058-211,5058,888888,6,22,244,2,3,1,,,,Airam Guadalupe Ramirez Rangel  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5070-211,5070,888888,6,22,244,2,3,1,,,,Guillermo G. Gomez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5072-211,5072,888888,6,22,244,2,3,1,,,,Alberto Jaimes  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5078-211,5078,888888,6,15,149,2,3,1,,500,75,Maria del Rosario Tzunun Tzoc De Garcia EAD Renewal,2021-06-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-01,,,0
+EN,2,5083-211,5083,888888,6,22,244,2,3,1,,,,Fany Y. Rodriguez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5084-211,5084,888888,6,22,244,2,3,1,,,,Adriana Ruby Avendano  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5091-211,5091,888888,6,22,244,1,3,1,,,,Francisco Brito  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5092-211,5092,888888,6,22,244,2,3,1,,,,Juan Padilla  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5093-211,5093,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Ivan A. Perez Lopez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5100-211,5100,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Gzegors Kurtzydo  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5101-211,5101,888888,6,22,244,2,3,1,,,,Luis G. Oviedo  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5105-211,5105,888888,6,22,244,2,3,1,,,,Maria E. Gonzalez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5106-201,5106,888888,6,15,80,2,3,1,Legal fees due pertaining to Written Pleading for Omar R. Padilla Quiroz with Immigration Court.,500,75,Omar R. PADILLA-EAD Renewal,2020-07-31,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-07-31,,,500
+EN,2,5114-211,5114,888888,6,12,129,2,3,1,,,,Maria Marcela Diaz Translations,2021-02-01,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-02-01,,,
+EN,2,5118-211,5118,888888,6,22,244,2,3,1,,,,Norma Rees  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5127-221,5127,888888,6,15,303,2,3,1,,,,Terna Itzonzuhut Removal Matter,2022-02-24,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-24,,,
+EN,2,5135-211,5135,888888,6,22,244,2,3,1,,,,Magali Alejandra Rojas Cervantes  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5139-211,5139,888888,6,22,244,2,3,1,,,, Cesar Cruz  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5142-211,5142,888888,6,22,244,2,3,1,,,,Plant Process Equipment - Gabriel Elias Sab  Immigration 2019 Reconciliatio,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5145-211,5145,888888,6,22,244,2,3,1,,,,Mercedes Ramos  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5146-211,5146,888888,6,22,244,2,3,1,,,,Mario Garza  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5148-211,5148,888888,6,22,244,2,3,1,,,,Itzel Brito Calleja  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5154-211,5154,888888,6,22,244,2,3,1,,,,Patricia Quiroz  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5155-211,5155,888888,6,22,244,2,3,1,,,, Maria de Jesus Turcios  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5159-211,5159,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Patricia Buena Vista  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5161-211,5161,888888,6,22,244,2,3,1,,,,Mari Del Carmen Rodriguez Rojas  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5180-211,5180,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Enrique Suarez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5181-211,5181,888888,6,22,244,2,3,1,,,,Claudia Sarai Rivas Romo  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5189-211,5189,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Jose R. Lopez Hernandez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5190-211,5190,888888,6,22,244,2,3,1,,,,Oralia Almanza  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5191-211,5191,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Onesima Rangel  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5195-211,5195,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Carlos Barbosa  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5196-211,5196,888888,6,22,244,2,3,1,,,,Ramiro Motta  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5201-211,5201,888888,6,22,244,2,3,1,,,,Jose Muniz Guajardo  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5203-211,5203,888888,6,22,244,2,3,1,,,,Larry Hill  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5206-211,5206,888888,6,22,244,2,3,1,,,,Maria Martinez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5208-211,5208,888888,6,22,244,2,3,1,,,,Tuan Bui  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5209-211,5209,888888,6,12,286,1,2,1,,0,0,Jorge Pastrana Green Card Holder - outside of the US,2021-03-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-29,,,2500
+EN,2,5213-211,5213,888888,6,22,244,2,3,1,Attorney Fees for reconciliation for 2019.,,,Santos Solis  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5214-211,5214,888888,6,22,244,2,3,1,,,,Josefina Lopez Gomez  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5216-211,5216,888888,6,22,244,2,3,1,,,,Eide M. McElwee  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5218-211,5218,888888,6,22,244,2,3,1,,,,Herminio Medina  Immigration 2019 Reconciliation,2021-05-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-16,,,
+EN,2,5225-211,5225,888888,6,15,303,2,3,1,,500,75,Francisco Santizo Vasquez EAD Renewal,2021-12-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-12-29,,,575
+EN,2,5228-221,5228,888888,6,12,287,1,2,1,,0,0,Denys Ortega Mexican Passport,2022-03-30,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-30,,,0
+EN,2,5232-211,5232,888888,6,22,244,2,3,1,,,, Jose Lazo  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5236-211,5236,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Heron Otero  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5237-211,5237,888888,6,22,244,2,3,1,,,,Alberto Tinoco  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5240-211,5240,888888,6,22,244,2,3,1,,,,Martin Sanchez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5243-211,5243,888888,6,22,244,2,3,1,,,,Hector Olivares  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5244-211,5244,888888,6,22,244,2,3,1,,,,Maria Garcia  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5251-211,5251,888888,6,22,244,2,3,1,,,,Norma Martinez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5252-211,5252,888888,6,22,244,2,3,1,,,,Isidro Barrera  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5260-211,5260,888888,6,22,244,2,3,1,,,,Heriberto Perez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5262-211,5262,888888,6,22,244,1,3,1,,,,Rolando Rocha  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5266-211,5266,888888,6,22,244,2,3,1,,,,Cesar Orlando Zumaya Rodriguez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5270-211,5270,888888,6,22,244,2,3,1,,,,Victoria DeLeon Jimenez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5271-211,5271,888888,6,22,244,2,3,1,,,,Jesus Amado Martinez Rivera  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5272-211,5272,888888,6,22,244,2,3,1,,,,Jose Damian Martinez Rivera  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5274-211,5274,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Victor Medina  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5277-211,5277,888888,6,22,244,2,3,1,,,,Alberto Alvarez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5281-211,5281,888888,6,22,244,2,3,1,,,,Nadia Moreno  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5282-211,5282,888888,6,22,244,2,3,1,,,,Samantha Moreno  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5286-211,5286,888888,6,22,244,2,3,1,,,,Ramiro Motta  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5291-211,5291,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Alfredo Castillo  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5297-211,5297,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Cirina Maya  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5298-211,5298,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Inrineo Campos  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5305-211,5305,888888,6,22,244,2,3,1,,,,Clemencia Mandujano  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5311-211,5311,888888,6,22,244,2,3,1,,,,Jesus Domingo Hernandez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5316-211,5316,888888,6,22,244,2,3,1,,,,Carlos Sanchez Netro  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5318-211,5318,888888,6,22,244,2,3,1,,,,Roxana Amaya  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5325-211,5325,888888,6,22,244,2,3,1,,,,Julieta Olvera  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5341-211,5341,888888,6,22,244,2,3,1,,,,Elen T. Duran  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5343-191,5343,888888,6,15,149,2,3,1,,375,37.5,Eduardo Miranda,2019-12-09,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-12-09,,,375
+EN,2,5344-211,5344,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jose F. Javier  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5354-211,5354,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Julieta Morales  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5355-211,5355,888888,6,22,244,2,3,1,,,,Mayra Alejandra  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5367-211,5367,888888,6,22,244,2,3,1,,,,Jose Pedro Salmeron  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5370-211,5370,888888,6,22,244,2,3,1,,,,Sandra Cristina Cuc De Leon  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5376-211,5376,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Maria Teresa Jimenez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5378-211,5378,888888,6,22,244,2,3,1,,,,Jose G. Gallego  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5381-221,5381,888888,6,15,303,2,3,1,,2000,300,Gerson Leonel Martinez Family Petition,2022-03-22,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-22,,,2000
+EN,2,5381-222,5381,888888,6,15,303,2,3,1,,2000,300,Gerson Leonel Martinez Out of Scope work,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,2000
+EN,2,5381-223,5381,888888,6,15,303,2,3,1,,2000,300,Gerson Leonel Martinez Removal Matter,2022-03-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-08,,,2000
+EN,2,5386-201,5386,888888,6,12,176,2,3,1,,1800,270,Martha R. Palma N400,2020-09-08,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-09-08,,,400
+EN,2,5389-211,5389,888888,6,15,303,2,3,1,,5432.5,450,Jimmy Alexander VASQUEZ EAD RN,2021-06-02,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-02,,,2432.5
+EN,2,53906-01,53906,888888,6,23,303,1,1,1,,,,"Reliant ABA Therapy, Inc. - General",2020-08-03,,,,,,,,,,,,,,,,,,,,26,0,SV,2020-08-03,,,
+EN,2,53936-01,53936,888888,6,12,119,1,1,1,,,,Allison Abigail Vega Cerda DACA - Initial,2021-03-12,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-03-12,,,
+EN,2,5397-211,5397,888888,6,22,244,2,3,1,,,,Hilario Ramirez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5403-211,5403,888888,6,22,244,2,3,1,,,, Liliana Rebolledo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5414-211,5414,888888,6,22,244,2,3,1,,,, Francisco Mendez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5419-211,5419,888888,6,22,244,2,3,1,,,,Nehemias Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5420-211,5420,888888,6,22,244,2,3,1,,,,Gloria Jaramillo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5422-211,5422,888888,6,22,244,2,3,1,,,,Yesenia Garcia Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5424-211,5424,888888,6,22,244,2,3,1,,,,Vilma Yolanda Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5440-211,5440,888888,6,22,244,2,3,1,,,,Francisco Rodriguez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5443-201,5443,888888,6,12,303,2,3,1,,2000,200,Carlos Zepeda Z,2020-01-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-22,,,800
+EN,2,5443-211,5443,888888,6,22,244,2,3,1,,,,Carlos Zepeda Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5444-211,5444,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Sara Mancilla Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5446-211,5446,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Alfredo Tovar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5452-211,5452,888888,6,22,244,2,3,1,,,,Jesus Jaime Coronado Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5454-211,5454,888888,6,22,244,2,3,1,,,,Ammy Fabiola Carrasco Olivas Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5462-211,5462,888888,6,22,244,2,3,1,,,,Jose Elias Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5464-211,5464,888888,6,22,244,2,3,1,,,,Nivardo Vasquez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5469-221,5469,888888,6,12,233,2,3,1,,2500,350,Michael Machowski N400 & Representation at Interview,2022-01-20,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-01-20,,,2500
+EN,2,5469-222,5469,888888,6,12,273,2,3,1,,2500,350,Michael Machowski Out of Scope Work,2022-02-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-02-09,,,2500
+EN,2,5483-221,5483,888888,6,12,135,2,3,1,,,,Francisco Omar Flores DACA Renewal,2022-04-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-08,,,
+EN,2,5484-211,5484,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Rene A. Dorante Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5485-211,5485,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jorge A. Dorante Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5486-211,5486,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Sergio A. Dorante Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5487-211,5487,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Ernesto Camarillo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5490-211,5490,888888,6,22,244,2,3,1,,,,Vidal Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5491-211,5491,888888,6,22,244,2,3,1,,,,Maria Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5495-211,5495,888888,6,22,244,2,3,1,,,,Juan Jose Valdorinos Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5498-211,5498,888888,6,22,244,2,3,1,,,,Rosa Ma Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5507-211,5507,888888,6,22,244,2,3,1,,,,Claudia Torres Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5508-211,5508,888888,6,22,244,2,3,1,,,,Orlando Benitez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5510-211,5510,888888,6,12,176,2,3,1,,2250,375,Lucio Prado N400,2021-09-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-16,,,1000
+EN,2,5511-211,5511,888888,6,22,244,2,3,1,,2250,375,Leonila Prado Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,1000
+EN,2,5511-212,5511,888888,6,12,176,2,3,1,,2250,375,Leonila Prado N400,2021-09-16,,,,,,,,,,,,,,,,,,,,26,0,CR,2021-09-16,,,1000
+EN,2,5513-211,5513,888888,6,22,244,2,3,1,,,,Irwin E. Amaya Escobar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5514-211,5514,888888,6,22,244,2,3,1,,,,Leticia Reyes Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5527-211,5527,888888,6,12,143,2,3,1,,,,Martha Lopez Jimenez Removal of Conditions,2021-10-06,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-10-06,,,
+EN,2,5535-211,5535,888888,6,22,244,2,3,1,,,, Hilario Perez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5538-211,5538,888888,6,22,244,2,3,1,,,,Lorena Saaveda Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5547-211,5547,888888,6,22,244,2,3,1,,,,Francisco Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5548-211,5548,888888,6,22,244,2,3,1,,,,Alejandra Reynoso Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5551-211,5551,888888,6,22,244,2,3,1,,,,Barix Alvarez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5553-211,5553,888888,6,22,244,2,3,1,,,, Karla Sarai Calderon  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,55551,5555,888888,6,12,303,2,3,1,,,,MiguelAngel Cis,2019-12-30,,,,,,,,,,,,,,,,,,,,26,0,RGC,2019-12-30,,,
+EN,2,5555-211,5555,888888,6,22,244,2,3,1,,,,Miguel Angel Cisneros  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5560-211,5560,888888,6,22,244,2,3,1,,,,Otullo Mata  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5563-211,5563,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jesus Zelaya  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5564-211,5564,888888,6,22,244,2,3,1,,,,Aslin Berenice  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5565-201,5565,888888,6,21,191,2,3,1,,4500,675,Robert G. Shaw I-130/AOS,2020-05-27,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-05-27,,,2025
+EN,2,5565-211,5565,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Robert G. Shaw   Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5566-211,5566,888888,6,22,244,2,3,1,,,,Heriberto Gonzalez  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5567-211,5567,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Sayra Molina  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5573-211,5573,888888,6,22,244,2,3,1,,,,Filberto Munoz Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5576-211,5576,888888,6,22,244,2,3,1,,,,Marlen Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5582-211,5582,888888,6,22,244,2,3,1,,,,Juan Carlos Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5586-211,5586,888888,6,12,131,2,3,1,,1800,270,Marcelo Carrasco Rivera Family Petition,2021-08-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-19,,,1000
+EN,2,5587-211,5587,888888,6,12,131,2,3,1,,1800,270,Gloria Olivas Hernandez Family Petition,2021-08-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-08-19,,,1000
+EN,2,5592-211,5592,888888,6,22,244,2,3,1,,,,Dieg Pina Vazquez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5605-211,5605,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Eva Maria Pan Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5616-201,5616,888888,6,12,135,2,3,1,,,,Carlos Sanchez Netro DACA Renewal,2020-10-21,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-10-21,,,
+EN,2,5616-211,5616,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Fabriana Rendon Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5619-211,5619,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Rocio Angelica Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5620-221,5620,888888,6,12,135,2,3,1,,750,112,Francisco Sifuentes DACA Renewal,2022-03-25,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-25,,,750
+EN,2,5625-211,5625,888888,6,22,244,2,3,1,,,,Elias Alonso Vera Lazcano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5633-211,5633,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Dr. Samantha BD  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5640-211,5640,888888,6,22,244,2,3,1,,,,Yesenia Estrada Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5641-211,5641,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Juan Carlos Melendez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5643-211,5643,888888,6,22,244,2,3,1,,,,Maria de la Paz Garcia Immigration 2019 Reconciliation,2021-06-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-08,,,
+EN,2,5644-211,5644,888888,6,22,244,2,3,1,,,,Raul Conde Immigration 2019 Reconciliation,2021-06-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-08,,,
+EN,2,5646-221,5646,888888,6,12,142,2,3,1,,2600,260,Aldair A. Ramirez Sandoval AOS,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,1170
+EN,2,5646-222,5646,888888,6,12,273,2,3,1,,2600,260,Aldair A. Ramirez Sandoval Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,1170
+EN,2,5647-211,5647,888888,6,22,244,2,3,1,,,,Raul Carrillo Velazquez  Immigration 2019 Reconciliation,2021-06-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-06-08,,,
+EN,2,5656-211,5656,888888,6,22,244,2,3,1,,,,Angel Guerra Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5659-211,5659,888888,6,22,244,2,3,1,,,,Abigail Pelcastre Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5671-211,5671,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Stephanie Wieja Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5674-211,5674,888888,6,22,244,2,3,1,,,,Ernesto Villanueva Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5681-211,5681,888888,6,22,244,2,3,1,,,,Marisol Uribe Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5682-211,5682,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Evelia Arellano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5684-211,5684,888888,6,22,244,2,3,1,,,,Ana Lea Mejia Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5687-211,5687,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Miriam Ofir Ventura Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5698-211,5698,888888,6,22,244,2,3,1,,,,Jose Luis Castellano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5700-211,5700,888888,6,22,244,2,3,1,,,,Apolinar Ortega Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5702-211,5702,888888,6,22,244,2,3,1,,,,Alex Guerra Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5703-211,5703,888888,6,22,244,2,3,1,,,,Juan Luis Bravo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5707-211,5707,888888,6,22,244,2,3,1,,,,Rosa Elia Mancha-Reyes Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5708-201,5708,888888,6,12,135,2,3,1,Legal fees due pertaining to Alejandra Williams's DACA with US Department of Homeland Security.,500,50,Alejandra Mancha,2020-01-15,,,,,,,,,,,,,,,,,,,,26,0,BG,2020-01-15,,,500
+EN,2,5708-221,5708,888888,6,12,135,2,3,1,,,,Alejandra Mancha-Reyes DACA Renewal,2022-04-08,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-08,,,
+EN,2,5714-221,5714,888888,6,12,142,2,3,1,,2600,260,Larry Gonzalo Ramirez Sandoval AOS,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,1170
+EN,2,5714-222,5714,888888,6,12,273,2,3,1,,2600,260,Larry Gonzalo Ramirez Sandoval Out of Scope Work,2022-03-15,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-03-15,,,1170
+EN,2,5718-211,5718,888888,6,22,244,2,3,1,,,,Francisco Mendoza Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5725-211,5725,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Maria Elena Mandujano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5726-211,5726,888888,6,22,244,2,3,1,,,,Lorenzo Perez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5727-211,5727,888888,6,22,244,2,3,1,,,,Kelman Lina Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5729-211,5729,888888,6,22,244,2,3,1,,,,Diana Alvarado Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5750-211,5750,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,GIT Ashlesha Bhoo Pathi Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5754-211,5754,888888,6,22,244,2,3,1,,,, Sandy Hernandez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5755-211,5755,888888,6,22,244,2,3,1,,,,Nicolas . Vasquez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5777-211,5777,888888,6,22,244,2,3,1,,,,Karla Belen Infante Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5778-211,5778,888888,6,22,244,2,3,1,,,,Sandra Aguilar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5788-211,5788,888888,6,22,244,2,3,1,,,,Eduardo Manzao Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5789-211,5789,888888,6,22,244,2,3,1,,,,Gustavo Avila Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5805-211,5805,888888,6,22,244,2,3,1,,,, Malbeth Mairen  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5807-211,5807,888888,6,22,244,2,3,1,,,,Cindy Monge Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5812-211,5812,888888,6,22,244,2,3,1,,,,Marina Sanchez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5813-211,5813,888888,6,22,244,2,3,1,,,,Claudia Solis Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5814-211,5814,888888,6,22,244,2,3,1,,,,Victor Arce Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5816-211,5816,888888,6,22,244,2,3,1,,,,Juan Antonio Davilos Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5820-211,5820,888888,6,22,244,2,3,1,,,,Elmer Alexander Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5821-211,5821,888888,6,22,244,2,3,1,,,,Alfonso Hernandez Huerta Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5822-211,5822,888888,6,12,233,2,3,1,,2000,300,Juan Jose Bustillos N400&Interview,2021-04-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-26,,,1000
+EN,2,5826-211,5826,888888,6,22,244,2,3,1,,,, Jose Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5827-211,5827,888888,6,22,244,2,3,1,,,, Eugenio Gonzalez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5829-211,5829,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Edide Arellano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5832-211,5832,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Santiago Netro Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5833-211,5833,888888,6,22,244,2,3,1,,,,Ivan Ugarte Pineda Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5838-211,5838,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Lorenzo Bartolo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5841-211,5841,888888,6,22,244,2,3,1,,,,Dora Granados Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5849-211,5849,888888,6,22,244,2,3,1,,,,Anduen Prendashi Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5851-211,5851,888888,6,22,244,2,3,1,,,,Christian Humberto  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5852-211,5852,888888,6,22,244,2,3,1,,,,Wendy Galeano Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5853-211,5853,888888,6,22,244,2,3,1,,,,Leticia  De Leon Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5855-201,5855,888888,6,12,226,2,3,1,,,,Gerardo Penaloza Travel Document,2021-01-26,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-01-26,,,
+EN,2,5855-211,5855,888888,6,22,244,2,3,1,,750,112.5,Gerardo Penaloza Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,487.5
+EN,2,5858-211,5858,888888,6,22,244,2,3,1,,,,Gregorio Aguilera Del Rio Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5866-211,5866,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Francisco Martinez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5871-211,5871,888888,6,22,244,2,3,1,,,,Juan Shehin Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5872-211,5872,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Myrna Marcela Sanchez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5873-211,5873,888888,6,22,244,2,3,1,,,,Luz Maria Ceja Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5880-211,5880,888888,6,22,244,2,3,1,,,,Denis Mauricio Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5886-211,5886,888888,6,22,244,2,3,1,,,,Alex Rios Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5887-211,5887,888888,6,22,244,2,3,1,,,,Rose Mary Aviles Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5889-211,5889,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Franklin Reyes Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5896-211,5896,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jesus Cronado Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5897-211,5897,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Graciela Aviles Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5903-211,5903,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Isabel Cristina Salazar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5906-211,5906,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Dolores Batalla Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5910-201,5910,888888,6,20,68,1,1,1,,3000,0,Flavio Rafael CARRANZA GONZALEZ TN/TD Ext,2020-06-26,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-06-26,,,0
+EN,2,5919-211,5919,888888,6,22,244,2,3,1,,,,Jonathan Martin Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5925-211,5925,888888,6,22,244,2,3,1,,,,Consuelo Brito Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5926-211,5926,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Consuelo Bianca Brito Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5931 GE1,5931 GE,888888,6,12,4,,,,,,,Danny Joel Leiva General Matters,2020-10-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2020-10-09,,,
+EN,2,5935-211,5935,888888,6,22,244,2,3,1,,,,Jesus Caseres M. Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5942-211,5942,888888,6,22,244,2,3,1,,,,Juan Hugo Chavez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5945-211,5945,888888,6,22,244,2,3,1,,,,Claudia M. Saavedra Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5950-211,5950,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Marco Antonio Cardenas Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,59541,5954,888888,6,22,161,1,1,1,,,,David Gutierrez,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,BAK,2019-04-23,,,
+EN,2,5956-211,5956,888888,6,22,244,2,3,1,,,,Jazmin Tovar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5957-211,5957,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Epifania Vargas Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5958-211,5958,888888,6,21,4,1,1,1,,,,Jan Burvil KRISTOFFERSEN General Matter,2021-07-16,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-16,,,
+EN,2,59591,5959,888888,6,22,288,1,3,1,,,,Carmen Lizeth PRADO,2019-04-23,,,,,,,,,,,,,,,,,,,,26,0,BAK,2019-04-23,,,
+EN,2,5959-211,5959,888888,6,22,244,2,3,1,,,,Carmen Lizeth Prado Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5964-211,5964,888888,6,22,244,2,3,1,,,,Elida Reyes Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5968-211,5968,888888,6,22,244,2,3,1,,,,Benito Sanchez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5970-221,5970,888888,6,12,135,2,3,1,Legal fees due pertaining to DACA Renewal for Raul Chavez with U.S. Department of Homeland Security.,750,112.5,Raul Chavez DACA Renewal,2022-04-04,,,,,,,,,,,,,,,,,,,,26,0,DEC,2022-04-04,,,750
+EN,2,5974-211,5974,888888,6,22,244,2,3,1,,,, Eduardo Hernandez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5975-211,5975,888888,6,22,244,2,3,1,,,,Soyla Carrizales Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5983-211,5983,888888,6,22,244,2,3,1,,,,Isidro de Jesus Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5984-211,5984,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Edy Astrid Castro de Melgar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5986-211,5986,888888,6,22,244,2,3,1,,,,Francisco Javier Zavala Beltran Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,5989-201,5989,888888,6,12,135,2,3,1,,750,112.5,Laura Diaz DACA Renewal,2020-12-03,,,,,,,,,,,,,,,,,,,,26,0,CR,2020-12-03,,,750
+EN,2,5989-211,5989,888888,6,22,244,2,3,1,,,,Laura Ameli Diaz Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,59921,5992,888888,6,15,303,2,3,1,,,,Nelson Ferman,2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,CR,2019-04-15,,,
+EN,2,5995-211,5995,888888,6,15,303,2,3,1,,500,75,Juan Carlos Perez Aguirre EAD Renewal,2021-11-29,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-11-29,,,500
+EN,2,6002-211,6002,888888,6,22,244,2,3,1,,,, Eladio Carrillo Garcia Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6003-211,6003,888888,6,22,244,2,3,1,,,,Jazmin Flores Santiago Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6004-211,6004,888888,6,22,244,2,3,1,,,,Sandra Dolores Melgar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6005-211,6005,888888,6,22,244,2,3,1,,,,Salvadro Eduardo Melgar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6006-211,6006,888888,6,22,244,2,3,1,,,,Rafael Isidro Melgar Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6007-211,6007,888888,6,22,244,2,3,1,,,,Juana Francisca Melgar De Figueroa Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6010-211,6010,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Amado Medina Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6014-211,6014,888888,6,22,244,2,3,1,,,,Jorge Aaron Ulloa  Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6018-211,6018,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,J. Trinidad Guemero Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6020-191,6020,888888,6,12,135,2,3,1,,500,50,Cecilio Cano Acosta,2019-06-22,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-06-22,,,500
+EN,2,6020-211,6020,888888,6,12,135,2,3,1,,750,112.5,Cecilio CANO DACA Renewal,2021-05-19,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-05-19,,,750
+EN,2,6024-211,6024,888888,6,22,244,2,3,1,,,,Carlos Miguel Rodriguez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6026-211,6026,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Jose Miguel Rodriguez Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,60291,6029,888888,6,22,4,1,1,1,,,,"Cost Center 0840825-02300""",2019-04-15,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-04-15,,,
+EN,2,6033-211,6033,888888,6,22,244,2,3,1,,,,Ruben Cano Acosta Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6035-211,6035,888888,6,22,244,2,3,1,,,,Safdar Jahangr Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6036-211,6036,888888,6,22,244,2,3,1,,,,Miguel Monje Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6039-211,6039,888888,6,22,244,2,3,1,,,,Juan Castillo Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6040-141,6040,888888,6,22,303,1,3,1,,,,Cynthia HUERTA,2019-08-09,,,,,,,,,,,,,,,,,,,,26,0,SM,2019-08-09,,,
+EN,2,6045-211,6045,888888,6,12,233,2,3,1,,2000,300,Noe Vega N-400 & Interview Representation,2021-04-09,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-04-09,,,1250
+EN,2,6050-211,6050,888888,6,22,244,2,3,1,MR Reconciliation 2019,,,Reynado Vargas Immigration 2019 Reconciliation,2021-07-03,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-03,,,
+EN,2,6052-191,6052,888888,6,12,135,2,3,1,,500,50,Luis Fernando A,2019-09-24,,,,,,,,,,,,,,,,,,,,26,0,BG,2019-09-24,,,500
+EN,2,6052-211,6052,888888,6,12,135,2,3,1,,,,Luis Fernando Aviles DACA Renewal,2021-07-21,,,,,,,,,,,,,,,,,,,,26,0,DEC,2021-07-21,,,

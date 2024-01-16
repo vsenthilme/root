@@ -1,0 +1,48 @@
+::ng-deep .mat-menu-submenu-icon {
+  color: white;
+}
+
+.dropdown_fields:hover {
+  background: #fff;
+  padding-left: 30px;
+  width: 210%;
+  box-shadow: 0 0 17px rgb(0 0 0 / 40%);
+  color: #514E51 !important;
+}
+
+.dropdown_fields {
+  position: relative;
+  transition: all 250ms ease-in-out;
+  border-radius: 5px;
+  color: white !important;
+}
+
+::ng-deep .mat-tooltip {
+  background-color: #fbc02d;
+  color: white !important;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-size: 1rem;
+}
+
+::ng-deep .custom-class2 {
+  width: 14rem;
+  background: rgba(81, 78, 81, 0.9);
+  max-height: 28rem !important;
+}
+::ng-deep .custom-class3 {
+  width: 14rem;
+  background: transparent !important;
+  max-height: 25rem;
+}
+
+
+::ng-deep .mat-menu-item {
+  line-height: 48px !important;
+  height: 48px !important;
+  padding: 0 16 px !important;
+}
+
+
+.hide{
+  display: none !important;
+}

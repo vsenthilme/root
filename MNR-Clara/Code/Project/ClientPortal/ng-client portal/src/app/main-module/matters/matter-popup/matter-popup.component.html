@@ -1,0 +1,38 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto">Matter - {{data.code.matterNumber}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"style="font-size: 17px"></i>
+    </div>
+<div class=" ml-2 pr-5" style="margin-right: 7rem !important;">
+    <mat-stepper class="py-2" orientation="vertical" [linear]="isLinear" #stepper>
+        <mat-step label="Opened On" *ngIf="data.code.caseOpenedDate != null">
+           <ng-template matStepperIcon="edit">
+                    <mat-icon>done</mat-icon>
+               </ng-template>
+         <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.caseOpenedDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+        <mat-step  *ngIf="data.code.caseFiledDate != null">
+            <ng-template matStepLabel>Filed On</ng-template>
+            <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.caseFiledDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+        <mat-step  *ngIf="data.code.receiptDate != null">
+            <ng-template matStepLabel>Receipt Date</ng-template>
+            <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.receiptDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+        <mat-step  *ngIf="data.code.courtDate != null">
+            <ng-template matStepLabel>RFE Date </ng-template>
+            <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.courtDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+ 
+        <mat-step *ngIf="data.code.approvalDate != null">
+            <ng-template matStepLabel>Approved Date</ng-template>   
+            <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.approvalDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+        <mat-step *ngIf="data.code.caseClosedDate != null">
+            <ng-template matStepLabel>Close Date</ng-template>   
+            <p class="text-muted pt-4 d-flex align-items-center"><mat-icon class="mr-2 my-auto">today</mat-icon>{{data.code.caseClosedDate | date : 'MM-dd-yyyy':'UTC 0'}}</p>
+        </mat-step>
+      </mat-stepper> 
+</div>
+</div>

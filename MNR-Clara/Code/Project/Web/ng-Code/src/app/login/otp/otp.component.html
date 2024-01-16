@@ -1,0 +1,35 @@
+<div class="container primaryblue vw-100 vh-100 mw-100 bg-white">
+    <div class="row no-gutters">
+      <div class="col-4 offset-8 vh-100 d-flex my-auto">
+        <mat-card style="background-color: white;" class="d-flex  align-self-center px-5 rounded-0 shadow py-4 border border-muted"
+          style="margin-right:2rem;">
+  
+          <form>
+            <div class="text-center mx-auto">
+              <img src="../../../assets/img/icons/otp.svg" class="" alt="" srcset="" style="width: 17rem;height: 13rem;">
+            </div>
+  
+            <div class="mt-1 " style="margin-bottom:0.6rem">
+              <h4 class="text-blue mb-2 text-center fw-bold" style="font-size:20px;letter-spacing: 0.7px;">Please Enter OTP</h4>
+              <p class="text-muted text-center mb-3" style="font-size:13px;">We have sent you a one time password to your registered mobile
+                number.</p>
+              <ng-otp-input [config]="config" class="mx-auto text-center text-blue" style="margin-bottom:1rem;"></ng-otp-input>
+            </div>
+            <div class=" text-center mx-auto" style="margin-bottom:1.5rem;">
+              <p class="d-inline text-muted" style="font-size:13px;">Did'nt Receive the OTP?</p>
+              <p class="d-inline text-blue fw-bold" style="font-size:13px;"> Resend</p>
+            </div>
+            <div class=" mx-auto text-center">
+              <button mat-button style="background-color: #077b96;color: white;width:18rem;"
+                class="btn-lg btn-block py-2">Validate OTP</button>
+            </div>
+          </form>
+          <!-- <br> -->
+          <!-- <div class="row justify-content-center">
+        <button style="width: 50%;" type="button" (click)="routeDeliveryPortal();" class="btn btn-dark mr-1">Delivery
+          Portal</button>
+      </div> -->
+        </mat-card>
+      </div>
+    </div>
+  

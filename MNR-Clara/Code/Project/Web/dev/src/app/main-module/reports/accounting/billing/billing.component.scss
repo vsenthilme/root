@@ -1,0 +1,79 @@
+.rounded_100{border-radius: 15px;}
+
+.space{letter-spacing: 1.6px;text-rendering: optimizeLegibility !important; -webkit-font-smoothing: antialiased !important;}
+.font-size-1_6rem{font-size: 1.6rem;}
+
+.card_box{width: 85%;  backdrop-filter: blur(8px) saturate(138%);
+    -webkit-backdrop-filter: blur(8px) saturate(138%);
+    background-color: rgba(255, 255, 255, 0.34);
+    border-radius: 12px;
+    border: 1px rgba(255,255,255,0.3) solid;
+  }
+.header{height: 14%;}
+.scroll2{overflow-y: scroll;height: calc(100vh - 30.6rem);}
+.scroll20{overflow-y: scroll;height: calc(100vh - 17.5rem);}
+.scroll1{overflow-y: scroll;height: calc(100vh - 14.2rem);}
+.table_shadow{filter: drop-shadow(-12px 0px 6px rgba(0, 0, 0, 0.15)) drop-shadow(10px 0px 6px rgba(0, 0, 0, 0.15));}
+.mat-header-cell {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(53, 53, 53);
+    background-color: #e2edf7;
+    filter: drop-shadow(0px 3px 0px rgba(0,0,0,0.15));
+}
+::ng-deep.mat-paginator-container {
+    min-height: 36px;
+}
+::ng-deep.mat-form-field-wrapper {
+  padding-bottom: 1.1em;
+}
+.form-control:focus { box-shadow: none;}
+.filter_button{border-top: 2px !important;border-left: 2px !important;border-right: 2px !important; background-color: transparent !important;border-color: #d2d2d2  !important;width: 15rem !important;}
+.breadcrumb > li + li::before{color: #6c757d; content: ">";padding: 0 5px;}
+.breadcrumb {background-color: transparent !important;color: #222222 !important;}
+.breadcrumb-item.active {color: #181818;}
+.breadcrumb-item > a{color: #181818 !important; text-decoration: none !important;}
+  //Checkbox
+::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+::ng-deep .mat-checkbox-indeterminate .mat-checkbox-background {background-color: #006990 !important; }
+::ng-deep .mat-checkbox-ripple .mat-ripple-element {background-color: #006990 !important;}
+
+.custom-class{width: 14rem;background: rgba(81, 78, 81, 0.9);}
+.dropdown_fields{position: relative;transition: all 250ms ease-in-out; border-radius: 5px;color: white;}
+.font_1-5{font-size: 1.2rem;}
+.dropdown_fields:hover { background: #fff;padding-left: 30px;width: 100%;box-shadow: 0 0 17px rgb(0 0 0 / 40%);color: #514E51;}
+
+::ng-deep .action-button{border-radius: 4px;min-width: 6rem; box-shadow: none !important;}
+
+.input_field{width: 100%;border-color: #dee2e6;}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.5em 0 0.7em 0 !important;
+}
+::ng-deep .mat-form-field-wrapper{padding-bottom: 0.5rem;}
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgb(167 167 167 / 4%);
+}
+.filterscroll{overflow-y: scroll;height: calc(100vh - 35.1rem);}
+.roundedhover:hover{
+  background-color: #bcbcbc !important;
+}
+.roundedhover{
+  background-color: #f5f5f5 !important;
+}
+.scroll4{width: 164rem;}
+.mat-column-select {flex: 0 0 17% !important; width: 2% !important;padding-right: 20px !important;text-align: center !important;}
+.mat-column-billingDate {flex: 0 0 17% !important; width: 8% !important;}
+.mat-column-billingModeDescription {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-classId {flex: 0 0 17% !important; width: 8% !important;}
+.mat-column-clientName {flex: 0 0 17% !important; width: 10.5% !important;}
+.mat-column-feeBilled {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-positiveHardCost {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-invoiceNumber {flex: 0 0 17% !important; width: 8% !important;}
+.mat-column-matterNumber {flex: 0 0 17% !important; width: 5.5% !important;}
+.mat-column-matterName {flex: 0 0 17% !important; width: 13.5% !important;}
+.mat-column-miscDebits {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-remainingBalance {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-positiveSoftCost {flex: 0 0 17% !important; width: 6% !important;}
+.mat-column-totalBilled {flex: 0 0 17% !important; width: 7% !important;}
+.mat-column-paidAmount {flex: 0 0 17% !important; width: 7% !important;}
+.mat-column-postingDate {flex: 0 0 17% !important; width: 5.5% !important;}

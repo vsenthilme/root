@@ -1,0 +1,753 @@
+<div class=" my-0 py-0 mt-3">
+
+  <div class="row ms-3 me-3 px-1 smallscreen">
+    <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 ">
+      <h2 class="my-auto fw-bolder header-text ps-2"> Client Information Sheet DACA - {{itformno}}</h2>
+    </div>
+    <div class="col-md-12 px-0 mt-1 ml-2">
+      <div class="">
+         <mat-tab-group animationDuration="0ms" >
+        <form [formGroup]="form">
+            <mat-tab label="Personal Details"> 
+            <div class="row scroll mt-2  px-1">
+              <div class="col-lg-3 col-md-4 mt-2">
+
+                <p class="mb-0 py-0  required">Name</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="name">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('name')">{{getErrorMessage()}}</mat-error>
+
+              </div>
+              <div class="col-lg-9 col-md-6 mt-2">
+                <p class="mb-0 py-0  ">Address</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="address">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('address')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 py-0 required ">Do you live at this address?</p>
+              <div class="row mt-2">
+                <mat-radio-group formControlName="doYouLiveAtThisAddress" layout="row">
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('doYouLiveAtThisAddress')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div formGroupName="contactNumber" class="row px-0 mx-0">
+                <p class="mb-0 pb-2  fw-bolder mt-3 ps-3">Telephone</p>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0   ">Office</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input type="number"  matInput placeholder="Enter" formControlName="workNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber.workNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0   ">Cell</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input  type="number"  matInput placeholder="Enter" formControlName="cellNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber.cellNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0   ">Direct / Home</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input  type="number"  matInput placeholder="Enter" formControlName="homeNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber.homeNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0   ">Fax</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input  type="number"  matInput placeholder="Enter" formControlName="faxNo">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('contactNumber.faxNo')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+              </div>
+              <p class="mb-0"></p>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Email Address</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="emailAddress">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('emailAddress')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Contact Person Name</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="contactPersonName">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('contactPersonName')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 py-0 required  mt-2">Do you want to receive information regarding immigration updates?</p>
+              <div class="row mt-2">
+                <mat-radio-group formControlName="doYouNeedImmigrationUpdates" layout="row">
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('doYouNeedImmigrationUpdates')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="col-sm-12 mt-3 mb-2">
+                <p class="mb-0 py-0  required ">Why are you visiting our office today?</p>
+                <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter" formControlName="purposeOfVisit"></textarea>
+                </mat-form-field>
+
+                <mat-error *ngIf="errorHandling('purposeOfVisit')">{{getErrorMessage()}}</mat-error>
+              </div>
+
+            </div>
+            </mat-tab>
+            <mat-tab label="Addtitional Details"> 
+            <div class="row scroll  mt-2  px-1">
+              <p class="mb-0 py-0   mt-2">Since your last visit with Monty & Ramirez LLP has your marital status
+                changed? </p>
+              <div class="row mt-2">
+                <mat-radio-group formControlName="hasYourMaritalStatusInfoChanged" layout="row">
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('hasYourMaritalStatusInfoChanged')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 py-0  mt-2">If so, please complete the following information.</p>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Marital Status</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <mat-select placeholder="select" formControlName="maritalStatus">
+                    <mat-option value="single">Single</mat-option>
+                    <mat-option value="egaged">Engaged </mat-option>
+                    <mat-option value="married">Married </mat-option>
+                    <mat-option value="dicorced">Divorced</mat-option>
+                    <mat-option value="widow">Widowed</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('maritalStatus')">{{getErrorMessage()}}</mat-error>
+
+              </div>
+              <p class="mb-0 pb-2  fw-bolder mt-3">If married or engaged, Complete this section.</p>
+              <div class="row">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0  ">Name of Spouse or Fiancé(e): </p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="nameOfSpouseOrFiance">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('nameOfSpouseOrFiance')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div formGroupName="clientPersonalInfo" class="row">
+                  <div class="col-lg-3 col-md-4 mt-2 me-2 pe-0">
+                    <p class="mb-0 py-0  ">Date of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                      <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker1" [max]="todaydate"
+                        formControlName="dateOfBirth">
+                      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('clientPersonalInfo.dateOfBirth')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                  <div class="col-lg-3 col-md-4 mt-2">
+                    <p class="mb-0 py-0  ">City and Country of Birth</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="cityAndCountryOfBirth">
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('clientPersonalInfo.cityAndCountryOfBirth')">{{getErrorMessage()}}
+                    </mat-error>
+                  </div>
+                </div>
+             <div class="row px-0 mx-0">
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Date of Marriage</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                  <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2" [max]="todaydate"
+                    formControlName="dateOfMarriage">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('dateOfMarriage')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Place of Residence</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="placeOfResidence">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('placeOfResidence')">{{getErrorMessage()}}</mat-error>
+              </div>
+             </div>
+                <p class="mb-0 py-0  ">Has your spouse ever been convicted of a crime?</p>
+                <mat-radio-group formControlName="hasSpouseEverbeenConvictedOfACrime" layout="row mt-2">
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('hasSpouseEverbeenConvictedOfACrime')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 pb-2  fw-bolder mt-3">If you have children, Please complete this section:</p>
+              <div formGroupName="child1" class="row px-0 mx-0">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">1. Name of Child</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="nameOfChild">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child1.nameOfChild')">{{getErrorMessage()}}
+                  </mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">City and Country of Birth</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="cityAndCountryOfBirth">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child1.cityAndCountryOfBirth')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">Age</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input type="number"  matInput placeholder="Enter" formControlName="age">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child1.age')">{{getErrorMessage()}}
+                  </mat-error>
+                </div>
+                <p class="mb-0 py-0    mt-2 ps-3">Does child live with you? </p>
+                <div class="row mt-2">
+
+                  <mat-radio-group formControlName="doesChildLiveWithYou" layout="row">
+
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+
+                  </mat-radio-group>
+                  <mat-error *ngIf="errorHandling('child1.doesChildLiveWithYou')">
+                    {{getErrorMessage()}}</mat-error>
+
+                </div>
+              </div>
+              <div formGroupName="child2" class="row px-0 mx-0">
+                <div class="col-lg-3 col-md-4 mt-2">
+
+                  <p class="mb-0 py-0   ">2. Name of Child</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="nameOfChild">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child2.nameOfChild')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">City and Country of Birth</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="cityAndCountryOfBirth">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child2.cityAndCountryOfBirth')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">Age</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input type="number"  matInput placeholder="Enter" formControlName="age">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child2.age')">{{getErrorMessage()}}
+                  </mat-error>
+                </div>
+                <p class="mb-0 py-0    mt-2 ps-3">Does child live with you? </p>
+                <div class="row mt-2">
+
+                  <mat-radio-group formControlName="doesChildLiveWithYou" layout="row">
+
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+
+                  </mat-radio-group>
+                  <mat-error *ngIf="errorHandling('child2.doesChildLiveWithYou')">
+                    {{getErrorMessage()}}</mat-error>
+
+                </div>
+              </div>
+              <div formGroupName="child3" class="row px-0 mx-0">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">3. Name of Child</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="nameOfChild">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child3.nameOfChild')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">City and Country of Birth</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="cityAndCountryOfBirth">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child3.cityAndCountryOfBirth')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">Age</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input type="number"  matInput placeholder="Enter" formControlName="age">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child3.age')">{{getErrorMessage()}}
+                  </mat-error>
+                </div>
+                <p class="mb-0 py-0    mt-2 ps-3">Does child live with you? </p>
+                <div class="row mt-2">
+
+                  <mat-radio-group formControlName="doesChildLiveWithYou" layout="row">
+
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+
+                  </mat-radio-group>
+                  <mat-error *ngIf="errorHandling('child3.doesChildLiveWithYou')">
+                    {{getErrorMessage()}}</mat-error>
+
+                </div>
+              </div>
+              <div formGroupName="child4" class="row px-0 mx-0">
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">4. Name of Child</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="nameOfChild">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child4.nameOfChild')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">City and Country of Birth</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="cityAndCountryOfBirth">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child4.cityAndCountryOfBirth')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-4 mt-2">
+                  <p class="mb-0 py-0   ">Age</p>
+                  <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input type="number"  matInput placeholder="Enter" formControlName="age">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('child4.age')">{{getErrorMessage()}}
+                  </mat-error>
+                </div>
+                <p class="mb-0 py-0    mt-2 ps-3">Does child live with you? </p>
+                <div class="row mt-2">
+                  <mat-radio-group formControlName="doesChildLiveWithYou" layout="row">
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                    </mat-radio-button>
+                    <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <mat-error *ngIf="errorHandling('child4.doesChildLiveWithYou')">
+                    {{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <p class="mb-0 pb-2  fw-bolder mt-3">Have you traveled outside the united states? if so, please
+                complete the following</p>
+
+              <table class="table ">
+                <thead>
+                  <tr>
+                    <th scope="col sticky-top">S.No</th>
+                    <th scope="col sticky-top">Entered</th>
+                    <th scope="col sticky-top">Exited</th>
+                    <th scope="col sticky-top">Places</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>
+                      <div formGroupName="clientEntryOutside1">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker31" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker31"></mat-datepicker-toggle>
+                          <mat-datepicker #picker31></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside1">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker32" [max]="todaydate"
+                            formControlName="dateOfExited" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker32"></mat-datepicker-toggle>
+                          <mat-datepicker #picker32></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside1">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>
+                      <div formGroupName="clientEntryOutside2">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker33" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker33"></mat-datepicker-toggle>
+                          <mat-datepicker #picker33></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside2">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker34" [max]="todaydate"
+                            formControlName="dateOfExited" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker34"></mat-datepicker-toggle>
+                          <mat-datepicker #picker34></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside2">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>
+                      <div formGroupName="clientEntryOutside3">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker35" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker35"></mat-datepicker-toggle>
+                          <mat-datepicker #picker35></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside3">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker36" [max]="todaydate"
+                            formControlName="dateOfExited" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker36"></mat-datepicker-toggle>
+                          <mat-datepicker #picker36></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside3">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">4</th>
+                    <td>
+                      <div formGroupName="clientEntryOutside4">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker37" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker37"></mat-datepicker-toggle>
+                          <mat-datepicker #picker37></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside4">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker38" [max]="todaydate"
+                            formControlName="dateOfExited" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker38"></mat-datepicker-toggle>
+                          <mat-datepicker #picker38></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside4">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">5</th>
+                    <td>
+                      <div formGroupName="clientEntryOutside5">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker39" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker39"></mat-datepicker-toggle>
+                          <mat-datepicker #picker39></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside5">
+                        <mat-form-field class="form-group input_field mb-0 pb-0 entry" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker40" [max]="todaydate"
+                            formControlName="dateOfExited" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker40"></mat-datepicker-toggle>
+                          <mat-datepicker #picker40></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="clientEntryOutside5">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">6</th>
+                    <td>
+                      <div formGroupName="lastClientEntryOutside">
+                        <mat-form-field class="form-group input_field mb-0 pb-0" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker41" [max]="todaydate"
+                            formControlName="dateOfEntered" class="mb-0 pb-0">
+                          <mat-datepicker-toggle matSuffix [for]="picker41"></mat-datepicker-toggle>
+                          <mat-datepicker #picker41></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="lastClientEntryOutside">
+                        <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                          <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker42" [max]="todaydate"
+                            formControlName="dateOfExited">
+                          <mat-datepicker-toggle matSuffix [for]="picker42"></mat-datepicker-toggle>
+                          <mat-datepicker #picker42></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                    <td>
+                      <div formGroupName="lastClientEntryOutside">
+                        <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                          <input matInput placeholder="Enter" formControlName="place">
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+            </mat-tab>
+
+            <mat-tab label="M&R Contact Details" *ngIf="pageflow == 'validate' || pageflow == 'update'|| pageflow == 'Display'">
+            <div class="row scroll mt-2  px-1">
+              <div class="col-lg-3 col-md-4 offset-md-9 mt-2">
+                <p class="mb-0 py-0  ">Conf Room No</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="confRoomNo">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('confRoomNo')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 pb-2 mt-2">Welcome back to our office. In order to ensure that we have your most updated
+                information, we are requesting that you update the following:</p>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Attorney</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="attorney">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('attorney')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Legal Assistant</p>
+                <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="legalAssistant">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('legalAssistant')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Date</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                  <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker0" formControlName="date"
+                    [max]="todaydate">
+                  <mat-datepicker-toggle matSuffix [for]="picker0"></mat-datepicker-toggle>
+                  <mat-datepicker #picker0></mat-datepicker>
+                </mat-form-field>
+
+                <mat-error *ngIf="errorHandling('date')">{{getErrorMessage()}}</mat-error>
+              </div>
+              <p class="mb-0 pb-2  fw-bolder mt-3">Client Contact Information</p>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0  ">Client Number</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="clientNumber">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('clientNumber')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0  ">Client PGT</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="clientPGT">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('clientPGT')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <div class="d-flex flex-column">
+                  <p class="mb-0 py-0  ">BGT</p>
+                  <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="bgt">
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('bgt')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <p class="mb-0 py-0   mt-2">Since your last visit with Monty & Ramirez LLP has your contact information
+                changed?</p>
+              <div class="row mt-2">
+                <mat-radio-group formControlName="hasYourMaritalStatusInfoChanged" layout="row">
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="true">Yes
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" [value]="false">No
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('hasYourMaritalStatusInfoChanged')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+            </mat-tab>
+
+        </form>
+        <form [formGroup]="intakefg">
+
+            <mat-tab label="Assign" *ngIf="pageflow == 'validate' || pageflow == 'update'|| pageflow == 'Display'">
+            <div class="row scroll mt-2 px-1">
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Consultation Date</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                  <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker123" [min]="todaydate"
+                    formControlName="referenceField1">
+                  <mat-datepicker-toggle matSuffix [for]="picker123"></mat-datepicker-toggle>
+                  <mat-datepicker #picker123></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling_admin('referenceField1')">{{getErrorMessage()}}</mat-error>
+
+              </div>
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Assigned Attorney</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+
+                  <mat-select placeholder="select" formControlName="referenceField2" placeholder="Select">
+                    <mat-option *ngFor="let food of useridList" [value]="food.key">
+                      {{food.value}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling_admin('referenceField2')">{{getErrorMessage()}}</mat-error>
+
+              </div>
+            </div>
+            </mat-tab>
+        </form>
+        <form [formGroup]="form">
+
+
+            <mat-tab label="Office Details"  *ngIf="pageflow == 'validate' || pageflow == 'Display'">
+            <div class="row scroll mt-2 px-1">
+              <p class="mb-0 pb-2  fw-bolder mt-3">Attorney Notes</p>
+              <div class="col-sm-12 mt-2 mb-2">
+                <p class="mb-0 py-0   ">Issues:</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter" formControlName="issues"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 mt-2 mb-2">
+                <p class="mb-0 py-0   ">Recommendations:</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter" formControlName="recommendations"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 mt-2 mb-2">
+                <p class="mb-0 py-0   ">Billing Department Notes:</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter" formControlName="billingDepartmentNotes"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 mt-2 mb-2">
+                <p class="mb-0 py-0   ">Notes</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <textarea matInput rows="5" placeholder="Enter" formControlName="notes"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            </mat-tab>
+        </form>
+        <form [formGroup]="intakefg">
+
+    
+
+            <mat-tab label="Status" *ngIf="pageflow == 'validate' || pageflow == 'Display'" >
+
+            <div class="row scroll mt-2 px-1 ">
+              <div class="col-lg-3 col-md-4 mt-2">
+                <p class="mb-0 py-0  ">Intake Status</p>
+                <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                  <mat-select placeholder="select" formControlName="statusId" placeholder="Select">
+                    <mat-option *ngFor="let food of statusIdList" [value]="food.key">
+                      {{food.value}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling_admin('statusId')">{{getErrorMessage()}}</mat-error>
+
+
+              </div>
+            </div>
+            </mat-tab>
+        </form>
+        </mat-tab-group> 
+
+
+    </div>
+      <div class="d-flex justify-content-center align-items-center py-2 bg-white w-100 fixed-bottom">
+
+        <button *ngIf="!btncancel" mat-raised-button (click)="back()" class="mx-2 bg-red text-white"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>
+          Cancel</button>
+        <button *ngIf="isbtntext" mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          {{btntext}}</button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,354 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3"><a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a></li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Reports
+        </li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page"><a
+            routerLink="/main/reports/accountlist">Matter Management</a>
+        </li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Academy Report</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%">
+    </div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" (click)="downloadexcel()">
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons bg-yellow1 text-white mx-2 "
+        matTooltip="Delete" [disabled]="true">
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="  floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display" [disabled]="!RA.view">
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true"
+        class="floating-buttons text-white mx-2 me-3 bg-darkblue1  " matTooltip="Edit" [disabled]="true">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button  "
+        [disabled]="true">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab disabled class="text-white mx-2 action-button bg-red disabled  " type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<div class="d-flex align-items-center justify-content-between pb-2"
+  style="height: 3rem !important;background-color: #f5f5f5 !important;">
+  <div>
+    <h2 class="my-auto mb-0 mx-4 ps-3 font-weight-bold text-blue">Academy Report</h2>
+  </div>
+  <div *ngIf="back" class="d-flex w-45">
+    <button mat-icon-button (click)="backsearch()"
+      class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+      matTooltip="Back">
+      <mat-icon class="action-icon text-secondary d-flex align-items-center justify-content-center my-auto">
+        arrow_back
+      </mat-icon>
+    </button>
+  </div>
+</div>
+<form [formGroup]="form">
+  <div class="mt-3 mb-0 " *ngIf="search">
+    <div class="row  mx-4">
+      <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 text-black">Class </p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" formControlName="classIdFE" readonly>
+            </mat-form-field>
+          </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+            <p class="mb-0 py-0 text-black">Matter</p>
+            <p-multiSelect placeholder="Select"  appendTo="body" class="w-100 my-1 mb-2" [options]="multiMatterList" 
+            formControlName="matterNumber" [style]="{'width': '100%'}"[panelStyle]="{'width':'20%'}"></p-multiSelect> 
+        </div>
+    </div>
+      <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Case Category </p>
+            <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" [(ngModel)]="selectedCaseCategoryItems"
+              [options]="multiSelectCaseCategoryList" formControlName="caseCategory" [style]="{'width': '100%'}">
+            </p-multiSelect>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Case Sub Category </p>
+            <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+              [options]="multiSelectSubCaseCategoryList" formControlName="caseSubCategory" [style]="{'width': '100%'}">
+            </p-multiSelect>
+          </div>
+        </div>
+      <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Partner</p>
+            <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+              [options]="multiSelectPartnerIdList" formControlName="partner" [style]="{'width': '100%'}"></p-multiSelect>
+          </div>
+        </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0 ">Filed Date </p>
+          <mat-form-field class="form-group input_field2 mb-0 w-100" appearance="outline">
+            <mat-date-range-input [rangePicker]="picker2">
+              <input matStartDate placeholder="Start date" formControlName="fromFiledDateFE">
+              <input matEndDate placeholder="End date" formControlName="toFiledDateFE">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker2></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+          <p class="mb-0 py-0">Corporation</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="multiselectclientList" formControlName="corpClientId" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+          </p-multiSelect>
+        </div>
+      <div class="col-lg-3 col-md-4">
+          <p class="mb-0 py-0">Legal Assistant 2</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="legalAssistantList" formControlName="legalAssistant" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+          </p-multiSelect>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <p class="mb-0 py-0">Legal Assistant 1</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="ParalegalList" formControlName="paralegal" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+          </p-multiSelect>
+        </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Responsible TimeKeeper</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="multiSelectMainAttorneyIdList" formControlName="responsibleTimeKeeper"
+            [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+        <div class="d-flex flex-column">
+          <p class="mb-0 py-0">Assigned TimeKeeper</p>
+          <!-- <angular2-multiselect class="mb-2" [data]="multiSelectAssignedTKIdList" [(ngModel)]="selectedAssignedTKId"
+              [settings]="dropdownSettings" formControlName="assignedTimeKeeperFE">
+            </angular2-multiselect> -->
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="multiSelectAssignedTKIdList" formControlName="assignedTimeKeeper" [style]="{'width': '100%'}">
+          </p-multiSelect>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4">
+          <p class="mb-0 py-0">Originating TK</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+            [options]="originatingTimeList" formControlName="originatingTimeKeeper" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+          </p-multiSelect>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+      <button mat-raised-button class=" bg-danger px-4 text-white mb-2 mx-2" (click)="reset()"> <i
+          class="bi bi-arrow-counterclockwise me-1 font-size-1_5rem pr-2"></i>Reset</button>
+      <button mat-raised-button class=" bg-darkblue text-white mb-2 mx-2" (click)="filtersearch()"> <i
+          class="bi bi-gear-fill me-1 font-size-1_5rem pr-2"></i>Execute</button>
+
+    </div>
+  </div>
+</form>
+<div class=" my-0 py-0" *ngIf="table">
+  <div class="ms-3 me-3 px-1" [ngClass]="{'scroll20' : !search, 'scroll2': search}">
+    <div class="scroll4">
+      <table mat-table [dataSource]="dataSource"  matSort matSortActive="postingDate" matSortDirection="asc" class=" w-100 ">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="clientId" sticky>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Id</th>
+          <td mat-cell *matCellDef="let element"> {{element.clientId }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+
+        <ng-container matColumnDef="matterNumber" sticky>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.matterNumber}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+
+        <ng-container matColumnDef="matterDescription" sticky>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Matter Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.matterDescription}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="partner" sticky>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Partner</th>
+          <td mat-cell *matCellDef="let element"> {{element.partner}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+        </ng-container>
+
+        <ng-container matColumnDef="assignedTimekeeper" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Assigned TimeKeeper</th>
+          <td mat-cell *matCellDef="let element"> {{element.assignedTimekeeper}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+
+        <ng-container matColumnDef="paralegal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Legal Assistant 1 </th>
+          <td mat-cell *matCellDef="let element"  > {{element.paralegal }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" > </td>
+        </ng-container>
+        <ng-container matColumnDef="legalAssistant">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Legal Assistant 2</th>
+          <td mat-cell *matCellDef="let element" > {{element.legalAssistant}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" >  </td>
+        </ng-container>
+
+        <ng-container matColumnDef="clientName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</th>
+          <td mat-cell *matCellDef="let element" > {{element.clientName }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" > </td>
+        </ng-container>
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Position</th>
+          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="dateOfHire">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Hire</th>
+          <td mat-cell *matCellDef="let element"> {{element.dateOfHire | date : 'MM-dd-yyyy'}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+          <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+          <td mat-cell *matCellDef="let element" > {{element.state }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+       
+        <ng-container matColumnDef="caseSubCategoryDescription">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Visa</th>
+          <td mat-cell *matCellDef="let element"> {{element.caseSubCategoryDescription}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="eligibilityDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Earliest Date to file</th>
+          <td mat-cell *matCellDef="let element"> {{element.eligibilityDate | date : 'MM-dd-yyyy'}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="expirationDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>I-94 Expiration Date/EAD </th>
+          <td mat-cell *matCellDef="let element"> {{element.expirationDate| date : 'MM-dd-yyyy' }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+        </ng-container>
+        <ng-container matColumnDef="receiptDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Validity Starts </th>
+          <td mat-cell *matCellDef="let element"> {{element.receiptDate| date : 'MM-dd-yyyy' }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;"></td>
+        </ng-container>
+        <ng-container matColumnDef="academyComments">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Academy Comments</th>
+          <td mat-cell *matCellDef="let element"> {{element.academyComments}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" ></td>
+        </ng-container>
+        <ng-container matColumnDef="mrjobDescriptionNote">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>M&R Notes Job Description</th>
+          <td mat-cell *matCellDef="let element"> {{element.mrjobDescriptionNote }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="mrnivnote">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NIV M&R Notes</th>
+          <td mat-cell *matCellDef="let element"> {{element.mrnivnote }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="mrivnote">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>IV-M&R Notes</th>
+          <td mat-cell *matCellDef="let element" > {{element.mrivnote}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="h1BEndDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>End of 5th Year H1B</th>
+          <td mat-cell *matCellDef="let element" > {{element.h1BEndDate | date : 'MM-dd-yyyy'}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="priorityDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>I-140 Priority Date </th>
+          <td mat-cell *matCellDef="let element" > {{element.priorityDate | date : 'MM-dd-yyyy'}} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="auditEmail">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Audit Email</th>
+          <td mat-cell *matCellDef="let element"  > {{element.auditEmail }} </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="leadership">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Leadership</th>
+          <td mat-cell *matCellDef="let element" > {{element.leadership }}  </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="hrPartners">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>HR Partners</th>
+          <td mat-cell *matCellDef="let element" > {{element.hrPartners }}  </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <ng-container matColumnDef="emailId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Email</th>
+          <td mat-cell *matCellDef="let element"> {{element.emailId }}  </td>
+          <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem;" class="text-right"></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" class="example-first-footer-row"></tr>
+      </table>
+    </div>
+  </div>
+  <div class="p-0 mx-1 m-0">
+    <mat-paginator class="mx-3 me-3" showFirstLastButtons [pageSize]="500" [pageSizeOptions]="[500, 600, 700, 800]"
+      aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>
+
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-aliasMenuItems="element">
+    <button mat-menu-item>Edit</button>
+    <button mat-menu-item>Display</button>
+    <button mat-menu-item>Delete</button>
+    <!-- <button mat-menu-item (click)="open_ClientCreation(aliasMenuItems)">Client Creation</button>  -->
+  </ng-template>
+</mat-menu>
+
+

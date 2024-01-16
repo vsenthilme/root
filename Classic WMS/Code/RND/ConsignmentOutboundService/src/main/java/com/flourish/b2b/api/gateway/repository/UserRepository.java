@@ -1,0 +1,16 @@
+package com.flourish.b2b.api.gateway.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.flourish.b2b.api.gateway.model.user.User;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long>{
+
+	public List<User> findAll();
+	Optional<User> findByEmail(String email);
+}

@@ -1,0 +1,328 @@
+
+Adhoc : POST /adhoc
+
+{
+  "adhocModuleId": "string",
+  "companyId": "string",
+  "createdBy": "string",
+  "languageId": "string",
+  "modeOfImplementation": "string",
+  "moduleCode": 0,
+  "plantId": "string",
+  "warehouseID": "string"
+}
+
+--------------------------------------------------------------------
+Barcode : POST /barcode
+
+{
+  "barcodeLength": 0,
+  "barcodeSubTypeId": 0,
+  "barcodeTypeId": 0,
+  "barcodeWidth": 0,
+  "companyId": "string",
+  "createdBy": "string",
+  "dimensionUom": "string",
+  "labelInformation": "string",
+  "languageId": "string",
+  "levelId": 0,
+  "levelReference": "string",
+  "method": "string",
+  "numberRangeFrom": "string",
+  "numberRangeTo": "string",
+  "plantId": "string",
+  "processId": 0,
+  "warehouseID": "string"
+}
+--------------------------------------------------------------------
+
+BatchSerial : POST /batchserial
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "languageId": "string",
+  "levelId": 0,
+  "levelReference": "string",
+  "maintenance": "string",
+  "plantId": "string",
+  "storageMethod": "string",
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+
+CompanyMaster : POST /company
+{
+  "address1": "string",
+  "address2": "string",
+  "city": "string",
+  "companyId": "string",
+  "contactName": "string",
+  "country": "string",
+  "createdBy": "string",
+  "currency": 0,
+  "designation": "string",
+  "email": "string",
+  "languageId": "string",
+  "noOfOutlets": 0,
+  "noOfPlants": 0,
+  "noOfWarehouses": 0,
+  "phoneNumber": "string",
+  "registrationNo": "string",
+  "state": "string",
+  "verticalId": "string",
+  "zipCode": 0
+} 
+--------------------------------------------------------------------
+Doors : POST /doors
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "doorId": "string",
+  "doorType": "string",
+  "languageId": "string",
+  "plantId": "string",
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+Employee : POST /employee
+
+{
+  "companyCode": "string",
+  "companyId": "string",
+  "createdBy": "string",
+  "employeeId": "string",
+  "handlingEquipment": "string",
+  "languageId": "string",
+  "plantId": "string",
+  "processId": 0,
+  "status": "string",
+  "stroageSection": "string",
+  "warehouseId": "string",
+  "warehouseNo": "string"
+}
+--------------------------------------------------------------------
+Floor: POST /floor
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "floorId": 0,
+  "languageId": "string",
+  "plantId": "string",
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+ItemGroup : POST /itemgroup
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "itemGroupId": 0,
+  "itemTypeId": 0,
+  "languageId": "string",
+  "plantId": "string",
+  "storageClassId": 0,
+  "storageSectionId": 0,
+  "subItemGroupId": 0,
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+ItemType: POST /itemtype
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "description": "string",
+  "itemTypeId": 0,
+  "languageId": "string",
+  "plantId": "string",
+  "storageMethod": "string",
+  "variantManagementIndicator": 0,
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+Plant : POST /plant
+
+{
+  "address1": "string",
+  "address2": "string",
+  "city": "string",
+  "companyId": "string",
+  "contactName": "string",
+  "country": "string",
+  "createdBy": "string",
+  "designation": "string",
+  "email": "string",
+  "languageId": "string",
+  "phoneNumber": "string",
+  "plantId": "string",
+  "state": "string",
+  "zipCode": 0
+}
+--------------------------------------------------------------------
+StorageBinType : POST /storageBinType
+
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "dimentionUom": "string",
+  "height": 0,
+  "languageId": "string",
+  "length": 0,
+  "plantId": "string",
+  "storageBinTypeBlock": 0,
+  "storageBinTypeId": 0,
+  "storageTypeId": 0,
+  "totalVolume": 0,
+  "volumeUom": "string",
+  "warehouseId": "string",
+  "width": 0
+}
+--------------------------------------------------------------------
+StorageClass : POST /storageClass
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "hazardMaterialClass": "string",
+  "languageId": "string",
+  "plantId": "string",
+  "remarks": "string",
+  "storageClassId": 0,
+  "warehouseID": "string",
+  "waterPollutionClass": "string"
+}
+--------------------------------------------------------------------
+StorageSection : POST /storageSection
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "floorId": 0,
+  "itemGroup": 0,
+  "itemType": 0,
+  "languageId": "string",
+  "noAisles": 0,
+  "noRows": 0,
+  "noShelves": 0,
+  "noSpan": 0,
+  "noStorageBins": 0,
+  "plantId": "string",
+  "storageSectionId": 0,
+  "storageTypeNo": 0,
+  "subItemGroup": 0,
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+Storagetype : POST /storagetype
+{
+  "addToExistingStock": 0,
+  "allowNegativeStock": 0,
+  "capacityCheck": 0,
+  "companyId": "string",
+  "createdBy": "string",
+  "languageId": "string",
+  "mixToStock": 0,
+  "plantId": "string",
+  "returnToSameStorageType": 0,
+  "storageClassId": 0,
+  "storageTemperatureFrom": "string",
+  "storageTemperatureTo": "string",
+  "storageTypeId": 0,
+  "storageUom": "string",
+  "warehouseID": "string"
+}
+--------------------------------------------------------------------
+Strategies : POST /strategies
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "languageId": "string",
+  "plantId": "string",
+  "priority": 0,
+  "sequenceIndicator": 0,
+  "strategyNo": "string",
+  "strategyTypeId": 0,
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+Variant : POST /variant
+{
+  "companyId": "string",
+  "createdBy": "string",
+  "languageId": "string",
+  "levelId": 0,
+  "levelReferece": "string",
+  "plantId": "string",
+  "variantId": "string",
+  "variantSubId": "string",
+  "warehouseId": "string"
+}
+--------------------------------------------------------------------
+Warehouse ; POST /warehouse
+{
+  "address1": "string",
+  "address2": "string",
+  "city": "string",
+  "companyId": "string",
+  "contactName": "string",
+  "country": 0,
+  "createdBy": "string",
+  "email": "string",
+  "inboundQACheck": true,
+  "languageId": "string",
+  "latitude": 0,
+  "length": 0,
+  "longitude": 0,
+  "modeOfImpelementation": "string",
+  "noAisles": 0,
+  "outboundQACheck": true,
+  "phoneNumber": "string",
+  "plantId": "string",
+  "state": "string",
+  "storageMethod": "string",
+  "totalArea": 0,
+  "uom": "string",
+  "warehouseID": "string",
+  "warehouseTypeID": 0,
+  "width": 0,
+  "zipCode": 0,
+  "zone": "string"
+}
+--------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

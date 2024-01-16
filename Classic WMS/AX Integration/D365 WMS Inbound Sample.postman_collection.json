@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "0476d28b-a2a5-4399-b14b-6cff7a69cb16",
+		"name": "D365 WMS Inbound Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20275160"
+	},
+	"item": [
+		{
+			"name": "API Exposing from D365",
+			"item": [
+				{
+					"name": "Authentication",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "client_Id  ",
+									"value": "a9ef22c7-c41f-4cc5-8d83-4eb222dd7734",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "default"
+								},
+								{
+									"key": "resource",
+									"value": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com",
+									"type": "default"
+								},
+								{
+									"key": "client_secret",
+									"value": "Bx28Q~Sjz45kSetkvgBqZjt2g-fimhs~Cat5taVt",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/truevalue.com.kw/oauth2/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"truevalue.com.kw",
+								"oauth2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SO Packingslip",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTkzNDMzNiwibmJmIjoxNzAxOTM0MzM2LCJleHAiOjE3MDE5MzgyMzYsImFpbyI6IkUyVmdZQkMyaWI4eFBmYlNuejJxS1NkeXZJT1pBUT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJoNFJQYkRiaENVMkpmUjlqM2sxd0FBIiwidmVyIjoiMS4wIn0.fHfoNUNJQIdJIuvFfRxNy7P4os0LcIAq640GkZVIhz7fxBjDdOX_KVk8BWKaMCKOsFVb1Xu23AorA6tusz7fmM7zJPqac7xfX3dwFDvTKyo9CIv1gj11e9sO8hxdPRABOUTLanTA3l740xNkemzHZcst3OoBLLHcPO3s79u2eu11dU6aBIKaFS9JCvulLNjLRuX1Mahr3ApZgtFmOagA_qrUTMDbEnYiCk-D_ak6dUyiBNHfFK3-cQ1MAFLCtecUnSjrT4vNFJ-M2hbawFqpYoSUOYX6zAVjpnA3gOC4bRAWnJWlt2mN-kuTS69e9mRCoeNlR9YHYDyk9xIqRS-7_g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"soHeader\": {\r\n        \"salesOrderNumber\": \"TV-000321\"\r\n    },\r\n    \"soLines\": [\r\n        {\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 1,\r\n            \"orderedQty\": 1,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"09-12-2023\",\r\n            \"storeId\": \"112\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \"OOH LA OUD CANDLE,48,PIECE\",\r\n            \"lineReference\": 2,\r\n            \"orderedQty\": 12,\r\n            \"shippedQty\": 8,\r\n            \"deliverydate\": \"09-12-2023\",\r\n            \"storeId\": \"112\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAbbey\",\r\n            \"skuDescription\": \"OOH LA OUD CANDLE,48,PIECE\",\r\n            \"lineReference\": 3,\r\n            \"orderedQty\": 8,\r\n            \"shippedQty\": 8,\r\n            \"deliverydate\": \"09-12-2023\",\r\n            \"storeId\": \"112\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \"OOH LA OUD CANDLE,48,PIECE\",\r\n            \"lineReference\": 4,\r\n            \"orderedQty\": 3,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"09-12-2023\",\r\n            \"storeId\": \"112\",\r\n            \"wareHouseID\": \"110\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setSOPackingSlip",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setSOPackingSlip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SO Return Packingslip",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTc3Mzc5OSwibmJmIjoxNzAxNzczNzk5LCJleHAiOjE3MDE3Nzc2OTksImFpbyI6IkUyVmdZRWcreWFyU1p1WEFlckZsRXVQR2pMVGxBQT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJjUGRlQmtEaFlFNllTSGV5cTY0ZkFBIiwidmVyIjoiMS4wIn0.N8jE9JG1d7-HRcQs4WK6a3niTNX-alypKZt3vOP6AULkdm9lU-AQ9hcc3sacuhgrNZ0YmLYdP7xpuQb0OgHPU_hFzq8sYhJQdmcmFk8XpB8wtUGPw_E2kjl7pBD_JISY3Tq4RtQCvPqLK9p3-_INycUUCUzS9XhQLokbyup_aF1qZKpPAghl4dd2LdjKxwgYv5BQMPTtJV02t4PVZgcsmfoQ6JU-2toJshiAU_JKNKMLVKO7uKBOjnvaAN7N_u7McI_lQhVaYjKkPcINUatxUDntN5iaLafVFvTYepJBZvx1ssku9LCYrqMziqPSPVTZbqQojxFxTSTJVcKCbe4J7g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"returnOrderHeader\": {\r\n        \"returnOrderReference\": \"TV-000325\"\r\n    },\r\n    \"returnOrderLines\": [\r\n        {\r\n            \"salesOrderReference\": \"TV-000321\",\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 1,\r\n            \"expectedQty\": 1,\r\n            \"uom\": \"PIECE\",\r\n            \"returnQty\": 1,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"salesOrderReference\": \"TV-000321\",\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 2,\r\n            \"expectedQty\": 8,\r\n            \"uom\": \"PIECE\",\r\n            \"returnQty\": 6,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"salesOrderReference\": \"TV-000321\",\r\n            \"sku\": \"DemAbbey\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 3,\r\n            \"expectedQty\": 8,\r\n            \"uom\": \"PIECE\",\r\n            \"returnQty\": 8,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"salesOrderReference\": \"TV-000321\",\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 4,\r\n            \"expectedQty\": 1,\r\n            \"uom\": \"PIECE\",\r\n            \"returnQty\": 1,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"wareHouseId\": \"110\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setReturnSOPackingSlip",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setReturnSOPackingSlip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TO Receipt",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTc3Mzc5OSwibmJmIjoxNzAxNzczNzk5LCJleHAiOjE3MDE3Nzc2OTksImFpbyI6IkUyVmdZRWcreWFyU1p1WEFlckZsRXVQR2pMVGxBQT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJjUGRlQmtEaFlFNllTSGV5cTY0ZkFBIiwidmVyIjoiMS4wIn0.N8jE9JG1d7-HRcQs4WK6a3niTNX-alypKZt3vOP6AULkdm9lU-AQ9hcc3sacuhgrNZ0YmLYdP7xpuQb0OgHPU_hFzq8sYhJQdmcmFk8XpB8wtUGPw_E2kjl7pBD_JISY3Tq4RtQCvPqLK9p3-_INycUUCUzS9XhQLokbyup_aF1qZKpPAghl4dd2LdjKxwgYv5BQMPTtJV02t4PVZgcsmfoQ6JU-2toJshiAU_JKNKMLVKO7uKBOjnvaAN7N_u7McI_lQhVaYjKkPcINUatxUDntN5iaLafVFvTYepJBZvx1ssku9LCYrqMziqPSPVTZbqQojxFxTSTJVcKCbe4J7g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"toHeader\": {\r\n        \"transferOrderNumber\": \"TV-000182\"\r\n    },\r\n    \"toLines\": [\r\n        {\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \" KRUGER COUGAR DIFFUSER 200ml \",\r\n            \"lineReference\": 1,\r\n            \"expectedQty\": 1,\r\n            \"uom\": \" PIECE \",\r\n            \"receivedQty\": 1,\r\n            \"damagedQty\": 0,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \" KRUGER COUGAR DIFFUSER 200ml \",\r\n            \"lineReference\": 2,\r\n            \"expectedQty\": 8,\r\n            \"uom\": \" PIECE \",\r\n            \"receivedQty\": 6,\r\n            \"damagedQty\": 2,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \" KRUGER COUGAR DIFFUSER 200ml \",\r\n            \"lineReference\": 3,\r\n            \"expectedQty\": 1,\r\n            \"uom\": \" PIECE \",\r\n            \"receivedQty\": 0,\r\n            \"damagedQty\": 1,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseId\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemBlueL\",\r\n            \"skuDescription\": \" KRUGER COUGAR DIFFUSER 200ml \",\r\n            \"lineReference\": 4,\r\n            \"expectedQty\": 12,\r\n            \"uom\": \" PIECE \",\r\n            \"receivedQty\": 0,\r\n            \"damagedQty\": 6,\r\n            \"packQty\": 6,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseId\": \"110\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setTransferOrderReceipt",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setTransferOrderReceipt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TO Shipment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTc3Mzc5OSwibmJmIjoxNzAxNzczNzk5LCJleHAiOjE3MDE3Nzc2OTksImFpbyI6IkUyVmdZRWcreWFyU1p1WEFlckZsRXVQR2pMVGxBQT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJjUGRlQmtEaFlFNllTSGV5cTY0ZkFBIiwidmVyIjoiMS4wIn0.N8jE9JG1d7-HRcQs4WK6a3niTNX-alypKZt3vOP6AULkdm9lU-AQ9hcc3sacuhgrNZ0YmLYdP7xpuQb0OgHPU_hFzq8sYhJQdmcmFk8XpB8wtUGPw_E2kjl7pBD_JISY3Tq4RtQCvPqLK9p3-_INycUUCUzS9XhQLokbyup_aF1qZKpPAghl4dd2LdjKxwgYv5BQMPTtJV02t4PVZgcsmfoQ6JU-2toJshiAU_JKNKMLVKO7uKBOjnvaAN7N_u7McI_lQhVaYjKkPcINUatxUDntN5iaLafVFvTYepJBZvx1ssku9LCYrqMziqPSPVTZbqQojxFxTSTJVcKCbe4J7g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"toHeader\": {\r\n        \"transferOrderNumber\": \"TV-000181\"\r\n    },\r\n    \"toLines\": [\r\n        {\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 1,\r\n            \"orderedQty \": 1,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"10-12-2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAbbey\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 2,\r\n            \"orderedQty \": 12,\r\n            \"shippedQty\": 8,\r\n            \"deliverydate\": \"10-12-2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 3,\r\n            \"orderedQty \": 8,\r\n            \"shippedQty\": 8,\r\n            \"deliverydate\": \"10-12-2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseID\": \"110\"\r\n        },\r\n        {\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 4,\r\n            \"orderedQty \": 3,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"10-12-2023\",\r\n            \"storeId\": \"102\",\r\n            \"wareHouseID\": \"110\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setTransferOrderShipment",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setTransferOrderShipment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InterTO Receipt",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTc3Mzc5OSwibmJmIjoxNzAxNzczNzk5LCJleHAiOjE3MDE3Nzc2OTksImFpbyI6IkUyVmdZRWcreWFyU1p1WEFlckZsRXVQR2pMVGxBQT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJjUGRlQmtEaFlFNllTSGV5cTY0ZkFBIiwidmVyIjoiMS4wIn0.N8jE9JG1d7-HRcQs4WK6a3niTNX-alypKZt3vOP6AULkdm9lU-AQ9hcc3sacuhgrNZ0YmLYdP7xpuQb0OgHPU_hFzq8sYhJQdmcmFk8XpB8wtUGPw_E2kjl7pBD_JISY3Tq4RtQCvPqLK9p3-_INycUUCUzS9XhQLokbyup_aF1qZKpPAghl4dd2LdjKxwgYv5BQMPTtJV02t4PVZgcsmfoQ6JU-2toJshiAU_JKNKMLVKO7uKBOjnvaAN7N_u7McI_lQhVaYjKkPcINUatxUDntN5iaLafVFvTYepJBZvx1ssku9LCYrqMziqPSPVTZbqQojxFxTSTJVcKCbe4J7g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"toHeader\": {\r\n        \"transferOrderNumber\": \"TV-000186\"\r\n    },\r\n    \"toLines\": [\r\n        {\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 1,\r\n            \"expectedQty\": 1,\r\n            \"uom\": \"PIECE\",\r\n            \"receivedQty\": 1,\r\n            \"damagedQty\": 0,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"FromWhsID\": \"110\",\r\n            \"ToWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAbbey\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 2,\r\n            \"expectedQty\": 9,\r\n            \"uom\": \"PIECE\",\r\n            \"receivedQty\": 6,\r\n            \"damagedQty\": 3,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"FromWhsID\": \"110\",\r\n            \"ToWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 3,\r\n            \"expectedQty\": 8,\r\n            \"uom\": \"PIECE\",\r\n            \"receivedQty\": 6,\r\n            \"damagedQty\": 0,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"FromWhsID\": \"110\",\r\n            \"ToWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 4,\r\n            \"expectedQty\": 3,\r\n            \"uom\": \"PIECE\",\r\n            \"receivedQty\": 3,\r\n            \"damagedQty\": 0,\r\n            \"packQty\": 2,\r\n            \"actualReceiptDate\": \"10/12/2023\",\r\n            \"FromWhsID\": \"110\",\r\n            \"ToWhsID\": \"111\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setInterTransferOrderReceipt",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setInterTransferOrderReceipt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InterTO Shipment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSIsImtpZCI6IlQxU3QtZExUdnlXUmd4Ql82NzZ1OGtyWFMtSSJ9.eyJhdWQiOiJodHRwczovL3R2ZDM2NS1kZXY4MWNiYjFlNzM0OTc0Y2ZmZGV2YW9zLmF4Y2xvdWQuZHluYW1pY3MuY29tIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMWU5MjFjNjItYTkxZS00MDg5LThlY2EtMjRlZTUxNzU5MDdkLyIsImlhdCI6MTcwMTc3Mzc5OSwibmJmIjoxNzAxNzczNzk5LCJleHAiOjE3MDE3Nzc2OTksImFpbyI6IkUyVmdZRWcreWFyU1p1WEFlckZsRXVQR2pMVGxBQT09IiwiYXBwaWQiOiJhOWVmMjJjNy1jNDFmLTRjYzUtOGQ4My00ZWIyMjJkZDc3MzQiLCJhcHBpZGFjciI6IjEiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QvIiwib2lkIjoiODU4MTY5ODctM2JlOS00MmYwLTg5YzgtYzZjM2VlODQ1ZTE3IiwicmgiOiIwLkFURUFZaHlTSGg2cGlVQ095aVR1VVhXUWZSVUFBQUFBQUFBQXdBQUFBQUFBQUFEakFBQS4iLCJzdWIiOiI4NTgxNjk4Ny0zYmU5LTQyZjAtODljOC1jNmMzZWU4NDVlMTciLCJ0aWQiOiIxZTkyMWM2Mi1hOTFlLTQwODktOGVjYS0yNGVlNTE3NTkwN2QiLCJ1dGkiOiJjUGRlQmtEaFlFNllTSGV5cTY0ZkFBIiwidmVyIjoiMS4wIn0.N8jE9JG1d7-HRcQs4WK6a3niTNX-alypKZt3vOP6AULkdm9lU-AQ9hcc3sacuhgrNZ0YmLYdP7xpuQb0OgHPU_hFzq8sYhJQdmcmFk8XpB8wtUGPw_E2kjl7pBD_JISY3Tq4RtQCvPqLK9p3-_INycUUCUzS9XhQLokbyup_aF1qZKpPAghl4dd2LdjKxwgYv5BQMPTtJV02t4PVZgcsmfoQ6JU-2toJshiAU_JKNKMLVKO7uKBOjnvaAN7N_u7McI_lQhVaYjKkPcINUatxUDntN5iaLafVFvTYepJBZvx1ssku9LCYrqMziqPSPVTZbqQojxFxTSTJVcKCbe4J7g",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"toHeader\": {\r\n        \"transferOrderNumber\": \"TV-000202\"\r\n    },\r\n    \"toLines\": [\r\n        {\r\n            \"sku\": \"000781316\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 1,\r\n            \"orderedQty\": 1,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"10/12/2023\",\r\n            \"fromWhsID\": \"110\",\r\n            \"toWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAbbey\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 2,\r\n            \"orderedQty\": 12,\r\n            \"shippedQty\": 9,\r\n            \"deliverydate\": \"10/12/2023\",\r\n            \"fromWhsID\": \"110\",\r\n            \"toWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemAstroid\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 3,\r\n            \"orderedQty\": 8,\r\n            \"shippedQty\": 8,\r\n            \"deliverydate\": \"10/12/2023\",\r\n            \"fromWhsID\": \"110\",\r\n            \"toWhsID\": \"111\"\r\n        },\r\n        {\r\n            \"sku\": \"DemRedS\",\r\n            \"skuDescription\": \"KRUGER COUGAR DIFFUSER 200ml\",\r\n            \"lineReference\": 4,\r\n            \"orderedQty\": 3,\r\n            \"shippedQty\": 1,\r\n            \"deliverydate\": \"10/12/2023\",\r\n            \"fromWhsID\": \"110\",\r\n            \"toWhsID\": \"111\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://tvd365-dev81cbb1e734974cffdevaos.axcloud.dynamics.com/api/services/TSCWIInboundIntServiceGroup/TSCWIInboundIntService/setInterTransferOrderShipment",
+							"protocol": "https",
+							"host": [
+								"tvd365-dev81cbb1e734974cffdevaos",
+								"axcloud",
+								"dynamics",
+								"com"
+							],
+							"path": [
+								"api",
+								"services",
+								"TSCWIInboundIntServiceGroup",
+								"TSCWIInboundIntService",
+								"setInterTransferOrderShipment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,14 @@
+
+1. IMBASICDATA :  change ITM_BAR to ITM_BARCODE
+
+2. STORAGEBIN: include field after ST_BIN_TYP_ID( Field Name:CTRL_TYP_ID/Null/Non Primary/INTEGER/description:controltype ID)
+
+3. STORAGEBIN: remove fields PUTAWAY_BLK, PICK_BLK 
+
+4. CYCLE COUNT SCHEDULER:  Include field ( field Name :CC_MTD / Primary/Notnull/NAVARCHAR(30)/description: Cycle Count Method)
+
+5. CYCLECOUNT SCHEDULER: Include field ( field Name: SCHE_NO/Primary/Notnull/NVARCHAR(20)/description:Scheduler No)
+
+6. CYCLECOUNT SCHEDULER: Include field ( field Name: SUB_LVL_REF/Non Primary/null/NVARCHAR(50)/description:Sub level Reference)
+
+7. AUDITLOG : SCREEN_NO/SUB_SCREEN_NO data type not maintained, Maintain (NAVARCHAR(10)/Not Null/Non primary) for both the fields

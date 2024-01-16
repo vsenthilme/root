@@ -1,0 +1,1263 @@
+9884608071
+
+Wifi pwd: ABC!ND321
+abc@echo1
+======================
+
+
+New Devs
+--------------------------------------------------------------------------------------------------------------------------------
+App
+3.111.203.218
+
+DB
+35.154.84.178
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+IP is 38.108.3.135 so you can use
+
+
+https:
+------------
+
+For calling services:
+https://mrclara.com:27070/mnrclara/api/services/swagger-ui.html# - Working
+http://27.7.57.232:8824/mnrclara/api/services/swagger-ui.html
+
+https://mrclara.com/mnrclara/#/
+https://mrclara.com/mnrclientapp
+
+--------------------------------------------------------------------------------
+http://10.0.85.21:27070/mnrclara/api-dev/services/swagger-ui.html#
+http://38.108.3.135:9000/mnrclara/#/
+http://38.108.3.135:8824/mnrclara/api-dev/services/swagger-ui.html#
+http://10.0.85.21:8080/mnrclara/#/
+http://38.108.3.135:9001/mnrclara/#/
+
+
+10.0.85.21:27070
+
+LAN 
+27070	> 8824
+
+create user 'user1'@'localhost' identified by 'P@$$w0rd';
+grant all privileges on MNRCLARA.* to 'user1'@'localhost';
+identified by 'P@$$w0rd';
+
+/***************************************************************
+spring.datasource.url=jdbc:mysql://localhost/MNRCLARA?user=user1&password=P@$$w0rd&useUnicode=true
+
+#db-connection
+spring.datasource.username=user1
+spring.datasource.password=P@$$w0rd
+/****************************************************************
+
+/opt/jdk-14/
+
+MONGO 
+-----------	
+
+sudo mkdir -p /data/db/
+sudo chown `id -u` /data/db
+mongod --fork --syslog ----------> To start Service
+
+Clara RDP
+--------------
+Run -> M&R Cloud RDP.exe (first) 
+Username: MONTYLAW\murugavel
+Password: pULouZZ1984!
+
+QBServer
+------------
+Username: montylaw\qbweb
+Password: QB@reset344!
+QB User: ClaraITAdmin/Clara@2022
+QB Admin User: Admin/Q$b00ksAd@min^20
+
+jiyengar@montyramirezlaw.com/M@Rami$2022
+
+
+ClaraITadmin@montyramirezlaw.com
+Username: ClaraITadmin
+Password: CLT@dcv446
+
+Docketwise
+email id:ClaraITadmin@montyramirezlaw.com
+pwd: Mrc1@r@2022
+
+jiyengar@montyramirezlaw.com (prod other user)
+Claradocket@2022
+
+Docusign
+----------
+email id: ClaraITadmin@montyramirezlaw.com
+pwd: Mrc1@r@2022
+
+UserID:  			723e8a8b-e527-4717-b87c-a1ff008ce3ee
+API Account ID: 		ec47bf59-8ad7-4b61-a1db-e15777c5d4ec
+Account Base URI:		https://demo.docusign.net
+AppName:			mrclara
+Integration Key (Client ID):	f283dc93-4159-4f4e-9f1a-4ec6249112b4
+Secret Key:			3ef50c44-e84d-48e8-b9b0-6cf1183cab76	(prod)
+
+Step1: <do it in browser window>
+https://account.docusign.com/oauth/auth?
+   response_type=code
+   &scope=signature
+   &client_id=f283dc93-4159-4f4e-9f1a-4ec6249112b4
+   &redirect_uri=https://mrclara.com/mnrclara/callback
+
+https://mrclara.com/mnrclara/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiOGFlYzFjZjQtYmE4NS00MDM5LWE1MmItYzVhODAxMjA3N2EyIn0.AQoAAAABAAYABwCATV6Do1baSAgAgNnkyqNW2kgCAKcqCgOxWeJGhnWeqO8Apo0VAAcAAAAYAAEAAAAFAAAADQAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0IgAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0NwDbrcjtPxvQQ71ac18UToe1MACANqlWoVbaSA.K-FWLW9a1MsRvlOMERK641H33P9-6qS6oZ6_JzhOb_ds8RGX5QCVjIgitKpTGnr2ceLDG7hvzKIBIq2wGY89gKiKkLtmVDrepYSjg2zx0H8xrtpJ8YZi349Kkk2frBLBU_D7etDBetDAhV4HQzCd28kgnfd94_s3i32RKGppeBN1YHKIQvyRBZkg6gxWnfbU0AGJwT4HGyi2Cb6EPNcq-dmwNnHeL9jRW_xDYM_sixnDolONbEWl1p5-NkNKy15H5HSueI9X8XjJXpVXGb3JvJ6nXCYHA5RWDw5ZHrZtmMFDqzVN76ypTXoN0hAsdNMMnDQmdUO_Ag2zqR6rui1pJg
+
+Use /mnr-crm-service/agreement/docusign/token -> service for paste this generated code and generate OAUTH Token for new Docusign.x
+
+Step3: Once Code is generated use the below api for generate Access Token and insert into Table
+
+/mnr-crm-service/agreement/docusign/token - DocuSign
+
+QuickBooks
+----------------
+admin/Admin$123
+
+----SHARED----FOLDER--------CORRECT-SYNTAX------------------------------------------------------------------------------------------------------------
+sudo mount -t cifs //10.0.85.13/CorporateDrive /home/admini/mrclara/desktop/winfiles/ -o username=Murugavel,domain=MONTYLAW,password=Innovative@2022
+sudo mount -t cifs //10.0.85.13/Data /home/admini/mrclara/desktop/ydrive -o username=Murugavel,domain=MONTYLAW,password=Innovative@2022
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+GIT: 
+-----------------------
+username: mnrclara
+password: c1@r@2022
+token: << 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 >>
+
+https://github.com/mnrclara/root.git
+https://github.com/mnrclara/main.git
+
+First time git clone: git clone https://github.com/mnrclara/root.git
+<git clone https://mnrclara@github.com/mnrclara/root.git>
+
+Second time (taking latest) : git pull https://github.com/mnrclara/root.git main
+
+Build:
+============
+source /etc/profile.d/gradle.sh	
+gradle build
+nohup gradle bootRun &
+
+----------PROD Build----------------------
+D:\Murugavel R\Project\Tekclover\Clara\root> git commands to push the latest code
+
+Linux
+----------
+User: admini
+Password: z2sco@MR!
+
+local IP: 10.0.85.21
+username: admini
+password: z2sco@MR!
+
+keytool -import -alias springboot -file myCertificate.crt -keystore springboot.p12 -storepass password
+
+======================================================================================================================================
+======================================================================================================================================
+---------------------------------------
+Docketwise
+---------------------------------------
+User: ClaraITadmin@montyramirezlaw.com
+password: Docketwise@2022
+
+email id:ClaraITadmin@montyramirezlaw.com
+pwd: Mrc1@r@2022
+
+base uri - https://app.docketwise.com/api/v1/
+
+obtain code:
+~~~~~~~~~~~~
+GET https://app.docketwise.com/api/v1/oauth/authorize?response_type=code&client_id=your_client_id&
+redirect_uri=http%3A%2F%2Fyourapp.com%2Fcallback&scope=public%20write
+
+https://app.docketwise.com/api/v1/oauth/authorize?response_type=code&client_id=a6fffe92713f7bebf850972df634888fa83c0e82fc4ff6a3699eb1e0b0435deb&redirect_uri=redirect_uri=https://www.getpostman.com/oauth2/callback/&scope=public%20write
+
+client id: 135d65312af5634a7221f65154a9ff639e77bdf552efbb790fc6dc34cc8d4095
+client secret: 91423e29e2b3d0fc1d308a255e039fb4d5465de7d7a74e16f41bb42d9967b2aa
+
+GET 
+
+https://app.docketwise.com/oauth/authorize?response_type=code&
+client_id=a6fffe92713f7bebf850972df634888fa83c0e82fc4ff6a3699eb1e0b0435deb&
+redirect_uri=https://www.getpostman.com/oauth2/callback/&scope=public%20write
+
+http://38.108.3.135:9000/?code=qn8iz1p8YDSLfCdyl8YAJK32n0XgBYrzju-XaW7X-cE
+
+https://app.docketwise.com/oauth/token
+
+"access_token": "pgs-D-iuUkaTfBCaIP7_oRQk03ZzrSJxjKFuHpsiPJI",
+"refresh_token": "2NycZtTCdqbCZ_7eVIIlK8mtks5EkckejcBXhNR7Ls0",
+
+Production Docketwise:
+
+Auth Code:
+https://mrclara.com/mnrclara/?code=KKA5FcPkfNXsNEgY7CtwJRKppAJxW69KLXACmOFpnNI
+
+Generate oAuth Token:
+https://app.docketwise.com/oauth/token
+CLient ID: a6fffe92713f7bebf850972df634888fa83c0e82fc4ff6a3699eb1e0b0435deb
+Client Secret: 1a9e95e45e2d3aeabf8cc208435d45460508d08dc8fd1a6c271918f46c3797ad
+Redirect URI used: https://mrclara.com/mnrclara/
+grant_type : authorization_code
+code : KKA5FcPkfNXsNEgY7CtwJRKppAJxW69KLXACmOFpnNI
+
+ "access_token": "2HTp3U2n87pG8qeg5eyVz_T2rMymBkcjy-h7HNqjKxA"
+ "refresh_token": "a1Y1FULpzTFJQVjo2EMzTl_YnmdMBYxB4qWFK4V-KUI",
+
+
+===========================================================================================================================================
+===========================================================================================================================================
+MSSQL
+https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver15
+
+ systemctl status mssql-server.service 
+sqlcmd -S 127.0.0.1 -U sa -P 'P@$$w0rd'
+
+===================================================================
+
+Oracle JDK
+Uname: murugavel.r@prodapt.com
+PWD: Oracle@123
+
+**********************************************************************************************************************************************************************
+
+B2B
+https://apiplayground.shipsy.in/#post-Client-will-provide-URL
+**********************************************
+TO-072084
+--------------------------------------------------------------------------------------------------------------------------------------------
+///////////////////////////////////////////////---------WMS-------////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------------------------------------------------------------
+ubuntu/$upp0rt#98QA
+
+https://www.classicwms.com:8086/classicwms/swagger-ui.html#/
+https://www.classicwms.com:8084/classicwms/api/wms-transaction-service/swagger-ui.html#/
+
+http://3.111.203.218:8084/classicwms/api/wms-transaction-service/swagger-ui.html#/
+http://3.111.203.218:8086/classicwms/swagger-ui.html#/
+
+https://www.classicwms.com/webportal/#/
+
+https://43.205.50.91:8080/webportal/#/
+
+http://13.126.106.171:8080/webportal/#/
+
+
+PROD 
+----------
+To connect to AWS Instance:
+Go to C:\Downloads> and type below.
+
+putty-> ec2-3-109-151-174.ap-south-1.compute.amazonaws.com
+
+ssh -i "classickey.pem" ubuntu@ec2-3-109-151-174.ap-south-1.compute.amazonaws.com
+ssh -i "classickey.pem" ubuntu@ec2-43.205.137.55.ap-south-1.compute.amazonaws.com
+
+ssh -i "classickey.pem" ubuntu@43.205.137.55
+
+%%%%%%%%%%%%%%%%%--------------NEW_PROD-----------------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Production App : Public
+Public IP - 43.205.50.91
+Private IP - 10.0.1.10
+
+Production DB : Private
+Private IP - 10.0.3.10
+
+Production DB : Private IP - 10.0.3.10
+
+ssh -i "classickey.pem" ubuntu@43.205.50.91		-> APP
+ssh -i "classickey.pem" ubuntu@10.0.3.10		-> DB
+
+sqlcmd -S localhost -U sa -P 30NcyBuK
+
+sqlcmd -S localhost -U sa -P 30NcyBuK -i ./usertoken.sql
+
+Second time (taking latest) : 
+	git pull https://github.com/classicwms/root.git main
+	
+------------- compiling & build ---------------------------------------------------
+source /etc/profile.d/gradle.sh
+gradle build	
+nohup gradle bootRun &
+
+http://43.205.50.91:8086/classicwms/swagger-ui.html#/
+http://43.205.50.91:8080/classicwms/#/
+
+Order processing key notes:
+----------------------------
+ - Under TransactionService: /orders api pointing to MSSQL tables (not mongo)
+ - Need to change the processStatusID to 0 to reprocess the order in MONGO
+ - Use warehouse endpoints for repushing the orders from TransactionService
+
+%%%%%%%%%%%%%%%%%---------------NEW Dev---------------------------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+http://3.111.203.218:8000/classicwms/#/
+http://3.111.203.218:8086/classicwms/swagger-ui.html#/
+
+http://3.111.203.218:9000/mnrclara/#/
+http://3.111.203.218:27070/mnrclara/api/services/swagger-ui.html
+
+http://35.154.84.178:9000/mnrclara/#/
+http://35.154.84.178:27070/mnrclara/api/services/swagger-ui.html
+
+http://35.154.84.178:7073/mnrclara/api/mnr-crm-service/swagger-ui.html
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "b2b-master-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "us-trans-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "us-master-service"
+}
+
+http://35.154.84.178:5001/iwe/swagger-ui.html#		-> To get token
+http://35.154.84.178:5002/iwe/api/b2b-master-service/swagger-ui.html#
+
+ssh -i "classickey.pem" ubuntu@3.111.203.218
+ssh -i "classickey.pem" ubuntu@35.154.84.178	-> DB
+
+First time git clone: git clone https://github.com/tekclover/root.git
+Second time (taking latest) : git pull https://github.com/tekclover/root.git main
+Token 				-> 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
+
+git clone https://Murugavel1978@github.com/tekclover/root.git
+
+source /etc/profile.d/gradle.sh
+gradle build -- compiling & build
+nohup gradle bootRun &
+
+sudo netstat -lnp | grep :8084
+#################################################################################################################################
+
+*******************************************************************************************************************************************
+US
+-------
+http://3.111.203.218:6001/ustorage/api/us-master-service/swagger-ui.html
+http://3.111.203.218:6002/ustorage/swagger-ui.html
+
+http://3.111.203.218:8000/ustorage/#/
+https://demo.classicwms.com:8000/ustorage/#/
+
+#############-------------Check List for WMS UAT----------------#################################################################
+1. Property File should point to AX-UAT property files ##########################################################################
+
+
+#################################################################################################################################
+
+jdbc:mysql://35.154.84.178:3306/MNRCLARA
+jdbc:sqlserver://35.154.84.178;databaseName=WMS
+
+uer 
+app
+3.111.203.218
+
+
+
+DB
+35.154.84.178
+Mssql:
+sa - 30NcyBuK
+
+Mysql:
+root - 30NcyBuK
+
+Mssql:
+sa - 30NcyBuK
+
+mysql -u root -p
+
+DB Server:
+MYSQL - /var/lib/mysql
+MSSQL - /var/opt/mssql/
+MONGODB - /var/lib/mongodb/
+
+APP Server:
+Apache Tomcat - /opt/tomcat/
+
+sqlcmd -S localhost -U sa -P 30NcyBuK
+
+spring.datasource.url=jdbc:sqlserver://35.154.84.178;databaseName=WMS
+spring.datasource.username=sa
+spring.datasource.password=30NcyBuK
+spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.jpa.show-sql=false
+spring.jpa.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+spring.datasource.url=jdbc:sqlserver://10.0.3.10;databaseName=WMS
+spring.datasource.username=sa
+spring.datasource.password=30NcyBuK
+spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.jpa.show-sql=false
+spring.jpa.hibernate.dialect=org.hibernate.dialect.SQLServer2012Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+--------------------------------------------------------------------------------------------------------
+
+MS-SQL
+------------
+sqlcmd -S localhost -U SA -P Admin@123$
+sqlcmd -S localhost -U SA -P 'Admin@123$' -i ./usertoken.sql
+sqlcmd -S localhost -U SA -P 'Admin@123$' -i ./Outbound_DB_Scripts_v1.0.sql
+sqlcmd -S localhost -U SA -P Admin@123$ -i ./run.sql
+
+SELECT name, database_id, create_date
+FROM sys.databases;  
+GO 
+
+
+---to see all created tables
+select table_name from WMS.INFORMATION_SCHEMA.TABLES where TABLE_TYPE = 'BASE TABLE'
+
+-----------------------------------------------------------------------------------------------------------
+
+-----------------CURRENT------PROD-------------------------------------------------------------------------
+MAIL
+murugavel@tekclover.com/Muruvel$1978
+
+GIT
+murugavel@tekclover.com/we1c@me$123
+Username: classicwms/we1c@me$123
+https://github.com/classicwms/root.git
+
+First time git clone: 
+	git clone https://github.com/classicwms/root.git
+	
+Second time (taking latest) : 
+	git pull https://github.com/classicwms/root.git main
+
+token: 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
+
+GRADLE - BUILD
+----------------
+source /etc/profile.d/gradle.sh
+gradle build
+nohup gradle bootRun &
+
+MS-SQL
+-------------
+sa/Admin@123$
+
+sudo /opt/mssql/bin/mssql-conf setup
+
+sudo systemctl start mssql-server
+systemctl status mssql-server --no-pager	
+sqlcmd -S localhost -U SA -P Admin@123$
+
+installed location is /opt/mssql
+systemctl status mssql-server.service
+
+sqlcmd -S localhost -U SA -P 'Admin@123$' -i ./usertoken.sql
+
+GoDaddy
+---------
+GoDaddy (TEKCLOVER.IN)
+Customer ID:	303420529
+PIN:		3893
+User Name:	karthikeyand.1978@gmail.com
+Passoword:	!Harmony@555#21
+
+
+ClassicWMS - Ports
+http://27.7.57.232:18080/classicwms/swagger-ui.html#/
+
+db.InboundIntegrationHeader.find
+db.InboundIntegrationHeader.find( {} )
+
+db.getCollection("outboundIntegrationHeader").find({processedStatusId:0});
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Credentials:
+============
+Root Admin:
+~~~~~~~~~~~
+User Name: System01
+Password: P@$$w0rd*#21
+
+User Name: superadmin
+Password: Supp0rt%21
+
+Database Credentials
+----------------------
+Username: root
+Password: P@$$w0rd (old->admin@123)
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+CLASS-WMS: Root Folder: /home/superadmin/tekclover/root/root (client 1 machine)
+Tekclover AWS Account (Root)
+----------------------------------
+https://portal.aws.amazon.com/billing/signup#/start/email
+user name:       admin@tekclover.com
+pwd:                !Juggler@3103
+
+To Run Application:
+===================
+changes user: sudo su
+
+########################################################################DEV###############################################################################
+Clara UAT: 
+
+CREATE USER 'clarauat'@'localhost' IDENTIFIED BY 'C1@r@uat2022';
+CREATE USER 'clarauat'@'%' IDENTIFIED BY 'C1@r@uat2022';
+
+GRANT ALL ON *.* TO 'clarauat'@'localhost';
+GRANT ALL ON *.* TO 'clarauat'@'%';
+
+GRANT ALL ON *.* TO 'clara'@'localhost' IDENTIFIED BY 'C1@r@uat2022' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'clara'@'%' IDENTIFIED BY 'C1@r@uat2022' WITH GRANT OPTION;
+
+-----------------------------------------------------------
+
+WMS:
+
+CREATE USER 'wms'@'localhost' IDENTIFIED BY 'Wms@2022';
+CREATE USER 'wms'@'%' IDENTIFIED BY 'Wms@2022';
+
+GRANT ALL ON *.* TO 'wms'@'localhost';
+GRANT ALL ON *.* TO 'wms'@'%';
+
+GRANT ALL ON *.* TO 'wms'@'localhost' IDENTIFIED BY 'Wms@2022' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'wms'@'%' IDENTIFIED BY 'Wms@2022' WITH GRANT OPTION;
+
+27.7.57.232:13306 ----> 8823 (clara)
+27.7.57.232:23306 ----> 7823 (wms)
+
+
+WMS UAT DB
+IP: 27.7.57.232
+DB PORT: 23306
+wms/Wms@2022
+
+Remote DB: 27.7.57.232/clara/C1@r@uat2022
+
+
+http://27.7.57.232:18081/classicwms/api/wms-transaction-service
+
+DEV
+---------
+
+First time git clone: git clone https://github.com/tekclover/root.git
+Second time (taking latest) : git pull https://github.com/tekclover/root.git main
+
+- Deployment
+	1. change the mode of user
+
+	sudo su
+	<password> 
+
+	2. git pull origin main
+	<if asks for git login> GIT Login: Murugavel1978/we1c@me$123
+
+	GIT Login: Murugavel1978/we1c@me$123 (Password didn't accept instead, need to pass the below Token.
+
+	{{ GIT OAUTH Token instead of Password -> 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 }}
+						<<<<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>>>>
+
+[To generate new token - https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token]
+
+	2.1 <if stash error throws>
+	  git reset --mixed
+	  git stash
+	  git clean -f <if untracked error tree comes>
+
+	2.2 git clean  -d  -f . -> to delete untracked files
+	
+	3. <<If permission denied error comes then use sudo su command>>
+	
+	-- Run below command if any permission issue comes
+	sudo chown -R $USER:$USER "$(git rev-parse --show-toplevel)/.git"
+
+	#to remove build dir
+	sudo rm -r -f /path/
+A001-Agreement-Document_processed.docx
+	4. Gradle:	
+		-- To START Application --	
+		source /etc/profile.d/gradle.sh	
+		gradle --stop #to stop all process
+
+		gradle build -- compiling & build	
+		gradle bootRun -- run MS
+
+		nohup gradle bootRun &
+
+	4.1. -- To get running port
+		sudo netstat -lpn | grep :8080
+		sudo kill -9  1325
+
+	4.2. sudo netstat -tunlp
+		sudo nmap -p 18080 localhost
+
+Mongo DB:
+---------------------------------------------------
+Start service: systemctl enable mongodb.service
+
+------------------------------------------------------
+7000
+
+Connect to mysql (sudo su):
+===========================
+
+1. Type the below command
+
+mysql -u root -p
+<Enter Password> Password: P@$$w0rd
+
+mysql> will be loaded
+
+1. navigate to folder where the .sql files are presented
+2. Type mysql
+3. mysql> will be shown
+4. mysql> source <sql-file-name>.sql -- to run the .sql script
+5. show tables; -- to list the created tables
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'P@$$w0rd';
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Token Authentication Steps:
+
+1. tblUserToken table must be created first
+2. Atleast one user credential must be inserted
+3. Username and Password columns are presented
+4. Password must be encrypted and stored into the table. Default password is welcome and it has been inserted thro script.
+
+OAuth URL: http://localhost:8085/oauth/token
+Username: muru
+Encrupted password for welcome : $2a$2a$10$B5sulFY6EJVJ0W3ok9IlleJolpQ1lU2TWwU2Q6FGwFbIhuuoLFMm2
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+28510090072
+
+# to release lock
+find ~/.gradle -type f -name "*.lock" -delete
+
+Application URLs:
+http://27.7.57.232:18080/classicwms/EnterpriseSetup/swagger-ui.html
+http://27.7.57.232:18080/classicwms/swagger-ui.html
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Account Information
+Username: murugavel@innovitsolution.com
+Temporary password: we1c@me$123
+Display name: Murugavel R
+Account type: Microsoft 365 Email Plus From GoDaddy
+Email login address: http://email.innovitsolution.com
+
+
+{
+    "registerId": "jpxgxpEGpZ",
+    "clientName": "Test4",
+    "clientSecretId": "pixeltrice"
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+RDP:
+IP : 27.7.57.232:33189 , username: Prosupport , Password: $upp0rt#98QA
+SQL Details : IP : 192.168.25.151 , username: TekcloverMSSQLAdmin , password : 6dmY:[QV)Gv3.H-(dV`>
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+QuickBooks:
+=============
+IP : 27.7.57.232:33189 , username: Prosupport , Password: $upp0rt#98QA
+Username: muruvel@gmail.com
+pwd: We1c@me$123
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Docketwise Credentials:
+===================================================================================
+UserName : jiyengar@montyramirezlaw.com
+Password : Docketwise@2021
+
+https://app.docketwise.com/users/sign_in
+
+client id: 8c89be50d381eb47743544ae29f01800f11d7b7db3018643912f0ac1e6860d48
+client secret: 1ddfb71e9a12f94bd867d1453856f02355e9a25023b0d8e4fe1ffef600692b8f
+
+base uri - https://app.docketwise.com/api/v1/
+
+obtain code:
+~~~~~~~~~~~~
+GET /oauth/authorize?response_type=code&client_id=your_client_id&redirect_uri=http%3A%2F%2Fyourapp.com%2Fcallback&scope=public%20write
+
+https://app.docketwise.com/api/v1/oauth/authorize?response_type=code&client_id=8c89be50d381eb47743544ae29f01800f11d7b7db3018643912f0ac1e6860d48&redirect_uri=http://localhost:27070/&scope=public%20write
+
+==================================
+Access Token: kVfjk642TISCApkS--RYBjfg_-5oQ1F7HEL3ZKuPAUA
+Refresh Token: 0pxU7EaEL4qgeq7WDPhOKoaeQeyDunxutdcUtSvJicY
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Internal Account:
+------------------
+
+karthik@tekclover.com
+Welcome@555
+
+client: 64dd9aa1c0d89ee655e73159b5f54749b0b310ba8472765627e7006cd2c95b06
+secret: 5bba5c649d3b79d90f91ee07167fb4ba35ee03fb4d5b256b5646c6eb19521d82
+
+https://www.getpostman.com/oauth2/callback 
+
+GET 
+https://app.docketwise.com/api/v1/oauth/authorize?
+	response_type=code&
+	client_id=64dd9aa1c0d89ee655e73159b5f54749b0b310ba8472765627e7006cd2c95b06&
+	redirect_uri=http%3A%2F%2Flocalhost:27070/oauth2/callback&
+	scope=public%20write
+
+https://app.docketwise.com/oauth/authorize?response_type=code&
+client_id=64dd9aa1c0d89ee655e73159b5f54749b0b310ba8472765627e7006cd2c95b06&scope=public%20write&redirect_uri=https://www.getpostman.com/oauth2/callback
+-----------------------------------------------------------------
+
+Access Token: pnEE8DzUZoejowpj-he9nCNlJCe5Xv2w-8D-UbjNX5k
+RefreshToken: bKx4aqdH0xAEHWet6-FOf5SBZjBjtlaL5OSY3F5Rn0Q
+
+Expires in: 180 days
+
+-----------------------------------------------------------------------------------------------------
+
+Dropbox:
+
+UserID: raj@tekclover.com
+Pwd: Tekclover@2020
+-----------------------------------------------------------------------------------------------------
+
+
+Mozeo
+======
+
+user id smonty@montyramirezlaw.com
+
+PW: Monty@2015
+
+0930 210 598
+
+-------------------------------------------------------------
+
+Outlook INtegration:
+~~~~~~~~~~~~~~~~~~~~
+Application (client) ID
+a8b1fac7-5929-4ef5-b7eb-d2e0e82ec8b1
+
+Register an application with the Microsoft identity platform
+- https://docs.microsoft.com/en-gb/graph/auth-register-app-v2
+
+
+murugavel@p15k.onmicrosoft.com
+we1c@me$123
+
+appName - > MNRCLARA
+
+App Client ID: be9535f7-ff2e-470c-83fa-237ca66cf8b1
+Tenant ID: f8cdef31-a31e-4b4a-93e4-5f571e91255a
+Object ID: 9bd61117-74d4-4535-9992-69e788113735
+Secret ID: 6bc97af6-bad9-47ba-8c7c-8d073225f7bd
+Secret Value: iTi7Q~d0oR_N8upYNOX9tZ0aAdN8haMAC2uyv
+
+https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a/oauth2/authorize?
+client_id=be9535f7-ff2e-470c-83fa-237ca66cf8b1
+&response_type=code
+&redirect_uri=http://localhost:27070/mnrclara/
+&response_mode=query
+&state=12345
+
+a3d931e5-7404-4612-b25e-87e64de438b3
+
+Azure pwd: we1c@me$123
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+DROP Box Integration:
+=====================
+
+User Name: raj@tekclover.com
+Pwd: Tekclover@2020
+App key -> cqac62xobulfoo8
+App secret -> l3yhbrix2dt844t
+
+Token -> HjbREmPAaR0AAAAAAAAAAexAyWoZB16X7_b83D8Me3WFfPtfB0MSCkr-LfFk-YP0
+--------------------------------------------------------------------------------
+
+
+DocuSign INtegration:
+=======================================================================================
+Developer Accout credentials:
+User ID: murugavel.r@prodapt.com
+Password: Prodapt@234
+
+
+App Name: MNR
+
+Integration Key (Client ID) - 37ae229e-aeb7-4039-ab97-f6afb4cc7263
+Secret Key - 26e6fe90-f1d6-45c5-9f48-e65afd735476
+
+Step1: <do it in browser window>
+https://account-d.docusign.com/oauth/auth?
+   response_type=code
+   &scope=signature
+   &client_id=37ae229e-aeb7-4039-ab97-f6afb4cc7263
+   &redirect_uri=http://localhost
+
+<output will be as below>
+http://localhost/?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAYABwAAEuNdq5fZSAgAAJ5ppauX2UgCAHasHT6Zf6JFhtw393A8MzMVAAEAAAAYAAEAAAAFAAAADQAkAAAAMzdhZTIyOWUtYWViNy00MDM5LWFiOTctZjZhZmI0Y2M3MjYzIgAkAAAAMzdhZTIyOWUtYWViNy00MDM5LWFiOTctZjZhZmI0Y2M3MjYzNwD0gpXlAEu8SKBFIQ1v_E8LMACAf2ffbJfZSA.hmJW-IQlkQlkrFR_lMb_lyT4UosVGGTzSOWkjYVZm7M1FuWMauWj_tAjOS-U-HWOGAeIQyznukKEfEwU0vuTnH3mAD6d1o7dRiwSt1qtIrt9sz9ICkoQM4ZYRIITqql3k7110lb9QqNmpVLJbeFVoSQkIliWOdhzPI7FoOEeCwi8TTXpxbITfV0i_arZXK8IHvFWg1kyGorlJcSXCYwkJp_uscctJwdaQCaECKWNTC-RJmrLc2-LelcftoFwqWBOE71SHslctcu66YTIA2AG3LwC86w3lQRbih6-V-y6oMO8I-8y5nGpAM78Jg7M3Ir4mBrZdOlVGU8HiOVC9DUVnA
+D:\Murugavel.R\Project\7horses\root\MNR-Clara\Code\Project\MailMerge\Processed\A001-Agreement-Document_processed.docx
+
+///////////////////////////////////////////////////////////////////////////////
+{
+  "envelopeId": "7c54051d-a0e0-41b1-a8b8-d442bca3ac4c",
+  "uri": "/envelopes/7c54051d-a0e0-41b1-a8b8-d442bca3ac4c",
+  "statusDateTime": "2021-10-25T04:17:55.557+00:00",
+  "status": "sent"
+}
+Step2: Get Access token
+
+Step3: https://account-d.docusign.com/oauth/userinfo - Get User Informaion to get account Id etc
+
+
+Step3.1:
+https://account-d.docusign.com/oauth/userinfo
+
+
+Step4: 
+
+Creating envelope 
+
+{{baseUrl}}/{{apiVersion}}/accounts/{{accountId}}/envelopes
+
+baseUrl - https://demo.docusign.net/restapi/
+apiVersion - v2.1
+accountId - cc83e9d5-71d4-4606-bcbc-815360cdf457
+
+https://demo.docusign.net/restapi/v2.1/accounts/cc83e9d5-71d4-4606-bcbc-815360cdf457/envelopes
+
+
+Step 2:
+POST https://account-d.docusign.com/oauth/token
+
+base64 code needs to be generated-> 
+<inetgration-key:secret key>
+37ae229e-aeb7-4039-ab97-f6afb4cc7263:26e6fe90-f1d6-45c5-9f48-e65afd735476
+
+convert as base64 code:
+MzdhZTIyOWUtYWViNy00MDM5LWFiOTctZjZhZmI0Y2M3MjYzOjI2ZTZmZTkwLWYxZDYtNDVjNS05ZjQ4LWU2NWFmZDczNTQ3Ng==
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+<<<<<<<DEV VERSION>>>>>>>>>>>>>>>>>
+Integration Key: 59444ec1-ebc6-494f-ad0f-afb68a09a4eb
+sec key: 41e99515-8fe6-4334-8516-a04966c89e67
+Account ID: f36caf9a-296a-4d65-8a73-f9f411724716
+
+base path:
+https://account-d.docusign.com/oauth/auth
+
+STEP 1
+https://account-d.docusign.com/oauth/auth?
+   response_type=code
+   &scope=signature
+   &client_id=59444ec1-ebc6-494f-ad0f-afb68a09a4eb
+   &redirect_uri=https://www.example.com/callback
+
+
+Welcome@9999
+
+https://www.example.com/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAYABwCAbEbSWaDZSAgAgPjMGVqg2UgCAL8RY1p_tEVFmusEVm-ZsxYVAAEAAAAYAAEAAAAFAAAADQAkAAAANTk0NDRlYzEtZWJjNi00OTRmLWFkMGYtYWZiNjhhMDlhNGViIgAkAAAANTk0NDRlYzEtZWJjNi00OTRmLWFkMGYtYWZiNjhhMDlhNGViNwD8DLNMT0PMRINS0WSS_ob0MACAOxUiOqDZSA.y-EUG4UQFnseDGyyin9j3gQktRNrWVqJDIxcqbxHVjDBO5YQdcrOz4SP_kO6inn6iowpuc5e0r_d6u-3cxhqvJCxXPF1Oo1L8HGMbVZ977P2chkM2hwEAeihOtepQI-g1-qiIyC4UMA2Rraot8dE84gsnlBFKH-uqF7MzVtdkqlCOB9uWtzqQyPhAv-lrRUiDnnnjDPlRoZw0ydkqLLZRZ8agpkE-Qt7r7SVFL4grPekI5e8UYSG7_HkNToUy5iVUA5DywbcHDRPfNXlBBaqWg63G4js_ezYubs7UzrMYGmlKrX2mb1nKW1I4kbAV6bBLakcOQl2w_BTZSz5nIsXrQ
+------------------------------------------------------------------------------------------------------------------------------
+<<<<<<<UAT VERSION>>>>>>>>>>>>>>>>>
+
+karthik@innovitsolution.com
+Welcome@2211
+
+Account ID: 978a1df8-5250-48d5-8221-178473cbbe7b
+0Base URI: https://demo.docusign.net
+Integration Key: 2037d277-fc66-4fa0-9cb6-9cd8715000e0
+Secret Key: 738676e7-969a-4dc2-9958-ed05cfaf18b9
+
+STEP 1
+https://account-d.docusign.com/oauth/auth?
+   response_type=code
+   &scope=signature
+   &client_id=2037d277-fc66-4fa0-9cb6-9cd8715000e0
+   &redirect_uri=https://www.example.com/callback
+
+https://www.example.com/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAYABwCAzsS7_6jZSAgAgFpLAwCp2UgCABWZnI7zIIlIqr5-_BE_YoAVAAEAAAAYAAEAAAAFAAAADQAkAAAAMjAzN2QyNzctZmM2Ni00ZmEwLTljYjYtOWNkODcxNTAwMGUwIgAkAAAAMjAzN2QyNzctZmM2Ni00ZmEwLTljYjYtOWNkODcxNTAwMGUwNwDGlv_iEArpRL-hDUfhyd9sMACAyB-z_qjZSA.k3F-EadrCEAqAOdmHJVCjwEUOduitAEv6bxtBT2l3Ca-GXK3KSuAjg3S_grZjJiR2N9_EkEWgNf1RzSQ8KywkD20wQkC0Yf6CQrwqDco-uzoMMnfvkSag-9I8RPQGfdBDjkMhXc5CNlZq88Q7mVUK-zQNBZOE2zTLj2RpGMnj3uX123leLJvA4Meviu18nuCm5PJcmJwP2qSNoKXn83HGImAHYwxFCAuhKK0U4_WbnGuUULqHJNjDsPzWInRIF9vDMGBQgIF33cHz-j5s0afTeowEENM3Vme0DMg_7_g9g3z0IC2CoVTwgnqEp9RCN2igdvtSkmyuCsOlRuth_M_eQ
+
+[NOTES TO REMEMBER]
+-> generateOAuthToken - CommonService (inserts first client_id entry into User Table)
+-> listDocuments - CommonService
+-> userInfo - CommonService
+-> postEnvelope - (wrapper service1)
+-> downloadEnvelope - (wrapper service1)
+-> EnvelopeStatus - (wrapper service1)
+
+###########################################################################################################################
+
+Client Credentials: Docusign licensed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+UserID: accounting@montyramirezlaw.com
+Passdword: M&R@2021
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+---------------------------------------------------------------------------------------------------------------------
+
+https://aad.portal.azure.com/#dashboard
+
+Application ID:
+cbcbda03-47d3-4f7b-a613-ef044f3ad4cb
+
+Microsoft Authentication Library (MSAL) for Java into the application.
+----------------------------------------------------------------------------------------------------------------------
+CORS:
+https://spring.io/guides/gs/rest-service-cors/
+
+--------------------------------------------------------------------------------------------------------------------------
+
+Quickbooks
+---------------
+https://docs.worldsecuresystems.com/user-manual/e-Commerce/integrating-intuit-quickbooks-with-your-site
+
+
+OAUTH INTEGRAION Steps:
+=================================================================================================================
+Step 1:
+------------
+
+Endpoint Description: To Register Client
+Endpoint: /register-app-client 
+URL: http://27.7.57.232:18081/classicwms/register-app-client?clientName=Test
+
+Input: Client Name (pass any client name. but it should be unique)
+Output JSON:
+
+{
+  "registerId": "K3yKbDjXZT",
+  "clientName": "Test",
+  "clientSecretId": "pixeltrice"
+}
+
+----------------------------------------------------------------------------------------
+
+Step 2:
+------------
+
+Endpoint Description: To Get Client Secret Key
+Endpoint: /client-secret-key
+URL: http://27.7.57.232:18081/classicwms/client-secret-key
+
+Input JSON:
+{
+  "registerId": "K3yKbDjXZT",
+  "clientSecretId": "pixeltrice"
+}
+
+Output : 
+Client Secret key: pixeltrice-secret-key
+
+----------------------------------------------------------------------------------------
+
+Step 3:
+------------
+
+Endpoint Description: To Get Auth Tokn
+Endpoint: /auth-token
+URL: http://27.7.57.232:18081/classicwms/auth-token
+
+Input JSON:
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "welcome",
+  "oauthUserName": "muru"
+}
+
+----------------------------------------------------------------------------------------
+
+Step 4:
+------------
+
+Endpoint Description: To Login (to test Login API)
+Endpoint: /login
+URL: http://27.7.57.232:18081/classicwms/login
+
+
+
+{
+  "registerId": "7hkytiDrtu",
+  "clientSecretId": "pixeltrice"
+}
+
+
+
+{
+  "registerId": "5powCw8Xmh",
+  "clientSecretId": "pixeltrice"
+}
+
+ "client-secret-key": "pixeltrice-secret-key"
+
+https://howtodoinjava.com/spring-boot2/oauth2-auth-server/
+
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "welcome",
+  "oauthUserName": "muru",
+  "apiName": "wms-enterprise-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "welcome",
+  "oauthUserName": "muru",
+  "apiName": "wms-idmaster-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "wms",
+  "oauthUserName": "wms",
+  "apiName": "wms-transaction-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "welcome",
+  "oauthUserName": "muru",
+  "apiName": "wms-masters-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-setup-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-crm-service"
+}
+
+9840174703
+sudha.govi@gmail.com
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-crm-service"
+}
+	
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-management-service"
+}
+
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-accounting-service"
+}
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "mnr-common-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "b2b-master-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "b2b-integration-service"
+}
+
+{
+  "clientId": "pixeltrice",
+  "clientSecretKey": "pixeltrice-secret-key",
+  "grantType": "password",
+  "oauthPassword": "test",
+  "oauthUserName": "test",
+  "apiName": "b2b-portal-service"
+}
+
+
+http://localhost:5001/iwe/swagger-ui.html#/Wrapper%20Service/authTokenUsingPOST
+http://localhost:5002/iwe/api/b2b-master-service/swagger-ui.html#
+
+=================================================================================================================
+SMS number:2816864390
+
+http://27.7.57.232:27070/mnrclara/api-dev/services/swagger-ui.html
+
+http://27.7.57.232:8824/mnrclara/api-dev/services/auth-token
+-------------------------------------------------------------------------
+
+ALTER TABLE `mnrclara`.`tbluserprofileid` 
+ADD COLUMN `IS_OTP_REQ` INT NULL DEFAULT 0 AFTER `UTD_ON`, COMMENT = '	' ;
+
+/home/superadmin/mnr/MNR-Clara/Code/Project/CommonLibs/aspose-words-21.9-jdk16.jar
+
+================================================================================================================
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+k@rth1ck@2008
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+AX-API - Details
+==================
+base URL: http://168.187.214.59:8040/api
+
+"username": "TestAxUser", 
+"password": "Wms-@tv@ndtsc-!nt00"
+
+------------------------------------------------------------------------
+
+#------------------PROD----------------------------------------------------------------------------------
+doc.storage.base.path=/home/admini/mrclara/desktop/winfiles/clara
+doc.storage.lne.base.path=/home/admini/mrclara/desktop/ydrive/clara
+doc.storage.immig.base.path=/home/admini/mrclara/desktop/winfiles/clara
+
+--------------------------------------------------------------------------------------------------------------
+
+
+sudo mount -t cifs //10.0.85.13/CorporateDrive /home/admini/mrclara/desktop/winfiles/ -o username=Murugavel,domain=MONTYLAW,password=Innovative@2022
+
+sudo mount -t cifs //10.0.85.13/CorporateDrive /home/admini/mrclara/desktop/winfiles/ -o username=Murugavel,domain=MONTYLAW,password=Innovative@2022
+sudo mount -t cifs //10.0.85.13/Data /home/admini/mrclara/desktop/ydrive -o username=Murugavel,domain=MONTYLAW,password=Innovative@2022
+
+====================================================================================
+
+
+- mongo find - brings all records.
+
+
+   Order mgt line, pick up header and line, quality header and line, Outbound Header and Line
+
+/home/ubuntu/classicwms/root/Code/Project/TransactionService/nohup.out {
+    maxsize 200M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+/home/ubuntu/classicwms/root/Code/Project/MasterSetupService/nohup.out {
+    maxsize 200M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+/home/ubuntu/project/classicwms/code/root/Code/Project/TransactionService/nohup.out {
+    maxsize 100M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+/home/ubuntu/project/classicwms/code/root/Code/Project/MasterSetupService/nohup.out {
+    maxsize 100M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+List of Softwares
+------------------
+Application
+	- Java 11 JDK
+	- Gradle 6.3
+	- Apache Tomcat 9
+	- Maven
+
+Database 
+	- Mysql 5.x
+	- Mongo DB
+	- MSSQLServer developer version
+	
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Elastic search api (imbasicdata1 - itemcode, itemdec)
+2. timeticket api - with time
+

@@ -1,0 +1,30 @@
+
+// JSON Structure for SO-MSD to WMS
+{
+  "sequenceNumber": "",
+  "siteTransferOrder": "",
+  "outletName": "",
+  "customerName": "",
+  "consignmentDelDate": "2021-02-08 07:07:19",
+  "itemCode": "",
+  "itemDesc": "",
+  "quantity": 0,
+  "packedQty": 0,
+  "uom": "",
+  "storerCode": "51127",
+  "soType": "1",
+  "flag": "",
+  "notes": ""
+}
+
+// JSON Structure for SC-WMS to MSD
+{
+  "siteTransferOrder": "",
+  "consignmentDelDate": "2021-02-08 07:07:19",
+  "itemCode": "",
+  "itemDesc": "",
+  "quantity": 0,
+  "shippedQty": 0,
+  "soType": "1",
+  "flag": ""
+}

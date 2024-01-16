@@ -1,0 +1,70 @@
+
+-- Server URL
+Server IP Address 	: 183.82.33.232
+Port Enabled		: 18080 <Microservice listens>
+
+EnterpriseSetup Microservice URL	:	http://183.82.33.232:18080/classicwms/EnterpriseSetup/
+
+To access Swagger URL:
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/swagger-ui.html
+
+Submodule URL:
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/barcode
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/batchserial
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/company
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/doors
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/employee
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/floor
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/itemgroup
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/itemtype
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/plant
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/storagebintype
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/storageclass
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/storagesection
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/storagetype
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/strategies
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/user
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/variant
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/warehouse
+
+OAuth Token URL: [Use POSTMAN Tool]
+http://183.82.33.232:18080/classicwms/EnterpriseSetup/oauth/token
+
+Authorization [section]:
+Username - pixeltrice
+Password - pixeltrice-secret-key
+
+Body [section]: 
+grant_type = password
+username = muru
+password = welcome
+
+Steps to generate OAuth Key:
+----------------------------
+1. Invoke the above URL in PostMan tool
+2. Configure the above sections as per given details
+3. Click on Send button
+4. Copy the access_token value
+5. Use the key as below.
+	Bearer<space>[generated key]
+
+-----------------------------------------------------------------------------------------
+
+# Login API endpoint
+api : http://183.82.33.232:18080/classicwms/EnterpriseSetup/login?name=XXXX&password=XXXX"
+
+1. supply username and password
+2. If success then login api gives Http 200 response
+3. If not succeeded then login api throws Invalid User or Password is wrong error message
+
+------------------------------------------------------------------------------------------
+
+# To create New User
+api: http://183.82.33.232:18080/classicwms/EnterpriseSetup/user
+
+
+
+
+
+
+

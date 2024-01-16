@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/screen.css">
+
+
+    <!--animate-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="row no-gutters main">
+        <!--Sidebar-->
+        <div class="col-md-1">
+            <div class="sidebar">
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex flex-column iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;">
+                        <i class="bi bi-house-door" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Home</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;;">
+                        <i class="bi bi-people" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Users</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;;">
+                        <i class="bi bi-file-earmark-plus" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Inbound</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;;">
+                        <i class="bi bi-arrow-left-right" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Make & Change</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;">
+                        <i class="bi bi-file-earmark-plus" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Outbound</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;">
+                        <i class="bi bi-arrow-repeat" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Cycle Count</p>
+
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;;">
+                        <i class="bi bi-columns-gap" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Dashboard</p>
+                <div class=" d-flex justify-content-center">
+                    <div class="d-flex iconbox justify-content-center align-items-center mt-2"
+                        style="height: 38px;width: 38px;;">
+                        <i class="bi bi-gear" style="font-size: 20px;"></i>
+                    </div>
+                </div>
+                <p class="text-center mb-0 text-secondary">Settings</p>
+            </div>
+        </div>
+        <!--search bar-->
+        <div class="col-md-11">
+            <div class="d-flex justify-content-between bg-white " style="height: 38px;">
+                <div class="d-flex flex-row ">
+                    <div class="d-flex flex-row align-items-center justify-content-between px-2">
+                        
+                        <p class="text-secondary mt-1 mb-1">Sort by</p>
+                        <select class="form-select mx-2 text-secondary" aria-label="Default select example">
+                            <option selected>Name</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <div class="d-flex align-items-center">
+                            <a href="#"><i class="bi bi-download ml-4" style="font-size:22px"></i></a>
+                            <a href="#"><i class="bi bi-file-earmark-plus ml-4" style="font-size:22px"></i></a>
+                            <a href="#"><i class="bi bi-pencil-square ml-4" style="font-size:22px"></i></a>
+                            <a href="#"><i class="bi bi-gear ml-4" style="font-size:22px"></i></a>
+                        </div>
+                        <button class="btn button btn-sm btn-outline-secondary mx-4"><i
+                                class="bi bi-funnel"></i>Filter</button>
+                    </div>
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <p class="text-pri name mt-2 mr-2 ml-0">JAMES CARMAL</p>
+                    <img src="img/Userpic.png" alt="" class="img-fluid mt-1 pic mr-5 ml-2">
+                    <i class="bi bi-bell mr-5 pr-3 mt-1" style="font-size: 25px;"></i>
+                    <i class="bi bi-three-dots mr-3" data-toggle="dropdown" style="font-size:25px"></i>
+                            <div class="dropdown-menu px-3" style="top: -3px; margin-left:-140px;font-size: 0.8rem;"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="d-flex  text-secondary"><i class="bi bi-envelope-fill pr-2 mb-1"></i>
+                                    <p class="mb-1">Personal Notepad</p>
+                                </div>
+                                <div class="d-flex  text-secondary"><i class="bi bi-file-check-fill pr-2 mb-2"></i>
+                                    <p class="mb-1">Files</p>
+                                </div>
+                                <div class="d-flex text-secondary"><i class="bi bi-file-earmark-image pr-2 mb-0"></i>
+                                    <p class="mb-0 ">Files</p>
+                                </div>
+                            </div>
+                    <nav class="nav mr-1">
+                        <a class="nav-link" href="#">Tab 1 <span><i class="bi bi-chevron-down"></i></span></a>
+                        <div class="hf my-auto"></div>
+                        <a class="nav-link" href="#">Tab 2 <span><i class="bi bi-chevron-down"></i></span></a>
+                      </nav>
+                </div>
+            </div>
+
+            <!--Advance toolbar-->
+            <div class="row text-secondary ml-2">
+                <div class="col-md-9">
+                    <div class="row bg-white border mt-1 py-1">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <button type="button" class="btn button btn-sm btn-outline-secondary mx-3">All</button>
+                            <button class="btn button btn-sm btn-outline-secondary mx-2"> <span><i class="bi bi-calendar-date"></i></span></button>
+                            <p class="text-secondary mt-1 mb-1">Email</p>
+                            <input type="text" class="form-control field adv-search mx-2" placeholder="Enter">
+                            <div class="form-check ml-3">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label pt-1" for="defaultCheck1">
+                                    Default
+                                </label>
+                            </div>
+                            <div class="form-check ml-3">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label pt-1" for="defaultCheck1">
+                                  Default
+                                </label>
+                              </div>
+                              <div class="form-check ml-3">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <label class="form-check-label pt-1" for="exampleRadios1">
+                                  Default
+                                </label>
+                              </div>
+                        </div>
+                        <div class="ml-auto d-flex align-items-center">
+                            <ul class="nav nav-tabs invisible">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">Tab 1</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Tab 2</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="d-flex align-items-center accordion pr-2 dropdown invisible">
+                            <i class="bi bi-three-dots" data-toggle="dropdown" style="font-size:25px"></i>
+                            <div class="dropdown-menu px-3" style="top: -3px; margin-left:-140px;font-size: 0.8rem;"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="d-flex  text-secondary"><i class="bi bi-envelope-fill pr-2 mb-1"></i>
+                                    <p class="mb-1">Personal Notepad</p>
+                                </div>
+                                <div class="d-flex  text-secondary"><i class="bi bi-file-check-fill pr-2 mb-2"></i>
+                                    <p class="mb-1">Files</p>
+                                </div>
+                                <div class="d-flex text-secondary"><i class="bi bi-file-earmark-image pr-2 mb-0"></i>
+                                    <p class="mb-0 ">Files</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--TABBAR tool-->
+                    <div class="col-md-10 offset-md-2 p-0 pl-1">
+                        <div class="row bg-white border mt-1 py-1">
+                            <div class="d-flex flex-row align-items-center justify-content-between">
+                                <button type="button" class="btn button btn-sm btn-outline-secondary mx-3">Add</button>
+                                <p class="text-secondary mt-1 mb-1">Sort by</p>
+                                <select class="form-select mx-2 text-secondary" aria-label="Default select example">
+                                    <option selected>Name</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="ml-auto d-flex align-items-center">
+                                <ul class="nav nav-tabs invisible">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#">Tab 1</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Tab 2</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex align-items-center accordion pr-2 dropdown">
+                                <i class="bi bi-three-dots" data-toggle="dropdown" style="font-size:25px"></i>
+                                <div class="dropdown-menu px-3" style="top: -3px; margin-left:-140px;font-size: 0.8rem;"
+                                    aria-labelledby="dropdownMenuLink">
+                                    <div class="d-flex  text-secondary"><i class="bi bi-envelope-fill pr-2 mb-1"></i>
+                                        <p class="mb-1">Personal Notepad</p>
+                                    </div>
+                                    <div class="d-flex  text-secondary"><i class="bi bi-file-check-fill pr-2 mb-2"></i>
+                                        <p class="mb-1">Files</p>
+                                    </div>
+                                    <div class="d-flex text-secondary"><i
+                                            class="bi bi-file-earmark-image pr-2 mb-0"></i>
+                                        <p class="mb-0 ">Files</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--TABBAR vertical-->
+
+                    <div id=verticalbar class="row">
+                        <div class="col-md-2 p-0">
+                            <nav class="nav flex-column">
+                                <a href="company.html" style="height: 95px;"
+                                    class="box  d-flex bg-white text-secondary justify-content-center border border-right-0  align-items-center">Company</a>
+                                <a href="plant.html" style="height: 95px;"
+                                    class="box  d-flex justify-content-center border align-items-center">Plant</a>
+                                <a href="warehouse_tab.html" style="height: 95px;"
+                                    class="box  d-flex justify-content-center border align-items-center">Warehouse</a>
+                                <a href="floor.html" style="height: 95px;"
+                                    class="box  d-flex justify-content-center border align-items-center">Floor</a>
+                                <a href="storage.html" style="height: 95px;"
+                                    class="box  d-flex justify-content-center border align-items-center">Storage
+                                    Section</a>
+
+                            </nav>
+                        </div>
+                        <!--TABBAR input-->
+                        <div class="col-md-10 p-0 bg-white align-items-end">
+                            <!--frame1-->
+                            <div section="tabbar" class="bg-white pad">
+                                <p class="my-1 pl-1">Genral Data</p>
+                                <form class="p-1 border">
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label d-flex">
+                                            <label for="">Company Code <span class="text-danger">*</span></label>
+                                            <i class="bi bi-exclamation-circle ml-2" data-toggle="tooltip"
+                                                data-placement="bottom" title="Mandatory Field"
+                                                style="font-size: 11px;"></i>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">Company Name <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right"
+                                                placeholder="autofill">
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label d-flex">
+                                            <label for="">Industry Vertical <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-3 label d-flex">
+                                            <label for="">Currency <span class="text-danger">*</span></label>
+
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field float-right">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-0 invisible">
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right "
+                                                placeholder="Enter">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!--frame1-->
+                            <div section="tabbar" class="bg-white pad">
+                                <p class="my-1 pl-1">Address</p>
+                                <form class="p-1 border mb-1">
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Address 1</label>
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">Address 2</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right"
+                                                placeholder="Enter">
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">City</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">State</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field float-right">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-0">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Country</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">Zip Code</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select class="form-select text-secondary field float-right">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--frame1-->
+                            <div section="tabbar" class="bg-white pad">
+                                <p class=" mt-0 mb-1 pl-1">Communication</p>
+                                <form class="p-1 border mb-1">
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Contact Name</label>
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">Designation</label>
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <input type="text" class="form-control field float-right" placeholder="Enter">
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Phone Number</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">E-Mail ID</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right" placeholder="Enter">
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-0 invisible">
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right "
+                                                placeholder="Enter">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--frame1-->
+                            <div section="tabbar" class="bg-white pad mb-1">
+                                <p class=" mt-0 mb-1 pl-1">Other Details</p>
+                                <form class="p-1 border">
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Number of Outlets</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">Number of Plants</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right"
+                                                placeholder="Enter">
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-1">
+                                        <div class="col-sm-3 label">
+                                            <label for="">Number of Warehouses</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label invisible">
+                                            <label for="">Currency<span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-sm-3 invisible">
+                                            <select class="form-select text-secondary field float-right">
+                                                <option selected>Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row justify-content-between mb-0 invisible">
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field" placeholder="Enter">
+                                        </div>
+
+                                        <div class="col-sm-3 label">
+                                            <label for="">warehouse destruction</label>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control field float-right "
+                                                placeholder="Enter">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 pl-2 mt-1">
+                    <div class="bg-white" style="height: 102%;">
+                        <div class="logo text-center ">
+                            <img src="img/logo.jpeg" alt="" class="img-fluid" style="height: 46px;width: 285px;">
+                        </div>
+                        <div class="row mt-1 no-gutters">
+                            <div class="col-md-6 pl-0">
+                                <div class="rightpane border d-flex flex-column  align-items-center justify-content-center"
+                                    style="height: 7rem;">
+                                    <i class="far fa-arrow-alt-circle-down fa-2x"></i>
+                                    <p class="mb-0 mt-1">Inbound</p>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 pl-0">
+                                <div class="rightpane border d-flex flex-column  align-items-center justify-content-center"
+                                    style="height: 7rem;">
+                                    <i class="far fa-arrow-alt-circle-down fa-2x"></i>
+                                    <p class="mb-0 mt-1">Inbound</p>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 pl-0">
+                                <div class="rightpane border d-flex flex-column  align-items-center justify-content-center"
+                                    style="height: 7rem;">
+                                    <i class="far fa-arrow-alt-circle-down fa-2x"></i>
+                                    <p class="mb-0 mt-1">Inbound</p>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6  pl-0">
+                                <div class="rightpane border d-flex flex-column  align-items-center justify-content-center"
+                                    style="height: 7rem;">
+                                    <i class="far fa-arrow-alt-circle-down fa-2x"></i>
+                                    <p class="mb-0 mt-1">Inbound</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-0 m-0 bg-white fixed-bottom mt-1 pt-1">
+                <div class="col-md-4  px-2 invisible">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination ">
+                            <li class="page-item"><a class="page-link rounded-0" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link rounded-0" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-5 offset-md-3" style="padding-left:64px">
+                    <button class="btn btn-sm btn-outline-secondary "><span><i class="bi bi-arrow-left"></i>
+                        </span>Back</button>
+                    <a href="plant.html" class="btn btn-sm btn-outline-secondary ml-3">Next <span><i
+                                class="bi bi-arrow-right"></i></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+
+    <script src="js/script.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>

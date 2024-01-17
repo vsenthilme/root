@@ -1154,6 +1154,8 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "(COALESCE(:itemCode, null) IS NULL OR (iv.ITM_CODE IN (:itemCode))) and \n" +
             "(COALESCE(:storageBin, null) IS NULL OR (iv.ST_BIN IN (:storageBin))) and\n" +
             "(COALESCE(:stockTypeId, null) IS NULL OR (iv.STCK_TYP_ID IN (:stockTypeId))) and \n" +
+            "(COALESCE(:storageSectionId, null) IS NULL OR (iv.REF_FIELD_10 IN (:storageSectionId))) and \n" +
+            "(COALESCE(:levelId, null) IS NULL OR (iv.level_id IN (:levelId))) and \n" +
             "(COALESCE(:specialStockIndicatorId, null) IS NULL OR (iv.SP_ST_IND_ID IN (:specialStockIndicatorId))) and \n" +
             "(COALESCE(:binClassId, null) IS NULL OR (iv.BIN_CL_ID IN (:binClassId))) and\n" +
             "(COALESCE(:description, null) IS NULL OR (iv.TEXT IN (:description))) and \n" +
@@ -1171,6 +1173,8 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
                                                  @Param("storageBin") List<String> storageBin,
                                                  @Param("description") String description,
                                                  @Param("stockTypeId") List<Long> stockTypeId,
+                                                 @Param("storageSectionId") List<String> storageSectionId,
+                                                 @Param("levelId") List<String> levelId,
                                                  @Param("specialStockIndicatorId") List<Long> specialStockIndicatorId,
                                                  @Param("binClassId") List<Long> binClassId);
 

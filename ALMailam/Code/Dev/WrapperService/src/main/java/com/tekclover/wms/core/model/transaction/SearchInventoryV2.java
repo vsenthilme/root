@@ -14,6 +14,7 @@ public class SearchInventoryV2 extends SearchInventory {
 	private List<String> plantId;
 
 	private List<String> barcodeId;
+	private List<String> levelId;
 	private List<String> manufacturerCode;
 	private List<String> referenceDocumentNo;
 }

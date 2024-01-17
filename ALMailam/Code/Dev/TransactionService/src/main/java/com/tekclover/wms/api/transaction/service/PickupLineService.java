@@ -1651,28 +1651,6 @@ public class PickupLineService extends BaseService {
                     dbPickupLine.getPickedPackCode(),
                     0L);
 
-//            InventoryV2 inventory = inventoryService.getInventoryForPickUpLine(
-//                    dbPickupLine.getCompanyCodeId(),
-//                    dbPickupLine.getPlantId(),
-//                    dbPickupLine.getLanguageId(),
-//                    dbPickupLine.getWarehouseId(),
-//                    dbPickupLine.getItemCode(),
-//                    dbPickupLine.getPickedPackCode(),
-//                    dbPickupLine.getRefDocNumber(),
-//                    dbPickupLine.getManufacturerName());
-//
-//            if (inventory != null) {
-//                if (inventory.getCbmPerQuantity() != null) {
-//
-//                    Double cbmPerQty = 0D;
-//                    if (inventory.getCbmPerQuantity() != null) {
-//                        cbmPerQty = Double.valueOf(inventory.getCbmPerQuantity());
-//                    }
-//
-//                    dbPickupLine.setPickedCbm(cbmPerQty * dbPickupLine.getPickConfirmQty());
-//                }
-//            }
-
             log.info("existingPickupLine : " + existingPickupLine);
             if (existingPickupLine == null) {
                 PickupLineV2 createdPickupLine = pickupLineV2Repository.save(dbPickupLine);

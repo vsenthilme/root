@@ -1980,8 +1980,14 @@ public class InventoryService extends BaseService {
         if (searchInventory.getStockTypeId() == null || searchInventory.getStockTypeId().isEmpty()) {
             searchInventory.setStockTypeId(null);
         }
+        if (searchInventory.getStorageSectionId() == null || searchInventory.getStorageSectionId().isEmpty()) {
+            searchInventory.setStorageSectionId(null);
+        }
         if (searchInventory.getSpecialStockIndicatorId() == null || searchInventory.getSpecialStockIndicatorId().isEmpty()) {
             searchInventory.setSpecialStockIndicatorId(null);
+        }
+        if (searchInventory.getLevelId() == null || searchInventory.getLevelId().isEmpty()) {
+            searchInventory.setLevelId(null);
         }
         if (searchInventory.getBinClassId() == null || searchInventory.getBinClassId().isEmpty()) {
             searchInventory.setBinClassId(null);
@@ -2004,6 +2010,8 @@ public class InventoryService extends BaseService {
                 searchInventory.getStorageBin(),
                 searchInventory.getDescription(),
                 searchInventory.getStockTypeId(),
+                searchInventory.getStorageSectionId(),
+                searchInventory.getLevelId(),
                 searchInventory.getSpecialStockIndicatorId(),
                 searchInventory.getBinClassId());
         return results;

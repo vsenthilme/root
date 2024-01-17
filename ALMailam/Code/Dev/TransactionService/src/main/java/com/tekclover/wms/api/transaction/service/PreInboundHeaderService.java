@@ -1,5 +1,21 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -1966,6 +1982,9 @@ public class PreInboundHeaderService extends BaseService {
         String preInboundNo = null;
         String containerNo = null;
         String warehouseId = null;
+        String companyCode = null;
+        String plantId = null;
+        String languageId = null;
         for (PreInboundLineEntityV2 objUpdatePreInboundLine : inputPreInboundLines) {
             objUpdatePreInboundLine.setStatusId(5L);
             statusDescription = stagingLineV2Repository.getStatusDescription(5L, objUpdatePreInboundLine.getLanguageId());
@@ -1979,11 +1998,15 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundNo = updatedPreInboundLine.getPreInboundNo();
                 containerNo = updatedPreInboundLine.getContainerNo();
                 warehouseId = updatedPreInboundLine.getWarehouseId();
+                companyCode = updatedPreInboundLine.getCompanyCode();
+                plantId = updatedPreInboundLine.getPlantId();
+                languageId = updatedPreInboundLine.getLanguageId();
             }
         }
 
         // PREINBOUNDHEADER Update
-        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+        // PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+           PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId, languageId);
         log.info("preInboundHeader---found-------> : " + preInboundHeader);
 
         PreInboundHeaderEntityV2 preInboundHeaderEntity = copyBeanToHeaderEntity(preInboundHeader);

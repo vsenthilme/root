@@ -3169,6 +3169,8 @@ public class GrLineService extends BaseService {
                 log.info("Total Inventory Qty : " + totalQty);
                 inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
                 inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
+                inventory.setCreatedOn(dbInventory.getCreatedOn());
+                inventory.setUpdatedOn(new Date());
                 inventory.setInventoryId(System.currentTimeMillis());
                 createdinventory = inventoryV2Repository.save(inventory);
                 log.info("created inventory[Existing] : " + createdinventory);
@@ -3178,7 +3180,7 @@ public class GrLineService extends BaseService {
 
                 InventoryV2 inventory = new InventoryV2();
                 BeanUtils.copyProperties(createdGRLine, inventory, CommonUtils.getNullPropertyNames(createdGRLine));
-                inventory.setInventoryId(System.currentTimeMillis());
+
                 inventory.setCompanyCodeId(createdGRLine.getCompanyCode());
 
                 // VAR_ID, VAR_SUB_ID, STR_MTD, STR_NO ---> Hard coded as '1'
@@ -3258,7 +3260,6 @@ public class GrLineService extends BaseService {
                 // INV_UOM
                 inventory.setInventoryUom(createdGRLine.getOrderUom());
                 inventory.setCreatedBy(createdGRLine.getCreatedBy());
-                inventory.setCreatedOn(createdGRLine.getCreatedOn());
 
                 //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
                 boolean capacityCheck = false;
@@ -3299,6 +3300,9 @@ public class GrLineService extends BaseService {
                 inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
                 inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
 
+                inventory.setCreatedOn(new Date());
+                inventory.setUpdatedOn(new Date());
+                inventory.setInventoryId(System.currentTimeMillis());
                 createdinventory = inventoryV2Repository.save(inventory);
                 log.info("created inventory : " + createdinventory);
             }

@@ -1516,11 +1516,13 @@ public class InboundHeaderService extends BaseService {
                     inventory2.setInventoryQuantity(INV_QTY);
                     inventory2.setReferenceField4(INV_QTY);         //Allocated Qty is always 0 for BinClassId 3
                     log.info("INV_QTY---->TOT_QTY---->: " + INV_QTY + ", " + INV_QTY);
-                    inventory2.setInventoryId(System.currentTimeMillis());
 
                     palletCode = existinginventory.getPalletCode();
                     caseCode = existinginventory.getCaseCode();
 
+                    inventory2.setCreatedOn(existinginventory.getCreatedOn());
+                    inventory2.setUpdatedOn(new Date());
+                    inventory2.setInventoryId(System.currentTimeMillis());
                     InventoryV2 createdInventoryV2 = inventoryV2Repository.save(inventory2);
                     log.info("----existinginventory--createdInventoryV2--------> : " + createdInventoryV2);
                 }
@@ -1619,17 +1621,6 @@ public class InboundHeaderService extends BaseService {
             // SP_ST_IND_ID
             inventory.setSpecialStockIndicatorId(1L);
 
-//            IInventoryImpl existingInventory = inventoryService.getInventoryForCreateInvInboundConfirm(
-//                    putAwayLine.getCompanyCode(),
-//                    putAwayLine.getPlantId(),
-//                    putAwayLine.getLanguageId(),
-//                    putAwayLine.getWarehouseId(),
-//                    putAwayLine.getItemCode(),
-//                    binClassId,
-//                    1L,
-//                    putAwayLine.getManufacturerName(),
-//                    putAwayLine.getConfirmedStorageBin());
-
             InventoryV2 existingInventory = inventoryService.getInventoryForInhouseTransferV2(
                     putAwayLine.getCompanyCode(),
                     putAwayLine.getPlantId(),
@@ -1681,8 +1672,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PA UOM: " + putAwayLine.getPutAwayUom());
             }
             inventory.setCreatedBy(putAwayLine.getCreatedBy());
-//            inventory.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            inventory.setCreatedOn(new Date());
 
             //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
             boolean capacityCheck = false;
@@ -1724,7 +1713,12 @@ public class InboundHeaderService extends BaseService {
             inventory.setReferenceDocumentNo(putAwayLine.getRefDocNumber());
             inventory.setReferenceOrderNo(putAwayLine.getRefDocNumber());
 
-//            inventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            if(existingInventory != null) {
+                inventory.setCreatedOn(existingInventory.getCreatedOn());
+            }
+            if(existingInventory == null) {
+                inventory.setCreatedOn(new Date());
+            }
             inventory.setUpdatedOn(new Date());
             inventory.setInventoryId(System.currentTimeMillis());
             InventoryV2 createdinventory = inventoryV2Repository.save(inventory);

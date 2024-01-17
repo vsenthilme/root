@@ -62,6 +62,8 @@ import java.util.stream.Stream;
 @Service
 public class OutboundLineService extends BaseService {
     @Autowired
+    private OutboundLineInterimRepository outboundLineInterimRepository;
+    @Autowired
     private InboundLineV2Repository inboundLineV2Repository;
     @Autowired
     private OutboundHeaderRepository outboundHeaderRepository;
@@ -2848,7 +2850,8 @@ public class OutboundLineService extends BaseService {
 //								for (PickupHeader pickupHeaderData : pickupHeader) {
 //									Double ALLOC_QTY = (inventory.getAllocatedQuantity() != null ? inventory.getAllocatedQuantity() : 0) + (pickupHeaderData.getPickToQty() != null ? pickupHeaderData.getPickToQty() : 0);
 //									inventory.setAllocatedQuantity(ALLOC_QTY);
-                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+//                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
                             inventory.setInventoryQuantity(INV_QTY);
                             Double ALLOC_QTY = 0D;
                             if(inventory.getAllocatedQuantity() != null) {
@@ -2859,6 +2862,7 @@ public class OutboundLineService extends BaseService {
 //                                log.info("inventory updated : " + inventory);
                             InventoryV2 newInventoryV2 = new InventoryV2();
                             BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
                             newInventoryV2.setInventoryId(System.currentTimeMillis());
                             InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
                             log.info("InventoryV2 created : " + createdInventoryV2);
@@ -3024,6 +3028,7 @@ public class OutboundLineService extends BaseService {
 //                            log.info("inventory updated : " + inventory);
                             InventoryV2 newInventoryV2 = new InventoryV2();
                             BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
                             newInventoryV2.setInventoryId(System.currentTimeMillis());
                             InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
                             log.info("InventoryV2 created : " + createdInventoryV2);
@@ -3711,5 +3716,32 @@ public class OutboundLineService extends BaseService {
             }
         }
         return outboundLineV2List;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     */
+    public List<OutboundLineInterim> deleteOutboundLineInterimForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                                        String warehouseId, String refDocNumber, String loginUserID) {
+        List<OutboundLineInterim> listOutboundLineInterim = outboundLineInterimRepository.
+                findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundLine Interim: " + listOutboundLineInterim);
+        if (listOutboundLineInterim != null && !listOutboundLineInterim.isEmpty()) {
+            listOutboundLineInterim.forEach(data -> {
+                data.setDeletionIndicator(1L);
+                data.setUpdatedBy(loginUserID);
+                data.setUpdatedOn(new Date());
+            });
+            return outboundLineInterimRepository.saveAll(listOutboundLineInterim);
+        }
+        return listOutboundLineInterim;
     }
 }

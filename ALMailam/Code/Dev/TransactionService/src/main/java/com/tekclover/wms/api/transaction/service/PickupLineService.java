@@ -1783,6 +1783,7 @@ public class PickupLineService extends BaseService {
 //                        log.info("inventory updated : " + inventory);
                         InventoryV2 inventoryV2 = new InventoryV2();
                         BeanUtils.copyProperties(inventory, inventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                        inventoryV2.setUpdatedOn(new Date());
                         inventoryV2.setInventoryId(System.currentTimeMillis());
                         inventoryV2 = inventoryV2Repository.save(inventoryV2);
                         log.info("-----Inventory2 updated-------: " + inventoryV2);
@@ -1901,6 +1902,7 @@ public class PickupLineService extends BaseService {
 //                        log.info("inventory updated : " + inventory);
                         InventoryV2 newInventoryV2 = new InventoryV2();
                         BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                        newInventoryV2.setUpdatedOn(new Date());
                         newInventoryV2.setInventoryId(System.currentTimeMillis());
                         InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
                         log.info("InventoryV2 created : " + createdInventoryV2);

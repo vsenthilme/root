@@ -375,6 +375,27 @@ public class QualityHeaderService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<QualityHeaderV2> getQualityHeaderForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<QualityHeaderV2> qualityHeader =
+                qualityHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        if (qualityHeader != null && !qualityHeader.isEmpty()) {
+            log.info("Quality Header: " + qualityHeader);
+            return qualityHeader;
+        }
+        log.info("The given picklist ID : " + refDocNumber + " doesn't exist.");
+        return null;
+    }
+
+    /**
      * @param warehouseId
      * @param refDocNumber
      * @param statusId

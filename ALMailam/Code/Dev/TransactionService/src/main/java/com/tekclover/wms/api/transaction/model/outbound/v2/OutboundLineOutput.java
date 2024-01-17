@@ -57,6 +57,7 @@ public interface OutboundLineOutput {
 	public String getReferenceDocumentType();
 	public String getSupplierInvoiceNo();
 	public String getSalesOrderNumber();
+	public String getSalesInvoiceNumber();
 	public String getManufacturerFullName();
 
 	public String getPickListNumber();

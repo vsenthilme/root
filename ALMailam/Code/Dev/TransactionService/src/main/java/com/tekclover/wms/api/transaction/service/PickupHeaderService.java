@@ -483,6 +483,27 @@ public class PickupHeaderService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<PickupHeaderV2> getPickupHeaderForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<PickupHeaderV2> pickupHeader =
+                pickupHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("New Picklist ---> pickup header : " + pickupHeader);
+        if (pickupHeader != null && !pickupHeader.isEmpty()) {
+            return pickupHeader;
+        }
+        log.info("No Pickup Header for New Picklist");
+        return null;
+    }
+
+    /**
      * @param warehouseId
      * @param refDocNumber
      * @param statusId

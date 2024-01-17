@@ -1,11 +1,7 @@
 package com.mnrclara.api.management.repository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import com.mnrclara.api.management.model.dto.*;
+import com.mnrclara.api.management.model.mattertimeticket.MatterTimeTicket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +11,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mnrclara.api.management.model.mattertimeticket.MatterTimeTicket;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Repository
 @Transactional
@@ -393,7 +392,7 @@ public interface MatterTimeTicketRepository extends JpaRepository<MatterTimeTick
             "from tblmattertimeticketid tm  \n" +
             "join tblclientgeneralid tc on tc.CLIENT_ID = tm.CLIENT_ID  \n" +
             "join tblclassid tcl on tcl.CLASS_ID = tc.CLASS_ID  \n" +
-            "join tblmattergenaccid mg on mg.CLIENT_ID = tm.CLIENT_ID \n" +
+            "join tblmattergenaccid mg on mg.MATTER_NO = tm.MATTER_NO \n" +
             "join tblstatusid ts on ts.STATUS_ID = tm.STATUS_ID \n" +
             "where \n" +
             "(COALESCE(:timeTicketNumber, null) IS NULL OR (tm.TIME_TICKET_NO IN (:timeTicketNumber))) and \n" +

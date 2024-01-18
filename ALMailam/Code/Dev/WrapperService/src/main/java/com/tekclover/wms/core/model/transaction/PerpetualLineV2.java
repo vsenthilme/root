@@ -3,6 +3,8 @@ package com.tekclover.wms.core.model.transaction;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.persistence.Column;
+
 @Data
 @ToString(callSuper = true)
 public class PerpetualLineV2 extends PerpetualLine {
@@ -26,5 +28,6 @@ public class PerpetualLineV2 extends PerpetualLine {
 	private Double firstCountedQty;
 	private Double secondCountedQty;
 	private String levelId;
+	private Double amsVarianceQty;
 
 }

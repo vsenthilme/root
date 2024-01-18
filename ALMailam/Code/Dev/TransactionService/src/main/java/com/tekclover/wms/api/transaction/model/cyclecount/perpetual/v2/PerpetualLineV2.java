@@ -65,4 +65,7 @@ public class PerpetualLineV2 extends PerpetualLine {
 	@Column(name = "LEVEL_ID", columnDefinition = "nvarchar(255)")
 	private String levelId;
 
+	@Column(name = "AMS_VAR_QTY")
+	private Double amsVarianceQty;
+
 }

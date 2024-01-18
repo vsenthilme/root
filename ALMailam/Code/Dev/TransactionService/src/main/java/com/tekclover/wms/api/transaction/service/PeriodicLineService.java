@@ -871,6 +871,9 @@ public class PeriodicLineService extends BaseService {
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);
                 }
 
+                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - ((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
+                dbPeriodicLine.setAmsVarianceQty(AMS_VAR_QTY);
 
                 // CTD_QTY
                 if (updatePeriodicLine.getCountedQty() != null) {
@@ -981,6 +984,9 @@ public class PeriodicLineService extends BaseService {
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);
                 }
 
+                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - ((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
+                dbPeriodicLine.setAmsVarianceQty(AMS_VAR_QTY);
                 /*
                  * 1. Action = WRITEOFF
                  * If ACTION = WRITEOFF , update ACTION field in PeriodicLine as WRITEOFF by passing unique fields and

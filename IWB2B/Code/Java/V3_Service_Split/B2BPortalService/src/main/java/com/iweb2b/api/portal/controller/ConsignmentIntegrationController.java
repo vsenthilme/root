@@ -2,6 +2,8 @@ package com.iweb2b.api.portal.controller;
 
 import java.util.List;
 
+import com.iweb2b.api.portal.model.consignment.dto.jnt.JNTPrintLabelResponse;
+import com.iweb2b.api.portal.model.consignment.dto.jnt.JNTWebhookRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,19 +84,19 @@ public class ConsignmentIntegrationController {
 //        return new ResponseEntity<>(webhookResponse, HttpStatus.OK);
 //    }
 //
-//    @ApiOperation(response = JNTWebhookRequest.class, value = "Print Label") // label for swagger
-//    @GetMapping("/jnt/{billCode}/printLabel")
-//    public ResponseEntity<?> printLabel(@PathVariable String billCode) throws Exception {
-//        JNTPrintLabelResponse printLabelResponse = integrationService.printLabel(billCode);
-//        return new ResponseEntity<>(printLabelResponse, HttpStatus.OK);
-//    }
-//
-//    @ApiOperation(response = JNTWebhookRequest.class, value = "Print Label") // label for swagger
-//    @GetMapping("/jnt/{billCode}/pdf/printLabel")
-//    public ResponseEntity<?> pdfPrintLabel(@PathVariable String billCode) throws Exception {
-//        byte[] printLabelResponse = integrationService.pdfPrintLabel(billCode);
-//        return new ResponseEntity<>(printLabelResponse, HttpStatus.OK);
-//    }
+    @ApiOperation(response = JNTWebhookRequest.class, value = "Print Label") // label for swagger
+    @GetMapping("/jnt/{billCode}/printLabel")
+    public ResponseEntity<?> printLabel(@PathVariable String billCode) throws Exception {
+        JNTPrintLabelResponse printLabelResponse = integrationService.printLabel(billCode);
+        return new ResponseEntity<>(printLabelResponse, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = JNTWebhookRequest.class, value = "Print Label") // label for swagger
+    @GetMapping("/jnt/{billCode}/pdf/printLabel")
+    public ResponseEntity<?> pdfPrintLabel(@PathVariable String billCode) throws Exception {
+        byte[] printLabelResponse = integrationService.pdfPrintLabel(billCode);
+        return new ResponseEntity<>(printLabelResponse, HttpStatus.OK);
+    }
 //
 //    @ApiOperation(response = JNTWebhookRequest.class, value = "Update Shipsy Order Event") // label for swagger
 //    @PostMapping("/jnt/{referenceNumber}/eventUpdate")

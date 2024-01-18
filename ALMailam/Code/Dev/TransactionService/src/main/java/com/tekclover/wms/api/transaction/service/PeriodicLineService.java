@@ -865,7 +865,7 @@ public class PeriodicLineService extends BaseService {
                         updatePeriodicLine.getItemCode(),
                         updatePeriodicLine.getManufacturerName(),
                         updatePeriodicLine.getStorageBin(),
-                        updatePeriodicLine.getCountedOn());
+                        updatePeriodicLine.getCreatedOn());
                 if (pickupLineList != null) {
                     OB_QTY = pickupLineList.stream().mapToDouble(a -> a.getPickConfirmQty()).sum();
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);
@@ -975,7 +975,7 @@ public class PeriodicLineService extends BaseService {
                         updatePeriodicLine.getItemCode(),
                         updatePeriodicLine.getManufacturerName(),
                         updatePeriodicLine.getStorageBin(),
-                        updatePeriodicLine.getCountedOn());
+                        updatePeriodicLine.getCreatedOn());
                 if (pickupLineList != null) {
                     OB_QTY = pickupLineList.stream().mapToDouble(a -> a.getPickConfirmQty()).sum();
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);

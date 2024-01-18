@@ -19,6 +19,7 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV
 import com.tekclover.wms.api.transaction.model.inbound.staging.StagingLineEntity;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
+import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.GrLineSpecification;
@@ -119,6 +120,10 @@ public class GrLineService extends BaseService {
     private PickupLineService pickupLineService;
 
     String statusDescription = null;
+
+    @Autowired
+    ExceptionLogRepository exceptionLogRepo;
+
     //----------------------------------------------------------------------------------------------------
 
 
@@ -923,6 +928,10 @@ public class GrLineService extends BaseService {
                 itemCode,
                 0L);
         if (grLine.isEmpty()) {
+            //Exception Log 
+            createGrLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, goodsReceiptNo, palletCode,
+                    caseCode, packBarcodes, lineNo, itemCode, "GrLineV2 with goodsReceiptNo - " + goodsReceiptNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -962,6 +971,10 @@ public class GrLineService extends BaseService {
                         itemCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog1(languageId, companyCode, plantId, refDocNumber, preInboundNo, packBarcodes, lineNo,
+                    itemCode, "The given values of GrLineV2 with lineNo - " + lineNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -996,6 +1009,10 @@ public class GrLineService extends BaseService {
                         caseCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog2(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, packBarcodes, caseCode,
+                    "The given values of GrLineV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1076,6 +1093,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog3(languageId, companyCode, plantId, refDocNumber, packBarcodes,
+                    "The given values of GrLineV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1108,6 +1129,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog4(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNumber,
+                    packBarcodes, "The given values of GrLineV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1134,6 +1159,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog5(languageId, companyCode, plantId, warehouseId, refDocNumber, packBarcodes,
+                    "The given values of GrLineV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1203,6 +1232,10 @@ public class GrLineService extends BaseService {
                         itemCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog6(languageId, companyCode, plantId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "The given values of GrLineV2 with lineNo - " + lineNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",warehouseId: " + warehouseId +
                     ",refDocNumber: " + refDocNumber +
@@ -1428,6 +1461,10 @@ public class GrLineService extends BaseService {
                             createdGRLine = grLineV2Repository.save(dbGrLine);
                         } catch (Exception e) {
                             createGrLineError = true;
+
+                            //Exception Log
+                            createGrLineLog7(dbGrLine, e.toString());
+
                             throw new RuntimeException(e);
                         }
                         log.info("createdGRLine : " + createdGRLine);
@@ -1571,6 +1608,9 @@ public class GrLineService extends BaseService {
             }
             return createdGRLines;
         } catch (Exception e) {
+            //Exception Log
+            createGrLineLog10(newGrLines, e.toString());
+
             e.printStackTrace();
             throw e;
         }
@@ -2000,7 +2040,7 @@ public class GrLineService extends BaseService {
 
                     StorageBinV2 storageBin = mastersService.getStorageBinV2(proposedStorageBin, warehouseId, companyCode, plantId, languageId, authTokenForMastersService.getAccess_token());
                     log.info("InterimStorageBin: " + storageBin);
-                    if(storageBin != null) {
+                    if (storageBin != null) {
                         if (storageBin.isCapacityCheck()) {
                             storageBinCapacityCheck = storageBin.isCapacityCheck();
                         }
@@ -2060,9 +2100,15 @@ public class GrLineService extends BaseService {
                     }
 
                     if (!capacityCheck && storageBinCapacityCheck) {
+                        // Exception Log
+                        createGrLineLog9(storageBin, "Storage Bin Capacity Check is enabled whereas item capacity check is disabled." + storageBinCapacityCheck);
+
                         throw new RuntimeException("Storage Bin Capacity Check is enabled whereas item capacity check is disabled ");
                     }
                     if (capacityCheck && !storageBinCapacityCheck) {
+                        // Exception Log
+                        createGrLineLog8(itemCodeCapacityCheck, "Item Capacity Check is enabled whereas Storage Bin capacity check is disabled." + capacityCheck);
+
                         throw new RuntimeException("item Capacity Check is enabled whereas Storage Bin capacity check is disabled ");
                     }
 
@@ -2422,7 +2468,7 @@ public class GrLineService extends BaseService {
                     List<PickupLineV2> pickupLineList = pickupLineService.getPickupLineForLastBinCheckV2(companyCode, plantId, languageId, warehouseId, itemCode, createdGRLine.getManufacturerName());
                     log.info("PickupLineForLastBinCheckV2: " + pickupLineList);
                     List<String> lastPickedStorageBinList = null;
-                    if(pickupLineList != null){
+                    if (pickupLineList != null) {
                         lastPickedStorageBinList = pickupLineList.stream().map(PickupLineV2::getPickedStorageBin).collect(Collectors.toList());
                     }
                     log.info("LastPickedStorageBinList: " + lastPickedStorageBinList);
@@ -3153,16 +3199,16 @@ public class GrLineService extends BaseService {
 
             InventoryV2 createdinventory = null;
 
-            if(dbInventory != null) {
+            if (dbInventory != null) {
                 InventoryV2 inventory = new InventoryV2();
                 BeanUtils.copyProperties(dbInventory, inventory, CommonUtils.getNullPropertyNames(dbInventory));
                 inventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + createdGRLine.getGoodReceiptQty());
                 log.info("Inventory Qty = inv_qty + gr_qty: " + dbInventory.getInventoryQuantity() + ", " + createdGRLine.getGoodReceiptQty());
                 Double totalQty = 0D;
-                if(inventory.getReferenceField4() != null) {
+                if (inventory.getReferenceField4() != null) {
                     totalQty = inventory.getReferenceField4() + createdGRLine.getGoodReceiptQty();
                 }
-                if(inventory.getReferenceField4() == null) {
+                if (inventory.getReferenceField4() == null) {
                     totalQty = createdGRLine.getGoodReceiptQty();
                 }
                 inventory.setReferenceField4(totalQty);
@@ -3176,7 +3222,7 @@ public class GrLineService extends BaseService {
                 log.info("created inventory[Existing] : " + createdinventory);
             }
 
-            if(dbInventory == null) {
+            if (dbInventory == null) {
 
                 InventoryV2 inventory = new InventoryV2();
                 BeanUtils.copyProperties(createdGRLine, inventory, CommonUtils.getNullPropertyNames(createdGRLine));
@@ -3309,6 +3355,9 @@ public class GrLineService extends BaseService {
 
             return createdinventory;
         } catch (Exception e) {
+            // Exception Log
+            createGrLineLog7(createdGRLine, e.toString());
+
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -3390,6 +3439,10 @@ public class GrLineService extends BaseService {
             grLine.setUpdatedOn(new Date());
             grLineV2Repository.save(grLine);
         } else {
+            // Exception Log
+            createGrLineLog(languageId, companyCodeId, plantId, warehouseId, refDocNumber, preInboundNo, goodsReceiptNo, palletCode,
+                    caseCode, packBarcodes, lineNo, itemCode, "Error in deleting GrLineV2 with goodsReceiptNo - " + goodsReceiptNo);
+
             throw new EntityNotFoundException("Error in deleting Id: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -3404,7 +3457,6 @@ public class GrLineService extends BaseService {
     }
 
     /**
-     *
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -3432,6 +3484,207 @@ public class GrLineService extends BaseService {
             }
         }
         return grLineV2s;
+    }
+
+    //============================================GrLine_ExceptionLog==================================================
+    private void createGrLineLog(String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+                                 String preInboundNo, String goodsReceiptNo, String palletCode, String caseCode,
+                                 String packBarcodes, Long lineNo, String itemCode, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(goodsReceiptNo);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField2(palletCode);
+        dbExceptionLog.setReferenceField3(caseCode);
+        dbExceptionLog.setReferenceField4(packBarcodes);
+        dbExceptionLog.setReferenceField5(itemCode);
+        dbExceptionLog.setReferenceField6(String.valueOf(lineNo));
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog1(String languageId, String companyCode, String plantId, String refDocNumber,
+                                  String preInboundNo, String packBarcodes, Long lineNo, String itemCode, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(String.valueOf(lineNo));
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField2(packBarcodes);
+        dbExceptionLog.setReferenceField3(itemCode);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog2(String languageId, String companyCode, String plantId, String warehouseId,
+                                  String refDocNumber, String preInboundNo, String packBarcodes, String caseCode, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField4(caseCode);
+        dbExceptionLog.setReferenceField5(packBarcodes);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog3(String languageId, String companyCode, String plantId,
+                                  String refDocNumber, String packBarcodes, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField5(packBarcodes);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog4(String languageId, String companyCode, String plantId, String warehouseId,
+                                  String refDocNumber, String preInboundNo, String packBarcodes, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField5(packBarcodes);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog5(String languageId, String companyCode, String plantId, String warehouseId,
+                                  String refDocNumber, String packBarcodes, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(packBarcodes);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog6(String languageId, String companyCode, String plantId, String refDocNumber,
+                                  String preInboundNo, Long lineNo, String itemCode, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(String.valueOf(lineNo));
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField2(itemCode);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog7(GrLineV2 grLineV2, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(grLineV2.getGoodsReceiptNo());
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(grLineV2.getLanguageId());
+        dbExceptionLog.setCompanyCodeId(grLineV2.getCompanyCode());
+        dbExceptionLog.setPlantId(grLineV2.getPlantId());
+        dbExceptionLog.setWarehouseId(grLineV2.getWarehouseId());
+        dbExceptionLog.setRefDocNumber(grLineV2.getRefDocNumber());
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog8(ImBasicData1 imBasicData1, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(imBasicData1.getUomId());
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(imBasicData1.getLanguageId());
+        dbExceptionLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        dbExceptionLog.setPlantId(imBasicData1.getPlantId());
+        dbExceptionLog.setWarehouseId(imBasicData1.getWarehouseId());
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog9(StorageBinV2 storageBinV2, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(storageBinV2.getStorageBin());
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(storageBinV2.getLanguageId());
+        dbExceptionLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
+        dbExceptionLog.setPlantId(storageBinV2.getPlantId());
+        dbExceptionLog.setWarehouseId(storageBinV2.getWarehouseId());
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
+    private void createGrLineLog10(@Valid List<AddGrLineV2> grLineV2List, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+
+        for (AddGrLineV2 addGrLineV2 : grLineV2List) {
+            dbExceptionLog.setOrderTypeId(addGrLineV2.getGoodsReceiptNo());
+            dbExceptionLog.setOrderDate(new Date());
+            dbExceptionLog.setLanguageId(addGrLineV2.getLanguageId());
+            dbExceptionLog.setCompanyCodeId(addGrLineV2.getCompanyCode());
+            dbExceptionLog.setPlantId(addGrLineV2.getPlantId());
+            dbExceptionLog.setWarehouseId(addGrLineV2.getWarehouseId());
+            dbExceptionLog.setRefDocNumber(addGrLineV2.getRefDocNumber());
+            dbExceptionLog.setErrorMessage(error + addGrLineV2.getGoodsReceiptNo());
+            dbExceptionLog.setCreatedBy("MSD_API");
+            dbExceptionLog.setCreatedOn(new Date());
+            exceptionLogRepo.save(dbExceptionLog);
+        }
     }
 
 }

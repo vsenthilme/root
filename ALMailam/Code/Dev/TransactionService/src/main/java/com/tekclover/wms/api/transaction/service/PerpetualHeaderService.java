@@ -1782,7 +1782,7 @@ public class PerpetualHeaderService extends BaseService {
             }
 
             if (searchPerpetualHeader.getCycleCounterId() != null) {
-                searchPerpetualLine.setCycleCounterId(searchPerpetualHeader.getCycleCounterId());
+                searchPerpetualLine.setCycleCounterId(searchPerpetualHeader.getCycleCounterId().get(0));
             }
 
             if (searchPerpetualHeader.getLineStatusId() != null) {

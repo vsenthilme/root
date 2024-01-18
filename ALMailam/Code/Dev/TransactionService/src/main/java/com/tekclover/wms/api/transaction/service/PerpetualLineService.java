@@ -884,7 +884,7 @@ public class PerpetualLineService extends BaseService {
                         updatePerpetualLine.getItemCode(),
                         updatePerpetualLine.getManufacturerName(),
                         updatePerpetualLine.getStorageBin(),
-                        updatePerpetualLine.getCountedOn());
+                        updatePerpetualLine.getCreatedOn());
                 if (pickupLineList != null) {
                     OB_QTY = pickupLineList.stream().mapToDouble(a -> a.getPickConfirmQty()).sum();
                     dbPerpetualLine.setOutboundQuantity(OB_QTY);
@@ -998,7 +998,7 @@ public class PerpetualLineService extends BaseService {
                         updatePerpetualLine.getItemCode(),
                         updatePerpetualLine.getManufacturerName(),
                         updatePerpetualLine.getStorageBin(),
-                        updatePerpetualLine.getCountedOn());
+                        updatePerpetualLine.getCreatedOn());
                 if (pickupLineList != null) {
                     OB_QTY = pickupLineList.stream().mapToDouble(a -> a.getPickConfirmQty()).sum();
                     dbPerpetualLine.setOutboundQuantity(OB_QTY);

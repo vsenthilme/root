@@ -28,12 +28,15 @@ public class PerpetualLineV2Specification implements Specification<PerpetualLine
         	 predicates.add(group.in(searchPerpetualLine.getCycleCountNo()));
          }
          
-         if (searchPerpetualLine.getCycleCounterId() != null && !searchPerpetualLine.getCycleCounterId().isEmpty()) {
-//        	 predicates.add(cb.equal(root.get("cycleCounterId"), searchPerpetualLine.getCycleCounterId()));
-			 final Path<Group> group = root.<Group> get("cycleCounterId");
-			 predicates.add(group.in(searchPerpetualLine.getCycleCounterId()));
-         }
-		   
+//         if (searchPerpetualLine.getCycleCounterId() != null && !searchPerpetualLine.getCycleCounterId().isEmpty()) {
+////        	 predicates.add(cb.equal(root.get("cycleCounterId"), searchPerpetualLine.getCycleCounterId()));
+//			 final Path<Group> group = root.<Group> get("cycleCounterId");
+//			 predicates.add(group.in(searchPerpetualLine.getCycleCounterId()));
+//         }
+
+		if (searchPerpetualLine.getCycleCounterId() != null && !searchPerpetualLine.getCycleCounterId().isEmpty()) {
+			predicates.add(cb.equal(root.get("cycleCounterId"), searchPerpetualLine.getCycleCounterId()));
+		}
 		 if (searchPerpetualLine.getLineStatusId() != null && !searchPerpetualLine.getLineStatusId().isEmpty()) {	
         	 final Path<Group> group = root.<Group> get("statusId");
         	 predicates.add(group.in(searchPerpetualLine.getLineStatusId()));

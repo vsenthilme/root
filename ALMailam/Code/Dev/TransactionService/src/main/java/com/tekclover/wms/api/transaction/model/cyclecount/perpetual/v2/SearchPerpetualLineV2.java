@@ -17,7 +17,7 @@ public class SearchPerpetualLineV2 {
 
 	private List<String> cycleCountNo;
 	private List<Long> lineStatusId;
-	private List<String> cycleCounterId;
+	private String cycleCounterId;
 	private String warehouseId;
 	private Date startCreatedOn;
 	private Date endCreatedOn;

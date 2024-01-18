@@ -1252,13 +1252,14 @@ public class PickupLineService extends BaseService {
      */
     public List<PickupLineV2> getPickupLineForPerpetualCountV2(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                                String itemCode, String manufacturerName, String storageBin, Date stockCountDate) {
-        //List<PickupLineV2> pickupLine = pickupLineV2Repository
-        //      .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPickedStorageBinAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicator(
-        //            languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, storageBin, 20L, stockCountDate, new Date(), 0L);
         List<PickupLineV2> pickupLine = pickupLineV2Repository
-                .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPickedStorageBinAndStatusIdAndDeletionIndicator(
-                        languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, storageBin, 48L, 0L);
+              .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPickedStorageBinAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicator(
+                    languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, storageBin, 50L, stockCountDate, new Date(), 0L);
+//        List<PickupLineV2> pickupLine = pickupLineV2Repository
+//                .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPickedStorageBinAndStatusIdAndDeletionIndicator(
+//                        languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, storageBin, 50L, 0L);
         if (pickupLine != null && !pickupLine.isEmpty()) {
+            log.info("PickUpline Status 50 ---> " + pickupLine);
             return pickupLine;
         }
         return null;

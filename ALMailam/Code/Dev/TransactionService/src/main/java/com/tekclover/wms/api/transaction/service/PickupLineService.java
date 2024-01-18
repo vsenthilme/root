@@ -1654,6 +1654,16 @@ public class PickupLineService extends BaseService {
 
             log.info("existingPickupLine : " + existingPickupLine);
             if (existingPickupLine == null) {
+
+                try {
+                    String leadTime = pickupLineV2Repository.getleadtime(companyCodeId, plantId, languageId, warehouseId, dbPickupLine.getPickupNumber(), new Date());
+                    dbPickupLine.setReferenceField1(leadTime);
+                    log.info("LeadTime: " + leadTime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+
                 PickupLineV2 createdPickupLine = pickupLineV2Repository.save(dbPickupLine);
                 log.info("dbPickupLine created: " + createdPickupLine);
                 createdPickupLineList.add(createdPickupLine);

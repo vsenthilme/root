@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,4 +130,13 @@ public interface PutAwayLineV2Repository extends JpaRepository<PutAwayLineV2, Lo
                                  @Param("refDocNumber") String refDocNumber,
                                  @Param("statusId") Long statusId,
                                  @Param("statusDescription") String statusDescription);
+
+    @Query(value = "SELECT DATEDIFF(MINUTE, ib.PA_CTD_ON, :lDate) from tblputawayheader ib \n"
+            + "where ib.pa_no = :putAwayNumber and ib.wh_id = :warehouseId and ib.c_id = :companyCode and ib.plant_Id = :plantId and ib.lang_Id = :languageId and ib.is_deleted = 0", nativeQuery = true)
+    public String getleadtime(@Param("companyCode") String companyCode,
+                              @Param("plantId") String plantId,
+                              @Param("languageId") String languageId,
+                              @Param("warehouseId") String warehouseId,
+                              @Param(value = "putAwayNumber") String putAwayNumber,
+                              @Param("lDate") Date lDate);
 }

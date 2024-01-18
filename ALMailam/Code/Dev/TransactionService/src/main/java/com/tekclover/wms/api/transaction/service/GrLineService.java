@@ -1534,7 +1534,8 @@ public class GrLineService extends BaseService {
                         grHeader.setStatusDescription(statusDescription);
                         grHeader.setCreatedBy(loginUserID);
 //                        grHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                        grHeader.setCreatedOn(new Date());
+                        grHeader.setUpdatedOn(new Date());
+                        grHeader.setConfirmedOn(new Date());
                         grHeader = grHeaderV2Repository.save(grHeader);
                         log.info("grHeader updated: " + grHeader);
                     }

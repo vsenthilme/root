@@ -1386,13 +1386,16 @@ public class PutAwayLineService extends BaseService {
                 dbPutAwayLine.setCreatedBy(loginUserID);
                 dbPutAwayLine.setUpdatedBy(loginUserID);
                 dbPutAwayLine.setConfirmedBy(loginUserID);
-//                dbPutAwayLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbPutAwayLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
-                dbPutAwayLine.setCreatedOn(new Date());
+
+                dbPutAwayHeader = putAwayHeaderService.getPutawayHeaderV2(companyCode, plantId, languageId, warehouseId, newPutAwayLine.getPutAwayNumber());
+                log.info("putawayHeader: " + dbPutAwayHeader);
+                if(dbPutAwayHeader != null) {
+                    dbPutAwayLine.setCreatedOn(dbPutAwayHeader.getCreatedOn());
+                } else {
+                    dbPutAwayLine.setCreatedOn(new Date());
+                }
                 dbPutAwayLine.setUpdatedOn(new Date());
                 dbPutAwayLine.setConfirmedOn(new Date());
-
 
                 Optional<PutAwayLineV2> existingPutAwayLine = putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndPreInboundNoAndRefDocNumberAndPutAwayNumberAndLineNoAndItemCodeAndProposedStorageBinAndConfirmedStorageBinInAndDeletionIndicator(
                         newPutAwayLine.getLanguageId(), newPutAwayLine.getCompanyCode(), newPutAwayLine.getPlantId(),
@@ -1407,6 +1410,14 @@ public class PutAwayLineService extends BaseService {
 
                 if (existingPutAwayLine.isEmpty()) {
 
+                    try {
+                        String leadTime = putAwayLineV2Repository.getleadtime(companyCode, plantId, languageId, warehouseId, newPutAwayLine.getPutAwayNumber(), new Date());
+                        dbPutAwayLine.setReferenceField1(leadTime);
+                        log.info("LeadTime: " + leadTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                     PutAwayLineV2 createdPutAwayLine = putAwayLineV2Repository.save(dbPutAwayLine);
 
                     log.info("---------->createdPutAwayLine created: " + createdPutAwayLine);
@@ -1603,9 +1614,21 @@ public class PutAwayLineService extends BaseService {
                                     createdPutAwayLine.getCompanyCode(),
                                     createdPutAwayLine.getPlantId(),
                                     createdPutAwayLine.getLanguageId());
-                            statusDescription = stagingLineV2Repository.getStatusDescription(20L, createdPutAwayLine.getLanguageId());
                             for (PutAwayHeaderV2 putAwayHeader : headers) {
-                                putAwayHeader.setStatusId(20L);
+
+                                if(createdPutAwayLine.getPutawayConfirmedQty() < putAwayHeader.getOrderQty()){
+                                    putAwayHeader.setReferenceField1(String.valueOf(putAwayHeader.getOrderQty()));
+                                    Double ORD_QTY = (putAwayHeader.getOrderQty() != null ? putAwayHeader.getOrderQty() : 0) - (createdPutAwayLine.getPutawayConfirmedQty() != null ? createdPutAwayLine.getPutawayConfirmedQty() : 0);
+                                    putAwayHeader.setOrderQty(ORD_QTY);
+                                    log.info("OrderQty ReCalcuated/Changed : " + ORD_QTY);
+                                    putAwayHeader.setStatusId(19L);
+                                    log.info("PutawayHeader StatusId : 19");
+                                }
+                                if(createdPutAwayLine.getPutawayConfirmedQty() == putAwayHeader.getOrderQty()) {
+                                    putAwayHeader.setStatusId(20L);
+                                    log.info("PutawayHeader StatusId : 20");
+                                }
+                                statusDescription = stagingLineV2Repository.getStatusDescription(putAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
                                 putAwayHeader.setStatusDescription(statusDescription);
                                 putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
                                 log.info("putAwayHeader updated: " + putAwayHeader);

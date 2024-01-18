@@ -1344,13 +1344,13 @@ public class InboundHeaderService extends BaseService {
         List<Boolean> validationStatusList = new ArrayList<>();
 
         // PutawayLine Validation
-        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
-        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
-
-        if (putAwayLineStatusIdCount == 0) {
-            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
-        }
-        validationStatusList.add(true);
+//        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
+//        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
+//
+//        if (putAwayLineStatusIdCount == 0) {
+//            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
+//        }
+//        validationStatusList.add(true);
 
         // PutawayHeader Validation
         long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);

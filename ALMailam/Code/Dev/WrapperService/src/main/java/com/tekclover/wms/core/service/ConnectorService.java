@@ -2,8 +2,7 @@ package com.tekclover.wms.core.service;
 
 
 import com.tekclover.wms.core.config.PropertiesConfig;
-import com.tekclover.wms.core.model.Connector.SearchSupplierInvoiceHeader;
-import com.tekclover.wms.core.model.Connector.SupplierInvoiceHeader;
+import com.tekclover.wms.core.model.Connector.*;
 import com.tekclover.wms.core.model.transaction.IntegrationLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +70,101 @@ public class ConnectorService {
             throw e;
         }
     }
+
+    // Find SalesReturnHeader
+    public SalesReturnHeader[] findSalesReturnHeader(FindSalesReturnHeader findSalesReturnHeader, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/salesReturn/findsalesreturnheader");
+            HttpEntity<?> entity = new HttpEntity<>(findSalesReturnHeader, headers);
+            ResponseEntity<SalesReturnHeader[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, SalesReturnHeader[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    // Find StockAdjustment
+    public StockAdjustment[] findStockAdjustment(FindStockAdjustment findStockAdjustment, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/stockAdjustment/findStockAdjustment");
+            HttpEntity<?> entity = new HttpEntity<>(findStockAdjustment, headers);
+            ResponseEntity<StockAdjustment[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, StockAdjustment[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Find StockAdjustment
+    public PickListHeader[] findPickListHeader(FindPickListHeader findPickListHeader, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/salesorderv2/findPickListHeader");
+            HttpEntity<?> entity = new HttpEntity<>(findPickListHeader, headers);
+            ResponseEntity<PickListHeader[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PickListHeader[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Find StockAdjustment
+    public PurchaseReturnHeader[] findPurchaseReturnHeader(FindPurchaseReturnHeader findPurchaseReturnHeader, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/returnpov2/findPurchaseReturnHeader");
+            HttpEntity<?> entity = new HttpEntity<>(findPurchaseReturnHeader, headers);
+            ResponseEntity<PurchaseReturnHeader[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PurchaseReturnHeader[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Find StockAdjustment
+    public SalesInvoice[] findSalesInvoice(FindSalesInvoice findSalesInvoice, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/salesinvoice/findSalesInvoice");
+            HttpEntity<?> entity = new HttpEntity<>(findSalesInvoice, headers);
+            ResponseEntity<SalesInvoice[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, SalesInvoice[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

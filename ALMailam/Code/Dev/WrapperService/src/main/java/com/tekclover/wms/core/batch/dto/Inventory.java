@@ -14,8 +14,8 @@ public class Inventory {
 	private String warehouseId;
 	private String palletCode;
 	private String caseCode;
+	private String packBarcodes;
 	private String itemCode;
-	private String packBarcode;
 	private Long variantCode;
 	private String variantSubCode;
 	private String batchSerialNumber;
@@ -33,6 +33,16 @@ public class Inventory {
 	private Date manufacturerDate;
 	private Date expiryDate;
 	private Long deletionIndicator;
+	private String referenceField1;
+	private String referenceField2;
+	private String referenceField3;
+	private String referenceField4;
+	private String referenceField5;
+	private String referenceField6;
+	private String referenceField7;
+	private String referenceField8;
+	private String referenceField9;
+	private String referenceField10;
 	private String dType;
 	private String createdBy;
 
@@ -43,12 +53,14 @@ public class Inventory {
 	private String cbmPerQuantity;
 	private String manufacturerName;
 	private String origin;
+	private String levelId;
 	private String brand;
 	private String referenceDocumentNo;
 	private String companyDescription;
 	private String plantDescription;
 	private String warehouseDescription;
 	private String statusDescription;
+	private String stockTypeDescription;
 
 	/**
 	 * @param languageId
@@ -58,7 +70,7 @@ public class Inventory {
 	 * @param palletCode
 	 * @param caseCode
 	 * @param itemCode
-	 * @param packBarcode
+	 * @param packBarcodes
 	 * @param variantCode
 	 * @param variantSubCode
 	 * @param batchSerialNumber
@@ -92,12 +104,14 @@ public class Inventory {
 	 * @param createdBy
 	 */
 	public Inventory(Long inventoryId, String languageId, String companyCodeId, String plantId, String warehouseId, String palletCode, String caseCode,
-					 String itemCode, String packBarcode, Long variantCode, String variantSubCode, String batchSerialNumber,
+					 String itemCode, String packBarcodes, Long variantCode, String variantSubCode, String batchSerialNumber,
 					 String storageBin, Long stockTypeId, Long specialStockIndicatorId, String referenceOrderNo, String storageMethod,
 					 Long binClassId, String description, Double allocatedQuantity, Double inventoryQuantity, String inventoryUom,
 					 String manufacturerCode, Date manufacturerDate, Date expiryDate, String barcodeId, String cbm, String cbmUnit, String cbmPerQuantity,
-					 String manufacturerName, String origin, String brand, String referenceDocumentNo, String companyDescription,
-					 String plantDescription, String warehouseDescription, String statusDescription, Long deletionIndicator, String dType, String createdBy) {
+					 String manufacturerName, String origin, String brand, String referenceDocumentNo, String levelId, String companyDescription,
+					 String plantDescription, String warehouseDescription, String statusDescription, String stockTypeDescription, Long deletionIndicator, String referenceField1,
+					 String referenceField2, String referenceField3, String referenceField4, String referenceField5, String referenceField6,
+					 String referenceField7, String referenceField8, String referenceField9, String referenceField10, String dType, String createdBy) {
 
 		this.inventoryId = inventoryId;
 		this.languageId = languageId;
@@ -107,7 +121,7 @@ public class Inventory {
 		this.palletCode = palletCode;
 		this.caseCode = caseCode;
 		this.itemCode = itemCode;
-		this.packBarcode = packBarcode;
+		this.packBarcodes = packBarcodes;
 		this.variantCode = variantCode;
 		this.variantSubCode = variantSubCode;
 		this.batchSerialNumber = batchSerialNumber;
@@ -132,11 +146,23 @@ public class Inventory {
 		this.origin = origin;
 		this.brand = brand;
 		this.referenceDocumentNo = referenceDocumentNo;
+		this.levelId = levelId;
 		this.companyDescription = companyDescription;
 		this.plantDescription = plantDescription;
 		this.warehouseDescription = warehouseDescription;
 		this.statusDescription = statusDescription;
+		this.stockTypeDescription = stockTypeDescription;
 		this.deletionIndicator = deletionIndicator;
+		this.referenceField1 = referenceField1;
+		this.referenceField2 = referenceField2;
+		this.referenceField3 = referenceField3;
+		this.referenceField4 = referenceField4;
+		this.referenceField5 = referenceField5;
+		this.referenceField6 = referenceField6;
+		this.referenceField7 = referenceField7;
+		this.referenceField8 = referenceField8;
+		this.referenceField9 = referenceField9;
+		this.referenceField10 = referenceField10;
 		this.dType = dType;
 		this.createdBy = createdBy;
 	}

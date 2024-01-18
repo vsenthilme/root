@@ -1,7 +1,6 @@
 package com.tekclover.wms.core.controller;
 
-import com.tekclover.wms.core.model.Connector.SearchSupplierInvoiceHeader;
-import com.tekclover.wms.core.model.Connector.SupplierInvoiceHeader;
+import com.tekclover.wms.core.model.Connector.*;
 import com.tekclover.wms.core.model.transaction.IntegrationLog;
 import com.tekclover.wms.core.service.ConnectorService;
 import io.swagger.annotations.Api;
@@ -42,4 +41,50 @@ public class ConnectorServiceController {
         SupplierInvoiceHeader[] supplierInvoiceHeader = connectorService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader, authToken);
         return new ResponseEntity<>(supplierInvoiceHeader, HttpStatus.OK);
     }
+
+    // Find SalesReturnHeader
+    @ApiOperation(response = SalesReturnHeader[].class, value = "Find SalesReturnHeader") //label for swagger
+    @PostMapping("/findSalesReturnHeader")
+    public ResponseEntity<?> findSalesReturnHeader(@RequestBody FindSalesReturnHeader findSalesReturnHeader,
+                                                   @RequestParam String authToken) {
+        SalesReturnHeader[] salesReturnHeader = connectorService.findSalesReturnHeader(findSalesReturnHeader, authToken);
+        return new ResponseEntity<>(salesReturnHeader, HttpStatus.OK);
+    }
+
+    // Find StockAdjustment
+    @ApiOperation(response = StockAdjustment[].class, value = "Find StockAdjustment") //label for swagger
+    @PostMapping("/findStockAdjustment")
+    public ResponseEntity<?> findStockAdjustment(@RequestBody FindStockAdjustment findStockAdjustment,
+                                                 @RequestParam String authToken) {
+        StockAdjustment[] stockAdjustment = connectorService.findStockAdjustment(findStockAdjustment, authToken);
+        return new ResponseEntity<>(stockAdjustment, HttpStatus.OK);
+    }
+
+    // Find PickListHeader
+    @ApiOperation(response = PickListHeader[].class, value = "Find PickListHeader") //label for swagger
+    @PostMapping("/findPickListHeader")
+    public ResponseEntity<?> findPickListHeader(@RequestBody FindPickListHeader findPickListHeader,
+                                                @RequestParam String authToken) {
+        PickListHeader[] pickListHeader = connectorService.findPickListHeader(findPickListHeader, authToken);
+        return new ResponseEntity<>(pickListHeader, HttpStatus.OK);
+    }
+
+    // Find PurchaseReturnHeader
+    @ApiOperation(response = PurchaseReturnHeader[].class, value = "Find PurchaseReturnHeader") //label for swagger
+    @PostMapping("/findPurchaseReturnHeader")
+    public ResponseEntity<?> findPurchaseReturnHeader(@RequestBody FindPurchaseReturnHeader findPurchaseReturnHeader,
+                                                      @RequestParam String authToken) {
+        PurchaseReturnHeader[] purchaseReturnHeader = connectorService.findPurchaseReturnHeader(findPurchaseReturnHeader, authToken);
+        return new ResponseEntity<>(purchaseReturnHeader, HttpStatus.OK);
+    }
+
+    // Find SalesInvoice
+    @ApiOperation(response = SalesInvoice[].class, value = "Find SalesInvoice") //label for swagger
+    @PostMapping("/findSalesInvoice")
+    public ResponseEntity<?> findSalesInvoice(@RequestBody FindSalesInvoice findSalesInvoice,
+                                              @RequestParam String authToken) {
+        SalesInvoice[] salesInvoice = connectorService.findSalesInvoice(findSalesInvoice, authToken);
+        return new ResponseEntity<>(salesInvoice, HttpStatus.OK);
+    }
+
 }

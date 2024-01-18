@@ -21,8 +21,8 @@ public class BinLocation {
 	private Long binClassId;        // BIN_CL_ID
 	private String description;        // ST_BIN_TEXT
 	private String binBarcode;        // BIN_BAR
-	private Boolean putawayBlock;    // PUTAWAY_BLOCK
-	private Boolean pickingBlock;    // PICK_BLOCK
+	private Long putawayBlock;    // PUTAWAY_BLOCK
+	private Long pickingBlock;    // PICK_BLOCK
 	private String blockReason;        // BLK_REASON
 	private Long statusId;            // STATUS_ID
 	private String occupiedVolume;
@@ -80,8 +80,8 @@ public class BinLocation {
 	 */
 	public BinLocation(String languageId, String companyCodeId, String plantId, String warehouseId, String storageBin, Long floorId,
 					   String storageSectionId, String rowId, String aisleNumber, String spanId, String shelfId, String binSectionId,
-					   Long storageTypeId, Long binClassId, String description, String binBarcode, Boolean putawayBlock,
-					   Boolean pickingBlock, String blockReason, Long statusId, String occupiedVolume, String occupiedWeight,
+					   Long storageTypeId, Long binClassId, String description, String binBarcode, Long putawayBlock,
+					   Long pickingBlock, String blockReason, Long statusId, String occupiedVolume, String occupiedWeight,
 					   String occupiedQuantity, String remainingVolume, String remainingWeight, String remainingQuantity,
 					   String totalVolume, String totalWeight, String totalQuantity, Boolean capacityCheck, Double allocatedVolume,
 					   Long deletionIndicator, String dType, String createdBy) {

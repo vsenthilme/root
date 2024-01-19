@@ -217,10 +217,10 @@ public class MastersServiceController {
 
     @ApiOperation(response = Optional.class, value = "Create BusinessPartner") // label for swagger
     @RequestMapping(value = "/businesspartner", method = RequestMethod.POST)
-    public ResponseEntity<?> createBusinessPartner(@RequestBody BusinessPartner newBusinessPartner,
+    public ResponseEntity<?> createBusinessPartner(@RequestBody BusinessPartnerV2 newBusinessPartner,
                                                    @RequestParam String loginUserID, @RequestParam String authToken) {
 
-        BusinessPartner createdBusinessPartner = mastersService.addBusinessPartner(newBusinessPartner, loginUserID, authToken);
+        BusinessPartnerV2 createdBusinessPartner = mastersService.addBusinessPartner(newBusinessPartner, loginUserID, authToken);
         return new ResponseEntity<>(createdBusinessPartner, HttpStatus.OK);
     }
 

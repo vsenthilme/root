@@ -201,7 +201,7 @@ public class BusinessPartnerService {
      * @param newBusinessPartner
      * @return
      */
-    public BusinessPartnerV2 createBusinessPartnerV2(BusinessPartnerV2 newBusinessPartner) throws java.text.ParseException {
+    public BusinessPartnerV2 createBusinessPartnerV2(BusinessPartnerV2 newBusinessPartner, String loginUserId) throws java.text.ParseException {
 
         Optional<BusinessPartnerV2> duplicateBusinessPartner = businessPartnerV2Repository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPartnerCodeAndBusinessPartnerTypeAndLanguageIdAndDeletionIndicator(
                 newBusinessPartner.getCompanyCodeId(), newBusinessPartner.getPlantId(),
@@ -213,8 +213,8 @@ public class BusinessPartnerService {
         } else {
             BeanUtils.copyProperties(newBusinessPartner, dbBusinessPartner, CommonUtils.getNullPropertyNames(newBusinessPartner));
             dbBusinessPartner.setDeletionIndicator(0L);
-            dbBusinessPartner.setCreatedBy(newBusinessPartner.getCreatedBy());
-            dbBusinessPartner.setUpdatedBy(newBusinessPartner.getCreatedBy());
+            dbBusinessPartner.setCreatedBy(loginUserId);
+            dbBusinessPartner.setUpdatedBy(loginUserId);
             dbBusinessPartner.setCreatedOn(new Date());
             dbBusinessPartner.setUpdatedOn(new Date());
             return businessPartnerV2Repository.save(dbBusinessPartner);

@@ -117,7 +117,7 @@ public class ImStrategiesService {
 			dbImStrategies.setDeletionIndicator(0L);
 			dbImStrategies.setCreatedBy(loginUserID);
 			dbImStrategies.setUpdatedBy(loginUserID);
-			dbImStrategies.setCreatedOn(new Date()());
+			dbImStrategies.setCreatedOn(new Date());
 			dbImStrategies.setUpdatedOn(new Date());
 			return imstrategiesRepository.save(dbImStrategies);
 		}

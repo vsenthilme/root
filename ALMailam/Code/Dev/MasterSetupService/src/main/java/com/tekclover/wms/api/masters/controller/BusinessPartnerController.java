@@ -91,6 +91,14 @@ public class BusinessPartnerController {
 		return new ResponseEntity<>(businesspartner, HttpStatus.OK);
 	}
 
+	@ApiOperation(response = BusinessPartner.class, value = "Create BusinessPartner") // label for swagger
+	@PostMapping("/v2")
+	public ResponseEntity<?> postBusinessPartnerV2(@Valid @RequestBody BusinessPartnerV2 newBusinessPartner, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
+		BusinessPartnerV2 createdBusinessPartner = businesspartnerService.createBusinessPartnerV2(newBusinessPartner, loginUserID);
+		return new ResponseEntity<>(createdBusinessPartner , HttpStatus.OK);
+	}
+
 	@ApiOperation(response = BusinessPartnerV2.class, value = "Update BusinessPartner V2") // label for swagger
     @PatchMapping("/v2/{partnerCode}")
 	public ResponseEntity<?> patchBusinessPartnerV2(@PathVariable String partnerCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam Long businessPartnerType,

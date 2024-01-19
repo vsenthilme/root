@@ -155,7 +155,7 @@ public class PriceListService {
             dbPriceList.setServiceTypeIdAndDescription(dbServiceTypeId.getServiceTypeId() + "-" + dbServiceTypeId.getServiceTypeDescription());
             dbPriceList.setCreatedBy(loginUserID);
             dbPriceList.setUpdatedBy(loginUserID);
-            dbPriceList.setCreatedOn(new Date();
+            dbPriceList.setCreatedOn(new Date());
             dbPriceList.setUpdatedOn(new Date());
             return priceListRepository.save(dbPriceList);
         }

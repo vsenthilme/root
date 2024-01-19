@@ -428,7 +428,7 @@ public class MastersService {
     }
 
     // POST BusinessPartner
-    public BusinessPartner addBusinessPartner(BusinessPartner businesspartner, String loginUserID, String authToken) {
+    public BusinessPartnerV2 addBusinessPartner(BusinessPartnerV2 businesspartner, String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -436,11 +436,11 @@ public class MastersService {
             headers.add("Authorization", "Bearer " + authToken);
 
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "businesspartner")
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "businesspartner/v2")
                             .queryParam("loginUserID", loginUserID);
 
             HttpEntity<?> entity = new HttpEntity<>(businesspartner, headers);
-            ResponseEntity<BusinessPartner> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, BusinessPartner.class);
+            ResponseEntity<BusinessPartnerV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, BusinessPartnerV2.class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
         } catch (Exception e) {

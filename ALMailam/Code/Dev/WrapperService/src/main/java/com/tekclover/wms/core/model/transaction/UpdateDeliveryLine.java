@@ -77,6 +77,8 @@ public class UpdateDeliveryLine {
 
     private String paymentMode;
 
+    private Boolean reDelivery;
+
     private Long statusId;
 
     private Long deletionIndicator;

@@ -194,8 +194,8 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<PreInboundHeader[]> result = getRestTemplate().exchange(builder.toUriString(),
                     HttpMethod.GET, entity, PreInboundHeader[].class);
-			log.info("result : " + result.getStatusCode());
-			return result.getBody();
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
 
             //Adding time to Date
 //            List<PreInboundHeader> obList = new ArrayList<>();
@@ -372,8 +372,8 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<PreInboundLine[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
                     entity, PreInboundLine[].class);
-			log.info("result : " + result.getStatusCode());
-			return result.getBody();
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
 
 //            List<PreInboundLine> obList = new ArrayList<>();
 //            for (PreInboundLine preInboundLine : result.getBody()) {
@@ -4656,7 +4656,7 @@ public class TransactionService {
 
     // POST - stock-movement-report-findOutboundLine V2
     public StockMovementReport[] findOutboundLineForStockMovementV2(SearchOutboundLineV2 searchOutboundLine,
-                                                                  String authToken) throws ParseException {
+                                                                    String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -7622,7 +7622,7 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(searchPreInboundHeader, headers);
             ResponseEntity<PreInboundHeaderV2[]> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PreInboundHeaderV2[].class);
-			log.info("result : " + result.getStatusCode());
+            log.info("result : " + result.getStatusCode());
             return result.getBody();
 //            List<PreInboundHeaderV2> obList = new ArrayList<>();
 //            for (PreInboundHeaderV2 preInboundHeader : result.getBody()) {
@@ -7673,7 +7673,7 @@ public class TransactionService {
                             .queryParam("languageId", languageId);
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<PreInboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, PreInboundHeaderV2.class);
-			log.info("result : " + result.getStatusCode());
+            log.info("result : " + result.getStatusCode());
             return result.getBody();
 //            return addingTimeWithDate(result.getBody());
         } catch (Exception e) {
@@ -7699,8 +7699,8 @@ public class TransactionService {
                             .queryParam("languageId", languageId);
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<PreInboundHeaderV2[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, PreInboundHeaderV2[].class);
-			log.info("result : " + result.getStatusCode());
-            			return result.getBody();
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
 
             //Adding time to Date
 //            List<PreInboundHeaderV2> obList = new ArrayList<>();
@@ -7816,7 +7816,7 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<PreInboundLineV2> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, PreInboundLineV2.class);
-			log.info("result : " + result.getStatusCode());
+            log.info("result : " + result.getStatusCode());
             return result.getBody();
 //            return addingTimeWithDatePreInboundLine(result.getBody());
         } catch (Exception e) {
@@ -10140,7 +10140,7 @@ public class TransactionService {
             RestTemplate restTemplate = getRestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "deliveryline/deliveryNo/" )
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "deliveryline/deliveryNo/")
                     .queryParam("loginUserID", loginUserID);
 
             ResponseEntity<DeliveryLine[]> result = restTemplate.exchange(builder.toUriString(),
@@ -10197,6 +10197,33 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(searchDeliveryLine, headers);
             ResponseEntity<DeliveryLine[]> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, DeliveryLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    // GET - DeliveryLineCount
+    public DeliveryLineCount getDeliveryLineCount(String companyCodeId, String plantId, String languageId, String warehouseId, String driverId, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "deliveryline/count")
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("driverId", driverId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<DeliveryLineCount> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
+                    entity, DeliveryLineCount.class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
         } catch (Exception e) {
@@ -10495,7 +10522,7 @@ public class TransactionService {
     }
 
     public OrderManagementLineV2[] doUnAllocationV2(List<OrderManagementLineV2> orderManagementLineV2,
-                                                  String loginUserID, String authToken) {
+                                                    String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -10519,7 +10546,7 @@ public class TransactionService {
         }
     }
 
-     //PATCH
+    //PATCH
     public OrderManagementLineV2 doUnAllocationV2(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                   String preOutboundNo, String refDocNumber, String partnerCode, Long lineNumber,
                                                   String itemCode, String proposedStorageBin, String proposedPackBarCode,
@@ -10558,39 +10585,39 @@ public class TransactionService {
         }
     }
 
-     public OrderManagementLineV2 doAllocationV2(String companyCodeId, String plantId, String languageId,
-                                                    String warehouseId, String preOutboundNo, String refDocNumber,
-                                                    String partnerCode, Long lineNumber, String itemCode, String loginUserID, String authToken) {
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
-                headers.add("Authorization", "Bearer " + authToken);
-                HttpEntity<?> entity = new HttpEntity<>(headers);
-                HttpClient client = HttpClients.createDefault();
+    public OrderManagementLineV2 doAllocationV2(String companyCodeId, String plantId, String languageId,
+                                                String warehouseId, String preOutboundNo, String refDocNumber,
+                                                String partnerCode, Long lineNumber, String itemCode, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            HttpClient client = HttpClients.createDefault();
 
-                RestTemplate restTemplate = getRestTemplate();
-                restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
-                UriComponentsBuilder builder = UriComponentsBuilder
-                        .fromHttpUrl(getTransactionServiceApiUrl() + "ordermanagementline/v2/allocate")
-                        .queryParam("companyCodeId", companyCodeId)
-                        .queryParam("plantId", plantId)
-                        .queryParam("languageId", languageId)
-                        .queryParam("warehouseId", warehouseId)
-                        .queryParam("preOutboundNo", preOutboundNo)
-                        .queryParam("refDocNumber", refDocNumber)
-                        .queryParam("partnerCode", partnerCode)
-                        .queryParam("lineNumber", lineNumber)
-                        .queryParam("itemCode", itemCode)
-                        .queryParam("loginUserID", loginUserID);
-                ResponseEntity<OrderManagementLineV2> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH,
-                        entity, OrderManagementLineV2.class);
-                log.info("result : " + result.getStatusCode());
-                return result.getBody();
-            } catch (Exception e) {
-                throw e;
-            }
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "ordermanagementline/v2/allocate")
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("preOutboundNo", preOutboundNo)
+                    .queryParam("refDocNumber", refDocNumber)
+                    .queryParam("partnerCode", partnerCode)
+                    .queryParam("lineNumber", lineNumber)
+                    .queryParam("itemCode", itemCode)
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<OrderManagementLineV2> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH,
+                    entity, OrderManagementLineV2.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            throw e;
         }
+    }
 
     // PATCH
     public OrderManagementLineV2[] doAllocationV2(List<OrderManagementLineV2> orderManagementLineV2, String loginUserID, String authToken) {
@@ -11335,7 +11362,7 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(requestDataForService, headers);
             ResponseEntity<OutboundHeaderV2[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
                     entity, OutboundHeaderV2[].class);
-			 log.info("result : " + result.getStatusCode());
+            log.info("result : " + result.getStatusCode());
             return result.getBody();
 
 //            List<OutboundHeaderV2> obList = new ArrayList<>();
@@ -12276,7 +12303,7 @@ public class TransactionService {
         }
     }
 
-// FIND ALL - findPeriodicHeaderEntity
+    // FIND ALL - findPeriodicHeaderEntity
     public PeriodicHeaderEntityV2[] findPeriodicHeaderEntityV2(SearchPeriodicHeader searchPerpetualHeader, String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -12508,7 +12535,7 @@ public class TransactionService {
 
     // PATCH
     public PeriodicLineV2[] updatePeriodicLineAssingHHTUserV2(List<AssignHHTUserCC> assignHHTUser, String loginUserID,
-                                                            String authToken) {
+                                                              String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -12535,7 +12562,7 @@ public class TransactionService {
 
     // PATCH
     public PeriodicUpdateResponseV2 updatePeriodicLineV2(String cycleCountNo, List<PeriodicLineV2> updatePeriodicLine,
-                                                       String loginUserID, String authToken) {
+                                                         String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -12592,8 +12619,8 @@ public class TransactionService {
     // ---------------------------------StockAdjustment----------------------------------------------------
 
     public StockAdjustment[] getStockAdjustment(String companyCode, String plantId, String languageId,
-                                              String warehouseId, Long stockAdjustmentKey, String itemCode,
-                                              String manufacturerName, String storageBin, String authToken) throws ParseException {
+                                                String warehouseId, Long stockAdjustmentKey, String itemCode,
+                                                String manufacturerName, String storageBin, String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -12648,9 +12675,9 @@ public class TransactionService {
 
     // PATCH
     public StockAdjustment[] updateStockAdjustment(String companyCode, String plantId, String languageId,
-                                                 String warehouseId, Long stockAdjustmentKey, String itemCode,
-                                                 String manufacturerName, String loginUserId,
-                                                 @Valid List<StockAdjustment> updateStockAdjustment, String authToken) {
+                                                   String warehouseId, Long stockAdjustmentKey, String itemCode,
+                                                   String manufacturerName, String loginUserId,
+                                                   @Valid List<StockAdjustment> updateStockAdjustment, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -12728,18 +12755,39 @@ public class TransactionService {
                     .queryParam("companyCode", companyCode)
                     .queryParam("plantId", plantId)
                     .queryParam("languageId", languageId)
-                    .queryParam("oldInvoiceNo",oldInvoiceNo)
+                    .queryParam("oldInvoiceNo", oldInvoiceNo)
                     .queryParam("newInvoiceNo", newInvoiceNo)
                     .queryParam("warehouseId", warehouseId)
                     .queryParam("loginUserId", loginUserId);
 
             ResponseEntity<WarehouseApiResponse> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity,
                     WarehouseApiResponse.class);
-            log.info("result : " + result);
+            log.info("result : " + result.getBody());
+            return result.getBody();
+            //return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    //==========================================Get All Exception Log Details==========================================
+    public ExceptionLog[] getAllExceptionLogs(String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "exceptionlog/all");
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<ExceptionLog[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, ExceptionLog[].class);
+            log.info("result: " + result.getStatusCode());
             return result.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
+
+
 }

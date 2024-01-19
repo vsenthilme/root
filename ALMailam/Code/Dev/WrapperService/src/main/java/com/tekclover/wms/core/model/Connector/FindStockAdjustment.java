@@ -15,4 +15,14 @@ public class FindStockAdjustment {
     private List<String> unitOfMeasure;
     private List<String> manufacturerCode;
 
+    private Date fromOrderReceivedOn;
+
+    private Date toOrderReceivedOn;
+
+    private Date fromOrderProcessedOn;
+
+    private Date toOrderProcessedOn;
+
+    private List<Long> processedStatusId;
+
 }

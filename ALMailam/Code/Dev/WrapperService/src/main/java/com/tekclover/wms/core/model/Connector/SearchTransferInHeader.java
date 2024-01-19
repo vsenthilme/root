@@ -24,4 +24,17 @@ public class SearchTransferInHeader {
 
     private Date toTransferOrderDate;
 
+    private Date fromOrderReceivedOn;
+
+    private Date toOrderReceivedOn;
+
+    private Date fromOrderProcessedOn;
+
+    private Date toOrderProcessedOn;
+
+    private List<Long> processedStatusId;
+
+
+
+
 }

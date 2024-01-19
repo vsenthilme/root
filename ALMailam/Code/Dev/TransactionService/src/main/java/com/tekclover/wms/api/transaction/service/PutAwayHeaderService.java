@@ -919,10 +919,10 @@ public class PutAwayHeaderService extends BaseService {
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
             searchPutAwayHeader.setEndCreatedOn(dates[1]);
         }
-
+        log.info("searchPutAwayHeader V2: " + searchPutAwayHeader);
         PutAwayHeaderV2Specification spec = new PutAwayHeaderV2Specification(searchPutAwayHeader);
         List<PutAwayHeaderV2> results = putAwayHeaderV2Repository.findAll(spec);
-//        log.info("putAwayHeader results:" + results);
+        log.info("putAwayHeader results:" + results);
         return results;
     }
 

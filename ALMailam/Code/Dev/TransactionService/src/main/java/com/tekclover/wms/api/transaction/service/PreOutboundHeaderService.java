@@ -3416,6 +3416,7 @@ public class PreOutboundHeaderService extends BaseService {
                         newQualityLine.setManufacturerName(qualityHeader.getManufacturerName());
                         newQualityLine.setPickPackBarCode(qualityHeader.getReferenceField2());
                         newQualityLine.setQualityInspectionNo(qualityHeader.getQualityInspectionNo());
+                        newQualityLine.setQualityQty(Double.valueOf(qualityHeader.getQcToQty()));
                         if(qualityHeader.getReferenceField5() != null) {
                             newQualityLine.setLineNumber(Long.valueOf(qualityHeader.getReferenceField5()));
                         }

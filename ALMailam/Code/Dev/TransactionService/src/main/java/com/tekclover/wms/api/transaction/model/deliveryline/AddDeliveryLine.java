@@ -86,6 +86,8 @@ public class AddDeliveryLine {
 
     private Long statusId;
 
+    private Boolean reDelivery;
+
     private Long deletionIndicator;
 
     private String referenceField1;

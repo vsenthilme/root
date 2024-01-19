@@ -71,6 +71,10 @@ public class DeliveryLineSpecification implements Specification<DeliveryLine> {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("vehicleNo");
             predicates.add(group.in(searchDeliveryLine.getVehicleNo()));
         }
+        if (searchDeliveryLine.getReDelivery() != null && !searchDeliveryLine.getReDelivery().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("reDelivery");
+            predicates.add(group.in(searchDeliveryLine.getReDelivery()));
+        }
 
         predicates.add(cb.equal(root.get("deletionIndicator"), 0L));
         return cb.and(predicates.toArray(new Predicate[] {}));

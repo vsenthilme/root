@@ -2,10 +2,7 @@ package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
-import com.tekclover.wms.api.transaction.model.deliveryline.AddDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.DeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.SearchDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.UpdateDeliveryLine;
+import com.tekclover.wms.api.transaction.model.deliveryline.*;
 import com.tekclover.wms.api.transaction.repository.DeliveryLineRepository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.specification.DeliveryLineSpecification;
@@ -18,10 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -281,5 +275,34 @@ public class DeliveryLineService {
         }
 
         return deliveryLineList;
+    }
+
+
+    //Delivery Line Count
+    public DeliveryLineCount getDeliveryLineCount(String companyCodeId, String languageId, String plantId, String warehouseId, String driverId){
+
+        DeliveryLineCount deliveryLineCount = new DeliveryLineCount();
+
+        //new
+        List<Long> newDeliveryLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 90L);
+        Long newLineCount = newDeliveryLineCount.stream().count();
+        deliveryLineCount.setNewCount(newLineCount);
+
+        //InTransit
+        List<Long> inTransitLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 91L);
+        Long transitCount = inTransitLineCount.stream().count();
+        deliveryLineCount.setInTransitCount(transitCount);
+
+        //Completed
+        List<Long> completedLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 92L);
+        Long completedCount = completedLineCount.stream().count();
+        deliveryLineCount.setCompletedCount(completedCount);
+
+        //ReDelivery
+        List<Long> reDeliveryLineCount = deliveryLineRepository.getReDeliveryLineCount(companyCodeId, plantId, warehouseId, languageId, driverId, 92L,true);
+        Long reDeliveryCount = reDeliveryLineCount.stream().count();
+        deliveryLineCount.setRedeliveryCount(reDeliveryCount);
+
+        return deliveryLineCount;
     }
 }

@@ -2201,27 +2201,27 @@ public class GrLineService extends BaseService {
                                             proposedStorageBin = proposedExistingBin.getStorageBin();
                                             log.info("Existing NON-CBM ProposedBin: " + proposedExistingBin);
 
-                                            putAwayHeader.setProposedStorageBin(proposedStorageBin);
-                                        }
-                                        putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
-                                        putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
-                                        log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
-                                        cbm = 0D;   //break the loop
+                                        putAwayHeader.setProposedStorageBin(proposedStorageBin);
                                     }
-                                    if(createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
-                                        storageBinPutAway.setBinClassId(7L);
-                                        StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
-                                        if (proposedBinClass7Bin != null) {
-                                            String proposedStBin = proposedBinClass7Bin.getStorageBin();
-                                            putAwayHeader.setProposedStorageBin(proposedStBin);
-                                            putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
-                                            putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
-                                            log.info("Damage Qty --> BinClassId7 Proposed Bin: " + proposedStBin);
-                                            cbm = 0D;   //break the loop
-                                        }
+                                    putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
+                                    putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
+                                    log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
+                                    cbm = 0D;   //break the loop
+                                }
+                                if (createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
+                                    storageBinPutAway.setBinClassId(7L);
+                                    StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                                    if (proposedBinClass7Bin != null) {
+                                        String proposedStBin = proposedBinClass7Bin.getStorageBin();
+                                        putAwayHeader.setProposedStorageBin(proposedStBin);
+                                        putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
+                                        putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
+                                        log.info("Damage Qty --> BinClassId7 Proposed Bin: " + proposedStBin);
+                                        cbm = 0D;   //break the loop
                                     }
                                 }
                             }
+                        }
 
                         if (capacityCheck) {
 

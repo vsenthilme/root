@@ -148,6 +148,9 @@ public class DeliveryLine {
     @Column(name="PAYMENT_MODE",columnDefinition = "nvarchar(50)")
     private String paymentMode;
 
+    @Column(name = "RE_DELIVERY")
+    private Boolean reDelivery;
+
     @Column(name="STATUS_ID")
     private Long statusId;
 

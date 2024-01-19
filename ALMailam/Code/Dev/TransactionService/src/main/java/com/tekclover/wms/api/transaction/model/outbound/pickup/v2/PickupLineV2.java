@@ -82,4 +82,7 @@ public class PickupLineV2 extends PickupLine {
 
 	@Column(name = "TARGET_BRANCH_CODE", columnDefinition = "nvarchar(50)")
 	private String targetBranchCode;
+
+	@Column(name = "VAR_QTY")
+	private Double varianceQuantity;
 }

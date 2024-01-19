@@ -1631,9 +1631,13 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickupCreatedBy());
             }
 
+            Double VAR_QTY = (dbPickupLine.getAllocatedQty() != null ? dbPickupLine.getAllocatedQty() : 0) - (dbPickupLine.getPickConfirmQty() != null ? dbPickupLine.getPickConfirmQty() : 0);
+            dbPickupLine.setVarianceQuantity(VAR_QTY);
+            log.info("Var_Qty: " + VAR_QTY);
+
             dbPickupLine.setDeletionIndicator(0L);
             dbPickupLine.setPickupUpdatedBy(loginUserID);
-            dbPickupLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPickupLine.setPickupUpdatedOn(new Date());
 
             // Checking for Duplicates
             PickupLineV2 existingPickupLine = pickupLineV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndPickupNumberAndItemCodeAndActualHeNoAndPickedStorageBinAndPickedPackCodeAndDeletionIndicator(

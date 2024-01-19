@@ -140,8 +140,8 @@ public interface PickupLineV2Repository extends JpaRepository<PickupLineV2, Long
             String storageBin, Long statusId, Date stockCountDate, Date date, Long deletionIndicator);
 
     @Query(value = "SELECT DATEDIFF(MINUTE, ib.PICK_CTD_ON, :lDate) from tblpickupheader ib \n"
-            + "where ib.pu_no = :pickupNumber and ib.wh_id = :warehouseId and ib.c_id = :companyCode and ib.plant_Id = :plantId and ib.lang_Id = :languageId and ib.is_deleted = 0", nativeQuery = true)
-    public String getleadtime(@Param("companyCode") String companyCode,
+            + "where ib.pu_no = :pickupNumber and ib.wh_id = :warehouseId and ib.c_id = :companyCodeId and ib.plant_Id = :plantId and ib.lang_Id = :languageId and ib.is_deleted = 0", nativeQuery = true)
+    public String getleadtime(@Param("companyCodeId") String companyCodeId,
                               @Param("plantId") String plantId,
                               @Param("languageId") String languageId,
                               @Param("warehouseId") String warehouseId,

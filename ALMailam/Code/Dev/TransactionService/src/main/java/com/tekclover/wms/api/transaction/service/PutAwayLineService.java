@@ -1616,6 +1616,10 @@ public class PutAwayLineService extends BaseService {
                                     createdPutAwayLine.getLanguageId());
                             for (PutAwayHeaderV2 putAwayHeader : headers) {
                                 log.info("putawayConfirmQty, putawayOrderedQty: " + createdPutAwayLine.getPutawayConfirmedQty() + ", " + putAwayHeader.getOrderQty());
+                                if(createdPutAwayLine.getPutawayConfirmedQty().equals(putAwayHeader.getOrderQty())) {
+                                    putAwayHeader.setStatusId(20L);
+                                    log.info("PutawayHeader StatusId : 20");
+                                }
                                 if(createdPutAwayLine.getPutawayConfirmedQty() < putAwayHeader.getOrderQty()){
                                     putAwayHeader.setReferenceField1(String.valueOf(putAwayHeader.getOrderQty()));
                                     Double ORD_QTY = (putAwayHeader.getOrderQty() != null ? putAwayHeader.getOrderQty() : 0) - (createdPutAwayLine.getPutawayConfirmedQty() != null ? createdPutAwayLine.getPutawayConfirmedQty() : 0);
@@ -1623,10 +1627,6 @@ public class PutAwayLineService extends BaseService {
                                     log.info("OrderQty ReCalcuated/Changed : " + ORD_QTY);
                                     putAwayHeader.setStatusId(19L);
                                     log.info("PutawayHeader StatusId : 19");
-                                }
-                                if(createdPutAwayLine.getPutawayConfirmedQty().equals(putAwayHeader.getOrderQty())) {
-                                    putAwayHeader.setStatusId(20L);
-                                    log.info("PutawayHeader StatusId : 20");
                                 }
                                 statusDescription = stagingLineV2Repository.getStatusDescription(putAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
                                 putAwayHeader.setStatusDescription(statusDescription);

@@ -3379,6 +3379,8 @@ public class PreOutboundHeaderService extends BaseService {
                     newPickupLine.setPickupNumber(pickupHeaderV2.getPickupNumber());
                     newPickupLine.setActualHeNo(pickupLinePresent.get(0).getActualHeNo());
                     newPickupLine.setPickedPackCode(pickupHeaderV2.getProposedPackBarCode());
+                    newPickupLine.setAllocatedQty(pickupHeaderV2.getPickToQty());
+                    newPickupLine.setPickQty(String.valueOf(pickupHeaderV2.getPickToQty()));
                     newPickupLineList.add(newPickupLine);
                     }
                 }

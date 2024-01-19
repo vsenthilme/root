@@ -1042,8 +1042,10 @@ public class InhouseTransferHeaderService extends BaseService {
                     InventoryV2 deleteInventoryV2 = new InventoryV2();
                     BeanUtils.copyProperties(inventorySourceItemCode, deleteInventoryV2, CommonUtils.getNullPropertyNames(inventorySourceItemCode));
                     deleteInventoryV2.setUpdatedOn(new Date());
-                    deleteInventoryV2.setInventoryId(System.currentTimeMillis());
                     deleteInventoryV2.setInventoryQuantity(0D);
+                    deleteInventoryV2.setAllocatedQuantity(0D);
+                    deleteInventoryV2.setReferenceField4(0D);
+                    deleteInventoryV2.setInventoryId(System.currentTimeMillis());
                     InventoryV2 deletedInventoryV2 = inventoryV2Repository.save(deleteInventoryV2);
                     log.info("---------inventory-----deleted-----");
                     try {
@@ -1144,7 +1146,6 @@ public class InhouseTransferHeaderService extends BaseService {
                             createdInhouseTransferLine.getManufacturerName(), languageId);
                     log.info("Barcode : " + barcode);
                     if (inventorySourceItemCode.getBarcodeId() == null) {
-//                        newInventory.setBarcodeId(barcode.replaceAll("\\s", "").trim());             //to remove white space
                         if (barcode != null && !barcode.isEmpty()) {
                             newInventory.setBarcodeId(barcode.get(0));
                         }

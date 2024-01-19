@@ -164,8 +164,8 @@ public class AisleIdService{
 			dbAisleId.setStorageSectionIdDescription(dbStorageSectionId.getStorageSectionId()+"-"+dbStorageSectionId.getDescription());//storageSectionIdAndDescription Mapped By StorageSectionAndDescription
 			dbAisleId.setCreatedBy(loginUserID);
 			dbAisleId.setUpdatedBy(loginUserID);
-			dbAisleId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbAisleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbAisleId.setCreatedOn(new Date());
+			dbAisleId.setUpdatedOn(new Date());
 			return aisleIdRepository.save(dbAisleId);
 		}
 	}
@@ -185,7 +185,7 @@ public class AisleIdService{
 		AisleId dbAisleId = getAisleId(warehouseId, aisleId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateAisleId, dbAisleId, CommonUtils.getNullPropertyNames(updateAisleId));
 		dbAisleId.setUpdatedBy(loginUserID);
-		dbAisleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbAisleId.setUpdatedOn(new Date());
 		return aisleIdRepository.save(dbAisleId);
 	}
 

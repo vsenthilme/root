@@ -153,8 +153,8 @@ public class UomIdService {
 			dbUomId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbUomId.setCreatedBy(loginUserID);
 			dbUomId.setUpdatedBy(loginUserID);
-			dbUomId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbUomId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbUomId.setCreatedOn(new Date());
+			dbUomId.setUpdatedOn(new Date());
 			return uomIdRepository.save(dbUomId);
 		}
 	}
@@ -174,7 +174,7 @@ public class UomIdService {
 		UomId dbUomId = getUomId(uomId,companyCodeId,warehouseId,plantId,languageId);
 		BeanUtils.copyProperties(updateUomId, dbUomId, CommonUtils.getNullPropertyNames(updateUomId));
 		dbUomId.setUpdatedBy(loginUserID);
-		dbUomId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbUomId.setUpdatedOn(new Date());
 		return uomIdRepository.save(dbUomId);
 	}
 

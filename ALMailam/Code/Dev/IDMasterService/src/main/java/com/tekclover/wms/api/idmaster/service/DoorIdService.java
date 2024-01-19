@@ -135,8 +135,8 @@ public class DoorIdService {
 			dbDoorId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbDoorId.setCreatedBy(loginUserID);
 			dbDoorId.setUpdatedBy(loginUserID);
-			dbDoorId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbDoorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbDoorId.setCreatedOn(new Date());
+			dbDoorId.setUpdatedOn(new Date());
 			return doorIdRepository.save(dbDoorId);
 		}
 	}
@@ -156,7 +156,7 @@ public class DoorIdService {
 		DoorId dbDoorId = getDoorId( warehouseId,doorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDoorId, dbDoorId, CommonUtils.getNullPropertyNames(updateDoorId));
 		dbDoorId.setUpdatedBy(loginUserID);
-		dbDoorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDoorId.setUpdatedOn(new Date());
 		return doorIdRepository.save(dbDoorId);
 	}
 

@@ -231,8 +231,8 @@ public class MenuIdService {
 			dbMenuId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbMenuId.setCreatedBy(loginUserID);
 			dbMenuId.setUpdatedBy(loginUserID);
-			dbMenuId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbMenuId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbMenuId.setCreatedOn(new Date());
+			dbMenuId.setUpdatedOn(new Date());
 			return menuIdRepository.save(dbMenuId);
 		}
 	}
@@ -255,8 +255,8 @@ public class MenuIdService {
 			dbMenuId.setDeletionIndicator(0L);
 			dbMenuId.setCreatedBy(loginUserId);
 			dbMenuId.setUpdatedBy(loginUserId);
-			dbMenuId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbMenuId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbMenuId.setCreatedOn(new Date());
+			dbMenuId.setUpdatedOn(new Date());
 			savedMenuId.add(menuIdRepository.save(dbMenuId));
 		}
 		return savedMenuId;
@@ -277,7 +277,7 @@ public class MenuIdService {
 		MenuId dbMenuId = getMenuId(warehouseId, menuId, subMenuId, authorizationObjectId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateMenuId, dbMenuId, CommonUtils.getNullPropertyNames(updateMenuId));
 		dbMenuId.setUpdatedBy(loginUserID);
-		dbMenuId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbMenuId.setUpdatedOn(new Date());
 		return menuIdRepository.save(dbMenuId);
 	}
 

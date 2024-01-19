@@ -71,8 +71,8 @@ public class DoorsService extends BaseService {
 		dbDoors.setCompanyId(getCompanyCode());
 		dbDoors.setCreatedBy(loginUserID);
 		dbDoors.setUpdatedBy(loginUserID);
-		dbDoors.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbDoors.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDoors.setCreatedOn(new Date());
+		dbDoors.setUpdatedOn(new Date());
 		return doorsRepository.save(dbDoors);
 	}
 	
@@ -89,7 +89,7 @@ public class DoorsService extends BaseService {
 		Doors dbDoors = getDoors(doorNumber);
 		BeanUtils.copyProperties(updateDoors, dbDoors, CommonUtils.getNullPropertyNames(updateDoors));
 		dbDoors.setUpdatedBy(loginUserID);
-		dbDoors.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDoors.setUpdatedOn(new Date());
 		return doorsRepository.save(dbDoors);
 	}
 	
@@ -102,7 +102,7 @@ public class DoorsService extends BaseService {
 		if ( doors != null) {
 			doors.setDeletionIndicator (1L);
 			doors.setUpdatedBy(loginUserID);
-			doors.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			doors.setUpdatedOn(new Date());
 			doorsRepository.save(doors);
 		} else {
 			throw new EntityNotFoundException(String.valueOf(doorNumber));

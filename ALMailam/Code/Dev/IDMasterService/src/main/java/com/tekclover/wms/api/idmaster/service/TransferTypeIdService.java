@@ -134,8 +134,8 @@ public class TransferTypeIdService  {
 			dbTransferTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbTransferTypeId.setCreatedBy(loginUserID);
 			dbTransferTypeId.setUpdatedBy(loginUserID);
-			dbTransferTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbTransferTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbTransferTypeId.setCreatedOn(new Date());
+			dbTransferTypeId.setUpdatedOn(new Date());
 			return transferTypeIdRepository.save(dbTransferTypeId);
 		}
 	}
@@ -155,7 +155,7 @@ public class TransferTypeIdService  {
 		TransferTypeId dbTransferTypeId = getTransferTypeId( warehouseId,transferTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateTransferTypeId, dbTransferTypeId, CommonUtils.getNullPropertyNames(updateTransferTypeId));
 		dbTransferTypeId.setUpdatedBy(loginUserID);
-		dbTransferTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbTransferTypeId.setUpdatedOn(new Date());
 		return transferTypeIdRepository.save(dbTransferTypeId);
 	}
 

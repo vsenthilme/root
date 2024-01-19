@@ -138,8 +138,8 @@ public class ProcessIdService{
 			dbProcessId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbProcessId.setCreatedBy(loginUserID);
 			dbProcessId.setUpdatedBy(loginUserID);
-			dbProcessId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbProcessId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbProcessId.setCreatedOn(new Date());
+			dbProcessId.setUpdatedOn(new Date());
 			return processIdRepository.save(dbProcessId);
 		}
 	}
@@ -159,7 +159,7 @@ public class ProcessIdService{
 		ProcessId dbProcessId = getProcessId(warehouseId,processId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateProcessId, dbProcessId, CommonUtils.getNullPropertyNames(updateProcessId));
 		dbProcessId.setUpdatedBy(loginUserID);
-		dbProcessId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbProcessId.setUpdatedOn(new Date());
 		return processIdRepository.save(dbProcessId);
 	}
 

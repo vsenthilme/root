@@ -219,8 +219,8 @@ public class WarehouseService {
 		dbWarehouse.setDeletionIndicator(0L);
 		dbWarehouse.setCreatedBy(loginUserID);
 		dbWarehouse.setUpdatedBy(loginUserID);
-		dbWarehouse.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbWarehouse.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbWarehouse.setCreatedOn(new Date());
+		dbWarehouse.setUpdatedOn(new Date());
 		return warehouseRepository.save(dbWarehouse);
 	}
 
@@ -237,7 +237,7 @@ public class WarehouseService {
 		Warehouse dbWarehouse = getWarehouse(warehouseId,modeOfImplementation,warehouseTypeId,companyId,plantId,languageId);
 		BeanUtils.copyProperties(updateWarehouse, dbWarehouse, CommonUtils.getNullPropertyNames(updateWarehouse));
 		dbWarehouse.setUpdatedBy(loginUserID);
-		dbWarehouse.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbWarehouse.setUpdatedOn(new Date());
 		return warehouseRepository.save(dbWarehouse);
 	}
 
@@ -250,7 +250,7 @@ public class WarehouseService {
 		if ( warehouse != null) {
 			warehouse.setDeletionIndicator (1L);
 			warehouse.setUpdatedBy(loginUserID);
-			warehouse.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			warehouse.setUpdatedOn(new Date());
 			warehouseRepository.save(warehouse);
 		} else {
 			throw new EntityNotFoundException(String.valueOf(warehouseId));

@@ -134,8 +134,8 @@ public class CycleCountTypeIdService{
 			dbCycleCountTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbCycleCountTypeId.setCreatedBy(loginUserID);
 			dbCycleCountTypeId.setUpdatedBy(loginUserID);
-			dbCycleCountTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbCycleCountTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCycleCountTypeId.setCreatedOn(new Date());
+			dbCycleCountTypeId.setUpdatedOn(new Date());
 			return cycleCountTypeIdRepository.save(dbCycleCountTypeId);
 		}
 	}
@@ -155,7 +155,7 @@ public class CycleCountTypeIdService{
 		CycleCountTypeId dbCycleCountTypeId = getCycleCountTypeId( warehouseId, cycleCountTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateCycleCountTypeId, dbCycleCountTypeId, CommonUtils.getNullPropertyNames(updateCycleCountTypeId));
 		dbCycleCountTypeId.setUpdatedBy(loginUserID);
-		dbCycleCountTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCycleCountTypeId.setUpdatedOn(new Date());
 		return cycleCountTypeIdRepository.save(dbCycleCountTypeId);
 	}
 

@@ -154,8 +154,8 @@ public class AdhocModuleIdService {
 			dbAdhocModuleId.setModuleIdAndDescription(dbModuleId.get().getModuleId()+"-"+dbModuleId.get().getModuleDescription());
 			dbAdhocModuleId.setCreatedBy(loginUserID);
 			dbAdhocModuleId.setUpdatedBy(loginUserID);
-			dbAdhocModuleId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbAdhocModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbAdhocModuleId.setCreatedOn(new Date());
+			dbAdhocModuleId.setUpdatedOn(new Date());
 			return adhocModuleIdRepository.save(dbAdhocModuleId);
 		}
 	}
@@ -175,7 +175,7 @@ public class AdhocModuleIdService {
 		AdhocModuleId dbAdhocModuleId = getAdhocModuleId(warehouseId, moduleId, adhocModuleId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateAdhocModuleId, dbAdhocModuleId, CommonUtils.getNullPropertyNames(updateAdhocModuleId));
 		dbAdhocModuleId.setUpdatedBy(loginUserID);
-		dbAdhocModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbAdhocModuleId.setUpdatedOn(new Date());
 		return adhocModuleIdRepository.save(dbAdhocModuleId);
 	}
 

@@ -130,8 +130,8 @@ public class BillingModeIdService {
             dbBillingModeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbBillingModeId.setCreatedBy(loginUserID);
             dbBillingModeId.setUpdatedBy(loginUserID);
-            dbBillingModeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBillingModeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBillingModeId.setCreatedOn(new Date());
+            dbBillingModeId.setUpdatedOn(new Date());
             return billingModeIdRepository.save(dbBillingModeId);
         }
     }
@@ -149,7 +149,7 @@ public class BillingModeIdService {
         BillingModeId dbBillingModeId=getBillingModeId(warehouseId,billModeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingModeId,dbBillingModeId,CommonUtils.getNullPropertyNames(updateBillingModeId));
         dbBillingModeId.setUpdatedBy(loginUserID);
-        dbBillingModeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBillingModeId.setUpdatedOn(new Date());
         return billingModeIdRepository.save(dbBillingModeId);
     }
     /**

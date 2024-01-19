@@ -125,8 +125,8 @@ public class CityService {
 			dbCity.setCountryIdAndDescription(dbState.getCountryIdAndDescription());
 			dbCity.setCreatedBy(loginUserID);
 			dbCity.setUpdatedBy(loginUserID);
-			dbCity.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbCity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCity.setCreatedOn(new Date());
+			dbCity.setUpdatedOn(new Date());
 			return cityRepository.save(dbCity);
 		}
 	}
@@ -151,7 +151,7 @@ public class CityService {
 		BeanUtils.copyProperties(updateCity, dbCity, CommonUtils.getNullPropertyNames(updateCity));
 		dbCity.setDeletionIndicator(0L);
 		dbCity.setUpdatedBy(loginUserID);
-		dbCity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCity.setUpdatedOn(new Date());
 		return cityRepository.save(dbCity);
 	}
 

@@ -151,8 +151,8 @@ public class WarehouseTypeIdService {
 			dbWarehouseTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbWarehouseTypeId.setCreatedBy(loginUserID);
 			dbWarehouseTypeId.setUpdatedBy(loginUserID);
-			dbWarehouseTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbWarehouseTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbWarehouseTypeId.setCreatedOn(new Date());
+			dbWarehouseTypeId.setUpdatedOn(new Date());
 			return warehouseTypeIdRepository.save(dbWarehouseTypeId);
 		}
 	}
@@ -172,7 +172,7 @@ public class WarehouseTypeIdService {
 		WarehouseTypeId dbWarehouseTypeId = getWarehouseTypeId(warehouseId,warehouseTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateWarehouseTypeId, dbWarehouseTypeId, CommonUtils.getNullPropertyNames(updateWarehouseTypeId));
 		dbWarehouseTypeId.setUpdatedBy(loginUserID);
-		dbWarehouseTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbWarehouseTypeId.setUpdatedOn(new Date());
 		return warehouseTypeIdRepository.save(dbWarehouseTypeId);
 	}
 

@@ -271,8 +271,8 @@ public class HhtUserService {
         dbHhtUser.setUserPresent("1");
         dbHhtUser.setCreatedBy(loginUserID);
         dbHhtUser.setUpdatedBy(loginUserID);
-        dbHhtUser.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbHhtUser.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbHhtUser.setCreatedOn(new Date());
+        dbHhtUser.setUpdatedOn(new Date());
         HhtUser savedHhtUser = hhtUserRepository.save(dbHhtUser);
 
         savedHhtUser.setOrderTypeIds(new HashSet<>());
@@ -287,8 +287,8 @@ public class HhtUserService {
                 dbOrderTypeId.setDeletionIndicator(0L);
                 dbOrderTypeId.setCreatedBy(loginUserID);
                 dbOrderTypeId.setUpdatedBy(loginUserID);
-                dbOrderTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbOrderTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOrderTypeId.setCreatedOn(new Date());
+                dbOrderTypeId.setUpdatedOn(new Date());
                 dbOrderTypeId.setUserId(savedHhtUser.getUserId());
                 OrderTypeId savedOrderTypeId = orderTypeIdRepository.save(dbOrderTypeId);
                 savedHhtUser.getOrderTypeIds().add(savedOrderTypeId);
@@ -328,7 +328,7 @@ public class HhtUserService {
         }
 
         dbHhtUser.get().setUpdatedBy(loginUserID);
-        dbHhtUser.get().setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbHhtUser.get().setUpdatedOn(new Date());
         HhtUser savedHhtUser = hhtUserRepository.save(dbHhtUser.get());
 
         if (updateHhtUser.getOrderType() != null) {
@@ -354,8 +354,8 @@ public class HhtUserService {
                     dbOrderTypeId.setDeletionIndicator(0L);
                     dbOrderTypeId.setCreatedBy(loginUserID);
                     dbOrderTypeId.setUpdatedBy(loginUserID);
-                    dbOrderTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                    dbOrderTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                    dbOrderTypeId.setCreatedOn(new Date());
+                    dbOrderTypeId.setUpdatedOn(new Date());
                     dbOrderTypeId.setUserId(savedHhtUser.getUserId());
                     OrderTypeId savedOrderTypeId = orderTypeIdRepository.save(dbOrderTypeId);
                     savedHhtUser.getOrderTypeIds().add(savedOrderTypeId);

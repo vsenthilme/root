@@ -128,8 +128,8 @@ public class PaymentTermIdService{
             dbPaymentTermId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbPaymentTermId.setCreatedBy(loginUserID);
             dbPaymentTermId.setUpdatedBy(loginUserID);
-            dbPaymentTermId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbPaymentTermId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPaymentTermId.setCreatedOn(new Date());
+            dbPaymentTermId.setUpdatedOn(new Date());
             return paymentTermIdRepository.save(dbPaymentTermId);
         }
     }
@@ -147,7 +147,7 @@ public class PaymentTermIdService{
         PaymentTermId dbPaymentTermId=getPaymentTermId(warehouseId,paymentTermId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePaymentTermId,dbPaymentTermId,CommonUtils.getNullPropertyNames(updatePaymentTermId));
         dbPaymentTermId.setUpdatedBy(loginUserID);
-        dbPaymentTermId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPaymentTermId.setUpdatedOn(new Date());
         return paymentTermIdRepository.save(dbPaymentTermId);
     }
     /**

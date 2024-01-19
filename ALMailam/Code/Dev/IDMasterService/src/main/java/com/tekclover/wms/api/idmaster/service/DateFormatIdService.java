@@ -136,8 +136,8 @@ public class DateFormatIdService{
 			dbDateFormatId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbDateFormatId.setCreatedBy(loginUserID);
 			dbDateFormatId.setUpdatedBy(loginUserID);
-			dbDateFormatId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbDateFormatId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbDateFormatId.setCreatedOn(new Date());
+			dbDateFormatId.setUpdatedOn(new Date());
 			return dateFormatIdRepository.save(dbDateFormatId);
 		}
 	}
@@ -157,7 +157,7 @@ public class DateFormatIdService{
 		DateFormatId dbDateFormatId = getDateFormatId( warehouseId,dateFormatId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDateFormatId, dbDateFormatId, CommonUtils.getNullPropertyNames(updateDateFormatId));
 		dbDateFormatId.setUpdatedBy(loginUserID);
-		dbDateFormatId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDateFormatId.setUpdatedOn(new Date());
 		return dateFormatIdRepository.save(dbDateFormatId);
 	}
 

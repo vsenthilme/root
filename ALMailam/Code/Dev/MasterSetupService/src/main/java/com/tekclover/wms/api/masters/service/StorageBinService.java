@@ -620,8 +620,8 @@ public class StorageBinService {
             dbStorageBin.setDeletionIndicator(0L);
             dbStorageBin.setCreatedBy(loginUserID);
             dbStorageBin.setUpdatedBy(loginUserID);
-            dbStorageBin.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbStorageBin.setCreatedOn(new Date());
+            dbStorageBin.setUpdatedOn(new Date());
             return storagebinRepository.save(dbStorageBin);
         }
     }
@@ -640,7 +640,7 @@ public class StorageBinService {
         StorageBin dbStorageBin = getStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId);
         BeanUtils.copyProperties(updateStorageBin, dbStorageBin, CommonUtils.getNullPropertyNames(updateStorageBin));
         dbStorageBin.setUpdatedBy(loginUserID);
-        dbStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbStorageBin.setUpdatedOn(new Date());
         return storagebinRepository.save(dbStorageBin);
     }
 
@@ -667,8 +667,8 @@ public class StorageBinService {
             dbStorageBin.setDeletionIndicator(0L);
             dbStorageBin.setCreatedBy(loginUserID);
             dbStorageBin.setUpdatedBy(loginUserID);
-            dbStorageBin.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbStorageBin.setCreatedOn(new Date());
+            dbStorageBin.setUpdatedOn(new Date());
             return storageBinV2Repository.save(dbStorageBin);
         }
     }
@@ -691,7 +691,7 @@ public class StorageBinService {
         log.info("dbstorageBin: " + dbStorageBin);
         BeanUtils.copyProperties(updateStorageBin, dbStorageBin, CommonUtils.getNullPropertyNames(updateStorageBin));
         dbStorageBin.setUpdatedBy(loginUserID);
-        dbStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbStorageBin.setUpdatedOn(new Date());
         return storageBinV2Repository.save(dbStorageBin);
     }
 
@@ -705,7 +705,7 @@ public class StorageBinService {
         if (storagebin != null) {
             storagebin.setDeletionIndicator(1L);
             storagebin.setUpdatedBy(loginUserID);
-            storagebin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            storagebin.setUpdatedOn(new Date());
             storagebinRepository.save(storagebin);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + storageBin);
@@ -758,7 +758,7 @@ public class StorageBinService {
         StorageBinV2 dbStorageBin = getStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId);
         BeanUtils.copyProperties(storageBinV2, dbStorageBin, CommonUtils.getNullPropertyNames(storageBinV2));
         dbStorageBin.setUpdatedBy(loginUserID);
-        dbStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbStorageBin.setUpdatedOn(new Date());
         return storagebinRepository.save(dbStorageBin);
     }
 
@@ -778,7 +778,7 @@ public class StorageBinService {
         if (storeBinV2 != null) {
             storeBinV2.setDeletionIndicator(1L);
             storeBinV2.setUpdatedBy(loginUserID);
-            storeBinV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            storeBinV2.setUpdatedOn(new Date());
             storagebinRepository.save(storeBinV2);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + storageBin);

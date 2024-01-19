@@ -99,8 +99,8 @@ public class ImAlternatePartService {
                 dbImAlternatePart.setDeletionIndicator(0L);
                 dbImAlternatePart.setCreatedBy(loginUserID);
                 dbImAlternatePart.setUpdatedBy(loginUserID);
-                dbImAlternatePart.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbImAlternatePart.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbImAlternatePart.setCreatedOn(new Date());
+                dbImAlternatePart.setUpdatedOn(new Date());
                 ImAlternatePart savedImAlternatePart = imAlternatePartRepository.save(dbImAlternatePart);
                 imAlternatePartList.add(savedImAlternatePart);
             }
@@ -137,7 +137,7 @@ public class ImAlternatePartService {
             for(ImAlternatePart imAlternatePart:imAlternatePartList){
                 imAlternatePart.setDeletionIndicator(1L);
                 imAlternatePart.setUpdatedBy(loginUserID);
-                imAlternatePart.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                imAlternatePart.setUpdatedOn(new Date());
                 imAlternatePartRepository.save(imAlternatePart);
             }
         }
@@ -163,7 +163,7 @@ public class ImAlternatePartService {
             for(ImAlternatePart newImAlternatePart:imAlternatePart) {
                 newImAlternatePart.setDeletionIndicator(1L);
                 newImAlternatePart.setUpdatedBy(loginUserID);
-                newImAlternatePart.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newImAlternatePart.setUpdatedOn(new Date());
                 imAlternatePartRepository.save(newImAlternatePart);
             }
         } else {

@@ -153,8 +153,8 @@ public class StrategyIdService {
 			dbStrategyId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbStrategyId.setCreatedBy(loginUserID);
 			dbStrategyId.setUpdatedBy(loginUserID);
-			dbStrategyId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStrategyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStrategyId.setCreatedOn(new Date());
+			dbStrategyId.setUpdatedOn(new Date());
 			return strategyIdRepository.save(dbStrategyId);
 		}
 	}
@@ -175,7 +175,7 @@ public class StrategyIdService {
 		StrategyId dbStrategyId = getStrategyId(warehouseId, strategyTypeId,strategyNo,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStrategyId, dbStrategyId, CommonUtils.getNullPropertyNames(updateStrategyId));
 		dbStrategyId.setUpdatedBy(loginUserID);
-		dbStrategyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStrategyId.setUpdatedOn(new Date());
 		return strategyIdRepository.save(dbStrategyId);
 	}
 

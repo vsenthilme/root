@@ -251,8 +251,8 @@ public class ImBasicData1Service {
             dbImBasicData1.setDeletionIndicator(0L);
             dbImBasicData1.setCreatedBy(loginUserID);
             dbImBasicData1.setUpdatedBy(loginUserID);
-            dbImBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImBasicData1.setCreatedOn(new Date());
+            dbImBasicData1.setUpdatedOn(new Date());
             return imbasicdata1Repository.save(dbImBasicData1);
         }
     }
@@ -289,8 +289,8 @@ public class ImBasicData1Service {
             dbImBasicData1.setDeletionIndicator(0L);
             dbImBasicData1.setCreatedBy(loginUserID);
             dbImBasicData1.setUpdatedBy(loginUserID);
-            dbImBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImBasicData1.setCreatedOn(new Date());
+            dbImBasicData1.setUpdatedOn(new Date());
             return imBasicData1V2Repository.save(dbImBasicData1);
         }
     }
@@ -316,7 +316,7 @@ public class ImBasicData1Service {
                 getImBasicData1(itemCode, warehouseId, companyCodeId, plantId, uomId, manufacturerPartNo, languageId);
         BeanUtils.copyProperties(updateImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(updateImBasicData1));
         dbImBasicData1.setUpdatedBy(loginUserID);
-        dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbImBasicData1.setUpdatedOn(new Date());
         return imbasicdata1Repository.save(dbImBasicData1);
     }
 
@@ -335,7 +335,7 @@ public class ImBasicData1Service {
         if (imbasicdata1 != null) {
             imbasicdata1.setDeletionIndicator(1L);
             imbasicdata1.setUpdatedBy(loginUserID);
-            imbasicdata1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            imbasicdata1.setUpdatedOn(new Date());
             imbasicdata1Repository.save(imbasicdata1);
         } else {
             throw new EntityNotFoundException("Error in deleting itemCode Id:" + itemCode);

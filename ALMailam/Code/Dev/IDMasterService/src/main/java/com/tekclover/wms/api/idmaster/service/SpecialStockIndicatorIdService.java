@@ -146,8 +146,8 @@ public class SpecialStockIndicatorIdService {
 			dbSpecialStockIndicatorId.setStockTypeIdAndDescription(dbStockTypeId.getStockTypeId()+"-"+dbStockTypeId.getStockTypeText());
 			dbSpecialStockIndicatorId.setCreatedBy(loginUserID);
 			dbSpecialStockIndicatorId.setUpdatedBy(loginUserID);
-			dbSpecialStockIndicatorId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbSpecialStockIndicatorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbSpecialStockIndicatorId.setCreatedOn(new Date());
+			dbSpecialStockIndicatorId.setUpdatedOn(new Date());
 			return specialStockIndicatorIdRepository.save(dbSpecialStockIndicatorId);
 		}
 	}
@@ -167,7 +167,7 @@ public class SpecialStockIndicatorIdService {
 		SpecialStockIndicatorId dbSpecialStockIndicatorId = getSpecialStockIndicatorId( warehouseId,stockTypeId,specialStockIndicatorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSpecialStockIndicatorId, dbSpecialStockIndicatorId, CommonUtils.getNullPropertyNames(updateSpecialStockIndicatorId));
 		dbSpecialStockIndicatorId.setUpdatedBy(loginUserID);
-		dbSpecialStockIndicatorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbSpecialStockIndicatorId.setUpdatedOn(new Date());
 		return specialStockIndicatorIdRepository.save(dbSpecialStockIndicatorId);
 	}
 

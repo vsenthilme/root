@@ -202,8 +202,8 @@ public class StorageClassService {
 			dbStorageClass.setDeletionIndicator(0L);
 			dbStorageClass.setCreatedBy(loginUserID);
 			dbStorageClass.setUpdatedBy(loginUserID);
-			dbStorageClass.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStorageClass.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStorageClass.setCreatedOn(new Date());
+			dbStorageClass.setUpdatedOn(new Date());
 			return storageclassRepository.save(dbStorageClass);
 		}
 	}
@@ -221,7 +221,7 @@ public class StorageClassService {
 			StorageClass dbStorageClass = getStorageClass(warehouseId,storageClassId,companyId,languageId,plantId);
 			BeanUtils.copyProperties(updateStorageClass, dbStorageClass, CommonUtils.getNullPropertyNames(updateStorageClass));
 			dbStorageClass.setUpdatedBy(loginUserID);
-			dbStorageClass.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStorageClass.setUpdatedOn(new Date());
 			return storageclassRepository.save(dbStorageClass);
 		}
 
@@ -234,7 +234,7 @@ public class StorageClassService {
 			if ( storageclass != null) {
 				storageclass.setDeletionIndicator (1L);
 				storageclass.setUpdatedBy(loginUserID);
-				storageclass.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				storageclass.setUpdatedOn(new Date());
 				storageclassRepository.save(storageclass);
 			} else {
 				throw new EntityNotFoundException("Error in deleting Id: " + storageClassId);

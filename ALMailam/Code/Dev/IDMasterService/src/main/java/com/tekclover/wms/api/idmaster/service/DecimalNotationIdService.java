@@ -134,8 +134,8 @@ public class DecimalNotationIdService  {
 			dbDecimalNotationId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbDecimalNotationId.setCreatedBy(loginUserID);
 			dbDecimalNotationId.setUpdatedBy(loginUserID);
-			dbDecimalNotationId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbDecimalNotationId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbDecimalNotationId.setCreatedOn(new Date());
+			dbDecimalNotationId.setUpdatedOn(new Date());
 			return decimalNotationIdRepository.save(dbDecimalNotationId);
 		}
 	}
@@ -155,7 +155,7 @@ public class DecimalNotationIdService  {
 		DecimalNotationId dbDecimalNotationId = getDecimalNotationId( warehouseId, decimalNotationId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDecimalNotationId, dbDecimalNotationId, CommonUtils.getNullPropertyNames(updateDecimalNotationId));
 		dbDecimalNotationId.setUpdatedBy(loginUserID);
-		dbDecimalNotationId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDecimalNotationId.setUpdatedOn(new Date());
 		return decimalNotationIdRepository.save(dbDecimalNotationId);
 	}
 

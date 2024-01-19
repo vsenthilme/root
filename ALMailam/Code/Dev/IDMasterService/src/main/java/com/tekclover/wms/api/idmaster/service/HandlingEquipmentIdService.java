@@ -140,8 +140,8 @@ public class HandlingEquipmentIdService{
 			dbHandlingEquipmentId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbHandlingEquipmentId.setCreatedBy(loginUserID);
 			dbHandlingEquipmentId.setUpdatedBy(loginUserID);
-			dbHandlingEquipmentId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbHandlingEquipmentId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbHandlingEquipmentId.setCreatedOn(new Date());
+			dbHandlingEquipmentId.setUpdatedOn(new Date());
 			return handlingEquipmentIdRepository.save(dbHandlingEquipmentId);
 		}
 	}
@@ -165,7 +165,7 @@ public class HandlingEquipmentIdService{
 
 		BeanUtils.copyProperties(updateHandlingEquipmentId, dbHandlingEquipmentId, CommonUtils.getNullPropertyNames(updateHandlingEquipmentId));
 		dbHandlingEquipmentId.setUpdatedBy(loginUserID);
-		dbHandlingEquipmentId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbHandlingEquipmentId.setUpdatedOn(new Date());
 		return handlingEquipmentIdRepository.save(dbHandlingEquipmentId);
 	}
 

@@ -160,8 +160,8 @@ public class BarcodeSubTypeIdService {
 			dbBarcodeSubTypeId.setBarcodeTypeIdAndDescription(dbBarcodeTypeId.getBarcodeTypeId()+"-"+dbBarcodeTypeId.getBarcodeType());
 			dbBarcodeSubTypeId.setCreatedBy(loginUserID);
 			dbBarcodeSubTypeId.setUpdatedBy(loginUserID);
-			dbBarcodeSubTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbBarcodeSubTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbBarcodeSubTypeId.setCreatedOn(new Date());
+			dbBarcodeSubTypeId.setUpdatedOn(new Date());
 			return barcodeSubTypeIdRepository.save(dbBarcodeSubTypeId);
 		}
 	}
@@ -181,7 +181,7 @@ public class BarcodeSubTypeIdService {
 		BarcodeSubTypeId dbBarcodeSubTypeId = getBarcodeSubTypeId(warehouseId, barcodeTypeId, barcodeSubTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBarcodeSubTypeId, dbBarcodeSubTypeId, CommonUtils.getNullPropertyNames(updateBarcodeSubTypeId));
 		dbBarcodeSubTypeId.setUpdatedBy(loginUserID);
-		dbBarcodeSubTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBarcodeSubTypeId.setUpdatedOn(new Date());
 		return barcodeSubTypeIdRepository.save(dbBarcodeSubTypeId);
 	}
 

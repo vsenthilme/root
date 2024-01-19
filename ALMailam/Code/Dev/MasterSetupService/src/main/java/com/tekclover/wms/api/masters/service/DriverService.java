@@ -107,8 +107,8 @@ public class DriverService {
             dbDriver.setDeletionIndicator(0L);
             dbDriver.setCreatedBy(loginUserID);
             dbDriver.setUpdatedBy(loginUserID);
-            dbDriver.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbDriver.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbDriver.setCreatedOn(new Date());
+            dbDriver.setUpdatedOn(new Date());
             return driverRepository.save(dbDriver);
         }
     }
@@ -127,7 +127,7 @@ public class DriverService {
         Driver dbDriver = getDriver(driverId,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateDriver, dbDriver, CommonUtils.getNullPropertyNames(updateDriver));
         dbDriver.setUpdatedBy(loginUserID);
-        dbDriver.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbDriver.setUpdatedOn(new Date());
         return driverRepository.save(dbDriver);
     }
 
@@ -142,7 +142,7 @@ public class DriverService {
         if ( driver != null) {
             driver.setDeletionIndicator (1L);
             driver.setUpdatedBy(loginUserID);
-            driver.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            driver.setUpdatedOn(new Date());
             driverRepository.save(driver);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + driverId);

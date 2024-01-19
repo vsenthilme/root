@@ -156,8 +156,8 @@ public class PlantService {
 		dbPlant.setDeletionIndicator(0L);
 		dbPlant.setCreatedBy(loginUserID);
 		dbPlant.setUpdatedBy(loginUserID);
-		dbPlant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbPlant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbPlant.setCreatedOn(new Date());
+		dbPlant.setUpdatedOn(new Date());
 		return plantRepository.save(dbPlant);
 	}
 
@@ -174,7 +174,7 @@ public class PlantService {
 		Plant dbPlant = getPlant(plantId,companyId,languageId);
 		BeanUtils.copyProperties(updatePlant, dbPlant, CommonUtils.getNullPropertyNames(updatePlant));
 		dbPlant.setUpdatedBy(loginUserID);
-		dbPlant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbPlant.setUpdatedOn(new Date());
 		return plantRepository.save(dbPlant);
 	}
 
@@ -187,7 +187,7 @@ public class PlantService {
 		if ( plant != null) {
 			plant.setDeletionIndicator (1L);
 			plant.setUpdatedBy(loginUserID);
-			plant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			plant.setUpdatedOn(new Date());
 			plantRepository.save(plant);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + plantId);

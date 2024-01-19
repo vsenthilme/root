@@ -118,8 +118,8 @@ public class ImVariantService {
                 dbImVariant.setDeletionIndicator(0L);
                 dbImVariant.setCreatedBy(loginUserID);
                 dbImVariant.setUpdatedBy(loginUserID);
-                dbImVariant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbImVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbImVariant.setCreatedOn(new Date());
+                dbImVariant.setUpdatedOn(new Date());
                 ImVariant savedImVariant = imVariantRepository.save(dbImVariant);
                 imVariantList.add(savedImVariant);
             }
@@ -153,7 +153,7 @@ public class ImVariantService {
         if (imVariantList != null) {
             for (ImVariant imVariant : imVariantList) {
                 imVariant.setUpdatedBy(loginUserID);
-                imVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                imVariant.setUpdatedOn(new Date());
                 imVariant.setDeletionIndicator(1L);
                 imVariantRepository.save(imVariant);
             }
@@ -193,7 +193,7 @@ public class ImVariantService {
             for(ImVariant variant :imVariant) {
                 variant.setDeletionIndicator(1L);
                 variant.setUpdatedBy(loginUserID);
-                variant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                variant.setUpdatedOn(new Date());
                 imVariantRepository.save(variant);
             }
         } else {

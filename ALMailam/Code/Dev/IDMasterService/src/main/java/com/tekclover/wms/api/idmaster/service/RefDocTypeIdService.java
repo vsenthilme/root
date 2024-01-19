@@ -133,8 +133,8 @@ public class RefDocTypeIdService{
 			dbRefDocTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbRefDocTypeId.setCreatedBy(loginUserID);
 			dbRefDocTypeId.setUpdatedBy(loginUserID);
-			dbRefDocTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbRefDocTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbRefDocTypeId.setCreatedOn(new Date());
+			dbRefDocTypeId.setUpdatedOn(new Date());
 			return refDocTypeIdRepository.save(dbRefDocTypeId);
 		}
 	}
@@ -154,7 +154,7 @@ public class RefDocTypeIdService{
 		RefDocTypeId dbRefDocTypeId = getRefDocTypeId( warehouseId, referenceDocumentTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateRefDocTypeId, dbRefDocTypeId, CommonUtils.getNullPropertyNames(updateRefDocTypeId));
 		dbRefDocTypeId.setUpdatedBy(loginUserID);
-		dbRefDocTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbRefDocTypeId.setUpdatedOn(new Date());
 		return refDocTypeIdRepository.save(dbRefDocTypeId);
 	}
 

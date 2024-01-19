@@ -153,8 +153,8 @@ public class LevelIdService {
 			dbLevelId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbLevelId.setCreatedBy(loginUserID);
 			dbLevelId.setUpdatedBy(loginUserID);
-			dbLevelId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbLevelId.setCreatedOn(new Date());
+			dbLevelId.setUpdatedOn(new Date();
 			return levelIdRepository.save(dbLevelId);
 		}
 	}
@@ -174,7 +174,7 @@ public class LevelIdService {
 		LevelId dbLevelId = getLevelId(warehouseId, levelId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateLevelId, dbLevelId, CommonUtils.getNullPropertyNames(updateLevelId));
 		dbLevelId.setUpdatedBy(loginUserID);
-		dbLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbLevelId.setUpdatedOn(new Date());
 		return levelIdRepository.save(dbLevelId);
 	}
 

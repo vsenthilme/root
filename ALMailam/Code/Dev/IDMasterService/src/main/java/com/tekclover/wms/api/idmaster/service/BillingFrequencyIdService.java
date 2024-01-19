@@ -128,8 +128,8 @@ public class BillingFrequencyIdService{
             dbBillingFrequencyId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbBillingFrequencyId.setCreatedBy(loginUserID);
             dbBillingFrequencyId.setUpdatedBy(loginUserID);
-            dbBillingFrequencyId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBillingFrequencyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBillingFrequencyId.setCreatedOn(new Date());
+            dbBillingFrequencyId.setUpdatedOn(new Date());
             return billingFrequencyIdRepository.save(dbBillingFrequencyId);
         }
     }
@@ -147,7 +147,7 @@ public class BillingFrequencyIdService{
         BillingFrequencyId dbBillingFrequencyId=getBillingFrequencyId(warehouseId,billFrequencyId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingFrequencyId,dbBillingFrequencyId,CommonUtils.getNullPropertyNames(updateBillingFrequencyId));
         dbBillingFrequencyId.setUpdatedBy(loginUserID);
-        dbBillingFrequencyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBillingFrequencyId.setUpdatedOn(new Date());
         return billingFrequencyIdRepository.save(dbBillingFrequencyId);
     }
     /**

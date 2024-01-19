@@ -114,8 +114,8 @@ public class HandlingUnitService {
 			dbHandlingUnit.setDeletionIndicator(0L);
 			dbHandlingUnit.setCreatedBy(loginUserID);
 			dbHandlingUnit.setUpdatedBy(loginUserID);
-			dbHandlingUnit.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbHandlingUnit.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbHandlingUnit.setCreatedOn(new Date());
+			dbHandlingUnit.setUpdatedOn(new Date());
 			return handlingunitRepository.save(dbHandlingUnit);
 		}
 	}
@@ -133,7 +133,7 @@ public class HandlingUnitService {
 		HandlingUnit dbHandlingUnit = getHandlingUnit(warehouseId,handlingUnit,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateHandlingUnit, dbHandlingUnit, CommonUtils.getNullPropertyNames(updateHandlingUnit));
 		dbHandlingUnit.setUpdatedBy(loginUserID);
-		dbHandlingUnit.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbHandlingUnit.setUpdatedOn(new Date());
 		return handlingunitRepository.save(dbHandlingUnit);
 	}
 
@@ -146,7 +146,7 @@ public class HandlingUnitService {
 		if ( handlingunit != null) {
 			handlingunit.setDeletionIndicator (1L);
 			handlingunit.setUpdatedBy(loginUserID);
-			handlingunit.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			handlingunit.setUpdatedOn(new Date());
 			handlingunitRepository.save(handlingunit);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id:" + handlingUnit);

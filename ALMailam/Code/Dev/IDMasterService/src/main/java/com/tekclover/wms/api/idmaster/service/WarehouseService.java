@@ -173,8 +173,8 @@ public class WarehouseService  {
 			dbWarehouse.setPlantIdAndDescription(dbPlantId.getPlantId()+"-"+dbPlantId.getDescription());
 			dbWarehouse.setCreatedBy(loginUserID);
 			dbWarehouse.setUpdatedBy(loginUserID);
-			dbWarehouse.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbWarehouse.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbWarehouse.setCreatedOn(new Date());
+			dbWarehouse.setUpdatedOn(new Date());
 			warehouseRepository.save(dbWarehouse);
 		}
 		return dbWarehouse;
@@ -195,7 +195,7 @@ public class WarehouseService  {
 		Warehouse dbWarehouse = getWarehouse(warehouseId,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateWarehouse, dbWarehouse, CommonUtils.getNullPropertyNames(updateWarehouse));
 		dbWarehouse.setUpdatedBy(loginUserID);
-		dbWarehouse.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbWarehouse.setUpdatedOn(new Date());
 
 		updateRoleAccess(warehouseId, companyCodeId, plantId, languageId, updateWarehouse.getWarehouseDesc());									//Update Description
 		updateModuleId(warehouseId, companyCodeId, plantId, languageId, updateWarehouse.getWarehouseDesc());									//Update Description

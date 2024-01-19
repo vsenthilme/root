@@ -83,8 +83,8 @@ public class EmployeeService extends BaseService {
 		dbEmployee.setCompanyId(getCompanyCode());
 		dbEmployee.setCreatedBy(loginUserID);
 		dbEmployee.setUpdatedBy(loginUserID);
-		dbEmployee.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbEmployee.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbEmployee.setCreatedOn(new Date());
+		dbEmployee.setUpdatedOn(new Date());
 		return employeeRepository.save(dbEmployee);
 	}
 	
@@ -101,7 +101,7 @@ public class EmployeeService extends BaseService {
 		Employee dbEmployee = getEmployee(warehouseId, employeeId, processId);
 		BeanUtils.copyProperties(updateEmployee, dbEmployee, CommonUtils.getNullPropertyNames(updateEmployee));
 		dbEmployee.setUpdatedBy(loginUserID);
-		dbEmployee.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbEmployee.setUpdatedOn(new Date());
 		return employeeRepository.save(dbEmployee);
 	}
 	
@@ -114,7 +114,7 @@ public class EmployeeService extends BaseService {
 		if ( employee != null) {
 			employee.setDeletionIndicator (1L);
 			employee.setUpdatedBy(loginUserID);
-			employee.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			employee.setUpdatedOn(new Date());
 			employeeRepository.save(employee);
 		} else {
 			throw new EntityNotFoundException(String.valueOf(employeeId));

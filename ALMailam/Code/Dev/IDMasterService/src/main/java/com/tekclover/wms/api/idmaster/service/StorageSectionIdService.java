@@ -161,8 +161,8 @@ public class StorageSectionIdService {
 			dbStorageSectionId.setFloorIdAndDescription(dbFloorId.getFloorId()+"-" + dbFloorId.getDescription());
 			dbStorageSectionId.setCreatedBy(loginUserID);
 			dbStorageSectionId.setUpdatedBy(loginUserID);
-			dbStorageSectionId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStorageSectionId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStorageSectionId.setCreatedOn(new Date());
+			dbStorageSectionId.setUpdatedOn(new Date());
 			storageSectionIdRepository.save(dbStorageSectionId);
 		}
 		return dbStorageSectionId;
@@ -184,7 +184,7 @@ public class StorageSectionIdService {
 		StorageSectionId dbStorageSectionId = getStorageSectionId(warehouseId,floorId,storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageSectionId, dbStorageSectionId, CommonUtils.getNullPropertyNames(updateStorageSectionId));
 		dbStorageSectionId.setUpdatedBy(loginUserID);
-		dbStorageSectionId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageSectionId.setUpdatedOn(new Date());
 		return storageSectionIdRepository.save(dbStorageSectionId);
 	}
 

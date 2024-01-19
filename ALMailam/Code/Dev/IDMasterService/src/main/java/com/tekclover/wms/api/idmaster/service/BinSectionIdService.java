@@ -135,8 +135,8 @@ public class BinSectionIdService {
 			dbBinSectionId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbBinSectionId.setCreatedBy(loginUserID);
 			dbBinSectionId.setUpdatedBy(loginUserID);
-			dbBinSectionId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbBinSectionId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbBinSectionId.setCreatedOn(new Date());
+			dbBinSectionId.setUpdatedOn(new Date());
 			return binSectionIdRepository.save(dbBinSectionId);
 		}
 	}
@@ -156,7 +156,7 @@ public class BinSectionIdService {
 		BinSectionId dbBinSectionId = getBinSectionId( warehouseId,binSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBinSectionId, dbBinSectionId, CommonUtils.getNullPropertyNames(updateBinSectionId));
 		dbBinSectionId.setUpdatedBy(loginUserID);
-		dbBinSectionId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBinSectionId.setUpdatedOn(new Date());
 		return binSectionIdRepository.save(dbBinSectionId);
 	}
 

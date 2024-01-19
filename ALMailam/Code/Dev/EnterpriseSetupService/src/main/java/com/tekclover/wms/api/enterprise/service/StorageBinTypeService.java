@@ -232,8 +232,8 @@ public class StorageBinTypeService {
 		dbStorageBinType.setDeletionIndicator(0L);
 		dbStorageBinType.setCreatedBy(loginUserID);
 		dbStorageBinType.setUpdatedBy(loginUserID);
-		dbStorageBinType.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbStorageBinType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageBinType.setCreatedOn(new Date());
+		dbStorageBinType.setUpdatedOn(new Date());
 		return storagebintypeRepository.save(dbStorageBinType);
 	}
 
@@ -250,7 +250,7 @@ public class StorageBinTypeService {
 		StorageBinType dbStorageBinType = getStorageBinType(warehouseId, storageTypeId, storageBinTypeId,storageClassId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageBinType, dbStorageBinType, CommonUtils.getNullPropertyNames(updateStorageBinType));
 		dbStorageBinType.setUpdatedBy(loginUserID);
-		dbStorageBinType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageBinType.setUpdatedOn(new Date());
 		return storagebintypeRepository.save(dbStorageBinType);
 	}
 
@@ -263,7 +263,7 @@ public class StorageBinTypeService {
 		if ( storagebintype != null) {
 			storagebintype.setDeletionIndicator (1L);
 			storagebintype.setUpdatedBy(loginUserID);
-			storagebintype.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			storagebintype.setUpdatedOn(new Date());
 			storagebintypeRepository.save(storagebintype);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + storageBinTypeId);

@@ -126,8 +126,8 @@ public class BillingFormatIdService{
             dbBillingFormatId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbBillingFormatId.setCreatedBy(loginUserID);
             dbBillingFormatId.setUpdatedBy(loginUserID);
-            dbBillingFormatId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBillingFormatId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBillingFormatId.setCreatedOn(new Date());
+            dbBillingFormatId.setUpdatedOn(new Date());
             return billingFormatIdRepository.save(dbBillingFormatId);
         }
     }
@@ -146,7 +146,7 @@ public class BillingFormatIdService{
         BillingFormatId dbBillingFormatId=getBillingFormatId(warehouseId,billFormatId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingFormatId,dbBillingFormatId,CommonUtils.getNullPropertyNames(updateBillingFormatId));
         dbBillingFormatId.setUpdatedBy(loginUserID);
-        dbBillingFormatId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBillingFormatId.setUpdatedOn(new Date());
         return billingFormatIdRepository.save(dbBillingFormatId);
     }
     /**

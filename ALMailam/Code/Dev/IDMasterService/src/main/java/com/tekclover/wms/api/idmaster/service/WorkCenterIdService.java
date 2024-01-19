@@ -132,8 +132,8 @@ public class WorkCenterIdService  {
 			dbWorkCenterId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbWorkCenterId.setCreatedBy(loginUserID);
 			dbWorkCenterId.setUpdatedBy(loginUserID);
-			dbWorkCenterId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbWorkCenterId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbWorkCenterId.setCreatedOn(new Date());
+			dbWorkCenterId.setUpdatedOn(new Date());
 			return workCenterIdRepository.save(dbWorkCenterId);
 		}
 	}

@@ -200,8 +200,8 @@ public class FloorService {
 		dbFloor.setDeletionIndicator(0L);
 		dbFloor.setCreatedBy(loginUserID);
 		dbFloor.setUpdatedBy(loginUserID);
-		dbFloor.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbFloor.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbFloor.setCreatedOn(new Date());
+		dbFloor.setUpdatedOn(new Date());
 		return floorRepository.save(dbFloor);
 	}
 
@@ -218,7 +218,7 @@ public class FloorService {
 		Floor dbFloor = getFloor(warehouseId,companyId,plantId,languageId,floorId);
 		BeanUtils.copyProperties(updateFloor, dbFloor, CommonUtils.getNullPropertyNames(updateFloor));
 		dbFloor.setUpdatedBy(loginUserID);
-		dbFloor.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbFloor.setUpdatedOn(new Date());
 		return floorRepository.save(dbFloor);
 	}
 
@@ -231,7 +231,7 @@ public class FloorService {
 		if ( floor != null) {
 			floor.setDeletionIndicator (1L);
 			floor.setUpdatedBy(loginUserID);
-			floor.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			floor.setUpdatedOn(new Date());
 			floorRepository.save(floor);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + floorId);

@@ -49,7 +49,7 @@ public class LevelReferenceVariantService {
             for(LevelReferenceVariant newLevelReference: levelReferences){
                 newLevelReference.setDeletionIndicator(1L);
                 newLevelReference.setUpdatedBy(loginUserID);
-                newLevelReference.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newLevelReference.setUpdatedOn(new Date());
                 levelReferenceVariantRepository.save(newLevelReference);
             }
         } else {

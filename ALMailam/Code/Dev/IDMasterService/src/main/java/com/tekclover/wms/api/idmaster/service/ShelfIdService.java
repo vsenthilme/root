@@ -194,8 +194,8 @@ public class ShelfIdService {
 			dbShelfId.setDeletionIndicator(0L);
 			dbShelfId.setCreatedBy(loginUserID);
 			dbShelfId.setUpdatedBy(loginUserID);
-			dbShelfId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbShelfId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbShelfId.setCreatedOn(new Date());
+			dbShelfId.setUpdatedOn(new Date());
 			return shelfIdRepository.save(dbShelfId);
 		}
 	}
@@ -215,7 +215,7 @@ public class ShelfIdService {
 		ShelfId dbShelfId = getShelfId(warehouseId, aisleId, shelfId,spanId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateShelfId, dbShelfId, CommonUtils.getNullPropertyNames(updateShelfId));
 		dbShelfId.setUpdatedBy(loginUserID);
-		dbShelfId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbShelfId.setUpdatedOn(new Date());
 		return shelfIdRepository.save(dbShelfId);
 	}
 

@@ -176,8 +176,8 @@ public class StorageBinTypeIdService {
 			dbStorageBinTypeId.setStorageTypeIdAndDescription(dbStorageTypeId.getStorageTypeId()+"-"+dbStorageTypeId.getDescription());
 			dbStorageBinTypeId.setCreatedBy(loginUserID);
 			dbStorageBinTypeId.setUpdatedBy(loginUserID);
-			dbStorageBinTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStorageBinTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStorageBinTypeId.setCreatedOn(new Date());
+			dbStorageBinTypeId.setUpdatedOn(new Date());
 			return storageBinTypeIdRepository.save(dbStorageBinTypeId);
 		}
 	}
@@ -197,7 +197,7 @@ public class StorageBinTypeIdService {
 		StorageBinTypeId dbStorageBinTypeId = getStorageBinTypeId(warehouseId,storageBinTypeId,storageClassId,storageTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageBinTypeId, dbStorageBinTypeId, CommonUtils.getNullPropertyNames(updateStorageBinTypeId));
 		dbStorageBinTypeId.setUpdatedBy(loginUserID);
-		dbStorageBinTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageBinTypeId.setUpdatedOn(new Date());
 		return storageBinTypeIdRepository.save(dbStorageBinTypeId);
 	}
 

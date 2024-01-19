@@ -116,8 +116,8 @@ public class DockService {
             dbDock.setDeletionIndicator(0L);
             dbDock.setCreatedBy(loginUserID);
             dbDock.setUpdatedBy(loginUserID);
-            dbDock.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbDock.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbDock.setCreatedOn(new Date());
+            dbDock.setUpdatedOn(new Date());
             return dockRepository.save(dbDock);
         }
     }
@@ -135,7 +135,7 @@ public class DockService {
         Dock dbDock = getDock(dockId,companyCodeId,plantId,languageId,warehouseId,dockType);
         BeanUtils.copyProperties(updateDock, dbDock, CommonUtils.getNullPropertyNames(updateDock));
         dbDock.setUpdatedBy(loginUserID);
-        dbDock.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbDock.setUpdatedOn(new Date());
         return dockRepository.save(dbDock);
     }
 
@@ -149,7 +149,7 @@ public class DockService {
         if ( dock != null) {
             dock.setDeletionIndicator (1L);
             dock.setUpdatedBy(loginUserID);
-            dock.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dock.setUpdatedOn(new Date());
             dockRepository.save(dock);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + dockId);

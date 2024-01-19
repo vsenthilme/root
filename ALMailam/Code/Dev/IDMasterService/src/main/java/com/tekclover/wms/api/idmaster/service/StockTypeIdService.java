@@ -136,8 +136,8 @@ public class StockTypeIdService{
 			dbStockTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbStockTypeId.setCreatedBy(loginUserID);
 			dbStockTypeId.setUpdatedBy(loginUserID);
-			dbStockTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStockTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStockTypeId.setCreatedOn(new Date());
+			dbStockTypeId.setUpdatedOn(new Date());
 			return stockTypeIdRepository.save(dbStockTypeId);
 		}
 	}
@@ -157,7 +157,7 @@ public class StockTypeIdService{
 		StockTypeId dbStockTypeId = getStockTypeId( warehouseId,stockTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStockTypeId, dbStockTypeId, CommonUtils.getNullPropertyNames(updateStockTypeId));
 		dbStockTypeId.setUpdatedBy(loginUserID);
-		dbStockTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStockTypeId.setUpdatedOn(new Date());
 		return stockTypeIdRepository.save(dbStockTypeId);
 	}
 

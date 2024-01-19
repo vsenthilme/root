@@ -173,8 +173,8 @@ public class RowIdService{
 			dbRowId.setAisleIdAndDescription(dbAisleId.getAisleId()+ "-" +dbAisleId.getAisleDescription());
 			dbRowId.setCreatedBy(loginUserID);
 			dbRowId.setUpdatedBy(loginUserID);
-			dbRowId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbRowId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbRowId.setCreatedOn(new Date());
+			dbRowId.setUpdatedOn(new Date());
 			return rowIdRepository.save(dbRowId);
 		}
 	}
@@ -193,7 +193,7 @@ public class RowIdService{
 		RowId dbRowId = getRowId(warehouseId,floorId,storageSectionId,rowId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateRowId, dbRowId, CommonUtils.getNullPropertyNames(updateRowId));
 		dbRowId.setUpdatedBy(loginUserID);
-		dbRowId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbRowId.setUpdatedOn(new Date());
 		return rowIdRepository.save(dbRowId);
 	}
 

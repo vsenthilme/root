@@ -162,8 +162,8 @@ public class ProcessSequenceIdService {
 			dbProcessSequenceId.setProcessIdAndDescription(dbProcessId.getProcessId()+"-"+dbProcessId.getProcessText());
 			dbProcessSequenceId.setCreatedBy(loginUserID);
 			dbProcessSequenceId.setUpdatedBy(loginUserID);
-			dbProcessSequenceId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbProcessSequenceId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbProcessSequenceId.setCreatedOn(new Date());
+			dbProcessSequenceId.setUpdatedOn(new Date());
 			return processSequenceIdRepository.save(dbProcessSequenceId);
 		}
 	}

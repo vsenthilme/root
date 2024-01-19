@@ -132,8 +132,8 @@ public class DockIdService {
 			dbDockId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbDockId.setCreatedBy(loginUserID);
 			dbDockId.setUpdatedBy(loginUserID);
-			dbDockId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbDockId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbDockId.setCreatedOn(new Date());
+			dbDockId.setUpdatedOn(new Date());
 			return dockIdRepository.save(dbDockId);
 		}
 	}
@@ -153,7 +153,7 @@ public class DockIdService {
 		DockId dbDockId = getDockId(warehouseId,dockId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDockId, dbDockId, CommonUtils.getNullPropertyNames(updateDockId));
 		dbDockId.setUpdatedBy(loginUserID);
-		dbDockId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbDockId.setUpdatedOn(new Date());
 		return dockIdRepository.save(dbDockId);
 	}
 

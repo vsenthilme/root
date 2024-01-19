@@ -96,7 +96,7 @@ public class MasterOrderService {
             imBasicData1V2.setBrand(item.getBrand());
             imBasicData1V2.setSupplierPartNumber(item.getSupplierPartNumber());
             imBasicData1V2.setCreatedBy(item.getCreatedBy());
-            imBasicData1V2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            imBasicData1V2.setCreatedOn(new Date());
             imBasicData1V2.setIsNew(item.getIsNew());
             imBasicData1V2.setIsUpdate(item.getIsUpdate());
             imBasicData1V2.setIsCompleted(item.getIsCompleted());
@@ -141,7 +141,7 @@ public class MasterOrderService {
             businessPartnerV2.setCountry(customer.getCountry());
             businessPartnerV2.setAlternatePhoneNumber(customer.getAlternatePhoneNumber());
             businessPartnerV2.setCreatedBy(customer.getCreatedBy());
-            businessPartnerV2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            businessPartnerV2.setCreatedOn(new Date());
             businessPartnerV2.setIsNew(customer.getIsNew());
             businessPartnerV2.setIsUpdate(customer.getIsUpdate());
             businessPartnerV2.setIsCompleted(customer.getIsCompleted());
@@ -207,7 +207,7 @@ public class MasterOrderService {
                                 item.getPlantId(), "EN", item.getManufacturerName(), dbWarehouse.get().getWarehouseId());
 
                         dbitem.setRemarks("item Master Already Exist");
-                        dbitem.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                        dbitem.setOrderProcessedOn(new Date());
                         log.info("item Master Already Exist and tblorderitem updated with remarks");
 
                         if (updateImbasicData1) {
@@ -216,12 +216,12 @@ public class MasterOrderService {
                                 imBasicData1.setCreatedBy(existingImBasicData.get().getCreatedBy());
                                 imBasicData1.setCreatedOn(existingImBasicData.get().getCreatedOn());
                                 imBasicData1.setUpdatedBy(item.getCreatedBy());
-                                imBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                                imBasicData1.setUpdatedOn(new Date());
                                 imBasicData1V2Repo.save(imBasicData1);
                                 log.info("Item Master updated Successfully");
 
                                 dbitem.setRemarks("item Master Updated Successfully");
-                                dbitem.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                                dbitem.setOrderProcessedOn(new Date());
                                 log.info("item Master updated Successfully");
 
                                 return imBasicData1;
@@ -235,7 +235,7 @@ public class MasterOrderService {
                     } else {
 
                         imBasicData1.setCreatedBy(item.getCreatedBy());
-                        imBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                        imBasicData1.setCreatedOn(new Date());
                         imBasicData1.setUpdatedOn(null);
                         imBasicData1V2Repo.save(imBasicData1);
 
@@ -262,12 +262,12 @@ public class MasterOrderService {
                             imBasicData1.setCreatedBy(existingImBasicData.get().getCreatedBy());
                             imBasicData1.setCreatedOn(existingImBasicData.get().getCreatedOn());
                             imBasicData1.setUpdatedBy(item.getCreatedBy());
-                            imBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                            imBasicData1.setUpdatedOn(new Date());
                             imBasicData1V2Repo.save(imBasicData1);
                             log.info("Item Master updated Successfully: " + imBasicData1);
 
                             dbitem.setRemarks("item Master Updated Successfully");
-                            dbitem.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                            dbitem.setOrderProcessedOn(new Date());
                             log.info("item Master updated Successfully");
 
                             return imBasicData1;
@@ -283,7 +283,7 @@ public class MasterOrderService {
 
                 if (existingImBasicData != null && !existingImBasicData.isEmpty()) {
                     dbitem.setRemarks("item Master Already Exist");
-                    dbitem.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                    dbitem.setOrderProcessedOn(new Date());
                     log.info("item Master Already Exist and tblorderitem updated with remarks");
 
                     throw new BadRequestException("item Master Already Exist");
@@ -291,7 +291,7 @@ public class MasterOrderService {
                 } else {
 
                     imBasicData1.setCreatedBy(item.getCreatedBy());
-                    imBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                    imBasicData1.setCreatedOn(new Date());
                     imBasicData1.setUpdatedOn(null);
                     imBasicData1V2Repo.save(imBasicData1);
                     log.info("item Master Created Successfully: " + imBasicData1);
@@ -308,7 +308,7 @@ public class MasterOrderService {
 
                 if (existingImBasicData != null && !existingImBasicData.isEmpty()) {
                     dbitem.setRemarks("item Master Already Exist");
-                    dbitem.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                    dbitem.setOrderProcessedOn(new Date());
 
                     log.info("item Master Already Exist and tblorderitem updated with remarks");
 
@@ -336,7 +336,7 @@ public class MasterOrderService {
         log.info("dbItemMaster : " + dbItemMaster);
         if (dbItemMaster != null) {
             dbItemMaster.setProcessedStatusId(10L);
-            dbItemMaster.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+            dbItemMaster.setOrderProcessedOn(new Date());
             Item itemMaster = itemMasterRepository.save(dbItemMaster);
         }
     }
@@ -367,12 +367,12 @@ public class MasterOrderService {
         dbInboundIntegrationLog.setWarehouseId(dbWarehouse.get().getWarehouseId());
         dbInboundIntegrationLog.setIntegrationLogNumber(String.valueOf(System.currentTimeMillis()));
         dbInboundIntegrationLog.setRefDocNumber(inbound.getItemCode());
-        dbInboundIntegrationLog.setOrderReceiptDate(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setOrderReceiptDate(new Date());
         dbInboundIntegrationLog.setIntegrationStatus("FAILED");
-        dbInboundIntegrationLog.setOrderReceiptDate(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setOrderReceiptDate(new Date());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy("MSD_API");
-        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
         return dbInboundIntegrationLog;
@@ -477,12 +477,12 @@ public class MasterOrderService {
                                     businessPartnerV2.setCreatedBy(customer.getCreatedBy());
                                     businessPartnerV2.setCreatedOn(existingCustomerMaster.get().getCreatedOn());
                                     businessPartnerV2.setUpdatedBy(customer.getCreatedBy());
-                                    businessPartnerV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                                    businessPartnerV2.setUpdatedOn(new Date());
                                     businessPartnerRepo.save(businessPartnerV2);
                                     log.info("Business Master updated Successfully");
 
                                     dbCustomer.setRemarks("Customer Master Updated Successfully");
-                                    dbCustomer.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                                    dbCustomer.setOrderProcessedOn(new Date());
                                     log.info("Customer Master updated Successfully");
 
                                     businessPartnerV2List.add(businessPartnerV2);
@@ -493,13 +493,13 @@ public class MasterOrderService {
                             }
 
                             dbCustomer.setRemarks("Customer Master Already Exist");
-                            dbCustomer.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                            dbCustomer.setOrderProcessedOn(new Date());
                             log.info("Customer Master Already Exist and tblordercustomer updated with remarks");
 
                         } else {
 
                             businessPartnerV2.setCreatedBy(customer.getCreatedBy());
-                            businessPartnerV2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                            businessPartnerV2.setCreatedOn(new Date());
                             businessPartnerV2.setUpdatedOn(null);
                             businessPartnerRepo.save(businessPartnerV2);
 
@@ -529,12 +529,12 @@ public class MasterOrderService {
                                 businessPartnerV2.setCreatedBy(customer.getCreatedBy());
                                 businessPartnerV2.setCreatedOn(existingCustomerMaster.get().getCreatedOn());
                                 businessPartnerV2.setUpdatedBy(customer.getCreatedBy());
-                                businessPartnerV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                                businessPartnerV2.setUpdatedOn(new Date());
                                 businessPartnerRepo.save(businessPartnerV2);
                                 log.info("Business Master updated Successfully : " + businessPartnerV2);
 
                                 dbCustomer.setRemarks("Customer Master Updated Successfully");
-                                dbCustomer.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                                dbCustomer.setOrderProcessedOn(new Date());
                                 log.info("Customer Master updated Successfully");
 
                                 businessPartnerV2List.add(businessPartnerV2);
@@ -550,12 +550,12 @@ public class MasterOrderService {
 
                     if (existingCustomerMaster != null && !existingCustomerMaster.isEmpty()) {
                         dbCustomer.setRemarks("Customer Master Already Exist");
-                        dbCustomer.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                        dbCustomer.setOrderProcessedOn(new Date());
                         log.info("Customer Master Already Exist and tblordercustomer updated with remarks");
                     } else {
 
                         businessPartnerV2.setCreatedBy(customer.getCreatedBy());
-                        businessPartnerV2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                        businessPartnerV2.setCreatedOn(new Date());
                         businessPartnerV2.setUpdatedOn(null);
                         businessPartnerRepo.save(businessPartnerV2);
 
@@ -570,7 +570,7 @@ public class MasterOrderService {
 
                     if (existingCustomerMaster != null && !existingCustomerMaster.isEmpty()) {
                         dbCustomer.setRemarks("Customer Master Already Exist");
-                        dbCustomer.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+                        dbCustomer.setOrderProcessedOn(new Date());
                         log.info("Customer Master Already Exist and tblordercustomer updated with remarks");
 
                     }
@@ -596,7 +596,7 @@ public class MasterOrderService {
         log.info("dbCustomerMaster : " + dbCustomerMaster);
         if (dbCustomerMaster != null) {
             dbCustomerMaster.setProcessedStatusId(10L);
-            dbCustomerMaster.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+            dbCustomerMaster.setOrderProcessedOn(new Date());
             Customer customerMaster = customerMasterRepository.save(dbCustomerMaster);
         }
     }
@@ -627,12 +627,12 @@ public class MasterOrderService {
         dbInboundIntegrationLog.setWarehouseId(dbWarehouse.get().getWarehouseId());
         dbInboundIntegrationLog.setIntegrationLogNumber(String.valueOf(System.currentTimeMillis()));
         dbInboundIntegrationLog.setRefDocNumber(inbound.getPartnerCode());
-        dbInboundIntegrationLog.setOrderReceiptDate(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setOrderReceiptDate(new Date());
         dbInboundIntegrationLog.setIntegrationStatus("FAILED");
-        dbInboundIntegrationLog.setOrderReceiptDate(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setOrderReceiptDate(new Date());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy("MSD_API");
-        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
         return dbInboundIntegrationLog;

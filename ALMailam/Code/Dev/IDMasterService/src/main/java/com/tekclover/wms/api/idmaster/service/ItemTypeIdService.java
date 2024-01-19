@@ -152,8 +152,8 @@ public class ItemTypeIdService {
 			dbItemTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbItemTypeId.setCreatedBy(loginUserID);
 			dbItemTypeId.setUpdatedBy(loginUserID);
-			dbItemTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbItemTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbItemTypeId.setCreatedOn(new Date());
+			dbItemTypeId.setUpdatedOn(new Date());
 			return itemTypeIdRepository.save(dbItemTypeId);
 		}
 	}
@@ -173,7 +173,7 @@ public class ItemTypeIdService {
 		ItemTypeId dbItemTypeId = getItemTypeId(warehouseId,itemTypeId,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateItemTypeId, dbItemTypeId, CommonUtils.getNullPropertyNames(updateItemTypeId));
 		dbItemTypeId.setUpdatedBy(loginUserID);
-		dbItemTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbItemTypeId.setUpdatedOn(new Date());
 		return itemTypeIdRepository.save(dbItemTypeId);
 	}
 

@@ -101,8 +101,8 @@ public class ImPackingService {
 			dbImPacking.setDeletionIndicator(0L);
 			dbImPacking.setCreatedBy(loginUserID);
 			dbImPacking.setUpdatedBy(loginUserID);
-			dbImPacking.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbImPacking.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbImPacking.setCreatedOn(new Date());
+			dbImPacking.setUpdatedOn(new Date());
 			return impackingRepository.save(dbImPacking);
 		}
 	}
@@ -120,7 +120,7 @@ public class ImPackingService {
 		ImPacking dbImPacking = getImPacking(packingMaterialNo,companyCodeId,plantId,languageId,warehouseId,itemCode);
 		BeanUtils.copyProperties(updateImPacking, dbImPacking, CommonUtils.getNullPropertyNames(updateImPacking));
 		dbImPacking.setUpdatedBy(loginUserID);
-		dbImPacking.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbImPacking.setUpdatedOn(new Date());
 		return impackingRepository.save(dbImPacking);
 	}
 
@@ -133,7 +133,7 @@ public class ImPackingService {
 		if ( impacking != null) {
 			impacking.setDeletionIndicator (1L);
 			impacking.setUpdatedBy(loginUserID);
-			impacking.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			impacking.setUpdatedOn(new Date());
 			impackingRepository.save(impacking);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id:" + packingMaterialNo);

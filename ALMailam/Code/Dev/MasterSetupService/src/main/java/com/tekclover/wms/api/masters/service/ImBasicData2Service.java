@@ -100,8 +100,8 @@ public class ImBasicData2Service {
 			dbImBasicData2.setDeletionIndicator(0L);
 			dbImBasicData2.setCreatedBy(loginUserID);
 			dbImBasicData2.setUpdatedBy(loginUserID);
-			dbImBasicData2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbImBasicData2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbImBasicData2.setCreatedOn(new Date());
+			dbImBasicData2.setUpdatedOn(new Date());
 			return imbasicdata2Repository.save(dbImBasicData2);
 		}
 	}
@@ -124,7 +124,7 @@ public class ImBasicData2Service {
 		ImBasicData2 dbImBasicData2 = getImBasicData2(itemCode,companyCodeId,plantId,warehouseId,languageId);
 		BeanUtils.copyProperties(updateImBasicData2, dbImBasicData2, CommonUtils.getNullPropertyNames(updateImBasicData2));
 		dbImBasicData2.setUpdatedBy(loginUserID);
-		dbImBasicData2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbImBasicData2.setUpdatedOn(new Date());
 		return imbasicdata2Repository.save(dbImBasicData2);
 	}
 
@@ -137,7 +137,7 @@ public class ImBasicData2Service {
 		if ( imbasicdata2 != null) {
 			imbasicdata2.setDeletionIndicator (1L);
 			imbasicdata2.setUpdatedBy(loginUserID);
-			imbasicdata2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			imbasicdata2.setUpdatedOn(new Date());
 			imbasicdata2Repository.save(imbasicdata2);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id:" + itemCode);

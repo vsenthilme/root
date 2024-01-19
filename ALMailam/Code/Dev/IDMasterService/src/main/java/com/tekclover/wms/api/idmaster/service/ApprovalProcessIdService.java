@@ -135,8 +135,8 @@ public class ApprovalProcessIdService {
 			dbApprovalProcessId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbApprovalProcessId.setCreatedBy(loginUserID);
 			dbApprovalProcessId.setUpdatedBy(loginUserID);
-			dbApprovalProcessId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbApprovalProcessId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbApprovalProcessId.setCreatedOn(new Date());
+			dbApprovalProcessId.setUpdatedOn(new Date());
 			return approvalProcessIdRepository.save(dbApprovalProcessId);
 		}
 	}
@@ -156,7 +156,7 @@ public class ApprovalProcessIdService {
 		ApprovalProcessId dbApprovalProcessId = getApprovalProcessId( warehouseId,approvalProcessId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateApprovalProcessId, dbApprovalProcessId, CommonUtils.getNullPropertyNames(updateApprovalProcessId));
 		dbApprovalProcessId.setUpdatedBy(loginUserID);
-		dbApprovalProcessId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbApprovalProcessId.setUpdatedOn(new Date());
 		return approvalProcessIdRepository.save(dbApprovalProcessId);
 	}
 

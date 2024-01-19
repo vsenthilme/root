@@ -111,8 +111,8 @@ public class NumberRangeItemService {
             dbNUmberRangeItem.setDeletionIndicator(0L);
             dbNUmberRangeItem.setCreatedBy(loginUserID);
             dbNUmberRangeItem.setUpdatedBy(loginUserID);
-            dbNUmberRangeItem.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbNUmberRangeItem.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbNUmberRangeItem.setCreatedOn(new Date());
+            dbNUmberRangeItem.setUpdatedOn(new Date());
             return numberRangeItemRepository.save(dbNUmberRangeItem);
         }
     }
@@ -130,7 +130,7 @@ public class NumberRangeItemService {
         NumberRangeItem dbNumberRangeItem = getNumberRangeItem(warehouseId,companyCodeId,languageId,plantId,itemTypeId,sequenceNo);
         BeanUtils.copyProperties(updateNumberRangeItem, dbNumberRangeItem, CommonUtils.getNullPropertyNames(updateNumberRangeItem));
         dbNumberRangeItem.setUpdatedBy(loginUserID);
-        dbNumberRangeItem.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbNumberRangeItem.setUpdatedOn(new Date());
         return numberRangeItemRepository.save(dbNumberRangeItem);
     }
 
@@ -144,7 +144,7 @@ public class NumberRangeItemService {
         if ( numberRangeItem != null) {
             numberRangeItem.setDeletionIndicator (1L);
             numberRangeItem.setUpdatedBy(loginUserID);
-            numberRangeItem.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            numberRangeItem.setUpdatedOn(new Date());
             numberRangeItemRepository.save(numberRangeItem);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + itemTypeId);

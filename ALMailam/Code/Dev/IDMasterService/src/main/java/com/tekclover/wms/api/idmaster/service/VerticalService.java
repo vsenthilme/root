@@ -77,8 +77,8 @@ public class VerticalService {
 			dbVertical.setDeletionIndicator(0L);
 			dbVertical.setCreatedBy(loginUserID);
 			dbVertical.setUpdatedBy(loginUserID);
-			dbVertical.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbVertical.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbVertical.setCreatedOn(new Date());
+			dbVertical.setUpdatedOn(new Date());
 			verticalRepository.save(dbVertical);
 		}
 		return dbVertical;
@@ -97,7 +97,7 @@ public class VerticalService {
 		Vertical dbVertical = getVertical(verticalId,languageId);
 		BeanUtils.copyProperties(updateVertical, dbVertical, CommonUtils.getNullPropertyNames(updateVertical));
 		dbVertical.setUpdatedBy(loginUserID);
-		dbVertical.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbVertical.setUpdatedOn(new Date());
 		return verticalRepository.save(dbVertical);
 	}
 

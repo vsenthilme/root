@@ -152,8 +152,8 @@ public class FloorIdService {
 			dbFloorId.setWarehouseIdAndDescription(dbwarehouse.getWarehouseId()+"-"+dbwarehouse.getWarehouseDesc());
 			dbFloorId.setCreatedBy(loginUserID);
 			dbFloorId.setUpdatedBy(loginUserID);
-			dbFloorId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbFloorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbFloorId.setCreatedOn(new Date());
+			dbFloorId.setUpdatedOn(new Date());
 			floorIdRepository.save(dbFloorId);
 		}
 		return dbFloorId;
@@ -174,7 +174,7 @@ public class FloorIdService {
 		FloorId dbFloorId = getFloorId( warehouseId, floorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateFloorId, dbFloorId, CommonUtils.getNullPropertyNames(updateFloorId));
 		dbFloorId.setUpdatedBy(loginUserID);
-		dbFloorId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbFloorId.setUpdatedOn(new Date());
 		return floorIdRepository.save(dbFloorId);
 	}
 

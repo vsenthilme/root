@@ -148,8 +148,8 @@ public class NumberRangeService {
 					.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId() + "-" + dbWarehouse.getWarehouseDesc());
 			dbNumberRange.setCreatedBy(loginUserID);
 			dbNumberRange.setUpdatedBy(loginUserID);
-			dbNumberRange.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbNumberRange.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbNumberRange.setCreatedOn(new Date());
+			dbNumberRange.setUpdatedOn(new Date());
 			return numberRangeRepository.save(dbNumberRange);
 		}
 
@@ -172,7 +172,7 @@ public class NumberRangeService {
 				fiscalYear);
 		BeanUtils.copyProperties(updateNumberRange, dbNumberRange, CommonUtils.getNullPropertyNames(updateNumberRange));
 		dbNumberRange.setUpdatedBy(loginUserID);
-		dbNumberRange.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbNumberRange.setUpdatedOn(new Date());
 		return numberRangeRepository.save(dbNumberRange);
 	}
 

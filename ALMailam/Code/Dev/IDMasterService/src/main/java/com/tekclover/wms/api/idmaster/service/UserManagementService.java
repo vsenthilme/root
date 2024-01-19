@@ -251,9 +251,9 @@ public class UserManagementService {
 				String encodedPwd = passwordEncoder.encodePassword(newUserManagement.getPassword());
 				dbUserManagement.setPassword(encodedPwd);
 				dbUserManagement.setCreatedBy(loginUserID);
-				dbUserManagement.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+				dbUserManagement.setCreatedOn(new Date());
 				dbUserManagement.setUpdatedBy(loginUserID);
-				dbUserManagement.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbUserManagement.setUpdatedOn(new Date());
 				dbUserManagement.setDeletionIndicator(0L);
 				return userManagementRepository.save(dbUserManagement);
 			} catch (Exception e) {
@@ -292,7 +292,7 @@ public class UserManagementService {
 			dbUserManagement.setPassword(encodedPwd);
 		}
 		dbUserManagement.setUpdatedBy(loginUserID);
-		dbUserManagement.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbUserManagement.setUpdatedOn(new Date());
 		return userManagementRepository.save(dbUserManagement);
 	}
 
@@ -309,7 +309,7 @@ public class UserManagementService {
 		UserManagement dbUserManagement = getUserManagement(languageId, companyCode, plantId, warehouseId, userId, userRoleId);
 		if ( dbUserManagement != null) {
 			dbUserManagement.setUpdatedBy(loginUserID);
-			dbUserManagement.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbUserManagement.setUpdatedOn(new Date());
 			dbUserManagement.setDeletionIndicator(1L);
 			userManagementRepository.save(dbUserManagement);
 		} else {

@@ -79,8 +79,8 @@ public class CycleCountSchedulerService {
             cycleCountScheduler.setDeletionIndicator(0L);
             cycleCountScheduler.setCreatedBy(loginUserID);
             cycleCountScheduler.setUpdatedBy(loginUserID);
-            cycleCountScheduler.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            cycleCountScheduler.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            cycleCountScheduler.setCreatedOn(new Date());
+            cycleCountScheduler.setUpdatedOn(new Date());
             return cycleCountSchedulerRepository.save(cycleCountScheduler);
         }
     }
@@ -99,7 +99,7 @@ public class CycleCountSchedulerService {
         CycleCountScheduler dbCycleCountScheduler = getCycleCountScheduler(companyCodeId,languageId,warehouseId,plantId,levelId,cycleCountTypeId,schedulerNumber);
         BeanUtils.copyProperties(updateCycleCountScheduler, dbCycleCountScheduler, CommonUtils.getNullPropertyNames(updateCycleCountScheduler));
         dbCycleCountScheduler.setUpdatedBy(loginUserID);
-        dbCycleCountScheduler.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbCycleCountScheduler.setUpdatedOn(new Date());
         return cycleCountSchedulerRepository.save(dbCycleCountScheduler);
     }
 
@@ -112,7 +112,7 @@ public class CycleCountSchedulerService {
         if ( cycleCountScheduler != null) {
             cycleCountScheduler.setDeletionIndicator (1L);
             cycleCountScheduler.setUpdatedBy(loginUserID);
-            cycleCountScheduler.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            cycleCountScheduler.setUpdatedOn(new Date());
             cycleCountSchedulerRepository.save(cycleCountScheduler);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + cycleCountTypeId);

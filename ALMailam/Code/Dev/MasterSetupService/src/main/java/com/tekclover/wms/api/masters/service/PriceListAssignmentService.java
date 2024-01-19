@@ -177,8 +177,8 @@ public class PriceListAssignmentService {
             dbPriceListAssignment.setPartnerCodeAndDescription(iKeyValuePair.getPartnerCode() + "-" + iKeyValuePair.getDescription());
             dbPriceListAssignment.setCreatedBy(loginUserID);
             dbPriceListAssignment.setUpdatedBy(loginUserID);
-            dbPriceListAssignment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbPriceListAssignment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPriceListAssignment.setCreatedOn(new Date());
+            dbPriceListAssignment.setUpdatedOn(new Date());
             return priceListAssignmentRepository.save(dbPriceListAssignment);
         }
     }
@@ -200,7 +200,7 @@ public class PriceListAssignmentService {
         PriceListAssignment dbPriceListAssignment = getPriceListAssignment(warehouseId, partnerCode, priceListId, companyCodeId, languageId, plantId);
         BeanUtils.copyProperties(updatePriceListAssignment, dbPriceListAssignment, CommonUtils.getNullPropertyNames(updatePriceListAssignment));
         dbPriceListAssignment.setUpdatedBy(loginUserID);
-        dbPriceListAssignment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPriceListAssignment.setUpdatedOn(new Date());
         return priceListAssignmentRepository.save(dbPriceListAssignment);
     }
 

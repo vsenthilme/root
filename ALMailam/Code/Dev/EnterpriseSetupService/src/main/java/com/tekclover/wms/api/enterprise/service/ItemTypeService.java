@@ -203,8 +203,8 @@ public class ItemTypeService{
 		dbItemType.setDeletionIndicator(0L);
 		dbItemType.setCreatedBy(loginUserID);
 		dbItemType.setUpdatedBy(loginUserID);
-		dbItemType.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbItemType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbItemType.setCreatedOn(new Date());
+		dbItemType.setUpdatedOn(new Date());
 		return itemtypeRepository.save(dbItemType);
 	}
 
@@ -221,7 +221,7 @@ public class ItemTypeService{
 		ItemType dbItemType = getItemType(warehouseId, itemTypeId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateItemType, dbItemType, CommonUtils.getNullPropertyNames(updateItemType));
 		dbItemType.setUpdatedBy(loginUserID);
-		dbItemType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbItemType.setUpdatedOn(new Date());
 		return itemtypeRepository.save(dbItemType);
 	}
 
@@ -234,7 +234,7 @@ public class ItemTypeService{
 		if ( itemtype != null) {
 			itemtype.setDeletionIndicator (1L);
 			itemtype.setUpdatedBy(loginUserID);
-			itemtype.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			itemtype.setUpdatedOn(new Date());
 			itemtypeRepository.save(itemtype);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + itemTypeId);

@@ -164,8 +164,8 @@ public class StorageTypeIdService {
 			dbStorageTypeId.setStorageClassIdAndDescription(dbStorageClassId.getStorageClassId()+"-"+dbStorageClassId.getDescription());
 			dbStorageTypeId.setCreatedBy(loginUserID);
 			dbStorageTypeId.setUpdatedBy(loginUserID);
-			dbStorageTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStorageTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStorageTypeId.setCreatedOn(new Date());
+			dbStorageTypeId.setUpdatedOn(new Date());
 			return storageTypeIdRepository.save(dbStorageTypeId);
 		}
 	}
@@ -185,7 +185,7 @@ public class StorageTypeIdService {
 		StorageTypeId dbStorageTypeId = getStorageTypeId(warehouseId, storageClassId, storageTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageTypeId, dbStorageTypeId, CommonUtils.getNullPropertyNames(updateStorageTypeId));
 		dbStorageTypeId.setUpdatedBy(loginUserID);
-		dbStorageTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageTypeId.setUpdatedOn(new Date());
 		return storageTypeIdRepository.save(dbStorageTypeId);
 	}
 

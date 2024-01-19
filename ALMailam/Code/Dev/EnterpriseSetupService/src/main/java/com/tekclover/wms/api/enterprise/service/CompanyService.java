@@ -160,8 +160,8 @@ public class CompanyService {
 		dbCompany.setDeletionIndicator(0L);
 		dbCompany.setCreatedBy(loginUserID);
 		dbCompany.setUpdatedBy(loginUserID);
-		dbCompany.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbCompany.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCompany.setCreatedOn(new Date());
+		dbCompany.setUpdatedOn(new Date());
 		return companyRepository.save(dbCompany);
 	}
 
@@ -180,7 +180,7 @@ public class CompanyService {
 		log.info("dbCompany : " + dbCompany);
 		BeanUtils.copyProperties(updateCompany, dbCompany, CommonUtils.getNullPropertyNames(updateCompany));
 		dbCompany.setUpdatedBy(loginUserID);
-		dbCompany.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCompany.setUpdatedOn(new Date());
 		return companyRepository.save(dbCompany);
 	}
 
@@ -193,7 +193,7 @@ public class CompanyService {
 		if ( company != null) {
 			company.setDeletionIndicator (1L);
 			company.setUpdatedBy(loginUserID);
-			company.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			company.setUpdatedOn(new Date());
 			companyRepository.save(company);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + companyId);

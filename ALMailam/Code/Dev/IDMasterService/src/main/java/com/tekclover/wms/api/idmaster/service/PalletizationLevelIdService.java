@@ -135,8 +135,8 @@ public class PalletizationLevelIdService {
 			dbPalletizationLevelId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbPalletizationLevelId.setCreatedBy(loginUserID);
 			dbPalletizationLevelId.setUpdatedBy(loginUserID);
-			dbPalletizationLevelId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbPalletizationLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbPalletizationLevelId.setCreatedOn(new Date());
+			dbPalletizationLevelId.setUpdatedOn(new Date());
 			return palletizationLevelIdRepository.save(dbPalletizationLevelId);
 		}
 	}
@@ -157,7 +157,7 @@ public class PalletizationLevelIdService {
 		PalletizationLevelId dbPalletizationLevelId = getPalletizationLevelId( warehouseId, palletizationLevelId, palletizationLevel,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updatePalletizationLevelId, dbPalletizationLevelId, CommonUtils.getNullPropertyNames(updatePalletizationLevelId));
 		dbPalletizationLevelId.setUpdatedBy(loginUserID);
-		dbPalletizationLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbPalletizationLevelId.setUpdatedOn(new Date());
 		return palletizationLevelIdRepository.save(dbPalletizationLevelId);
 	}
 

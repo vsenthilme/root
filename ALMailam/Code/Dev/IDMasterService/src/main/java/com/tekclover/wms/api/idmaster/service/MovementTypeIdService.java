@@ -136,8 +136,8 @@ public class MovementTypeIdService {
 			dbMovementTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbMovementTypeId.setCreatedBy(loginUserID);
 			dbMovementTypeId.setUpdatedBy(loginUserID);
-			dbMovementTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbMovementTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbMovementTypeId.setCreatedOn(new Date());
+			dbMovementTypeId.setUpdatedOn(new Date());
 			return movementTypeIdRepository.save(dbMovementTypeId);
 		}
 	}
@@ -157,7 +157,7 @@ public class MovementTypeIdService {
 		MovementTypeId dbMovementTypeId = getMovementTypeId( warehouseId,movementTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateMovementTypeId, dbMovementTypeId, CommonUtils.getNullPropertyNames(updateMovementTypeId));
 		dbMovementTypeId.setUpdatedBy(loginUserID);
-		dbMovementTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbMovementTypeId.setUpdatedOn(new Date());
 		return movementTypeIdRepository.save(dbMovementTypeId);
 	}
 

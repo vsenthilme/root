@@ -69,7 +69,7 @@ public class OrderTypeIdService {
             for(OrderTypeId newOrderTypeId: orderTypeIds){
                 newOrderTypeId.setDeletionIndicator(1L);
                 newOrderTypeId.setUpdatedBy(loginUserID);
-                newOrderTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newOrderTypeId.setUpdatedOn(new Date());
                 orderTypeIdRepository.save(newOrderTypeId);
             }
         } else {
@@ -82,7 +82,7 @@ public class OrderTypeIdService {
             for(OrderTypeId newOrderTypeId: orderTypeIds){
                 newOrderTypeId.setDeletionIndicator(1L);
                 newOrderTypeId.setUpdatedBy(loginUserID);
-                newOrderTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newOrderTypeId.setUpdatedOn(new Date());
                 orderTypeIdRepository.save(newOrderTypeId);
             }
         } else {

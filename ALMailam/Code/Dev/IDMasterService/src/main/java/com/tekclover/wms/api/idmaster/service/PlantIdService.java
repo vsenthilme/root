@@ -147,8 +147,8 @@ public class PlantIdService{
 			dbPlantId.setCompanyIdAndDescription(dbCompanyId.getCompanyCodeId() + "-" + dbCompanyId.getDescription());
 			dbPlantId.setCreatedBy(loginUserID);
 			dbPlantId.setUpdatedBy(loginUserID);
-			dbPlantId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbPlantId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbPlantId.setCreatedOn(new Date());
+			dbPlantId.setUpdatedOn(new Date());
 			plantIdRepository.save(dbPlantId);
 		}
 		return dbPlantId;
@@ -168,7 +168,7 @@ public class PlantIdService{
 		PlantId dbPlantId = getPlantId(plantId,companyCodeId,languageId);
 		BeanUtils.copyProperties(updatePlantId, dbPlantId, CommonUtils.getNullPropertyNames(updatePlantId));
 		dbPlantId.setUpdatedBy(loginUserID);
-		dbPlantId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbPlantId.setUpdatedOn(new Date());
 
 		updateRoleAccess(plantId, companyCodeId, languageId, updatePlantId.getDescription());									//Update Description
 		updateModuleId(plantId, companyCodeId, languageId, updatePlantId.getDescription());									//Update Description

@@ -214,8 +214,8 @@ public class StorageTypeService {
 		dbStorageType.setDeletionIndicator(0L);
 		dbStorageType.setCreatedBy(loginUserID);
 		dbStorageType.setUpdatedBy(loginUserID);
-		dbStorageType.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbStorageType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageType.setCreatedOn(new Date());
+		dbStorageType.setUpdatedOn(new Date());
 		return storagetypeRepository.save(dbStorageType);
 	}
 
@@ -232,7 +232,7 @@ public class StorageTypeService {
 		StorageType dbStorageType = getStorageType(warehouseId, storageClassId, storageTypeId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageType, dbStorageType, CommonUtils.getNullPropertyNames(updateStorageType));
 		dbStorageType.setUpdatedBy(loginUserID);
-		dbStorageType.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageType.setUpdatedOn(new Date());
 		return storagetypeRepository.save(dbStorageType);
 	}
 
@@ -245,7 +245,7 @@ public class StorageTypeService {
 		if ( storagetype != null) {
 			storagetype.setDeletionIndicator (1L);
 			storagetype.setUpdatedBy(loginUserID);
-			storagetype.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			storagetype.setUpdatedOn(new Date());
 			storagetypeRepository.save(storagetype);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + storageTypeId);

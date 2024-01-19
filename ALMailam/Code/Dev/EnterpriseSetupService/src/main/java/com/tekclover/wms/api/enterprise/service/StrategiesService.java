@@ -268,8 +268,8 @@ public class StrategiesService {
 			dbStrategies.setDeletionIndicator(0L);
 			dbStrategies.setCreatedBy(loginUserID);
 			dbStrategies.setUpdatedBy(loginUserID);
-			dbStrategies.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStrategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStrategies.setCreatedOn(new Date());
+			dbStrategies.setUpdatedOn(new Date());
 			Strategies savedStrategies = strategiesRepository.save(dbStrategies);
 
 			strategiesList.add(savedStrategies);
@@ -302,7 +302,7 @@ public class StrategiesService {
 			for(Strategies strategies:dbStrategies){
 				strategies.setDeletionIndicator(1L);
 				strategies.setUpdatedBy(loginUserID);
-				strategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				strategies.setUpdatedOn(new Date());
 				strategiesRepository.save(strategies);
 			}
 		}
@@ -331,7 +331,7 @@ public class StrategiesService {
 			for(Strategies dbStrategies:strategies) {
 				dbStrategies.setDeletionIndicator(1L);
 				dbStrategies.setUpdatedBy(loginUserID);
-				dbStrategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbStrategies.setUpdatedOn(new Date());
 				strategiesRepository.save(dbStrategies);
 			}
 		} else {

@@ -219,8 +219,8 @@ public class StorageSectionService {
 		dbStorageSection.setDeletionIndicator(0L);
 		dbStorageSection.setCreatedBy(loginUserID);
 		dbStorageSection.setUpdatedBy(loginUserID);
-		dbStorageSection.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbStorageSection.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageSection.setCreatedOn(new Date());
+		dbStorageSection.setUpdatedOn(new Date());
 		return storagesectionRepository.save(dbStorageSection);
 	}
 
@@ -237,7 +237,7 @@ public class StorageSectionService {
 		StorageSection dbStorageSection = getStorageSection(warehouseId, floorId, storageSectionId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageSection, dbStorageSection, CommonUtils.getNullPropertyNames(updateStorageSection));
 		dbStorageSection.setUpdatedBy(loginUserID);
-		dbStorageSection.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStorageSection.setUpdatedOn(new Date());
 		return storagesectionRepository.save(dbStorageSection);
 	}
 
@@ -250,7 +250,7 @@ public class StorageSectionService {
 		if ( storagesection != null) {
 			storagesection.setDeletionIndicator (1L);
 			storagesection.setUpdatedBy(loginUserID);
-			storagesection.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			storagesection.setUpdatedOn(new Date());
 			storagesectionRepository.save(storagesection);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id: " + storageSectionId);

@@ -319,8 +319,8 @@ public class ItemGroupService {
 				dbItemGroupId.setDeletionIndicator(0L);
 				dbItemGroupId.setCreatedBy(loginUserID);
 				dbItemGroupId.setUpdatedBy(loginUserID);
-				dbItemGroupId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-				dbItemGroupId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbItemGroupId.setCreatedOn(new Date());
+				dbItemGroupId.setUpdatedOn(new Date());
 				ItemGroup savedItemGroup = itemgroupRepository.save(dbItemGroupId);
 				dbItemGroupList.add(savedItemGroup);
 			}
@@ -352,7 +352,7 @@ public class ItemGroupService {
 			if (dbItemGroup != null) {
 				for (ItemGroup newItemGroup : dbItemGroup) {
 					newItemGroup.setUpdatedBy(loginUserID);
-					newItemGroup.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					newItemGroup.setUpdatedOn(new Date());
 					newItemGroup.setDeletionIndicator(1L);
 					itemgroupRepository.save(newItemGroup);
 				}
@@ -386,7 +386,7 @@ public class ItemGroupService {
 				for (ItemGroup itemGroup : itemgroup) {
 					itemGroup.setDeletionIndicator(1L);
 					itemGroup.setUpdatedBy(loginUserID);
-					itemGroup.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					itemGroup.setUpdatedOn(new Date());
 					itemgroupRepository.save(itemGroup);
 				}
 			}else {

@@ -145,8 +145,8 @@ public class SubMovementTypeIdService {
 			dbSubMovementTypeId.setMovementTypeIdAndDescription(dbMovementTypeId.getMovementTypeId()+"-"+dbMovementTypeId.getMovementTypeText());
 			dbSubMovementTypeId.setCreatedBy(loginUserID);
 			dbSubMovementTypeId.setUpdatedBy(loginUserID);
-			dbSubMovementTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbSubMovementTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbSubMovementTypeId.setCreatedOn(new Date());
+			dbSubMovementTypeId.setUpdatedOn(new Date());
 			return subMovementTypeIdRepository.save(dbSubMovementTypeId);
 		}
 	}
@@ -166,7 +166,7 @@ public class SubMovementTypeIdService {
 		SubMovementTypeId dbSubMovementTypeId = getSubMovementTypeId( warehouseId,movementTypeId,subMovementTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSubMovementTypeId, dbSubMovementTypeId, CommonUtils.getNullPropertyNames(updateSubMovementTypeId));
 		dbSubMovementTypeId.setUpdatedBy(loginUserID);
-		dbSubMovementTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbSubMovementTypeId.setUpdatedOn(new Date());
 		return subMovementTypeIdRepository.save(dbSubMovementTypeId);
 	}
 

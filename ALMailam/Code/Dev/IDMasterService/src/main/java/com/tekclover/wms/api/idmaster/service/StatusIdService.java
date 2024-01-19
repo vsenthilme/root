@@ -128,8 +128,8 @@ public class StatusIdService {
             dbStatusId.setDeletionIndicator(0L);
             dbStatusId.setCreatedBy(loginUserID);
             dbStatusId.setUpdatedBy(loginUserID);
-            dbStatusId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbStatusId.setCreatedOn(new Date());
+            dbStatusId.setUpdatedOn(new Date());
             return statusIdRepository.save(dbStatusId);
         }
     }
@@ -150,7 +150,7 @@ public class StatusIdService {
         StatusId dbStatusId = getStatusId(statusId, languageId);
         BeanUtils.copyProperties(updateStatusId, dbStatusId, CommonUtils.getNullPropertyNames(updateStatusId));
         dbStatusId.setUpdatedBy(loginUserID);
-        dbStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbStatusId.setUpdatedOn(new Date());
         return statusIdRepository.save(dbStatusId);
     }
 

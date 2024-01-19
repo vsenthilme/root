@@ -85,8 +85,8 @@ public class CurrencyService {
 			dbCurrency.setDeletionIndicator(0L);
 			dbCurrency.setCreatedBy(loginUserID);
 			dbCurrency.setUpdatedBy(loginUserID);
-			dbCurrency.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbCurrency.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCurrency.setCreatedOn(new Date());
+			dbCurrency.setUpdatedOn(new Date());
 			return currencyRepository.save(dbCurrency);
 		}
 	}
@@ -105,7 +105,7 @@ public class CurrencyService {
 		BeanUtils.copyProperties(updateCurrency, dbCurrency, CommonUtils.getNullPropertyNames(updateCurrency));
 		dbCurrency.setDeletionIndicator(0L);
 		dbCurrency.setUpdatedBy(loginUserID);
-		dbCurrency.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCurrency.setUpdatedOn(new Date());
 		return currencyRepository.save(dbCurrency);
 	}
 

@@ -360,8 +360,8 @@ public class BatchSerialService {
 				batchSerial.setDeletionIndicator(0L);
 				batchSerial.setCreatedBy(loginUserID);
 				batchSerial.setUpdatedBy(loginUserID);
-				batchSerial.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-				batchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				batchSerial.setCreatedOn(new Date());
+				batchSerial.setUpdatedOn(new Date());
 				BatchSerial savedBatchSerial = batchSerialRepository.save(batchSerial);
 
 //			savedBatchSerial.setLevelReferences(new HashSet<>());
@@ -419,7 +419,7 @@ public class BatchSerialService {
 
 					BeanUtils.copyProperties(newUpdateBatchSerial, dbBatchSerial, CommonUtils.getNullPropertyNames(newUpdateBatchSerial));
 					dbBatchSerial.setUpdatedBy(loginUserID);
-					dbBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbBatchSerial.setUpdatedOn(new Date());
 					batchSerialList.add(batchSerialRepository.save(dbBatchSerial));
 				}
 				else {
@@ -457,7 +457,7 @@ public class BatchSerialService {
 						newBatchSerial.setId(id);
 						newBatchSerial.setDeletionIndicator(0L);
 						newBatchSerial.setUpdatedBy(loginUserID);
-						newBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+						newBatchSerial.setUpdatedOn(new Date());
 
 						batchSerialList.add(batchSerialRepository.save(newBatchSerial));
 
@@ -506,7 +506,7 @@ public class BatchSerialService {
 			for(BatchSerial batchSerial:dbBatchSerial) {
 				batchSerial.setDeletionIndicator(1L);
 				batchSerial.setUpdatedBy(loginUserID);
-				batchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				batchSerial.setUpdatedOn(new Date());
 				batchSerialRepository.save(batchSerial);
 //				if (levelReferenceService.getLevelReferences(storageMethod) != null) {
 //					levelReferenceService.deleteLevelReferences(storageMethod, loginUserID);

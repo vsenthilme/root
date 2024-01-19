@@ -53,8 +53,8 @@ public class AuditLogService {
 		BeanUtils.copyProperties(newAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(newAuditLog));
 		dbAuditLog.setCreatedBy(loginUserID);
 		dbAuditLog.setUpdatedBy(loginUserID);
-		dbAuditLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbAuditLog.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbAuditLog.setCreatedOn(new Date());
+		dbAuditLog.setUpdatedOn(new Date());
 		log.info("dbAuditLog----------> : " + dbAuditLog);
 		return auditLogRepository.save(dbAuditLog);
 	}

@@ -105,8 +105,8 @@ public class BomLineService {
 			dbBomLine.setDeletionIndicator(0L);
 			dbBomLine.setCreatedBy(loginUserID);
 			dbBomLine.setUpdatedBy(loginUserID);
-			dbBomLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbBomLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbBomLine.setCreatedOn(new Date());
+			dbBomLine.setUpdatedOn(new Date());
 			return bomLineRepository.save(dbBomLine);
 		}
 	}
@@ -126,7 +126,7 @@ public class BomLineService {
 		BomLine dbBomLine = getBomLine(warehouseId, bomNumber, childItemCode,companyCode,plantId,languageId);
 		BeanUtils.copyProperties(updateBomLine, dbBomLine, CommonUtils.getNullPropertyNames(updateBomLine));
 		dbBomLine.setUpdatedBy(loginUserID);
-		dbBomLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomLine.setUpdatedOn(new Date());
 		return bomLineRepository.save(dbBomLine);
 	}
 

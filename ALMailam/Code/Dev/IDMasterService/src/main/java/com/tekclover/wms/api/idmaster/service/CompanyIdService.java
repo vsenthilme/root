@@ -111,8 +111,8 @@ public class CompanyIdService{
 			dbCompanyId.setDeletionIndicator(0L);
 			dbCompanyId.setCreatedBy(loginUserID);
 			dbCompanyId.setUpdatedBy(loginUserID);
-			dbCompanyId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbCompanyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCompanyId.setCreatedOn(new Date());
+			dbCompanyId.setUpdatedOn(new Date());
 			companyIdRepository.save(dbCompanyId);
 		}
 		return dbCompanyId;
@@ -133,7 +133,7 @@ public class CompanyIdService{
 		CompanyId dbCompanyId = getCompanyId(companyCodeId,languageId);
 		BeanUtils.copyProperties(updateCompanyId, dbCompanyId, CommonUtils.getNullPropertyNames(updateCompanyId));
 		dbCompanyId.setUpdatedBy(loginUserID);
-		dbCompanyId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCompanyId.setUpdatedOn(new Date());
 
 		updateRoleAccess(companyCodeId, updateCompanyId.getDescription());									//Update Company Description
 		updateModuleId(companyCodeId, updateCompanyId.getDescription());									//Update Company Description

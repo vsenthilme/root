@@ -350,8 +350,8 @@ private VariantRepository variantRepository;
 				dbVariant.setDeletionIndicator(0L);
 				dbVariant.setCreatedBy(loginUserID);
 				dbVariant.setUpdatedBy(loginUserID);
-				dbVariant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-				dbVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbVariant.setCreatedOn(new Date());
+				dbVariant.setUpdatedOn(new Date();
 				Variant savedVariant = variantRepository.save(dbVariant);
 
 //			savedVariant.setLevelReferenceVariants(new HashSet<>());
@@ -362,8 +362,9 @@ private VariantRepository variantRepository;
 //					dblevelReferenceVariant.setDeletionIndicator(0L);
 //					dblevelReferenceVariant.setCreatedBy(loginUserID);
 //					dblevelReferenceVariant.setUpdatedBy(loginUserID);
-//					dblevelReferenceVariant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//					dblevelReferenceVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+
+//					dblevelReferenceVariant.setCreatedOn(new Date());
+//					dblevelReferenceVariant.setUpdatedOn(new Date());
 //					dblevelReferenceVariant.setVariantId(savedVariant.getVariantId());
 //					LevelReferenceVariant savedLevelReferenceVariant = levelReferenceVariantRepository.save(dblevelReferenceVariant);
 //					savedVariant.getLevelReferenceVariants().add(savedLevelReferenceVariant);
@@ -396,8 +397,9 @@ private VariantRepository variantRepository;
 //			dbVariant.setLevelIdAndDescription(ikeyValuePair3.getLevelId()+"-"+ikeyValuePair3.getDescription());
 //			dbVariant.setCreatedBy(loginUserID);
 //			dbVariant.setUpdatedBy(loginUserID);
-//			dbVariant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//			dbVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+//			dbVariant.setCreatedOn(new Date());
+//			dbVariant.setUpdatedOn(new Date()
+//			);
 //			return variantRepository.save(dbVariant);
 //		}
 //	}
@@ -440,7 +442,7 @@ private VariantRepository variantRepository;
 				if (dbVariant != null) {
 					BeanUtils.copyProperties(newUpdateVariant, dbVariant, CommonUtils.getNullPropertyNames(newUpdateVariant));
 					dbVariant.setUpdatedBy(loginUserID);
-					dbVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbVariant.setUpdatedOn(new Date());
 					variantList.add(variantRepository.save(dbVariant));
 				}
 				else {
@@ -470,8 +472,8 @@ private VariantRepository variantRepository;
 						newVariant.setDeletionIndicator(0L);
 						newVariant.setCreatedBy(loginUserID);
 						newVariant.setUpdatedBy(loginUserID);
-						newVariant.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-						newVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+						newVariant.setCreatedOn(new Date());
+						newVariant.setUpdatedOn(new Date());
 						variantList.add(variantRepository.save(newVariant));
 					}
 				}
@@ -499,7 +501,7 @@ private VariantRepository variantRepository;
 			for (Variant dbVariant:variant){
 				dbVariant.setDeletionIndicator(1L);
 				dbVariant.setUpdatedBy(loginUserID);
-				dbVariant.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbVariant.setUpdatedOn(new Date());
 				variantRepository.save(dbVariant);
 				//batchSerialRepository.save(batchSerial);
 //				if (levelReferenceVariantService.getLevelReferenceVariant(variantId) != null) {

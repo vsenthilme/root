@@ -145,8 +145,8 @@ public class SubLevelIdService{
 			dbSubLevelId.setLevelIdAndDescription(dbLevelId.getLevel()+"-"+dbLevelId.getLevelReference());//levelIdAndDescription mapped by levelAndLevelReference
 			dbSubLevelId.setCreatedBy(loginUserID);
 			dbSubLevelId.setUpdatedBy(loginUserID);
-			dbSubLevelId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbSubLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbSubLevelId.setCreatedOn(new Date());
+			dbSubLevelId.setUpdatedOn(new Date());
 			return subLevelIdRepository.save(dbSubLevelId);
 		}
 	}
@@ -166,7 +166,7 @@ public class SubLevelIdService{
 		SubLevelId dbSubLevelId = getSubLevelId(warehouseId, subLevelId,levelId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSubLevelId, dbSubLevelId, CommonUtils.getNullPropertyNames(updateSubLevelId));
 		dbSubLevelId.setUpdatedBy(loginUserID);
-		dbSubLevelId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbSubLevelId.setUpdatedOn(new Date());
 		return subLevelIdRepository.save(dbSubLevelId);
 	}
 

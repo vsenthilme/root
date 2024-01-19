@@ -193,8 +193,8 @@ public class BillingService{
             dbBilling.setDeletionIndicator(0L);
             dbBilling.setCreatedBy(loginUserID);
             dbBilling.setUpdatedBy(loginUserID);
-            dbBilling.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBilling.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBilling.setCreatedOn(new Date());
+            dbBilling.setUpdatedOn(new Date());
 
             return billingRepository.save(dbBilling);
         }
@@ -215,7 +215,7 @@ public class BillingService{
         Billing dbBilling = getBilling(warehouseId,moduleId,partnerCode,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBilling, dbBilling, CommonUtils.getNullPropertyNames(updateBilling));
         dbBilling.setUpdatedBy(loginUserID);
-        dbBilling.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBilling.setUpdatedOn(new Date());
         return billingRepository.save(dbBilling);
     }
 

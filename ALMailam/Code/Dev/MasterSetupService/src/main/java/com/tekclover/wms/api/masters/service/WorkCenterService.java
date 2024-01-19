@@ -110,8 +110,8 @@ public class WorkCenterService {
             dbWorkCenter.setDeletionIndicator(0L);
             dbWorkCenter.setCreatedBy(loginUserID);
             dbWorkCenter.setUpdatedBy(loginUserID);
-            dbWorkCenter.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbWorkCenter.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbWorkCenter.setCreatedOn(new Date());
+            dbWorkCenter.setUpdatedOn(new Date());
             return workCenterRepository.save(dbWorkCenter);
         }
     }
@@ -129,7 +129,7 @@ public class WorkCenterService {
         WorkCenter dbWorkCenter = getWorkCenter(workCenterId,companyCodeId,plantId,languageId,warehouseId,workCenterType);
         BeanUtils.copyProperties(updateWorkCenter, dbWorkCenter, CommonUtils.getNullPropertyNames(updateWorkCenter));
         dbWorkCenter.setUpdatedBy(loginUserID);
-        dbWorkCenter.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbWorkCenter.setUpdatedOn(new Date());
         return workCenterRepository.save(dbWorkCenter);
     }
 
@@ -143,7 +143,7 @@ public class WorkCenterService {
         if ( workCenter != null) {
             workCenter.setDeletionIndicator (1L);
             workCenter.setUpdatedBy(loginUserID);
-            workCenter.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            workCenter.setUpdatedOn(new Date());
             workCenterRepository.save(workCenter);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + workCenterId);

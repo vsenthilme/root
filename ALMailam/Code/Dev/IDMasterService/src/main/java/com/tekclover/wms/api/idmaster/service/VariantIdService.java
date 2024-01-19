@@ -157,8 +157,8 @@ public class VariantIdService{
 			dbVariantId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbVariantId.setCreatedBy(loginUserID);
 			dbVariantId.setUpdatedBy(loginUserID);
-			dbVariantId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbVariantId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbVariantId.setCreatedOn(new Date());
+			dbVariantId.setUpdatedOn(new Date());
 			return variantIdRepository.save(dbVariantId);
 		}
 	}
@@ -178,7 +178,7 @@ public class VariantIdService{
 		VariantId dbVariantId = getVariantId(warehouseId, variantCode, variantType, variantSubCode,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateVariantId, dbVariantId, CommonUtils.getNullPropertyNames(updateVariantId));
 		dbVariantId.setUpdatedBy(loginUserID);
-		dbVariantId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbVariantId.setUpdatedOn(new Date());
 		return variantIdRepository.save(dbVariantId);
 	}
 

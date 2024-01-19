@@ -42,7 +42,7 @@ public class NotificationService {
      * @param userId
      */
     public void sendMessage(String topic, String message, String userId) throws ParseException {
-        final String time = new SimpleDateFormat("HH:mm").format(DateUtils.getCurrentKWTDateTime());
+        final String time = new SimpleDateFormat("HH:mm").format(new Date());
         simpMessagingTemplate.convertAndSend("/topic/messages",
                 new OutputMessage(topic, message, time, userId, null));
     }

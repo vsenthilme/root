@@ -133,8 +133,8 @@ public class EmployeeIdService  {
 			dbEmployeeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbEmployeeId.setCreatedBy(loginUserID);
 			dbEmployeeId.setUpdatedBy(loginUserID);
-			dbEmployeeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbEmployeeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbEmployeeId.setCreatedOn(new Date());
+			dbEmployeeId.setUpdatedOn(new Date());
 			return employeeIdRepository.save(dbEmployeeId);
 		}
 	}
@@ -154,7 +154,7 @@ public class EmployeeIdService  {
 		EmployeeId dbEmployeeId = getEmployeeId( warehouseId,employeeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateEmployeeId, dbEmployeeId, CommonUtils.getNullPropertyNames(updateEmployeeId));
 		dbEmployeeId.setUpdatedBy(loginUserID);
-		dbEmployeeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbEmployeeId.setUpdatedOn(new Date());
 		return employeeIdRepository.save(dbEmployeeId);
 	}
 

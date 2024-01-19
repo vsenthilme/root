@@ -151,8 +151,8 @@ public class CbmInboundService {
             dbCbmInbound.setCreatedBy(loginUserID);
             dbCbmInbound.setUpdatedBy(loginUserID);
             dbCbmInbound.setDeletionIndicator(0L);
-            dbCbmInbound.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbCbmInbound.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbCbmInbound.setCreatedOn(new Date());
+            dbCbmInbound.setUpdatedOn(new Date());
             return cbmInboundRepository.save(dbCbmInbound);
         }
     }
@@ -172,7 +172,7 @@ public class CbmInboundService {
         CbmInbound dbCbmInbound = getCbmInbound(warehouseId,itemCode,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateCbmInbound, dbCbmInbound, CommonUtils.getNullPropertyNames(updateCbmInbound));
         dbCbmInbound.setUpdatedBy(loginUserID);
-        dbCbmInbound.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbCbmInbound.setUpdatedOn(new Date());
         return cbmInboundRepository.save(dbCbmInbound);
     }
 

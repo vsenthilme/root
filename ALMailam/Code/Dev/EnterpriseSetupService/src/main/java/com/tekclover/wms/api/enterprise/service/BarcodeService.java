@@ -123,8 +123,8 @@ public class BarcodeService extends BaseService {
 		dbBarcode.setCompanyId(getCompanyCode());
 		dbBarcode.setCreatedBy(loginUserID);
 		dbBarcode.setUpdatedBy(loginUserID);
-		dbBarcode.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbBarcode.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBarcode.setCreatedOn(new Date());
+		dbBarcode.setUpdatedOn(new Date());
 		return barcodeRepository.save(dbBarcode);
 	}
 	

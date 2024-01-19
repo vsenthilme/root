@@ -117,8 +117,8 @@ public class ImStrategiesService {
 			dbImStrategies.setDeletionIndicator(0L);
 			dbImStrategies.setCreatedBy(loginUserID);
 			dbImStrategies.setUpdatedBy(loginUserID);
-			dbImStrategies.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbImStrategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbImStrategies.setCreatedOn(new Date()());
+			dbImStrategies.setUpdatedOn(new Date());
 			return imstrategiesRepository.save(dbImStrategies);
 		}
 	}
@@ -144,7 +144,7 @@ public class ImStrategiesService {
 		ImStrategies dbImStrategies = getImStrategies(strategyTypeId,companyCodeId,plantId,warehouseId,itemCode,sequenceIndicator,languageId);
 		BeanUtils.copyProperties(updateImStrategies, dbImStrategies, CommonUtils.getNullPropertyNames(updateImStrategies));
 		dbImStrategies.setUpdatedBy(loginUserID);
-		dbImStrategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbImStrategies.setUpdatedOn(new Date());
 		return imstrategiesRepository.save(dbImStrategies);
 	}
 
@@ -165,7 +165,7 @@ public class ImStrategiesService {
 		if ( imstrategies != null) {
 			imstrategies.setDeletionIndicator (1L);
 			imstrategies.setUpdatedBy(loginUserID);
-			imstrategies.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			imstrategies.setUpdatedOn(new Date());
 			imstrategiesRepository.save(imstrategies);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id:" + strategyTypeId);

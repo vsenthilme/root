@@ -132,8 +132,8 @@ public class OutboundOrderStatusIdService {
 			dbOutboundOrderStatusId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbOutboundOrderStatusId.setCreatedBy(loginUserID);
 			dbOutboundOrderStatusId.setUpdatedBy(loginUserID);
-			dbOutboundOrderStatusId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbOutboundOrderStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbOutboundOrderStatusId.setCreatedOn(new Date());
+			dbOutboundOrderStatusId.setUpdatedOn(new Date());
 			return outboundOrderStatusIdRepository.save(dbOutboundOrderStatusId);
 		}
 	}

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -151,8 +152,8 @@ public class HandlingEquipmentService {
             dbHandlingEquipment.setDeletionIndicator(0L);
             dbHandlingEquipment.setCreatedBy(loginUserID);
             dbHandlingEquipment.setUpdatedBy(loginUserID);
-            dbHandlingEquipment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbHandlingEquipment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbHandlingEquipment.setCreatedOn(new Date());
+            dbHandlingEquipment.setUpdatedOn(new Date());
             return handlingequipmentRepository.save(dbHandlingEquipment);
         }
     }
@@ -171,7 +172,7 @@ public class HandlingEquipmentService {
         HandlingEquipment dbHandlingEquipment = getHandlingEquipment(warehouseId, handlingEquipmentId, companyCodeId, languageId, plantId);
         BeanUtils.copyProperties(updateHandlingEquipment, dbHandlingEquipment, CommonUtils.getNullPropertyNames(updateHandlingEquipment));
         dbHandlingEquipment.setUpdatedBy(loginUserID);
-        dbHandlingEquipment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbHandlingEquipment.setUpdatedOn(new Date());
         return handlingequipmentRepository.save(dbHandlingEquipment);
     }
 
@@ -185,7 +186,7 @@ public class HandlingEquipmentService {
         if (handlingequipment != null) {
             handlingequipment.setDeletionIndicator(1L);
             handlingequipment.setUpdatedBy(loginUserID);
-            handlingequipment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            handlingequipment.setUpdatedOn(new Date());
             handlingequipmentRepository.save(handlingequipment);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + handlingEquipmentId);

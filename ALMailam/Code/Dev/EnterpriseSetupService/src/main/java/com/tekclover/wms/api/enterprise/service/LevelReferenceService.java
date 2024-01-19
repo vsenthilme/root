@@ -47,7 +47,7 @@ private LevelReferenceRepository levelReferenceRepository;
             for(LevelReference newLevelReference: levelReferences){
                     newLevelReference.setDeletionIndicator(1L);
                     newLevelReference.setUpdatedBy(loginUserID);
-                    newLevelReference.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                    newLevelReference.setUpdatedOn(new Date());
                     levelReferenceRepository.save(newLevelReference);
             }
         } else {

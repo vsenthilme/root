@@ -112,8 +112,8 @@ public class PackingMaterialService {
 			dbPackingMaterial.setDeletionIndicator(0L);
 			dbPackingMaterial.setCreatedBy(loginUserID);
 			dbPackingMaterial.setUpdatedBy(loginUserID);
-			dbPackingMaterial.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbPackingMaterial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbPackingMaterial.setCreatedOn(new Date());
+			dbPackingMaterial.setUpdatedOn(new Date());
 			return packingmaterialRepository.save(dbPackingMaterial);
 		}
 	}
@@ -131,7 +131,7 @@ public class PackingMaterialService {
 		PackingMaterial dbPackingMaterial = getPackingMaterial(packingMaterialNo,companyCodeId,plantId,languageId,warehouseId);
 		BeanUtils.copyProperties(updatePackingMaterial, dbPackingMaterial, CommonUtils.getNullPropertyNames(updatePackingMaterial));
 		dbPackingMaterial.setUpdatedBy(loginUserID);
-		dbPackingMaterial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbPackingMaterial.setUpdatedOn(new Date());
 		return packingmaterialRepository.save(dbPackingMaterial);
 	}
 
@@ -144,7 +144,7 @@ public class PackingMaterialService {
 		if ( packingmaterial != null) {
 			packingmaterial.setDeletionIndicator (1L);
 			packingmaterial.setUpdatedBy(loginUserID);
-			packingmaterial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			packingmaterial.setUpdatedOn(new Date());
 			packingmaterialRepository.save(packingmaterial);
 		} else {
 			throw new EntityNotFoundException("Error in deleting Id:" + packingMaterialNo);

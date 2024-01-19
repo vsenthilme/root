@@ -118,8 +118,8 @@ public class ImPalletizationService {
                 dbImPalletization.setDeletionIndicator(0L);
                 dbImPalletization.setCreatedBy(loginUserID);
                 dbImPalletization.setUpdatedBy(loginUserID);
-                dbImPalletization.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbImPalletization.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbImPalletization.setCreatedOn(new Date());
+                dbImPalletization.setUpdatedOn(new Date());
                 ImPalletization savedImPalletization = imPalletizationRepository.save(dbImPalletization);
                 imPalletizationList.add(savedImPalletization);
             }
@@ -154,7 +154,7 @@ public class ImPalletizationService {
         if (palletizationList !=null) {
             for (ImPalletization newImPalletization : palletizationList) {
                 newImPalletization.setUpdatedBy(loginUserID);
-                newImPalletization.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newImPalletization.setUpdatedOn(new Date());
                 newImPalletization.setDeletionIndicator(1L);
                 imPalletizationRepository.save(newImPalletization);
             }
@@ -182,7 +182,7 @@ public class ImPalletizationService {
             for(ImPalletization newImPalletization : imPalletization) {
                 newImPalletization.setDeletionIndicator(1L);
                 newImPalletization.setUpdatedBy(loginUserID);
-                newImPalletization.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                newImPalletization.setUpdatedOn(new Date());
                 imPalletizationRepository.save(newImPalletization);
             }
         } else {

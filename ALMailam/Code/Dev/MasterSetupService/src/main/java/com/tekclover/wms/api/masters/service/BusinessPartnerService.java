@@ -126,8 +126,8 @@ public class BusinessPartnerService {
             dbBusinessPartner.setDeletionIndicator(0L);
             dbBusinessPartner.setCreatedBy(loginUserID);
             dbBusinessPartner.setUpdatedBy(loginUserID);
-            dbBusinessPartner.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBusinessPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBusinessPartner.setCreatedOn(new Date());
+            dbBusinessPartner.setUpdatedOn(new Date());
             return businesspartnerRepository.save(dbBusinessPartner);
         }
     }
@@ -151,7 +151,7 @@ public class BusinessPartnerService {
         BusinessPartner dbBusinessPartner = getBusinessPartner(partnerCode, companyCodeId, plantId, warehouseId, languageId, businessPartnerType);
         BeanUtils.copyProperties(updateBusinessPartner, dbBusinessPartner, CommonUtils.getNullPropertyNames(updateBusinessPartner));
         dbBusinessPartner.setUpdatedBy(loginUserID);
-        dbBusinessPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBusinessPartner.setUpdatedOn(new Date());
         return businesspartnerRepository.save(dbBusinessPartner);
     }
 
@@ -170,7 +170,7 @@ public class BusinessPartnerService {
         if (businesspartner != null) {
             businesspartner.setDeletionIndicator(1L);
             businesspartner.setUpdatedBy(loginUserID);
-            businesspartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            businesspartner.setUpdatedOn(new Date());
             businesspartnerRepository.save(businesspartner);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + partnerCode);
@@ -215,8 +215,8 @@ public class BusinessPartnerService {
             dbBusinessPartner.setDeletionIndicator(0L);
             dbBusinessPartner.setCreatedBy(newBusinessPartner.getCreatedBy());
             dbBusinessPartner.setUpdatedBy(newBusinessPartner.getCreatedBy());
-            dbBusinessPartner.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbBusinessPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbBusinessPartner.setCreatedOn(new Date());
+            dbBusinessPartner.setUpdatedOn(new Date());
             return businessPartnerV2Repository.save(dbBusinessPartner);
         }
     }
@@ -243,7 +243,7 @@ public class BusinessPartnerService {
                         companyCodeId, plantId, languageId, warehouseId, partnerCode, 0L);
         BeanUtils.copyProperties(updateBusinessPartner, dbBusinessPartner, CommonUtils.getNullPropertyNames(updateBusinessPartner));
         dbBusinessPartner.setUpdatedBy(loginUserID);
-        dbBusinessPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbBusinessPartner.setUpdatedOn(new Date());
         return businessPartnerV2Repository.save(dbBusinessPartner);
     }
 

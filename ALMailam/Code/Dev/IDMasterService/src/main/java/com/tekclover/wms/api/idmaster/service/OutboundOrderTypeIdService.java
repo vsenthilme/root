@@ -135,8 +135,8 @@ public class OutboundOrderTypeIdService {
             dbOutboundOrderTypeIdId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbOutboundOrderTypeIdId.setCreatedBy(loginUserID);
             dbOutboundOrderTypeIdId.setUpdatedBy(loginUserID);
-            dbOutboundOrderTypeIdId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbOutboundOrderTypeIdId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOutboundOrderTypeIdId.setCreatedOn(new Date());
+            dbOutboundOrderTypeIdId.setUpdatedOn(new Date());
             return outboundOrderTypeIdRepository.save(dbOutboundOrderTypeIdId);
         }
     }
@@ -156,7 +156,7 @@ public class OutboundOrderTypeIdService {
         OutboundOrderTypeId dbOutboundOrderTypeId = getOutboundOrderTypeId( warehouseId, outboundOrderTypeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateOutboundOrderTypeId, dbOutboundOrderTypeId, CommonUtils.getNullPropertyNames(updateOutboundOrderTypeId));
         dbOutboundOrderTypeId.setUpdatedBy(loginUserID);
-        dbOutboundOrderTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOutboundOrderTypeId.setUpdatedOn(new Date());
         return outboundOrderTypeIdRepository.save(dbOutboundOrderTypeId);
     }
     /**

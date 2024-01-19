@@ -124,8 +124,8 @@ public class DriverVehicleAssignmentService {
             dbDriverVehicleAssignment.setDeletionIndicator(0L);
             dbDriverVehicleAssignment.setCreatedBy(loginUserID);
             dbDriverVehicleAssignment.setUpdatedBy(loginUserID);
-            dbDriverVehicleAssignment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbDriverVehicleAssignment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbDriverVehicleAssignment.setCreatedOn(new Date());
+            dbDriverVehicleAssignment.setUpdatedOn(new Date());
             return driverVehicleAssignmentRepository.save(dbDriverVehicleAssignment);
         }
     }
@@ -156,7 +156,7 @@ public class DriverVehicleAssignmentService {
         BeanUtils.copyProperties(updateDriverVehicleAssignment, dbDriverVehicleAssignment,
                 CommonUtils.getNullPropertyNames(updateDriverVehicleAssignment));
         dbDriverVehicleAssignment.setUpdatedBy(loginUserID);
-        dbDriverVehicleAssignment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbDriverVehicleAssignment.setUpdatedOn(new Date());
         return driverVehicleAssignmentRepository.save(dbDriverVehicleAssignment);
     }
 
@@ -178,7 +178,7 @@ public class DriverVehicleAssignmentService {
         if ( driverVehicleAssignment != null) {
             driverVehicleAssignment.setDeletionIndicator (1L);
             driverVehicleAssignment.setUpdatedBy(loginUserID);
-            driverVehicleAssignment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            driverVehicleAssignment.setUpdatedOn(new Date());
             driverVehicleAssignmentRepository.save(driverVehicleAssignment);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + driverId);

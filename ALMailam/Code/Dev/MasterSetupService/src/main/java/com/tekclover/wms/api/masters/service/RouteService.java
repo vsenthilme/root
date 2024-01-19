@@ -110,8 +110,8 @@ public class RouteService {
             dbRoute.setDeletionIndicator(0L);
             dbRoute.setCreatedBy(loginUserID);
             dbRoute.setUpdatedBy(loginUserID);
-            dbRoute.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbRoute.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbRoute.setCreatedOn(new Date());
+            dbRoute.setUpdatedOn(new Date());
             return routeRepository.save(dbRoute);
         }
     }
@@ -135,7 +135,7 @@ public class RouteService {
         Route dbRoute = getRoute(routeId,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateRoute, dbRoute, CommonUtils.getNullPropertyNames(updateRoute));
         dbRoute.setUpdatedBy(loginUserID);
-        dbRoute.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbRoute.setUpdatedOn(new Date());
         return routeRepository.save(dbRoute);
     }
 
@@ -154,7 +154,7 @@ public class RouteService {
         if ( dbRoute != null) {
             dbRoute.setDeletionIndicator (1L);
             dbRoute.setUpdatedBy(loginUserID);
-            dbRoute.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbRoute.setUpdatedOn(new Date());
             routeRepository.save(dbRoute);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + routeId);

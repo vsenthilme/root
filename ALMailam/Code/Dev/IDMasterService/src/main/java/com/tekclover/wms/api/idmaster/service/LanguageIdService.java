@@ -79,8 +79,8 @@ public class LanguageIdService {
 			dbLanguageId.setDeletionIndicator(0L);
 			dbLanguageId.setCreatedBy(loginUserID);
 			dbLanguageId.setUpdatedBy(loginUserID);
-			dbLanguageId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbLanguageId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbLanguageId.setCreatedOn(new Date());
+			dbLanguageId.setUpdatedOn(new Date());
 			return languageIdRepository.save(dbLanguageId);
 		}
 	}
@@ -100,7 +100,7 @@ public class LanguageIdService {
 		LanguageId dbLanguageId = getLanguageId(languageId);
 		BeanUtils.copyProperties(updateLanguageId, dbLanguageId, CommonUtils.getNullPropertyNames(updateLanguageId));
 		dbLanguageId.setUpdatedBy(loginUserID);
-		dbLanguageId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbLanguageId.setUpdatedOn(new Date());
 		return languageIdRepository.save(dbLanguageId);
 	}
 

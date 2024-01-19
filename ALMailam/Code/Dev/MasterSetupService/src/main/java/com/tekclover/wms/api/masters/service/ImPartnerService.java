@@ -201,8 +201,8 @@ public class ImPartnerService {
 				dbImPartner.setDeletionIndicator(0L);
 				dbImPartner.setCreatedBy(loginUserID);
 				dbImPartner.setUpdatedBy(loginUserID);
-				dbImPartner.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-				dbImPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbImPartner.setCreatedOn(new Date());
+				dbImPartner.setUpdatedOn(new Date());
 				ImPartner savedImPartner = impartnerRepository.save(dbImPartner);
 				imPartnerList.add(savedImPartner);
 			}
@@ -237,7 +237,7 @@ public class ImPartnerService {
 		if(dbImPartner!=null) {
 			for (ImPartner newImPartner : dbImPartner) {
 				newImPartner.setUpdatedBy(loginUserID);
-				newImPartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				newImPartner.setUpdatedOn((new Date()));
 				newImPartner.setDeletionIndicator(1L);
 				impartnerRepository.save(newImPartner);
 			}
@@ -273,7 +273,7 @@ public class ImPartnerService {
 				for(ImPartner dbImpartner:impartner) {
 					dbImpartner.setDeletionIndicator(1L);
 					dbImpartner.setUpdatedBy(loginUserID);
-					dbImpartner.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbImpartner.setUpdatedOn(new Date());
 					impartnerRepository.save(dbImpartner);
 				}
 			} else {

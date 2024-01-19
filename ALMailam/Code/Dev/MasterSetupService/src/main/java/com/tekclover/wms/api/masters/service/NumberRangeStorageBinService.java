@@ -121,8 +121,8 @@ public class NumberRangeStorageBinService {
             dbNumberRangeStorageBin.setDeletionIndicator(0L);
             dbNumberRangeStorageBin.setCreatedBy(loginUserID);
             dbNumberRangeStorageBin.setUpdatedBy(loginUserID);
-            dbNumberRangeStorageBin.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbNumberRangeStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbNumberRangeStorageBin.setCreatedOn(new Date());
+            dbNumberRangeStorageBin.setUpdatedOn(new Date());
             return numberRangeStorageBinRepository.save(dbNumberRangeStorageBin);
         }
     }
@@ -145,7 +145,7 @@ public class NumberRangeStorageBinService {
         BeanUtils.copyProperties(updateNumberRangeStorageBin, dbNumberRangeStorageBin,
                 CommonUtils.getNullPropertyNames(updateNumberRangeStorageBin));
         dbNumberRangeStorageBin.setUpdatedBy(loginUserID);
-        dbNumberRangeStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbNumberRangeStorageBin.setUpdatedOn(new Date());
         return numberRangeStorageBinRepository.save(dbNumberRangeStorageBin);
     }
 
@@ -164,7 +164,7 @@ public class NumberRangeStorageBinService {
         if ( numberRangeStorageBin != null) {
             numberRangeStorageBin.setDeletionIndicator (1L);
             numberRangeStorageBin.setUpdatedBy(loginUserID);
-            numberRangeStorageBin.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            numberRangeStorageBin.setUpdatedOn(new Date());
             numberRangeStorageBinRepository.save(numberRangeStorageBin);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + storageSectionId);

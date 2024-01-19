@@ -131,8 +131,8 @@ public class ControlTypeIdService{
 			dbControlTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbControlTypeId.setCreatedBy(loginUserID);
 			dbControlTypeId.setUpdatedBy(loginUserID);
-			dbControlTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbControlTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbControlTypeId.setCreatedOn(new Date());
+			dbControlTypeId.setUpdatedOn(new Date());
 			return controlTypeIdRepository.save(dbControlTypeId);
 		}
 	}
@@ -152,7 +152,7 @@ public class ControlTypeIdService{
 		ControlTypeId dbControlTypeId = getControlTypeId( warehouseId, controlTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateControlTypeId, dbControlTypeId, CommonUtils.getNullPropertyNames(updateControlTypeId));
 		dbControlTypeId.setUpdatedBy(loginUserID);
-		dbControlTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbControlTypeId.setUpdatedOn(new Date());
 		return controlTypeIdRepository.save(dbControlTypeId);
 	}
 

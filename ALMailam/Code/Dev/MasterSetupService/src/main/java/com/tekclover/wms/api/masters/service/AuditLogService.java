@@ -89,8 +89,8 @@ public class AuditLogService {
 			dbAuditLog.setDeletionIndicator(0L);
 			dbAuditLog.setCreatedBy(loginUserID);
 			dbAuditLog.setUpdatedBy(loginUserID);
-			dbAuditLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbAuditLog.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbAuditLog.setCreatedOn(new Date());
+			dbAuditLog.setUpdatedOn(new Date());
 			return auditlogRepository.save(dbAuditLog);
 		}
 	}
@@ -107,7 +107,7 @@ public class AuditLogService {
 		AuditLog dbAuditLog = getAuditLog(auditFileNumber);
 		BeanUtils.copyProperties(updateAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(updateAuditLog));
 		dbAuditLog.setUpdatedBy(loginUserID);
-		dbAuditLog.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbAuditLog.setUpdatedOn(new Date());
 		return auditlogRepository.save(dbAuditLog);
 	}
 

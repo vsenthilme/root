@@ -104,8 +104,8 @@ public class StateService {
 			dbState.setCountryIdAndDescription(dbCountry.getCountryId()+"-"+dbCountry.getCountryName());
 			dbState.setCreatedBy(loginUserID);
 			dbState.setUpdatedBy(loginUserID);
-			dbState.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbState.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbState.setCreatedOn(new Date());
+			dbState.setUpdatedOn(new Date());
 			return stateRepository.save(dbState);
 		}
 	}
@@ -123,7 +123,7 @@ public class StateService {
 		State dbState = getState(stateId,countryId,languageId);
 		BeanUtils.copyProperties(updateState, dbState, CommonUtils.getNullPropertyNames(updateState));
 		dbState.setUpdatedBy(loginUserID);
-		dbState.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbState.setUpdatedOn(new Date());
 		return stateRepository.save(dbState);
 	}
 

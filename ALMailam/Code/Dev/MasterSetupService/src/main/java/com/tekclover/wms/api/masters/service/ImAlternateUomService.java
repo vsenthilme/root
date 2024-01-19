@@ -132,8 +132,8 @@ public class ImAlternateUomService {
 				dbImAlternateUom.setDeletionIndicator(0L);
 				dbImAlternateUom.setCreatedBy(loginUserID);
 				dbImAlternateUom.setUpdatedBy(loginUserID);
-				dbImAlternateUom.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-				dbImAlternateUom.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbImAlternateUom.setCreatedOn(new Date());
+				dbImAlternateUom.setUpdatedOn(new Date());
 				ImAlternateUom savedImAlternate = imalternateuomRepository.save(dbImAlternateUom);
 				dbImAlternateUomList.add(savedImAlternate);
 			}
@@ -193,7 +193,7 @@ public class ImAlternateUomService {
 
 					BeanUtils.copyProperties(newUpdateImAlternateUom, dbImAlternateUom, CommonUtils.getNullPropertyNames(newUpdateImAlternateUom));
 					dbImAlternateUom.setUpdatedBy(loginUserID);
-					dbImAlternateUom.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbImAlternateUom.setUpdatedOn(new Date());
 					dbImAlternateUomList.add(imalternateuomRepository.save(dbImAlternateUom));
 
 				}
@@ -221,8 +221,8 @@ public class ImAlternateUomService {
 					newImAlternateUom.setDeletionIndicator(0L);
 					newImAlternateUom.setCreatedBy(loginUserID);
 					newImAlternateUom.setUpdatedBy(loginUserID);
-					newImAlternateUom.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-					newImAlternateUom.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					newImAlternateUom.setCreatedOn(new Date());
+					newImAlternateUom.setUpdatedOn(new Date());
 
 					dbImAlternateUomList.add(imalternateuomRepository.save(newImAlternateUom));
 				}
@@ -259,7 +259,7 @@ public class ImAlternateUomService {
 			for (ImAlternateUom dbImAlternateUom : imalternateuom) {
 				dbImAlternateUom.setDeletionIndicator(1L);
 				dbImAlternateUom.setUpdatedBy(loginUserID);
-				dbImAlternateUom.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+				dbImAlternateUom.setUpdatedOn(new Date());
 				imalternateuomRepository.save(dbImAlternateUom);
 			}
 		} else{

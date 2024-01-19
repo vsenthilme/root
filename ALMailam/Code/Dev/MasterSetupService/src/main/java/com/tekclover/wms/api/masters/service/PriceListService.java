@@ -155,8 +155,8 @@ public class PriceListService {
             dbPriceList.setServiceTypeIdAndDescription(dbServiceTypeId.getServiceTypeId() + "-" + dbServiceTypeId.getServiceTypeDescription());
             dbPriceList.setCreatedBy(loginUserID);
             dbPriceList.setUpdatedBy(loginUserID);
-            dbPriceList.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbPriceList.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPriceList.setCreatedOn(new Date();
+            dbPriceList.setUpdatedOn(new Date());
             return priceListRepository.save(dbPriceList);
         }
     }
@@ -179,7 +179,7 @@ public class PriceListService {
         PriceList dbPriceList = getPriceList(warehouseId, moduleId,priceListId,serviceTypeId,chargeRangeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePriceList, dbPriceList, CommonUtils.getNullPropertyNames(updatePriceList));
         dbPriceList.setUpdatedBy(loginUserID);
-        dbPriceList.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPriceList.setUpdatedOn(new Date());
         return priceListRepository.save(dbPriceList);
     }
 

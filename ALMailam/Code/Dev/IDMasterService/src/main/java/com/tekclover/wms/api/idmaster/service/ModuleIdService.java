@@ -260,8 +260,8 @@ public class ModuleIdService {
 					dbModuleId.setDeletionIndicator(0L);
 					dbModuleId.setCreatedBy(loginUserID);
 					dbModuleId.setUpdatedBy(loginUserID);
-					dbModuleId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-					dbModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbModuleId.setCreatedOn(new Date());
+					dbModuleId.setUpdatedOn(new Date());
 					moduleIdList.add(moduleIdRepository.save(dbModuleId));
 				}
 			}
@@ -314,7 +314,7 @@ public class ModuleIdService {
 				} else {
 					BeanUtils.copyProperties(newUpdateModuleId, dbModuleId, CommonUtils.getNullPropertyNames(newUpdateModuleId));
 					dbModuleId.setUpdatedBy(loginUserID);
-					dbModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					dbModuleId.setUpdatedOn(new Date());
 					moduleIdList.add(moduleIdRepository.save(dbModuleId));
 				}
 			} else {
@@ -345,8 +345,8 @@ public class ModuleIdService {
 					newModuleId.setDeletionIndicator(0L);
 					newModuleId.setCreatedBy(loginUserID);
 					newModuleId.setUpdatedBy(loginUserID);
-					newModuleId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-					newModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+					newModuleId.setCreatedOn(new Date());
+					newModuleId.setUpdatedOn(new Date());
 					moduleIdList.add(moduleIdRepository.save(newModuleId));
 					}
 				}

@@ -163,8 +163,8 @@ public class ItemGroupIdService{
 			dbItemGroupId.setItemTypeIdAndDescription(dbItemTypeId.getItemTypeId()+"-"+dbItemTypeId.getItemType());
 			dbItemGroupId.setCreatedBy(loginUserID);
 			dbItemGroupId.setUpdatedBy(loginUserID);
-			dbItemGroupId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbItemGroupId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbItemGroupId.setCreatedOn(new Date());
+			dbItemGroupId.setUpdatedOn(new Date());
 			return itemGroupIdRepository.save(dbItemGroupId);
 		}
 	}
@@ -184,7 +184,7 @@ public class ItemGroupIdService{
 		ItemGroupId dbItemGroupId = getItemGroupId(warehouseId, itemTypeId, itemGroupId,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateItemGroupId, dbItemGroupId, CommonUtils.getNullPropertyNames(updateItemGroupId));
 		dbItemGroupId.setUpdatedBy(loginUserID);
-		dbItemGroupId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbItemGroupId.setUpdatedOn(new Date());
 		return itemGroupIdRepository.save(dbItemGroupId);
 	}
 

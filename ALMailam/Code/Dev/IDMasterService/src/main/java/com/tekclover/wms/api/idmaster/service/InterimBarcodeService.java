@@ -82,8 +82,8 @@ public class InterimBarcodeService {
             dbInterimBarcode.setDeletionIndicator(0L);
             dbInterimBarcode.setCreatedBy(loginUserID);
             dbInterimBarcode.setUpdatedBy(loginUserID);
-            dbInterimBarcode.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbInterimBarcode.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbInterimBarcode.setCreatedOn(new Date());
+            dbInterimBarcode.setUpdatedOn(new Date());
             return interimBarcodeRepository.save(dbInterimBarcode);
         }
     }

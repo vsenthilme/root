@@ -113,8 +113,8 @@ public class ImBatchSerialService {
             dbImBatchSerial.setDeletionIndicator(0L);
             dbImBatchSerial.setCreatedBy(loginUserID);
             dbImBatchSerial.setUpdatedBy(loginUserID);
-            dbImBatchSerial.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImBatchSerial.setCreatedOn(new Date());
+            dbImBatchSerial.setUpdatedOn(new Date());
             return imBatchSerialRepository.save(dbImBatchSerial);
         }
     }
@@ -132,7 +132,7 @@ public class ImBatchSerialService {
         ImBatchSerial dbImBatchSerial = getImBatchSerial(warehouseId,companyCodeId,languageId,plantId,itemCode,storageMethod);
         BeanUtils.copyProperties(updateImBatchSerial, dbImBatchSerial, CommonUtils.getNullPropertyNames(updateImBatchSerial));
         dbImBatchSerial.setUpdatedBy(loginUserID);
-        dbImBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbImBatchSerial.setUpdatedOn(new Date());
         return imBatchSerialRepository.save(dbImBatchSerial);
     }
 
@@ -146,7 +146,7 @@ public class ImBatchSerialService {
         if ( imBatchSerial != null) {
             imBatchSerial.setDeletionIndicator (1L);
             imBatchSerial.setUpdatedBy(loginUserID);
-            imBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            imBatchSerial.setUpdatedOn(new Date());
             imBatchSerialRepository.save(imBatchSerial);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + storageMethod);

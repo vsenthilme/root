@@ -131,8 +131,8 @@ public class PaymentModeIdService{
             dbPaymentModeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
             dbPaymentModeId.setCreatedBy(loginUserID);
             dbPaymentModeId.setUpdatedBy(loginUserID);
-            dbPaymentModeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbPaymentModeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPaymentModeId.setCreatedOn(new Date());
+            dbPaymentModeId.setUpdatedOn(new Date());
             return paymentModeIdRepository.save(dbPaymentModeId);
         }
     }
@@ -150,7 +150,7 @@ public class PaymentModeIdService{
         PaymentModeId dbPaymentModeId=getPaymentModeId(warehouseId,paymentModeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePaymentModeId,dbPaymentModeId,CommonUtils.getNullPropertyNames(updatePaymentModeId));
         dbPaymentModeId.setUpdatedBy(loginUserID);
-        dbPaymentModeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPaymentModeId.setUpdatedOn(new Date());
         return paymentModeIdRepository.save(dbPaymentModeId);
     }
     /**

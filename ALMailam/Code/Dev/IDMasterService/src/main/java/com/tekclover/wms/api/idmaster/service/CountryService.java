@@ -76,8 +76,8 @@ public class CountryService {
 			dbCountry.setDeletionIndicator(0L);
 			dbCountry.setCreatedBy(loginUserID);
 			dbCountry.setUpdatedBy(loginUserID);
-			dbCountry.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbCountry.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCountry.setCreatedOn(new Date());
+			dbCountry.setUpdatedOn(new Date());
 			return countryRepository.save(dbCountry);
 		}
 	}
@@ -96,7 +96,7 @@ public class CountryService {
 		BeanUtils.copyProperties(updateCountry, dbCountry, CommonUtils.getNullPropertyNames(updateCountry));
 		dbCountry.setUpdatedBy(loginUserID);
 		dbCountry.setDeletionIndicator(0L);
-		dbCountry.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbCountry.setUpdatedOn(new Date());
 		return countryRepository.save(dbCountry);
 	}
 

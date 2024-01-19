@@ -117,8 +117,8 @@ public class ImCapacityService {
             dbImCapacity.setDeletionIndicator(0L);
             dbImCapacity.setCreatedBy(loginUserID);
             dbImCapacity.setUpdatedBy(loginUserID);
-            dbImCapacity.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImCapacity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImCapacity.setCreatedOn(new Date());
+            dbImCapacity.setUpdatedOn(new Date());
             return imCapacityRepository.save(dbImCapacity);
         }
     }
@@ -135,7 +135,7 @@ public class ImCapacityService {
         ImCapacity dbImCapacity = getImCapacity(warehouseId,companyCodeId,languageId,plantId,itemCode);
         BeanUtils.copyProperties(updateImCapacity, dbImCapacity, CommonUtils.getNullPropertyNames(updateImCapacity));
         dbImCapacity.setUpdatedBy(loginUserID);
-        dbImCapacity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbImCapacity.setUpdatedOn(new Date());
         return imCapacityRepository.save(dbImCapacity);
     }
 
@@ -148,7 +148,7 @@ public class ImCapacityService {
         if ( imCapacity != null) {
             imCapacity.setDeletionIndicator (1L);
             imCapacity.setUpdatedBy(loginUserID);
-            imCapacity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            imCapacity.setUpdatedOn(new Date());
             imCapacityRepository.save(imCapacity);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + imCapacity);

@@ -131,8 +131,8 @@ public class InboundOrderStatusIdService{
 			dbInboundOrderStatusId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbInboundOrderStatusId.setCreatedBy(loginUserID);
 			dbInboundOrderStatusId.setUpdatedBy(loginUserID);
-			dbInboundOrderStatusId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbInboundOrderStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbInboundOrderStatusId.setCreatedOn(new Date());
+			dbInboundOrderStatusId.setUpdatedOn(new Date());
 			return inboundOrderStatusIdRepository.save(dbInboundOrderStatusId);
 		}
 	}
@@ -152,7 +152,7 @@ public class InboundOrderStatusIdService{
 		InboundOrderStatusId dbInboundOrderStatusId = getInboundOrderStatusId( warehouseId,inboundOrderStatusId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateInboundOrderStatusId, dbInboundOrderStatusId, CommonUtils.getNullPropertyNames(updateInboundOrderStatusId));
 		dbInboundOrderStatusId.setUpdatedBy(loginUserID);
-		dbInboundOrderStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbInboundOrderStatusId.setUpdatedOn(new Date());
 		return inboundOrderStatusIdRepository.save(dbInboundOrderStatusId);
 	}
 

@@ -88,8 +88,8 @@ public class StatusMessagesIdService{
 			dbStatusMessagesId.setDeletionIndicator(0L);
 			dbStatusMessagesId.setCreatedBy(loginUserID);
 			dbStatusMessagesId.setUpdatedBy(loginUserID);
-			dbStatusMessagesId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbStatusMessagesId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbStatusMessagesId.setCreatedOn(new Date());
+			dbStatusMessagesId.setUpdatedOn(new Date());
 			return statusMessagesIdRepository.save(dbStatusMessagesId);
 		}
 	}
@@ -109,7 +109,7 @@ public class StatusMessagesIdService{
 		StatusMessagesId dbStatusMessagesId = getStatusMessagesId(messagesId, languageId, messageType);
 		BeanUtils.copyProperties(updateStatusMessagesId, dbStatusMessagesId, CommonUtils.getNullPropertyNames(updateStatusMessagesId));
 		dbStatusMessagesId.setUpdatedBy(loginUserID);
-		dbStatusMessagesId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbStatusMessagesId.setUpdatedOn(new Date());
 		return statusMessagesIdRepository.save(dbStatusMessagesId);
 	}
 

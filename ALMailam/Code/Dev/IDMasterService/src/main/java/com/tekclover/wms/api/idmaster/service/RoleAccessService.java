@@ -126,8 +126,8 @@ public class RoleAccessService {
 			dbRoleAccess.setDeletionIndicator(0L);
 			dbRoleAccess.setCreatedBy(loginUserID);
 			dbRoleAccess.setUpdatedBy(loginUserID);
-			dbRoleAccess.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbRoleAccess.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbRoleAccess.setCreatedOn(new Date());
+			dbRoleAccess.setUpdatedOn(new Date());
 
 			List<MenuId> menuId = menuIdService.getMenuId(newRoleAccess.getMenuId());			//Check Menu Exist or not
 			List<MenuId> subMenuId = menuIdService.getSubMenuId(newRoleAccess.getSubMenuId());	//Check Sub Menu Exist or Not
@@ -189,8 +189,8 @@ public class RoleAccessService {
 			dbRoleAccess.setDeletionIndicator(0L);
 			dbRoleAccess.setCreatedBy(loginUserID);
 			dbRoleAccess.setUpdatedBy(loginUserID);
-			dbRoleAccess.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbRoleAccess.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbRoleAccess.setCreatedOn(new Date());
+			dbRoleAccess.setUpdatedOn(new Date());
 
 			List<MenuId> menuId = menuIdService.getMenuId(newRoleAccess.getMenuId());			//Check Menu Exist or not
 			List<MenuId> subMenuId = menuIdService.getSubMenuId(newRoleAccess.getSubMenuId());	//Check Sub Menu Exist or Not

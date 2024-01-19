@@ -113,8 +113,8 @@ public class VehicleService {
             dbVehicle.setDeletionIndicator(0L);
             dbVehicle.setCreatedBy(loginUserID);
             dbVehicle.setUpdatedBy(loginUserID);
-            dbVehicle.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbVehicle.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbVehicle.setCreatedOn(new Date());
+            dbVehicle.setUpdatedOn(new Date());
             return vehicleRepository.save(dbVehicle);
         }
     }
@@ -132,7 +132,7 @@ public class VehicleService {
         Vehicle dbVehicle = getVehicle(vehicleNumber,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateVehicle, dbVehicle, CommonUtils.getNullPropertyNames(updateVehicle));
         dbVehicle.setUpdatedBy(loginUserID);
-        dbVehicle.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbVehicle.setUpdatedOn(new Date());
         return vehicleRepository.save(dbVehicle);
     }
 
@@ -146,7 +146,7 @@ public class VehicleService {
         if ( dbVehicle != null) {
             dbVehicle.setDeletionIndicator (1L);
             dbVehicle.setUpdatedBy(loginUserID);
-            dbVehicle.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbVehicle.setUpdatedOn(new Date());
             vehicleRepository.save(dbVehicle);
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + vehicleNumber);

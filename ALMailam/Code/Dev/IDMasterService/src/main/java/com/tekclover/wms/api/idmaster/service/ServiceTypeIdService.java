@@ -154,8 +154,8 @@ public class ServiceTypeIdService{
            dbServiceTypeId.setModuleIdAndDescription(dbModuleId.get().getModuleId()+"-"+dbModuleId.get().getModuleDescription());
            dbServiceTypeId.setCreatedBy(loginUserID);
            dbServiceTypeId.setUpdatedBy(loginUserID);
-           dbServiceTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-           dbServiceTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+           dbServiceTypeId.setCreatedOn(new Date());
+           dbServiceTypeId.setUpdatedOn(new Date());
            return serviceTypeIdRepository.save(dbServiceTypeId);
        }
    }
@@ -173,7 +173,7 @@ public class ServiceTypeIdService{
    ServiceTypeId dbServiceTypeId =getServiceTypeId(warehouseId,moduleId,serviceTypeId,companyCodeId,languageId,plantId);
    BeanUtils.copyProperties(updateServiceTypeId, dbServiceTypeId,CommonUtils.getNullPropertyNames(updateServiceTypeId));
    dbServiceTypeId.setUpdatedBy(loginUserID);
-   dbServiceTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+   dbServiceTypeId.setUpdatedOn(new Date());
    return serviceTypeIdRepository.save(dbServiceTypeId);
    }
     /**

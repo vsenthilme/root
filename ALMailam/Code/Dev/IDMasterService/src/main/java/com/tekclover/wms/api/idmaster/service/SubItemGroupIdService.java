@@ -194,8 +194,8 @@ public class SubItemGroupIdService{
 			dbSubItemGroupId.setDeletionIndicator(0L);
 			dbSubItemGroupId.setCreatedBy(loginUserID);
 			dbSubItemGroupId.setUpdatedBy(loginUserID);
-			dbSubItemGroupId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbSubItemGroupId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbSubItemGroupId.setCreatedOn(new Date());
+			dbSubItemGroupId.setUpdatedOn(new Date());
 			return subItemGroupIdRepository.save(dbSubItemGroupId);
 		}
 	}
@@ -226,7 +226,7 @@ public class SubItemGroupIdService{
 
 		BeanUtils.copyProperties(updateSubItemGroupId, dbSubItemGroupId, CommonUtils.getNullPropertyNames(updateSubItemGroupId));
 		dbSubItemGroupId.setUpdatedBy(loginUserID);
-		dbSubItemGroupId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbSubItemGroupId.setUpdatedOn(new Date());
 		return subItemGroupIdRepository.save(dbSubItemGroupId);
 	}
 

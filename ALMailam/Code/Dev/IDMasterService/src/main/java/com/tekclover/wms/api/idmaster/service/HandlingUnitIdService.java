@@ -156,8 +156,8 @@ public class HandlingUnitIdService {
 			dbHandlingUnitId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbHandlingUnitId.setCreatedBy(loginUserID);
 			dbHandlingUnitId.setUpdatedBy(loginUserID);
-			dbHandlingUnitId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbHandlingUnitId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbHandlingUnitId.setCreatedOn(new Date());
+			dbHandlingUnitId.setUpdatedOn(new Date());
 			return handlingUnitIdRepository.save(dbHandlingUnitId);
 		}
 	}
@@ -184,7 +184,7 @@ public class HandlingUnitIdService {
 		HandlingUnitId dbHandlingUnitId = getHandlingUnitId( warehouseId,handlingUnitNumber,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateHandlingUnitId, dbHandlingUnitId, CommonUtils.getNullPropertyNames(updateHandlingUnitId));
 		dbHandlingUnitId.setUpdatedBy(loginUserID);
-		dbHandlingUnitId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbHandlingUnitId.setUpdatedOn(new Date());
 		return handlingUnitIdRepository.save(dbHandlingUnitId);
 	}
 

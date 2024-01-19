@@ -270,8 +270,8 @@ public class BomHeaderService extends BaseService{
 		dbBomHeader.setDeletionIndicator(0L);
 		dbBomHeader.setCreatedBy(loginUserID);
 		dbBomHeader.setUpdatedBy(loginUserID);
-		dbBomHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbBomHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomHeader.setCreatedOn(new Date());
+		dbBomHeader.setUpdatedOn(new Date());
 		dbBomHeader = bomHeaderRepository.save(dbBomHeader);
 
 		AddBomHeader createdBomHeader = new AddBomHeader();
@@ -296,7 +296,7 @@ public class BomHeaderService extends BaseService{
 		BomHeader dbBomHeader = getBomHeaderByEntity (warehouseId, parentItemCode,languageId,companyCode,plantId);
 		BeanUtils.copyProperties(updateBomHeader, dbBomHeader, CommonUtils.getNullPropertyNames(updateBomHeader));
 		dbBomHeader.setUpdatedBy(loginUserID);
-		dbBomHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomHeader.setUpdatedOn(new Date());
 		dbBomHeader = bomHeaderRepository.save(dbBomHeader);
 
 		List<BomLine> updateBomLines = new ArrayList<>();

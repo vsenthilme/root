@@ -180,8 +180,8 @@ public class SpanIdService {
 			dbSpanId.setRowIdAndDescription(dbRowId.getRowId()+"-"+ dbRowId.getRowNumber());
 			dbSpanId.setCreatedBy(loginUserID);
 			dbSpanId.setUpdatedBy(loginUserID);
-			dbSpanId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbSpanId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbSpanId.setCreatedOn(new Date());
+			dbSpanId.setUpdatedOn(new Date());
 			return spanIdRepository.save(dbSpanId);
 		}
 	}
@@ -202,7 +202,7 @@ public class SpanIdService {
 		SpanId dbSpanId = getSpanId(warehouseId, aisleId, spanId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSpanId, dbSpanId, CommonUtils.getNullPropertyNames(updateSpanId));
 		dbSpanId.setUpdatedBy(loginUserID);
-		dbSpanId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbSpanId.setUpdatedOn(new Date());
 		return spanIdRepository.save(dbSpanId);
 	}
 

@@ -2207,11 +2207,6 @@ public class OrderManagementLineService extends BaseService {
                         companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
         log.info("PickList Cancellation - OrderManagementLine : " + orderManagementLine);
 
-        if(orderManagementLine != null && !orderManagementLine.isEmpty()) {
-            List<OrderManagementLineV2> orderManagementLineV2s = orderManagementLineService.doUnAllocationV2(orderManagementLine, loginUserID);
-            log.info("OrderManagement Unallocation Successful: " + orderManagementLineV2s);
-        }
-
         if (orderManagementLine != null && !orderManagementLine.isEmpty()) {
             for (OrderManagementLineV2 orderManagementLineV2 : orderManagementLine) {
                 orderManagementLineV2.setDeletionIndicator(1L);

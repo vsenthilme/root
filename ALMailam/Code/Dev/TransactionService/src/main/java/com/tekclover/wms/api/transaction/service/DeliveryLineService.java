@@ -136,6 +136,7 @@ public class DeliveryLineService {
                 dbDeliveryLineList.add(savedDeliveryLine);
             }
         }
+        log.info("DeliveryLine Create Successfully" + dbDeliveryLineList );
         return dbDeliveryLineList;
     }
 
@@ -197,6 +198,7 @@ public class DeliveryLineService {
                     deliveryLine.getRefDocNumber(), deliveryLine.getLanguageId(), deliveryLine.getDeliveryNo(),
                     deliveryLine.getItemCode(), deliveryLine.getLineNumber());
 
+            log.info("GetDeliveryLine " + dbDeliveryLine);
             if (dbDeliveryLine != null) {
                 BeanUtils.copyProperties(deliveryLine, dbDeliveryLine, CommonUtils.getNullPropertyNames(deliveryLine));
                 dbDeliveryLine.setUpdatedBy(loginUserId);
@@ -213,6 +215,7 @@ public class DeliveryLineService {
                         ", lineNumber=" + deliveryLine.getLineNumber());
             }
         }
+        log.info("Update DeliveryLine SuccessFully " + deliveryLineList);
         return deliveryLineList;
     }
 
@@ -239,6 +242,7 @@ public class DeliveryLineService {
             deliveryLine.setDeletionIndicator(1L);
             deliveryLine.setUpdatedBy(loginUserID);
             deliveryLineRepository.save(deliveryLine);
+            log.info("Delete DeliveryLine SuccessFully " + deliveryLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + deliveryNo);
         }
@@ -252,6 +256,7 @@ public class DeliveryLineService {
     public List<DeliveryLine> findDeliveryLine(SearchDeliveryLine searchDeliveryLine) throws ParseException {
 
         DeliveryLineSpecification spec = new DeliveryLineSpecification(searchDeliveryLine);
+        log.info("Input value " + searchDeliveryLine);
         List<DeliveryLine> results = deliveryLineRepository.findAll(spec);
         results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
 

@@ -19,5 +19,6 @@ public class SearchDeliveryLine  {
     private List<Long> statusId;
     private List<String> remarks;
     private List<String> vehicleNo;
-    private List<Boolean> reDelivery;
+    private Boolean reDelivery;
+    private List<String> driverId;
 }

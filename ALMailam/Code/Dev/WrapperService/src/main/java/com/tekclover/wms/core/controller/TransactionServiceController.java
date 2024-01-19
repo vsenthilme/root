@@ -4041,8 +4041,8 @@ public class TransactionServiceController {
                                                       @RequestParam String warehouseId,@RequestParam String oldInvoiceNumber, @RequestParam String newInvoiceNumber,
                                                       @RequestParam String loginUserID, @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
 
-                transactionService.replaceInvoice(companyCode, plantId, languageId, warehouseId, newInvoiceNumber,oldInvoiceNumber, loginUserID, authToken);
-        return ResponseEntity.ok("Invoice replacement successful.");
+      WarehouseApiResponse result = transactionService.replaceInvoice(companyCode, plantId, languageId, warehouseId, newInvoiceNumber,oldInvoiceNumber, loginUserID, authToken);
+      return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

@@ -1604,7 +1604,7 @@ public class PutAwayLineService extends BaseService {
                         mastersService.updateStorageBinV2(dbPutAwayLine.getConfirmedStorageBin(), dbStorageBin,
                                 dbPutAwayLine.getCompanyCode(), dbPutAwayLine.getPlantId(), dbPutAwayLine.getLanguageId(), dbPutAwayLine.getWarehouseId(),
                                 loginUserID, authTokenForMastersService.getAccess_token());
-
+                        AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
 //                        if (isInventoryCreated && isInventoryMovemoentCreated) {
                         if (isInventoryMovemoentCreated) {
                             List<PutAwayHeaderV2> headers = putAwayHeaderService.getPutAwayHeaderV2(createdPutAwayLine.getWarehouseId(),
@@ -1615,23 +1615,36 @@ public class PutAwayLineService extends BaseService {
                                     createdPutAwayLine.getPlantId(),
                                     createdPutAwayLine.getLanguageId());
                             for (PutAwayHeaderV2 putAwayHeader : headers) {
-                                log.info("putawayConfirmQty, putawayOrderedQty: " + createdPutAwayLine.getPutawayConfirmedQty() + ", " + putAwayHeader.getOrderQty());
-                                if(createdPutAwayLine.getPutawayConfirmedQty().equals(putAwayHeader.getOrderQty())) {
+                                log.info("putawayConfirmQty, putawayQty: " + createdPutAwayLine.getPutawayConfirmedQty() + ", " + putAwayHeader.getPutAwayQuantity());
+
                                     putAwayHeader.setStatusId(20L);
                                     log.info("PutawayHeader StatusId : 20");
-                                }
-                                if(createdPutAwayLine.getPutawayConfirmedQty() < putAwayHeader.getOrderQty()){
-                                    putAwayHeader.setReferenceField1(String.valueOf(putAwayHeader.getOrderQty()));
-                                    Double ORD_QTY = (putAwayHeader.getOrderQty() != null ? putAwayHeader.getOrderQty() : 0) - (createdPutAwayLine.getPutawayConfirmedQty() != null ? createdPutAwayLine.getPutawayConfirmedQty() : 0);
-                                    putAwayHeader.setOrderQty(ORD_QTY);
-                                    log.info("OrderQty ReCalcuated/Changed : " + ORD_QTY);
-                                    putAwayHeader.setStatusId(19L);
+                                    statusDescription = stagingLineV2Repository.getStatusDescription(putAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
+                                    putAwayHeader.setStatusDescription(statusDescription);
+                                    putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
+                                    log.info("putAwayHeader updated: " + putAwayHeader);
+
+                                if(createdPutAwayLine.getPutawayConfirmedQty() < putAwayHeader.getPutAwayQuantity()){
+                                    log.info("New PutawayHeader Creation: ");
+                                    PutAwayHeaderV2 newPutAwayHeader = new PutAwayHeaderV2();
+                                    BeanUtils.copyProperties(putAwayHeader, newPutAwayHeader, CommonUtils.getNullPropertyNames(putAwayHeader));
+
+                                    // PA_NO
+                                    long NUM_RAN_CODE = 7;
+                                    String nextPANumber = getNextRangeNumber(NUM_RAN_CODE, companyCode, plantId, languageId, warehouseId, authTokenForIDMasterService.getAccess_token());
+                                    newPutAwayHeader.setPutAwayNumber(nextPANumber);                           //PutAway Number
+
+                                    newPutAwayHeader.setReferenceField1(String.valueOf(putAwayHeader.getPutAwayQuantity()));
+                                    Double PUTAWAY_QTY = (putAwayHeader.getPutAwayQuantity() != null ? putAwayHeader.getPutAwayQuantity() : 0) - (createdPutAwayLine.getPutawayConfirmedQty() != null ? createdPutAwayLine.getPutawayConfirmedQty() : 0);
+                                    newPutAwayHeader.setPutAwayQuantity(PUTAWAY_QTY);
+                                    log.info("OrderQty ReCalcuated/Changed : " + PUTAWAY_QTY);
+                                    newPutAwayHeader.setStatusId(19L);
                                     log.info("PutawayHeader StatusId : 19");
+                                    statusDescription = stagingLineV2Repository.getStatusDescription(newPutAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
+                                    newPutAwayHeader.setStatusDescription(statusDescription);
+                                    newPutAwayHeader = putAwayHeaderV2Repository.save(newPutAwayHeader);
+                                    log.info("putAwayHeader created: " + newPutAwayHeader);
                                 }
-                                statusDescription = stagingLineV2Repository.getStatusDescription(putAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
-                                putAwayHeader.setStatusDescription(statusDescription);
-                                putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
-                                log.info("putAwayHeader updated: " + putAwayHeader);
                             }
 
                             /*--------------------- INBOUNDTABLE Updates ------------------------------------------*/

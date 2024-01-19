@@ -19,6 +19,7 @@ import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.repository.InboundHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
@@ -89,7 +90,7 @@ public class InvoiceCancellationService extends BaseService{
 //===================================================================================================================================
 
     @Transactional
-    public void replaceSupplierInvoice(String companyCode, String languageId, String plantId, String warehouseId, String oldInvoiceNo, String newInvoiceNo, String loginUserId) throws ParseException {
+    public WarehouseApiResponse replaceSupplierInvoice(String companyCode, String languageId, String plantId, String warehouseId, String oldInvoiceNo, String newInvoiceNo, String loginUserId) throws ParseException {
 
         log.info("Supplier Invoice Cancellation Initiated ---> oldInvoiceNumber ----> : " + oldInvoiceNo + ", " + newInvoiceNo);
 
@@ -132,7 +133,7 @@ public class InvoiceCancellationService extends BaseService{
         List<GrLineV2> grLineList = grLineService.deleteGrLineV2(companyCode, plantId, languageId, warehouseId, oldInvoiceNo, loginUserId);
         log.info("GrLine Deleted Successfully " + grLineList);
 
-        if(grLineList != null && !grLineList.isEmpty()) {
+        if (grLineList != null && !grLineList.isEmpty()) {
             List<InventoryV2> inventoryList = new ArrayList<>();
             for (GrLineV2 grLine : grLineList) {
                 InventoryV2 dbInventory = inventoryService.deleteInventoryInvoiceCancellation(companyCode, plantId, languageId, warehouseId, grLine);
@@ -150,122 +151,123 @@ public class InvoiceCancellationService extends BaseService{
         log.info("PutAwayLine Deleted Successfully" + putAwayLineV2List);
 
         //InventoryMovement
-        List<InventoryMovement> inventoryMovement = inventoryMovementService.deleteInventoryMovement(warehouseId, companyCode, plantId, languageId, oldInvoiceNo,loginUserId);
+        List<InventoryMovement> inventoryMovement = inventoryMovementService.deleteInventoryMovement(warehouseId, companyCode, plantId, languageId, oldInvoiceNo, loginUserId);
         log.info("InventoryMovement Deleted Successfully" + inventoryMovement);
 
         //Get GrHeader NewInvoiceNo
         GrHeaderV2 grHeader = grHeaderService.getGrHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, newInvoiceNo);
         log.info("New Supplier Invoice - GrHeader : " + grHeader);
 
-        if(grHeader != null) {
+        List<PutAwayLineV2> createdPutawayLine = null;
+        if (grHeader != null) {
 
-                List<StagingLineEntityV2> stagingLineEntityList = stagingLineService.getStagingLineForGrLine(
-                        companyCode, plantId, languageId, warehouseId, grHeader.getStagingNo(), grHeader.getCaseCode());
-                log.info("New Supplier Invoice StagingLine : " + stagingLineEntityList);
+            List<StagingLineEntityV2> stagingLineEntityList = stagingLineService.getStagingLineForGrLine(
+                    companyCode, plantId, languageId, warehouseId, grHeader.getStagingNo(), grHeader.getCaseCode());
+            log.info("New Supplier Invoice StagingLine : " + stagingLineEntityList);
 
-                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
 
-                Double itemLength = 0D;
-                Double itemWidth = 0D;
-                Double itemHeight = 0D;
-                Double orderQty = 0D;
-                Double cbm = 0D;
-                Double cbmPerQty = 0D;
+            Double itemLength = 0D;
+            Double itemWidth = 0D;
+            Double itemHeight = 0D;
+            Double orderQty = 0D;
+            Double cbm = 0D;
+            Double cbmPerQty = 0D;
 
-                List<AddGrLineV2> newGrLineList = new ArrayList<>();
+            List<AddGrLineV2> newGrLineList = new ArrayList<>();
 
-                if(stagingLineEntityList != null && !stagingLineEntityList.isEmpty()) {
-                    for (StagingLineEntityV2 dbStagingLine : stagingLineEntityList) {
-                        List<GrLineV2> grLinePresent = grLineList.stream().filter(n->n.getItemCode().equalsIgnoreCase(dbStagingLine.getItemCode()) && n.getManufacturerName().equalsIgnoreCase(dbStagingLine.getManufacturerName())).collect(Collectors.toList());
-                        log.info("GrLine Present in cancelled SupplierInvoice : " + grLinePresent);
-                        if(grLinePresent != null && !grLinePresent.isEmpty()) {
-                            List<PackBarcode> packBarcodeList = new ArrayList<>();
-                            AddGrLineV2 newGrLine = new AddGrLineV2();
-                            PackBarcode newPackBarcode = new PackBarcode();
+            if (stagingLineEntityList != null && !stagingLineEntityList.isEmpty()) {
+                for (StagingLineEntityV2 dbStagingLine : stagingLineEntityList) {
+                    List<GrLineV2> grLinePresent = grLineList.stream().filter(n -> n.getItemCode().equalsIgnoreCase(dbStagingLine.getItemCode()) && n.getManufacturerName().equalsIgnoreCase(dbStagingLine.getManufacturerName())).collect(Collectors.toList());
+                    log.info("GrLine Present in cancelled SupplierInvoice : " + grLinePresent);
+                    if (grLinePresent != null && !grLinePresent.isEmpty()) {
+                        List<PackBarcode> packBarcodeList = new ArrayList<>();
+                        AddGrLineV2 newGrLine = new AddGrLineV2();
+                        PackBarcode newPackBarcode = new PackBarcode();
 
-                            BeanUtils.copyProperties(dbStagingLine, newGrLine, CommonUtils.getNullPropertyNames(dbStagingLine));
+                        BeanUtils.copyProperties(dbStagingLine, newGrLine, CommonUtils.getNullPropertyNames(dbStagingLine));
 
-                            AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
-                            long NUM_RAN_ID = 6;
-                            String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
-                                    dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
+                        AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
+                        long NUM_RAN_ID = 6;
+                        String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
+                                dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
 
-                            boolean capacityCheck = false;
-                            boolean storageBinCapacityCheck = false;
+                        boolean capacityCheck = false;
+                        boolean storageBinCapacityCheck = false;
 
-                            ImBasicData imBasicData = new ImBasicData();
-                            imBasicData.setCompanyCodeId(dbStagingLine.getCompanyCode());
-                            imBasicData.setPlantId(dbStagingLine.getPlantId());
-                            imBasicData.setLanguageId(dbStagingLine.getLanguageId());
-                            imBasicData.setWarehouseId(dbStagingLine.getWarehouseId());
-                            imBasicData.setItemCode(dbStagingLine.getItemCode());
-                            imBasicData.setManufacturerName(dbStagingLine.getManufacturerName());
-                            ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
-                            log.info("ImbasicData1 : " + itemCodeCapacityCheck);
-                            if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                                capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
-                                log.info("capacity Check: " + capacityCheck);
-                            }
-
-                            newPackBarcode.setQuantityType("A");
-                            newPackBarcode.setBarcode(nextRangeNumber);
-
-                            if (capacityCheck) {
-
-                                if (dbStagingLine.getOrderQty() != null) {
-                                    orderQty = dbStagingLine.getOrderQty();
-                                }
-                                if (itemCodeCapacityCheck.getLength() != null) {
-                                    itemLength = itemCodeCapacityCheck.getLength();
-                                }
-                                if (itemCodeCapacityCheck.getWidth() != null) {
-                                    itemWidth = itemCodeCapacityCheck.getWidth();
-                                }
-                                if (itemCodeCapacityCheck.getHeight() != null) {
-                                    itemHeight = itemCodeCapacityCheck.getHeight();
-                                }
-
-                                cbmPerQty = itemLength * itemWidth * itemHeight;
-                                cbm = orderQty * cbmPerQty;
-
-                                newPackBarcode.setCbmQuantity(cbmPerQty);
-                                newPackBarcode.setCbm(cbm);
-
-                                log.info("item Length, Width, Height, Volume[CbmPerQty], CBM: " + itemLength + ", " + itemWidth + "," + itemHeight + ", " + cbmPerQty + ", " + cbm);
-                            }
-                            if (!capacityCheck) {
-
-                                newPackBarcode.setCbmQuantity(0D);
-                                newPackBarcode.setCbm(0D);
-                            }
-
-                            packBarcodeList.add(newPackBarcode);
-
-                            newGrLine.setGoodReceiptQty(dbStagingLine.getOrderQty());
-                            newGrLine.setAcceptedQty(dbStagingLine.getOrderQty());
-                            newGrLine.setGoodsReceiptNo(grHeader.getGoodsReceiptNo());
-                            newGrLine.setManufacturerFullName(dbStagingLine.getManufacturerFullName());
-                            newGrLine.setReferenceDocumentType(dbStagingLine.getReferenceDocumentType());
-                            newGrLine.setPurchaseOrderNumber(dbStagingLine.getPurchaseOrderNumber());
-                            if (dbStagingLine.getPartner_item_barcode() != null) {
-                                newGrLine.setBarcodeId(dbStagingLine.getPartner_item_barcode());
-                            }
-                            if (dbStagingLine.getPartner_item_barcode() == null) {
-                                newGrLine.setBarcodeId(dbStagingLine.getManufacturerName() + dbStagingLine.getItemCode());
-                            }
-
-                            newGrLine.setAssignedUserId(grLinePresent.get(0).getAssignedUserId());
-
-                            newGrLine.setPackBarcodes(packBarcodeList);
-
-                            newGrLineList.add(newGrLine);
+                        ImBasicData imBasicData = new ImBasicData();
+                        imBasicData.setCompanyCodeId(dbStagingLine.getCompanyCode());
+                        imBasicData.setPlantId(dbStagingLine.getPlantId());
+                        imBasicData.setLanguageId(dbStagingLine.getLanguageId());
+                        imBasicData.setWarehouseId(dbStagingLine.getWarehouseId());
+                        imBasicData.setItemCode(dbStagingLine.getItemCode());
+                        imBasicData.setManufacturerName(dbStagingLine.getManufacturerName());
+                        ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                        log.info("ImbasicData1 : " + itemCodeCapacityCheck);
+                        if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                            capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                            log.info("capacity Check: " + capacityCheck);
                         }
+
+                        newPackBarcode.setQuantityType("A");
+                        newPackBarcode.setBarcode(nextRangeNumber);
+
+                        if (capacityCheck) {
+
+                            if (dbStagingLine.getOrderQty() != null) {
+                                orderQty = dbStagingLine.getOrderQty();
+                            }
+                            if (itemCodeCapacityCheck.getLength() != null) {
+                                itemLength = itemCodeCapacityCheck.getLength();
+                            }
+                            if (itemCodeCapacityCheck.getWidth() != null) {
+                                itemWidth = itemCodeCapacityCheck.getWidth();
+                            }
+                            if (itemCodeCapacityCheck.getHeight() != null) {
+                                itemHeight = itemCodeCapacityCheck.getHeight();
+                            }
+
+                            cbmPerQty = itemLength * itemWidth * itemHeight;
+                            cbm = orderQty * cbmPerQty;
+
+                            newPackBarcode.setCbmQuantity(cbmPerQty);
+                            newPackBarcode.setCbm(cbm);
+
+                            log.info("item Length, Width, Height, Volume[CbmPerQty], CBM: " + itemLength + ", " + itemWidth + "," + itemHeight + ", " + cbmPerQty + ", " + cbm);
+                        }
+                        if (!capacityCheck) {
+
+                            newPackBarcode.setCbmQuantity(0D);
+                            newPackBarcode.setCbm(0D);
+                        }
+
+                        packBarcodeList.add(newPackBarcode);
+
+                        newGrLine.setGoodReceiptQty(dbStagingLine.getOrderQty());
+                        newGrLine.setAcceptedQty(dbStagingLine.getOrderQty());
+                        newGrLine.setGoodsReceiptNo(grHeader.getGoodsReceiptNo());
+                        newGrLine.setManufacturerFullName(dbStagingLine.getManufacturerFullName());
+                        newGrLine.setReferenceDocumentType(dbStagingLine.getReferenceDocumentType());
+                        newGrLine.setPurchaseOrderNumber(dbStagingLine.getPurchaseOrderNumber());
+                        if (dbStagingLine.getPartner_item_barcode() != null) {
+                            newGrLine.setBarcodeId(dbStagingLine.getPartner_item_barcode());
+                        }
+                        if (dbStagingLine.getPartner_item_barcode() == null) {
+                            newGrLine.setBarcodeId(dbStagingLine.getManufacturerName() + dbStagingLine.getItemCode());
+                        }
+
+                        newGrLine.setAssignedUserId(grLinePresent.get(0).getAssignedUserId());
+
+                        newGrLine.setPackBarcodes(packBarcodeList);
+
+                        newGrLineList.add(newGrLine);
                     }
                 }
+            }
 
             List<GrLineV2> createGrLine = null;
             try {
-                if(newGrLineList != null && !newGrLineList.isEmpty()) {
+                if (newGrLineList != null && !newGrLineList.isEmpty()) {
                     createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
                 }
             } catch (Exception e) {
@@ -274,47 +276,54 @@ public class InvoiceCancellationService extends BaseService{
             }
             log.info("GrLine Created Successfully: " + createGrLine);
 
-                List<PutAwayLineV2> createdPutawayLine = null;
-                //putaway Confirm
-                if (createGrLine != null && !createGrLine.isEmpty()) {
-                    log.info("Putaway line Confirm Initiated");
-                    List<PutAwayLineV2> createPutawayLine = new ArrayList<>();
+            createdPutawayLine = null;
+            //putaway Confirm
+            if (createGrLine != null && !createGrLine.isEmpty()) {
+                log.info("Putaway line Confirm Initiated");
+                List<PutAwayLineV2> createPutawayLine = new ArrayList<>();
 
-                    List<PutAwayHeaderV2> dbPutawayHeaderList = putAwayHeaderService.getPutAwayHeaderV2(
-                            companyCode,
-                            plantId,
-                            languageId,
-                            warehouseId,
-                            newInvoiceNo);
-                    log.info("Putaway header: " + dbPutawayHeaderList);
+                List<PutAwayHeaderV2> dbPutawayHeaderList = putAwayHeaderService.getPutAwayHeaderV2(
+                        companyCode,
+                        plantId,
+                        languageId,
+                        warehouseId,
+                        newInvoiceNo);
+                log.info("Putaway header: " + dbPutawayHeaderList);
 
-                    if (dbPutawayHeaderList != null && !dbPutawayHeaderList.isEmpty()) {
-                        for (PutAwayHeaderV2 dbPutawayHeader : dbPutawayHeaderList) {
-                            List<PutAwayLineV2> putAwayLinePresent = putAwayLineV2List.stream().filter(n -> n.getItemCode().equalsIgnoreCase(dbPutawayHeader.getReferenceField5()) && n.getManufacturerName().equalsIgnoreCase(dbPutawayHeader.getManufacturerName())).collect(Collectors.toList());
-                            log.info("PutawayLine Present : " + putAwayLinePresent);
-                            if (putAwayLinePresent != null && !putAwayLinePresent.isEmpty()) {
+                if (dbPutawayHeaderList != null && !dbPutawayHeaderList.isEmpty()) {
+                    for (PutAwayHeaderV2 dbPutawayHeader : dbPutawayHeaderList) {
+                        List<PutAwayLineV2> putAwayLinePresent = putAwayLineV2List.stream().filter(n -> n.getItemCode().equalsIgnoreCase(dbPutawayHeader.getReferenceField5()) && n.getManufacturerName().equalsIgnoreCase(dbPutawayHeader.getManufacturerName())).collect(Collectors.toList());
+                        log.info("PutawayLine Present : " + putAwayLinePresent);
+                        if (putAwayLinePresent != null && !putAwayLinePresent.isEmpty()) {
 
-                                PutAwayLineV2 putAwayLine = new PutAwayLineV2();
+                            PutAwayLineV2 putAwayLine = new PutAwayLineV2();
 
-                                List<GrLineV2> grLine = createGrLine.stream().filter(n -> n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
+                            List<GrLineV2> grLine = createGrLine.stream().filter(n -> n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
 
-                                BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
-                                putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());
-                                putAwayLine.setConfirmedStorageBin(dbPutawayHeader.getProposedStorageBin());
-                                putAwayLine.setPutawayConfirmedQty(dbPutawayHeader.getPutAwayQuantity());
-                                putAwayLine.setPutAwayNumber(dbPutawayHeader.getPutAwayNumber());
-                                createPutawayLine.add(putAwayLine);
-                            }
+                            BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
+                            putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());
+                            putAwayLine.setConfirmedStorageBin(dbPutawayHeader.getProposedStorageBin());
+                            putAwayLine.setPutawayConfirmedQty(dbPutawayHeader.getPutAwayQuantity());
+                            putAwayLine.setPutAwayNumber(dbPutawayHeader.getPutAwayNumber());
+                            createPutawayLine.add(putAwayLine);
                         }
                     }
-                    try {
-                        createdPutawayLine = putAwayLineService.putAwayLineConfirmV2(createPutawayLine, grHeader.getCreatedBy());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                    log.info("PutawayLine Confirmed: " + createdPutawayLine);
                 }
+                try {
+                    createdPutawayLine = putAwayLineService.putAwayLineConfirmV2(createPutawayLine, grHeader.getCreatedBy());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+                log.info("PutawayLine Confirmed: " + createdPutawayLine);
             }
         }
+
+        WarehouseApiResponse warehouseApiResponse = new WarehouseApiResponse();
+        if (createdPutawayLine != null && !createdPutawayLine.isEmpty()){
+            warehouseApiResponse.setStatusCode("200");
+            warehouseApiResponse.setMessage("SupplierInvoice Cancellation Success");
+        }
+        return warehouseApiResponse;
+    }
 }

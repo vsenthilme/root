@@ -12714,8 +12714,8 @@ public class TransactionService {
 
     /*-------------------------------Supplier Invoice Cancellation-------------------------------------*/
 
-    public boolean replaceInvoice(String companyCode, String plantId, String languageId,
-                                  String warehouseId,String newInvoiceNo, String oldInvoiceNo, String loginUserId, String authToken) {
+    public WarehouseApiResponse replaceInvoice(String companyCode, String plantId, String languageId, String warehouseId,
+                                               String newInvoiceNo, String oldInvoiceNo, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -12733,10 +12733,10 @@ public class TransactionService {
                     .queryParam("warehouseId", warehouseId)
                     .queryParam("loginUserId", loginUserId);
 
-            ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity,
-                    String.class);
+            ResponseEntity<WarehouseApiResponse> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity,
+                    WarehouseApiResponse.class);
             log.info("result : " + result);
-            return true;
+            return result.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

@@ -1,5 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.tekclover.wms.api.transaction.model.deliveryline.DeliveryLine;
+import com.tekclover.wms.api.transaction.model.deliveryline.SearchDeliveryLine;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.report.*;
 import com.tekclover.wms.api.transaction.service.ReportsService;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,6 +38,15 @@ public class ReportsController {
     public ResponseEntity<?> getMobileDashboard(@RequestParam String warehouseId, @RequestParam String companyCode,
                                                 @RequestParam String plantId, @RequestParam String languageId, @RequestParam String loginUserID) throws Exception {
         MobileDashboard dashboard = reportsService.getMobileDashboard(companyCode, plantId, warehouseId, languageId, loginUserID);
+        return new ResponseEntity<>(dashboard, HttpStatus.OK);
+    }
+
+    // Search DeliveryLine
+    @ApiOperation(response = MobileDashboard.class, value = "Find MobileDashBoard") // label for swagger
+    @PostMapping("/dashboard/mobile/find")
+    public ResponseEntity<?> findMobileDashBoard(@Valid @RequestBody FindMobileDashBoard findMobileDashBoard) throws Exception {
+
+        MobileDashboard dashboard = reportsService.findMobileDashBoard(findMobileDashBoard);
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
     }
 

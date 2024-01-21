@@ -1759,6 +1759,15 @@ public class TransactionServiceController {
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
     }
 
+
+    //FIND
+    @ApiOperation(response = MobileDashboard.class, value = "Find MobileDashBoard")//label for swagger
+    @PostMapping("/reports/dashboard/mobile/find")
+    public MobileDashboard findMobileDashBoard(@RequestBody FindMobileDashBoard findMobileDashBoard,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findMobileDashBoard(findMobileDashBoard, authToken);
+    }
+
     ///*
     //     * MobileDashboard
     //     */

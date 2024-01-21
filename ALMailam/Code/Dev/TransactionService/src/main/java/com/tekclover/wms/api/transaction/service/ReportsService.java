@@ -19,9 +19,7 @@ import com.tekclover.wms.api.transaction.model.inbound.inventory.SearchInventory
 import com.tekclover.wms.api.transaction.model.inbound.putaway.PutAwayHeader;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.*;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupHeader;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
-import com.tekclover.wms.api.transaction.model.outbound.quality.QualityHeader;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
 import com.tekclover.wms.api.transaction.model.report.*;
@@ -55,6 +53,16 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class ReportsService extends BaseService {
+    @Autowired
+    private PeriodicLineRepository periodicLineRepository;
+    @Autowired
+    private PerpetualLineRepository perpetualLineRepository;
+    @Autowired
+    private PickupHeaderRepository pickupHeaderRepository;
+    @Autowired
+    private PutAwayHeaderRepository putAwayHeaderRepository;
+    @Autowired
+    private GrHeaderRepository grHeaderRepository;
     @Autowired
     private QualityHeaderRepository qualityHeaderRepository;
     @Autowired
@@ -2153,6 +2161,75 @@ public class ReportsService extends BaseService {
         return mobileDashboard;
     }
 
+
+    //Find MobileDashBoard
+    public MobileDashboard findMobileDashBoard(FindMobileDashBoard findMobileDashBoard)throws Exception {
+
+        MobileDashboard mobileDashboard = new MobileDashboard();
+
+        List<String> companyCode = findMobileDashBoard.getCompanyCode();
+        List<String> plantId = findMobileDashBoard.getPlantId();
+        List<String> warehouseId = findMobileDashBoard.getWarehouseId();
+        List<String> languageId = findMobileDashBoard.getLanguageId();
+        List<String> userId = findMobileDashBoard.getUserID();
+
+        /*--------------Inbound--------------------------------*/
+        MobileDashboard.InboundCount inboundCount = mobileDashboard.new InboundCount();
+
+        Long grHeaders = grHeaderRepository.grHeaderCount(companyCode,plantId,languageId, warehouseId, 16L);
+        inboundCount.setCases(grHeaders);
+
+        // -------------Putaway----------------------------------
+        List<Long> orderTypeId = Arrays.asList(1L, 3L, 4L, 5L);
+        Long putAwayHeaderList = putAwayHeaderRepository.getPutAwayHeaderCount(companyCode, plantId, warehouseId, languageId, 19L, orderTypeId);
+        inboundCount.setPutaway(putAwayHeaderList);
+
+        // -------------Reversals-------------------------------
+        orderTypeId = Arrays.asList(2L);
+        Long  putAwayHeaderReversals = putAwayHeaderRepository.getPutAwayHeaderCount(companyCode, plantId, warehouseId, languageId, 19L, orderTypeId);
+        inboundCount.setReversals(putAwayHeaderReversals);
+
+        /*--------------Outbound--------------------------------*/
+        MobileDashboard.OutboundCount outboundCount = mobileDashboard.new OutboundCount();
+
+        //Get LevelId from User HHtUser
+        String levelId = pickupLineRepository.getLevelIdForUserId(companyCode, plantId, languageId, warehouseId, userId);
+
+        // --------------Picking---------------------------------------------------------------------------
+        orderTypeId = Arrays.asList(0L, 1L, 3L);
+//        List<PickupHeaderV2> pickupHeaderList =
+//                pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, levelId, orderTypeId);
+        Long pickupHeaderList = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, levelId, 48L,  orderTypeId);
+        outboundCount.setPicking(pickupHeaderList);
+
+        // -------------Reversals-------------------------------------------------------------------------
+        orderTypeId = Arrays.asList(2L);
+        Long pickupHeaderListReversal = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, levelId, 48L, orderTypeId);
+        outboundCount.setReversals(pickupHeaderListReversal);
+
+        // -----------Quality-----------------------------------------------------------------------------
+        List<Long> qualityHeaderCount = qualityHeaderRepository.getQualityCount(companyCode, plantId, languageId, warehouseId,54L);
+        Long quality = qualityHeaderCount.stream().count();
+        outboundCount.setQuality(quality);
+
+        /*--------------StockCount--------------------------------*/
+        MobileDashboard.StockCount stockCount = mobileDashboard.new StockCount();
+
+        List<Long> status2 = Arrays.asList(72L, 75L);
+
+        Long perpetualLines = perpetualLineRepository.getPerpetualLineCount(companyCode, plantId, warehouseId, languageId, status2, userId);
+        Long periodicLines = periodicLineRepository.getPeriodicLineCount(companyCode, plantId, warehouseId, languageId, status2, userId);
+
+        stockCount.setPerpertual(perpetualLines);
+        stockCount.setPeriodic(periodicLines);
+
+        mobileDashboard.setInboundCount(inboundCount);
+        mobileDashboard.setOutboundCount(outboundCount);
+        mobileDashboard.setStockCount(stockCount);
+        return mobileDashboard;
+
+    }
+
     /**
      * AwaitingASN Count
      *
@@ -2870,5 +2947,8 @@ public class ReportsService extends BaseService {
         Stream<StockMovementReport1> results = stockMovementReport1Repository.stream(spec, StockMovementReport1.class);
         return results;
     }
+
+
+
 
 }

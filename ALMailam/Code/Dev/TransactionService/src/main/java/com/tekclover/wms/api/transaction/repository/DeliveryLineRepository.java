@@ -29,7 +29,7 @@ public interface DeliveryLineRepository extends JpaRepository<DeliveryLine, Stri
 
 
     @Query(value = "select count(*) as count from tbldeliveryline where c_id = :companyCodeId and " +
-            "plant_id = :plantId and wh_id = :warehouseId and lang_id = :languageId and driver_id = :driverId and" +
+            "plant_id = :plantId and wh_id = :warehouseId and lang_id = :languageId and driver_nm = :driverId and" +
             " status_id = :statusId and is_deleted = 0 group by ref_doc_no ", nativeQuery = true )
     public List<Long> getNewRecordCount(@Param("companyCodeId") String companyCodeId,
                                         @Param("plantId") String plantId,
@@ -40,7 +40,7 @@ public interface DeliveryLineRepository extends JpaRepository<DeliveryLine, Stri
 
 
     @Query(value = "select count(*) as count from tbldeliveryline where c_id = :companyCodeId and " +
-            "plant_id = :plantId and wh_id = :warehouseId and lang_id = :languageId and driver_id = :driverId and " +
+            "plant_id = :plantId and wh_id = :warehouseId and lang_id = :languageId and driver_nm = :driverId and " +
             " status_id = :statusId and re_delivery = :reDelivery and is_deleted = 0 group by ref_doc_no", nativeQuery = true)
     public List<Long> getReDeliveryLineCount(@Param("companyCodeId") String companyCodeId,
                                              @Param("plantId") String plantId,

@@ -90,4 +90,18 @@ public interface PickupLineRepository extends JpaRepository<PickupLine, Long>,
             @Param("warehouseId")String warehouseId,
             @Param(value = "userId")String userId);
 
+    @Query(value = "SELECT level_id AS levelId FROM tblhhtuser WHERE "
+            + "(:userId IS NULL OR usr_id IN (:userId)) AND "
+            + "(:companyCode IS NULL OR c_id IN (:companyCode)) AND "
+            + "(:plantId IS NULL OR plant_id IN (:plantId)) AND "
+            + "(:languageId IS NULL OR lang_id IN (:languageId)) AND "
+            + "(:warehouseId IS NULL OR wh_id IN (:warehouseId)) AND "
+            + "is_deleted = 0", nativeQuery = true)
+    public String getLevelIdForUserId(@Param("companyCode") List<String> companyCode,
+                                      @Param("plantId") List<String> plantId,
+                                      @Param("languageId") List<String> languageId,
+                                      @Param("warehouseId") List<String> warehouseId,
+                                      @Param("userId") List<String> userId);
+
+
 }

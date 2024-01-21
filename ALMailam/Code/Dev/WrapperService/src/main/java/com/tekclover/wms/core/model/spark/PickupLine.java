@@ -78,5 +78,7 @@ public class PickupLine {
     private String salesInvoiceNumber;
     private String supplierInvoiceNo;
     private String manufacturerFullName;
+    private String targetBranchCode;
+    private Double varianceQuantity;
 
 }

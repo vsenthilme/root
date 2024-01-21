@@ -2571,8 +2571,8 @@ public class OutboundLineService extends BaseService {
         dbOutboundLine.setDeletionIndicator(0L);
         dbOutboundLine.setCreatedBy(loginUserID);
         dbOutboundLine.setUpdatedBy(loginUserID);
-        dbOutboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOutboundLine.setCreatedOn(new Date());
+        dbOutboundLine.setUpdatedOn(new Date());
         return outboundLineV2Repository.save(dbOutboundLine);
     }
 
@@ -2598,7 +2598,7 @@ public class OutboundLineService extends BaseService {
         OutboundLineV2 outboundLine = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode);
         BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
         outboundLine.setUpdatedBy(loginUserID);
-        outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        outboundLine.setUpdatedOn(new Date());
 
         if (updateOutboundLine != null && updateOutboundLine.getStatus() != null) {
             statusDescription = stagingLineV2Repository.getStatusDescription(updateOutboundLine.getStatusId(), languageId);
@@ -2636,7 +2636,7 @@ public class OutboundLineService extends BaseService {
                     updateOutboundLine.getItemCode());
             BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             statusDescription = stagingLineV2Repository.getStatusDescription(outboundLine.getStatusId(), outboundLine.getLanguageId());
             outboundLine.setStatusDescription(statusDescription);
             outboundLine = outboundLineRepository.save(outboundLine);
@@ -2675,7 +2675,7 @@ public class OutboundLineService extends BaseService {
         for (OutboundLine outboundLine : outboundLines) {
             BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             outboundLineRepository.save(outboundLine);
         }
         return outboundLines;
@@ -2694,7 +2694,7 @@ public class OutboundLineService extends BaseService {
         if (outboundLine != null) {
             outboundLine.setDeletionIndicator(1L);
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             outboundLineV2Repository.save(outboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2726,7 +2726,7 @@ public class OutboundLineService extends BaseService {
                 dbOutboundLine.setPhoneNumber(outboundIntegrationHeader.getPhoneNumber());
                 dbOutboundLine.setAlternateNo(outboundIntegrationHeader.getAlternateNo());
                 dbOutboundLine.setStatus(outboundIntegrationHeader.getStatus());
-                dbOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOutboundLine.setUpdatedOn(new Date());
                 updateOutboundLineList.add(dbOutboundLine);
             }
             outboundLineV2Repository.saveAll(updateOutboundLineList);
@@ -2761,7 +2761,7 @@ public class OutboundLineService extends BaseService {
 
                 outboundLine.setDeliveryQty(0D);
                 outboundLine.setReversedBy(loginUserID);
-                outboundLine.setReversedOn(DateUtils.getCurrentKWTDateTime());
+                outboundLine.setReversedOn(new Date());
                 outboundLine.setStatusId(47L);
                 statusDescription = stagingLineV2Repository.getStatusDescription(47L, outboundLine.getLanguageId());
                 outboundLine.setStatusDescription(statusDescription);
@@ -3279,7 +3279,7 @@ public class OutboundLineService extends BaseService {
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
             dbOrderManagementLine.setPickupNumber(null);
             dbOrderManagementLine.setStatusId(43L);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             updatedOrderManagementLine = orderManagementLineRepository.save(dbOrderManagementLine);
             log.info("OrderManagementLine updated : " + updatedOrderManagementLine);
         }
@@ -3313,11 +3313,7 @@ public class OutboundLineService extends BaseService {
                 data.setStatusId(47L);
                 data.setReferenceField7(statusDescription);    // ref_field_7
                 data.setStatusDescription(statusDescription);
-                try {
-                    data.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (java.text.ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                data.setPickupUpdatedOn(new Date());
                 orderManagementLineList.add(data);
             });
 
@@ -3596,7 +3592,7 @@ public class OutboundLineService extends BaseService {
                 // ----------------OutboundLine update-----------------------------------------------------------------------------------------
                 List<Long> lineNumbers = outboundLineByStatus57List.stream().map(OutboundLine::getLineNumber).collect(Collectors.toList());
                 List<String> itemCodes = outboundLineByStatus57List.stream().map(OutboundLine::getItemCode).collect(Collectors.toList());
-                Date deliveryConfirmedOn = DateUtils.getCurrentKWTDateTime();
+                Date deliveryConfirmedOn = new Date();
                 outboundLineV2Repository.updateOutboundLineStatusV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, lineNumbers, deliveryConfirmedOn);
                 log.info("OutboundLine updated ");
 
@@ -3610,8 +3606,8 @@ public class OutboundLineService extends BaseService {
                     isOrderConfirmedOutboundHeader.setStatusId(STATUS_ID_59);
                     isOrderConfirmedOutboundHeader.setStatusDescription(statusDescription);
                     isOrderConfirmedOutboundHeader.setUpdatedBy(loginUserID);
-                    isOrderConfirmedOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                    isOrderConfirmedOutboundHeader.setDeliveryConfirmedOn(DateUtils.getCurrentKWTDateTime());
+                    isOrderConfirmedOutboundHeader.setUpdatedOn(new Date());
+                    isOrderConfirmedOutboundHeader.setDeliveryConfirmedOn(new Date());
                     outboundHeaderV2Repository.saveAndFlush(isOrderConfirmedOutboundHeader);
                     log.info("OutboundHeader updated---2---> : " + isOrderConfirmedOutboundHeader.getRefDocNumber() + "---" + isOrderConfirmedOutboundHeader.getStatusId());
                 }

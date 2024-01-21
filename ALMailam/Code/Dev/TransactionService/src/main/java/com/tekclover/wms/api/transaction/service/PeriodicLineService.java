@@ -714,9 +714,9 @@ public class PeriodicLineService extends BaseService {
             dbPeriodicLine.setStatusDescription(statusDescription);
 
             dbPeriodicLine.setCreatedBy(loginUserID);
-            dbPeriodicLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPeriodicLine.setCreatedOn(new Date());
             dbPeriodicLine.setCountedBy(loginUserID);
-            dbPeriodicLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+            dbPeriodicLine.setCountedOn(new Date());
             newPeriodicLineList.add(dbPeriodicLine);
         }
         return periodicLineV2Repository.saveAll(newPeriodicLineList);
@@ -736,9 +736,9 @@ public class PeriodicLineService extends BaseService {
         BeanUtils.copyProperties(newPeriodicLine, dbPeriodicLine, CommonUtils.getNullPropertyNames(newPeriodicLine));
         dbPeriodicLine.setDeletionIndicator(0L);
         dbPeriodicLine.setCreatedBy(loginUserID);
-        dbPeriodicLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPeriodicLine.setCreatedOn(new Date());
         dbPeriodicLine.setCountedBy(loginUserID);
-        dbPeriodicLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+        dbPeriodicLine.setCountedOn(new Date());
         return periodicLineV2Repository.save(dbPeriodicLine);
     }
 
@@ -900,7 +900,7 @@ public class PeriodicLineService extends BaseService {
                 dbPeriodicLine.setStatusDescription(statusDescription);
 
                 dbPeriodicLine.setCountedBy(loginUserID);
-                dbPeriodicLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+                dbPeriodicLine.setCountedOn(new Date());
                 updateBatchPeriodicLine.add(dbPeriodicLine);
             } else {
                 // Create new Record
@@ -913,9 +913,9 @@ public class PeriodicLineService extends BaseService {
 
                 newPeriodicLineV2.setDeletionIndicator(0L);
                 newPeriodicLineV2.setCreatedBy(loginUserID);
-                newPeriodicLineV2.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                newPeriodicLineV2.setCreatedOn(new Date());
                 newPeriodicLineV2.setCountedBy(loginUserID);
-                newPeriodicLineV2.setCountedOn(DateUtils.getCurrentKWTDateTime());
+                newPeriodicLineV2.setCountedOn(new Date());
                 createPeriodicLine.add(newPeriodicLineV2);
             }
         }
@@ -1281,7 +1281,7 @@ public class PeriodicLineService extends BaseService {
 
         inventory.setCreatedBy(updatePeriodicLine.getCreatedBy());
         inventory.setCreatedOn(updatePeriodicLine.getCreatedOn());
-        inventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        inventory.setUpdatedOn(new Date());
         InventoryV2 createdinventory = inventoryV2Repository.save(inventory);
         log.info("created inventory : " + createdinventory);
         return createdinventory;
@@ -1348,7 +1348,7 @@ public class PeriodicLineService extends BaseService {
         inventoryMovement.setCreatedBy(updatedPeriodicLine.getCreatedBy());
 
         // IM_CTD_ON
-        inventoryMovement.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        inventoryMovement.setCreatedOn(new Date());
         inventoryMovement.setCreatedBy(updatedPeriodicLine.getCreatedBy());
 
         inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
@@ -1367,7 +1367,7 @@ public class PeriodicLineService extends BaseService {
         if (periodicLine != null) {
             periodicLine.setDeletionIndicator(1L);
             periodicLine.setConfirmedBy(loginUserID);
-            periodicLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
+            periodicLine.setConfirmedOn(new Date());
             periodicLineRepository.save(periodicLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + storageBin);

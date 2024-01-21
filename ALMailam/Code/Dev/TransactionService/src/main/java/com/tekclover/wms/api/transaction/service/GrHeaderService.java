@@ -659,8 +659,6 @@ public class GrHeaderService extends BaseService {
         newGrHeader.setDeletionIndicator(0L);
         newGrHeader.setCreatedBy(loginUserID);
         newGrHeader.setUpdatedBy(loginUserID);
-//        newGrHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        newGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         newGrHeader.setCreatedOn(new Date());
         newGrHeader.setUpdatedOn(new Date());
         return grHeaderV2Repository.save(newGrHeader);
@@ -694,7 +692,6 @@ public class GrHeaderService extends BaseService {
                 palletCode, caseCode);
         BeanUtils.copyProperties(updateGrHeader, dbGrHeader, CommonUtils.getNullPropertyNames(updateGrHeader));
         dbGrHeader.setUpdatedBy(loginUserID);
-//        dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbGrHeader.setUpdatedOn(new Date());
         return grHeaderV2Repository.save(dbGrHeader);
     }
@@ -719,7 +716,6 @@ public class GrHeaderService extends BaseService {
             dbGrHeader.setStatusDescription(statusDescription);
 
             dbGrHeader.setUpdatedBy(loginUserID);
-//            dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrHeader.setUpdatedOn(new Date());
             grHeaderV2Repository.save(dbGrHeader);
         }
@@ -731,7 +727,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
             grLine.setStatusDescription(statusDescription);
             grLine.setUpdatedBy(loginUserID);
-//            grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grLine.setUpdatedOn(new Date());
             grLineV2Repository.save(grLine);
         }
@@ -758,7 +753,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
             dbGrHeader.setStatusDescription(statusDescription);
             dbGrHeader.setUpdatedBy(loginUserID);
-//            dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrHeader.setUpdatedOn(new Date());
             dbGrHeader = grHeaderV2Repository.save(dbGrHeader);
             log.info("dbGrHeader updated : " + dbGrHeader);
@@ -770,7 +764,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
             dbGrLine.setStatusDescription(statusDescription);
             dbGrLine.setUpdatedBy(loginUserID);
-//            dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrLine.setUpdatedOn(new Date());
             dbGrLine = grLineV2Repository.save(dbGrLine);
             log.info("dbGrLine updated : " + dbGrLine);
@@ -806,7 +799,6 @@ public class GrHeaderService extends BaseService {
         if (grHeader != null) {
             grHeader.setDeletionIndicator(1L);
             grHeader.setUpdatedBy(loginUserID);
-//            grHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grHeader.setUpdatedOn(new Date());
             grHeaderV2Repository.save(grHeader);
         } else {

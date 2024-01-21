@@ -455,8 +455,6 @@ public class PreInboundLineService extends BaseService {
         dbPreInboundLine.setDeletionIndicator(0L);
         dbPreInboundLine.setCreatedBy(loginUserID);
         dbPreInboundLine.setUpdatedBy(loginUserID);
-//        dbPreInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setCreatedOn(new Date());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
@@ -609,7 +607,6 @@ public class PreInboundLineService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy(loginUserID);
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -659,7 +656,6 @@ public class PreInboundLineService extends BaseService {
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbPreInboundLine.setStatusDescription(statusDescription);
         dbPreInboundLine.setUpdatedBy(loginUserID);
-//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
     }
@@ -686,7 +682,6 @@ public class PreInboundLineService extends BaseService {
         if (preInboundLine != null && preInboundLine.getStatusId() == 6L) {
             preInboundLine.setDeletionIndicator(1L);
             preInboundLine.setUpdatedBy(loginUserID);
-//            preInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             preInboundLine.setUpdatedOn(new Date());
             preInboundLineV2Repository.save(preInboundLine);
         } else {

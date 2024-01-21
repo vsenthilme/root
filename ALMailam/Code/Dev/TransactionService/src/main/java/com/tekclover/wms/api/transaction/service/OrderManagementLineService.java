@@ -1362,9 +1362,9 @@ public class OrderManagementLineService extends BaseService {
 
         dbOrderManagementLine.setDeletionIndicator(0L);
         dbOrderManagementLine.setPickupCreatedBy(loginUserID);
-        dbOrderManagementLine.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupCreatedOn(new Date());
         dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupUpdatedOn(new Date());
 
         return orderManagementLineV2Repository.save(dbOrderManagementLine);
     }
@@ -1435,7 +1435,7 @@ public class OrderManagementLineService extends BaseService {
 //            dbOrderManagementLine.setReferenceField7(idStatus.getStatus());
                 dbOrderManagementLine.setReferenceField7(statusDescription);
                 dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-                dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
                 if (i != 0) {
                     dbOrderManagementLine.setDeletionIndicator(1L);
                 }
@@ -1534,7 +1534,7 @@ public class OrderManagementLineService extends BaseService {
 //            dbOrderManagementLine.setReferenceField7(idStatus.getStatus());
             dbOrderManagementLine.setReferenceField7(statusDescription);
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             if (i != 0) {
                 dbOrderManagementLine.setDeletionIndicator(1L);
             }
@@ -1604,7 +1604,7 @@ public class OrderManagementLineService extends BaseService {
                         dbOrderManagementLine.getItemCode(), loginUserID);
 
                 dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-                dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
 
             }
             OrderManagementLineV2 updatedOrderManagementLine = orderManagementLineV2Repository.save(dbOrderManagementLine);
@@ -1678,7 +1678,7 @@ public class OrderManagementLineService extends BaseService {
 
         }
         dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupUpdatedOn(new Date());
         OrderManagementLineV2 updatedOrderManagementLine = orderManagementLineV2Repository.save(dbOrderManagementLine);
         log.info("OrderManagementLine updated: " + updatedOrderManagementLine);
         return updatedOrderManagementLine;
@@ -1818,7 +1818,7 @@ public class OrderManagementLineService extends BaseService {
                     pickupHeader.setProposedPackBarCode(dbOrderManagementLine.getProposedPackBarCode());
 
                     pickupHeader.setPickupCreatedBy(loginUserID);
-                    pickupHeader.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+                    pickupHeader.setPickupCreatedOn(new Date());
 
                     // REF_FIELD_1
                     pickupHeader.setReferenceField1(dbOrderManagementLine.getReferenceField1());
@@ -1877,8 +1877,10 @@ public class OrderManagementLineService extends BaseService {
                     orderManagementLine.getManufacturerName(), authTokenForMastersService.getAccess_token());
 
             log.info("ImBasicData1: " + dbImBasicData1);
-            if (dbImBasicData1.getShelfLifeIndicator() != null) {
-                shelfLifeIndicator = dbImBasicData1.getShelfLifeIndicator();
+            if(dbImBasicData1 != null) {
+                if (dbImBasicData1.getShelfLifeIndicator() != null) {
+                    shelfLifeIndicator = dbImBasicData1.getShelfLifeIndicator();
+                }
             }
         }
 
@@ -1978,7 +1980,7 @@ public class OrderManagementLineService extends BaseService {
                 orderManagementLine.setStatusDescription(statusDescription);
                 orderManagementLine.setReferenceField7(statusDescription);
                 orderManagementLine.setPickupUpdatedBy(loginUserID);
-                orderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                orderManagementLine.setPickupUpdatedOn(new Date());
 
                 double allocatedQtyFromOrderMgmt = 0.0;
 
@@ -2116,7 +2118,7 @@ public class OrderManagementLineService extends BaseService {
             BeanUtils.copyProperties(updateOrderManagementLine, dbOrderManagementLine,
                     CommonUtils.getNullPropertyNames(updateOrderManagementLine));
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             return orderManagementLineV2Repository.save(dbOrderManagementLine);
         }
         return null;
@@ -2151,7 +2153,7 @@ public class OrderManagementLineService extends BaseService {
                 dbOrderManagementLine.setPickupNumber(null);
             }
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             return orderManagementLineV2Repository.save(dbOrderManagementLine);
         }
         return null;
@@ -2179,7 +2181,7 @@ public class OrderManagementLineService extends BaseService {
         if (orderManagementHeader != null) {
             orderManagementHeader.setDeletionIndicator(1L);
             orderManagementHeader.setPickupUpdatedBy(loginUserID);
-            orderManagementHeader.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeader.setPickupUpdatedOn(new Date());
             orderManagementLineV2Repository.save(orderManagementHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);

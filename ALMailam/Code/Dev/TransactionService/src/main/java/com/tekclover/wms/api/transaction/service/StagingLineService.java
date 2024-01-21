@@ -1028,8 +1028,6 @@ public class StagingLineService extends BaseService {
                 dbStagingLineEntity.setDeletionIndicator(0L);
                 dbStagingLineEntity.setCreatedBy(loginUserID);
                 dbStagingLineEntity.setUpdatedBy(loginUserID);
-//                dbStagingLineEntity.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 dbStagingLineEntity.setCreatedOn(new Date());
                 dbStagingLineEntity.setUpdatedOn(new Date());
                 stagingLineEntityList.add(dbStagingLineEntity);
@@ -1107,7 +1105,6 @@ public class StagingLineService extends BaseService {
                 caseCode, lineNo, itemCode);
         BeanUtils.copyProperties(updateStagingLine, dbStagingLineEntity, CommonUtils.getNullPropertyNames(updateStagingLine));
         dbStagingLineEntity.setUpdatedBy(loginUserID);
-//        dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingLineEntity.setUpdatedOn(new Date());
         return stagingLineV2Repository.save(dbStagingLineEntity);
     }
@@ -1144,7 +1141,6 @@ public class StagingLineService extends BaseService {
                     assignHHTUser.getItemCode());
             dbStagingLineEntity.setAssignedUserId(assignedUserId);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
-//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
             log.info("StagingLine: " + dbStagingLineEntity);
 
@@ -1204,7 +1200,6 @@ public class StagingLineService extends BaseService {
             dbStagingLineEntity.setStatusDescription(statusDescription);
             dbStagingLineEntity.setCaseCode(caseCode);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
-//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
             StagingLineEntityV2 updatedStagingLineEntity = stagingLineV2Repository.save(dbStagingLineEntity);
 
@@ -1515,7 +1510,6 @@ public class StagingLineService extends BaseService {
         if (StagingLineEntity != null) {
             StagingLineEntity.setDeletionIndicator(1L);
             StagingLineEntity.setUpdatedBy(loginUserID);
-//            StagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             StagingLineEntity.setUpdatedOn(new Date());
             stagingLineV2Repository.save(StagingLineEntity);
         } else {

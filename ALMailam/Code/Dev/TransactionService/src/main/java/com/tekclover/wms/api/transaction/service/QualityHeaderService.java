@@ -568,8 +568,8 @@ public class QualityHeaderService {
         dbQualityHeader.setDeletionIndicator(0L);
         dbQualityHeader.setQualityCreatedBy(loginUserID);
         dbQualityHeader.setQualityUpdatedBy(loginUserID);
-        dbQualityHeader.setQualityCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbQualityHeader.setQualityCreatedOn(new Date());
+        dbQualityHeader.setQualityUpdatedOn(new Date());
         return qualityHeaderV2Repository.save(dbQualityHeader);
     }
 
@@ -595,7 +595,7 @@ public class QualityHeaderService {
         if (dbQualityHeader != null) {
             BeanUtils.copyProperties(updateQualityHeader, dbQualityHeader, CommonUtils.getNullPropertyNames(updateQualityHeader));
             dbQualityHeader.setQualityUpdatedBy(loginUserID);
-            dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(dbQualityHeader);
         }
         return null;
@@ -622,7 +622,7 @@ public class QualityHeaderService {
         if (dbQualityHeader != null) {
             BeanUtils.copyProperties(updateQualityHeader, dbQualityHeader, CommonUtils.getNullPropertyNames(updateQualityHeader));
             dbQualityHeader.setQualityUpdatedBy(loginUserID);
-            dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(dbQualityHeader);
         }
         return null;
@@ -641,7 +641,7 @@ public class QualityHeaderService {
         if (qualityHeader != null) {
             qualityHeader.setDeletionIndicator(1L);
             qualityHeader.setQualityUpdatedBy(loginUserID);
-            qualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            qualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(qualityHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + qualityInspectionNo);
@@ -669,12 +669,7 @@ public class QualityHeaderService {
             qualityHeader.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
                 toUpdate.add(data);
             });
             return qualityHeaderV2Repository.saveAll(toUpdate);
@@ -702,7 +697,7 @@ public class QualityHeaderService {
         if (qualityHeader != null) {
             qualityHeader.setDeletionIndicator(1L);
             qualityHeader.setQualityUpdatedBy(loginUserID);
-            qualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            qualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(qualityHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + qualityInspectionNo);
@@ -732,7 +727,7 @@ public class QualityHeaderService {
             for (QualityHeaderV2 qualityHeaderV2 : qualityHeaderList) {
                 qualityHeaderV2.setDeletionIndicator(1L);
                 qualityHeaderV2.setQualityUpdatedBy(loginUserID);
-                qualityHeaderV2.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                qualityHeaderV2.setQualityUpdatedOn(new Date());
                 qualityHeaderV2Repository.save(qualityHeaderV2);
                 qualityHeaders.add(qualityHeaderV2);
             }

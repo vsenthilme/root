@@ -749,8 +749,8 @@ public class InhouseTransferHeaderService extends BaseService {
         dbInhouseTransferHeader.setDeletionIndicator(0L);
         dbInhouseTransferHeader.setCreatedBy(loginUserID);
         dbInhouseTransferHeader.setUpdatedBy(loginUserID);
-        dbInhouseTransferHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbInhouseTransferHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbInhouseTransferHeader.setCreatedOn(new Date());
+        dbInhouseTransferHeader.setUpdatedOn(new Date());
 
         // - TR_TYP_ID -
         Long transferTypeId = dbInhouseTransferHeader.getTransferTypeId();
@@ -793,11 +793,11 @@ public class InhouseTransferHeaderService extends BaseService {
             dbInhouseTransferLine.setStatusId(30L);
             dbInhouseTransferLine.setDeletionIndicator(0L);
             dbInhouseTransferLine.setCreatedBy(loginUserID);
-            dbInhouseTransferLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setCreatedOn(new Date());
             dbInhouseTransferLine.setUpdatedBy(loginUserID);
-            dbInhouseTransferLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setUpdatedOn(new Date());
             dbInhouseTransferLine.setConfirmedBy(loginUserID);
-            dbInhouseTransferLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setConfirmedOn(new Date());
 
             IKeyValuePair description = stagingLineV2Repository.getDescription(dbInhouseTransferLine.getCompanyCodeId(),
                     dbInhouseTransferLine.getLanguageId(),

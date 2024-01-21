@@ -493,8 +493,6 @@ public class InboundLineService extends BaseService {
         dbInboundLine.setDeletionIndicator(0L);
         dbInboundLine.setCreatedBy(loginUserID);
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setCreatedOn(new Date());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
@@ -590,7 +588,6 @@ public class InboundLineService extends BaseService {
         InboundLineV2 dbInboundLine = getInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         BeanUtils.copyProperties(updateInboundLine, dbInboundLine, CommonUtils.getNullPropertyNames(updateInboundLine));
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
     }
@@ -613,10 +610,7 @@ public class InboundLineService extends BaseService {
         if (inboundLine != null) {
             inboundLine.setDeletionIndicator(1L);
             inboundLine.setUpdatedBy(loginUserID);
-
-//            inboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundLine.setUpdatedOn(new Date());
-
             inboundLineV2Repository.save(inboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNo);

@@ -120,7 +120,7 @@ public class StockAdjustmentService extends BaseService {
 //                dbStockAdjustment.setStatusDescription(statusDescription);
 //
 //                dbStockAdjustment.setDeletionIndicator(0L);
-//                dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//                dbStockAdjustment.setCreatedOn(new Date());
 //                dbStockAdjustment.setCreatedBy("MSD_INT");
 //
 //                createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
@@ -178,7 +178,7 @@ public class StockAdjustmentService extends BaseService {
 
                 BeanUtils.copyProperties(updateStockAdjustment, dbStockAdjustment, CommonUtils.getNullPropertyNames(updateStockAdjustment));
                 dbStockAdjustment.setUpdatedBy(loginUserId);
-                dbStockAdjustment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbStockAdjustment.setUpdatedOn(new Date());
 
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbStockAdjustment.getStatusId(), dbStockAdjustment.getLanguageId());
                 dbStockAdjustment.setStatusDescription(statusDescription);
@@ -309,7 +309,7 @@ public class StockAdjustmentService extends BaseService {
                     dbStockAdjustment.setStatusDescription(statusDescription);
 
                     dbStockAdjustment.setDeletionIndicator(0L);
-                    dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                    dbStockAdjustment.setCreatedOn(new Date());
                     dbStockAdjustment.setIsCompleted("Y");
                     dbStockAdjustment.setCreatedBy("AMS_INT");
 
@@ -437,10 +437,10 @@ public class StockAdjustmentService extends BaseService {
                     newInventory.setBarcodeId(barcode.get(0));
                 }
 
-                newInventory.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                newInventory.setCreatedOn(new Date());
             }
 
-            newInventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            newInventory.setUpdatedOn(new Date());
             newInventory.setInventoryId(System.currentTimeMillis());
             inventoryV2Repository.save(newInventory);
 
@@ -494,7 +494,7 @@ public class StockAdjustmentService extends BaseService {
 
             dbStockAdjustment.setDeletionIndicator(0L);
             dbStockAdjustment.setIsCompleted("Y");
-            dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            dbStockAdjustment.setCreatedOn(new Date());
             dbStockAdjustment.setCreatedBy("AMS_INT");
 
             StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);

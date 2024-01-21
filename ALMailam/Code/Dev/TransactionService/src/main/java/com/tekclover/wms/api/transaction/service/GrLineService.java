@@ -1443,8 +1443,6 @@ public class GrLineService extends BaseService {
                     dbGrLine.setDeletionIndicator(0L);
                     dbGrLine.setCreatedBy(loginUserID);
                     dbGrLine.setUpdatedBy(loginUserID);
-//                    dbGrLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                    dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                     dbGrLine.setCreatedOn(new Date());
                     dbGrLine.setUpdatedOn(new Date());
 
@@ -1533,7 +1531,6 @@ public class GrLineService extends BaseService {
                         statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
                         grHeader.setStatusDescription(statusDescription);
                         grHeader.setCreatedBy(loginUserID);
-//                        grHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
                         grHeader.setUpdatedOn(new Date());
                         grHeader.setConfirmedOn(new Date());
                         grHeader = grHeaderV2Repository.save(grHeader);
@@ -2847,9 +2844,6 @@ public class GrLineService extends BaseService {
                 putAwayHeader.setDeletionIndicator(0L);
                 putAwayHeader.setCreatedBy(loginUserID);
                 putAwayHeader.setUpdatedBy(loginUserID);
-//                putAwayHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                putAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//                putAwayHeader.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 putAwayHeader.setCreatedOn(new Date());
                 putAwayHeader.setUpdatedOn(new Date());
                 putAwayHeader.setConfirmedOn(new Date());
@@ -3394,7 +3388,6 @@ public class GrLineService extends BaseService {
                 packBarcodes, lineNo, itemCode);
         BeanUtils.copyProperties(updateGrLine, dbGrLine, CommonUtils.getNullPropertyNames(updateGrLine));
         dbGrLine.setUpdatedBy(loginUserID);
-//        dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbGrLine.setUpdatedOn(new Date());
         GrLineV2 updatedGrLine = grLineV2Repository.save(dbGrLine);
         return updatedGrLine;
@@ -3436,7 +3429,6 @@ public class GrLineService extends BaseService {
         if (grLine != null) {
             grLine.setDeletionIndicator(1L);
             grLine.setUpdatedBy(loginUserID);
-//            grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grLine.setUpdatedOn(new Date());
             grLineV2Repository.save(grLine);
         } else {
@@ -3479,7 +3471,7 @@ public class GrLineService extends BaseService {
             for (GrLineV2 grLine : dbGrLineList) {
                 grLine.setDeletionIndicator(1L);
                 grLine.setUpdatedBy(loginUserID);
-                grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                grLine.setUpdatedOn(new Date());
                 GrLineV2 grLineV2 = grLineV2Repository.save(grLine);
                 grLineV2s.add(grLineV2);
             }

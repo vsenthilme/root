@@ -325,9 +325,9 @@ public class OrderManagementHeaderService {
 
         dbOrderManagementHeader.setDeletionIndicator(0L);
         dbOrderManagementHeader.setPickupCreatedBy(loginUserID);
-        dbOrderManagementHeader.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementHeader.setPickupCreatedOn(new Date());
         dbOrderManagementHeader.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementHeader.setPickupupdatedOn(new Date());
         return orderManagementHeaderV2Repository.save(dbOrderManagementHeader);
     }
 
@@ -353,7 +353,7 @@ public class OrderManagementHeaderService {
         if (dbOrderManagementHeader != null) {
             BeanUtils.copyProperties(updateOrderManagementHeader, dbOrderManagementHeader, CommonUtils.getNullPropertyNames(updateOrderManagementHeader));
             dbOrderManagementHeader.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementHeader.setPickupupdatedOn(new Date());
 
             if (dbOrderManagementHeader.getStatusId() != null) {
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbOrderManagementHeader.getStatusId(), dbOrderManagementHeader.getLanguageId());
@@ -382,7 +382,7 @@ public class OrderManagementHeaderService {
         if (orderManagementHeader != null) {
             orderManagementHeader.setDeletionIndicator(1L);
             orderManagementHeader.setPickupUpdatedBy(loginUserID);
-            orderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeader.setPickupupdatedOn(new Date());
             orderManagementHeaderV2Repository.save(orderManagementHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
@@ -411,7 +411,7 @@ public class OrderManagementHeaderService {
         if(orderManagementHeaderV2 != null){
             orderManagementHeaderV2.setDeletionIndicator(1L);
             orderManagementHeaderV2.setPickupUpdatedBy(loginUserID);
-            orderManagementHeaderV2.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeaderV2.setPickupupdatedOn(new Date());
 //            orderManagementHeaderV2.setPickupupdatedOn(new Date());
             orderManagementHeaderV2Repository.save(orderManagementHeaderV2);
         }

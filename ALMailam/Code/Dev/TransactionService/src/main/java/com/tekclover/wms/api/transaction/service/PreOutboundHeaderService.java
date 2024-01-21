@@ -508,8 +508,8 @@ public class PreOutboundHeaderService extends BaseService {
         /*
          * Setting up KuwaitTime
          */
-        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-        outboundHeader.setRefDocDate(kwtDate);
+//        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+        outboundHeader.setRefDocDate(new Date());
         outboundHeader.setStatusId(dbOrderManagementHeader.getStatusId());
         outboundHeader.setCreatedBy(createdPreOutboundHeader.getCreatedBy());
         outboundHeader.setCreatedOn(createdPreOutboundHeader.getCreatedOn());
@@ -560,8 +560,8 @@ public class PreOutboundHeaderService extends BaseService {
         /*
          * Setting up KuwaitTime
          */
-        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-        preOutboundHeader.setRefDocDate(kwtDate);
+//        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+        preOutboundHeader.setRefDocDate(new Date());
         preOutboundHeader.setStatusId(39L);
         preOutboundHeader.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
 
@@ -576,7 +576,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         preOutboundHeader.setDeletionIndicator(0L);
         preOutboundHeader.setCreatedBy("MSD_INT");
-        preOutboundHeader.setCreatedOn(kwtDate);
+        preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeader createdPreOutboundHeader = preOutboundHeaderRepository.save(preOutboundHeader);
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
         return createdPreOutboundHeader;
@@ -873,8 +873,8 @@ public class PreOutboundHeaderService extends BaseService {
         /*
          * Setting up KuwaitTime
          */
-        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-        dbOutboundIntegrationLog.setCreatedOn(kwtDate);
+//        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+        dbOutboundIntegrationLog.setCreatedOn(new Date());
         dbOutboundIntegrationLog = outboundIntegrationLogRepository.save(dbOutboundIntegrationLog);
         log.info("dbOutboundIntegrationLog : " + dbOutboundIntegrationLog);
         return dbOutboundIntegrationLog;
@@ -1260,8 +1260,8 @@ public class PreOutboundHeaderService extends BaseService {
         dbPreOutboundHeader.setDeletionIndicator(0L);
         dbPreOutboundHeader.setCreatedBy(loginUserID);
         dbPreOutboundHeader.setUpdatedBy(loginUserID);
-        dbPreOutboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbPreOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPreOutboundHeader.setCreatedOn(new Date());
+        dbPreOutboundHeader.setUpdatedOn(new Date());
         return preOutboundHeaderV2Repository.save(dbPreOutboundHeader);
     }
 
@@ -1283,7 +1283,7 @@ public class PreOutboundHeaderService extends BaseService {
         PreOutboundHeaderV2 dbPreOutboundHeader = getPreOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, preOutboundNo, partnerCode);
         BeanUtils.copyProperties(updatePreOutboundHeader, dbPreOutboundHeader, CommonUtils.getNullPropertyNames(updatePreOutboundHeader));
         dbPreOutboundHeader.setUpdatedBy(loginUserID);
-        dbPreOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPreOutboundHeader.setUpdatedOn(new Date());
         return preOutboundHeaderV2Repository.save(dbPreOutboundHeader);
     }
 
@@ -1317,7 +1317,7 @@ public class PreOutboundHeaderService extends BaseService {
         Optional<PreOutboundHeaderV2> orderProcessedStatus =
                 preOutboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(outboundIntegrationHeader.getRefDocumentNo(), 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedOrderV2(outboundIntegrationHeader.getRefDocumentNo());
+            orderService.updateProcessedOrderV2(outboundIntegrationHeader.getRefDocumentNo(), 100L);
             throw new BadRequestException("Order :" + outboundIntegrationHeader.getRefDocumentNo() +
                     " already processed. Reprocessing can't be allowed.");
         }
@@ -1971,7 +1971,7 @@ public class PreOutboundHeaderService extends BaseService {
                 orderManagementLine.setStatusId(48L);                        // 2. Update STATUS_ID = 48
                 orderManagementLine.setStatusDescription(statusDescription);
 //                    orderManagementLine.setPickupUpdatedBy("Automate");            // Ref_field_7
-                orderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                orderManagementLine.setPickupUpdatedOn(new Date());
                 OrderManagementLineV2 orderManagementLineV2 = orderManagementLineV2Repository.save(orderManagementLine);
                 log.info("OrderManagementLine updated : " + orderManagementLineV2);
 //                    }
@@ -2474,7 +2474,7 @@ public class PreOutboundHeaderService extends BaseService {
                 orderManagementLine.setStatusId(48L);                        // 2. Update STATUS_ID = 48
                 orderManagementLine.setStatusDescription(statusDescription);
 //                    orderManagementLine.setPickupUpdatedBy("Automate");            // Ref_field_7
-                orderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                orderManagementLine.setPickupUpdatedOn(new Date());
                 OrderManagementLineV2 orderManagementLineV2 = orderManagementLineV2Repository.save(orderManagementLine);
                 log.info("OrderManagementLine updated : " + orderManagementLineV2);
 //                    }
@@ -2677,8 +2677,8 @@ public class PreOutboundHeaderService extends BaseService {
         /*
          * Setting up KuwaitTime
          */
-        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-        outboundHeader.setRefDocDate(kwtDate);
+//        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+        outboundHeader.setRefDocDate(new Date());
         outboundHeader.setStatusId(statusId);
 
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, createdPreOutboundHeader.getLanguageId());
@@ -2777,8 +2777,8 @@ public class PreOutboundHeaderService extends BaseService {
         /*
          * Setting up KuwaitTime
          */
-        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-        preOutboundHeader.setRefDocDate(kwtDate);
+//        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+        preOutboundHeader.setRefDocDate(new Date());
         preOutboundHeader.setStatusId(39L);
         preOutboundHeader.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
 
@@ -2818,7 +2818,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         preOutboundHeader.setDeletionIndicator(0L);
         preOutboundHeader.setCreatedBy("MSD_INT");
-        preOutboundHeader.setCreatedOn(kwtDate);
+        preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeaderV2 createdPreOutboundHeader = preOutboundHeaderV2Repository.save(preOutboundHeader);
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
         return createdPreOutboundHeader;
@@ -2943,8 +2943,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         preOutboundLine.setDeletionIndicator(0L);
         preOutboundLine.setCreatedBy("MSD_INT");
-//        preOutboundLine.setCreatedOn(new Date());
-        preOutboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preOutboundLine.setCreatedOn(new Date());
         return preOutboundLine;
     }
 
@@ -3058,8 +3057,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         preOutboundLine.setDeletionIndicator(0L);
         preOutboundLine.setCreatedBy("MSD_INT");
-//        preOutboundLine.setCreatedOn(new Date());
-        preOutboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preOutboundLine.setCreatedOn(new Date());
 
         log.info("preOutboundLine : " + preOutboundLine);
         return preOutboundLine;
@@ -3245,8 +3243,8 @@ public class PreOutboundHeaderService extends BaseService {
             /*
              * Setting up KuwaitTime
              */
-            Date kwtDate = DateUtils.getCurrentKWTDateTime();
-            dbOutboundIntegrationLog.setCreatedOn(kwtDate);
+//            Date kwtDate = DateUtils.getCurrentKWTDateTime();
+            dbOutboundIntegrationLog.setCreatedOn(new Date());
             dbOutboundIntegrationLog = outboundIntegrationLogRepository.save(dbOutboundIntegrationLog);
             log.info("dbOutboundIntegrationLog : " + dbOutboundIntegrationLog);
             return dbOutboundIntegrationLog;
@@ -3265,8 +3263,7 @@ public class PreOutboundHeaderService extends BaseService {
         log.info("PickList Cancellation - preOutboundHeaderV2: " + preOutboundHeaderV2);
         if (preOutboundHeaderV2 != null) {
             preOutboundHeaderV2.setUpdatedBy(loginUserID);
-            preOutboundHeaderV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//            preOutboundHeaderV2.setUpdatedOn(new Date());
+            preOutboundHeaderV2.setUpdatedOn(new Date());
             preOutboundHeaderV2.setDeletionIndicator(1L);
             preOutboundHeaderV2Repository.save(preOutboundHeaderV2);
         }

@@ -1247,7 +1247,6 @@ public class InboundHeaderService extends BaseService {
         InboundHeaderV2 dbInboundHeader = optInboundHeader.get();
         BeanUtils.copyProperties(updateInboundHeader, dbInboundHeader, CommonUtils.getNullPropertyNames(updateInboundHeader));
         dbInboundHeader.setUpdatedBy(loginUserID);
-//        dbInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundHeader.setUpdatedOn(new Date());
         return inboundHeaderV2Repository.save(dbInboundHeader);
     }
@@ -1267,7 +1266,6 @@ public class InboundHeaderService extends BaseService {
         if (inboundHeader != null) {
             inboundHeader.setDeletionIndicator(1L);
             inboundHeader.setUpdatedBy(loginUserID);
-//            inboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundHeader.setUpdatedOn(new Date());
             inboundHeaderV2Repository.save(inboundHeader);
         } else {
@@ -1448,11 +1446,9 @@ public class InboundHeaderService extends BaseService {
 
         List<InboundLineV2> inboundLineV2List = inboundLineService.getInboundLineForInboundConfirmWithStatusIdV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
         statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
-//        inboundLineRepository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundLineV2Repository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundLine updated");
 
-//        inboundHeaderRepository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundHeaderV2Repository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundHeader updated");
 
@@ -1752,7 +1748,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
 
                 ASNLineV2 asnLine = new ASNLineV2();
@@ -1835,7 +1830,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceAsnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1862,7 +1856,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 StoreReturnLine storeReturnLine = new StoreReturnLine();
 
@@ -1936,7 +1929,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceStoreReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1963,7 +1955,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 SOReturnLine soReturnLine = new SOReturnLine();
 
@@ -2027,7 +2018,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceSOReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -2055,7 +2045,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 InterWarehouseTransferInLineV2 iwhTransferLine = new InterWarehouseTransferInLineV2();
 
@@ -2135,7 +2124,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceInterwareHouseUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);

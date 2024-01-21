@@ -1777,8 +1777,6 @@ public class PutAwayLineService extends BaseService {
         dbPutAwayLine.setDeletionIndicator(0L);
         dbPutAwayLine.setCreatedBy(loginUserID);
         dbPutAwayLine.setUpdatedBy(loginUserID);
-//        dbPutAwayLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayLine.setCreatedOn(new Date());
         dbPutAwayLine.setUpdatedOn(new Date());
         PutAwayLineV2 createdPutAwayLine = putAwayLineRepository.save(dbPutAwayLine);
@@ -1902,7 +1900,6 @@ public class PutAwayLineService extends BaseService {
         PutAwayLineV2 dbPutAwayLine = new PutAwayLineV2();
         BeanUtils.copyProperties(updatePutAwayLine, dbPutAwayLine, CommonUtils.getNullPropertyNames(updatePutAwayLine));
         dbPutAwayLine.setUpdatedBy(loginUserID);
-//        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayLine.setUpdatedOn(new Date());
         return putAwayLineV2Repository.save(dbPutAwayLine);
     }
@@ -1931,7 +1928,6 @@ public class PutAwayLineService extends BaseService {
         if (putAwayLine != null) {
             putAwayLine.setDeletionIndicator(1L);
             putAwayLine.setUpdatedBy(loginUserID);
-//            putAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             putAwayLine.setUpdatedOn(new Date());
             putAwayLineRepository.save(putAwayLine);
         } else {

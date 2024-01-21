@@ -2241,7 +2241,7 @@ public class PickupLineService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(51L, languageId);
             outboundHeader.setStatusDescription(statusDescription);
             outboundHeader.setUpdatedBy(loginUserID);
-            outboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundHeader.setUpdatedOn(new Date());
             outboundHeaderV2Repository.save(outboundHeader);
             log.info("outboundHeader updated as 51.");
 
@@ -2250,7 +2250,7 @@ public class PickupLineService extends BaseService {
             preOutboundHeader.setStatusId(51L);
             preOutboundHeader.setStatusDescription(statusDescription);
             preOutboundHeader.setUpdatedBy(loginUserID);
-            preOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            preOutboundHeader.setUpdatedOn(new Date());
             preOutboundHeaderV2Repository.save(preOutboundHeader);
             log.info("PreOutboundHeader updated as 51.");
         }
@@ -2271,7 +2271,7 @@ public class PickupLineService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(50L, languageId);
             outboundHeader50.setStatusDescription(statusDescription);
             outboundHeader50.setUpdatedBy(loginUserID);
-            outboundHeader50.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundHeader50.setUpdatedOn(new Date());
             outboundHeaderV2Repository.save(outboundHeader50);
             log.info("outboundHeader updated as 50.");
         }
@@ -2408,7 +2408,7 @@ public class PickupLineService extends BaseService {
             BeanUtils.copyProperties(updatePickupLine, dbPickupLine,
                     CommonUtils.getNullPropertyNames(updatePickupLine));
             dbPickupLine.setPickupUpdatedBy(loginUserID);
-            dbPickupLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPickupLine.setPickupUpdatedOn(new Date());
             return pickupLineV2Repository.save(dbPickupLine);
         }
         return null;
@@ -2424,7 +2424,7 @@ public class PickupLineService extends BaseService {
             for (PickupLineV2 data : dbPickupLine) {
                 BeanUtils.copyProperties(updatePickupLine, data, CommonUtils.getNullPropertyNames(updatePickupLine));
                 data.setPickupUpdatedBy(loginUserID);
-                data.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                data.setPickupUpdatedOn(new Date());
                 toSave.add(data);
             }
             return pickupLineV2Repository.saveAll(toSave);
@@ -2459,7 +2459,7 @@ public class PickupLineService extends BaseService {
             BeanUtils.copyProperties(updatePickupLine, dbPickupLine,
                     CommonUtils.getNullPropertyNames(updatePickupLine));
             dbPickupLine.setPickupUpdatedBy(loginUserID);
-            dbPickupLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPickupLine.setPickupUpdatedOn(new Date());
             return pickupLineV2Repository.save(dbPickupLine);
         }
         return null;
@@ -2490,7 +2490,7 @@ public class PickupLineService extends BaseService {
         if (dbPickupLine != null) {
             dbPickupLine.setDeletionIndicator(1L);
             dbPickupLine.setPickupUpdatedBy(loginUserID);
-            dbPickupLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPickupLine.setPickupUpdatedOn(new Date());
             return pickupLineV2Repository.save(dbPickupLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2517,7 +2517,7 @@ public class PickupLineService extends BaseService {
         if (dbPickupLine != null) {
             dbPickupLine.setDeletionIndicator(1L);
             dbPickupLine.setPickupUpdatedBy(loginUserID);
-            dbPickupLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPickupLine.setPickupUpdatedOn(new Date());
             return pickupLineV2Repository.save(dbPickupLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2550,12 +2550,7 @@ public class PickupLineService extends BaseService {
             dbPickupLine.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setPickupUpdatedBy(loginUserID);
-                try {
-                    data.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setPickupUpdatedOn(new Date());
                 toSavePickupLineList.add(data);
             });
             return pickupLineV2Repository.saveAll(toSavePickupLineList);

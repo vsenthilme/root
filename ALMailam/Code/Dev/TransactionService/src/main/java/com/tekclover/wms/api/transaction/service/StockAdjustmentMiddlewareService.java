@@ -38,12 +38,12 @@ public class StockAdjustmentMiddlewareService extends BaseService {
     /**
      * @param stockAdjustmentId
      */
-    public void updateProcessedOrderV2(Long stockAdjustmentId) {
+    public void updateProcessedOrderV2(Long stockAdjustmentId, Long processStatusId) {
         StockAdjustment dbStockAdjustment = stockAdjustmentMiddlewareRepository.findByStockAdjustmentId(stockAdjustmentId);
         log.info("StockAdjustmentId : " + stockAdjustmentId);
         log.info("dbStockAdjustmentId : " + dbStockAdjustment);
         if (dbStockAdjustment != null) {
-            dbStockAdjustment.setProcessedStatusId(10L);
+            dbStockAdjustment.setProcessedStatusId(processStatusId);
             dbStockAdjustment.setOrderProcessedOn(new Date());
             stockAdjustmentMiddlewareRepository.save(dbStockAdjustment);
         }

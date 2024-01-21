@@ -151,13 +151,13 @@ public class OrderService {
 	 * @param orderId
 	 * @return
 	 */
-	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId) throws ParseException {
+	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId, Long processStatusId) throws ParseException {
 		InboundOrderV2 dbInboundOrder = getOrderByIdV2 (orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbInboundOrder : " + dbInboundOrder);
 		if (dbInboundOrder != null) {
-			dbInboundOrder.setProcessedStatusId(10L);
-			dbInboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbInboundOrder.setProcessedStatusId(processStatusId);
+			dbInboundOrder.setOrderProcessedOn(new Date());
 			InboundOrderV2 inboundOrder = inboundOrderV2Repository.save(dbInboundOrder);
 			return inboundOrder;
 		}
@@ -241,7 +241,7 @@ public class OrderService {
 		log.info("dbOutboundOrder : " + dbOutboundOrder);
 		if (dbOutboundOrder != null) {
 			dbOutboundOrder.setProcessedStatusId(10L);
-			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbOutboundOrder.setOrderProcessedOn(new Date());
 			OutboundOrder outboundOrder = outboundOrderRepository.save(dbOutboundOrder);
 			return outboundOrder;
 		}
@@ -343,13 +343,13 @@ public class OrderService {
 
 	//===================================================================V2========================================================================
 
-	public OutboundOrderV2 updateProcessedOrderV2(String orderId) throws ParseException {
+	public OutboundOrderV2 updateProcessedOrderV2(String orderId, Long processStatusId) throws ParseException {
 		OutboundOrderV2 dbOutboundOrder = getOBOrderByIdV2(orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbOutboundOrder : " + dbOutboundOrder);
 		if (dbOutboundOrder != null) {
-			dbOutboundOrder.setProcessedStatusId(10L);
-			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbOutboundOrder.setProcessedStatusId(processStatusId);
+			dbOutboundOrder.setOrderProcessedOn(new Date());
 			OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(dbOutboundOrder);
 			return outboundOrder;
 		}
@@ -379,9 +379,7 @@ public class OrderService {
 			throw new BadRequestException("Order is getting Duplicated");
 		}
 
-		Date date = DateUtils.getCurrentKWTDateTime();
-		log.info("Kuwait Date: " + date);
-		newOutboundOrder.setUpdatedOn(date);
+		newOutboundOrder.setUpdatedOn(new Date());
 		OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(newOutboundOrder);
 		return outboundOrder;
 	}

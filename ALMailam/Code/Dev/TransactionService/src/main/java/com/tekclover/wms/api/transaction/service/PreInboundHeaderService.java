@@ -1314,8 +1314,6 @@ public class PreInboundHeaderService extends BaseService {
         dbPreInboundHeader.setDeletionIndicator(0L);
         dbPreInboundHeader.setCreatedBy(loginUserID);
         dbPreInboundHeader.setUpdatedBy(loginUserID);
-//        dbPreInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPreInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundHeader.setCreatedOn(new Date());
         dbPreInboundHeader.setUpdatedOn(new Date());
         return preInboundHeaderV2Repository.save(dbPreInboundHeader);
@@ -1342,7 +1340,6 @@ public class PreInboundHeaderService extends BaseService {
             dbEntity.setStatusId(7L); // Hardcoded as 7 during update
         }
         dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
 
@@ -1390,7 +1387,6 @@ public class PreInboundHeaderService extends BaseService {
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbEntity.setStatusDescription(statusDescription);
         dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         dbPreInboundHeader = copyHeaderEntityToBean(dbEntity);
@@ -1412,7 +1408,6 @@ public class PreInboundHeaderService extends BaseService {
         if (dbEntity != null) {
             dbEntity.setDeletionIndicator(1L);
             dbEntity.setUpdatedBy(loginUserID);
-//            dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbEntity.setUpdatedOn(new Date());
             preInboundHeaderV2Repository.save(dbEntity);
         } else {
@@ -1435,7 +1430,7 @@ public class PreInboundHeaderService extends BaseService {
          */
         Optional<PreInboundHeaderEntityV2> orderProcessedStatus = preInboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(refDocNumber, 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedInboundOrderV2(refDocNumber);
+            orderService.updateProcessedInboundOrderV2(refDocNumber, 100L);
             throw new BadRequestException("Order :" + refDocNumber + " already processed. Reprocessing can't be allowed.");
         }
 
@@ -1699,7 +1694,6 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -1808,7 +1802,6 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -1861,7 +1854,6 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundHeader.setDeletionIndicator(0L);
         preInboundHeader.setCreatedBy("MSD_INT");
-//        preInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntityV2 createdPreInboundHeader = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -2157,7 +2149,6 @@ public class PreInboundHeaderService extends BaseService {
         dbInboundIntegrationLog.setOrderReceiptDate(createdPreInboundHeader.getCreatedOn());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy(createdPreInboundHeader.getCreatedBy());
-//        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);

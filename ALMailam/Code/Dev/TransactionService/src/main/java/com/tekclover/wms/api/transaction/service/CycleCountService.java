@@ -26,13 +26,13 @@ public class CycleCountService {
 	 * @param warehouseId
 	 * @return
 	 */
-	public void updateProcessedOrderV2(String cycleCountNo) throws ParseException {
+	public void updateProcessedOrderV2(String cycleCountNo, Long processStatusId) throws ParseException {
 		CycleCountHeader dbCycleCountHeader = cycleCountHeaderRepository.findByCycleCountNo(cycleCountNo);
 		log.info("cycleCountNo : " + cycleCountNo);
 		log.info("dbCycleCountHeader : " + dbCycleCountHeader);
 		if (dbCycleCountHeader != null) {
-			dbCycleCountHeader.setProcessedStatusId(10L);
-			dbCycleCountHeader.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbCycleCountHeader.setProcessedStatusId(processStatusId);
+			dbCycleCountHeader.setOrderProcessedOn(new Date());
 			cycleCountHeaderRepository.save(dbCycleCountHeader);
 		}
 	}

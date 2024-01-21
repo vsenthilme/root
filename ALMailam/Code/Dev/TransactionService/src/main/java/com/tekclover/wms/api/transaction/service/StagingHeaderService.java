@@ -540,8 +540,6 @@ public class StagingHeaderService extends BaseService {
         dbStagingHeader.setDeletionIndicator(0L);
         dbStagingHeader.setCreatedBy(loginUserID);
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setCreatedOn(new Date());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
@@ -564,7 +562,6 @@ public class StagingHeaderService extends BaseService {
         StagingHeaderV2 dbStagingHeader = getStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo);
         BeanUtils.copyProperties(updateStagingHeader, dbStagingHeader, CommonUtils.getNullPropertyNames(updateStagingHeader));
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
     }
@@ -590,7 +587,6 @@ public class StagingHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
             dbStagingHeader.setStatusDescription(statusDescription);
             dbStagingHeader.setUpdatedBy(loginUserID);
-//            dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingHeader.setUpdatedOn(new Date());
             dbStagingHeader = stagingHeaderV2Repository.save(dbStagingHeader);
             log.info("dbStagingHeader : " + dbStagingHeader);
@@ -603,7 +599,6 @@ public class StagingHeaderService extends BaseService {
             stagingLineEntity.setStatusId(statusId);
             stagingLineEntity.setStatusDescription(statusDescription);
             stagingLineEntity.setUpdatedBy(loginUserID);
-//            stagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingLineEntity.setUpdatedOn(new Date());
             stagingLineEntity = stagingLineV2Repository.save(stagingLineEntity);
             log.info("stagingLineEntity : " + stagingLineEntity);
@@ -633,7 +628,6 @@ public class StagingHeaderService extends BaseService {
         if (stagingHeader != null) {
             stagingHeader.setDeletionIndicator(1L);
             stagingHeader.setUpdatedBy(loginUserID);
-//            stagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingHeader.setUpdatedOn(new Date());
             stagingHeaderV2Repository.save(stagingHeader);
         } else {

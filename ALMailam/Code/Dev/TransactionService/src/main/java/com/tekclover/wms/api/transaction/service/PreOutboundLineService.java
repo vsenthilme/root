@@ -333,8 +333,8 @@ public class PreOutboundLineService extends BaseService {
         dbPreOutboundLine.setDeletionIndicator(0L);
         dbPreOutboundLine.setCreatedBy(loginUserID);
         dbPreOutboundLine.setUpdatedBy(loginUserID);
-        dbPreOutboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbPreOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPreOutboundLine.setCreatedOn(new Date());
+        dbPreOutboundLine.setUpdatedOn(new Date());
         return preOutboundLineV2Repository.save(dbPreOutboundLine);
     }
 
@@ -360,7 +360,7 @@ public class PreOutboundLineService extends BaseService {
         if (dbPreOutboundLine != null) {
             BeanUtils.copyProperties(updatePreOutboundLine, dbPreOutboundLine, CommonUtils.getNullPropertyNames(updatePreOutboundLine));
             dbPreOutboundLine.setUpdatedBy(loginUserID);
-            dbPreOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPreOutboundLine.setUpdatedOn(new Date());
             return preOutboundLineV2Repository.save(dbPreOutboundLine);
         }
         return dbPreOutboundLine;
@@ -386,7 +386,7 @@ public class PreOutboundLineService extends BaseService {
         for (PreOutboundLineV2 dbPreOutboundLine : dbPreOutboundLines) {
             BeanUtils.copyProperties(updatePreOutboundLine, dbPreOutboundLine, CommonUtils.getNullPropertyNames(updatePreOutboundLine));
             dbPreOutboundLine.setUpdatedBy(loginUserID);
-            dbPreOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPreOutboundLine.setUpdatedOn(new Date());
             dbPreOutboundLine = preOutboundLineV2Repository.save(dbPreOutboundLine);
             updatedPreOutboundLine.add(dbPreOutboundLine);
         }
@@ -405,7 +405,7 @@ public class PreOutboundLineService extends BaseService {
         if (preOutboundLine != null) {
             preOutboundLine.setDeletionIndicator(1L);
             preOutboundLine.setUpdatedBy(loginUserID);
-            preOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            preOutboundLine.setUpdatedOn(new Date());
             preOutboundLineV2Repository.save(preOutboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -435,7 +435,7 @@ public class PreOutboundLineService extends BaseService {
             for(PreOutboundLineV2 preOutboundLineV2 : preOutboundLineV2List){
                 preOutboundLineV2.setDeletionIndicator(1L);
                 preOutboundLineV2.setUpdatedBy(loginUserID);
-                preOutboundLineV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                preOutboundLineV2.setUpdatedOn(new Date());
                 PreOutboundLineV2 dbPreOutBoundLine = preOutboundLineV2Repository.save(preOutboundLineV2);
                 preOutboundLineV2s.add(dbPreOutBoundLine);
             }

@@ -749,9 +749,9 @@ public class PerpetualLineService extends BaseService {
         BeanUtils.copyProperties(newPerpetualLine, dbPerpetualLine, CommonUtils.getNullPropertyNames(newPerpetualLine));
         dbPerpetualLine.setDeletionIndicator(0L);
         dbPerpetualLine.setCreatedBy(loginUserID);
-        dbPerpetualLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbPerpetualLine.setCreatedOn(new Date());
         dbPerpetualLine.setCountedBy(loginUserID);
-        dbPerpetualLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+        dbPerpetualLine.setCountedOn(new Date());
         return perpetualLineV2Repository.save(dbPerpetualLine);
     }
 
@@ -774,9 +774,9 @@ public class PerpetualLineService extends BaseService {
             dbPerpetualLine.setStatusDescription(statusDescription);
 
             dbPerpetualLine.setCreatedBy(loginUserID);
-            dbPerpetualLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            dbPerpetualLine.setCreatedOn(new Date());
             dbPerpetualLine.setCountedBy(loginUserID);
-            dbPerpetualLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+            dbPerpetualLine.setCountedOn(new Date());
             newPerpetualLineList.add(dbPerpetualLine);
         }
         return perpetualLineV2Repository.saveAll(newPerpetualLineList);
@@ -920,7 +920,7 @@ public class PerpetualLineService extends BaseService {
                 dbPerpetualLine.setStatusDescription(statusDescription);
 
                 dbPerpetualLine.setCountedBy(loginUserID);
-                dbPerpetualLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+                dbPerpetualLine.setCountedOn(new Date());
                 updateBatchPerpetualLines.add(dbPerpetualLine);
             } else {
                 // Create new Record
@@ -933,9 +933,9 @@ public class PerpetualLineService extends BaseService {
 
                 newPerpetualLine.setDeletionIndicator(0L);
                 newPerpetualLine.setCreatedBy(loginUserID);
-                newPerpetualLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                newPerpetualLine.setCreatedOn(new Date());
                 newPerpetualLine.setCountedBy(loginUserID);
-                newPerpetualLine.setCountedOn(DateUtils.getCurrentKWTDateTime());
+                newPerpetualLine.setCountedOn(new Date());
                 createBatchPerpetualLines.add(newPerpetualLine);
             }
         }
@@ -1507,7 +1507,7 @@ public class PerpetualLineService extends BaseService {
         inventoryMovement.setCreatedBy(updatedPerpetualLine.getCreatedBy());
 
         // IM_CTD_ON
-        inventoryMovement.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        inventoryMovement.setCreatedOn(new Date());
         inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
         log.info("created InventoryMovement : " + inventoryMovement);
         return inventoryMovement;

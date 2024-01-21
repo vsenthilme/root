@@ -573,7 +573,7 @@ public class OutboundHeaderService {
             dbOutboundHeader.setPhoneNumber(outboundIntegrationHeader.getPhoneNumber());
             dbOutboundHeader.setAlternateNo(outboundIntegrationHeader.getAlternateNo());
             dbOutboundHeader.setStatus(outboundIntegrationHeader.getStatus());
-            dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOutboundHeader.setUpdatedOn(new Date());
 
             outboundHeaderV2Repository.save(dbOutboundHeader);
             log.info("OutboundHeader updated with salesInvoice: " + outboundIntegrationHeader.getSalesInvoiceNumber());
@@ -934,8 +934,8 @@ public class OutboundHeaderService {
         dbOutboundHeader.setDeletionIndicator(0L);
         dbOutboundHeader.setCreatedBy(loginUserID);
         dbOutboundHeader.setUpdatedBy(loginUserID);
-        dbOutboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOutboundHeader.setCreatedOn(new Date());
+        dbOutboundHeader.setUpdatedOn(new Date());
         return outboundHeaderV2Repository.save(dbOutboundHeader);
     }
 
@@ -958,7 +958,7 @@ public class OutboundHeaderService {
         if (dbOutboundHeader != null) {
             BeanUtils.copyProperties(updateOutboundHeader, dbOutboundHeader, CommonUtils.getNullPropertyNames(updateOutboundHeader));
             dbOutboundHeader.setUpdatedBy(loginUserID);
-            dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOutboundHeader.setUpdatedOn(new Date());
             if (dbOutboundHeader.getStatusId() != null) {
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbOutboundHeader.getStatusId(), dbOutboundHeader.getLanguageId());
                 dbOutboundHeader.setStatusDescription(statusDescription);
@@ -980,7 +980,7 @@ public class OutboundHeaderService {
         if (outboundHeader != null) {
             outboundHeader.setDeletionIndicator(1L);
             outboundHeader.setUpdatedBy(loginUserID);
-            outboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundHeader.setUpdatedOn(new Date());
             outboundHeaderV2Repository.save(outboundHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + preOutboundNo);

@@ -194,7 +194,7 @@ public class OutboundReversalService {
 
 		// OB_REV_BY
 		dbOutboundReversal.setReversedBy(loginUserID);
-		dbOutboundReversal.setReversedOn(DateUtils.getCurrentKWTDateTime());
+		dbOutboundReversal.setReversedOn(new Date());
 		dbOutboundReversal.setDeletionIndicator(0L);
 		return outboundReversalV2Repository.save(dbOutboundReversal);
 	}

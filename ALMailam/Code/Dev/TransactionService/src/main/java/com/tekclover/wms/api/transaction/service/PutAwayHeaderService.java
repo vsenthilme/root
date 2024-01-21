@@ -1012,8 +1012,6 @@ public class PutAwayHeaderService extends BaseService {
         dbPutAwayHeader.setDeletionIndicator(0L);
         dbPutAwayHeader.setCreatedBy(loginUserID);
         dbPutAwayHeader.setUpdatedBy(loginUserID);
-//        dbPutAwayHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayHeader.setCreatedOn(new Date());
         dbPutAwayHeader.setUpdatedOn(new Date());
         return putAwayHeaderV2Repository.save(dbPutAwayHeader);
@@ -1048,7 +1046,6 @@ public class PutAwayHeaderService extends BaseService {
                 palletCode, caseCode, packBarcodes, putAwayNumber, proposedStorageBin);
         BeanUtils.copyProperties(updatePutAwayHeader, dbPutAwayHeader, CommonUtils.getNullPropertyNames(updatePutAwayHeader));
         dbPutAwayHeader.setUpdatedBy(loginUserID);
-//        dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayHeader.setUpdatedOn(new Date());
         return putAwayHeaderV2Repository.save(dbPutAwayHeader);
     }
@@ -1065,7 +1062,6 @@ public class PutAwayHeaderService extends BaseService {
             if (dbPutAwayHeader != null) {
                 BeanUtils.copyProperties(putAwayHeaderV2, dbPutAwayHeader, CommonUtils.getNullPropertyNames(putAwayHeaderV2));
                 dbPutAwayHeader.setUpdatedBy(loginUserID);
-//                dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 dbPutAwayHeader.setUpdatedOn(new Date());
                 PutAwayHeaderV2 savePutAway = putAwayHeaderV2Repository.save(dbPutAwayHeader);
                 putAwayHeaderV2List.add(savePutAway);
@@ -1101,7 +1097,6 @@ public class PutAwayHeaderService extends BaseService {
                 dbPutAwayHeader.setStatusDescription(statusDescription);
             }
             dbPutAwayHeader.setUpdatedBy(loginUserID);
-//            dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbPutAwayHeader.setUpdatedOn(new Date());
             updatedPutAwayHeaderList.add(putAwayHeaderV2Repository.save(dbPutAwayHeader));
         }
@@ -1344,8 +1339,6 @@ public class PutAwayHeaderService extends BaseService {
 
                         dbPutAwayLine.setConfirmedBy(loginUserID);
                         dbPutAwayLine.setUpdatedBy(loginUserID);
-//                        dbPutAwayLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
-//                        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                         dbPutAwayLine.setConfirmedOn(new Date());
                         dbPutAwayLine.setUpdatedOn(new Date());
                         dbPutAwayLine = putAwayLineV2Repository.save(dbPutAwayLine);
@@ -1547,7 +1540,6 @@ public class PutAwayHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(22L, languageId);
             dbPutAwayHeader.setStatusDescription(statusDescription);
             dbPutAwayHeader.setUpdatedBy(loginUserID);
-//            dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbPutAwayHeader.setUpdatedOn(new Date());
             PutAwayHeaderV2 updatedPutAwayHeader = putAwayHeaderV2Repository.save(dbPutAwayHeader);
             log.info("updatedPutAwayHeader : " + updatedPutAwayHeader);
@@ -1598,7 +1590,6 @@ public class PutAwayHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
             preInboundLine.setStatusDescription(statusDescription);
             preInboundLine.setUpdatedBy(loginUserID);
-//            preInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             preInboundLine.setUpdatedOn(new Date());
             PreInboundLineEntityV2 updatedPreInboundLine = preInboundLineV2Repository.save(preInboundLine);
             log.info("preInboundLine status updated: " + updatedPreInboundLine);

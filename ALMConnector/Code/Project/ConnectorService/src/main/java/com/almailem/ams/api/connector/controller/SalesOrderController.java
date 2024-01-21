@@ -1,5 +1,6 @@
 package com.almailem.ams.api.connector.controller;
 
+import com.almailem.ams.api.connector.model.picklist.FindPickListHeader;
 import com.almailem.ams.api.connector.model.picklist.PickListHeader;
 import com.almailem.ams.api.connector.service.SalesOrderService;
 import io.swagger.annotations.Api;
@@ -12,9 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -34,5 +38,13 @@ public class SalesOrderController {
     public ResponseEntity<?> getAllSalesOrderV2s() {
         List<PickListHeader> pickLists = salesOrderService.getAllSalesOrderV2Details();
         return new ResponseEntity<>(pickLists, HttpStatus.OK);
+    }
+
+    // FInd PickListHeader
+    @ApiOperation(response = PickListHeader.class, value = "Find PickListHeader") // label for Swagger
+    @PostMapping("/findPickListHeader")
+    public ResponseEntity<?> searchPickListHeader(@RequestBody FindPickListHeader findPickListHeader) throws ParseException {
+        List<PickListHeader> pickListHeaders = salesOrderService.findPickListHeader(findPickListHeader);
+        return new ResponseEntity<>(pickListHeaders, HttpStatus.OK);
     }
 }

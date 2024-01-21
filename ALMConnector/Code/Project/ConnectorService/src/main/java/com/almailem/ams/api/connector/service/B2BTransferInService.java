@@ -2,9 +2,12 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.transferin.SearchTransferInHeader;
 import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
 import com.almailem.ams.api.connector.model.wms.*;
 import com.almailem.ams.api.connector.repository.TransferInHeaderRepository;
+import com.almailem.ams.api.connector.repository.specification.TransferInHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Slf4j
@@ -113,6 +117,31 @@ public class B2BTransferInService {
                 getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
         log.info("result : " + result.getStatusCode());
         return result.getBody();
+    }
+
+    public List<TransferInHeader> findB2BTransferInHeader(SearchTransferInHeader searchTransferInHeader) throws ParseException {
+
+
+        if (searchTransferInHeader.getFromTransferOrderDate() != null && searchTransferInHeader.getFromTransferOrderDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchTransferInHeader.getFromTransferOrderDate(), searchTransferInHeader.getToTransferOrderDate());
+            searchTransferInHeader.setFromTransferOrderDate(dates[0]);
+            searchTransferInHeader.setToTransferOrderDate(dates[1]);
+        }
+        if (searchTransferInHeader.getFromOrderProcessedOn() != null && searchTransferInHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchTransferInHeader.getFromOrderProcessedOn(), searchTransferInHeader.getToOrderProcessedOn());
+            searchTransferInHeader.setFromOrderProcessedOn(dates[0]);
+            searchTransferInHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (searchTransferInHeader.getFromOrderReceivedOn() != null && searchTransferInHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchTransferInHeader.getFromOrderReceivedOn(), searchTransferInHeader.getToOrderReceivedOn());
+            searchTransferInHeader.setFromOrderReceivedOn(dates[0]);
+            searchTransferInHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+        TransferInHeaderSpecification spec = new TransferInHeaderSpecification(searchTransferInHeader);
+        List<TransferInHeader> results = transferInHeaderRepository.findAll(spec);
+        return results;
+
     }
 
 }

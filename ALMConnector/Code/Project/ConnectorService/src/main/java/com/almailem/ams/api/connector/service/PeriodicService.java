@@ -2,15 +2,16 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.periodic.FindPeriodicHeader;
 import com.almailem.ams.api.connector.model.periodic.PeriodicHeader;
 import com.almailem.ams.api.connector.model.periodic.PeriodicLine;
-import com.almailem.ams.api.connector.model.perpetual.PerpetualHeader;
-import com.almailem.ams.api.connector.model.perpetual.PerpetualLine;
 import com.almailem.ams.api.connector.model.wms.Periodic;
 import com.almailem.ams.api.connector.model.wms.UpdateStockCountLine;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PeriodicHeaderRepository;
 import com.almailem.ams.api.connector.repository.PeriodicLineRepository;
+import com.almailem.ams.api.connector.repository.specification.PeriodicHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Slf4j
@@ -74,7 +76,6 @@ public class PeriodicService {
 //    }
 
     /**
-     *
      * @param periodicHeaderId
      * @param companyCode
      * @param branchCode
@@ -83,7 +84,7 @@ public class PeriodicService {
      * @return
      */
     public PeriodicHeader updateProcessedPeriodicOrder(Long periodicHeaderId, String companyCode,
-                                                         String branchCode, String cycleCountNo, Long processedStatusId) {
+                                                       String branchCode, String cycleCountNo, Long processedStatusId) {
         PeriodicHeader dbInboundOrder =
                 periodicHeaderRepo.getPeriodicHeader(periodicHeaderId);
 //                        findTopByPeriodicHeaderIdAndCompanyCodeAndBranchCodeAndCycleCountNoOrderByOrderReceivedOnDesc(
@@ -166,4 +167,24 @@ public class PeriodicService {
         }
         return null;
     }
+
+    // Find PeriodicHeader
+    public List<PeriodicHeader> findPeriodicHeader(FindPeriodicHeader findPeriodicHeader) throws ParseException {
+
+        if (findPeriodicHeader.getFromOrderProcessedOn() != null && findPeriodicHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findPeriodicHeader.getFromOrderProcessedOn(), findPeriodicHeader.getToOrderProcessedOn());
+            findPeriodicHeader.setFromOrderProcessedOn(dates[0]);
+            findPeriodicHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (findPeriodicHeader.getFromOrderReceivedOn() != null && findPeriodicHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findPeriodicHeader.getFromOrderReceivedOn(), findPeriodicHeader.getToOrderReceivedOn());
+            findPeriodicHeader.setFromOrderReceivedOn(dates[0]);
+            findPeriodicHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+        PeriodicHeaderSpecification spec = new PeriodicHeaderSpecification(findPeriodicHeader);
+        List<PeriodicHeader> results = periodicHeaderRepo.findAll(spec);
+        return results;
+    }
+
 }

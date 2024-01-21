@@ -2,24 +2,25 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.transferout.FindTransferOutHeader;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
 import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferOut;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.TransferOutHeaderRepository;
+import com.almailem.ams.api.connector.repository.specification.TransferOutHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -118,4 +119,24 @@ public class InterWarehouseTransferOutService {
         log.info("result: " + result.getStatusCode());
         return result.getBody();
     }
+
+    // Find InterWarehouseTransferOut
+    public List<TransferOutHeader> findInterWarehouseTransferOut(FindTransferOutHeader findTransferOutHeader) throws ParseException {
+
+        if (findTransferOutHeader.getFromOrderProcessedOn() != null && findTransferOutHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findTransferOutHeader.getFromOrderProcessedOn(), findTransferOutHeader.getToOrderProcessedOn());
+            findTransferOutHeader.setFromOrderProcessedOn(dates[0]);
+            findTransferOutHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (findTransferOutHeader.getFromOrderReceivedOn() != null && findTransferOutHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findTransferOutHeader.getFromOrderReceivedOn(), findTransferOutHeader.getToOrderReceivedOn());
+            findTransferOutHeader.setFromOrderReceivedOn(dates[0]);
+            findTransferOutHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+        TransferOutHeaderSpecification spec = new TransferOutHeaderSpecification(findTransferOutHeader);
+        List<TransferOutHeader> results = transferOutHeaderRepository.findAll(spec);
+        return results;
+    }
+
 }

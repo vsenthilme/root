@@ -2,11 +2,14 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.purchasereturn.FindPurchaseReturnHeader;
 import com.almailem.ams.api.connector.model.purchasereturn.PurchaseReturnHeader;
 import com.almailem.ams.api.connector.model.salesreturn.SalesReturnHeader;
 import com.almailem.ams.api.connector.model.wms.ReturnPO;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PurchaseReturnHeaderRepository;
+import com.almailem.ams.api.connector.repository.specification.PurchaseReturnHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -108,4 +112,24 @@ public class ReturnPOService {
         log.info("result: " + result.getStatusCode());
         return result.getBody();
     }
+
+    // Find PurchaseReturnHeader
+    public List<PurchaseReturnHeader> findPurchaseReturnHeader(FindPurchaseReturnHeader findPurchaseReturnHeader) throws ParseException {
+
+        if (findPurchaseReturnHeader.getFromOrderProcessedOn() != null && findPurchaseReturnHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findPurchaseReturnHeader.getFromOrderProcessedOn(), findPurchaseReturnHeader.getToOrderProcessedOn());
+            findPurchaseReturnHeader.setFromOrderProcessedOn(dates[0]);
+            findPurchaseReturnHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (findPurchaseReturnHeader.getFromOrderReceivedOn() != null && findPurchaseReturnHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findPurchaseReturnHeader.getFromOrderReceivedOn(), findPurchaseReturnHeader.getToOrderReceivedOn());
+            findPurchaseReturnHeader.setFromOrderReceivedOn(dates[0]);
+            findPurchaseReturnHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+        PurchaseReturnHeaderSpecification spec = new PurchaseReturnHeaderSpecification(findPurchaseReturnHeader);
+        List<PurchaseReturnHeader> results = purchaseReturnHeaderRepository.findAll(spec);
+        return results;
+    }
+
 }

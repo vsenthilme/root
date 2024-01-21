@@ -1,5 +1,6 @@
 package com.almailem.ams.api.connector.controller;
 
+import com.almailem.ams.api.connector.model.transferout.FindTransferOutHeader;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
 import com.almailem.ams.api.connector.service.InterWarehouseTransferOutService;
 import io.swagger.annotations.Api;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -35,4 +35,13 @@ public class InterWarehouseTransferOutController {
         List<TransferOutHeader> transferOuts = iWhTransferOutV2Service.getAllInterWhTransferOutV2Details();
         return new ResponseEntity<>(transferOuts, HttpStatus.OK);
     }
+
+    // Find InterWarehouseTransferOut
+    @ApiOperation(response = TransferOutHeader.class, value = "Find InterWarehouseTransferOut") // label for Swagger
+    @PostMapping("/findInterWarehouseTransferOut")
+    public ResponseEntity<?> findInterWarehouseTransferOut(@RequestBody FindTransferOutHeader findTransferOutHeader) throws ParseException {
+        List<TransferOutHeader> transferOutHeaders = iWhTransferOutV2Service.findInterWarehouseTransferOut(findTransferOutHeader);
+        return new ResponseEntity<>(transferOutHeaders, HttpStatus.OK);
+    }
+
 }

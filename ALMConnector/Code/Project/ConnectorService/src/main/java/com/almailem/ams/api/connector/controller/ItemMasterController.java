@@ -1,5 +1,6 @@
 package com.almailem.ams.api.connector.controller;
 
+import com.almailem.ams.api.connector.model.master.FindItemMaster;
 import com.almailem.ams.api.connector.model.master.ItemMaster;
 import com.almailem.ams.api.connector.service.ItemMasterService;
 import io.swagger.annotations.Api;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -35,4 +35,13 @@ public class ItemMasterController {
         List<ItemMaster> itemMasters = itemMasterService.getAllItemMasterDetails();
         return new ResponseEntity<>(itemMasters, HttpStatus.OK);
     }
+
+    // Find ItemMaster
+    @ApiOperation(response = ItemMaster.class, value = "Find ItemMaster") // label for Swagger
+    @PostMapping("/findItemMaster")
+    public ResponseEntity<?> findItemMaster(@RequestBody FindItemMaster findItemMaster) throws ParseException {
+        List<ItemMaster> itemMaster = itemMasterService.findItemMaster(findItemMaster);
+        return new ResponseEntity<>(itemMaster, HttpStatus.OK);
+    }
+
 }

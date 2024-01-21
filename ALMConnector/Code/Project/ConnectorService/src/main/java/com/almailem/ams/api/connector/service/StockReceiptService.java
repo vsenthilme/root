@@ -2,9 +2,12 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
-import com.almailem.ams.api.connector.model.stockreceipt.*;
+import com.almailem.ams.api.connector.model.stockreceipt.SearchStockReceiptHeader;
+import com.almailem.ams.api.connector.model.stockreceipt.StockReceiptHeader;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.StockReceiptHeaderRepository;
+import com.almailem.ams.api.connector.repository.specification.StockReceiptHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -13,7 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -89,6 +96,26 @@ public class StockReceiptService {
                 getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
         log.info("result : " + result.getStatusCode());
         return result.getBody();
+    }
+
+    public List<StockReceiptHeader> findStockReceiptHeader(SearchStockReceiptHeader searchStockReceiptHeader) throws ParseException {
+
+
+        if (searchStockReceiptHeader.getFromOrderProcessedOn() != null && searchStockReceiptHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchStockReceiptHeader.getFromOrderProcessedOn(), searchStockReceiptHeader.getToOrderProcessedOn());
+            searchStockReceiptHeader.setFromOrderProcessedOn(dates[0]);
+            searchStockReceiptHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (searchStockReceiptHeader.getFromOrderReceivedOn() != null && searchStockReceiptHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchStockReceiptHeader.getFromOrderReceivedOn(), searchStockReceiptHeader.getToOrderReceivedOn());
+            searchStockReceiptHeader.setFromOrderReceivedOn(dates[0]);
+            searchStockReceiptHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+
+        StockReceiptHeaderSpecification spec = new StockReceiptHeaderSpecification(searchStockReceiptHeader);
+        List<StockReceiptHeader> results = stockReceiptHeaderRepo.findAll(spec);
+        return results;
     }
 
 }

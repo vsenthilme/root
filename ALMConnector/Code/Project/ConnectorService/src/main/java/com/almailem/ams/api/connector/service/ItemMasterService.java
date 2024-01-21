@@ -2,10 +2,13 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.master.FindItemMaster;
 import com.almailem.ams.api.connector.model.master.ItemMaster;
 import com.almailem.ams.api.connector.model.wms.Item;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.ItemMasterRepository;
+import com.almailem.ams.api.connector.repository.specification.ItemMasterSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -110,6 +114,25 @@ public class ItemMasterService {
                 getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
         log.info("result : " + result.getStatusCode());
         return result.getBody();
+    }
+
+    // Find Item Master
+    public List<ItemMaster> findItemMaster(FindItemMaster findItemMaster) throws ParseException {
+
+        if (findItemMaster.getFromOrderProcessedOn() != null && findItemMaster.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findItemMaster.getFromOrderProcessedOn(), findItemMaster.getToOrderProcessedOn());
+            findItemMaster.setFromOrderProcessedOn(dates[0]);
+            findItemMaster.setToOrderProcessedOn(dates[1]);
+        }
+        if (findItemMaster.getFromOrderReceivedOn() != null && findItemMaster.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findItemMaster.getFromOrderReceivedOn(), findItemMaster.getToOrderReceivedOn());
+            findItemMaster.setFromOrderReceivedOn(dates[0]);
+            findItemMaster.setToOrderReceivedOn(dates[1]);
+        }
+
+        ItemMasterSpecification spec = new ItemMasterSpecification(findItemMaster);
+        List<ItemMaster> results = itemMasterRepository.findAll(spec);
+        return results;
     }
 
 }

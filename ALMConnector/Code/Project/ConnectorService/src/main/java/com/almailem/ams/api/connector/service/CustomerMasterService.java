@@ -3,9 +3,12 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.master.CustomerMaster;
+import com.almailem.ams.api.connector.model.master.FindCustomerMaster;
 import com.almailem.ams.api.connector.model.wms.Customer;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.CustomerMasterRepository;
+import com.almailem.ams.api.connector.repository.specification.CustomerMasterSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -108,4 +112,24 @@ public class CustomerMasterService {
         log.info("result : " + result.getStatusCode());
         return result.getBody();
     }
+
+    // Find Customer Master
+    public List<CustomerMaster> findCustomerMaster(FindCustomerMaster findCustomerMaster) throws ParseException {
+
+        if (findCustomerMaster.getFromOrderProcessedOn() != null && findCustomerMaster.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findCustomerMaster.getFromOrderProcessedOn(), findCustomerMaster.getToOrderProcessedOn());
+            findCustomerMaster.setFromOrderProcessedOn(dates[0]);
+            findCustomerMaster.setToOrderProcessedOn(dates[1]);
+        }
+        if (findCustomerMaster.getFromOrderReceivedOn() != null && findCustomerMaster.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findCustomerMaster.getFromOrderReceivedOn(), findCustomerMaster.getToOrderReceivedOn());
+            findCustomerMaster.setFromOrderReceivedOn(dates[0]);
+            findCustomerMaster.setToOrderReceivedOn(dates[1]);
+        }
+
+        CustomerMasterSpecification spec = new CustomerMasterSpecification(findCustomerMaster);
+        List<CustomerMaster> results = customerMasterRepository.findAll(spec);
+        return results;
+    }
+
 }

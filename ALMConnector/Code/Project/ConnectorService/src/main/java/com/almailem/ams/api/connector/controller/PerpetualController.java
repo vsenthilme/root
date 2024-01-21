@@ -1,5 +1,6 @@
 package com.almailem.ams.api.connector.controller;
 
+import com.almailem.ams.api.connector.model.perpetual.FindPerpetualHeader;
 import com.almailem.ams.api.connector.model.perpetual.PerpetualHeader;
 import com.almailem.ams.api.connector.model.wms.UpdateStockCountLine;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -42,4 +44,13 @@ public class PerpetualController {
         WarehouseApiResponse perpetuals = perpetualService.updatePerpetualStockCount(updateStockCountLine);
         return new ResponseEntity<>(perpetuals, HttpStatus.OK);
     }
+
+    // Find PerpetualHeader
+    @ApiOperation(response = PerpetualHeader.class, value = "Find PerpetualHeader") // label for Swagger
+    @PostMapping("/findPerpetualHeader")
+    public ResponseEntity<?> findItemMaster(@RequestBody FindPerpetualHeader findPerpetualHeader) throws ParseException {
+        List<PerpetualHeader> perpetualHeader = perpetualService.findPerpetualHeader(findPerpetualHeader);
+        return new ResponseEntity<>(perpetualHeader, HttpStatus.OK);
+    }
+
 }

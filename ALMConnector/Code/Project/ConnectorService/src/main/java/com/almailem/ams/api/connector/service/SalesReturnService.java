@@ -3,10 +3,13 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.salesreturn.FindSalesReturnHeader;
 import com.almailem.ams.api.connector.model.salesreturn.SalesReturnHeader;
 import com.almailem.ams.api.connector.model.wms.SaleOrderReturn;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.SalesReturnHeaderRepository;
+import com.almailem.ams.api.connector.repository.specification.SalesReturnHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -88,6 +92,26 @@ public class SalesReturnService {
                 getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
         log.info("result : " + result.getStatusCode());
         return result.getBody();
+    }
+
+    // Find SalesReturnHeader
+    public List<SalesReturnHeader> findSalesReturnHeader(FindSalesReturnHeader findSalesReturnHeader) throws ParseException {
+
+        if (findSalesReturnHeader.getFromOrderProcessedOn() != null && findSalesReturnHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findSalesReturnHeader.getFromOrderProcessedOn(), findSalesReturnHeader.getToOrderProcessedOn());
+            findSalesReturnHeader.setFromOrderProcessedOn(dates[0]);
+            findSalesReturnHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (findSalesReturnHeader.getFromOrderReceivedOn() != null && findSalesReturnHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findSalesReturnHeader.getFromOrderReceivedOn(), findSalesReturnHeader.getToOrderReceivedOn());
+            findSalesReturnHeader.setFromOrderReceivedOn(dates[0]);
+            findSalesReturnHeader.setToOrderReceivedOn(dates[1]);
+        }
+
+
+        SalesReturnHeaderSpecification spec = new SalesReturnHeaderSpecification(findSalesReturnHeader);
+        List<SalesReturnHeader> results = salesReturnHeaderRepository.findAll(spec);
+        return results;
     }
 
 }

@@ -43,6 +43,19 @@ public class SupplierInvoiceHeaderSpecification implements Specification<Supplie
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("supplierInvoiceHeaderId");
             predicates.add(group.in(searchSupplierInvoiceHeader.getSupplierInvoiceHeaderId()));
         }
+        if (searchSupplierInvoiceHeader.getFromOrderProcessedOn() != null && searchSupplierInvoiceHeader.getToOrderProcessedOn() != null) {
+            predicates.add(cb.between(root.get("orderProcessedOn"), searchSupplierInvoiceHeader.getFromOrderProcessedOn(),
+                    searchSupplierInvoiceHeader.getToOrderProcessedOn()));
+        }
+        if (searchSupplierInvoiceHeader.getFromOrderReceivedOn() != null && searchSupplierInvoiceHeader.getToOrderReceivedOn() != null) {
+            predicates.add(cb.between(root.get("orderReceivedOn"), searchSupplierInvoiceHeader.getFromOrderReceivedOn(),
+                    searchSupplierInvoiceHeader.getToOrderReceivedOn()));
+        }
+
+        if (searchSupplierInvoiceHeader.getProcessedStatusId() != null && !searchSupplierInvoiceHeader.getProcessedStatusId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("processedStatusId");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getProcessedStatusId()));
+        }
 
         return cb.and(predicates.toArray(new Predicate[] {}));
     }

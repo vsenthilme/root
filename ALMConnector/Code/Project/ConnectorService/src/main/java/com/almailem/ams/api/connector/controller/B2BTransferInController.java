@@ -1,5 +1,6 @@
 package com.almailem.ams.api.connector.controller;
 
+import com.almailem.ams.api.connector.model.transferin.SearchTransferInHeader;
 import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
 import com.almailem.ams.api.connector.service.B2BTransferInService;
 import io.swagger.annotations.Api;
@@ -11,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -40,4 +40,13 @@ public class B2BTransferInController {
         List<TransferInHeader> transferIns = b2BTransferInService.getAllB2BTransferInDetails();
         return new ResponseEntity<>(transferIns, HttpStatus.OK);
     }
+
+    @ApiOperation(response = SearchTransferInHeader.class, value = "Find B2BTransferInHeader details")
+    // label for swagger
+    @PostMapping("/findB2BTransferInHeader")
+    public ResponseEntity<?> findTransferInHeader(@RequestBody SearchTransferInHeader searchTransferInHeader) throws ParseException {
+        List<TransferInHeader> transferInHeaderList = b2BTransferInService.findB2BTransferInHeader(searchTransferInHeader);
+        return new ResponseEntity<>(transferInHeaderList, HttpStatus.OK);
+    }
+
 }

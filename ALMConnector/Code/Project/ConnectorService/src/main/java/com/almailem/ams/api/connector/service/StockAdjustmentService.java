@@ -2,19 +2,28 @@ package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
+import com.almailem.ams.api.connector.model.stockadjustment.FindStockAdjustment;
 import com.almailem.ams.api.connector.model.stockadjustment.StockAdjustment;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.StockAdjustmentRepository;
+import com.almailem.ams.api.connector.repository.specification.StockAdjustmentSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -90,4 +99,26 @@ public class StockAdjustmentService {
         log.info("result: " + result.getStatusCode());
         return result.getBody();
     }
+
+    // Find StockAdjustment
+    public List<StockAdjustment> findStockAdjustment(FindStockAdjustment findStockAdjustment) throws ParseException {
+
+
+        if (findStockAdjustment.getFromOrderProcessedOn() != null && findStockAdjustment.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findStockAdjustment.getFromOrderProcessedOn(), findStockAdjustment.getToOrderProcessedOn());
+            findStockAdjustment.setFromOrderProcessedOn(dates[0]);
+            findStockAdjustment.setToOrderProcessedOn(dates[1]);
+        }
+        if (findStockAdjustment.getFromOrderReceivedOn() != null && findStockAdjustment.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findStockAdjustment.getFromOrderReceivedOn(), findStockAdjustment.getToOrderReceivedOn());
+            findStockAdjustment.setFromOrderReceivedOn(dates[0]);
+            findStockAdjustment.setToOrderReceivedOn(dates[1]);
+        }
+
+
+        StockAdjustmentSpecification spec = new StockAdjustmentSpecification(findStockAdjustment);
+        List<StockAdjustment> results = stockAdjustmentRepo.findAll(spec);
+        return results;
+    }
+
 }

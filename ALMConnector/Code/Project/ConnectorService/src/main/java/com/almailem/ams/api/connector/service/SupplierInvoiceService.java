@@ -6,6 +6,7 @@ import com.almailem.ams.api.connector.model.supplierinvoice.*;
 import com.almailem.ams.api.connector.model.wms.*;
 import com.almailem.ams.api.connector.repository.SupplierInvoiceHeaderRepository;
 import com.almailem.ams.api.connector.repository.specification.SupplierInvoiceHeaderSpecification;
+import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -98,6 +99,18 @@ public class SupplierInvoiceService {
 
     //Find
     public List<SupplierInvoiceHeader> findSupplierInvoiceHeader(SearchSupplierInvoiceHeader searchSupplierInvoiceHeader) throws ParseException {
+
+
+        if (searchSupplierInvoiceHeader.getFromOrderProcessedOn() != null && searchSupplierInvoiceHeader.getToOrderProcessedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceHeader.getFromOrderProcessedOn(), searchSupplierInvoiceHeader.getToOrderProcessedOn());
+            searchSupplierInvoiceHeader.setFromOrderProcessedOn(dates[0]);
+            searchSupplierInvoiceHeader.setToOrderProcessedOn(dates[1]);
+        }
+        if (searchSupplierInvoiceHeader.getFromOrderReceivedOn() != null && searchSupplierInvoiceHeader.getToOrderReceivedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceHeader.getFromOrderReceivedOn(), searchSupplierInvoiceHeader.getToOrderReceivedOn());
+            searchSupplierInvoiceHeader.setFromOrderReceivedOn(dates[0]);
+            searchSupplierInvoiceHeader.setToOrderReceivedOn(dates[1]);
+        }
 
         SupplierInvoiceHeaderSpecification spec = new SupplierInvoiceHeaderSpecification(searchSupplierInvoiceHeader);
         List<SupplierInvoiceHeader> results = supplierInvoiceHeaderRepository.findAll(spec);

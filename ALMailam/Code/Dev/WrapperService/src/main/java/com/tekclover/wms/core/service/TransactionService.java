@@ -9925,18 +9925,98 @@ public class TransactionService {
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, InventoryV2[].class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
-//            List<InventoryV2> inventoryList = new ArrayList<>();
-//            for (InventoryV2 inventory : result.getBody()) {
-//
-//                inventoryList.add(addingTimeWithDateInventory(inventory));
-//            }
-//            return inventoryList.toArray(new InventoryV2[inventoryList.size()]);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
+    // POST
+    public InventoryV2 createInventoryV2(InventoryV2 newInventory, String loginUserID, String authToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("User-Agent", "ClassicWMS RestTemplate");
+        headers.add("Authorization", "Bearer " + authToken);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "inventory/v2")
+                .queryParam("loginUserID", loginUserID);
+        HttpEntity<?> entity = new HttpEntity<>(newInventory, headers);
+        ResponseEntity<InventoryV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity,
+                InventoryV2.class);
+        log.info("result : " + result.getStatusCode());
+        return result.getBody();
+    }
+
+    // PATCH
+    public InventoryV2 updateInventoryV2(String companyCodeId, String plantId, String languageId, String warehouseId, String packBarcodes,
+                                         String itemCode, String manufacturerName, String storageBin, Long stockTypeId,
+                                         Long specialStockIndicatorId, InventoryV2 modifiedInventory, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(modifiedInventory, headers);
+
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "inventory/v2/" + stockTypeId)
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("manufacturerName", manufacturerName)
+                    .queryParam("packBarcodes", packBarcodes)
+                    .queryParam("itemCode", itemCode).queryParam("storageBin", storageBin)
+                    .queryParam("stockTypeId", stockTypeId)
+                    .queryParam("specialStockIndicatorId", specialStockIndicatorId)
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<InventoryV2> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity,
+                    InventoryV2.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // DELETE
+    public boolean deleteInventoryV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                     String manufacturerName, String packBarcodes, String itemCode, String storageBin,
+                                     Long stockTypeId, Long specialStockIndicatorId, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "inventory/v2/" + stockTypeId)
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("manufacturerName", manufacturerName)
+                    .queryParam("packBarcodes", packBarcodes)
+                    .queryParam("itemCode", itemCode).queryParam("storageBin", storageBin)
+                    .queryParam("stockTypeId", stockTypeId)
+                    .queryParam("specialStockIndicatorId", specialStockIndicatorId)
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.DELETE, entity,
+                    String.class);
+            log.info("result : " + result);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
     /*-----------------------------------------Delivery Module-------------------------------------------------------*/
     //--------------------------------------------Delivery Header------------------------------------------------------------------------
 

@@ -1149,7 +1149,8 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "(COALESCE(:warehouseId, null) IS NULL OR (iv.wh_id IN (:warehouseId))) and \n" +
             "(COALESCE(:referenceDocumentNo, null) IS NULL OR (iv.ref_doc_no IN (:referenceDocumentNo))) and \n" +
             "(COALESCE(:barcodeId, null) IS NULL OR (iv.BARCODE_ID IN (:barcodeId))) and \n" +
-            "(COALESCE(:manufacturerCode, null) IS NULL OR (iv.MFR_NAME IN (:manufacturerCode))) and \n" +
+            "(COALESCE(:manufacturerCode, null) IS NULL OR (iv.MFR_CODE IN (:manufacturerCode))) and \n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (iv.MFR_NAME IN (:manufacturerName))) and \n" +
             "(COALESCE(:packBarcodes, null) IS NULL OR (iv.PACK_BARCODE IN (:packBarcodes))) and \n" +
             "(COALESCE(:itemCode, null) IS NULL OR (iv.ITM_CODE IN (:itemCode))) and \n" +
             "(COALESCE(:storageBin, null) IS NULL OR (iv.ST_BIN IN (:storageBin))) and\n" +
@@ -1168,6 +1169,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
                                                  @Param("referenceDocumentNo") List<String> referenceDocumentNo,
                                                  @Param("barcodeId") List<String> barcodeId,
                                                  @Param("manufacturerCode") List<String> manufacturerCode,
+                                                 @Param("manufacturerName") List<String> manufacturerName,
                                                  @Param("packBarcodes") List<String> packBarcodes,
                                                  @Param("itemCode") List<String> itemCode,
                                                  @Param("storageBin") List<String> storageBin,
@@ -1745,4 +1747,16 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             @Param(value = "itemText") String itemText,
             @Param(value = "manufacturerName") List<String> manufacturerName,
             @Param(value = "stockTypeText") String stockTypeText);
+
+    InventoryV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicatorOrderByInventoryIdDesc(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String packBarcodes,
+            String itemCode, String manufacturerName, String storageBin, Long stockTypeId, Long specialStockIndicatorId, Long deletionIndicator);
+
+    List<InventoryV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String packBarcodes,
+            String itemCode, String manufacturerName, String storageBin, Long deletionIndicator);
+
+    List<InventoryV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String packBarcodes, String itemCode,
+            String manufacturerName, String storageBin, Long stockTypeId, Long specialStockIndicatorId, Long deletionIndicator);
 }

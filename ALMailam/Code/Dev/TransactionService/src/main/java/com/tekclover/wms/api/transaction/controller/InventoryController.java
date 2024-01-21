@@ -147,4 +147,36 @@ public class InventoryController {
 			throws Exception {
 		return inventoryService.findInventoryNewV2(searchInventory);
 	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Create Inventory V2") // label for swagger
+	@PostMapping("/v2")
+	public ResponseEntity<?> postInventoryV2(@Valid @RequestBody InventoryV2 newInventory, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		InventoryV2 createdInventory = inventoryService.createInventoryV2(newInventory, loginUserID);
+		return new ResponseEntity<>(createdInventory , HttpStatus.OK);
+	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Update Inventory V2") // label for swagger
+	@PatchMapping("/v2/{stockTypeId}")
+	public ResponseEntity<?> patchInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+											  @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String manufacturerName,
+											  @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String storageBin,
+											  @RequestParam Long specialStockIndicatorId, @Valid @RequestBody InventoryV2 updateInventory,
+											  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+		InventoryV2 updatedInventory =
+				inventoryService.updateInventoryV2(companyCodeId, plantId, languageId, warehouseId,
+						packBarcodes, itemCode, manufacturerName, storageBin,  stockTypeId,
+						specialStockIndicatorId, updateInventory, loginUserID);
+		return new ResponseEntity<>(updatedInventory , HttpStatus.OK);
+	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Delete Inventory V2") // label for swagger
+	@DeleteMapping("/v2/{stockTypeId}")
+	public ResponseEntity<?> deleteInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+											   @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String manufacturerName,
+											   @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String storageBin,
+											   @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID) {
+		inventoryService.deleteInventoryV2(companyCodeId, plantId, languageId, warehouseId, stockTypeId, specialStockIndicatorId, packBarcodes, itemCode, manufacturerName, storageBin, loginUserID);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
 }

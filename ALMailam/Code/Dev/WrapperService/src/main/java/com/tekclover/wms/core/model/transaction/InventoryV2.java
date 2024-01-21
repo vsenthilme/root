@@ -7,6 +7,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class InventoryV2 extends Inventory {
 
+	private Long inventoryId;
 	private String barcodeId;
 	private String cbm;
 	private String cbmUnit;

@@ -3021,6 +3021,39 @@ public class TransactionServiceController {
         return transactionService.findInventoryV2(searchInventory, authToken);
     }
 
+    @ApiOperation(response = InventoryV2.class, value = "Create Inventory V2") // label for swagger
+    @PostMapping("/v2/inventory")
+    public ResponseEntity<?> postInventoryV2(@Valid @RequestBody InventoryV2 newInventory, @RequestParam String loginUserID,
+                                           @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
+        InventoryV2 createdInventory = transactionService.createInventoryV2(newInventory, loginUserID, authToken);
+        return new ResponseEntity<>(createdInventory, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InventoryV2.class, value = "Update Inventory V2") // label for swagger
+    @RequestMapping(value = "/inventory/v2/{stockTypeId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> patchInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                              @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String packBarcodes,
+                                              @RequestParam String itemCode, @RequestParam String manufacturerName, @RequestParam String storageBin,
+                                              @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID,
+                                              @RequestParam String authToken, @Valid @RequestBody InventoryV2 updateInventory)
+            throws IllegalAccessException, InvocationTargetException {
+        InventoryV2 updatedInventory =
+                transactionService.updateInventoryV2(companyCodeId, plantId, languageId, warehouseId, packBarcodes, itemCode,
+                        manufacturerName, storageBin, stockTypeId, specialStockIndicatorId, updateInventory, loginUserID, authToken);
+        return new ResponseEntity<>(updatedInventory, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InventoryV2.class, value = "Delete Inventory V2") // label for swagger
+    @DeleteMapping("/inventory/v2/{stockTypeId}")
+    public ResponseEntity<?> deleteInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                               @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String packBarcodes,
+                                               @RequestParam String itemCode, @RequestParam String manufacturerName, @RequestParam String storageBin,
+                                               @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID, @RequestParam String authToken) {
+        transactionService.deleteInventoryV2(companyCodeId, plantId, languageId, warehouseId, manufacturerName,
+                packBarcodes, itemCode, storageBin, stockTypeId, specialStockIndicatorId, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     //--------------------Almailem--Orders------------------------------------------------------------------
 
     @ApiOperation(response = ASNV2.class, value = "Create ASNV2 Order") // label for swagger

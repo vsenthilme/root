@@ -1947,6 +1947,7 @@ public class InventoryService extends BaseService {
     public List<IInventoryImpl> findInventoryNewV2(SearchInventoryV2 searchInventory)
             throws ParseException {
 
+        log.info("SearchInventory Input: " + searchInventory);
         if (searchInventory.getCompanyCodeId() == null || searchInventory.getCompanyCodeId().isEmpty()) {
             searchInventory.setCompanyCodeId(null);
         }
@@ -1967,6 +1968,9 @@ public class InventoryService extends BaseService {
         }
         if (searchInventory.getManufacturerCode() == null || searchInventory.getManufacturerCode().isEmpty()) {
             searchInventory.setManufacturerCode(null);
+        }
+        if (searchInventory.getManufacturerName() == null || searchInventory.getManufacturerName().isEmpty()) {
+            searchInventory.setManufacturerName(null);
         }
         if (searchInventory.getPackBarcodes() == null || searchInventory.getPackBarcodes().isEmpty()) {
             searchInventory.setPackBarcodes(null);
@@ -2005,6 +2009,7 @@ public class InventoryService extends BaseService {
                 searchInventory.getReferenceDocumentNo(),
                 searchInventory.getBarcodeId(),
                 searchInventory.getManufacturerCode(),
+                searchInventory.getManufacturerName(),
                 searchInventory.getPackBarcodes(),
                 searchInventory.getItemCode(),
                 searchInventory.getStorageBin(),
@@ -2014,6 +2019,7 @@ public class InventoryService extends BaseService {
                 searchInventory.getLevelId(),
                 searchInventory.getSpecialStockIndicatorId(),
                 searchInventory.getBinClassId());
+        log.info("Inventory results: " + results);
         return results;
     }
 
@@ -2034,17 +2040,20 @@ public class InventoryService extends BaseService {
      * @throws InvocationTargetException
      */
     public InventoryV2 updateInventoryV2(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                         String packBarcodes, String itemCode, String storageBin, Long stockTypeId,
-                                         Long specialStockIndicatorId, InventoryV2 updateInventory, String loginUserID)
+                                         String packBarcodes, String itemCode, String manufacturerName,
+                                         String storageBin, Long stockTypeId, Long specialStockIndicatorId,
+                                         InventoryV2 updateInventory, String loginUserID)
             throws IllegalAccessException, InvocationTargetException {
-        InventoryV2 dbInventory = inventoryV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPackBarcodesAndItemCodeAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicator(
-                languageId, companyCodeId, plantId,
-                warehouseId, packBarcodes, itemCode,
-                storageBin, stockTypeId, specialStockIndicatorId, 0L);
-        BeanUtils.copyProperties(updateInventory, dbInventory, CommonUtils.getNullPropertyNames(updateInventory));
-        dbInventory.setUpdatedBy(loginUserID);
-        dbInventory.setUpdatedOn(new Date());
-        return inventoryV2Repository.save(dbInventory);
+        InventoryV2 dbInventory = inventoryV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicatorOrderByInventoryIdDesc(
+                companyCodeId, plantId, languageId, warehouseId, packBarcodes, itemCode, manufacturerName, storageBin, stockTypeId, specialStockIndicatorId, 0L);
+        log.info("Inventory for Update: " + dbInventory);
+        if(dbInventory != null) {
+            BeanUtils.copyProperties(updateInventory, dbInventory, CommonUtils.getNullPropertyNames(updateInventory));
+            dbInventory.setUpdatedBy(loginUserID);
+            dbInventory.setUpdatedOn(new Date());
+            return inventoryV2Repository.save(dbInventory);
+        }
+        return null;
     }
 
     /**
@@ -2147,14 +2156,19 @@ public class InventoryService extends BaseService {
      * @param packBarcodes
      * @param itemCode
      */
-    public boolean deleteInventoryV2(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                     String packBarcodes, String itemCode, String manufacturerName) {
+    public boolean deleteInventoryV2(String companyCodeId, String plantId, String languageId, String warehouseId, Long stockTypeId, Long specialStockIndicatorId,
+                                     String packBarcodes, String itemCode, String manufacturerName, String storageBin, String loginUserId) {
         try {
-            List<InventoryV2> inventoryList = getInventoryForDeleteV2(companyCodeId, plantId, languageId, warehouseId, packBarcodes, itemCode, manufacturerName);
-            log.info("inventoryList : " + inventoryList);
+            List<InventoryV2> inventoryList = inventoryV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicator(
+                    companyCodeId, plantId, languageId, warehouseId, packBarcodes, itemCode, manufacturerName, storageBin, stockTypeId, specialStockIndicatorId, 0L);
+            log.info("inventoryList for Delete: " + inventoryList);
             if (inventoryList != null) {
                 for (InventoryV2 inventory : inventoryList) {
-                    inventoryV2Repository.delete(inventory);
+                    inventory.setDeletionIndicator(1L);
+                    inventory.setUpdatedOn(new Date());
+                    inventory.setUpdatedBy(loginUserId);
+                    inventoryV2Repository.save(inventory);
+//                    inventoryV2Repository.delete(inventory);
                     log.info("inventory deleted.");
                 }
                 return true;

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
 import com.tekclover.wms.api.masters.model.storagebin.*;
 import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
@@ -487,6 +488,27 @@ public class StorageBinService {
                     plantId,
                     languageId,
                     warehouseId);
+            return data;
+        } else {
+            throw new BadRequestException("Search string must not be empty");
+        }
+    }
+
+    /**
+     *
+     * @param likeSearchInput
+     * @return
+     */
+    public List<StorageBinListImpl> findStorageBinLikeSearchV2(LikeSearchInput likeSearchInput) {
+        if (likeSearchInput.getLikeSearchByDesc() != null && !likeSearchInput.getLikeSearchByDesc().trim().isEmpty()) {
+            List<StorageBinListImpl> data = storagebinRepository.getStorageBinListBySearchV2(
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getCompanyCodeId(),
+                    likeSearchInput.getPlantId(),
+                    likeSearchInput.getLanguageId(),
+                    likeSearchInput.getWarehouseId());
             return data;
         } else {
             throw new BadRequestException("Search string must not be empty");

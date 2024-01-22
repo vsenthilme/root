@@ -1678,8 +1678,7 @@ public class TransactionServiceController {
         return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
     }
 
-    @ApiOperation(response = ShipmentDeliveryReport.class, value = "Get ShipmentDelivery Report v2")
-    // label for swagger
+    @ApiOperation(response = ShipmentDeliveryReport.class, value = "Get ShipmentDelivery Report v2")    // label for swagger
     @GetMapping("/reports/v2/shipmentDelivery")
     public ResponseEntity<?> getShipmentDeliveryReport(@RequestParam String companyCodeId, @RequestParam String plantId,
                                                        @RequestParam String languageId, @RequestParam String warehouseId,
@@ -1695,8 +1694,7 @@ public class TransactionServiceController {
         return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
     }
 
-    @ApiOperation(response = ShipmentDeliverySummaryReport.class, value = "Get ShipmentDeliverySummary Report")
-    // label for swagger
+    @ApiOperation(response = ShipmentDeliverySummaryReport.class, value = "Get ShipmentDeliverySummary Report")    // label for swagger
     @GetMapping("/reports/shipmentDeliverySummary1")
     public ResponseEntity<?> getShipmentDeliveryReport1(@RequestParam String fromDeliveryDate,
                                                         @RequestParam String toDeliveryDate, @RequestParam(required = false) List<String> customerCode,

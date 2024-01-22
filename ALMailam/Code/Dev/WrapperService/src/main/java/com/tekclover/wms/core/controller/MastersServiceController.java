@@ -5,6 +5,7 @@ import com.tekclover.wms.core.model.threepl.*;
 import com.tekclover.wms.core.model.transaction.PaginatedResponse;
 import com.tekclover.wms.core.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.core.model.warehouse.mastersorder.Customer;
+import com.tekclover.wms.core.model.warehouse.mastersorder.ImBasicData1V2;
 import com.tekclover.wms.core.model.warehouse.mastersorder.Item;
 import com.tekclover.wms.core.service.MastersService;
 import com.tekclover.wms.core.service.RegisterService;
@@ -583,6 +584,15 @@ public class MastersServiceController {
                 languageId, warehouseId, authToken);
     }
 
+    //Input Parameters added
+    @ApiOperation(response = ImBasicData1V2.class, value = "Like Search ImBasicData1 New v2") // label for swagger
+    @PostMapping("/imbasicdata1/v2/findItemCodeByLikeNew")
+    public ItemCodeDesc[] getImBasicData1LikeSearchNew(@Valid @RequestBody LikeSearchInput likeSearchInput,
+                                                       @RequestParam String authToken) throws Exception {
+
+        return mastersService.findImBasicData1LikeSearchNewV2(likeSearchInput, authToken);
+    }
+
 
     /* -----------------------------MASTERS---IMBASICDATA2---------------------------------------------------------------*/
 
@@ -1012,6 +1022,15 @@ public class MastersServiceController {
 
         return mastersService.findStorageBinLikeSearchNew(likeSearchByStorageBinNDesc, companyCodeId, plantId,
                 languageId, warehouseId, authToken);
+    }
+
+    //Input Parameters added
+    @ApiOperation(response = StorageBin.class, value = "Like Search StorageBin New V2") // label for swagger
+    @PostMapping("/storagebin/v2/findStorageBinByLikeNew")
+    public StorageBinDesc[] getStorageBinLikeSearchNewV2(@Valid @RequestBody LikeSearchInput likeSearchInput,
+                                                         @RequestParam String authToken) throws Exception {
+
+        return mastersService.findStorageBinLikeSearchNewV2(likeSearchInput, authToken);
     }
 
     @ApiOperation(response = Optional.class, value = "Create StorageBin") // label for swagger

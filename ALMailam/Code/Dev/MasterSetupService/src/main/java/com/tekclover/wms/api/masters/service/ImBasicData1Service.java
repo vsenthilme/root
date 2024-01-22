@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.imbasicdata1.AddImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.ImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.SearchImBasicData1;
@@ -214,6 +215,25 @@ public class ImBasicData1Service {
                     plantId,
                     languageId,
                     warehouseId);
+            return data;
+        } else {
+            throw new BadRequestException("Search string must not be empty");
+        }
+    }
+
+    //Like Search filter ItemCode, Description, Company Code, Plant, Language and warehouse
+    public List<ItemListImpl> findImBasicData1LikeSearchV2(LikeSearchInput likeSearchInput) {
+
+        if (likeSearchInput.getLikeSearchByDesc() != null && !likeSearchInput.getLikeSearchByDesc().trim().isEmpty()) {
+
+            List<ItemListImpl> data = imbasicdata1Repository.getItemListBySearchV2(
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getCompanyCodeId(),
+                    likeSearchInput.getPlantId(),
+                    likeSearchInput.getLanguageId(),
+                    likeSearchInput.getWarehouseId());
             return data;
         } else {
             throw new BadRequestException("Search string must not be empty");

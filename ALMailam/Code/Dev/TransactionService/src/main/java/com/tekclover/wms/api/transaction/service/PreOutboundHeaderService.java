@@ -3216,7 +3216,7 @@ public class PreOutboundHeaderService extends BaseService {
         return orderManagementLine;
     }
 
-    public OutboundIntegrationLog createOutboundIntegrationLogV2(OutboundIntegrationHeaderV2 outbound)
+    public OutboundIntegrationLog createOutboundIntegrationLogV2(OutboundIntegrationHeaderV2 outbound, String errorDesc)
             throws IllegalAccessException, InvocationTargetException, ParseException {
         try {
             OutboundIntegrationLog dbOutboundIntegrationLog = new OutboundIntegrationLog();
@@ -3240,6 +3240,8 @@ public class PreOutboundHeaderService extends BaseService {
             dbOutboundIntegrationLog.setOrderReceiptDate(outbound.getOrderProcessedOn());
             dbOutboundIntegrationLog.setDeletionIndicator(0L);
             dbOutboundIntegrationLog.setCreatedBy("MSD_API");
+
+            dbOutboundIntegrationLog.setReferenceField1(errorDesc);
             /*
              * Setting up KuwaitTime
              */

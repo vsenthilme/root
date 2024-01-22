@@ -1205,6 +1205,26 @@ public class MastersService {
         }
     }
 
+    // POST - findImBasicData1LikeSearch
+    public ItemCodeDesc[] findImBasicData1LikeSearchNewV2(LikeSearchInput likeSearchInput,
+                                                        String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", " RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "imbasicdata1/v2/findItemCodeByLikeNew");
+            HttpEntity<?> entity = new HttpEntity<>(likeSearchInput, headers);
+            ResponseEntity<ItemCodeDesc[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, ItemCodeDesc[].class);
+            return result.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     // POST ImBasicData1
     public ImBasicData1 addImBasicData1(ImBasicData1 imbasicdata1, String loginUserID, String authToken) {
         try {
@@ -2317,6 +2337,25 @@ public class MastersService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<StorageBinDesc[]> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, StorageBinDesc[].class);
+            return result.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    // POST - findImBasicData1LikeSearchNew
+    public StorageBinDesc[] findStorageBinLikeSearchNewV2(LikeSearchInput likeSearchInput, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "WMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/v2/findStorageBinByLikeNew");
+            HttpEntity<?> entity = new HttpEntity<>(likeSearchInput, headers);
+            ResponseEntity<StorageBinDesc[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, StorageBinDesc[].class);
             return result.getBody();
         } catch (Exception e) {
             throw e;

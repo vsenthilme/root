@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.masters.controller;
 
+import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
 import com.tekclover.wms.api.masters.model.storagebin.*;
 import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
@@ -91,7 +92,15 @@ public class StorageBinController {
         return storagebinService.findStorageBinLikeSearchNew(likeSearchByStorageBinNDesc, companyCodeId, plantId, languageId, warehouseId);
     }
 
-    @ApiOperation(response = StorageBin.class, value = "Get a StorageBin") // label for swagger 
+    //Like Search filter ItemCode, Description, Company Code, Plant, Language and warehouse
+    @ApiOperation(response = StorageBin.class, value = "Like Search StorageBin New") // label for swagger
+    @PostMapping("/v2/findStorageBinByLikeNew")
+    public List<StorageBinListImpl> getStorageBinLikeSearchV2(@Valid @RequestBody LikeSearchInput likeSearchInput)
+            throws Exception {
+        return storagebinService.findStorageBinLikeSearchV2(likeSearchInput);
+    }
+
+    @ApiOperation(response = StorageBin.class, value = "Get a StorageBin") // label for swagger
     @PostMapping("/putaway")
     public ResponseEntity<?> getStorageBin(@RequestBody StorageBinPutAway storageBinPutAway) {
         List<StorageBin> storagebin = storagebinService.getStorageBin(storageBinPutAway);

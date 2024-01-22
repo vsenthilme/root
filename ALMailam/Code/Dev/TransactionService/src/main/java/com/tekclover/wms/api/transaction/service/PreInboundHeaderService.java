@@ -2194,6 +2194,46 @@ public class PreInboundHeaderService extends BaseService {
 
     /**
      *
+     * @param inbound
+     * @param errorDesc
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public InboundIntegrationLog createInboundIntegrationLogV2(InboundIntegrationHeader inbound, String errorDesc)
+            throws IllegalAccessException, InvocationTargetException {
+        com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse =
+                getWarehouse(inbound.getCompanyCode(), inbound.getBranchCode());
+        if (warehouse == null) {
+            throw new BadRequestException("Warehouse not found : " + inbound.getWarehouseID());
+        }
+        InboundIntegrationLog dbInboundIntegrationLog = new InboundIntegrationLog();
+        dbInboundIntegrationLog.setLanguageId("EN");
+        dbInboundIntegrationLog.setCompanyCodeId(warehouse.getCompanyCodeId());
+        dbInboundIntegrationLog.setPlantId(warehouse.getPlantId());
+        dbInboundIntegrationLog.setWarehouseId(warehouse.getWarehouseId());
+        dbInboundIntegrationLog.setIntegrationLogNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setRefDocNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setIntegrationStatus("FAILED");
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setDeletionIndicator(0L);
+        dbInboundIntegrationLog.setCreatedBy("MSD_API");
+
+        try {
+            dbInboundIntegrationLog.setReferenceField1(errorDesc);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        dbInboundIntegrationLog.setCreatedOn(new Date());
+        dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
+        log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
+        return dbInboundIntegrationLog;
+    }
+
+    /**
+     *
      * @param companyCode
      * @param plantId
      * @param languageId

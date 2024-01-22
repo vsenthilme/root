@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.masters.controller;
 
+import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.imbasicdata1.AddImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.ImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.SearchImBasicData1;
@@ -114,6 +115,14 @@ public class ImBasicData1Controller {
                                                            @RequestParam String warehouseId)
             throws Exception {
         return imbasicdata1Service.findImBasicData1LikeSearchNew(likeSearchByItemCodeNDesc, companyCodeId, plantId, languageId, warehouseId);
+    }
+
+    //Like Search filter ItemCode, Description, Company Code, Plant, Language and warehouse
+    @ApiOperation(response = ImBasicData1.class, value = "Like Search ImBasicData1 New V2") // label for swagger
+    @PostMapping("/v2/findItemCodeByLikeNew")
+    public List<ItemListImpl> getImBasicData1LikeSearchNewV2(@Valid @RequestBody LikeSearchInput likeSearchInput)
+            throws Exception {
+        return imbasicdata1Service.findImBasicData1LikeSearchV2(likeSearchInput);
     }
 
     @ApiOperation(response = ImBasicData1.class, value = "Create ImBasicData1") // label for swagger

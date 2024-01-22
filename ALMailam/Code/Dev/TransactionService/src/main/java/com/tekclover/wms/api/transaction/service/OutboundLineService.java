@@ -3437,12 +3437,12 @@ public class OutboundLineService extends BaseService {
             log.info("searchOutboundLine.getWarehouseId() :  " + searchOutboundLine.getWarehouseId());
             List<StockMovementReportImpl> allLineData = new ArrayList<>();
             List<StockMovementReportImpl> outboundLineSearchResults =
-                    outboundLineV2Repository.findOutboundLineForStockMovement(searchOutboundLine.getItemCode(),
+                    pickupLineV2Repository.findPickupLineForStockMovement(searchOutboundLine.getItemCode(),
                             searchOutboundLine.getWarehouseId(),
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),
                             searchOutboundLine.getLanguageId(),
-                            59L, searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate());
+                            50L, searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate());
 
             List<StockMovementReportImpl> inboundLineSearchResults =
                     inboundLineV2Repository.findInboundLineForStockMovement(searchOutboundLine.getItemCode(),
@@ -3450,7 +3450,7 @@ public class OutboundLineService extends BaseService {
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),
                             searchOutboundLine.getLanguageId(),
-                            Arrays.asList(14L, 20L, 24L));
+                            Arrays.asList(24L));
 
             allLineData.addAll(outboundLineSearchResults);
             allLineData.addAll(inboundLineSearchResults);

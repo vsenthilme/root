@@ -310,4 +310,52 @@ public class DeliveryLineService {
 
         return deliveryLineCount;
     }
+
+
+    /**
+     *
+     * @param findDeliveryLineCount
+     * @return
+     * @throws Exception
+     */
+    public DeliveryLineCount findDeliveryLineCount(FindDeliveryLineCount findDeliveryLineCount) throws Exception{
+
+        DeliveryLineCount deliveryLineCount = new DeliveryLineCount();
+
+        //new
+        List<Long> newDeliveryLineCount = deliveryLineRepository.getNewDeliveryLineCount(findDeliveryLineCount.getCompanyCodeId(),
+                findDeliveryLineCount.getPlantId(), findDeliveryLineCount.getWarehouseId(), findDeliveryLineCount.getLanguageId(),
+                findDeliveryLineCount.getDriverId(),  90L);
+
+        Long newLineCount = newDeliveryLineCount.stream().count();
+        deliveryLineCount.setNewCount(newLineCount);
+
+        //InTransit
+        List<Long> inTransitLineCount = deliveryLineRepository.getCountOfDeliveryLine(findDeliveryLineCount.getCompanyCodeId(),
+                findDeliveryLineCount.getPlantId(), findDeliveryLineCount.getWarehouseId(), findDeliveryLineCount.getLanguageId(),
+                findDeliveryLineCount.getDriverId(),  91L,false);
+
+        Long transitCount = inTransitLineCount.stream().count();
+        deliveryLineCount.setInTransitCount(transitCount);
+
+        //Completed
+        List<Long> completedLineCount = deliveryLineRepository.getCountOfDeliveryLine(findDeliveryLineCount.getCompanyCodeId(),
+                findDeliveryLineCount.getPlantId(), findDeliveryLineCount.getWarehouseId(), findDeliveryLineCount.getLanguageId(),
+                findDeliveryLineCount.getDriverId(),  92L);
+
+        Long completedCount = completedLineCount.stream().count();
+        deliveryLineCount.setCompletedCount(completedCount);
+
+        //ReDelivery
+        List<Long> reDeliveryLineCount = deliveryLineRepository.getCountOfDeliveryLine(findDeliveryLineCount.getCompanyCodeId(),
+                findDeliveryLineCount.getPlantId(), findDeliveryLineCount.getWarehouseId(), findDeliveryLineCount.getLanguageId(),
+                findDeliveryLineCount.getDriverId(),  91L,true);
+
+        Long reDeliveryCount = reDeliveryLineCount.stream().count();
+        deliveryLineCount.setRedeliveryCount(reDeliveryCount);
+
+        return deliveryLineCount;
+
+    }
+
 }

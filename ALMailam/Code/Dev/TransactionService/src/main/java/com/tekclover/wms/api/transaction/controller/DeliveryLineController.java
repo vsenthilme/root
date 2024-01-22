@@ -116,4 +116,14 @@ public class DeliveryLineController {
                 deliveryLineService.getDeliveryLineCount(companyCodeId, languageId, plantId, warehouseId, driverId);
         return new ResponseEntity<>(deliveryLine, HttpStatus.OK);
     }
+
+    // Search DeliveryLine
+    @ApiOperation(response = DeliveryLineCount.class, value = "Find DeliveryLineCount") // label for swagger
+    @PostMapping("/findDeliveryLineCount")
+    public ResponseEntity<?> findDeliveryLineCount(@Valid @RequestBody FindDeliveryLineCount findDeliveryLineCount) throws Exception {
+
+        DeliveryLineCount createdDeliveryLine =
+                deliveryLineService.findDeliveryLineCount(findDeliveryLineCount);
+        return new ResponseEntity<>(createdDeliveryLine, HttpStatus.OK);
+    }
 }

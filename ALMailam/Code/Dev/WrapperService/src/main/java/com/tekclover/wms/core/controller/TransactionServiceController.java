@@ -3282,6 +3282,14 @@ public class TransactionServiceController {
         return new ResponseEntity<>(dbDeliveryLine, HttpStatus.OK);
     }
 
+    //FIND
+    @ApiOperation(response = DeliveryLineCount.class, value = "Find DeliveryLineCount")//label for swagger
+    @PostMapping("/deliveryline/findDeliveryLineCount")
+    public DeliveryLineCount findDeliveryLineCount(@RequestBody FindDeliveryLineCount findDeliveryLineCount,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findDeliveryLineCount(findDeliveryLineCount, authToken);
+    }
+
     /*-----------------------------CycleCountOrder------------------------------------------------*/
 
     //Perpetual

@@ -51,6 +51,54 @@ public interface DeliveryLineRepository extends JpaRepository<DeliveryLine, Stri
                                              @Param("reDelivery") Boolean reDelivery);
 
 
+    @Query(value = "select count(*) as count from tbldeliveryline where " +
+            "(:companyCodeId is null or c_id = :companyCodeId) and " +
+            "(:plantId is null or plant_id = :plantId) and " +
+            "(:warehouseId is null or wh_id = :warehouseId) and " +
+            "(:languageId is null or lang_id = :languageId) and " +
+            "(:driverId is null or driver_nm = :driverId) and " +
+            "(status_id = :statusId) and " +
+            "is_deleted = 0 group by ref_doc_no", nativeQuery = true)
+    public List<Long> getCountOfDeliveryLine(@Param("companyCodeId") String companyCodeId,
+                                       @Param("plantId") String plantId,
+                                       @Param("warehouseId") String warehouseId,
+                                       @Param("languageId") String languageId,
+                                       @Param("driverId") String driverId,
+                                       @Param("statusId") Long statusId);
+
+    @Query(value = "select count(*) as count from tbldeliveryline where " +
+            "(:companyCodeId is null or c_id = :companyCodeId) and " +
+            "(:plantId is null or plant_id = :plantId) and " +
+            "(:warehouseId is null or wh_id = :warehouseId) and " +
+            "(:languageId is null or lang_id = :languageId) and " +
+            "(:driverId is null or driver_nm = :driverId) and " +
+            "(status_id = :statusId) and " +
+            "is_deleted = 0 group by vehicle_id", nativeQuery = true)
+    public List<Long> getNewDeliveryLineCount(@Param("companyCodeId") String companyCodeId,
+                                             @Param("plantId") String plantId,
+                                             @Param("warehouseId") String warehouseId,
+                                             @Param("languageId") String languageId,
+                                             @Param("driverId") String driverId,
+                                             @Param("statusId") Long statusId);
+
+
+    @Query(value = "select count(*) as count from tbldeliveryline where " +
+            "(:companyCodeId is null or c_id = :companyCodeId) and " +
+            "(:plantId is null or plant_id = :plantId) and " +
+            "(:warehouseId is null or wh_id = :warehouseId) and " +
+            "(:languageId is null or lang_id = :languageId) and " +
+            "(:driverId is null or driver_nm = :driverId) and " +
+            "(status_id = :statusId) and " +
+            "(re_delivery = :reDelivery) and " +
+            "is_deleted = 0 group by ref_doc_no", nativeQuery = true)
+    public List<Long> getCountOfDeliveryLine(@Param("companyCodeId") String companyCodeId,
+                                       @Param("plantId") String plantId,
+                                       @Param("warehouseId") String warehouseId,
+                                       @Param("languageId") String languageId,
+                                       @Param("driverId") String driverId,
+                                       @Param("statusId") Long statusId,
+                                       @Param("reDelivery") Boolean reDelivery);
+
 
 
 }

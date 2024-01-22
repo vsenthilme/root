@@ -10333,6 +10333,27 @@ public class TransactionService {
         }
     }
 
+    //SEARCH
+    public DeliveryLineCount findDeliveryLineCount(FindDeliveryLineCount findDeliveryLineCount, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "deliveryline/findDeliveryLineCount");
+            HttpEntity<?> entity = new HttpEntity<>(findDeliveryLineCount, headers);
+            ResponseEntity<DeliveryLineCount> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, DeliveryLineCount.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     //----------------------Orders------------------------------------------------------------------
 
     // POST - ASN V2 upload

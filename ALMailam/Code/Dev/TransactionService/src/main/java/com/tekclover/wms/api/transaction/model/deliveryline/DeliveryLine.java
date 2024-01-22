@@ -149,7 +149,7 @@ public class DeliveryLine {
     private String paymentMode;
 
     @Column(name = "RE_DELIVERY")
-    private Boolean reDelivery;
+    private Boolean reDelivered;
 
     @Column(name="STATUS_ID")
     private Long statusId;

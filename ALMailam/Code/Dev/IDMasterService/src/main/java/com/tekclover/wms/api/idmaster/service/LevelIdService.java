@@ -154,7 +154,7 @@ public class LevelIdService {
 			dbLevelId.setCreatedBy(loginUserID);
 			dbLevelId.setUpdatedBy(loginUserID);
 			dbLevelId.setCreatedOn(new Date());
-			dbLevelId.setUpdatedOn(new Date();
+			dbLevelId.setUpdatedOn(new Date());
 			return levelIdRepository.save(dbLevelId);
 		}
 	}

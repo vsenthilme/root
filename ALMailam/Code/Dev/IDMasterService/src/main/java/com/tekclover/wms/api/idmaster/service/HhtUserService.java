@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -284,6 +281,11 @@ public class HhtUserService {
 
                 OrderTypeId dbOrderTypeId = new OrderTypeId();
                 dbOrderTypeId.setOrderTypeId(newOrderTypeId);
+                dbOrderTypeId.setId(savedHhtUser.getId());
+                dbOrderTypeId.setCompanyCodeId(dbHhtUser.getCompanyCodeId());
+                dbOrderTypeId.setPlantId(dbHhtUser.getPlantId());
+                dbOrderTypeId.setLanguageId(dbHhtUser.getLanguageId());
+                dbOrderTypeId.setWarehouseId(dbHhtUser.getWarehouseId());
                 dbOrderTypeId.setDeletionIndicator(0L);
                 dbOrderTypeId.setCreatedBy(loginUserID);
                 dbOrderTypeId.setUpdatedBy(loginUserID);

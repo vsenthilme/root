@@ -1666,7 +1666,7 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1682,7 +1682,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setBranchCode(inboundIntegrationLine.getBranchCode());
         preInboundLine.setTransferOrderNo(inboundIntegrationLine.getTransferOrderNo());
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
-        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getManufacturerName());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
 
         // REF_FIELD_1
         preInboundLine.setReferenceField1("CHILD ITEM");
@@ -1745,8 +1745,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());
 
         // PARTNER_CODE
-//        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
-        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getManufacturerName());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
 
         // ORD_QTY
         preInboundLine.setOrderQty(inboundIntegrationLine.getOrderedQty());
@@ -1785,7 +1784,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1932,7 +1931,7 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setManufacturerFullName(createdPreInboundLine.getManufacturerFullName());
             inboundLine.setPurchaseOrderNumber(createdPreInboundLine.getPurchaseOrderNumber());
 
-            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerCode());
+            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerName());
             inboundLine.setManufacturerName(createdPreInboundLine.getManufacturerName());
             inboundLine.setExpectedArrivalDate(createdPreInboundLine.getExpectedArrivalDate());
             inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());

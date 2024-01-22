@@ -1017,7 +1017,7 @@ public class StagingLineService extends BaseService {
                 dbStagingLineEntity.setReferenceDocumentType(newStagingLine.getReferenceDocumentType());
                 dbStagingLineEntity.setManufacturerFullName(newStagingLine.getManufacturerFullName());
 
-                dbStagingLineEntity.setManufacturerCode(newStagingLine.getManufacturerCode());
+                dbStagingLineEntity.setManufacturerCode(newStagingLine.getManufacturerName());
                 dbStagingLineEntity.setManufacturerName(newStagingLine.getManufacturerName());
                 dbStagingLineEntity.setManufacturerPartNo(newStagingLine.getManufacturerPartNo());
 

@@ -75,15 +75,15 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
     @Query(value = "SELECT SUM(ORD_QTY) AS ordQtyTotal \r\n"
             + "FROM tbloutboundline \r\n"
             + "WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND PRE_OB_NO IN :preOutboundNo "
-            + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND PARTNER_CODE = :partnerCode \r\n"
-            + "GROUP BY PARTNER_CODE;", nativeQuery = true)
+            + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND OB_ORD_TYP_ID = :outboundOrderTypeId \r\n"
+            + "GROUP BY OB_ORD_TYP_ID;", nativeQuery = true)
     public Long getSumOfOrderedQtyByPartnerCodeV2(@Param("companyCodeId") String companyCodeId,
                                                   @Param("plantId") String plantId,
                                                   @Param("languageId") String languageId,
                                                   @Param("warehouseId") String warehouseId,
                                                   @Param("preOutboundNo") List<String> preOutboundNo,
                                                   @Param("refDocNumber") List<String> refDocNumber,
-                                                  @Param("partnerCode") String partnerCode);
+                                                  @Param("outboundOrderTypeId") Long outboundOrderTypeId);
 
     @Query(value = "SELECT COUNT(OB_LINE_NO) AS deliveryLines \r\n"
             + "FROM tbloutboundline \r\n"
@@ -136,14 +136,14 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             + "FROM tbloutboundline \r\n"
             + "WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND PRE_OB_NO IN :preOutboundNo "
             + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND DLV_QTY > 0 \r\n"
-            + "AND PARTNER_CODE = :partnerCode GROUP BY PARTNER_CODE;", nativeQuery = true)
+            + "AND OB_ORD_TYP_ID = :outboundOrderTypeId GROUP BY OB_ORD_TYP_ID;", nativeQuery = true)
     public Long getDeliveryQtyByPartnerCodeV2(@Param("companyCodeId") String companyCodeId,
                                               @Param("plantId") String plantId,
                                               @Param("languageId") String languageId,
                                               @Param("warehouseId") String warehouseId,
                                               @Param("preOutboundNo") List<String> preOutboundNo,
                                               @Param("refDocNumber") List<String> refDocNumber,
-                                              @Param("partnerCode") String partnerCode);
+                                              @Param("outboundOrderTypeId") Long outboundOrderTypeId);
 
     /*
      * Line Shipped
@@ -336,6 +336,9 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "(COALESCE(:statusId, null) IS NULL OR (ob.status_id IN (:statusId))) and \n" +
             "(COALESCE(:lineNo, null) IS NULL OR (ob.ob_line_no IN (:lineNo))) and \n" +
             "(COALESCE(:itemCode, null) IS NULL OR (ob.itm_code IN (:itemCode))) and\n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (ob.MFR_NAME IN (:manufacturerName))) and\n" +
+            "(COALESCE(:salesOrderNumber, null) IS NULL OR (ob.SALES_ORDER_NUMBER IN (:salesOrderNumber))) and\n" +
+            "(COALESCE(:targetBranchCode, null) IS NULL OR (ob.TARGET_BRANCH_CODE IN (:targetBranchCode))) and\n" +
             "(COALESCE(:orderType, null) IS NULL OR (ob.ob_ord_typ_id IN (:orderType))) and \n" +
             "(COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) IS NULL OR (ob.DLV_CNF_ON between COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) and COALESCE(CONVERT(VARCHAR(255), :toDeliveryDate), null))) \n"
             , nativeQuery = true)
@@ -349,6 +352,9 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
                                                         @Param("refDocNo") List<String> refDocNo,
                                                         @Param("lineNo") List<Long> lineNo,
                                                         @Param("itemCode") List<String> itemCode,
+                                                        @Param("salesOrderNumber") List<String> salesOrderNumber,
+                                                        @Param("targetBranchCode") List<String> targetBranchCode,
+                                                        @Param("manufacturerName") List<String> manufacturerName,
                                                         @Param("statusId") List<Long> statusId,
                                                         @Param("orderType") List<String> orderType,
                                                         @Param("partnerCode") List<String> partnerCode);

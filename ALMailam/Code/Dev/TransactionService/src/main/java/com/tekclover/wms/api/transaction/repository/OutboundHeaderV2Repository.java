@@ -438,4 +438,7 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
 
     OutboundHeaderV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
+
+    List<OutboundHeaderV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndOutboundOrderTypeIdAndDeliveryConfirmedOnBetween(
+            String companyCode, String plantId, String languageId, String warehouseId, Long statusId, Long partnerCode, Date fromDeliveryDateD, Date toDeliveryDateD);
 }

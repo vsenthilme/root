@@ -80,6 +80,10 @@ public interface PickupLineV2Repository extends JpaRepository<PickupLineV2, Long
             String languageId, String companyCode, String plantId, String warehouseId, List<String> preOutboundNo,
             List<String> refDocNumber, String partnerCode, Long statusId, Long deletionIndicator);
 
+    List<PickupLineV2> findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoInAndRefDocNumberInAndOutboundOrderTypeIdAndStatusIdAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, List<String> preOutboundNo,
+            List<String> refDocNumber, Long outboundOrderTypeId, Long statusId, Long deletionIndicator);
+
     PickupLineV2 findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndPickupNumberAndItemCodeAndActualHeNoAndPickedStorageBinAndPickedPackCodeAndDeletionIndicator(
             String languageId, String companyCodeId, String plantId, String warehouseId, String preOutboundNo,
             String refDocNumber, String partnerCode, Long lineNumber, String pickupNumber, String itemCode,
@@ -121,10 +125,12 @@ public interface PickupLineV2Repository extends JpaRepository<PickupLineV2, Long
             " 'OutBound' as documentType , ol.ref_doc_no as documentNumber, ol.partner_code as customerCode,\n" +
             " ol.PICK_CNF_ON as confirmedOn, ol.pick_cnf_qty as movementQty, ol.item_text as itemText,ol.mfr_name as manufacturerSKU \n" +
             " from tblpickupline ol\n" +
-            " WHERE ol.ITM_CODE in (:itemCode) " +
-            " AND ol.C_ID in (:companyCodeId) AND ol.PLANT_ID in (:plantId) AND ol.LANG_ID in (:languageId) AND ol.WH_ID in (:warehouseId) AND ol.status_id = :statusId " +
-            " AND ol.DLV_CNF_ON between :fromDate and :toDate ", nativeQuery = true)
+            " WHERE ol.ITM_CODE in (:itemCode) and \n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (ol.MFR_NAME IN (:manufacturerName))) \n" +
+            " AND ol.C_ID in (:companyCodeId) AND ol.PLANT_ID in (:plantId) AND ol.LANG_ID in (:languageId) AND ol.WH_ID in (:warehouseId) AND ol.status_id = :statusId \n" +
+            " AND ol.PICK_CNF_ON between :fromDate and :toDate ", nativeQuery = true)
     public List<StockMovementReportImpl> findPickupLineForStockMovement(@Param("itemCode") List<String> itemCode,
+                                                                        @Param("manufacturerName") List<String> manufacturerName,
                                                                         @Param("warehouseId") List<String> warehouseId,
                                                                         @Param("companyCodeId") List<String> companyCodeId,
                                                                         @Param("plantId") List<String> plantId,

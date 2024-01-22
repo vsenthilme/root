@@ -1437,20 +1437,21 @@ public class PickupLineService extends BaseService {
     }
 
     /**
+     *
      * @param languageId
      * @param companyCode
      * @param plantId
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @return
      */
     public double getPickupLineCountV2(String languageId, String companyCode, String plantId, String warehouseId,
-                                       List<String> preOutboundNo, List<String> refDocNumber, String partnerCode) {
+                                       List<String> preOutboundNo, List<String> refDocNumber, Long outboundOrderTypeId) {
         List<PickupLineV2> pickupLineList = pickupLineV2Repository
-                .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoInAndRefDocNumberInAndPartnerCodeAndStatusIdAndDeletionIndicator(
-                        languageId, companyCode, plantId, warehouseId, preOutboundNo, refDocNumber, partnerCode, 50L, 0L);
+                .findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoInAndRefDocNumberInAndOutboundOrderTypeIdAndStatusIdAndDeletionIndicator(
+                        languageId, companyCode, plantId, warehouseId, preOutboundNo, refDocNumber, outboundOrderTypeId, 50L, 0L);
         if (pickupLineList != null && !pickupLineList.isEmpty()) {
             return pickupLineList.size();
         }

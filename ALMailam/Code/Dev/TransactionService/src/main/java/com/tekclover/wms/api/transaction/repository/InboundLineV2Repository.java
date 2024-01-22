@@ -85,10 +85,12 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
 //            + " join tblimbasicdata1 im on il.itm_code = im.itm_code "
             + "WHERE il.ITM_CODE in (:itemCode) AND "
 //            + "im.WH_ID in (:warehouseId) AND "
+            + "(COALESCE(:manufacturerName, null) IS NULL OR (il.MFR_NAME IN (:manufacturerName))) and \n"
             + "il.C_ID in (:companyCodeId) AND il.PLANT_ID in (:plantId) AND il.LANG_ID in (:languageId) AND il.WH_ID in (:warehouseId) AND il.status_id in (:statusId) "
             + " AND (il.accept_qty is not null OR il.damage_qty is not null)",
             nativeQuery = true)
     public List<StockMovementReportImpl> findInboundLineForStockMovement(@Param("itemCode") List<String> itemCode,
+                                                                         @Param("manufacturerName") List<String> manufacturerName,
                                                                          @Param("warehouseId") List<String> warehouseId,
                                                                          @Param("companyCodeId") List<String> companyCodeId,
                                                                          @Param("plantId") List<String> plantId,

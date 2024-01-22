@@ -1237,6 +1237,154 @@ public class ReportsService extends BaseService {
      * @throws java.text.ParseException
      * @throws ParseException
      */
+//    public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
+//                                                                          List<String> customerCode, String warehouseIds,
+//                                                                          String companyCodeId, String plantId, String languageId)
+//            throws ParseException, java.text.ParseException {
+//        /*
+//         * Pass the Input Parameters in Outbound Line table (From and TO date in
+//         * DLV_CNF_ON fields) and fetch the below Fields, If Customer Code is Selected
+//         * all, Pass all the values into OUTBOUNDLINE table
+//         */
+//        // Date range
+//        if (fromDeliveryDate == null || toDeliveryDate == null) {
+//            throw new BadRequestException("DeliveryDate can't be blank.");
+//        }
+//
+//        Date fromDeliveryDate_d = null;
+//        Date toDeliveryDate_d = null;
+//        try {
+//            log.info("Input Date: " + fromDeliveryDate + "," + toDeliveryDate);
+//            if (fromDeliveryDate.indexOf("T") > 0) {
+//                fromDeliveryDate_d = DateUtils.convertStringToDateWithT(fromDeliveryDate);
+//                toDeliveryDate_d = DateUtils.convertStringToDateWithT(toDeliveryDate);
+//            } else {
+//                fromDeliveryDate_d = DateUtils.addTimeToDate(fromDeliveryDate, 14, 0, 0);
+//                toDeliveryDate_d = DateUtils.addTimeToDate(toDeliveryDate, 13, 59, 59);
+//            }
+//            log.info("Date: " + fromDeliveryDate_d + "," + toDeliveryDate_d);
+//        } catch (Exception e) {
+//            throw new BadRequestException("Date should be in yyyy-MM-dd format.");
+//        }
+//
+//        List<OutboundHeaderV2> outboundHeaderList = outboundHeaderV2Repository
+//                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeliveryConfirmedOnBetween(
+//                        companyCodeId, plantId, languageId, warehouseIds, 59L, fromDeliveryDate_d, toDeliveryDate_d);
+//        ShipmentDeliverySummaryReport shipmentDeliverySummaryReport = new ShipmentDeliverySummaryReport();
+//        List<ShipmentDeliverySummary> shipmentDeliverySummaryList = new ArrayList<>();
+////        String languageId = null;
+//        String companyCode = null;
+////        String plantId = null;
+//        String warehouseId = null;
+//
+//        try {
+//            double sumOfLineItems = 0.0;
+//            Set<String> partnerCodes = new HashSet<>();
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//            for (OutboundHeaderV2 outboundHeader : outboundHeaderList) {
+//                languageId = outboundHeader.getLanguageId();
+//                companyCode = outboundHeader.getCompanyCodeId();
+//                plantId = outboundHeader.getPlantId();
+//                warehouseId = outboundHeader.getWarehouseId();
+//                partnerCodes.add(outboundHeader.getPartnerCode());
+//
+//                // Report Preparation
+//                ShipmentDeliverySummary shipmentDeliverySummary = new ShipmentDeliverySummary();
+//
+//                shipmentDeliverySummary.setSo(outboundHeader.getRefDocNumber());                            // SO
+//                shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
+//                shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
+//                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
+//
+//                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        2L,
+//                        outboundHeader.getPartnerCode(),
+//                        authTokenForMastersService.getAccess_token());
+//                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
+//
+//                shipmentDeliverySummary.setOrderType(outboundHeader.getReferenceField1());
+//
+//                // Line Ordered
+//                List<Long> countOfOrderedLines = outboundLineService.getCountofOrderedLinesV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Line Shipped
+//                List<Long> deliveryLines = outboundLineService.getDeliveryLinesV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Ordered Qty
+//                List<Long> sumOfOrderedQty = outboundLineService.getSumOfOrderedQtyV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Shipped Qty
+//                List<Long> sumOfDeliveryQtyList = outboundLineService.getDeliveryQtyV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                double pickupLineCount = pickupLineService.getPickupLineCountV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(), outboundHeader.getLanguageId(),
+//                        outboundHeader.getWarehouseId(), outboundHeader.getPreOutboundNo(),
+//                        Arrays.asList(outboundHeader.getRefDocNumber()));
+//
+//                double countOfOrderedLinesvalue = countOfOrderedLines.stream().mapToLong(Long::longValue).sum();
+//                double deliveryLinesCount = deliveryLines.stream().mapToLong(Long::longValue).sum();
+//                double sumOfOrderedQtyValue = sumOfOrderedQty.stream().mapToLong(Long::longValue).sum();
+//                double sumOfDeliveryQty = sumOfDeliveryQtyList.stream().mapToLong(Long::longValue).sum();
+//
+//                sumOfLineItems += countOfOrderedLinesvalue;
+//                shipmentDeliverySummary.setLineOrdered(countOfOrderedLinesvalue);
+//                shipmentDeliverySummary.setLineShipped(deliveryLinesCount);
+//                shipmentDeliverySummary.setOrderedQty(sumOfOrderedQtyValue);
+//                shipmentDeliverySummary.setShippedQty(sumOfDeliveryQty);
+//                shipmentDeliverySummary.setPickedQty(pickupLineCount);
+//
+//                // % Shipped - Divide (Shipped lines/Ordered Lines)*100
+//                double percShipped = Math.round((deliveryLinesCount / countOfOrderedLinesvalue) * 100);
+//                shipmentDeliverySummary.setPercentageShipped(percShipped);
+//                log.info("shipmentDeliverySummary : " + shipmentDeliverySummary);
+//
+//                shipmentDeliverySummaryList.add(shipmentDeliverySummary);
+//            }
+//
+//            // --------------------------------------------------------------------------------------------------------------------------------
+//            /*
+//             * Partner Code : 101, 102, 103, 107, 109, 111, 113 - Normal
+//             */
+//            //List<String> partnerCodes = Arrays.asList("101", "102", "103", "107", "109", "111", "112", "113");
+//            List<SummaryMetrics> summaryMetricsList = new ArrayList<>();
+//            for (String pCode : partnerCodes) {
+//                SummaryMetrics partnerCode_N = getMetricsDetails(languageId, companyCode, plantId, "N", warehouseId, pCode, "N", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
+//                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
+//
+//                if (partnerCode_N != null) {
+//                    summaryMetricsList.add(partnerCode_N);
+//                }
+//
+//                if (partnerCode_S != null) {
+//                    summaryMetricsList.add(partnerCode_S);
+//                }
+//            }
+//
+//            shipmentDeliverySummaryReport.setShipmentDeliverySummary(shipmentDeliverySummaryList);
+//            shipmentDeliverySummaryReport.setSummaryMetrics(summaryMetricsList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return shipmentDeliverySummaryReport;
+//    }
+
     public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
                                                                           List<String> customerCode, String warehouseIds,
                                                                           String companyCodeId, String plantId, String languageId)
@@ -1279,14 +1427,15 @@ public class ReportsService extends BaseService {
 
         try {
             double sumOfLineItems = 0.0;
-            Set<String> partnerCodes = new HashSet<>();
-            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+            Set<Long> outboundOrderTypeIds = new HashSet<>();
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
             for (OutboundHeaderV2 outboundHeader : outboundHeaderList) {
                 languageId = outboundHeader.getLanguageId();
                 companyCode = outboundHeader.getCompanyCodeId();
                 plantId = outboundHeader.getPlantId();
                 warehouseId = outboundHeader.getWarehouseId();
-                partnerCodes.add(outboundHeader.getPartnerCode());
+//                partnerCodes.add(outboundHeader.getPartnerCode());
+                outboundOrderTypeIds.add(outboundHeader.getOutboundOrderTypeId());
 
                 // Report Preparation
                 ShipmentDeliverySummary shipmentDeliverySummary = new ShipmentDeliverySummary();
@@ -1294,15 +1443,17 @@ public class ReportsService extends BaseService {
                 shipmentDeliverySummary.setSo(outboundHeader.getRefDocNumber());                            // SO
                 shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
                 shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
-                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
+//                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setBranchCode(String.valueOf(outboundHeader.getOutboundOrderTypeId()));                    // PARTNER_CODE/PARTNER_NM
 
-                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
-                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
-                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
-                        2L,
-                        outboundHeader.getPartnerCode(),
-                        authTokenForMastersService.getAccess_token());
-                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
+//                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        2L,
+//                        outboundHeader.getPartnerCode(),
+//                        authTokenForMastersService.getAccess_token());
+//                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
+                shipmentDeliverySummary.setBranchDesc(getOutboundOrderTypeDesc(outboundHeader.getOutboundOrderTypeId()));
 
                 shipmentDeliverySummary.setOrderType(outboundHeader.getReferenceField1());
 
@@ -1361,7 +1512,7 @@ public class ReportsService extends BaseService {
              */
             //List<String> partnerCodes = Arrays.asList("101", "102", "103", "107", "109", "111", "112", "113");
             List<SummaryMetrics> summaryMetricsList = new ArrayList<>();
-            for (String pCode : partnerCodes) {
+            for (Long pCode : outboundOrderTypeIds) {
                 SummaryMetrics partnerCode_N = getMetricsDetails(languageId, companyCode, plantId, "N", warehouseId, pCode, "N", fromDeliveryDate_d,
                         toDeliveryDate_d);
                 SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
@@ -1884,12 +2035,13 @@ public class ReportsService extends BaseService {
     }
 
     /**
+     *
      * @param languageId
      * @param companyCode
      * @param plantId
      * @param type
      * @param warehouseId
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @param refField1
      * @param fromDeliveryDate_d
      * @param toDeliveryDate_d
@@ -1898,30 +2050,33 @@ public class ReportsService extends BaseService {
      * @throws Exception
      */
     private SummaryMetrics getMetricsDetails(String languageId, String companyCode, String plantId, String type,
-                                             String warehouseId, String partnerCode, String refField1, Date fromDeliveryDate_d, Date toDeliveryDate_d) throws ParseException, Exception {
+                                             String warehouseId, Long outboundOrderTypeId, String refField1, Date fromDeliveryDate_d, Date toDeliveryDate_d) throws ParseException, Exception {
         List<OutboundHeaderV2> outboundHeaderList = outboundHeaderV2Repository
-                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndPartnerCodeAndDeliveryConfirmedOnBetween(
-                        companyCode, plantId, languageId, warehouseId, 59L, partnerCode, fromDeliveryDate_d, toDeliveryDate_d);
-        log.info("partnerCode--->: " + partnerCode + " refField1:----> : " + refField1 + "--:fromDeliveryDate_d:---> : " + fromDeliveryDate_d
+                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndOutboundOrderTypeIdAndDeliveryConfirmedOnBetween(
+                        companyCode, plantId, languageId, warehouseId, 59L, outboundOrderTypeId, fromDeliveryDate_d, toDeliveryDate_d);
+        log.info("OutboundOrderTypeId--->: " + outboundOrderTypeId + " refField1:----> : " + refField1 + "--:fromDeliveryDate_d:---> : " + fromDeliveryDate_d
                 + " --> toDeliveryDate_d;  " + toDeliveryDate_d);
         log.info("---------------------->outboundHeaderList : " + outboundHeaderList);
 
         List<String> refDocNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1().equalsIgnoreCase(refField1)).map(OutboundHeader::getRefDocNumber)
+                .filter(a -> a.getReferenceField1() != null && a.getReferenceField1().equalsIgnoreCase(refField1)).map(OutboundHeader::getRefDocNumber)
                 .collect(Collectors.toList());
         log.info("refDocNoList : " + refDocNoList);
 
         List<String> preOutboundNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1().equalsIgnoreCase(refField1) &&
-                        a.getPartnerCode().equalsIgnoreCase(partnerCode))
+                .filter(a -> a.getReferenceField1() != null && a.getReferenceField1().equalsIgnoreCase(refField1) &&
+                        a.getOutboundOrderTypeId().equals(outboundOrderTypeId))
                 .map(OutboundHeader::getPreOutboundNo)
                 .collect(Collectors.toList());
         log.info("preOutboundNoList : " + preOutboundNoList);
 
-        List<String> refField1List = outboundHeaderList.stream().map(OutboundHeader::getReferenceField1)
+        List<String> refField1List = outboundHeaderList.stream().filter(a -> a.getReferenceField1() != null).map(OutboundHeader::getReferenceField1)
                 .collect(Collectors.toList());
 
-        Long totalOrdeCount = refField1List.stream().filter(a -> a.equalsIgnoreCase(refField1)).count();
+        Long totalOrdeCount = 0L;
+        if(refField1List != null && !refField1List.isEmpty()) {
+            totalOrdeCount = refField1List.stream().filter(a -> a.equalsIgnoreCase(refField1)).count();
+        }
         log.info("refField1List : " + refField1List + "," + totalOrdeCount);
 
         /*
@@ -1950,20 +2105,20 @@ public class ReportsService extends BaseService {
             double percShipped_N = Math.round((shipped_lines_N / line_item_N) * 100);
 
             // PickupLine Count
-            log.info("---getMetricsDetails--1---pickupLineCount--------> : " + preOutboundNoList + "," + refDocNoList + "," + partnerCode);
-            double pickupLineCount = pickupLineService.getPickupLineCount(languageId, companyCode, plantId, warehouseId,
-                    preOutboundNoList, refDocNoList, partnerCode);
+            log.info("---getMetricsDetails--1---pickupLineCount--------> : " + preOutboundNoList + "," + refDocNoList + "," + outboundOrderTypeId);
+            double pickupLineCount = pickupLineService.getPickupLineCountV2(languageId, companyCode, plantId, warehouseId,
+                    preOutboundNoList, refDocNoList, outboundOrderTypeId);
             log.info("---getMetricsDetails--2--pickupLineCount--------> : " + pickupLineCount);
 
             // SumOfOrderQty by PartnerCode
             Long sumOfOrderQty =
                     outboundLineService.getSumOfOrderedQtyByPartnerCodeV2(companyCode, plantId, languageId,
-                            warehouseId, preOutboundNoList, refDocNoList, partnerCode);
+                            warehouseId, preOutboundNoList, refDocNoList, outboundOrderTypeId);
 
             // SunOfDeliveryQty by PartnerCode
             Long sumOfDeliveryQty =
                     outboundLineService.getDeliveryQtyByPartnerCodeV2(companyCode, plantId, languageId,
-                            warehouseId, preOutboundNoList, refDocNoList, partnerCode);
+                            warehouseId, preOutboundNoList, refDocNoList, outboundOrderTypeId);
 
             // Populate Metrics
             MetricsSummary metricsSummary = new MetricsSummary();
@@ -1976,12 +2131,12 @@ public class ReportsService extends BaseService {
             metricsSummary.setShippedLines(shipped_lines_N);
 
             // Obtain Partner Name
-            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-            BusinessPartnerV2 partner = mastersService.getBusinessPartnerV2(companyCode, plantId, languageId, warehouseId, 2L,
-                    partnerCode, authTokenForMastersService.getAccess_token());
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//            BusinessPartnerV2 partner = mastersService.getBusinessPartnerV2(companyCode, plantId, languageId, warehouseId, 2L,
+//                    partnerCode, authTokenForMastersService.getAccess_token());
 
             SummaryMetrics summaryMetrics = new SummaryMetrics();
-            summaryMetrics.setPartnerCode(partnerCode + "-" + partner.getPartnerName());
+            summaryMetrics.setPartnerCode(outboundOrderTypeId + "-" + getOutboundOrderTypeDesc(outboundOrderTypeId));
             summaryMetrics.setType(type);
             summaryMetrics.setMetricsSummary(metricsSummary);
             return summaryMetrics;

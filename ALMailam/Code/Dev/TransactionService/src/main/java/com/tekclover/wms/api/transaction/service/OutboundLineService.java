@@ -2222,15 +2222,19 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @return
      */
     public Long getSumOfOrderedQtyByPartnerCodeV2(String companyCodeId, String plantId, String languageId,
-                                                  String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, String partnerCode) {
-        Long sumOfOrderedQty = outboundLineV2Repository.getSumOfOrderedQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode);
+                                                  String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, Long outboundOrderTypeId) {
+        Long sumOfOrderedQty = outboundLineV2Repository.getSumOfOrderedQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, outboundOrderTypeId);
         return sumOfOrderedQty;
     }
 
@@ -2259,16 +2263,20 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @return
      */
     public Long getDeliveryQtyByPartnerCodeV2(String companyCodeId, String plantId, String languageId,
-                                              String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, String partnerCode) {
+                                              String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, Long outboundOrderTypeId) {
         Long deliveryQty = outboundLineV2Repository.getDeliveryQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId,
-                preOutboundNo, refDocNumber, partnerCode);
+                preOutboundNo, refDocNumber, outboundOrderTypeId);
         return deliveryQty;
     }
 
@@ -2524,12 +2532,22 @@ public class OutboundLineService extends BaseService {
             if (searchOutboundLine.getPartnerCode() == null || searchOutboundLine.getPartnerCode().isEmpty()) {
                 searchOutboundLine.setPartnerCode(null);
             }
+            if (searchOutboundLine.getSalesOrderNumber() == null || searchOutboundLine.getSalesOrderNumber().isEmpty()) {
+                searchOutboundLine.setSalesOrderNumber(null);
+            }
+            if (searchOutboundLine.getTargetBranchCode() == null || searchOutboundLine.getTargetBranchCode().isEmpty()) {
+                searchOutboundLine.setTargetBranchCode(null);
+            }
+            if (searchOutboundLine.getManufacturerName() == null || searchOutboundLine.getManufacturerName().isEmpty()) {
+                searchOutboundLine.setManufacturerName(null);
+            }
 
             List<OutboundLineOutput> outboundLineSearchResults = outboundLineV2Repository.findOutboundLineNew(
                     searchOutboundLine.getCompanyCodeId(), searchOutboundLine.getLanguageId(),
                     searchOutboundLine.getPlantId(), searchOutboundLine.getWarehouseId(),
                     searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate(), searchOutboundLine.getPreOutboundNo(),
                     searchOutboundLine.getRefDocNumber(), searchOutboundLine.getLineNumber(), searchOutboundLine.getItemCode(),
+                    searchOutboundLine.getSalesOrderNumber(), searchOutboundLine.getTargetBranchCode(), searchOutboundLine.getManufacturerName(),
                     searchOutboundLine.getStatusId(), searchOutboundLine.getOrderType(), searchOutboundLine.getPartnerCode());
 
             return outboundLineSearchResults;
@@ -3433,11 +3451,15 @@ public class OutboundLineService extends BaseService {
                 searchOutboundLine.setFromDeliveryDate(dates[0]);
                 searchOutboundLine.setToDeliveryDate(dates[1]);
             }
+            if(searchOutboundLine.getManufacturerName() == null || searchOutboundLine.getManufacturerName().isEmpty()){
+                searchOutboundLine.setManufacturerName(null);
+            }
 
             log.info("searchOutboundLine.getWarehouseId() :  " + searchOutboundLine.getWarehouseId());
             List<StockMovementReportImpl> allLineData = new ArrayList<>();
             List<StockMovementReportImpl> outboundLineSearchResults =
                     pickupLineV2Repository.findPickupLineForStockMovement(searchOutboundLine.getItemCode(),
+                            searchOutboundLine.getManufacturerName(),
                             searchOutboundLine.getWarehouseId(),
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),
@@ -3446,6 +3468,7 @@ public class OutboundLineService extends BaseService {
 
             List<StockMovementReportImpl> inboundLineSearchResults =
                     inboundLineV2Repository.findInboundLineForStockMovement(searchOutboundLine.getItemCode(),
+                            searchOutboundLine.getManufacturerName(),
                             searchOutboundLine.getWarehouseId(),
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),

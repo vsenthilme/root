@@ -13,5 +13,7 @@ public class SearchOutboundLineV2 extends SearchOutboundLine {
 	private List<String> languageId;
 	private List<String> companyCodeId;
 	private List<String> plantId;
-
+	private List<String> manufacturerName;
+	private List<String> targetBranchCode;
+	private List<String> salesOrderNumber;
 }

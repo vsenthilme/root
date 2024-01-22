@@ -1033,7 +1033,7 @@ public class PutAwayLineService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public List<PutAwayLineV2> putAwayLineConfirmV2(@Valid List<PutAwayLineV2> newPutAwayLines, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, ParseException {
         List<PutAwayLineV2> createdPutAwayLines = new ArrayList<>();

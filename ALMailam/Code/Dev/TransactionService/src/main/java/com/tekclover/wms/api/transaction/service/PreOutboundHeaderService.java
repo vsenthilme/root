@@ -1308,7 +1308,7 @@ public class PreOutboundHeaderService extends BaseService {
     /*
      * Process the PreoutboundIntegraion data
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public OutboundHeaderV2 processOutboundReceivedV2(OutboundIntegrationHeaderV2 outboundIntegrationHeader)
             throws IllegalAccessException, InvocationTargetException, BadRequestException, Exception {
         /*

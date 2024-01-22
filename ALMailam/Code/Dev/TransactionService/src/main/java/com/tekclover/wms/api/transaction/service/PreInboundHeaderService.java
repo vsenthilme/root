@@ -1422,7 +1422,7 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public InboundHeaderV2 processInboundReceivedV2(String refDocNumber, InboundIntegrationHeader inboundIntegrationHeader)
             throws IllegalAccessException, InvocationTargetException, BadRequestException, Exception {
         /*

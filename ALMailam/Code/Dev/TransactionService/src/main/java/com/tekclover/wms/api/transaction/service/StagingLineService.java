@@ -1024,6 +1024,7 @@ public class StagingLineService extends BaseService {
                 dbStagingLineEntity.setBranchCode(newStagingLine.getBranchCode());
                 dbStagingLineEntity.setTransferOrderNo(newStagingLine.getTransferOrderNo());
                 dbStagingLineEntity.setIsCompleted(newStagingLine.getIsCompleted());
+                dbStagingLineEntity.setBusinessPartnerCode(newStagingLine.getBusinessPartnerCode());
 
                 dbStagingLineEntity.setDeletionIndicator(0L);
                 dbStagingLineEntity.setCreatedBy(loginUserID);
@@ -1051,7 +1052,7 @@ public class StagingLineService extends BaseService {
                 caseConfirmation.setCaseCode(caseCode);
                 caseConfirmation.setLineNo(dbStagingLineEntity.getLineNo());
                 caseConfirmation.setItemCode(dbStagingLineEntity.getItemCode());
-                caseConfirmation.setManufactureCode(dbStagingLineEntity.getManufacturerCode());
+                caseConfirmation.setManufactureCode(manufactureCode);
                 caseConfirmationList.add(caseConfirmation);
             }
         }

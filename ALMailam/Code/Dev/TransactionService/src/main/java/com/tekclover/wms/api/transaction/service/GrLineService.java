@@ -3208,6 +3208,9 @@ public class GrLineService extends BaseService {
                 }
                 inventory.setReferenceField4(totalQty);
                 log.info("Total Inventory Qty : " + totalQty);
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
                 inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
                 inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
                 inventory.setCreatedOn(dbInventory.getCreatedOn());
@@ -3234,6 +3237,10 @@ public class GrLineService extends BaseService {
                 inventory.setDeletionIndicator(0L);
                 inventory.setManufacturerCode(createdGRLine.getManufacturerName());
                 inventory.setManufacturerName(createdGRLine.getManufacturerName());
+
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
 
                 // ST_BIN ---Pass WH_ID/BIN_CL_ID=3 in STORAGEBIN table and fetch ST_BIN value and update
                 AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();

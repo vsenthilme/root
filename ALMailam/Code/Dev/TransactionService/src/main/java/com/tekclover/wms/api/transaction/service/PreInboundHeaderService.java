@@ -1682,6 +1682,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setBranchCode(inboundIntegrationLine.getBranchCode());
         preInboundLine.setTransferOrderNo(inboundIntegrationLine.getTransferOrderNo());
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getManufacturerName());
 
         // REF_FIELD_1
         preInboundLine.setReferenceField1("CHILD ITEM");
@@ -1744,7 +1745,8 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());
 
         // PARTNER_CODE
-        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
+//        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getManufacturerName());
 
         // ORD_QTY
         preInboundLine.setOrderQty(inboundIntegrationLine.getOrderedQty());
@@ -1936,7 +1938,7 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
             inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
-            inboundLine.setVendorCode(createdPreInboundLine.getPartnerItemNo());
+            inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setManufacturerPartNo(createdPreInboundLine.getManufacturerPartNo());
 
             inboundLine.setBranchCode(createdPreInboundLine.getBranchCode());

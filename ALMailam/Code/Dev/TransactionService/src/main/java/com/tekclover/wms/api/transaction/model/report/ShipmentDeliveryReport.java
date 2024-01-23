@@ -16,6 +16,7 @@ public class ShipmentDeliveryReport {
 	private String commodity;
 	private String description;
 	private String manfCode;
+	private String targetBranch;
 	private Double quantity;
 	private Double total;
 }

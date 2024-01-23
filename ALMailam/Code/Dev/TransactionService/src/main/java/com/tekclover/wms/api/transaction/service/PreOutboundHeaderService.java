@@ -1882,6 +1882,37 @@ public class PreOutboundHeaderService extends BaseService {
                                 }
                             }
 
+//                            outerLoop1:
+//                                for (String hhtUser : hhtUserList) {
+//                                    List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                    log.info("pickUpHeader: " + pickupHeaderList);
+//                                    if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+//                                        assignPickerList.add(hhtUser);
+//                                        assignPickerListCount = assignPickerList.stream().count();
+//                                        log.info("assignPickerListCount: " + assignPickerListCount);
+//                                        if(assignPickerListCount > 0) {
+//                                            break outerLoop1;
+//                                        }
+//                                    }
+//                                    if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+//                                        List<PickupLineV2> pickerPickupLineList = pickupLineService.getPickupLineAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                        log.info("Pickupline for Current Date: " + pickerPickupLineList);
+//                                    if(pickerPickupLineList != null && !pickerPickupLineList.isEmpty()) {
+//                                        List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                        log.info("PickupHeaderV for Current Date: " + pickerPickupHeaderList);
+//                                        if(pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty()) {
+//                                            assignPickerList.add(hhtUser);
+//                                            assignPickerListCount = assignPickerList.stream().count();
+//                                            if(assignPickerListCount > 0) {
+//                                                break outerLoop1;
+//                                            }
+//                                        }
+//                                    }
+//                                        List<PickupHeaderV2> pickupHeaderLis = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                    }
+//                                }
+
+
                             if (LEVEL_ID == 0) {
                                 assignPickerId = assignPickerList.get(0);
                                 log.info("Level 0 picker");

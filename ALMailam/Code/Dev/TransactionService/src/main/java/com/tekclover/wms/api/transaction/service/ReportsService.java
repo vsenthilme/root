@@ -1248,7 +1248,7 @@ public class ReportsService extends BaseService {
                 ShipmentDeliveryReport shipmentDelivery = new ShipmentDeliveryReport();
                 shipmentDelivery.setDeliveryDate(outboundLine.getDeliveryConfirmedOn());
                 shipmentDelivery.setDeliveryTo(outboundLine.getPartnerCode());
-                shipmentDelivery.setOrderType(outboundLine.getReferenceField1());
+                shipmentDelivery.setOrderType(getOutboundOrderTypeDesc(outboundLine.getOutboundOrderTypeId()));
                 shipmentDelivery.setCustomerRef(outboundLine.getRefDocNumber()); // REF_DOC_NO
                 shipmentDelivery.setCommodity(outboundLine.getItemCode());
                 shipmentDelivery.setDescription(outboundLine.getDescription());
@@ -1257,7 +1257,8 @@ public class ReportsService extends BaseService {
                 // Obtain Partner Name
 //                BusinessPartner partner = mastersService.getBusinessPartner(outboundLine.getPartnerCode(),
 //                        authTokenForMastersService.getAccess_token());
-//                shipmentDelivery.setPartnerName(partner.getPartnerName());
+                shipmentDelivery.setPartnerName(outboundLine.getCustomerId() +" - " + outboundLine.getCustomerName());
+                shipmentDelivery.setTargetBranch(outboundLine.getTargetBranchCode());
 
                 /*
                  * MFR_PART
@@ -1494,7 +1495,7 @@ public class ReportsService extends BaseService {
                 shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
                 shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
 //                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
-                shipmentDeliverySummary.setBranchCode(outboundHeader.getFromBranchCode());                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setBranchCode(outboundHeader.getPlantId());                    // PARTNER_CODE/PARTNER_NM
                 shipmentDeliverySummary.setOrderType(String.valueOf(outboundHeader.getOutboundOrderTypeId()));
 
                 shipmentDeliverySummary.setBranchDesc(getOutboundOrderTypeDesc(outboundHeader.getOutboundOrderTypeId()));

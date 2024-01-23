@@ -1287,6 +1287,31 @@ public class PickupLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param assignedPickerId
+     * @return
+     * @throws java.text.ParseException
+     */
+    public List<PickupLineV2> getPickupLineAutomateCurrentDate(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                               String assignedPickerId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        List<PickupLineV2> pickupLine = pickupLineV2Repository
+                .findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndAssignedPickerIdAndDeletionIndicatorAndPickupConfirmedOnBetweenOrderByPickupConfirmedOn(
+                        companyCodeId, plantId, languageId, warehouseId, 50L, assignedPickerId, 0L, dates[0], dates[1]);
+        if (pickupLine != null && !pickupLine.isEmpty()) {
+            return pickupLine;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * @param companyCodeId
      * @param plantId
      * @param languageId

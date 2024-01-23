@@ -716,6 +716,25 @@ public class PickupHeaderService {
      * @param plantId
      * @param languageId
      * @param warehouseId
+     * @param assignedPickerId
+     * @return
+     */
+//    public List<PickupHeaderV2> getPickupHeaderAutomateCurrentDate(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId) throws java.text.ParseException {
+//
+//        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+//
+//        List<PickupHeaderV2> header =
+//                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+//                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, dates[0], dates[1], 0L);
+//        return header;
+//    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
      * @param itemCode
      * @param manufacturerName
      * @return

@@ -241,6 +241,8 @@ public class ConnectorService {
         }
     }
 
+
+
     // Find ShipmentOrder
     public TransferOutHeader[] findShipmentOrder(FindTransferOutHeader findTransferOutHeader, String authToken) {
         try {
@@ -335,5 +337,214 @@ public class ConnectorService {
             throw e;
         }
     }
+
+    //==================================LINE===========================================================================================================================================
+
+
+    // Find InterWarehouseTransferOutLine
+    public TransferOutLine[] findInterWarehouseTransferOutLine(FindTransferOutLine findTransferOutLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/interwarehousetransferoutv2/findInterWarehouseTransferOutLine");
+            HttpEntity<?> entity = new HttpEntity<>(findTransferOutLine, headers);
+            ResponseEntity<TransferOutLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, TransferOutLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+//Find ShipmentOrderLine
+    public TransferOutLine[] findShipmentOrderLine(FindTransferOutLine findTransferOutLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/shipmentorderv2/findShipmentOrderLine");
+            HttpEntity<?> entity = new HttpEntity<>(findTransferOutLine, headers);
+            ResponseEntity<TransferOutLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, TransferOutLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    public TransferInLine[] findInterWareHouseTransferInLine(SearchTransferInLine searchTransferInLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/interwarehousetransferinv2/findInterWareHouseTransferInLine");
+            HttpEntity<?> entity = new HttpEntity<>(searchTransferInLine, headers);
+            ResponseEntity<TransferInLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, TransferInLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public TransferInLine[] findB2BTransferInLine(SearchTransferInLine searchTransferInLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/b2btransferin/findB2BTransferInLine");
+            HttpEntity<?> entity = new HttpEntity<>(searchTransferInLine, headers);
+            ResponseEntity<TransferInLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, TransferInLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public SupplierInvoiceLine[] findSupplierInvoiceLine(SearchSupplierInvoiceLine searchSupplierInvoiceLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/supplierinvoice/findSupplierInvoiceLine");
+            HttpEntity<?> entity = new HttpEntity<>(searchSupplierInvoiceLine, headers);
+            ResponseEntity<SupplierInvoiceLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, SupplierInvoiceLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public StockReceiptLine[] findStockReceiptLine(SearchStockReceiptLine searchStockReceiptLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/stockreceipt/findStockReceiptLine");
+            HttpEntity<?> entity = new HttpEntity<>(searchStockReceiptLine, headers);
+            ResponseEntity<StockReceiptLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, StockReceiptLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public SalesReturnLine[] findSalesReturnLine(FindSalesReturnLine findSalesReturnLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/salesReturn/findsalesreturnline");
+            HttpEntity<?> entity = new HttpEntity<>(findSalesReturnLine, headers);
+            ResponseEntity<SalesReturnLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, SalesReturnLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public PurchaseReturnLine[] findPurchaseReturnLine(FindPurchaseReturnLine findPurchaseReturnLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/returnpov2/findPurchaseReturnLine");
+            HttpEntity<?> entity = new HttpEntity<>(findPurchaseReturnLine, headers);
+            ResponseEntity<PurchaseReturnLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PurchaseReturnLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public PickListLine[] findPickListLine(FindPickListLine findPickListLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/salesorderv2/findPickListLine");
+            HttpEntity<?> entity = new HttpEntity<>(findPickListLine, headers);
+            ResponseEntity<PickListLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PickListLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public PeriodicLine[] findPeriodicLine(FindPeriodicLine findPeriodicLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/periodic/findPeriodicLine");
+            HttpEntity<?> entity = new HttpEntity<>(findPeriodicLine, headers);
+            ResponseEntity<PeriodicLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PeriodicLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public PerpetualLine[] findPerpetualLine(FindPerpetualLine findPerpetualLine, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getConnectorServiceApiUrl() + "/perpetual/findPerpetualLine");
+            HttpEntity<?> entity = new HttpEntity<>(findPerpetualLine, headers);
+            ResponseEntity<PerpetualLine[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PerpetualLine[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+
+
 
 }

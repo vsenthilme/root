@@ -166,4 +166,91 @@ public class ConnectorServiceController {
         return new ResponseEntity<>(periodicHeader, HttpStatus.OK);
     }
 
+    //Find InterWarehouseTransferOutLine
+    @ApiOperation(response = TransferOutLine[].class, value = "Find InterWarehouseTransferOutLine") //label for swagger
+    @PostMapping("/findInterWarehouseTransferOutLine")
+    public ResponseEntity<?> searchInterWarehouseTransferOutLine(@RequestBody FindTransferOutLine findTransferOutLine,
+                                                 @RequestParam String authToken) {
+        TransferOutLine[] interWarehouseTransferOutLines = connectorService.findInterWarehouseTransferOutLine(findTransferOutLine, authToken);
+        return new ResponseEntity<>(interWarehouseTransferOutLines, HttpStatus.OK);
+    }
+
+
+    @ApiOperation(response = TransferOutLine[].class, value = "Find ShipmentOrderLine") //label for swagger
+    @PostMapping("/findShipmentOrderLine")
+    public ResponseEntity<?> searchShipmentOrderLine(@RequestBody FindTransferOutLine findTransferOutLine,
+                                                                 @RequestParam String authToken) {
+        TransferOutLine[] ShipmentOrderLines = connectorService.findShipmentOrderLine(findTransferOutLine, authToken);
+        return new ResponseEntity<>(ShipmentOrderLines, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = TransferInLine[].class, value = "Find InterWareHouseTransferInLine")//label for swagger
+    @PostMapping("/findInterWareHouseTransferInLine")
+    public ResponseEntity<?> findInterWareHouseTransferInLine(@RequestBody SearchTransferInLine searchTransferInLine
+            , @RequestParam String authToken) {
+        TransferInLine[] transferInLine = connectorService.findInterWareHouseTransferInLine(searchTransferInLine, authToken);
+        return new ResponseEntity<>(transferInLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = TransferInLine[].class, value = "Find B2BTransferInLine")//label for swagger
+    @PostMapping("/findB2BTransferInLine")
+    public ResponseEntity<?> findB2BTransferInLine(@RequestBody SearchTransferInLine searchTransferInLine
+            , @RequestParam String authToken) {
+        TransferInLine[] transferInLine = connectorService.findInterWareHouseTransferInLine(searchTransferInLine, authToken);
+        return new ResponseEntity<>(transferInLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = SupplierInvoiceLine[].class, value = "Find SupplierInvoiceLine")//label for swagger
+    @PostMapping("/findSupplierInvoiceLine")
+    public ResponseEntity<?> findSupplierInvoiceLine(@RequestBody SearchSupplierInvoiceLine searchSupplierInvoiceLine
+            , @RequestParam String authToken) {
+        SupplierInvoiceLine[] supplierInvoiceLine = connectorService.findSupplierInvoiceLine(searchSupplierInvoiceLine, authToken);
+        return new ResponseEntity<>(supplierInvoiceLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StockReceiptLine[].class, value = "Find StockReceiptLine")//label for swagger
+    @PostMapping("/findStockReceiptLine")
+    public ResponseEntity<?> findStockReceiptLine(@RequestBody SearchStockReceiptLine searchStockReceiptLine
+            , @RequestParam String authToken) {
+        StockReceiptLine[] stockReceiptLine = connectorService.findStockReceiptLine(searchStockReceiptLine, authToken);
+        return new ResponseEntity<>(stockReceiptLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = SalesReturnLine[].class, value = "Find SalesReturnLine")//label for swagger
+    @PostMapping("/findSalesReturnLine")
+    public ResponseEntity<?> findSalesReturnLine(@RequestBody FindSalesReturnLine findSalesReturnLine
+            , @RequestParam String authToken) {
+        SalesReturnLine[] salesReturnLine = connectorService.findSalesReturnLine(findSalesReturnLine, authToken);
+        return new ResponseEntity<>(salesReturnLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PurchaseReturnLine[].class, value = "Find PurchaseReturnLine")//label for swagger
+    @PostMapping("/findPurchaseReturnLine")
+    public ResponseEntity<?> findPurchaseReturnLine(@RequestBody FindPurchaseReturnLine findPurchaseReturnLine
+            , @RequestParam String authToken) {
+        PurchaseReturnLine[] purchaseReturnLine = connectorService.findPurchaseReturnLine(findPurchaseReturnLine, authToken);
+        return new ResponseEntity<>(purchaseReturnLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PickListLine[].class, value = "Find PickListLine")//label for swagger
+    @PostMapping("/findPickListLine")
+    public ResponseEntity<?> findPickListLine(@RequestBody FindPickListLine findPickListLine
+            , @RequestParam String authToken) {
+        PickListLine[] pickListLine = connectorService.findPickListLine(findPickListLine, authToken);
+        return new ResponseEntity<>(pickListLine, HttpStatus.OK);
+    }
+    @ApiOperation(response = PeriodicLine[].class, value = "Find PeriodicLine")//label for swagger
+    @PostMapping("/findPeriodicLine")
+    public ResponseEntity<?> findPeriodicLine(@RequestBody FindPeriodicLine findPeriodicLine
+            , @RequestParam String authToken) {
+        PeriodicLine[] periodicLine = connectorService.findPeriodicLine(findPeriodicLine, authToken);
+        return new ResponseEntity<>(periodicLine, HttpStatus.OK);
+    }
+    @ApiOperation(response = PerpetualLine[].class, value = "Find PerpetualLine")//label for swagger
+    @PostMapping("/findPerpetualLine")
+    public ResponseEntity<?> findPerpetualLine(@RequestBody FindPerpetualLine findPerpetualLine
+            , @RequestParam String authToken) {
+        PerpetualLine[] perpetualLine = connectorService.findPerpetualLine(findPerpetualLine, authToken);
+        return new ResponseEntity<>(perpetualLine, HttpStatus.OK);
+    }
 }

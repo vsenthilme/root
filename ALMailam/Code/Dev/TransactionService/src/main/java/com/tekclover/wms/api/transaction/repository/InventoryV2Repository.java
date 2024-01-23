@@ -1748,6 +1748,144 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             @Param(value = "manufacturerName") List<String> manufacturerName,
             @Param(value = "stockTypeText") String stockTypeText);
 
+    //Stock Report New
+    @Query(value =
+            "create table #stockreport \n" +
+            "(C_ID NVARCHAR(10), \n" +
+            "PLANT_ID NVARCHAR(10), \n" +
+            "LANG_ID NVARCHAR(10), \n" +
+            "WH_ID NVARCHAR(10), \n" +
+            "ITM_CODE NVARCHAR(200), \n" +
+            "MFR_NAME NVARCHAR(100), \n" +
+            "TEXT NVARCHAR(255), \n" +
+            "INV_QTY FLOAT, \n" +
+            "DMG_QTY FLOAT, \n" +
+            "C_TEXT NVARCHAR(50), \n" +
+            "PLANT_TEXT NVARCHAR(50), \n" +
+            "WH_TEXT NVARCHAR(50), \n" +
+            "BAR_CODE NVARCHAR(100), \n" +
+            "PRIMARY KEY (C_ID,PLANT_ID,LANG_ID,WH_ID,ITM_CODE,MFR_NAME)); \n" +
+
+            //itemCode and Description from imbasicData1 to temp table
+            "INSERT INTO #stockreport(C_ID,PLANT_ID,WH_ID,LANG_ID,ITM_CODE,TEXT,MFR_NAME) \n" +
+            "SELECT C_ID,PLANT_ID,WH_ID,LANG_ID,ITM_CODE,TEXT,MFR_PART FROM TBLIMBASICDATA1 \n" +
+            "WHERE \n" +
+            "IS_DELETED = 0 AND \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and\n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and\n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and\n" +
+            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and\n" +
+            "(COALESCE(:itemCode, null) IS NULL OR (itm_code IN (:itemCode))) and\n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (mfr_part IN (:manufacturerName))) and\n" +
+            "(COALESCE(:itemText, null) IS NULL OR (text IN (:itemText))) \n" +
+
+            // company Description from tblCompanyId to temp table
+            "UPDATE TH SET TH.C_TEXT = X.VALUE FROM #stockreport TH INNER JOIN \n" +
+            "(SELECT C_ID,LANG_ID,C_TEXT VALUE FROM TBLCOMPANYID \n" +
+            "WHERE \n" +
+            "IS_DELETED = 0 AND \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) \n" +
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.LANG_ID = TH.LANG_ID \n" +
+
+            // plant Description from tblplantId to temp table
+            "UPDATE TH SET TH.PLANT_TEXT = X.VALUE FROM #stockreport TH INNER JOIN \n" +
+            "(SELECT C_ID,PLANT_ID,LANG_ID,PLANT_TEXT VALUE FROM TBLPLANTID \n" +
+            "WHERE \n" +
+            "IS_DELETED = 0 AND \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) \n" +
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.LANG_ID = TH.LANG_ID \n" +
+
+            // warehouse Description from tblwarehouseId to temp table
+            "UPDATE TH SET TH.WH_TEXT = X.VALUE FROM #stockreport TH INNER JOIN \n" +
+            "(SELECT C_ID,PLANT_ID,LANG_ID,WH_ID,WH_TEXT VALUE FROM TBLWAREHOUSEID \n" +
+            "WHERE \n" +
+            "IS_DELETED = 0 AND \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
+            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) \n" +
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.WH_ID = TH.WH_ID AND X.LANG_ID = TH.LANG_ID \n" +
+
+            // Barcode from tblimpartner to temp table
+            "UPDATE TH SET TH.BAR_CODE = X.VALUE FROM #stockreport TH INNER JOIN \n" +
+            "(SELECT C_ID,PLANT_ID,LANG_ID,WH_ID,ITM_CODE,MFR_NAME,PARTNER_ITM_BAR VALUE FROM TBLIMPARTNER \n" +
+            "WHERE \n" +
+            "IS_DELETED = 0 AND \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
+            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
+            "(COALESCE(:itemCode, null) IS NULL OR (itm_code IN (:itemCode))) and \n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (mfr_name IN (:manufacturerName))) \n" +
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.WH_ID = TH.WH_ID AND X.LANG_ID = TH.LANG_ID AND \n" +
+            "X.ITM_CODE = TH.ITM_CODE AND X.MFR_NAME = TH.MFR_NAME \n" +
+
+            "select max(inv_id) inventoryId into #inv from tblinventory \n" +
+            "WHERE \n" +
+            "(COALESCE(:itemCode, null) IS NULL OR (ITM_CODE IN (:itemCode))) and \n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (MFR_NAME IN (:manufacturerName))) and \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
+            "is_deleted = 0 \n" +
+            "group by itm_code,mfr_name \n" +
+
+            // inv_qty from tblinventory to temp table
+            "UPDATE TH SET TH.INV_QTY = X.INV_QTY FROM #stockreport TH INNER JOIN \n" +
+            "(select c_id, plant_id, lang_id, wh_id, itm_code, mfr_name, ref_field_4 INV_QTY \n"+
+            "from tblinventory \r\n"+
+            "where stck_typ_id = 1 and bin_cl_id = 1 and IS_DELETED = 0 and :stockTypeText in ('ALL','ONHAND') \r\n"+
+            "and inv_id in (select inventoryId from #inv) \r\n"+
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.WH_ID = TH.WH_ID AND X.LANG_ID = TH.LANG_ID AND \n" +
+            "X.ITM_CODE = TH.ITM_CODE AND X.MFR_NAME = TH.MFR_NAME \n" +
+
+            // dmg_qty from tblinventory to temp table
+            "UPDATE TH SET TH.DMG_QTY = X.DMG_QTY FROM #stockreport TH INNER JOIN \n" +
+            "(select c_id, plant_id, lang_id, wh_id, itm_code, mfr_name, ref_field_4 DMG_QTY \n"+
+            "from tblinventory \r\n"+
+            "where bin_cl_id = 7 and IS_DELETED = 0 and :stockTypeText in ('ALL','DAMAGED')\r\n"+
+            "and inv_id in (select inventoryId from #inv) \r\n"+
+            ") X ON \n" +
+            "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.WH_ID = TH.WH_ID AND X.LANG_ID = TH.LANG_ID AND \n" +
+            "X.ITM_CODE = TH.ITM_CODE AND X.MFR_NAME = TH.MFR_NAME \n" +
+
+            "select \n" +
+            "C_ID companyCodeId, \n" +
+            "PLANT_ID plantId, \n" +
+            "LANG_ID languageId, \n" +
+            "WH_ID warehouseId, \n" +
+            "ITM_CODE itemCode, \n" +
+            "MFR_NAME manufacturerName, \n" +
+            "MFR_NAME manufacturerSKU, \n" +
+            "TEXT itemText, \n" +
+            "COALESCE(INV_QTY,0) onHandQty, \n" +
+            "COALESCE(DMG_QTY,0) damageQty, \n" +
+            "COALESCE(INV_QTY,0)+COALESCE(DMG_QTY,0) availableQty, \n" +
+            "C_TEXT companyDescription, \n" +
+            "PLANT_TEXT plantDescription, \n" +
+            "WH_TEXT warehouseDescription, \n" +
+            "BAR_CODE barcodeId \n" +
+            "from  \n" +
+            "#stockreport ", nativeQuery = true)
+    List<StockReportImpl> stockReportNew(
+            @Param(value = "languageId") List<String> languageId,
+            @Param(value = "companyCodeId") List<String> companyCodeId,
+            @Param(value = "plantId") List<String> plantId,
+            @Param(value = "warehouseId") List<String> warehouseId,
+            @Param(value = "itemCode") List<String> itemCode,
+            @Param(value = "itemText") List<String> itemText,
+            @Param(value = "manufacturerName") List<String> manufacturerName,
+            @Param(value = "stockTypeText") String stockTypeText);
+
     InventoryV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPackBarcodesAndItemCodeAndManufacturerNameAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicatorOrderByInventoryIdDesc(
             String companyCodeId, String plantId, String languageId, String warehouseId, String packBarcodes,
             String itemCode, String manufacturerName, String storageBin, Long stockTypeId, Long specialStockIndicatorId, Long deletionIndicator);

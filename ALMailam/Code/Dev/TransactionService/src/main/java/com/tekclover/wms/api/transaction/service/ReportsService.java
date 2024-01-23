@@ -395,6 +395,57 @@ public class ReportsService extends BaseService {
     }
 
     /**
+     *
+     * @param searchStockReport
+     * @return
+     */
+    public List<StockReportImpl> stockReport(SearchStockReport searchStockReport) {
+
+        if (searchStockReport.getCompanyCodeId() == null || searchStockReport.getCompanyCodeId().isEmpty()) {
+            searchStockReport.setCompanyCodeId(null);
+        }
+
+        if (searchStockReport.getPlantId() == null || searchStockReport.getPlantId().isEmpty()) {
+            searchStockReport.setPlantId(null);
+        }
+
+        if (searchStockReport.getLanguageId() == null || searchStockReport.getLanguageId().isEmpty()) {
+            searchStockReport.setLanguageId(null);
+        }
+
+        if (searchStockReport.getWarehouseId() == null || searchStockReport.getWarehouseId().isEmpty()) {
+            searchStockReport.setWarehouseId(null);
+        }
+
+        if (searchStockReport.getStockTypeText() == null) {
+            throw new BadRequestException("StockTypeText can't be blank.");
+        }
+
+        if (searchStockReport.getItemCode() == null || searchStockReport.getItemCode().isEmpty()) {
+            searchStockReport.setItemCode(null);
+        }
+        if (searchStockReport.getManufacturerName() == null || searchStockReport.getManufacturerName().isEmpty()) {
+            searchStockReport.setManufacturerName(null);
+        }
+
+        if (searchStockReport.getItemText() == null || searchStockReport.getItemText().isEmpty()) {
+            searchStockReport.setItemText(null);
+        }
+
+        List<StockReportImpl> reportList = inventoryV2Repository.stockReportNew(
+                searchStockReport.getLanguageId(),
+                searchStockReport.getCompanyCodeId(),
+                searchStockReport.getPlantId(),
+                searchStockReport.getWarehouseId(),
+                searchStockReport.getItemCode(),
+                searchStockReport.getItemText(),
+                searchStockReport.getManufacturerName(),
+                searchStockReport.getStockTypeText());
+
+        return reportList;
+    }
+
+    /**
      * Inventory Report -------------------------
      *
      * @param warehouseId
@@ -1387,8 +1438,7 @@ public class ReportsService extends BaseService {
 
     public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
                                                                           List<String> customerCode, String warehouseIds,
-                                                                          String companyCodeId, String plantId, String languageId)
-            throws ParseException, java.text.ParseException {
+                                                                          String companyCodeId, String plantId, String languageId) {
         /*
          * Pass the Input Parameters in Outbound Line table (From and TO date in
          * DLV_CNF_ON fields) and fetch the below Fields, If Customer Code is Selected
@@ -1444,18 +1494,10 @@ public class ReportsService extends BaseService {
                 shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
                 shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
 //                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
-                shipmentDeliverySummary.setBranchCode(String.valueOf(outboundHeader.getOutboundOrderTypeId()));                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setBranchCode(outboundHeader.getFromBranchCode());                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setOrderType(String.valueOf(outboundHeader.getOutboundOrderTypeId()));
 
-//                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
-//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
-//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
-//                        2L,
-//                        outboundHeader.getPartnerCode(),
-//                        authTokenForMastersService.getAccess_token());
-//                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
                 shipmentDeliverySummary.setBranchDesc(getOutboundOrderTypeDesc(outboundHeader.getOutboundOrderTypeId()));
-
-                shipmentDeliverySummary.setOrderType(outboundHeader.getReferenceField1());
 
                 // Line Ordered
                 List<Long> countOfOrderedLines = outboundLineService.getCountofOrderedLinesV2(
@@ -1515,16 +1557,16 @@ public class ReportsService extends BaseService {
             for (Long pCode : outboundOrderTypeIds) {
                 SummaryMetrics partnerCode_N = getMetricsDetails(languageId, companyCode, plantId, "N", warehouseId, pCode, "N", fromDeliveryDate_d,
                         toDeliveryDate_d);
-                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
-                        toDeliveryDate_d);
+//                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
 
                 if (partnerCode_N != null) {
                     summaryMetricsList.add(partnerCode_N);
                 }
 
-                if (partnerCode_S != null) {
-                    summaryMetricsList.add(partnerCode_S);
-                }
+//                if (partnerCode_S != null) {
+//                    summaryMetricsList.add(partnerCode_S);
+//                }
             }
 
             shipmentDeliverySummaryReport.setShipmentDeliverySummary(shipmentDeliverySummaryList);
@@ -2058,26 +2100,21 @@ public class ReportsService extends BaseService {
                 + " --> toDeliveryDate_d;  " + toDeliveryDate_d);
         log.info("---------------------->outboundHeaderList : " + outboundHeaderList);
 
-        List<String> refDocNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1() != null && a.getReferenceField1().equalsIgnoreCase(refField1)).map(OutboundHeader::getRefDocNumber)
-                .collect(Collectors.toList());
+        List<String> refDocNoList = outboundHeaderList.stream().map(OutboundHeader::getRefDocNumber).collect(Collectors.toList());
         log.info("refDocNoList : " + refDocNoList);
 
-        List<String> preOutboundNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1() != null && a.getReferenceField1().equalsIgnoreCase(refField1) &&
-                        a.getOutboundOrderTypeId().equals(outboundOrderTypeId))
-                .map(OutboundHeader::getPreOutboundNo)
-                .collect(Collectors.toList());
+        List<String> preOutboundNoList = outboundHeaderList.stream().filter(a -> a.getOutboundOrderTypeId().equals(outboundOrderTypeId))
+                .map(OutboundHeader::getPreOutboundNo).collect(Collectors.toList());
         log.info("preOutboundNoList : " + preOutboundNoList);
 
-        List<String> refField1List = outboundHeaderList.stream().filter(a -> a.getReferenceField1() != null).map(OutboundHeader::getReferenceField1)
+        List<Long> outboundOrderTypeIdList = outboundHeaderList.stream().filter(a -> a.getOutboundOrderTypeId().equals(outboundOrderTypeId)).map(OutboundHeader::getOutboundOrderTypeId)
                 .collect(Collectors.toList());
 
         Long totalOrdeCount = 0L;
-        if(refField1List != null && !refField1List.isEmpty()) {
-            totalOrdeCount = refField1List.stream().filter(a -> a.equalsIgnoreCase(refField1)).count();
+        if(outboundOrderTypeIdList != null && !outboundOrderTypeIdList.isEmpty()) {
+            totalOrdeCount = outboundOrderTypeIdList.stream().filter(a -> a.equals(outboundOrderTypeId)).count();
         }
-        log.info("refField1List : " + refField1List + "," + totalOrdeCount);
+        log.info("refField1List : " + outboundOrderTypeIdList + "," + totalOrdeCount);
 
         /*
          * 101- Line items(N) ----------------------- Pass the selected REF_DOC_NO in
@@ -2137,7 +2174,7 @@ public class ReportsService extends BaseService {
 
             SummaryMetrics summaryMetrics = new SummaryMetrics();
             summaryMetrics.setPartnerCode(outboundOrderTypeId + "-" + getOutboundOrderTypeDesc(outboundOrderTypeId));
-            summaryMetrics.setType(type);
+            summaryMetrics.setType(String.valueOf(outboundOrderTypeId));
             summaryMetrics.setMetricsSummary(metricsSummary);
             return summaryMetrics;
         }

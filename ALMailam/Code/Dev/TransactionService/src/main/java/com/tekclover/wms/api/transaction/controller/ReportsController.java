@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.controller;
 
 import com.tekclover.wms.api.transaction.model.deliveryline.DeliveryLine;
 import com.tekclover.wms.api.transaction.model.deliveryline.SearchDeliveryLine;
+import com.tekclover.wms.api.transaction.model.impl.StockReportImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.report.*;
 import com.tekclover.wms.api.transaction.service.ReportsService;
@@ -100,6 +101,13 @@ public class ReportsController {
                                                @RequestParam(required = false) List<String> manufacturerName,
                                                @RequestParam(required = true) String stockTypeText) {
         List<StockReport> stockReportList = reportsService.getAllStockReport(languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, itemText, stockTypeText);
+        return new ResponseEntity<>(stockReportList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = Inventory.class, value = "Get All Stock Reports New") // label for swagger
+    @PostMapping("/v2/stockReport-all")
+    public ResponseEntity<?> getAllStockReportV2(@Valid @RequestBody SearchStockReport searchStockReport) {
+        List<StockReportImpl> stockReportList = reportsService.stockReport(searchStockReport);
         return new ResponseEntity<>(stockReportList, HttpStatus.OK);
     }
 
@@ -208,8 +216,7 @@ public class ReportsController {
     /*
      * Shipment Dispatch Summary
      */
-    @ApiOperation(response = ShipmentDispatchSummaryReport.class, value = "Get ShipmentDispatchSummary Report")
-    // label for swagger
+    @ApiOperation(response = ShipmentDispatchSummaryReport.class, value = "Get ShipmentDispatchSummary Report")    // label for swagger
     @GetMapping("/shipmentDispatchSummary")
     public ResponseEntity<?> getShipmentDispatchSummaryReport(@RequestParam String fromDeliveryDate,
                                                               @RequestParam String toDeliveryDate, @RequestParam(required = false) List<String> customerCode, @RequestParam(required = true) String warehouseId)
@@ -222,8 +229,7 @@ public class ReportsController {
     /*
      * Receipt Confirmation
      */
-    @ApiOperation(response = ReceiptConfimationReport.class, value = "Get ReceiptConfimation Report")
-    // label for swagger
+    @ApiOperation(response = ReceiptConfimationReport.class, value = "Get ReceiptConfimation Report")    // label for swagger
     @GetMapping("/receiptConfirmation")
     public ResponseEntity<?> getReceiptConfimationReport(@RequestParam String asnNumber)
             throws Exception {
@@ -234,8 +240,7 @@ public class ReportsController {
     /*
      * Transaction History Report renamed from open/inventory stock report
      */
-    @ApiOperation(response = TransactionHistoryReport.class, value = "Get Transaction History Report")
-    // label for swagger
+    @ApiOperation(response = TransactionHistoryReport.class, value = "Get Transaction History Report")    // label for swagger
     @PostMapping("/transactionHistoryReport")
     public ResponseEntity<?> getTransactionHistoryReport(@RequestBody FindImBasicData1 searchImBasicData1) throws java.text.ParseException {
         Stream<TransactionHistoryReport> transactionHistoryReportList = reportsService.getTransactionHistoryReport(searchImBasicData1);

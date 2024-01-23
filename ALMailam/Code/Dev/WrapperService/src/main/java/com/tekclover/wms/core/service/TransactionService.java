@@ -4966,6 +4966,26 @@ public class TransactionService {
         }
     }
 
+// Get All Stock Reports New
+    public StockReport[] getAllStockReportsV2(SearchStockReport searchStockReport, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "reports/v2/stockReport-all");
+            HttpEntity<?> entity = new HttpEntity<>(searchStockReport, headers);
+            ResponseEntity<StockReport[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
+                    entity, StockReport[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 
     // GET - INVENTORY REPORT
     public PaginatedResponse<InventoryReport> getInventoryReport(List<String> warehouseId, List<String> itemCode,

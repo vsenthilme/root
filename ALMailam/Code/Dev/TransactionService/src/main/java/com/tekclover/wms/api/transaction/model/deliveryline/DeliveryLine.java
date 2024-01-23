@@ -154,6 +154,12 @@ public class DeliveryLine {
     @Column(name="STATUS_ID")
     private Long statusId;
 
+    @Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
+    private String barcodeId;
+
+    @Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
+    private String manufacturerName;
+
     @Column(name = "IS_DELETED")
     private Long deletionIndicator;
 

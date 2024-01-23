@@ -21,4 +21,6 @@ public class SearchDeliveryLine  {
     private List<String> vehicleNo;
     private Boolean reDelivered;
     private List<String> driverId;
+    private List<String> barcodeId;
+    private List<String> manufacturerName;
 }

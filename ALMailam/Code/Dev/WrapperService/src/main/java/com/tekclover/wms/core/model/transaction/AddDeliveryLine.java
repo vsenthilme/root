@@ -113,6 +113,7 @@ public class AddDeliveryLine {
     private String deliveryConfirmedBy;
 
     private Date deliveryConfirmedOn;
-
+    private String barcodeId;
+    private String manufacturerName;
 
 }

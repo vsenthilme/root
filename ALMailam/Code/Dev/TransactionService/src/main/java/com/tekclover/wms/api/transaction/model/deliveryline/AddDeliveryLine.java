@@ -89,6 +89,8 @@ public class AddDeliveryLine {
     private Boolean reDelivered;
 
     private Long deletionIndicator;
+    private String barcodeId;
+    private String manufacturerName;
 
     private String referenceField1;
 

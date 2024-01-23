@@ -51,6 +51,14 @@ public class DeliveryLineSpecification implements Specification<DeliveryLine> {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("itemCode");
             predicates.add(group.in(searchDeliveryLine.getItemCode()));
         }
+        if (searchDeliveryLine.getBarcodeId() != null && !searchDeliveryLine.getBarcodeId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("barcodeId");
+            predicates.add(group.in(searchDeliveryLine.getBarcodeId()));
+        }
+        if (searchDeliveryLine.getManufacturerName() != null && !searchDeliveryLine.getManufacturerName().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("manufacturerName");
+            predicates.add(group.in(searchDeliveryLine.getManufacturerName()));
+        }
         if (searchDeliveryLine.getInvoiceNumber() != null && !searchDeliveryLine.getInvoiceNumber().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("invoiceNumber");
             predicates.add(group.in(searchDeliveryLine.getInvoiceNumber()));

@@ -106,5 +106,7 @@ public class UpdateDeliveryLine {
     private String deliveryConfirmedBy;
 
     private Date deliveryConfirmedOn;
+    private String barcodeId;
+    private String manufacturerName;
 
 }

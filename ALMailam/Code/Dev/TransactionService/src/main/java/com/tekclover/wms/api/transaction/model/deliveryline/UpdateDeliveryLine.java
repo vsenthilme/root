@@ -80,7 +80,8 @@ public class UpdateDeliveryLine {
     private Boolean reDelivered;
 
     private Long statusId;
-
+    private String barcodeId;
+    private String manufacturerName;
     private Long deletionIndicator;
 
     private String referenceField1;

@@ -191,6 +191,8 @@ public class DeliveryLineService {
             throws IllegalAccessException, InvocationTargetException {
 
         List<DeliveryLine> deliveryLineList = new ArrayList<>();
+        List<AddDeliveryLine> createDeliveryLineList = new ArrayList<>();
+
         for (UpdateDeliveryLine deliveryLine : updateDeliveryLine) {
 
             DeliveryLine dbDeliveryLine = getDeliveryLine(deliveryLine.getCompanyCodeId(), deliveryLine.getPlantId(),
@@ -206,14 +208,20 @@ public class DeliveryLineService {
                 DeliveryLine updatedDeliveryLine = deliveryLineRepository.save(dbDeliveryLine);
                 deliveryLineList.add(updatedDeliveryLine);
             } else {
-                throw new BadRequestException("DeliveryLine not found for parameters: " +
-                        "companyCodeId=" + deliveryLine.getCompanyCodeId() +
-                        ", plantId=" + deliveryLine.getPlantId() +
-                        ", warehouseId=" + deliveryLine.getWarehouseId() +
-                        ", languageId=" + deliveryLine.getLanguageId() +
-                        ", itemCode=" + deliveryLine.getItemCode() +
-                        ", lineNumber=" + deliveryLine.getLineNumber());
+                AddDeliveryLine addDeliveryLine = new AddDeliveryLine();
+                BeanUtils.copyProperties(deliveryLine, addDeliveryLine, CommonUtils.getNullPropertyNames(deliveryLine));
+                createDeliveryLineList.add(addDeliveryLine);
+//                throw new BadRequestException("DeliveryLine not found for parameters: " +
+//                        "companyCodeId=" + deliveryLine.getCompanyCodeId() +
+//                        ", plantId=" + deliveryLine.getPlantId() +
+//                        ", warehouseId=" + deliveryLine.getWarehouseId() +
+//                        ", languageId=" + deliveryLine.getLanguageId() +
+//                        ", itemCode=" + deliveryLine.getItemCode() +
+//                        ", lineNumber=" + deliveryLine.getLineNumber());
             }
+        }
+        if(createDeliveryLineList != null && !createDeliveryLineList.isEmpty()) {
+            createDeliveryLine(createDeliveryLineList,loginUserId);
         }
         log.info("Update DeliveryLine SuccessFully " + deliveryLineList);
         return deliveryLineList;
@@ -258,28 +266,28 @@ public class DeliveryLineService {
         DeliveryLineSpecification spec = new DeliveryLineSpecification(searchDeliveryLine);
         log.info("Input value " + searchDeliveryLine);
         List<DeliveryLine> results = deliveryLineRepository.findAll(spec);
-        results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
+//        results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
 
-        List<DeliveryLine> deliveryLineList = new ArrayList<>();
-        for (DeliveryLine deliveryLine : results) {
-            IKeyValuePair description = stagingLineV2Repository.getDescription(deliveryLine.getCompanyCodeId(),
-                    deliveryLine.getLanguageId(),
-                    deliveryLine.getPlantId(),
-                    deliveryLine.getWarehouseId());
+//        List<DeliveryLine> deliveryLineList = new ArrayList<>();
+//        for (DeliveryLine deliveryLine : results) {
+//            IKeyValuePair description = stagingLineV2Repository.getDescription(deliveryLine.getCompanyCodeId(),
+//                    deliveryLine.getLanguageId(),
+//                    deliveryLine.getPlantId(),
+//                    deliveryLine.getWarehouseId());
+//
+//            if (description != null) {
+//                deliveryLine.setCompanyDescription(description.getCompanyDesc());
+//                deliveryLine.setPlantDescription(description.getPlantDesc());
+//                deliveryLine.setWarehouseDescription(description.getWarehouseDesc());
+//            }
+//            if (deliveryLine.getStatusId() != null) {
+//                statusDescription = stagingLineV2Repository.getStatusDescription(deliveryLine.getStatusId(), deliveryLine.getLanguageId());
+//                deliveryLine.setStatusDescription(statusDescription);
+//            }
+//            deliveryLineList.add(deliveryLine);
+//        }
 
-            if (description != null) {
-                deliveryLine.setCompanyDescription(description.getCompanyDesc());
-                deliveryLine.setPlantDescription(description.getPlantDesc());
-                deliveryLine.setWarehouseDescription(description.getWarehouseDesc());
-            }
-            if (deliveryLine.getStatusId() != null) {
-                statusDescription = stagingLineV2Repository.getStatusDescription(deliveryLine.getStatusId(), deliveryLine.getLanguageId());
-                deliveryLine.setStatusDescription(statusDescription);
-            }
-            deliveryLineList.add(deliveryLine);
-        }
-
-        return deliveryLineList;
+        return results;
     }
 
 

@@ -1782,8 +1782,9 @@ public class PreOutboundHeaderService extends BaseService {
                                             break outerLoop1;
                                         }
                                     }
-                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
-                                            (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)) {
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
+//                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
+                                    ) {
                                         assignPickerList.add(hhtUser);
                                         assignPickerListCount = assignPickerList.stream().count();
                                         if (assignPickerListCount > 0) {
@@ -2033,8 +2034,9 @@ public class PreOutboundHeaderService extends BaseService {
                                             break outerLoop1;
                                         }
                                     }
-                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
-                                            (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)) {
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
+//                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
+                                    ) {
                                         assignPickerList.add(hhtUser);
                                         assignPickerListCount = assignPickerList.stream().count();
                                         if (assignPickerListCount > 0) {

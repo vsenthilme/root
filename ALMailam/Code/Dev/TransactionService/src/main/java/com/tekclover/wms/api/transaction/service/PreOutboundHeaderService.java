@@ -1651,89 +1651,170 @@ public class PreOutboundHeaderService extends BaseService {
 
                             assignPickerListCount = assignPickerList.stream().count();
 
-                            outerLoop:
-                            if (lineCount != assignPickerListCount) {
-                                log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
-                                for (int i = 1; i <= lineCount; ) {
-                                    log.info("i, lineCount: " + i + ", " + lineCount);
-                                    for (String hhtUser : hhtUserList) {
-                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                        log.info("pickUpHeader: " + pickupHeaderList);
-                                        if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
-                                    if (pickupLineList != null) {
-                                        log.info("pickupLineList: " + linePickerIdAssignedList);
-                                        for (String hhtUser : linePickerIdAssignedList) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
-                                    if (pickupHeaderAssignedPickerIdList != null) {
-                                        log.info("pickupHeaderAssignedPickerIdList: " + pickUpheaderUserList);
-                                        for (String hhtUser : pickUpheaderUserList) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
+//                            outerLoop:
+//                            if (lineCount != assignPickerListCount) {
+//                                log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
+//                                for (int i = 1; i <= lineCount; ) {
+//                                    log.info("i, lineCount: " + i + ", " + lineCount);
+//                                    for (String hhtUser : hhtUserList) {
+//                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                        log.info("pickUpHeader: " + pickupHeaderList);
+//                                        if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (pickupLineList != null) {
+//                                        log.info("pickupLineList: " + linePickerIdAssignedList);
+//                                        for (String hhtUser : linePickerIdAssignedList) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (pickupHeaderAssignedPickerIdList != null) {
+//                                        log.info("pickupHeaderAssignedPickerIdList: " + pickUpheaderUserList);
+//                                        for (String hhtUser : pickUpheaderUserList) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    if (hhtUserList != null) {
+//                                        log.info("hhtUserList: " + hhtUserList);
+//                                        while (true) {
+//                                            for (String hhtUser : hhtUserList) {
+//                                                assignPickerList.add(hhtUser);
+//                                                i++;
+//
+//                                                if (i > lineCount) {
+//                                                    assignPickerListCount = assignPickerList.stream().count();
+//                                                    log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                    break outerLoop;
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
 
-                                    if (hhtUserList != null) {
-                                        log.info("hhtUserList: " + hhtUserList);
-                                        while (true) {
-                                            for (String hhtUser : hhtUserList) {
-                                                assignPickerList.add(hhtUser);
-                                                i++;
-
-                                                if (i > lineCount) {
-                                                    assignPickerListCount = assignPickerList.stream().count();
-                                                    log.info("assignPickerListCount: " + assignPickerListCount);
-                                                    break outerLoop;
-                                                }
+                            outerLoop1:
+                            for (String hhtUser : hhtUserList) {
+                                List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                log.info("pickUpHeader: " + pickupHeaderList);
+                                if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUser);
+                                    assignPickerListCount = assignPickerList.stream().count();
+                                    log.info("assignPickerListCount: " + assignPickerListCount);
+                                    if(assignPickerListCount > 0) {
+                                        break outerLoop1;
+                                    }
+                                }
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    List<PickupLineV2> pickerPickupLineList = pickupLineService.getPickupLineAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("Pickupline for Current Date: " + pickerPickupLineList);
+                                    if(pickerPickupLineList != null && !pickerPickupLineList.isEmpty()) {
+                                        List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                        log.info("PickupHeader for Current Date: " + pickerPickupHeaderList);
+                                        List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                        log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                        if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                            assignPickerList.add(hhtUser);
+                                            assignPickerListCount = assignPickerList.stream().count();
+                                            if(assignPickerListCount > 0) {
+                                                break outerLoop1;
                                             }
+                                        }
+                                        if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                                (pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty())) {
+                                            assignPickerList.add(hhtUser);
+                                            assignPickerListCount = assignPickerList.stream().count();
+                                            if(assignPickerListCount > 0) {
+                                                break outerLoop1;
+                                            }
+                                        }
+                                    }
+                                    if(pickerPickupLineList == null || pickerPickupLineList.isEmpty()){
+                                        List<PickupHeaderV2> pickerPickupHeaderList2 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                        log.info("PickupHeader for Current Date: " + pickerPickupHeaderList2);
+                                        List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                        log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                        if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                            assignPickerList.add(hhtUser);
+                                            assignPickerListCount = assignPickerList.stream().count();
+                                            if(assignPickerListCount > 0) {
+                                                break outerLoop1;
+                                            }
+                                        }
+                                        if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                                (pickerPickupHeaderList2 == null || pickerPickupHeaderList2.isEmpty() || pickerPickupHeaderList2.size() == 0)){
+                                            assignPickerList.add(hhtUser);
+                                            assignPickerListCount = assignPickerList.stream().count();
+                                            if(assignPickerListCount > 0) {
+                                                break outerLoop1;
+                                            }
+                                        }
+                                    }
+                                }
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
+                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                            (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if (assignPickerListCount > 0) {
+                                            break outerLoop1;
                                         }
                                     }
                                 }
                             }
 
                             if (OB_ORD_TYP_ID == 0) {
-                                assignPickerId = assignPickerList.get(obPicker0Position);
+                                assignPickerId = assignPickerList.get(0);
                                 log.info("OB_ORD_TYP_ID 0 picker");
-                                log.info("obPicker0Position: " + obPicker0Position);
+//                                log.info("obPicker0Position: " + obPicker0Position);
                                 obType0List.add(OB_ORD_TYP_ID);
                             }
                             if (OB_ORD_TYP_ID == 1) {
-                                assignPickerId = assignPickerList.get(obPicker1Position);
+                                assignPickerId = assignPickerList.get(0);
                                 log.info("OB_ORD_TYP_ID 1 picker");
-                                log.info("obPicker1Position: " + obPicker1Position);
+//                                log.info("obPicker1Position: " + obPicker1Position);
                                 obType1List.add(OB_ORD_TYP_ID);
                             }
                             if (OB_ORD_TYP_ID == 2) {
-                                assignPickerId = assignPickerList.get(obPicker2Position);
+                                assignPickerId = assignPickerList.get(0);
                                 log.info("OB_ORD_TYP_ID 2 picker");
-                                log.info("obPicker2Position: " + obPicker2Position);
+//                                log.info("obPicker2Position: " + obPicker2Position);
                                 obType2List.add(OB_ORD_TYP_ID);
                             }
                             if (OB_ORD_TYP_ID == 3) {
-                                assignPickerId = assignPickerList.get(obPicker3Position);
+                                assignPickerId = assignPickerList.get(0);
                                 log.info("OB_ORD_TYP_ID 3 picker");
-                                log.info("obPicker3Position: " + obPicker3Position);
+//                                log.info("obPicker3Position: " + obPicker3Position);
                                 obType3List.add(OB_ORD_TYP_ID);
                             }
 
@@ -1821,96 +1902,147 @@ public class PreOutboundHeaderService extends BaseService {
 
                             assignPickerListCount = assignPickerList.stream().count();
 
-                            outerLoop:
-                            if (lineCount != assignPickerListCount) {
-                                log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
-                                for (int i = 1; i <= lineCount; ) {
-                                    log.info("i, lineCount: " + i + ", " + lineCount);
-                                    for (String hhtUser : hhtUserList) {
-                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                        log.info("pickUpHeader: " + pickupHeaderList);
-                                        if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
-                                    if (pickupLineList != null) {
-                                        log.info("pickupLineList: " + linePickerIdAssignedList);
-                                        for (String hhtUser : linePickerIdAssignedList) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
-                                    if (pickupHeaderAssignedPickerIdList != null) {
-                                        log.info("pickupHeaderAssignedPickerIdList: " + pickUpheaderUserList);
-                                        for (String hhtUser : pickUpheaderUserList) {
-                                            assignPickerList.add(hhtUser);
-                                            i++;
-                                            if (i > lineCount) {
-                                                assignPickerListCount = assignPickerList.stream().count();
-                                                log.info("assignPickerListCount: " + assignPickerListCount);
-                                                break outerLoop;
-                                            }
-                                        }
-                                    }
+//                            outerLoop:
+//                            if (lineCount != assignPickerListCount) {
+//                                log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
+//                                for (int i = 1; i <= lineCount; ) {
+//                                    log.info("i, lineCount: " + i + ", " + lineCount);
+//                                    for (String hhtUser : hhtUserList) {
+//                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                        log.info("pickUpHeader: " + pickupHeaderList);
+//                                        if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (pickupLineList != null) {
+//                                        log.info("pickupLineList: " + linePickerIdAssignedList);
+//                                        for (String hhtUser : linePickerIdAssignedList) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (pickupHeaderAssignedPickerIdList != null) {
+//                                        log.info("pickupHeaderAssignedPickerIdList: " + pickUpheaderUserList);
+//                                        for (String hhtUser : pickUpheaderUserList) {
+//                                            assignPickerList.add(hhtUser);
+//                                            i++;
+//                                            if (i > lineCount) {
+//                                                assignPickerListCount = assignPickerList.stream().count();
+//                                                log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                break outerLoop;
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    if (hhtUserList != null) {
+//                                        log.info("hhtUserList: " + hhtUserList);
+//                                        while (true) {
+//                                            for (String hhtUser : hhtUserList) {
+//                                                assignPickerList.add(hhtUser);
+//                                                i++;
+//
+//                                                if (i > lineCount) {
+//                                                    assignPickerListCount = assignPickerList.stream().count();
+//                                                    log.info("assignPickerListCount: " + assignPickerListCount);
+//                                                    break outerLoop;
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
 
-                                    if (hhtUserList != null) {
-                                        log.info("hhtUserList: " + hhtUserList);
-                                        while (true) {
-                                            for (String hhtUser : hhtUserList) {
-                                                assignPickerList.add(hhtUser);
-                                                i++;
-
-                                                if (i > lineCount) {
-                                                    assignPickerListCount = assignPickerList.stream().count();
-                                                    log.info("assignPickerListCount: " + assignPickerListCount);
-                                                    break outerLoop;
-                                                }
-                                            }
+                            outerLoop1:
+                            for (String hhtUser : hhtUserList) {
+                                List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                log.info("pickUpHeader: " + pickupHeaderList);
+                                if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUser);
+                                    assignPickerListCount = assignPickerList.stream().count();
+                                    log.info("assignPickerListCount: " + assignPickerListCount);
+                                    if(assignPickerListCount > 0) {
+                                        break outerLoop1;
+                                    }
+                                }
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    List<PickupLineV2> pickerPickupLineList = pickupLineService.getPickupLineAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("Pickupline for Current Date: " + pickerPickupLineList);
+                                if(pickerPickupLineList != null && !pickerPickupLineList.isEmpty()) {
+                                    List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList);
+                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                            (pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty())) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                  }
+                                if(pickerPickupLineList == null || pickerPickupLineList.isEmpty()){
+                                    List<PickupHeaderV2> pickerPickupHeaderList2 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList2);
+                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                            (pickerPickupHeaderList2 == null || pickerPickupHeaderList2.isEmpty() || pickerPickupHeaderList2.size() == 0)){
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                }
+                                }
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
+                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if(assignPickerListCount > 0) {
+                                            break outerLoop1;
+                                        }
+                                    }
+                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty()) &&
+                                            (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)) {
+                                        assignPickerList.add(hhtUser);
+                                        assignPickerListCount = assignPickerList.stream().count();
+                                        if (assignPickerListCount > 0) {
+                                            break outerLoop1;
                                         }
                                     }
                                 }
                             }
-
-//                            outerLoop1:
-//                                for (String hhtUser : hhtUserList) {
-//                                    List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-//                                    log.info("pickUpHeader: " + pickupHeaderList);
-//                                    if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
-//                                        assignPickerList.add(hhtUser);
-//                                        assignPickerListCount = assignPickerList.stream().count();
-//                                        log.info("assignPickerListCount: " + assignPickerListCount);
-//                                        if(assignPickerListCount > 0) {
-//                                            break outerLoop1;
-//                                        }
-//                                    }
-//                                    if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
-//                                        List<PickupLineV2> pickerPickupLineList = pickupLineService.getPickupLineAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-//                                        log.info("Pickupline for Current Date: " + pickerPickupLineList);
-//                                    if(pickerPickupLineList != null && !pickerPickupLineList.isEmpty()) {
-//                                        List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-//                                        log.info("PickupHeaderV for Current Date: " + pickerPickupHeaderList);
-//                                        if(pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty()) {
-//                                            assignPickerList.add(hhtUser);
-//                                            assignPickerListCount = assignPickerList.stream().count();
-//                                            if(assignPickerListCount > 0) {
-//                                                break outerLoop1;
-//                                            }
-//                                        }
-//                                    }
-//                                        List<PickupHeaderV2> pickupHeaderLis = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-//                                    }
-//                                }
 
 
                             if (LEVEL_ID == 0) {

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -65,5 +66,12 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
             String companyCodeId, String plantId, String languageId, String warehouseId, Long statusId, String levelId, List<Long> outboundOrderTypeId, Long deletionIndicator);
 
 
+    List<PickupHeaderV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId,
+            Long statusId, Date startDate, Date endDate, Long deletionIndicator);
+
+    List<PickupHeaderV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndRefDocNumberAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId,
+            String refDocNumber, Long statusId, Date startDate, Date endDate, Long deletionIndicator);
 }
 

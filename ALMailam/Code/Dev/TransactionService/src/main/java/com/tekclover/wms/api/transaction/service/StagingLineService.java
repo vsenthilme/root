@@ -1112,8 +1112,9 @@ public class StagingLineService extends BaseService {
             List<ImPartner> imPartnerList = imPartnerService.getImpartnerBarcodeList(companyCode, plantId, languageId, warehouseId, updateStagingLine.getPartner_item_barcode());
             if (imPartnerList != null && !imPartnerList.isEmpty()) {
                 for(ImPartner imPartner : imPartnerList) {
-                    if (!imPartner.getItemCode().equalsIgnoreCase(itemCode) &&
-                        !imPartner.getManufacturerName().equalsIgnoreCase(updateStagingLine.getManufacturerName())) {
+                    String itemCodeMfrName = imPartner.getItemCode()+imPartner.getManufacturerName();
+                    String updateItemCodeMfrName = itemCode+dbStagingLineEntity.getManufacturerName();
+                    if (!itemCodeMfrName.equalsIgnoreCase(updateItemCodeMfrName)) {
                         log.info("Barcode Already Assigned");
                         throw new BadRequestException("Barcode already Assigned for : "
                                 + updateStagingLine.getPartner_item_barcode()
@@ -1129,16 +1130,17 @@ public class StagingLineService extends BaseService {
         if(stagingLineEntityV2List != null && !stagingLineEntityV2List.isEmpty()){
             if(updateStagingLine.getPartner_item_barcode() != null) {
                 List<StagingLineEntityV2> stagingLineBarcodeFilteredList = stagingLineEntityV2List.stream()
-                        .filter(a -> a.getPartner_item_barcode().equalsIgnoreCase(updateStagingLine.getPartner_item_barcode())).collect(Collectors.toList());
+                        .filter(a -> a.getPartner_item_barcode() != null && a.getPartner_item_barcode().equalsIgnoreCase(updateStagingLine.getPartner_item_barcode())).collect(Collectors.toList());
                 log.info("Staging Line same BarcodeId: " + stagingLineBarcodeFilteredList);
                 if(stagingLineBarcodeFilteredList != null && !stagingLineBarcodeFilteredList.isEmpty()){
                     for(StagingLineEntityV2 stagingLineEntityV2 : stagingLineBarcodeFilteredList) {
-                        if(!stagingLineEntityV2.getItemCode().equalsIgnoreCase(itemCode) &&
-                                !stagingLineEntityV2.getManufacturerName().equalsIgnoreCase(updateStagingLine.getManufacturerName())){
-                            throw new BadRequestException("Barcode Assigned for Another ItemCode - Manufacturer Name: "
-                                    + updateStagingLine.getPartner_item_barcode()
-                                    + ", " + stagingLineEntityV2.getItemCode()
-                                    + ", " + stagingLineEntityV2.getManufacturerName());
+                        String itemCodeMfrName = stagingLineEntityV2.getItemCode()+stagingLineEntityV2.getManufacturerName();
+                        String updateItemCodeMfrName = itemCode+dbStagingLineEntity.getManufacturerName();
+                        if(!itemCodeMfrName.equalsIgnoreCase(updateItemCodeMfrName)) {
+                                throw new BadRequestException("Barcode Assigned for Another ItemCode - Manufacturer Name: "
+                                        + updateStagingLine.getPartner_item_barcode()
+                                        + ", " + stagingLineEntityV2.getItemCode()
+                                        + ", " + stagingLineEntityV2.getManufacturerName());
                         }
                     }
                 }
@@ -1153,7 +1155,7 @@ public class StagingLineService extends BaseService {
                 log.info("Update Barcode: " + updateStagingLine.getPartner_item_barcode());
                 List<StagingLineEntityV2> stagingLineFilteredList = stagingLineEntityV2List.stream()
                         .filter(a -> a.getItemCode().equalsIgnoreCase(itemCode) &&
-                                     a.getManufacturerName().equalsIgnoreCase(updateStagingLine.getManufacturerName()))
+                                     a.getManufacturerName().equalsIgnoreCase(dbStagingLineEntity.getManufacturerName()))
                         .collect(Collectors.toList());
                 log.info("Staging Line same ItemCode and MfrName: " + stagingLineFilteredList);
                 if(stagingLineFilteredList != null && !stagingLineFilteredList.isEmpty()){

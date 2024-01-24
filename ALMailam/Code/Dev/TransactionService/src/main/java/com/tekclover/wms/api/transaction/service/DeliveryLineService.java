@@ -89,6 +89,25 @@ public class DeliveryLineService {
         return dbDeliveryLine.get();
     }
 
+    public DeliveryLine getDeliveryLineForUpdate(String companyCodeId, String plantId, String warehouseId,
+                                                 String invoiceNumber, String refDocNumber, String languageId,
+                                                 Long deliveryNo, String itemCode, Long lineNumber) {
+        Optional<DeliveryLine> dbDeliveryLine =
+                deliveryLineRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeliveryNoAndItemCodeAndLineNumberAndInvoiceNumberAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId,
+                        plantId,
+                        warehouseId,
+                        languageId,
+                        deliveryNo,
+                        itemCode,
+                        lineNumber,
+                        invoiceNumber,
+                        refDocNumber,
+                        0L
+                );
+        return dbDeliveryLine.get();
+    }
+
 
     /**
      * @param newDeliveryLineList
@@ -195,7 +214,7 @@ public class DeliveryLineService {
 
         for (UpdateDeliveryLine deliveryLine : updateDeliveryLine) {
 
-            DeliveryLine dbDeliveryLine = getDeliveryLine(deliveryLine.getCompanyCodeId(), deliveryLine.getPlantId(),
+            DeliveryLine dbDeliveryLine = getDeliveryLineForUpdate(deliveryLine.getCompanyCodeId(), deliveryLine.getPlantId(),
                     deliveryLine.getWarehouseId(), deliveryLine.getInvoiceNumber(),
                     deliveryLine.getRefDocNumber(), deliveryLine.getLanguageId(), deliveryLine.getDeliveryNo(),
                     deliveryLine.getItemCode(), deliveryLine.getLineNumber());

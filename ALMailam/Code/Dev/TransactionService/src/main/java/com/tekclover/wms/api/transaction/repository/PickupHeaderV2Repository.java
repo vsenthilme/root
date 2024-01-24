@@ -73,5 +73,8 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
     List<PickupHeaderV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndRefDocNumberAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
             String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId,
             String refDocNumber, Long statusId, Date startDate, Date endDate, Long deletionIndicator);
+
+    List<PickupHeaderV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdInAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, List<String> assignedPickerId, Long statusId, Date startDate, Date endDate, Long deletionIndicator);
 }
 

@@ -1770,27 +1770,37 @@ public class PreOutboundHeaderService extends BaseService {
                                         }
                                     }
                                 }
-                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
-                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
-                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
-                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
-                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
-                                        assignPickerList.add(hhtUser);
-                                        assignPickerListCount = assignPickerList.stream().count();
-                                        if(assignPickerListCount > 0) {
-                                            break outerLoop1;
-                                        }
-                                    }
-                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
-//                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
-                                    ) {
-                                        assignPickerList.add(hhtUser);
-                                        assignPickerListCount = assignPickerList.stream().count();
-                                        if (assignPickerListCount > 0) {
-                                            break outerLoop1;
-                                        }
-                                    }
+//                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+//                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
+//                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+//                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+//                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+//                                        assignPickerList.add(hhtUser);
+//                                        assignPickerListCount = assignPickerList.stream().count();
+//                                        if(assignPickerListCount > 0) {
+//                                            break outerLoop1;
+//                                        }
+//                                    }
+//                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
+////                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
+//                                    ) {
+//                                        assignPickerList.add(hhtUser);
+//                                        assignPickerListCount = assignPickerList.stream().count();
+//                                        if (assignPickerListCount > 0) {
+//                                            break outerLoop1;
+//                                        }
+//                                    }
+//                                }
+                            }
+                            if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.
+                                        getPickupHeaderAutomateCurrentDateHhtList(companyCodeId, plantId, languageId, warehouseId, hhtUserList);
+                                if(pickerPickupHeaderList != null && !pickerPickupHeaderList.isEmpty()){
+                                    assignPickerList.add(pickerPickupHeaderList.get(0).getAssignedPickerId());
+                                }
+                                if (pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUserList.get(0));
                                 }
                             }
 
@@ -2022,27 +2032,37 @@ public class PreOutboundHeaderService extends BaseService {
                                     }
                                 }
                                 }
-                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
-                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
-                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
-                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
-                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
-                                        assignPickerList.add(hhtUser);
-                                        assignPickerListCount = assignPickerList.stream().count();
-                                        if(assignPickerListCount > 0) {
-                                            break outerLoop1;
-                                        }
-                                    }
-                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
-//                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
-                                    ) {
-                                        assignPickerList.add(hhtUser);
-                                        assignPickerListCount = assignPickerList.stream().count();
-                                        if (assignPickerListCount > 0) {
-                                            break outerLoop1;
-                                        }
-                                    }
+//                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+//                                    List<PickupHeaderV2> pickerPickupHeaderList3 = pickupHeaderService.getPickupHeaderAutomateCurrentDate(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+//                                    log.info("PickupHeader for Current Date: " + pickerPickupHeaderList3);
+//                                    List<PickupHeaderV2> pickerPickupHeaderList1 = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrder(companyCodeId, plantId, languageId, warehouseId, hhtUser, refDocNumber);
+//                                    log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderList1);
+//                                    if(pickerPickupHeaderList1 != null && !pickerPickupHeaderList1.isEmpty()) {
+//                                        assignPickerList.add(hhtUser);
+//                                        assignPickerListCount = assignPickerList.stream().count();
+//                                        if(assignPickerListCount > 0) {
+//                                            break outerLoop1;
+//                                        }
+//                                    }
+//                                    if((pickerPickupHeaderList1 == null || pickerPickupHeaderList1.isEmpty())
+////                                            && (pickerPickupHeaderList3 == null || pickerPickupHeaderList3.isEmpty() || pickerPickupHeaderList3.size() == 0)
+//                                    ) {
+//                                        assignPickerList.add(hhtUser);
+//                                        assignPickerListCount = assignPickerList.stream().count();
+//                                        if (assignPickerListCount > 0) {
+//                                            break outerLoop1;
+//                                        }
+//                                    }
+//                                }
+                            }
+                            if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                List<PickupHeaderV2> pickerPickupHeaderList = pickupHeaderService.
+                                        getPickupHeaderAutomateCurrentDateHhtList(companyCodeId, plantId, languageId, warehouseId, hhtUserList);
+                                if(pickerPickupHeaderList != null && !pickerPickupHeaderList.isEmpty()){
+                                    assignPickerList.add(pickerPickupHeaderList.get(0).getAssignedPickerId());
+                                }
+                                if (pickerPickupHeaderList == null || pickerPickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUserList.get(0));
                                 }
                             }
 

@@ -1111,17 +1111,17 @@ public class StagingLineService extends BaseService {
         if(updateStagingLine.getPartner_item_barcode() != null) {
             List<ImPartner> imPartnerList = imPartnerService.getImpartnerBarcodeList(companyCode, plantId, languageId, warehouseId, updateStagingLine.getPartner_item_barcode());
             if (imPartnerList != null && !imPartnerList.isEmpty()) {
-//                List<ImPartner> imPartners = imPartnerList.stream()
-//                        .filter(a -> !a.getItemCode().equalsIgnoreCase(itemCode) &&
-//                                     !a.getManufacturerName().equalsIgnoreCase(updateStagingLine.getManufacturerName()))
-//                        .collect(Collectors.toList());
-//                if(imPartners != null && !imPartners.isEmpty()){
-                    throw new BadRequestException("Barcode already Assigned : "
+                List<ImPartner> imPartners = imPartnerList.stream()
+                        .filter(a -> !a.getItemCode().equalsIgnoreCase(itemCode) &&
+                                     !a.getManufacturerName().equalsIgnoreCase(updateStagingLine.getManufacturerName()))
+                        .collect(Collectors.toList());
+                if(imPartners != null && !imPartners.isEmpty()){
+                    throw new BadRequestException("Barcode already Assigned for : "
                             + updateStagingLine.getPartner_item_barcode()
-//                            + ", " + imPartners.get(0).getItemCode()
-//                            + ", " + imPartners.get(0).getManufacturerName()
+                            + ", " + imPartners.get(0).getItemCode()
+                            + ", " + imPartners.get(0).getManufacturerName()
                     );
-//                }
+                }
             }
         }
 

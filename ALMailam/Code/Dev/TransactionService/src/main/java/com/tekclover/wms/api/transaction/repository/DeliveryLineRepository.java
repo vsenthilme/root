@@ -100,5 +100,6 @@ public interface DeliveryLineRepository extends JpaRepository<DeliveryLine, Stri
                                        @Param("reDelivery") Boolean reDelivery);
 
 
-
+    List<DeliveryLine> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
 }

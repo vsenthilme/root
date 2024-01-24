@@ -26,4 +26,7 @@ public interface DeliveryHeaderRepository extends JpaRepository<DeliveryHeader, 
     @Query(value = "select MAX(DLV_NO)+1 \n" +
             "from tbldeliveryheader",nativeQuery = true)
     public Long getDeliveryNo();
+
+    List<DeliveryHeader> findByCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndLanguageIdAndDeletionIndicator(
+            String companyCodeId, String plantId, String warehouseId, String refDocNumber, String languageId, Long deletionIndicator);
 }

@@ -83,6 +83,28 @@ public class DeliveryHeaderService {
         return dbDeliveryHeader.get();
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<DeliveryHeader> getDeliveryHeaderList(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<DeliveryHeader> dbDeliveryHeader =
+                deliveryHeaderRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndLanguageIdAndDeletionIndicator(
+                        companyCodeId,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        languageId,
+                        0L
+                );
+        return dbDeliveryHeader;
+    }
+
 
     /**
      * @param newDeliveryHeader
@@ -120,12 +142,13 @@ public class DeliveryHeaderService {
             statusDescription = stagingLineV2Repository.getStatusDescription(dbDeliveryHeader.getStatusId(), dbDeliveryHeader.getLanguageId());
             dbDeliveryHeader.setStatusDescription(statusDescription);
         }
-        Long deliveryNo = deliveryHeaderRepository.getDeliveryNo();
-        if (deliveryNo != null) {
-            dbDeliveryHeader.setDeliveryNo(deliveryNo);
-        } else {
-            dbDeliveryHeader.setDeliveryNo(1L);
-        }
+//        Long deliveryNo = deliveryHeaderRepository.getDeliveryNo();
+//        if (deliveryNo != null) {
+//            dbDeliveryHeader.setDeliveryNo(deliveryNo);
+//        } else {
+//            dbDeliveryHeader.setDeliveryNo(1L);
+//        }
+        dbDeliveryHeader.setDeliveryNo(System.currentTimeMillis());
         dbDeliveryHeader.setDeletionIndicator(0L);
         dbDeliveryHeader.setCreatedBy(loginUserID);
         dbDeliveryHeader.setUpdatedBy(loginUserID);
@@ -189,27 +212,7 @@ public class DeliveryHeaderService {
 
         DeliveryHeaderSpecification spec = new DeliveryHeaderSpecification(searchDeliveryHeader);
         List<DeliveryHeader> results = deliveryHeaderRepository.findAll(spec);
-        results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
-
-        List<DeliveryHeader> deliveryHeaderList = new ArrayList<>();
-        for(DeliveryHeader deliveryHeader : results) {
-
-            IKeyValuePair description = stagingLineV2Repository.getDescription(deliveryHeader.getCompanyCodeId(),
-                    deliveryHeader.getLanguageId(),
-                    deliveryHeader.getPlantId(),
-                    deliveryHeader.getWarehouseId());
-            if(description != null) {
-                deliveryHeader.setCompanyDescription(description.getCompanyDesc());
-                deliveryHeader.setPlantDescription(description.getPlantDesc());
-                deliveryHeader.setWarehouseDescription(description.getWarehouseDesc());
-            }
-            if (deliveryHeader.getStatusId() != null) {
-                statusDescription = stagingLineV2Repository.getStatusDescription(deliveryHeader.getStatusId(), deliveryHeader.getLanguageId());
-                deliveryHeader.setStatusDescription(statusDescription);
-            }
-            deliveryHeaderList.add(deliveryHeader);
-        }
         log.info("results: " + results);
-        return deliveryHeaderList;
+        return results;
     }
 }

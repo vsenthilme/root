@@ -2171,6 +2171,23 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<OutboundLineV2> getOutboundLineV2(String companyCodeId, String plantId, String languageId,
+                                                  String warehouseId, String refDocNumber) {
+        List<OutboundLineV2> outboundLine =
+                outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+            return outboundLine;
+    }
+
+    /**
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
@@ -2621,6 +2638,27 @@ public class OutboundLineService extends BaseService {
         if (updateOutboundLine != null && updateOutboundLine.getStatus() != null) {
             statusDescription = stagingLineV2Repository.getStatusDescription(updateOutboundLine.getStatusId(), languageId);
             outboundLine.setStatusDescription(statusDescription);
+        }
+
+        List<OutboundLineV2> outboundLineList = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber);
+        List<OutboundLineV2> outboundLineListStatus90 = null;
+        if(outboundLineList != null && !outboundLineList.isEmpty()) {
+            log.info("outboundLineList : " + outboundLineList);
+            Long outboundLineCount = outboundLineList.stream().count();
+            log.info("outboundLine count : " + outboundLineCount);
+            outboundLineListStatus90 = outboundLineList.stream().filter(a-> a.getStatusId() == 90L).collect(Collectors.toList());
+            Long outboundLineCountStatus90 = outboundLineListStatus90.stream().count();
+            log.info("outboundLineListCount : " + outboundLineCountStatus90);
+            if(outboundLineCount.equals(outboundLineCountStatus90)){
+                OutboundHeaderV2 outboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber);
+                if(outboundHeader != null) {
+                    outboundHeader.setStatusId(90L);
+                    statusDescription = stagingLineV2Repository.getStatusDescription(90L, languageId);
+                    outboundHeader.setStatusDescription(statusDescription);
+                    outboundHeaderV2Repository.save(outboundHeader);
+                    log.info("Outbound Header Updated to Status 90: " + outboundHeader);
+                }
+            }
         }
 
         outboundLineV2Repository.save(outboundLine);

@@ -1086,6 +1086,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "group by itm_code,mfr_name,st_bin \n" +
 
             "SELECT \n" +
+            "iv.INV_ID inventoryId, \n" +
             "iv.LANG_ID languageId, \n" +
             "iv.C_ID companyCodeId,\n" +
             "iv.PLANT_ID plantId,\n" +

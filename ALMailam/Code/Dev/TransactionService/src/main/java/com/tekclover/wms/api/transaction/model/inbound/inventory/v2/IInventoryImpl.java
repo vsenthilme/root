@@ -5,6 +5,7 @@ import java.util.Date;
 public interface IInventoryImpl {
 
 	public String getLanguageId();
+	public String getInventoryId();
 	public String getCompanyCodeId();
 	public String getPlantId();
 	public String getWarehouseId();

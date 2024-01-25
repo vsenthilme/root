@@ -333,7 +333,7 @@ public class HhtUserService {
         dbHhtUser.get().setUpdatedOn(new Date());
         HhtUser savedHhtUser = hhtUserRepository.save(dbHhtUser.get());
 
-        if (updateHhtUser.getOrderType() != null && !updateHhtUser.getOrderType().isEmpty()) {
+        if (updateHhtUser.getOrderType() != null ) {
             if (orderTypeIdService.getOrderTypeId(companyCodeId, plantId, languageId, warehouseId, userId) != null) {
                 orderTypeIdService.deleteOrderTypeIdV2(companyCodeId, plantId, languageId, warehouseId, userId, loginUserID);
             }

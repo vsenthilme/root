@@ -103,9 +103,10 @@ public class OrderTypeIdService {
     public void deleteOrderTypeIdV2 (String companyCodeId, String plantId, String languageId, String warehouseId, String userId, String loginUserID) throws ParseException {
         List<OrderTypeId> orderTypeIds= getOrderTypeId(companyCodeId, plantId, languageId, warehouseId, userId);
         if (orderTypeIds != null) {
-            for(OrderTypeId newOrderTypeId: orderTypeIds){
-                orderTypeIdRepository.delete(newOrderTypeId);
-            }
+//            for(OrderTypeId newOrderTypeId: orderTypeIds){
+//                orderTypeIdRepository.delete(newOrderTypeId);
+                orderTypeIdRepository.deleteOrderTypeId(userId, languageId, companyCodeId, plantId, warehouseId);
+//            }
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + userId);
         }

@@ -39,4 +39,6 @@ public class OutboundLineV2 extends OutboundLine {
     private String isCompleted;
     private String isCancelled;
     private String barcodeId;
+    private String handlingEquipment;
+    private String customerType;
 }

@@ -115,6 +115,7 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
                     "oh.ALTERNATE_NO alternateNo,\n" +
                     "oh.TOKEN_NUMBER tokenNumber,\n" +
                     "oh.STATUS status,\n" +
+                    "oh.CUSTOMER_TYPE customerType,\n" +
                     "oh.ref_field_1 referenceField1,oh.ref_field_2 referenceField2,oh.ref_field_3 referenceField3, \n" +
                     "oh.ref_field_4 referenceField4,oh.ref_field_5 referenceField5,oh.ref_field_6 referenceField6,\n" +
                     "(CASE WHEN sum(dlv_qty) is not null THEN sum(dlv_qty) ELSE 0 END) as referenceField7,\n" +
@@ -188,6 +189,7 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
             "oh.ADDRESS address,\n" +
             "oh.PHONE_NUMBER phoneNumber,\n" +
             "oh.ALTERNATE_NO alternateNo,\n" +
+            "oh.CUSTOMER_TYPE customerType,\n" +
             "oh.STATUS status,\n" +
             "from tbloutboundheader oh\n" +
             "left join tbloutboundlinedup ol on ol.ref_doc_no = oh.ref_doc_no\n" +
@@ -207,7 +209,7 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
             "group by oh.c_id , oh.lang_id, oh.partner_code, oh.plant_id, oh.pre_ob_no,oh.ref_doc_no ,oh.wh_id,oh.dlv_ctd_by,oh.dlv_ctd_on,oh.is_deleted,oh.dlv_cnf_by,oh.dlv_cnf_on,\n" +
             "oh.dlv_ord_no, oh.ob_ord_typ_id,oh.ref_doc_date,oh.ref_doc_typ,oh.remark,oh.req_del_date,oh.dlv_rev_by,oh.dlv_rev_on,oh.status_id,oh.dlv_utd_by,oh.dlv_utd_on,\n" +
             "oh.ref_field_1,oh.ref_field_2,oh.ref_field_3,oh.ref_field_4,oh.ref_field_5,oh.ref_field_6,\n" +
-            "ol.ref_doc_no , ol.c_id , ol.lang_id, ol.plant_id, ol.wh_id, ol.pre_ob_no, ol.partner_code", nativeQuery = true)
+            "ol.ref_doc_no , ol.c_id , ol.lang_id, ol.plant_id, ol.wh_id, ol.pre_ob_no, ol.partner_code, ol.customer_type", nativeQuery = true)
     public List<OutboundHeaderV2> findAllOutBoundHeaderDataForRFD(
             @Param(value = "companyCodeId") List<String> companyCodeId,
             @Param(value = "plantId") List<String> plantId,

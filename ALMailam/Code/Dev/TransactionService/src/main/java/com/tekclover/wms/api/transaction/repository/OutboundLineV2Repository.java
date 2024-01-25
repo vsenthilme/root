@@ -316,6 +316,8 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.sales_order_number salesOrderNumber,\n" +
             "ob.manufacturer_full_name manufacturerFullName,\n" +
             "ob.PARTNER_ITEM_BARCODE barcodeId,\n" +
+            "ob.HE_NO handlingEquipment,\n" +
+            "ob.CUSTOMER_TYPE customerType,\n" +
             "(select pcQty from #tpl p \n" +
             "where \n" +
             "p.wh_id = ob.wh_id and p.c_id = ob.c_id and p.plant_id=ob.plant_id and p.lang_id = ob.lang_id and \n" +

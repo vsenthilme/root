@@ -95,4 +95,7 @@ public class OutboundHeaderV2 extends OutboundHeader {
 
     @Column(name = "SUM_PICK_QTY")
     private String sumOfPickedQty;
+
+    @Column(name = "CUSTOMER_TYPE", columnDefinition = "nvarchar(255)")
+    private String customerType;
 }

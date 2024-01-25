@@ -102,4 +102,10 @@ public class OutboundLineV2 extends OutboundLine {
     @Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
     private String barcodeId;
 
+    @Column(name = "CUSTOMER_TYPE", columnDefinition = "nvarchar(255)")
+    private String customerType;
+
+    @Column(name = "HE_NO", columnDefinition = "nvarchar(255)")
+    private String handlingEquipment;
+
 }

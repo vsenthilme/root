@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -158,5 +158,12 @@ public class PreInboundLineController {
 													@RequestParam Long lineNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
 		preinboundlineService.deletePreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@ApiOperation(response = PreInboundLineOutputV2.class, value = "Search PreInboundLine V2") // label for swagger
+	@PostMapping("/findPreInboundLine/v2")
+	public List<PreInboundLineOutputV2> findPreInboundLineV2(@RequestBody SearchPreInboundLineV2 searchPreInboundLine)
+			throws Exception {
+		return preinboundlineService.findPreInboundLineV2(searchPreInboundLine);
 	}
 }

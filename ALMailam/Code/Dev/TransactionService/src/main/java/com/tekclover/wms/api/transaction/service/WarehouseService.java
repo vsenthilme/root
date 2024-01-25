@@ -2094,6 +2094,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(soHeader.getTransferOrderNumber());
 			apiHeader.setOutboundOrderTypeID(0L);
 			apiHeader.setRefDocumentType("WMS to Non-WMS");                        // Hardcoded value "SO"
+			apiHeader.setCustomerType("TRANSVERSE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 			apiHeader.setTargetCompanyCode(soHeader.getTargetCompanyCode());
 			apiHeader.setTargetBranchCode(soHeader.getTargetBranchCode());
@@ -2137,6 +2138,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerName(soLine.getManufacturerName());
 				apiLine.setRefField1ForOrderType(soLine.getOrderType());        // ORDER_TYPE
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setCustomerType("TRANSVERSE");								//HardCoded
 
 				apiLine.setTransferOrderNumber(soLine.getTransferOrderNumber());
 				apiLine.setMiddlewareId(soLine.getMiddlewareId());
@@ -2309,6 +2311,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(salesOrderHeader.getPickListNumber());
 			apiHeader.setOutboundOrderTypeID(3L);                                   // Hardcoded Value "3"
 			apiHeader.setRefDocumentType("PICK LIST");                              // Hardcoded value "SaleOrder"
+			apiHeader.setCustomerType("INVOICE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 			apiHeader.setSalesOrderNumber(salesOrderHeader.getSalesOrderNumber());
 			apiHeader.setTokenNumber(salesOrderHeader.getTokenNumber());
@@ -2347,6 +2350,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerFullName(soLine.getManufacturerFullName());
 				apiLine.setStoreID(salesOrderHeader.getStoreID());
 				apiLine.setRefField1ForOrderType(soLine.getOrderType());
+				apiLine.setCustomerType("INVOICE");								//HardCoded
 
 				apiLine.setLineReference(soLine.getLineReference());            // IB_LINE_NO
 				apiLine.setItemCode(soLine.getSku());                            // ITM_CODE
@@ -2555,6 +2559,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(interWhTransferOutHeader.getTransferOrderNumber());
 			apiHeader.setOutboundOrderTypeID(1L);                             // Hardcoded Value "1"
 			apiHeader.setRefDocumentType("WMS to WMS");                            // Hardcoded value "WH to WH"
+			apiHeader.setCustomerType("TRANSVERSE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 
 			apiHeader.setMiddlewareId(interWhTransferOutHeader.getMiddlewareId());
@@ -2600,6 +2605,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerCode(iwhTransferLine.getManufacturerCode());
 				apiLine.setManufacturerName(iwhTransferLine.getManufacturerName());
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setCustomerType("TRANSVERSE");								//HardCoded
 
 				apiLine.setMiddlewareId(iwhTransferLine.getMiddlewareId());
 				apiLine.setMiddlewareHeaderId(iwhTransferLine.getMiddlewareHeaderId());

@@ -2149,6 +2149,7 @@ public class PickupLineService extends BaseService {
 
                 statusDescription = stagingLineV2Repository.getStatusDescription(STATUS_ID, dbPickupLine.getLanguageId());
                 updateOutboundLine.setStatusDescription(statusDescription);
+                updateOutboundLine.setHandlingEquipment(dbPickupLine.getActualHeNo());
 
                 OutboundLineV2 outboundLine = outboundLineService.updateOutboundLineV2(dbPickupLine.getCompanyCodeId(),
                         dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(), dbPickupLine.getWarehouseId(),

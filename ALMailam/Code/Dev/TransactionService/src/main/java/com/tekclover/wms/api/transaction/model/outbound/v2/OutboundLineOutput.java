@@ -11,8 +11,10 @@ public interface OutboundLineOutput {
 	public String getPreOutboundNo();
 	public String getRefDocNumber();
 	public String getPartnerCode();
+	public String getHandlingEquipment();
 	public Long getLineNumber();
 	public String getItemCode();
+	public String getCustomerType();
 	public String getDeliveryOrderNo();
 	public String getBatchSerialNumber();
 	public Long getVariantCode();

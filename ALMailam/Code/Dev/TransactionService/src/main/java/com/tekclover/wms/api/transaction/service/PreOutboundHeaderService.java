@@ -2808,7 +2808,7 @@ public class PreOutboundHeaderService extends BaseService {
                         preOutboundLine.getWarehouseId());
 
                 if (preOutboundLine.getStatusId() != null) {
-                    statusDescription = stagingLineV2Repository.getStatusDescription(preOutboundLine.getStatusId(), preOutboundLine.getLanguageId());
+                    statusDescription = stagingLineV2Repository.getStatusDescription(dbOrderManagementLine.getStatusId(), dbOrderManagementLine.getLanguageId());
                     outboundLine.setStatusDescription(statusDescription);
                 }
                 outboundLine.setCompanyDescription(description.getCompanyDesc());
@@ -2832,6 +2832,12 @@ public class PreOutboundHeaderService extends BaseService {
                 outboundLine.setReferenceDocumentType(preOutboundLine.getReferenceDocumentType());
                 outboundLine.setTargetBranchCode(preOutboundLine.getTargetBranchCode());
                 outboundLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
+                if(outboundLine.getOutboundOrderTypeId() == 3L) {
+                    outboundLine.setCustomerType("INVOICE");
+                }
+                if(outboundLine.getOutboundOrderTypeId() == 0L || outboundLine.getOutboundOrderTypeId() == 1L){
+                    outboundLine.setCustomerType("TRANSVERSE");
+                }
 
                 outboundLine.setTransferOrderNo(preOutboundLine.getTransferOrderNo());
                 outboundLine.setReturnOrderNo(preOutboundLine.getReturnOrderNo());
@@ -2888,6 +2894,13 @@ public class PreOutboundHeaderService extends BaseService {
         outboundHeader.setIsCompleted(outboundIntegrationHeader.getIsCompleted());
         outboundHeader.setIsCancelled(outboundIntegrationHeader.getIsCancelled());
         outboundHeader.setMUpdatedOn(outboundHeader.getMUpdatedOn());
+
+        if(outboundHeader.getOutboundOrderTypeId() == 3L) {
+            outboundHeader.setCustomerType("INVOICE");
+        }
+        if(outboundHeader.getOutboundOrderTypeId() == 0L || outboundHeader.getOutboundOrderTypeId() == 1L){
+            outboundHeader.setCustomerType("TRANSVERSE");
+        }
 
         outboundHeader.setCreatedBy(createdPreOutboundHeader.getCreatedBy());
         outboundHeader.setCreatedOn(createdPreOutboundHeader.getCreatedOn());

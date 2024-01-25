@@ -2,17 +2,17 @@ package com.tekclover.wms.api.transaction.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.*;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
+import com.tekclover.wms.api.transaction.repository.specification.PreInboundLineV2Specification;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +56,9 @@ public class PreInboundLineService extends BaseService {
 
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+    
+    @Autowired
+    private InventoryService inventoryService;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------------------
@@ -667,6 +670,67 @@ public class PreInboundLineService extends BaseService {
         List<PreInboundLineEntityV2> preInboundLines = getPreInboundLinesV2();
         preInboundLines.stream().forEach(preiblines -> preiblines.setReferenceField1(asnNumber));
         preInboundLineV2Repository.saveAll(preInboundLines);
+    }
+
+    /**
+     *
+     * @param searchPreInboundLine
+     * @return
+     * @throws ParseException
+     */
+    public List<PreInboundLineOutputV2> findPreInboundLineV2(SearchPreInboundLineV2 searchPreInboundLine) throws ParseException {
+        if (searchPreInboundLine.getStartCreatedOn() != null && searchPreInboundLine.getStartCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartCreatedOn(), searchPreInboundLine.getEndCreatedOn());
+            searchPreInboundLine.setStartCreatedOn(dates[0]);
+            searchPreInboundLine.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchPreInboundLine.getStartRefDocDate() != null && searchPreInboundLine.getStartRefDocDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartRefDocDate(), searchPreInboundLine.getEndRefDocDate());
+            searchPreInboundLine.setStartRefDocDate(dates[0]);
+            searchPreInboundLine.setEndRefDocDate(dates[1]);
+        }
+
+        PreInboundLineV2Specification spec = new PreInboundLineV2Specification(searchPreInboundLine);
+        List<PreInboundLineEntityV2> results = preInboundLineV2Repository.stream(spec, PreInboundLineEntityV2.class).collect(Collectors.toList());
+        List<PreInboundLineOutputV2> preInboundLineOutputList = new ArrayList<>();
+        if(results != null && !results.isEmpty()) {
+            for(PreInboundLineEntityV2 preInboundLine : results) {
+                PreInboundLineOutputV2 newPreInboundLineOutput = new PreInboundLineOutputV2();
+                BeanUtils.copyProperties(preInboundLine, newPreInboundLineOutput, CommonUtils.getNullPropertyNames(preInboundLine));
+                List<InventoryDetail> inventoryDetails = new ArrayList<>();
+                SearchInventoryV2 searchInventoryV2 = getSearchInventoryV2(preInboundLine);
+                List<IInventoryImpl> inventoryList = inventoryService.findInventoryNewV2(searchInventoryV2);
+                if(inventoryList != null && !inventoryList.isEmpty()) {
+                    for (IInventoryImpl inventory : inventoryList) {
+                        InventoryDetail inventoryDetail = new InventoryDetail();
+                        inventoryDetail.setStorageBin(inventory.getStorageBin());
+                        inventoryDetail.setInventoryQty(inventory.getReferenceField4());
+                        inventoryDetails.add(inventoryDetail);
+                    }
+                }
+                newPreInboundLineOutput.setInventoryDetail(inventoryDetails);
+                log.info("PreInboundLine: " + newPreInboundLineOutput);
+            }
+        }
+		log.info("results: " + results);
+        return preInboundLineOutputList;
+    }
+
+    /**
+     *
+     * @param preInboundLine
+     * @return
+     */
+    private static SearchInventoryV2 getSearchInventoryV2(PreInboundLineEntityV2 preInboundLine) {
+        SearchInventoryV2 searchInventoryV2 = new SearchInventoryV2();
+        searchInventoryV2.setCompanyCodeId(Collections.singletonList(preInboundLine.getCompanyCode()));
+        searchInventoryV2.setPlantId(Collections.singletonList(preInboundLine.getPlantId()));
+        searchInventoryV2.setLanguageId(Collections.singletonList(preInboundLine.getLanguageId()));
+        searchInventoryV2.setWarehouseId(Collections.singletonList(preInboundLine.getWarehouseId()));
+        searchInventoryV2.setItemCode(Collections.singletonList(preInboundLine.getItemCode()));
+        searchInventoryV2.setManufacturerName(Collections.singletonList(preInboundLine.getManufacturerName()));
+        return searchInventoryV2;
     }
 
     /**

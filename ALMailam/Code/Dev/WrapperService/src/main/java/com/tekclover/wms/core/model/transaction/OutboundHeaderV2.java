@@ -40,4 +40,7 @@ public class OutboundHeaderV2 extends OutboundHeader {
 
     private String countOfPickedLine;
     private String sumOfPickedQty;
+
+    private String customerType;
+
 }

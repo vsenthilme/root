@@ -146,7 +146,7 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
                     "oh.MIDDLEWARE_ID,oh.MIDDLEWARE_TABLE,oh.REF_DOC_TYP,oh.SALES_ORDER_NUMBER,\n" +
                     "oh.SALES_INVOICE_NUMBER,oh.PICK_LIST_NUMBER,oh.INVOICE_DATE,oh.DELIVERY_TYPE,\n" +
                     "oh.CUSTOMER_ID,oh.CUSTOMER_NAME,oh.ADDRESS,oh.PHONE_NUMBER,oh.ALTERNATE_NO,oh.STATUS,oh.TOKEN_NUMBER,oh.TARGET_BRANCH_CODE,\n" +
-                    "ol.ref_doc_no , ol.c_id , ol.lang_id, ol.plant_id, ol.wh_id, ol.pre_ob_no, ol.partner_code, ol.customer_type", nativeQuery = true)
+                    "ol.ref_doc_no , ol.c_id , ol.lang_id, ol.plant_id, ol.wh_id, ol.pre_ob_no, ol.partner_code, oh.customer_type", nativeQuery = true)
     Stream<OutboundHeaderV2Stream> findAllOutBoundHeader(
             @Param(value = "companyCodeId") List<String> companyCodeId,
             @Param(value = "plantId") List<String> plantId,

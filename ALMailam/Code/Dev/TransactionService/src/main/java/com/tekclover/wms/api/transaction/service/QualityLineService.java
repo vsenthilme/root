@@ -1286,11 +1286,11 @@ public class QualityLineService extends BaseService {
                     dbQualityLine.setDescription(dbOrderManagementLine.getDescription());
                     dbQualityLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                     dbQualityLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
-//                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
+                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                     dbQualityLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
                 }
 
-                dbQualityLine.setBarcodeId(newQualityLine.getBarcodeId());
+//                dbQualityLine.setBarcodeId(newQualityLine.getBarcodeId());
                 dbQualityLine.setDeletionIndicator(0L);
                 dbQualityLine.setQualityCreatedBy(loginUserID);
                 dbQualityLine.setQualityUpdatedBy(loginUserID);

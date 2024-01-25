@@ -481,8 +481,8 @@ public class HhtUserService {
                 if (dbHhtUser.getStartDate() != null && dbHhtUser.getEndDate() != null) {
                     List<HhtUser> userPresent = hhtUserRepository.getHhtUserAttendance(
                             dbHhtUser.getCompanyCodeId(),
-                            dbHhtUser.getPlantId(),
                             dbHhtUser.getLanguageId(),
+                            dbHhtUser.getPlantId(),
                             dbHhtUser.getWarehouseId(),
                             dbHhtUser.getUserId(),
                             dbHhtUser.getStartDate(),

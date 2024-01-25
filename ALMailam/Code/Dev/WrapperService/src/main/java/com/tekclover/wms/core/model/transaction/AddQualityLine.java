@@ -1,7 +1,6 @@
 package com.tekclover.wms.core.model.transaction;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
 
@@ -30,7 +29,7 @@ public class AddQualityLine {
 	private Long variantCode;
 	private String variantSubCode;
 	private String batchSerialNumber;
-	private Double qualityQty;	
+	private Double qualityQty;
 	private Double pickConfirmQty;
 	private String qualityConfirmUom;
 	private String rejectQty;
@@ -56,4 +55,5 @@ public class AddQualityLine {
 	private Date qualityReversedOn;
 
 	private String manufacturerName;
+	private String barcodeId;
 }

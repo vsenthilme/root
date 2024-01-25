@@ -55,6 +55,7 @@ public class AddQualityLineV2 {
 	private Date qualityReversedOn;
 
 	private String manufacturerName;
+	private String barcodeId;
 
 	/**
 	 * 

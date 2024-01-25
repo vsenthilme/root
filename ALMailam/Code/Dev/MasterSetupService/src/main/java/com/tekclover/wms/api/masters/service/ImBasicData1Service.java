@@ -2,6 +2,7 @@ package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
 import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
+import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.model.imbasicdata1.AddImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.ImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.SearchImBasicData1;
@@ -9,6 +10,7 @@ import com.tekclover.wms.api.masters.model.imbasicdata1.UpdateImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData1V2;
 import com.tekclover.wms.api.masters.model.impl.ItemListImpl;
+import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1Repository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1V2Repository;
 import com.tekclover.wms.api.masters.repository.specification.ImBasicData1Specification;
@@ -45,6 +47,9 @@ public class ImBasicData1Service {
     @Autowired
     private IDMasterService idMasterService;
 
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
+
     /**
      * getImBasicData1s
      *
@@ -77,6 +82,9 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+        createImBasicData1Log3(itemCode, languageId, companyCodeId, plantId, warehouseId, uomId, manufacturerPartNo,
+                "ImBasicData1 with given values and itemCode-" + itemCode + " doesn't exists.");
         return null;
     }
 
@@ -111,6 +119,9 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+        createImBasicData1Log4(itemCode, languageId, companyCodeId, plantId, warehouseId, manufacturerPartNo,
+                "ImBasicData1 with given values and itemCode-" + itemCode + " doesn't exists.");
         return null;
     }
 
@@ -256,6 +267,8 @@ public class ImBasicData1Service {
                 newImBasicData1.getUomId(), newImBasicData1.getManufacturerPartNo(), newImBasicData1.getLanguageId(), 0L);
 
         if (!duplicateImBasicData1.isEmpty()) {
+            // Exception Log
+            createImBasicData1Log1(newImBasicData1, "Record is getting Duplicated.");
             throw new EntityNotFoundException("Record is Getting Duplicated");
         } else {
             BeanUtils.copyProperties(newImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(newImBasicData1));
@@ -294,6 +307,8 @@ public class ImBasicData1Service {
                 newImBasicData1.getUomId(), newImBasicData1.getManufacturerPartNo(), newImBasicData1.getLanguageId(), 0L);
 
         if (!duplicateImBasicData1.isEmpty()) {
+            // Exception Log
+            createImBasicData1Log2(newImBasicData1, "Record is getting Duplicated.");
             throw new EntityNotFoundException("Record is Getting Duplicated");
         } else {
             BeanUtils.copyProperties(newImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(newImBasicData1));
@@ -374,6 +389,8 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+        createImBasicData1Log(imBasicData, "ImBasicData1 with given values Not Available!");
         return null;
     }
 
@@ -399,4 +416,96 @@ public class ImBasicData1Service {
             throw new EntityNotFoundException("Error in deleting itemCode Id:" + itemCode);
         }
     }
+
+    //========================================ImBasicData1_ExceptionLog================================================
+    private void createImBasicData1Log(ImBasicData imBasicData, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(imBasicData.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(imBasicData.getLanguageId());
+        exceptionLog.setCompanyCodeId(imBasicData.getCompanyCodeId());
+        exceptionLog.setPlantId(imBasicData.getPlantId());
+        exceptionLog.setWarehouseId(imBasicData.getWarehouseId());
+        exceptionLog.setReferenceField1(imBasicData.getItemCode());
+        exceptionLog.setReferenceField2(imBasicData.getManufacturerName());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log1(AddImBasicData1 addImBasicData1, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(addImBasicData1.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(addImBasicData1.getLanguageId());
+        exceptionLog.setCompanyCodeId(addImBasicData1.getCompanyCodeId());
+        exceptionLog.setPlantId(addImBasicData1.getPlantId());
+        exceptionLog.setWarehouseId(addImBasicData1.getWarehouseId());
+        exceptionLog.setReferenceField1(addImBasicData1.getItemCode());
+        exceptionLog.setReferenceField2(addImBasicData1.getUomId());
+        exceptionLog.setReferenceField3(addImBasicData1.getManufacturerPartNo());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log2(ImBasicData1 imBasicData1, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(imBasicData1.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(imBasicData1.getLanguageId());
+        exceptionLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        exceptionLog.setPlantId(imBasicData1.getPlantId());
+        exceptionLog.setWarehouseId(imBasicData1.getWarehouseId());
+        exceptionLog.setReferenceField1(imBasicData1.getItemCode());
+        exceptionLog.setReferenceField2(imBasicData1.getUomId());
+        exceptionLog.setReferenceField3(imBasicData1.getManufacturerPartNo());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log3(String itemCode, String languageId, String companyCodeId, String plantId,
+                                        String warehouseId, String uomId, String manufacturerPartNo, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(itemCode);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(itemCode);
+        exceptionLog.setReferenceField2(uomId);
+        exceptionLog.setReferenceField3(manufacturerPartNo);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log4(String itemCode, String languageId, String companyCodeId, String plantId,
+                                        String warehouseId, String manufacturerPartNo, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(itemCode);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(itemCode);
+        exceptionLog.setReferenceField2(manufacturerPartNo);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
 }

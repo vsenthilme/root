@@ -135,7 +135,7 @@ public class GrLineController {
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										 @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
 										 @RequestParam String itemCode) {
-		GrLineV2 grline = grlineService.getGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+		GrLineV2 grline = grlineService.getGrLineV2(companyCode, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
 				goodsReceiptNo, palletCode, caseCode, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
@@ -148,7 +148,7 @@ public class GrLineController {
 										 @RequestParam String plantId, @RequestParam String languageId,
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 										 @RequestParam String packBarcodes, @RequestParam String itemCode) {
-		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, plantId, languageId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
+		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, languageId, plantId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
 	}

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,6 +136,9 @@ public class PreInboundHeaderService extends BaseService {
 
     @Autowired
     private InboundLineV2Repository inboundLineV2Repository;
+
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------------------------------------------
@@ -1096,6 +1100,9 @@ public class PreInboundHeaderService extends BaseService {
                         companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, 0L);
 
         if (preInboundHeaderEntity.isEmpty()) {
+            // Exception log
+            createPreInboundHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "PreInboundHeaderV2 with given values doesn't exists - " + refDocNumber);
             throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
                     ", warehouseId: " + warehouseId + " doesn't exist.");
         }
@@ -2257,4 +2264,24 @@ public class PreInboundHeaderService extends BaseService {
             }
         return preInboundHeaderEntity;
     }
+
+    //=========================================PreInboundHeader_ExceptionLog===========================================
+    private void createPreInboundHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                            String refDocNumber, String preInboundNo, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
 }

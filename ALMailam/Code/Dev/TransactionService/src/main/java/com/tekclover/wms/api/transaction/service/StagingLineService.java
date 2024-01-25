@@ -4,6 +4,7 @@ import com.tekclover.wms.api.transaction.controller.exception.BadRequestExceptio
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.*;
+import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.AddGrHeader;
@@ -97,6 +98,9 @@ public class StagingLineService extends BaseService {
     private ImPartnerService imPartnerService;
 
     String statusDescription = null;
+
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
     //----------------------------------------------------------------------------------------
 
     /**
@@ -880,6 +884,9 @@ public class StagingLineService extends BaseService {
                         caseCode,
                         0L);
         if (StagingLineEntity.isEmpty()) {
+            // Exception Log
+            createStagingLineLog3(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber, lineNo, itemCode,
+                    caseCode, "StagingLine with given values and refDocNumber-" + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -1670,4 +1677,27 @@ public class StagingLineService extends BaseService {
         }
         return stagingLineEntityV2s;
     }
+
+    //===========================================StagingLine_ExceptionLog==============================================
+    private void createStagingLineLog3(String languageId, String companyCode, String plantId, String warehouseId, String preInboundNo,
+                                       String refDocNumber, Long lineNo, String itemCode, String caseCode, String error) {
+
+        ExceptionLog dbExceptionLog = new ExceptionLog();
+        dbExceptionLog.setOrderTypeId(refDocNumber);
+        dbExceptionLog.setOrderDate(new Date());
+        dbExceptionLog.setLanguageId(languageId);
+        dbExceptionLog.setCompanyCodeId(companyCode);
+        dbExceptionLog.setPlantId(plantId);
+        dbExceptionLog.setWarehouseId(warehouseId);
+        dbExceptionLog.setRefDocNumber(refDocNumber);
+        dbExceptionLog.setReferenceField1(preInboundNo);
+        dbExceptionLog.setReferenceField2(String.valueOf(lineNo));
+        dbExceptionLog.setReferenceField3(itemCode);
+        dbExceptionLog.setReferenceField4(caseCode);
+        dbExceptionLog.setErrorMessage(error);
+        dbExceptionLog.setCreatedBy("MSD_API");
+        dbExceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbExceptionLog);
+    }
+
 }

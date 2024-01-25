@@ -12931,5 +12931,78 @@ public class TransactionService {
         }
     }
 
+    //Find InBoundOrder
+    public InboundOrderV2[] findInboundOrderV2(FindInboundOrderV2 findInboundOrderV2, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "/orders/findInboundOrderV2");
+            HttpEntity<?> entity = new HttpEntity<>(findInboundOrderV2, headers);
+            ResponseEntity<InboundOrderV2[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, InboundOrderV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    //FindInboundOrderLine
+  public InboundOrderLinesV2[] findInboundOrderLinesV2(FindInboundOrderLineV2 findInboundOrderLineV2, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "/orders/findInboundOrderLinesV2");
+            HttpEntity<?> entity = new HttpEntity<>(findInboundOrderLineV2, headers);
+            ResponseEntity<InboundOrderLinesV2[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, InboundOrderLinesV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+    //FindOutboundOrder
+    public OutboundOrderV2[] findOutboundOrderV2(FindOutboundOrderV2 findOutboundOrderV2, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "/orders/findOutboundOrderV2");
+            HttpEntity<?> entity = new HttpEntity<>(findOutboundOrderV2, headers);
+            ResponseEntity<OutboundOrderV2[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, OutboundOrderV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public OutboundOrderLineV2[] findOutboundOrderLineV2(FindOutboundOrderLineV2 findOutboundOrderLineV2, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "/orders/findOutboundOrderLineV2");
+            HttpEntity<?> entity = new HttpEntity<>(findOutboundOrderLineV2, headers);
+            ResponseEntity<OutboundOrderLineV2[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, OutboundOrderLineV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
 }

@@ -4,12 +4,14 @@ import com.tekclover.wms.api.transaction.controller.exception.BadRequestExceptio
 import com.tekclover.wms.api.transaction.model.auditlog.AuditLog;
 import com.tekclover.wms.api.transaction.model.dto.IInventory;
 import com.tekclover.wms.api.transaction.model.dto.Warehouse;
+import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.transaction.model.impl.InventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.*;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
+import com.tekclover.wms.api.transaction.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.transaction.repository.InventoryMovementRepository;
 import com.tekclover.wms.api.transaction.repository.InventoryRepository;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
@@ -51,6 +53,9 @@ public class InventoryService extends BaseService {
     //================================================================================================
     @Autowired
     private InventoryV2Repository inventoryV2Repository;
+
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
     //================================================================================================
 
     /**
@@ -1925,6 +1930,8 @@ public class InventoryService extends BaseService {
                 inventoryV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndBinClassIdAndDeletionIndicatorOrderByInventoryIdDesc(
                         companycode, plantId, languageId, warehouseId, itemCode, manufacturerName, binClassId, 0L);
         if (stBinInventoryList == null || stBinInventoryList.isEmpty()) {
+            // Exception Log
+            createInventoryLog9(languageId, companycode, plantId, warehouseId, itemCode, manufacturerName, binClassId, "Inventory is null.");
             log.error("---------Inventory is null-----------");
             return null;
         }
@@ -2214,4 +2221,25 @@ public class InventoryService extends BaseService {
         }
         return newInventory;
     }
+
+    //===========================================Inventory_ExceptionLog================================================
+    private void createInventoryLog9(String languageId, String companyCodeId, String plantId, String warehouseId,
+                                     String itemCode, String manufacturerName, Long binClassId, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(itemCode);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(itemCode);
+        exceptionLog.setReferenceField2(manufacturerName);
+        exceptionLog.setReferenceField3(String.valueOf(binClassId));
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
 }

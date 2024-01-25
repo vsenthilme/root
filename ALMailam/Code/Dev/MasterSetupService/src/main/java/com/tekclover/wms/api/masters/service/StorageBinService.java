@@ -2,9 +2,11 @@ package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
 import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
+import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
 import com.tekclover.wms.api.masters.model.storagebin.*;
 import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
+import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.masters.repository.StorageBinRepository;
 import com.tekclover.wms.api.masters.repository.StorageBinV2Repository;
 import com.tekclover.wms.api.masters.repository.specification.StorageBinSpecification;
@@ -33,6 +35,9 @@ public class StorageBinService {
 
     @Autowired
     private StorageBinV2Repository storageBinV2Repository;
+
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
 
     /**
      * getStorageBins
@@ -63,6 +68,9 @@ public class StorageBinService {
                 languageId,
                 0L);
         if (storagebin.isEmpty()) {
+            // Exception Log
+            createStorageBinLog1(storageBin, languageId, companyCodeId, plantId, warehouseId,
+                    "Storage Bin with given values and binClassId - " + storageBin + " doesn't exists.");
             throw new BadRequestException("The Given Values:" +
                     "storageBin" + storageBin +
                     "companyCodeId" + companyCodeId +
@@ -82,6 +90,9 @@ public class StorageBinService {
                 languageId,
                 0L);
         if (storagebin.isEmpty()) {
+            // Exception Log
+            createStorageBinLog1(storageBin, languageId, companyCodeId, plantId, warehouseId,
+                    "Storage Bin with given values and storageBin - " + storageBin + " doesn't exists.");
             throw new BadRequestException("The Given Values: " +
                     "storageBin" + storageBin +
                     "companyCodeId " + companyCodeId +
@@ -107,6 +118,9 @@ public class StorageBinService {
                 warehouseId,
                 languageId);
         if (storagebin == null) {
+            // Exception Log
+            createStorageBinLog(binClassId, languageId, companyCodeId, plantId, warehouseId,
+                    "Storage Bin with given values and binClassId - " + binClassId + " doesn't exists.");
             throw new BadRequestException("The Given Values: " +
                     "binClassId" + binClassId +
                     "companyCodeId " + companyCodeId +
@@ -132,6 +146,9 @@ public class StorageBinService {
                 warehouseId,
                 languageId, 0L);
         if (storagebin.isEmpty()) {
+            // Exception Log
+            createStorageBinLog(binClassId, languageId, companyCodeId, plantId, warehouseId,
+                    "Storage Bin with given values and binClassId-" + binClassId + " doesn't exists.");
             throw new BadRequestException("The Given Values: " +
                     "binClassId" + binClassId +
                     "companyCodeId " + companyCodeId +
@@ -157,6 +174,8 @@ public class StorageBinService {
         if (!storagebinList.isEmpty()) {
             return storagebinList;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Storage Bin with given values doesn't exists.");
         return null;
     }
 
@@ -179,6 +198,8 @@ public class StorageBinService {
         if (!storagebinList.isEmpty()) {
             return storagebinList;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Storage Bin with given values doesn't exists.");
         return null;
     }
 
@@ -198,6 +219,8 @@ public class StorageBinService {
         if (storagebin != null) {
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Storage Bin with given values doesn't exists.");
         return null;
     }
 
@@ -238,6 +261,8 @@ public class StorageBinService {
         if (storagebin != null) {
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin NonCbm doesn't exists.");
         return null;
     }
 
@@ -263,6 +288,8 @@ public class StorageBinService {
             log.info("ProposedStorageBinNonCBMLastPickedBin: " + storagebin.getStorageBin());
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin NonCbm LastPicked doesn't exists.");
         return null;
     }
 
@@ -290,6 +317,8 @@ public class StorageBinService {
             log.info("ProposedStorageBinCBMLastPickedBin: " + storagebin.getStorageBin());
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin Cbm LastPicked doesn't exists.");
         return null;
     }
 
@@ -317,6 +346,8 @@ public class StorageBinService {
             log.info("ProposedStorageBinCBMPerQtyLastPickedBin: " + storagebin.getStorageBin());
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin CbmPerQty LastPicked doesn't exists.");
         return null;
     }
 
@@ -348,6 +379,8 @@ public class StorageBinService {
             log.info("Inventory Existing StorageBin: " + storagebin.getStorageBin());
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin NonCbm doesn't exists.");
         return null;
     }
 
@@ -371,6 +404,8 @@ public class StorageBinService {
             log.info("BinClassId 7 StorageBin: " + storagebin.getStorageBin());
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Storage Bin with BinClassId-7 not available!");
         return null;
     }
 
@@ -391,6 +426,8 @@ public class StorageBinService {
         if (storagebin != null) {
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin Cbm doesn't exists.");
         return null;
     }
 
@@ -411,6 +448,8 @@ public class StorageBinService {
         if (storagebin != null) {
             return storagebin;
         }
+        // Exception Log
+        createStorageBinLog2(storageBinPutAway, "Proposed Storage Bin CbmPerQty doesn't exists.");
         return null;
     }
 
@@ -561,6 +600,8 @@ public class StorageBinService {
         if (storagebin != null && storagebin.getDeletionIndicator() != null && storagebin.getDeletionIndicator() == 0) {
             return storagebin;
         } else {
+            // Exception Log
+            createStorageBinLog3(storageBin, warehouseId, "Storage Bin with Id-" + storageBin + " and warehouseId-" + warehouseId + " doesn't exists.");
             throw new BadRequestException("The given StorageBin ID : " + storageBin + " doesn't exist.");
         }
     }
@@ -805,6 +846,74 @@ public class StorageBinService {
         } else {
             throw new EntityNotFoundException("Error in deleting Id:" + storageBin);
         }
+    }
+
+    //========================================StorageBin_ExceptionLog==================================================
+    private void createStorageBinLog(Long binClassId, String languageId, String companyCodeId,
+                                     String plantId, String warehouseId, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(String.valueOf(binClassId));
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(String.valueOf(binClassId));
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createStorageBinLog1(String storageBin, String languageId, String companyCodeId,
+                                      String plantId, String warehouseId, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(storageBin);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(storageBin);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createStorageBinLog2(StorageBinPutAway storageBinPutAway, String error) {
+
+        for (String dbStorageBin : storageBinPutAway.getStorageBin()) {
+            ExceptionLog exceptionLog = new ExceptionLog();
+
+            exceptionLog.setOrderTypeId(dbStorageBin);
+            exceptionLog.setOrderDate(new Date());
+            exceptionLog.setLanguageId(storageBinPutAway.getLanguageId());
+            exceptionLog.setCompanyCodeId(storageBinPutAway.getCompanyCodeId());
+            exceptionLog.setPlantId(storageBinPutAway.getPlantId());
+            exceptionLog.setWarehouseId(storageBinPutAway.getWarehouseId());
+            exceptionLog.setReferenceField1(storageBinPutAway.getBin());
+            exceptionLog.setReferenceField2(String.valueOf(storageBinPutAway.getBinClassId()));
+            exceptionLog.setReferenceField3(String.valueOf(storageBinPutAway.getStatusId()));
+            exceptionLog.setErrorMessage(error);
+            exceptionLog.setCreatedBy("MSD_API");
+            exceptionLog.setCreatedOn(new Date());
+            exceptionLogRepo.save(exceptionLog);
+        }
+    }
+
+    private void createStorageBinLog3(String storageBin, String warehouseId, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(storageBin);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
     }
 
 }

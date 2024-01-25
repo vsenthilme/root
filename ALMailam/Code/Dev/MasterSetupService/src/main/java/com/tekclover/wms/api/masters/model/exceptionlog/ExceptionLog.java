@@ -1,4 +1,4 @@
-package com.tekclover.wms.api.transaction.model.exceptionlog;
+package com.tekclover.wms.api.masters.model.exceptionlog;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

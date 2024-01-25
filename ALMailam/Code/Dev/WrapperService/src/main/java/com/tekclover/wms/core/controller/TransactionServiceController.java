@@ -4121,4 +4121,43 @@ public class TransactionServiceController {
         return new ResponseEntity<>(exceptionLogs, HttpStatus.OK);
     }
 
+    //===============================================Find Order Details=================================================
+
+    //Find InBoundOrder
+    @ApiOperation(response = InboundOrderV2[].class, value = "Find InboundOrderV2")//label for swagger
+    @PostMapping("/findInboundOrderV2")
+    public ResponseEntity<?> findInboundOrderV2(@RequestBody FindInboundOrderV2 findInboundOrderV2,
+                                                @RequestParam String authToken) {
+        InboundOrderV2[] inboundOrderV2 = transactionService.findInboundOrderV2(findInboundOrderV2, authToken);
+        return new ResponseEntity<>(inboundOrderV2, HttpStatus.OK);
+    }
+
+    //Find InBoundOrderLine
+    @ApiOperation(response = InboundOrderLinesV2[].class, value = "Find InboundOrderLinesV2")//label for swagger
+    @PostMapping("/findInboundOrderLineV2")
+    public ResponseEntity<?> findInboundOrderLineV2(@RequestBody FindInboundOrderLineV2 findInboundOrderLineV2,
+                                                @RequestParam String authToken) {
+        InboundOrderLinesV2[] inboundOrderLinesV2 = transactionService.findInboundOrderLinesV2(findInboundOrderLineV2, authToken);
+        return new ResponseEntity<>(inboundOrderLinesV2, HttpStatus.OK);
+    }
+
+    //Find OutBoundOrder
+    @ApiOperation(response = OutboundOrderV2[].class, value = "Find OutboundOrderV2")//label for swagger
+    @PostMapping("/findOutboundOrderV2")
+    public ResponseEntity<?> findOutboundOrderV2(@RequestBody FindOutboundOrderV2 findOutboundOrderV2,
+                                                    @RequestParam String authToken) {
+        OutboundOrderV2[] outboundOrderV2 = transactionService.findOutboundOrderV2(findOutboundOrderV2, authToken);
+        return new ResponseEntity<>(outboundOrderV2, HttpStatus.OK);
+    }
+
+    //Find OutBoundOrderLine
+    @ApiOperation(response = OutboundOrderLineV2[].class, value = "Find OutboundOrderLineV2")//label for swagger
+    @PostMapping("/findOutboundOrderLineV2")
+    public ResponseEntity<?> findOutboundOrderLineV2(@RequestBody FindOutboundOrderLineV2 findOutboundOrderLineV2,
+                                                 @RequestParam String authToken) {
+        OutboundOrderLineV2[] outboundOrderLineV2 = transactionService.findOutboundOrderLineV2(findOutboundOrderLineV2, authToken);
+        return new ResponseEntity<>(outboundOrderLineV2, HttpStatus.OK);
+    }
+
+
 }

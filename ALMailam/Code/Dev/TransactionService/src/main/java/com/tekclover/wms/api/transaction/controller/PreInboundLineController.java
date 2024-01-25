@@ -161,7 +161,7 @@ public class PreInboundLineController {
 	}
 
 	@ApiOperation(response = PreInboundLineOutputV2.class, value = "Search PreInboundLine V2") // label for swagger
-	@PostMapping("/findPreInboundLine/v2")
+		@PostMapping("/findPreInboundLine/v2")
 	public List<PreInboundLineOutputV2> findPreInboundLineV2(@RequestBody SearchPreInboundLineV2 searchPreInboundLine)
 			throws Exception {
 		return preinboundlineService.findPreInboundLineV2(searchPreInboundLine);

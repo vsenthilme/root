@@ -2381,6 +2381,14 @@ public class TransactionServiceController {
         return new ResponseEntity<>(preinboundline, HttpStatus.OK);
     }
 
+    //Find
+    @ApiOperation(response = PreInboundLineOutputV2.class, value = "Search PreInboundLine v2") // label for swagger
+    @PostMapping("/preinboundline/v2/findPreInboundLine")
+    public PreInboundLineOutputV2[] findPreInboundLineV2(@RequestBody SearchPreInboundLineV2 searchPreInboundLine,
+                                                         @RequestParam String authToken) throws Exception {
+        return transactionService.findPreInboundLineV2(searchPreInboundLine, authToken);
+    }
+
     //Patch
     @ApiOperation(response = PreInboundLineV2.class, value = "Patch PreInboundLine V2") // label for swagger
     @PatchMapping("/preinboundline/{preInboundNo}/V2")

@@ -7884,6 +7884,26 @@ public class TransactionService {
         return preInboundLine;
     }
 
+    public PreInboundLineOutputV2[] findPreInboundLineV2(SearchPreInboundLineV2 searchPreInboundLine, String authToken) throws ParseException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "preinboundline/findPreInboundLine/v2");
+            HttpEntity<?> entity = new HttpEntity<>(searchPreInboundLine, headers);
+            ResponseEntity<PreInboundLineOutputV2[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, PreInboundLineOutputV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // GET
     public PreInboundLineV2[] getPreInboundLineV2(String preInboundNo, String authToken) throws ParseException {
         try {

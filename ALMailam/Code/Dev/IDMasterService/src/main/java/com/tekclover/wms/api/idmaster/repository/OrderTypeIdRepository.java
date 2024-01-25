@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.idmaster.repository;
 
 import com.tekclover.wms.api.idmaster.model.hhtuser.OrderTypeId;
-import com.tekclover.wms.api.idmaster.model.moduleid.ModuleId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;

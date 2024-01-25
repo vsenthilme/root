@@ -477,6 +477,24 @@ public class HhtUserService {
                 }
                 dbHhtUserOutput.setOrderType(orderTypeId);
             }
+            if(dbHhtUser != null) {
+                if (dbHhtUser.getStartDate() != null && dbHhtUser.getEndDate() != null) {
+                    List<HhtUser> userPresent = hhtUserRepository.getHhtUserAttendance(
+                            dbHhtUser.getCompanyCodeId(),
+                            dbHhtUser.getPlantId(),
+                            dbHhtUser.getLanguageId(),
+                            dbHhtUser.getWarehouseId(),
+                            dbHhtUser.getUserId(),
+                            dbHhtUser.getStartDate(),
+                            dbHhtUser.getEndDate());
+                    log.info("HHt User Absent: " + userPresent);
+                    if (userPresent != null && !userPresent.isEmpty()) {
+                        dbHhtUserOutput.setUserPresent("0");
+                    } else {
+                        dbHhtUserOutput.setUserPresent("1");
+                    }
+                }
+            }
 
             newHhtUser.add(dbHhtUserOutput);
         }

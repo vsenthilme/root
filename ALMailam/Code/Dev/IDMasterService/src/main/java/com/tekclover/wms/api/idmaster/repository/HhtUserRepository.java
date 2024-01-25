@@ -57,4 +57,22 @@ public interface HhtUserRepository extends JpaRepository<HhtUser, Long>, JpaSpec
                                     @Param("userPresent") List<String> userPresent,
                                     @Param("noOfDaysLeave") List<String> noOfDaysLeave);
 
+    @Query(value ="select * \n"+
+            " from tblhhtuser \n" +
+            " where \n" +
+            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
+            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
+            "(COALESCE(:userId, null) IS NULL OR (USR_ID IN (:userId))) and \n" +
+            "(getdate() between :startDate and :endDate) and \n" +
+            " is_deleted = 0 ",nativeQuery = true)
+    public List<HhtUser> getHhtUserAttendance(@Param("companyCodeId") String companyCodeId,
+                                              @Param("languageId") String languageId,
+                                              @Param("plantId") String plantId,
+                                              @Param("warehouseId") String warehouseId,
+                                              @Param("userId") String userId,
+                                              @Param("startDate") Date startDate,
+                                              @Param("endDate") Date endDate);
+
 }

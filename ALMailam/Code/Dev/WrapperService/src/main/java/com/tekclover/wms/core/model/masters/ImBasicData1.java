@@ -3,6 +3,7 @@ package com.tekclover.wms.core.model.masters;
 import java.util.Date;
 
 import lombok.Data;
+
 @Data
 public class ImBasicData1 { 
 	
@@ -105,4 +106,23 @@ public class ImBasicData1 {
 	private String dimensionUom;
 
 	private Double volume;
+
+	private String manufacturerName;
+	private String manufacturerFullName;
+	private String manufacturerCode;
+	private String brand;
+	private String supplierPartNumber;
+	private String remarks;
+
+	private String isNew;
+	private String isUpdate;
+	private String isCompleted;
+
+	private String companyDescription;
+	private String plantDescription;
+	private String warehouseDescription;
+
+	//MiddleWare Fields
+	private Long middlewareId;
+	private String middlewareTable;
 }

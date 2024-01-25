@@ -1645,7 +1645,7 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setOutboundOrderTypeId(dbOrderManagementLine.getOutboundOrderTypeId());
                 dbPickupLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                 dbPickupLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
-                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
+//                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                 dbPickupLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
             }
 
@@ -1661,7 +1661,7 @@ public class PickupLineService extends BaseService {
             dbPickupLine.setVarianceQuantity(VAR_QTY);
             log.info("Var_Qty: " + VAR_QTY);
 
-//            dbPickupLine.setBarcodeId(newPickupLine.getBarcodeId());
+            dbPickupLine.setBarcodeId(newPickupLine.getBarcodeId());
             dbPickupLine.setDeletionIndicator(0L);
             dbPickupLine.setPickupUpdatedBy(loginUserID);
             dbPickupLine.setPickupUpdatedOn(new Date());

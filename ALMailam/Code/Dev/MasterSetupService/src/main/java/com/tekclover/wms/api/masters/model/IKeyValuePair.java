@@ -3,6 +3,12 @@ package com.tekclover.wms.api.masters.model;
 
 public interface IKeyValuePair {
 
+    String getCompanyDesc();
+
+    String getPlantDesc();
+
+    String getWarehouseDesc();
+
     String getCompanyCodeId();
     String getDescription();
     String getPlantId();

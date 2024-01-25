@@ -23,6 +23,11 @@ public interface StockReportImpl {
     Double getHoldQty();
 
     Double getAvailableQty();
+    Double getInvQty();
+
+    Double getAllocQty();
+
+    Double getTotalQty();
 
     String getCompanyDescription();
 

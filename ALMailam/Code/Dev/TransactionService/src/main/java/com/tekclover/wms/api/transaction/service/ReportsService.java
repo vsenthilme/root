@@ -417,9 +417,9 @@ public class ReportsService extends BaseService {
             searchStockReport.setWarehouseId(null);
         }
 
-        if (searchStockReport.getStockTypeText() == null) {
-            throw new BadRequestException("StockTypeText can't be blank.");
-        }
+//        if (searchStockReport.getStockTypeText() == null) {
+//            throw new BadRequestException("StockTypeText can't be blank.");
+//        }
 
         if (searchStockReport.getItemCode() == null || searchStockReport.getItemCode().isEmpty()) {
             searchStockReport.setItemCode(null);
@@ -439,8 +439,8 @@ public class ReportsService extends BaseService {
                 searchStockReport.getWarehouseId(),
                 searchStockReport.getItemCode(),
                 searchStockReport.getItemText(),
-                searchStockReport.getManufacturerName(),
-                searchStockReport.getStockTypeText());
+                searchStockReport.getManufacturerName());
+//                searchStockReport.getStockTypeText());
 
         return reportList;
     }

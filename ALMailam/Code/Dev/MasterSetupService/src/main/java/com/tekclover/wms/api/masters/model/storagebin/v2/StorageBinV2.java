@@ -43,4 +43,13 @@ public class StorageBinV2 extends StorageBin {
 	@Column(name = "WEIGHT")
 	private Double weight;
 
+	@Column(name = "C_TEXT", columnDefinition = "nvarchar(255)")
+	private String companyDescription;
+
+	@Column(name = "PLANT_TEXT", columnDefinition = "nvarchar(255)")
+	private String plantDescription;
+
+	@Column(name = "WH_TEXT", columnDefinition = "nvarchar(255)")
+	private String warehouseDescription;
+
 }

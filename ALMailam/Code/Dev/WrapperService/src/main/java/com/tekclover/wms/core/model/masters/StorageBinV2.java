@@ -14,5 +14,8 @@ public class StorageBinV2 extends StorageBin {
 	private String capacityUom;
 	private String quantity;
 	private Double weight;
+	private String companyDescription;
+	private String plantDescription;
+	private String warehouseDescription;
 
 }

@@ -217,6 +217,18 @@ public class MasterOrderService {
                                 imBasicData1.setCreatedOn(existingImBasicData.get().getCreatedOn());
                                 imBasicData1.setUpdatedBy(item.getCreatedBy());
                                 imBasicData1.setUpdatedOn(new Date());
+
+                                IKeyValuePair description = imBasicData1V2Repo.getDescription(imBasicData1.getCompanyCodeId(),
+                                        imBasicData1.getLanguageId(),
+                                        imBasicData1.getPlantId(),
+                                        imBasicData1.getWarehouseId());
+
+                                if(description != null) {
+                                    imBasicData1.setCompanyDescription(description.getCompanyDesc());
+                                    imBasicData1.setPlantDescription(description.getPlantDesc());
+                                    imBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+                                }
+
                                 imBasicData1V2Repo.save(imBasicData1);
                                 log.info("Item Master updated Successfully");
 
@@ -237,6 +249,18 @@ public class MasterOrderService {
                         imBasicData1.setCreatedBy(item.getCreatedBy());
                         imBasicData1.setCreatedOn(new Date());
                         imBasicData1.setUpdatedOn(null);
+
+                        IKeyValuePair description = imBasicData1V2Repo.getDescription(imBasicData1.getCompanyCodeId(),
+                                imBasicData1.getLanguageId(),
+                                imBasicData1.getPlantId(),
+                                imBasicData1.getWarehouseId());
+
+                        if(description != null) {
+                            imBasicData1.setCompanyDescription(description.getCompanyDesc());
+                            imBasicData1.setPlantDescription(description.getPlantDesc());
+                            imBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+                        }
+
                         imBasicData1V2Repo.save(imBasicData1);
 
                         dbitem.setRemarks("item Master Created Successfully");
@@ -263,6 +287,18 @@ public class MasterOrderService {
                             imBasicData1.setCreatedOn(existingImBasicData.get().getCreatedOn());
                             imBasicData1.setUpdatedBy(item.getCreatedBy());
                             imBasicData1.setUpdatedOn(new Date());
+
+                            IKeyValuePair description = imBasicData1V2Repo.getDescription(imBasicData1.getCompanyCodeId(),
+                                    imBasicData1.getLanguageId(),
+                                    imBasicData1.getPlantId(),
+                                    imBasicData1.getWarehouseId());
+
+                            if(description != null) {
+                                imBasicData1.setCompanyDescription(description.getCompanyDesc());
+                                imBasicData1.setPlantDescription(description.getPlantDesc());
+                                imBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+                            }
+
                             imBasicData1V2Repo.save(imBasicData1);
                             log.info("Item Master updated Successfully: " + imBasicData1);
 
@@ -293,6 +329,18 @@ public class MasterOrderService {
                     imBasicData1.setCreatedBy(item.getCreatedBy());
                     imBasicData1.setCreatedOn(new Date());
                     imBasicData1.setUpdatedOn(null);
+
+                    IKeyValuePair description = imBasicData1V2Repo.getDescription(imBasicData1.getCompanyCodeId(),
+                            imBasicData1.getLanguageId(),
+                            imBasicData1.getPlantId(),
+                            imBasicData1.getWarehouseId());
+
+                    if(description != null) {
+                        imBasicData1.setCompanyDescription(description.getCompanyDesc());
+                        imBasicData1.setPlantDescription(description.getPlantDesc());
+                        imBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+                    }
+
                     imBasicData1V2Repo.save(imBasicData1);
                     log.info("item Master Created Successfully: " + imBasicData1);
 

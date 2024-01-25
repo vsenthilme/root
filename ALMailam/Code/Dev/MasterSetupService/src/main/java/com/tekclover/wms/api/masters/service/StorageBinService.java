@@ -1,12 +1,14 @@
 package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.IKeyValuePair;
 import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
 import com.tekclover.wms.api.masters.model.storagebin.*;
 import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
 import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
+import com.tekclover.wms.api.masters.repository.ImBasicData1V2Repository;
 import com.tekclover.wms.api.masters.repository.StorageBinRepository;
 import com.tekclover.wms.api.masters.repository.StorageBinV2Repository;
 import com.tekclover.wms.api.masters.repository.specification.StorageBinSpecification;
@@ -29,6 +31,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class StorageBinService {
+    @Autowired
+    private ImBasicData1V2Repository imBasicData1V2Repository;
 
     @Autowired
     private StorageBinRepository storagebinRepository;
@@ -727,6 +731,18 @@ public class StorageBinService {
             throw new BadRequestException("Record is Getting Duplicate");
         } else {
             BeanUtils.copyProperties(newStorageBin, dbStorageBin, CommonUtils.getNullPropertyNames(newStorageBin));
+
+            IKeyValuePair description = imBasicData1V2Repository.getDescription(newStorageBin.getCompanyCodeId(),
+                    newStorageBin.getLanguageId(),
+                    newStorageBin.getPlantId(),
+                    newStorageBin.getWarehouseId());
+
+            if(description != null) {
+                dbStorageBin.setCompanyDescription(description.getCompanyDesc());
+                dbStorageBin.setPlantDescription(description.getPlantDesc());
+                dbStorageBin.setWarehouseDescription(description.getWarehouseDesc());
+            }
+
             dbStorageBin.setDeletionIndicator(0L);
             dbStorageBin.setCreatedBy(loginUserID);
             dbStorageBin.setUpdatedBy(loginUserID);

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.IKeyValuePair;
 import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
 import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.model.imbasicdata1.AddImBasicData1;
@@ -14,6 +15,7 @@ import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1Repository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1V2Repository;
 import com.tekclover.wms.api.masters.repository.specification.ImBasicData1Specification;
+import com.tekclover.wms.api.masters.repository.specification.ImBasicData1V2Specification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
 import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -321,6 +323,18 @@ public class ImBasicData1Service {
             if(newImBasicData1.getItemType() == null) {
                 dbImBasicData1.setItemType(1L);
             }
+
+            IKeyValuePair description = imBasicData1V2Repository.getDescription(newImBasicData1.getCompanyCodeId(),
+                    newImBasicData1.getLanguageId(),
+                    newImBasicData1.getPlantId(),
+                    newImBasicData1.getWarehouseId());
+
+            if(description != null) {
+                dbImBasicData1.setCompanyDescription(description.getCompanyDesc());
+                dbImBasicData1.setPlantDescription(description.getPlantDesc());
+                dbImBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+            }
+
             dbImBasicData1.setDeletionIndicator(0L);
             dbImBasicData1.setCreatedBy(loginUserID);
             dbImBasicData1.setUpdatedBy(loginUserID);
@@ -392,6 +406,27 @@ public class ImBasicData1Service {
         // Exception Log
         createImBasicData1Log(imBasicData, "ImBasicData1 with given values Not Available!");
         return null;
+    }
+
+    //Streaming
+    public Stream<ImBasicData1V2> findImBasicData1V2Stream(SearchImBasicData1 searchImBasicData1)
+            throws Exception {
+        if (searchImBasicData1.getStartCreatedOn() != null && searchImBasicData1.getEndCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getStartCreatedOn(), searchImBasicData1.getEndCreatedOn());
+            searchImBasicData1.setStartCreatedOn(dates[0]);
+            searchImBasicData1.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchImBasicData1.getStartUpdatedOn() != null && searchImBasicData1.getEndUpdatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getStartUpdatedOn(), searchImBasicData1.getEndUpdatedOn());
+            searchImBasicData1.setStartUpdatedOn(dates[0]);
+            searchImBasicData1.setEndUpdatedOn(dates[1]);
+        }
+
+        ImBasicData1V2Specification spec = new ImBasicData1V2Specification(searchImBasicData1);
+        Stream<ImBasicData1V2> results = imBasicData1V2Repository.stream(spec, ImBasicData1V2.class);
+//		log.info("results: " + results);
+        return results;
     }
 
     /**

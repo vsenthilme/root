@@ -98,6 +98,14 @@ public class ImBasicData1Controller {
         return imbasicdata1Service.findImBasicData1Stream(searchImBasicData1);
     }
 
+    //Streaming
+    @ApiOperation(response = ImBasicData1V2.class, value = "Search ImBasicData1 Stream") // label for swagger
+    @PostMapping("/v2/findImBasicData1Stream")
+    public Stream<ImBasicData1V2> findImBasicData1StreamV2(@RequestBody SearchImBasicData1 searchImBasicData1)
+            throws Exception {
+        return imbasicdata1Service.findImBasicData1V2Stream(searchImBasicData1);
+    }
+
     @ApiOperation(response = ImBasicData1.class, value = "Like Search ImBasicData1") // label for swagger
     @GetMapping("/findItemCodeByLike")
     public List<ItemListImpl> getImBasicData1LikeSearch(@RequestParam String likeSearchByItemCodeNDesc)

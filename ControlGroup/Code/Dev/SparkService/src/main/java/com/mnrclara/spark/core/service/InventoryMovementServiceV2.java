@@ -1,4 +1,4 @@
-//package com.mnrclara.spark.core.service;
+package com.mnrclara.spark.core.service;//package com.mnrclara.spark.core.service;
 //
 //import com.mnrclara.spark.core.model.FindInventoryMovement;
 //import com.mnrclara.spark.core.model.InventoryMovement;

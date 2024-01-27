@@ -1,13 +1,12 @@
-package com.mnrclara.spark.core.model.Almailem;
-
+package com.mnrclara.spark.core.model.wmscorev2;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.sql.Timestamp;
 
 @Data
-public class PickupLine {
+public class PickupHeaderV2 {
+
     private String languageId;
     private String companyCodeId;
     private String plantId;
@@ -15,27 +14,19 @@ public class PickupLine {
     private String preOutboundNo;
     private String refDocNumber;
     private String partnerCode;
-    private Long lineNumber;
     private String pickupNumber;
+    private Long lineNumber;
     private String itemCode;
-    private String actualHeNo;
-    private String pickedStorageBin;
-    private String pickedPackCode;
+    private String proposedStorageBin;
+    private String proposedPackBarCode;
     private Long outboundOrderTypeId;
-    private Long variantCode;
-    private String variantSubCode;
-    private String batchSerialNumber;
-    private Double pickConfirmQty;
-    private Double allocatedQty;
+    private Double pickToQty;
     private String pickUom;
     private Long stockTypeId;
     private Long specialStockIndicatorId;
-    private String description;
     private String manufacturerPartNo;
-    private String assignedPickerId;
-    private String pickPalletCode;
-    private String pickCaseCode;
     private Long statusId;
+    private String assignedPickerId;
     private String referenceField1;
     private String referenceField2;
     private String referenceField3;
@@ -47,18 +38,18 @@ public class PickupLine {
     private String referenceField9;
     private String referenceField10;
     private Long deletionIndicator;
+    private String remarks;
     private String pickupCreatedBy;
     private Timestamp pickupCreatedOn;
-    private String pickupConfirmedBy;
-    private Timestamp pickupConfirmedOn;
-    private String pickupUpdatedBy;
-    private Timestamp pickupUpdatedOn;
+    private String pickConfimedBy;
+    private Timestamp pickConfimedOn;
+    private String pickUpdatedBy;
+    private Timestamp pickUpdatedOn;
     private String pickupReversedBy;
     private Timestamp pickupReversedOn;
-    //v2 fields
+
+    // V2 fields
     private Double inventoryQuantity;
-    private Double pickedCbm;
-    private String cbmUnit;
     private String manufacturerCode;
     private String manufacturerName;
     private String origin;
@@ -70,16 +61,16 @@ public class PickupLine {
     private String warehouseDescription;
     private String statusDescription;
     private Long middlewareId;
-    private Long middlewareHeaderId;
     private String middlewareTable;
     private String referenceDocumentType;
     private String salesOrderNumber;
-    private String pickListNumber;
-    private String tokenNumber;
     private String salesInvoiceNumber;
     private String supplierInvoiceNo;
-    private String manufacturerFullName;
+    private String pickListNumber;
+    private String tokenNumber;
+    private String fromBranchCode;
+    private String isCompleted;
+    private String isCancelled;
+    private Timestamp mUpdatedOn;
     private String targetBranchCode;
-    private Double varianceQuantity;
-
 }

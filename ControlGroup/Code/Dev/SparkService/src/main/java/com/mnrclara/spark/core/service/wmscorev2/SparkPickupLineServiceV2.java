@@ -1,7 +1,7 @@
-package com.mnrclara.spark.core.service.almailem;
+package com.mnrclara.spark.core.service.wmscorev2;
 
-import com.mnrclara.spark.core.model.Almailem.PickupLine;
-import com.mnrclara.spark.core.model.Almailem.SearchPickupLineV2;
+import com.mnrclara.spark.core.model.wmscorev2.PickupLine;
+import com.mnrclara.spark.core.model.wmscorev2.SearchPickupLineV2;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.spark.sql.*;
@@ -20,14 +20,14 @@ import static org.apache.spark.sql.functions.col;
 
 @Service
 @Slf4j
-public class SparkPickupLineService {
+public class SparkPickupLineServiceV2 {
 
     Properties conProp = new Properties();
     SparkSession sparkSession = null;
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public SparkPickupLineService() throws ParseException {
+    public SparkPickupLineServiceV2() throws ParseException {
         // Connection properties
         conProp.setProperty("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conProp.put("user", "sa");
@@ -37,9 +37,9 @@ public class SparkPickupLineService {
         sparkSession = SparkSession.builder().master("local[*]").appName("SparkByExample.com").config("spark.executor.memory", "4g")
                 .config("spark.executor.cores", "4").getOrCreate();
 
-        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_ALMDEV", "tblpickupline", conProp)
+        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_CORE", "tblpickupline", conProp)
                 .repartition(16);
-        df2.createOrReplaceTempView("tblpickuplinev2");
+        df2.createOrReplaceTempView("tblpickuplinev5");
     }
 
     /**
@@ -124,7 +124,7 @@ public class SparkPickupLineService {
                 + "MANUFACTURER_FULL_NAME as manufacturerFullName, "
                 + "TARGET_BRANCH_CODE as targetBranchCode, "
                 + "VAR_QTY as varianceQuantity "
-                + "FROM tblpickuplinev2 WHERE IS_DELETED = 0 ");
+                + "FROM tblpickuplinev5 WHERE IS_DELETED = 0 ");
 
         // Cache the DataFrame
         pickupLineSqlQuery.cache();

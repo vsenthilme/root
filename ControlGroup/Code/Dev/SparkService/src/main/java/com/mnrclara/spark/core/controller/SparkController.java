@@ -5,14 +5,8 @@ import java.util.Optional;
 
 import com.mnrclara.spark.core.model.*;
 import com.mnrclara.spark.core.model.Almailem.SearchImBasicData1;
-import com.mnrclara.spark.core.model.wmscore.FindStagingLine;
-import com.mnrclara.spark.core.model.wmscore.FindStorageBin;
-import com.mnrclara.spark.core.model.wmscore.StagingLine;
-import com.mnrclara.spark.core.model.wmscore.StorageBin;
 import com.mnrclara.spark.core.service.*;
 import com.mnrclara.spark.core.service.almailem.SparkImBasicData1Service;
-import com.mnrclara.spark.core.service.wmscore.StagingLineServiceSpark;
-import com.mnrclara.spark.core.service.wmscore.StorageBinServiceSpark;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,11 +90,6 @@ public class SparkController {
     @Autowired
     SparkImBasicData1Service almSparkImBasicData1Service;
 
-    @Autowired
-    StorageBinServiceSpark storageBinServiceSpark;
-
-    @Autowired
-    StagingLineServiceSpark stagingLineServiceSpark;
 
 
 //    @ApiOperation(response = Optional.class, value = "Get all Users")

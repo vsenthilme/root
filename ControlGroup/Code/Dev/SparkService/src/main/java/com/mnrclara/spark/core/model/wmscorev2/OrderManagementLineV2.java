@@ -1,13 +1,12 @@
-package com.mnrclara.spark.core.model.Almailem;
-
+package com.mnrclara.spark.core.model.wmscorev2;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.sql.Timestamp;
 
 @Data
-public class PickupLine {
+public class OrderManagementLineV2 {
+
     private String languageId;
     private String companyCodeId;
     private String plantId;
@@ -16,26 +15,36 @@ public class PickupLine {
     private String refDocNumber;
     private String partnerCode;
     private Long lineNumber;
-    private String pickupNumber;
     private String itemCode;
-    private String actualHeNo;
-    private String pickedStorageBin;
-    private String pickedPackCode;
-    private Long outboundOrderTypeId;
+    private String proposedStorageBin;
+    private String proposedPackBarCode;
+    private String pickupNumber;
     private Long variantCode;
     private String variantSubCode;
-    private String batchSerialNumber;
-    private Double pickConfirmQty;
-    private Double allocatedQty;
-    private String pickUom;
+    private Long outboundOrderTypeId;
+    private Long statusId;
     private Long stockTypeId;
     private Long specialStockIndicatorId;
     private String description;
     private String manufacturerPartNo;
+    private String hsnCode;
+    private String itemBarcode;
+    private Double orderQty;
+    private String orderUom;
+    private Double inventoryQty;
+    private Double allocatedQty;
+    private Double reAllocatedQty;
+    private Long strategyTypeId;
+    private String strategyNo;
+    private Timestamp requiredDeliveryDate;
+    private String proposedBatchSerialNumber;
+    private String proposedPalletCode;
+    private String proposedCaseCode;
+    private String proposedHeNo;
+    private String proposedPicker;
     private String assignedPickerId;
-    private String pickPalletCode;
-    private String pickCaseCode;
-    private Long statusId;
+    private String reassignedPickerId;
+    private Long deletionIndicator;
     private String referenceField1;
     private String referenceField2;
     private String referenceField3;
@@ -46,19 +55,18 @@ public class PickupLine {
     private String referenceField8;
     private String referenceField9;
     private String referenceField10;
-    private Long deletionIndicator;
+    private String reAllocatedBy;
+    private Timestamp reAllocatedOn;
     private String pickupCreatedBy;
     private Timestamp pickupCreatedOn;
-    private String pickupConfirmedBy;
-    private Timestamp pickupConfirmedOn;
     private String pickupUpdatedBy;
     private Timestamp pickupUpdatedOn;
-    private String pickupReversedBy;
-    private Timestamp pickupReversedOn;
+    private String pickerAssignedBy;
+    private Timestamp pickerAssignedOn;
+    private String pickerReassignedBy;
+    private Timestamp pickerReassignedOn;
+
     //v2 fields
-    private Double inventoryQuantity;
-    private Double pickedCbm;
-    private String cbmUnit;
     private String manufacturerCode;
     private String manufacturerName;
     private String origin;
@@ -73,13 +81,14 @@ public class PickupLine {
     private Long middlewareHeaderId;
     private String middlewareTable;
     private String referenceDocumentType;
+    private String supplierInvoiceNo;
     private String salesOrderNumber;
     private String pickListNumber;
     private String tokenNumber;
-    private String salesInvoiceNumber;
-    private String supplierInvoiceNo;
     private String manufacturerFullName;
+    private String transferOrderNo;
+    private String returnOrderNo;
+    private String isCompleted;
+    private String isCancelled;
     private String targetBranchCode;
-    private Double varianceQuantity;
-
 }

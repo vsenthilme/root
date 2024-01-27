@@ -1,9 +1,8 @@
-package com.mnrclara.spark.core.model.Almailem;
+package com.mnrclara.spark.core.model.wmscorev2;
 
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.sql.Timestamp;
 
 @Data

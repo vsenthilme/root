@@ -493,6 +493,8 @@ public class HhtUserService {
                     } else {
                         dbHhtUserOutput.setUserPresent("1");
                     }
+                } else {
+                    dbHhtUserOutput.setUserPresent("1");
                 }
             }
 

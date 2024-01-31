@@ -131,13 +131,13 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
             "ip.wh_id in (:warehouseId) and \n" +
             "ip.lang_id in (:languageId) and \n" +
             "ip.mfr_name in (:manufactureName) and \n" +
-            "ip.is_deleted = 0", nativeQuery = true)
+            "ip.is_deleted = 0 order by ctd_on desc", nativeQuery = true)
     public List<String> getPartnerItemBarcode(@Param(value = "itemCode") String itemCode,
-                                       @Param(value = "companyCode") String companyCode,
-                                       @Param(value = "plantId") String plantId,
-                                       @Param(value = "warehouseId") String warehouseId,
-                                       @Param(value = "manufactureName") String manufactureName,
-                                       @Param(value = "languageId") String languageId);
+                                              @Param(value = "companyCode") String companyCode,
+                                              @Param(value = "plantId") String plantId,
+                                              @Param(value = "warehouseId") String warehouseId,
+                                              @Param(value = "manufactureName") String manufactureName,
+                                              @Param(value = "languageId") String languageId);
 
     //Partner_item_barcode - almailem - interim only
     @Query(value = "select string_agg(barcode,', ') from (select distinct barcode from tblinterimbarcodeid ip \n" +
@@ -269,4 +269,7 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
     List<StagingLineEntityV2> findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
             String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
 
+    List<StagingLineEntityV2> findAllByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId,
+            String itemCode, String manufacturerName, Long deletionIndicator);
 }

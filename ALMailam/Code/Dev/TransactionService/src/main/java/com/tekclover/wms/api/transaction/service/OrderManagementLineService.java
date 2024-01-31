@@ -1280,6 +1280,37 @@ public class OrderManagementLineService extends BaseService {
         return orderManagementLineCount;
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     */
+    public void updateOrderManagementLineForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                      String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<Long> statusIdList = new ArrayList<>();
+        statusIdList.add(41L);      //Order Allocation
+        statusIdList.add(42L);      //Partial Allocation
+        statusIdList.add(43L);      //Allocated
+
+        List<OrderManagementLineV2> orderManagementLineList = orderManagementLineV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdInAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, statusIdList, 0L);
+        log.info("OrderManagementLine: " + orderManagementLineList);
+        if (orderManagementLineList != null && !orderManagementLineList.isEmpty()) {
+            for (OrderManagementLineV2 dbOrderManagementLine : orderManagementLineList) {
+                dbOrderManagementLine.setBarcodeId(barcodeId);
+                dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
+                orderManagementLineV2Repository.save(dbOrderManagementLine);
+            }
+        }
+    }
+
     //Streaming
     public Stream<OrderManagementLineV2> findOrderManagementLineV2(SearchOrderManagementLineV2 searchOrderManagementLine)
             throws ParseException, java.text.ParseException {

@@ -2026,7 +2026,7 @@ public class InventoryService extends BaseService {
                 searchInventory.getLevelId(),
                 searchInventory.getSpecialStockIndicatorId(),
                 searchInventory.getBinClassId());
-        log.info("Inventory results: " + results);
+        log.info("Inventory results: " + results.size() );
         return results;
     }
 
@@ -2061,6 +2061,33 @@ public class InventoryService extends BaseService {
             return inventoryV2Repository.save(dbInventory);
         }
         return null;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     * @return
+     */
+    public void updateInventoryForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                            String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<InventoryV2> dbInventoryList = inventoryV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 0L);
+        log.info("Inventory for UpdateBarcodeId: " + dbInventoryList);
+        if(dbInventoryList != null && !dbInventoryList.isEmpty()) {
+            for (InventoryV2 dbInventory : dbInventoryList) {
+                dbInventory.setBarcodeId(barcodeId);
+                dbInventory.setUpdatedBy(loginUserID);
+                dbInventory.setUpdatedOn(new Date());
+                inventoryV2Repository.save(dbInventory);
+            }
+        }
     }
 
     /**

@@ -16,7 +16,6 @@ import com.tekclover.wms.api.transaction.model.outbound.ordermangement.OrderMana
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.AddPickupLine;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupHeader;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.*;
@@ -26,6 +25,8 @@ import com.tekclover.wms.api.transaction.model.outbound.quality.v2.QualityHeader
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.QualityLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
+import com.tekclover.wms.api.transaction.model.outbound.v2.PickListHeader;
+import com.tekclover.wms.api.transaction.model.outbound.v2.PickListLine;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PreOutboundHeaderSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.PreOutboundHeaderV2Specification;
@@ -137,6 +138,12 @@ public class PreOutboundHeaderService extends BaseService {
 
     @Autowired
     private OutboundHeaderService outboundHeaderService;
+
+    @Autowired
+    private PickListHeaderService pickListHeaderService;
+
+    @Autowired
+    private PickListLineService pickListLineService;
     String statusDescription = null;
 
     //------------------------------------------------------------------------------------------------------
@@ -1485,14 +1492,17 @@ public class PreOutboundHeaderService extends BaseService {
 
                 if (oldPickListNo != null && !oldPickListNo.isEmpty()) {
                     for (String oldPickListNumber : oldPickListNo) {
+//                        OutboundHeaderV2 outboundOrderV2 =
+//                                outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndStatusIdAndDeletionIndicator(
+//                                        companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, 59L, 0L);
                         OutboundHeaderV2 outboundOrderV2 =
-                                outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndStatusIdAndDeletionIndicator(
-                                        companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, 59L, 0L);
+                                outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                                        companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, 0L);
                         log.info("Outbound Order status ---> Delivered for old Picklist Number: " + outboundOrderV2 + ", " + oldPickListNumber);
 
-                        if (outboundOrderV2 != null) {
+                        if (outboundOrderV2 != null && outboundOrderV2.getInvoiceNumber() != null) {
                             // Update error message for the new PicklistNo
-                            throw new BadRequestException("Picklist cannot be cancelled as Sales order associated with picklist has been already confirmed");
+                            throw new BadRequestException("Picklist cannot be cancelled as Sales order associated with picklist - Invoice has been raised");
                         }
 
                         log.info("Old PickList Number: " + oldPickListNumber + " Cancellation Initiated and followed by New PickList " + newPickListNo + " creation started");
@@ -1604,14 +1614,41 @@ public class PreOutboundHeaderService extends BaseService {
                     }
 
 
-                    List<String> hhtUserList = preOutboundHeaderV2Repository.getHHTUserPresentList(OB_ORD_TYP_ID, companyCodeId, plantId, languageId, warehouseId);
-                    log.info("hhtUserList: " + hhtUserList);
+                    List<HHTUser> hhtUserIdList = preOutboundHeaderV2Repository.getHHTUserListNew(OB_ORD_TYP_ID, companyCodeId, plantId, languageId, warehouseId);
+                    log.info("hhtUserList: " + hhtUserIdList);
 
-                    if (hhtUserList != null) {
+                    List<String> hhtUserList = new ArrayList<>();
+                    List<String> absentHhtUserList = new ArrayList<>();
+                    if(hhtUserIdList != null && !hhtUserIdList.isEmpty()) {
+                        for (HHTUser dbHhtUser : hhtUserIdList) {
+                            if (dbHhtUser.getStartDate() != null && dbHhtUser.getEndDate() != null) {
+                                List<String> userPresent = preOutboundHeaderV2Repository.getHhtUserAttendance(
+                                        dbHhtUser.getCompanyCodeId(),
+                                        dbHhtUser.getLanguageId(),
+                                        dbHhtUser.getPlantId(),
+                                        dbHhtUser.getWarehouseId(),
+                                        dbHhtUser.getUserId(),
+                                        dbHhtUser.getStartDate(),
+                                        dbHhtUser.getEndDate());
+                                log.info("HHt User Absent: " + userPresent);
+                                if (userPresent != null && !userPresent.isEmpty()) {
+                                    absentHhtUserList.add(dbHhtUser.getUserId());
+                                } else {
+                                    hhtUserList.add(dbHhtUser.getUserId());
+                                }
+                            } else {
+                                hhtUserList.add(dbHhtUser.getUserId());
+                            }
+                        }
+                    }
+                    log.info("Present HHtUser List: " + hhtUserList);
+                    log.info("Absent HHtUser List: " + absentHhtUserList);
+
+                    if (hhtUserList != null && !hhtUserList.isEmpty()) {
                         hhtUserCount = hhtUserList.stream().count();
                         log.info("hhtUserList count: " + hhtUserCount);
                     }
-                    if (hhtUserList != null) {
+                    if (hhtUserList != null && !hhtUserList.isEmpty()) {
 
                         hhtUserCount = hhtUserList.stream().count();
                         log.info("hhtUserList count: " + hhtUserCount);
@@ -1869,8 +1906,35 @@ public class PreOutboundHeaderService extends BaseService {
                         }
                     }
 
-                    List<String> hhtUserList = preOutboundHeaderV2Repository.getHHTUserByLevelIdPresentList(LEVEL_ID, companyCodeId, plantId, languageId, warehouseId);
-                    log.info("hhtUserList: " + hhtUserList);
+                    List<HHTUser> hhtUserIdList = preOutboundHeaderV2Repository.getHHTUserListByLevelIdNew(LEVEL_ID, companyCodeId, plantId, languageId, warehouseId);
+                    log.info("hhtUserList: " + hhtUserIdList);
+
+                    List<String> hhtUserList = new ArrayList<>();
+                    List<String> absentHhtUserList = new ArrayList<>();
+                    if(hhtUserIdList != null && !hhtUserIdList.isEmpty()) {
+                        for (HHTUser dbHhtUser : hhtUserIdList) {
+                            if (dbHhtUser.getStartDate() != null && dbHhtUser.getEndDate() != null) {
+                                List<String> userPresent = preOutboundHeaderV2Repository.getHhtUserAttendance(
+                                        dbHhtUser.getCompanyCodeId(),
+                                        dbHhtUser.getLanguageId(),
+                                        dbHhtUser.getPlantId(),
+                                        dbHhtUser.getWarehouseId(),
+                                        dbHhtUser.getUserId(),
+                                        dbHhtUser.getStartDate(),
+                                        dbHhtUser.getEndDate());
+                                log.info("HHt User Absent: " + userPresent);
+                                if (userPresent != null && !userPresent.isEmpty()) {
+                                    absentHhtUserList.add(dbHhtUser.getUserId());
+                                } else {
+                                    hhtUserList.add(dbHhtUser.getUserId());
+                                }
+                            } else {
+                                hhtUserList.add(dbHhtUser.getUserId());
+                            }
+                        }
+                    }
+                    log.info("Present HHtUser List: " + hhtUserList);
+                    log.info("Absent HHtUser List: " + absentHhtUserList);
 
                     if (hhtUserList != null) {
 
@@ -3627,5 +3691,87 @@ public class PreOutboundHeaderService extends BaseService {
             }
         }
         log.info("Pick List Cancellation Completed");
+//        insertNewPickListCancelRecord(outboundHeaderV2, outboundLineV2, pickupLineV2, companyCodeId, plantId, languageId, warehouseId, oldPickListNumber, newPickListNumber);
+    }
+
+    /**
+     *
+     * @param outboundHeaderV2
+     * @param outboundLineV2List
+     * @param pickupLineList
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param oldPickListNumber
+     * @param newPickListNumber
+     */
+    private void insertNewPickListCancelRecord(OutboundHeaderV2 outboundHeaderV2, List<OutboundLineV2> outboundLineV2List, List<PickupLineV2> pickupLineList,
+                                               String companyCodeId, String plantId, String languageId, String warehouseId, String oldPickListNumber, String newPickListNumber){
+        Long oldObLineCount = 0L;
+        Long newObLineCount = 0L;
+        Long oldPickLineCount = 0L;
+        Long newPickLineCount = 0L;
+        if(outboundLineV2List != null && !outboundLineV2List.isEmpty()){
+            oldObLineCount = outboundLineV2List.stream().count();
+        }
+        if(pickupLineList != null && !pickupLineList.isEmpty()) {
+            oldPickLineCount = pickupLineList.stream().count();
+        }
+        List<OutboundLineV2> newOutboundLineList = outboundLineService.getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
+        List<PickupLineV2> newPickupLineList = pickupLineService.getPickupLineForPickListCancellationV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
+        if(newOutboundLineList != null && !newOutboundLineList.isEmpty()) {
+            newObLineCount = newOutboundLineList.stream().count();
+        }
+        if(newPickupLineList != null && !newPickupLineList.isEmpty()) {
+            newPickLineCount = newOutboundLineList.stream().count();
+        }
+
+        if(outboundHeaderV2 != null) {
+            PickListHeader pickListHeader = new PickListHeader();
+            BeanUtils.copyProperties(outboundHeaderV2, pickListHeader, CommonUtils.getNullPropertyNames(outboundHeaderV2));
+            OutboundHeaderV2 newOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, newPickListNumber, warehouseId);
+            if(newOutboundHeader != null) {
+                pickListHeader.setOldPreOutboundNo(outboundHeaderV2.getPreOutboundNo());
+                pickListHeader.setOldRefDocNumber(outboundHeaderV2.getRefDocNumber());
+                pickListHeader.setOldPickListNumber(oldPickListNumber);
+                pickListHeader.setOldCustomerId(outboundHeaderV2.getCustomerId());
+                pickListHeader.setOldCustomerName(outboundHeaderV2.getCustomerName());
+                pickListHeader.setOldInvoiceDate(outboundHeaderV2.getInvoiceDate());
+                pickListHeader.setOldInvoiceNumber(outboundHeaderV2.getInvoiceNumber());
+                pickListHeader.setOldSalesInvoiceNumber(outboundHeaderV2.getSalesInvoiceNumber());
+                pickListHeader.setOldSupplierInvoiceNo(outboundHeaderV2.getSupplierInvoiceNo());
+                pickListHeader.setOldSalesOrderNumber(outboundHeaderV2.getSalesOrderNumber());
+                pickListHeader.setOldTokenNumber(outboundHeaderV2.getTokenNumber());
+                pickListHeader.setOldCountOfOrderedLine(oldObLineCount);
+                pickListHeader.setOldCountOfPickedLine(oldPickLineCount);
+
+                pickListHeader.setNewPreOutboundNo(newOutboundHeader.getPreOutboundNo());
+                pickListHeader.setNewRefDocNumber(newOutboundHeader.getRefDocNumber());
+                pickListHeader.setNewPickListNumber(newOutboundHeader.getPickListNumber());
+                pickListHeader.setNewCustomerId(newOutboundHeader.getCustomerId());
+                pickListHeader.setNewCustomerName(newOutboundHeader.getCustomerName());
+                pickListHeader.setNewInvoiceDate(newOutboundHeader.getInvoiceDate());
+                pickListHeader.setNewInvoiceNumber(newOutboundHeader.getInvoiceNumber());
+                pickListHeader.setNewSalesInvoiceNumber(newOutboundHeader.getSalesInvoiceNumber());
+                pickListHeader.setNewSupplierInvoiceNo(newOutboundHeader.getSupplierInvoiceNo());
+                pickListHeader.setNewSalesOrderNumber(newOutboundHeader.getSalesOrderNumber());
+                pickListHeader.setNewTokenNumber(newOutboundHeader.getTokenNumber());
+                pickListHeader.setNewCountOfOrderedLine(newObLineCount);
+                pickListHeader.setNewCountOfPickedLine(newPickLineCount);
+            }
+            List<PickListLine> createPickListLineList = new ArrayList<>();
+//            if(outboundLineV2List != null && !outboundLineV2List.isEmpty()){
+//                for(OutboundLineV2 dbOutboundLine : outboundLineV2List) {
+//                    PickListLine dbPickListLine = new PickListLine();
+//                    BeanUtils.copyProperties(dbOutboundLine, dbPickListLine, CommonUtils.getNullPropertyNames(dbOutboundLine));
+//                    dbPickListLine.setOldLineNo(dbOutboundLine.getLineNumber());
+//                    dbPickListLine.setOldPreOutboundNo(dbOutboundLine.getPreOutboundNo());
+//                    dbPickListLine.setOldPickConfirmQty(dbOutboundLine.getDeliveryQty());
+//
+//                }
+//            }
+        }
+
     }
 }

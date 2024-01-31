@@ -1,6 +1,7 @@
 package com.tekclover.wms.core.controller;
 
 import com.tekclover.wms.core.batch.scheduler.BatchJobScheduler;
+import com.tekclover.wms.core.model.masters.ImPartner;
 import com.tekclover.wms.core.model.transaction.*;
 import com.tekclover.wms.core.model.warehouse.cyclecount.periodic.Periodic;
 import com.tekclover.wms.core.model.warehouse.cyclecount.perpetual.Perpetual;
@@ -3542,6 +3543,16 @@ public class TransactionServiceController {
                         partnerCode, lineNumber, pickupNumber, itemCode, pickedStorageBin, pickedPackCode,
                         actualHeNo, loginUserID, updatePickupLine, authToken);
         return new ResponseEntity<>(createdPickupLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = ImPartner.class, value = "Update BarcodeId") // label for swagger
+    @PatchMapping("/pickupline/v2/barcodeId")
+    public ResponseEntity<?> patchPickupLineBarcodeIdV2(@RequestParam String warehouseId, @RequestParam String companyCodeId,
+                                                        @RequestParam String plantId, @RequestParam String languageId,
+                                                        @RequestParam String itemCode, @RequestParam String manufacturerName,
+                                                        @RequestParam String barcodeId, @RequestParam String loginUserID, @RequestParam String authToken) {
+        ImPartner results = transactionService.updatePickupLineForBarcodeId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID, authToken);
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @ApiOperation(response = PickupLineV2.class, value = "Delete PickupLine V2") // label for swagger

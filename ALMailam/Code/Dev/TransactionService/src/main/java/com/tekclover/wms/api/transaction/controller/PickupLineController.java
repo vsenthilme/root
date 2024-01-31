@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.dto.ImPartner;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
@@ -181,6 +182,16 @@ public class PickupLineController {
                         partnerCode, lineNumber, pickupNumber, itemCode, pickedStorageBin, pickedPackCode,
                         loginUserID, updatePickupLine);
         return new ResponseEntity<>(createdPickupLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PickupLineV2.class, value = "Update BarcodeId") // label for swagger
+    @PatchMapping("/v2/barcodeId")
+    public ResponseEntity<?> patchPickupLineBarcodeIdV2(@RequestParam String warehouseId, @RequestParam String companyCodeId,
+                                                        @RequestParam String plantId, @RequestParam String languageId,
+                                                        @RequestParam String itemCode, @RequestParam String manufacturerName,
+                                                        @RequestParam String barcodeId, @RequestParam String loginUserID) {
+        ImPartner results = pickuplineService.updatePickupLineForBarcodeV2 (companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     @ApiOperation(response = PickupLineV2.class, value = "Delete PickupLine") // label for swagger

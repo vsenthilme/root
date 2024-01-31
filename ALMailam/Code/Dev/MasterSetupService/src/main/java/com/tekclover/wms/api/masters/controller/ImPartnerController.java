@@ -52,11 +52,10 @@ public class ImPartnerController {
     
     @ApiOperation(response = ImPartner.class, value = "Get a ImPartner") // label for swagger 
 	@GetMapping("/{itemCode}")
-	public ResponseEntity<?> getImPartner(@PathVariable String itemCode,@RequestParam String companyCodeId,
-										  @RequestParam String plantId,@RequestParam String languageId,
-										  @RequestParam String warehouseId) {
+	public ResponseEntity<?> getImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
+										  @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId) {
     	List<ImPartner> impartner =
-				impartnerService.getImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode);
+				impartnerService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName);
 		return new ResponseEntity<>(impartner, HttpStatus.OK);
 	}
     
@@ -78,25 +77,25 @@ public class ImPartnerController {
     
     @ApiOperation(response = ImPartner.class, value = "Update ImPartner") // label for swagger
     @PatchMapping("/{itemCode}")
-	public ResponseEntity<?> patchImPartner(@PathVariable String itemCode,@RequestParam String companyCodeId,
-											@RequestParam String plantId, @RequestParam String languageId,
+	public ResponseEntity<?> patchImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId,
+											@RequestParam String plantId, @RequestParam String languageId, @RequestParam String manufacturerName,
 											@RequestParam String warehouseId, @Valid @RequestBody List<AddImPartner> updateImPartner,
 											@RequestParam String loginUserID)
 			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImPartner> createdImPartner =
-				impartnerService.updateImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode,updateImPartner, loginUserID);
+				impartnerService.updateImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, updateImPartner, loginUserID);
 		return new ResponseEntity<>(createdImPartner , HttpStatus.OK);
 	}
     
     @ApiOperation(response = ImPartner.class, value = "Delete ImPartner") // label for swagger
 	@DeleteMapping("/{itemCode}")
-	public ResponseEntity<?> deleteImPartner(@PathVariable String itemCode,
-											 @RequestParam String companyCodeId,@RequestParam String plantId,
-											 @RequestParam String languageId,@RequestParam String warehouseId,
+	public ResponseEntity<?> deleteImPartner(@PathVariable String itemCode, @RequestParam String manufacturerName,
+											 @RequestParam String companyCodeId, @RequestParam String plantId,
+											 @RequestParam String languageId, @RequestParam String warehouseId,
 											 @RequestParam String loginUserID) throws ParseException {
 
-		impartnerService.deleteImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode,loginUserID);
+		impartnerService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

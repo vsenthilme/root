@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
@@ -17,24 +18,26 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
-import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
-import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.*;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.repository.InboundHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
+import com.tekclover.wms.api.transaction.repository.SupplierInvoiceHeaderRepository;
+import com.tekclover.wms.api.transaction.repository.SupplierInvoiceLineRepository;
+import com.tekclover.wms.api.transaction.repository.specification.SupplierInvoiceHeaderSpecification;
+import com.tekclover.wms.api.transaction.repository.specification.SupplierInvoiceLineSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
+import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -86,6 +89,12 @@ public class InvoiceCancellationService extends BaseService{
 
     @Autowired
     StagingLineV2Repository stagingLineV2Repository;
+
+    @Autowired
+    SupplierInvoiceLineRepository supplierInvoiceLineRepository;
+
+    @Autowired
+    SupplierInvoiceHeaderRepository supplierInvoiceHeaderRepository;
 
 //===================================================================================================================================
 
@@ -326,4 +335,81 @@ public class InvoiceCancellationService extends BaseService{
         }
         return warehouseApiResponse;
     }
+
+    //Streaming
+    public Stream<SupplierInvoiceHeader> findSupplierInvoiceHeader(SearchSupplierInvoiceHeader searchSupplierInvoiceHeader) throws ParseException {
+
+        if (searchSupplierInvoiceHeader.getStartCreatedOn() != null
+                && searchSupplierInvoiceHeader.getEndCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceHeader.getStartCreatedOn(),
+                    searchSupplierInvoiceHeader.getEndCreatedOn());
+            searchSupplierInvoiceHeader.setStartCreatedOn(dates[0]);
+            searchSupplierInvoiceHeader.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchSupplierInvoiceHeader.getStartConfirmedOn() != null
+                && searchSupplierInvoiceHeader.getEndConfirmedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceHeader.getStartConfirmedOn(),
+                    searchSupplierInvoiceHeader.getEndConfirmedOn());
+            searchSupplierInvoiceHeader.setStartConfirmedOn(dates[0]);
+            searchSupplierInvoiceHeader.setEndConfirmedOn(dates[1]);
+        }
+        SupplierInvoiceHeaderSpecification spec = new SupplierInvoiceHeaderSpecification(searchSupplierInvoiceHeader);
+        Stream<SupplierInvoiceHeader> searchResults = supplierInvoiceHeaderRepository.stream(spec, SupplierInvoiceHeader.class);
+
+        return searchResults;
+    }
+
+    //Streaming
+    public Stream<SupplierInvoiceLine> findSupplierInvoiceLine(SearchSupplierInvoiceLine searchSupplierInvoiceLine) throws ParseException {
+
+        if (searchSupplierInvoiceLine.getStartConfirmedOn() != null
+                && searchSupplierInvoiceLine.getEndConfirmedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceLine.getStartConfirmedOn(),
+                    searchSupplierInvoiceLine.getEndConfirmedOn());
+            searchSupplierInvoiceLine.setStartConfirmedOn(dates[0]);
+            searchSupplierInvoiceLine.setEndConfirmedOn(dates[1]);
+        }
+        SupplierInvoiceLineSpecification spec = new SupplierInvoiceLineSpecification(searchSupplierInvoiceLine);
+        Stream<SupplierInvoiceLine> searchResults = supplierInvoiceLineRepository.stream(spec, SupplierInvoiceLine.class);
+
+        return searchResults;
+    }
+
+    /**
+     *
+     * @param supplierInvoiceHeader
+     * @return
+     */
+    private SupplierInvoiceHeader createSupplierInvoiceHeader(SupplierInvoiceHeader supplierInvoiceHeader) {
+        SupplierInvoiceHeader newSupplierInvoiceHeader = new SupplierInvoiceHeader();
+        BeanUtils.copyProperties(supplierInvoiceHeader, newSupplierInvoiceHeader, CommonUtils.getNullPropertyNames(supplierInvoiceHeader));
+
+        newSupplierInvoiceHeader.setDeletionIndicator(0L);
+        newSupplierInvoiceHeader.setCreatedBy(supplierInvoiceHeader.getCreatedBy());
+        newSupplierInvoiceHeader.setCreatedOn(new Date());
+        SupplierInvoiceHeader creatednewSupplierInvoiceHeader = supplierInvoiceHeaderRepository.save(newSupplierInvoiceHeader);
+        log.info("newSupplierInvoiceHeader : " + creatednewSupplierInvoiceHeader);
+
+        /*
+         * newSupplierInvoice Line Table Insert
+         */
+        Set<SupplierInvoiceLine> toBeCreatedSupplierInvoiceLineList = new HashSet<>();
+        for (SupplierInvoiceLine createdSupplierInvoiceLine : supplierInvoiceHeader.getLine()) {
+            SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
+            BeanUtils.copyProperties(createdSupplierInvoiceLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(createdSupplierInvoiceLine));
+
+            supplierInvoiceLine.setDeletionIndicator(0L);
+            supplierInvoiceLine.setCreatedBy(createdSupplierInvoiceLine.getCreatedBy());
+            supplierInvoiceLine.setCreatedOn(new Date());
+            supplierInvoiceLineRepository.save(supplierInvoiceLine);
+            toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
+        }
+
+        log.info("createdSupplierInvoiceLine : " + toBeCreatedSupplierInvoiceLineList);
+        creatednewSupplierInvoiceHeader.setLine(toBeCreatedSupplierInvoiceLineList);
+
+        return creatednewSupplierInvoiceHeader;
+    }
+
 }

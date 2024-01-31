@@ -6,5 +6,6 @@ import lombok.Data;
 public class ItemCodeDesc {
 
 	private String itemCode;
+	private String manufacturerName;
 	private String description;
 }

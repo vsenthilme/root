@@ -22,4 +22,10 @@ public interface ImPartnerRepository extends JpaRepository<ImPartner,Long>, JpaS
 
 	List<ImPartner> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
 			String companyCodeId, String plantId, String languageId, String warehouseId, String itemCode, String manufacturerName, Long deletionIndicator);
+
+	List<ImPartner> findAllByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+			String companyCodeId, String plantId, String warehouseId, String languageId, String itemCode, String manufacturerName, Long deletionIndicator);
+
+    List<ImPartner> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPartnerItemBarcodeAndDeletionIndicator(
+			String companyCodeId, String plantId, String languageId, String warehouseId, String itemCode, String manufacturerName, String barcodeId, Long deletionIndicator);
 }

@@ -867,6 +867,32 @@ public class PickupHeaderService {
         return null;
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     */
+    public void updatePickupHeaderForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                               String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<PickupHeaderV2> dbPickupHeaderList = pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 48L, 0L);
+        log.info("PickupHeader status_48: " + dbPickupHeaderList);
+        if (dbPickupHeaderList != null && !dbPickupHeaderList.isEmpty()) {
+            for (PickupHeaderV2 dbPickupHeader : dbPickupHeaderList) {
+                dbPickupHeader.setBarcodeId(barcodeId);
+                dbPickupHeader.setPickUpdatedBy(loginUserID);
+                dbPickupHeader.setPickUpdatedOn(new Date());
+                pickupHeaderV2Repository.save(dbPickupHeader);
+            }
+        }
+    }
+
     public List<PickupHeaderV2> updatePickupHeaderForConfirmationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
                                                                     String partnerCode, String pickupNumber, Long lineNumber, String itemCode, String loginUserID,
                                                                     PickupHeaderV2 updatePickupHeader) throws IllegalAccessException, InvocationTargetException {

@@ -1184,6 +1184,38 @@ public class StagingLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     * @return
+     */
+    public List<StagingLineEntityV2> updateStagingLineForBarcodeV2(String companyCode, String plantId, String languageId, String warehouseId,
+                                                                   String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<StagingLineEntityV2> barcodeUpdatedList = new ArrayList<>();
+        List<StagingLineEntityV2> stagingLineEntityV2List =
+                stagingLineV2Repository.findAllByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        languageId, companyCode, plantId, warehouseId, itemCode, manufacturerName, 0L);
+        log.info("Staging Lines List for respective itemCode, ManufacturerName: " + stagingLineEntityV2List);
+
+        if(stagingLineEntityV2List != null && !stagingLineEntityV2List.isEmpty()) {
+            for(StagingLineEntityV2 dbStagingLineEntity : stagingLineEntityV2List) {
+                dbStagingLineEntity.setPartner_item_barcode(barcodeId);
+                dbStagingLineEntity.setUpdatedBy(loginUserID);
+                dbStagingLineEntity.setUpdatedOn(new Date());
+                stagingLineV2Repository.save(dbStagingLineEntity);
+                barcodeUpdatedList.add(dbStagingLineEntity);
+            }
+        }
+        return barcodeUpdatedList;
+    }
+
+    /**
      * @param assignHHTUsers
      * @param assignedUserId
      * @param loginUserID

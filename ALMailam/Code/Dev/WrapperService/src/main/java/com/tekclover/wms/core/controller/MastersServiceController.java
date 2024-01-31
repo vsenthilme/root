@@ -722,12 +722,11 @@ public class MastersServiceController {
 
     @ApiOperation(response = ImPartner.class, value = "Get a ImPartner") // label for swagger
     @RequestMapping(value = "/impartner/{itemCode}", method = RequestMethod.GET)
-    public ResponseEntity<?> getImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId,
+    public ResponseEntity<?> getImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
                                           @RequestParam String plantId, @RequestParam String languageId,
                                           @RequestParam String warehouseId, @RequestParam String authToken) {
 
-        ImPartner[] impartner = mastersService.getImPartner(companyCodeId, plantId, languageId,
-                warehouseId, itemCode, authToken);
+        ImPartner[] impartner = mastersService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, authToken);
 
         log.info("ImPartner : " + impartner);
         return new ResponseEntity<>(impartner, HttpStatus.OK);
@@ -743,23 +742,23 @@ public class MastersServiceController {
 
     @ApiOperation(response = Optional.class, value = "Update ImPartner") // label for swagger
     @RequestMapping(value = "/impartner/{itemCode}", method = RequestMethod.PATCH)
-    public ResponseEntity<?> updateImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId,
+    public ResponseEntity<?> updateImPartner(@PathVariable String itemCode, @RequestParam String manufacturerName, @RequestParam String companyCodeId,
                                              @RequestParam String plantId, @RequestParam String languageId,
                                              @RequestParam String warehouseId, @RequestBody List<ImPartner> updatedImPartner,
                                              @RequestParam String loginUserID, @RequestParam String authToken) {
 
         ImPartner[] modifiedImPartner = mastersService.updateImPartner(companyCodeId, plantId, languageId,
-                warehouseId, itemCode, updatedImPartner, loginUserID, authToken);
+                warehouseId, itemCode, manufacturerName, updatedImPartner, loginUserID, authToken);
 
         return new ResponseEntity<>(modifiedImPartner, HttpStatus.OK);
     }
 
     @ApiOperation(response = ImPartner.class, value = "Delete ImPartner") // label for swagger
     @RequestMapping(value = "/impartner/{itemCode}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteImPartner(@RequestParam String authToken, @RequestParam String companyCodeId,
+    public ResponseEntity<?> deleteImPartner(@RequestParam String authToken, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
                                              @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
                                              @PathVariable String itemCode, @RequestParam String loginUserID) {
-        mastersService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, loginUserID, authToken);
+        mastersService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, loginUserID, authToken);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

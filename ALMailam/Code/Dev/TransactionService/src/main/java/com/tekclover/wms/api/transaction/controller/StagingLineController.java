@@ -185,6 +185,16 @@ public class StagingLineController {
         return new ResponseEntity<>(createdStagingLine, HttpStatus.OK);
     }
 
+    @ApiOperation(response = StagingLineEntityV2.class, value = "Update StagingLine BarcodeId V2") // label for swagger
+    @PatchMapping("/v2/barcodeId")
+    public ResponseEntity<?> patchStagingLineBarcodeIdV2(@RequestParam String warehouseId, @RequestParam String companyCode, @RequestParam String plantId,
+                                                         @RequestParam String languageId, @RequestParam String manufacturerName, @RequestParam String barcodeId,
+                                                         @RequestParam String itemCode, @RequestParam String loginUserID) {
+        List<StagingLineEntityV2> updateBarCodeId =
+                staginglineService.updateStagingLineForBarcodeV2(companyCode, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+        return new ResponseEntity<>(updateBarCodeId, HttpStatus.OK);
+    }
+
     @ApiOperation(response = StagingLineEntityV2.class, value = "AssignHHTUser StagingLine") // label for swagger
     @PatchMapping("/assignHHTUser/v2")
     public ResponseEntity<?> assignHHTUserV2(@RequestBody List<AssignHHTUser> assignHHTUsers, @RequestParam String companyCode,

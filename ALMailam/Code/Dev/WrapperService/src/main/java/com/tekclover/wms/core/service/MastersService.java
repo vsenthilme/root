@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -1627,7 +1628,7 @@ public class MastersService {
 
     // GET ImPartner
     public ImPartner[] getImPartner(String companyCodeId, String plantId, String languageId,
-                                    String warehouseId, String itemCode, String authToken) {
+                                    String warehouseId, String itemCode, String manufacturerName, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -1636,6 +1637,7 @@ public class MastersService {
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "impartner/" + itemCode)
+                    .queryParam("manufacturerName", manufacturerName)
                     .queryParam("companyCodeId", companyCodeId)
                     .queryParam("languageId", languageId)
                     .queryParam("plantId", plantId)
@@ -1673,7 +1675,7 @@ public class MastersService {
 
     // Patch ImPartner
     public ImPartner[] updateImPartner(String companyCodeId, String plantId, String languageId,
-                                       String warehouseId, String itemCode,
+                                       String warehouseId, String itemCode, String manufacturerName,
                                        List<ImPartner> modifiedImPartner, String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -1690,6 +1692,7 @@ public class MastersService {
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "impartner/" + itemCode)
                             .queryParam("loginUserID", loginUserID)
                             .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("manufacturerName", manufacturerName)
                             .queryParam("languageId", languageId)
                             .queryParam("warehouseId", warehouseId)
                             .queryParam("plantId", plantId)
@@ -1705,8 +1708,8 @@ public class MastersService {
     }
 
     // Delete ImPartner
-    public boolean deleteImPartner(String companyCodeId, String plantId, String languageId,
-                                   String warehouseId, String itemCode, String loginUserID, String authToken) {
+    public boolean deleteImPartner(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                   String itemCode, String manufacturerName, String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -1717,6 +1720,7 @@ public class MastersService {
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "impartner/" + itemCode)
                             .queryParam("loginUserID", loginUserID)
+                            .queryParam("manufacturerName", manufacturerName)
                             .queryParam("companyCodeId", companyCodeId)
                             .queryParam("plantId", plantId)
                             .queryParam("languageId", languageId)

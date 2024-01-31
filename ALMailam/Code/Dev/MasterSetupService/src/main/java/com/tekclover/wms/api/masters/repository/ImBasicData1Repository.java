@@ -69,7 +69,7 @@ public interface ImBasicData1Repository extends PagingAndSortingRepository<ImBas
 												@Param("languageId") String languageId,
 												@Param("warehouseId") String warehouseId  );
 
-   @Query(value = 	"select TOP 50 itm_code as itemCode, \n" +
+   @Query(value = 	"select TOP 50 itm_code as itemCode, mfr_part manufacturerName, \n" +
 					"text as description from tblimbasicdata1 \n" +
 					"where ( itm_code like :searchText1% or itm_code like %:searchText2 \n" +
 					"or text like %:searchText3% ) and \n" +

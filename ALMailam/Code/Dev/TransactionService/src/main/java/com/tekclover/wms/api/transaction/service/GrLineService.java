@@ -2855,7 +2855,7 @@ public class GrLineService extends BaseService {
                 InventoryV2 createdinventory = createInventoryV2(createdGRLine);
 
                 /*----------------INVENTORYMOVEMENT table Update---------------------------------------------*/
-                createInventoryMovementV2(createdGRLine, createdinventory);
+                createInventoryMovementV2(createdGRLine, createdinventory.getStorageBin());
             }
             if (cbm == 0D) {
                 break outerloop;
@@ -3120,10 +3120,11 @@ public class GrLineService extends BaseService {
     }
 
     /**
+     *
      * @param createdGRLine
-     * @param createdinventory
+     * @param storageBin
      */
-    private void createInventoryMovementV2(GrLineV2 createdGRLine, InventoryV2 createdinventory) {
+    private void createInventoryMovementV2(GrLineV2 createdGRLine, String storageBin) {
         InventoryMovement inventoryMovement = new InventoryMovement();
         BeanUtils.copyProperties(createdGRLine, inventoryMovement, CommonUtils.getNullPropertyNames(createdGRLine));
         inventoryMovement.setCompanyCodeId(createdGRLine.getCompanyCode());
@@ -3152,7 +3153,7 @@ public class GrLineService extends BaseService {
         inventoryMovement.setMovementDocumentNo(createdGRLine.getGoodsReceiptNo());
 
         // ST_BIN
-        inventoryMovement.setStorageBin(createdinventory.getStorageBin());
+        inventoryMovement.setStorageBin(storageBin);
 
         // MVT_QTY
         inventoryMovement.setMovementQty(createdGRLine.getGoodReceiptQty());

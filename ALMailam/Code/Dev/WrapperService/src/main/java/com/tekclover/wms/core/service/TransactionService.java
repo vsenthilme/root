@@ -5,10 +5,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVWriter;
 import com.tekclover.wms.core.config.PropertiesConfig;
-import com.tekclover.wms.core.model.masters.ImBasicData1;
-import com.tekclover.wms.core.model.masters.ImBasicData1Stream;
-import com.tekclover.wms.core.model.masters.SearchImBasicData1;
-import com.tekclover.wms.core.model.masters.StorageBinStream;
+import com.tekclover.wms.core.model.masters.*;
 import com.tekclover.wms.core.model.transaction.*;
 import com.tekclover.wms.core.model.warehouse.cyclecount.periodic.Periodic;
 import com.tekclover.wms.core.model.warehouse.cyclecount.periodic.PeriodicLineV1;
@@ -11126,6 +11123,39 @@ public class TransactionService {
 //                pickupLineList.add(pickupLine);
 //            }
 //            return pickupLineList.toArray(new PickupLineV2[pickupLineList.size()]);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // PATCH - BarcodeId
+    public ImPartner updatePickupLineForBarcodeId(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                  String itemCode, String manufacturerName, String barcodeId, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "pickupline/v2/barcodeId")
+                            .queryParam("warehouseId", warehouseId)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("plantId", plantId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("manufacturerName", manufacturerName)
+                            .queryParam("itemCode", itemCode)
+                            .queryParam("barcodeId", barcodeId)
+                            .queryParam("loginUserID", loginUserID);
+            ResponseEntity<ImPartner> result =
+                    restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, ImPartner.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

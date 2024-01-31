@@ -112,6 +112,9 @@ public class PickupLineService extends BaseService {
     @Autowired
     private StorageBinRepository storageBinRepository;
 
+    @Autowired
+    private ImPartnerService imPartnerService;
+
     String statusDescription = null;
     //------------------------------------------------------------------------------------------------------
 
@@ -2305,7 +2308,7 @@ public class PickupLineService extends BaseService {
         }
 
         /*---------------------------------------------PickupHeader Updates---------------------------------------*/
-        // -----------------logic for checking all records as 51 then only it should go o update header-----------*/
+        // -----------------logic for checking all records as 51 then only it should go to update header-----------*/
         try {
             boolean isStatus51 = false;
             List<Long> statusList = createdPickupLineList.stream().map(PickupLine::getStatusId)
@@ -2440,6 +2443,41 @@ public class PickupLineService extends BaseService {
             return pickupLineV2Repository.save(dbPickupLine);
         }
         return null;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     */
+    @Transactional
+    public ImPartner updatePickupLineForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                  String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        ImPartner updateBarcode = imPartnerService.updateImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName,barcodeId,loginUserID);
+        if(updateBarcode != null) {
+//            List<PickupLineV2> dbPickupLine = pickupLineV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdAndDeletionIndicator(
+//                    companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 48L, 0L);
+//            log.info("Pickupline statusId_48: " + dbPickupLine);
+//            if (dbPickupLine != null && !dbPickupLine.isEmpty()) {
+//                for (PickupLineV2 pickupLineV2 : dbPickupLine) {
+//                    pickupLineV2.setBarcodeId(barcodeId);
+//                    pickupLineV2.setPickupUpdatedBy(loginUserID);
+//                    pickupLineV2.setPickupUpdatedOn(new Date());
+//                    pickupLineV2Repository.save(pickupLineV2);
+//                }
+//            }
+            pickupHeaderService.updatePickupHeaderForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+            orderManagementLineService.updateOrderManagementLineForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+//            inventoryService.updateInventoryForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+            log.info("BarcodeId Update Successful in ImPartner, PickupHeader, OrderManagementLine");
+        }
+        return updateBarcode;
     }
 
     public List<PickupLineV2> updatePickupLineForConfirmationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
@@ -2660,6 +2698,22 @@ public class PickupLineService extends BaseService {
             }
         }
         return finalizedInventoryList;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<PickupLineV2> getPickupLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<PickupLineV2> pickupLine = pickupLineV2Repository
+                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+            return pickupLine;
     }
 
     /**

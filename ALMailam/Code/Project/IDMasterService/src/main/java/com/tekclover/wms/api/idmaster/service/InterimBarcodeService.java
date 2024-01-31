@@ -35,6 +35,7 @@ public class InterimBarcodeService {
      */
     public List<InterimBarcode> getAll() {
         List<InterimBarcode> interimBarcodeList = interimBarcodeRepository.findAll();
+        interimBarcodeList = interimBarcodeList.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
         return interimBarcodeList;
     }
 
@@ -65,16 +66,16 @@ public class InterimBarcodeService {
     public InterimBarcode createInterimBarcode(AddInterimBarcode newInterimBarcode, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, ParseException {
 
-        Optional<InterimBarcode> dbInterimBarcodeDuplicateCheck =
-                interimBarcodeRepository.findByItemCodeAndReferenceField1(
-                        newInterimBarcode.getItemCode(),
-                        newInterimBarcode.getReferenceField1());
+//        Optional<InterimBarcode> dbInterimBarcodeDuplicateCheck =
+//                interimBarcodeRepository.findByItemCodeAndReferenceField1(
+//                        newInterimBarcode.getItemCode(),
+//                        newInterimBarcode.getReferenceField1());
 
-        if (!dbInterimBarcodeDuplicateCheck.isEmpty()) {
-
-            throw new BadRequestException(newInterimBarcode.getItemCode() + " Item Code was Scanned already !");
-
-        } else {
+//        if (!dbInterimBarcodeDuplicateCheck.isEmpty()) {
+//
+//            throw new BadRequestException(newInterimBarcode.getItemCode() + " Item Code was Scanned already !");
+//
+//        } else {
 
             InterimBarcode dbInterimBarcode = new InterimBarcode();
             BeanUtils.copyProperties(newInterimBarcode, dbInterimBarcode, CommonUtils.getNullPropertyNames(newInterimBarcode));
@@ -84,7 +85,7 @@ public class InterimBarcodeService {
             dbInterimBarcode.setCreatedOn(new Date());
             dbInterimBarcode.setUpdatedOn(new Date());
             return interimBarcodeRepository.save(dbInterimBarcode);
-        }
+//        }
     }
 
     //Find InterimBarcode

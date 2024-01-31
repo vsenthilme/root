@@ -922,7 +922,7 @@ public class PutAwayHeaderService extends BaseService {
         log.info("searchPutAwayHeader V2: " + searchPutAwayHeader);
         PutAwayHeaderV2Specification spec = new PutAwayHeaderV2Specification(searchPutAwayHeader);
         List<PutAwayHeaderV2> results = putAwayHeaderV2Repository.findAll(spec);
-        log.info("putAwayHeader results:" + results);
+        log.info("putAwayHeader results:" + results.size());
         return results;
     }
 

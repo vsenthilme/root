@@ -7,6 +7,7 @@ import java.util.List;
 public class SearchImPartner {
 
     private List<String> itemCode;
+    private List<String> manufacturerName;
     private List<String> languageId;
     private List<String> companyCodeId;
     private List<String> plantId;

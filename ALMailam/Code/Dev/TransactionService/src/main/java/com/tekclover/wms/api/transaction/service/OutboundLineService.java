@@ -3600,54 +3600,16 @@ public class OutboundLineService extends BaseService {
         isConditionMet = (outboundLineListCount > 0 ? true : false);
         log.info("isConditionMet : " + isConditionMet);
 
-        AXApiResponse axapiResponse = new AXApiResponse();
         if (!isConditionMet) {
             throw new BadRequestException("OutboundLine: Order is not completely Processed.");
         } else {
             log.info("Order can be Processed.");
-            /*
-             * Call this respective API end points when REF_DOC_NO is confirmed with STATUS_ID = 59 in OUTBOUNDHEADER and
-             * OUTBOUNDLINE tables and based on OB_ORD_TYP_ID as per API document
-             */
-            OutboundHeaderV2 confirmedOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
-            List<OutboundLineV2> confirmedOutboundLines = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
-            log.info("OutboundOrderTypeId : " + confirmedOutboundHeader.getOutboundOrderTypeId());
-            log.info("confirmedOutboundLines: " + confirmedOutboundLines);
-
-            /*---------------------AXAPI-integration----------------------------------------------------------*/
-
-            // if OB_ORD_TYP_ID = 0 in OUTBOUNDHEADER table - call Shipment Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 0L && confirmedOutboundLines != null) {
-//                axapiResponse = postShipment(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            // if OB_ORD_TYP_ID = 1 in OUTBOUNDHEADER table - Interwarehouse Shipment Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 1L && confirmedOutboundLines != null) {
-//                axapiResponse = postInterwarehouseShipment(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            //  if OB_ORD_TYP_ID = 2 in OUTBOUNDHEADER table - Return PO Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 2L && confirmedOutboundLines != null) {
-//                axapiResponse = postReturnPO(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            // if OB_ORD_TYP_ID = 3 in OUTBOUNDHEADER table - Sale Order Confirmation - True Express
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 3L && confirmedOutboundLines != null) {
-//                axapiResponse = postSalesOrder(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-            axapiResponse.setStatusCode("200");         //Hard Coded for testing
         }
 
-        if (axapiResponse.getStatusCode() != null && axapiResponse.getStatusCode().equalsIgnoreCase("200")) {
             try {
                 Long STATUS_ID_59 = 59L;
                 List<Long> statusId57 = Arrays.asList(57L);
                 statusDescription = stagingLineV2Repository.getStatusDescription(STATUS_ID_59, languageId);
-//                AuthToken authTokenForIDService = authTokenService.getIDMasterServiceAuthToken();
                 List<OutboundLineV2> outboundLineByStatus57List = findOutboundLineByStatusV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusId57);
 
                 // ----------------OutboundLine update-----------------------------------------------------------------------------------------
@@ -3678,9 +3640,12 @@ public class OutboundLineService extends BaseService {
                 log.info("PreOutbound Line updated");
 
                 //----------------Preoutbound Header--------------------------------------------------------------------------------------------
-//                StatusId idStatus = idmasterService.getStatus(STATUS_ID_59, warehouseId, authTokenForIDService.getAccess_token());
                 preOutboundHeaderV2Repository.updatePreOutboundHeaderStatus(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
                 log.info("PreOutbound Header updated");
+
+                //----------------OrderManagement Line--------------------------------------------------------------------------------------------
+                orderManagementLineV2Repository.updateOrderManagementLineStatus(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
+                log.info("OrderManagement Line updated");
 
                 /*-----------------Inventory Updates---------------------------*/
 //                List<QualityLineV2> dbQualityLine = qualityLineService.getQualityLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumbers, itemCodes);
@@ -3737,10 +3702,6 @@ public class OutboundLineService extends BaseService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            String errorFromAXAPI = axapiResponse.getMessage();
-            throw new BadRequestException("Error from AX: " + errorFromAXAPI);
-        }
         return null;
     }
 

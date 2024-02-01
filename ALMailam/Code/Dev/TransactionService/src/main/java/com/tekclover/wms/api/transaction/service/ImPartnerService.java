@@ -142,7 +142,7 @@ public class ImPartnerService {
 			}
 
 			ImPartner imPartner = new ImPartner();
-			imPartner.setPartnerItemBarcode(manufacturerName);
+			imPartner.setBusinessPartnerCode(manufacturerName);
 			imPartner.setCompanyCodeId(companyCodeId);
 			imPartner.setPlantId(plantId);
 			imPartner.setLanguageId(languageId);

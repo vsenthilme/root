@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.model.inbound.gr;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -24,5 +25,5 @@ public class GrLineCompositeKey implements Serializable {
 	private String packBarcodes;
 	private Long lineNo;
 	private String itemCode;
-
+	private Date createdOn;
 }

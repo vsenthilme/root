@@ -121,7 +121,7 @@ public interface PutAwayLineV2Repository extends JpaRepository<PutAwayLineV2, Lo
             String preInboundNo, String itemCode, String manufacturerName, Long lineNumber, Long statusId, String packBarcodes, Long deletionIndicator);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE PutAwayLine ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
+    @Query("UPDATE PutAwayLineV2 ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
             "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId and ib.statusId = 20")
     void updatePutawayLineStatus(@Param("warehouseId") String warehouseId,
                                  @Param("companyCode") String companyCode,

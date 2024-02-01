@@ -118,6 +118,10 @@ public class GrLineV2Specification implements Specification<GrLineV2> {
             predicates.add(group.in(searchGrLine.getRejectReason()));
         }
 
+        if (searchGrLine.getStartCreatedOn() != null && searchGrLine.getEndCreatedOn() != null) {
+            predicates.add(cb.between(root.get("createdOn"), searchGrLine.getStartCreatedOn(), searchGrLine.getEndCreatedOn()));
+        }
+
         predicates.add(cb.equal(root.get("deletionIndicator"), 0L));
 
         return cb.and(predicates.toArray(new Predicate[]{}));

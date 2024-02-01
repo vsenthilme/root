@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
-import com.tekclover.wms.api.transaction.controller.exception.CustomErrorResponse;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.*;
@@ -33,9 +32,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -2448,25 +2447,24 @@ public class PickupLineService extends BaseService {
 
     /**
      *
-     * @param companyCodeId
-     * @param plantId
-     * @param languageId
-     * @param warehouseId
-     * @param itemCode
-     * @param manufacturerName
-     * @param barcodeId
-     * @param loginUserID
+     * @param updateBarcodeInput
+     * @return
      */
-    @Transactional(rollbackOn = Exception.class)
-    public ImPartner updatePickupLineForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                  String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
-        ImPartner updateBarcode = null;
-        try {
-            updateBarcode = imPartnerService.updateImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName,barcodeId,loginUserID);
-        } catch (CustomErrorResponse e) {
+//    @Transactional
+    public ImPartner updatePickupLineForBarcodeV2(UpdateBarcodeInput updateBarcodeInput) {
 
-        }
-        if(updateBarcode != null) {
+        if (updateBarcodeInput != null) {
+            String companyCodeId = updateBarcodeInput.getCompanyCodeId();
+            String plantId = updateBarcodeInput.getPlantId();
+            String languageId = updateBarcodeInput.getLanguageId();
+            String warehouseId = updateBarcodeInput.getWarehouseId();
+            String itemCode = updateBarcodeInput.getItemCode();
+            String manufacturerName = updateBarcodeInput.getManufacturerName();
+            String barcodeId = updateBarcodeInput.getBarcodeId();
+            String loginUserID = updateBarcodeInput.getLoginUserID();
+
+            ImPartner updateBarcode = imPartnerService.updateImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+            if (updateBarcode != null) {
 //            List<PickupLineV2> dbPickupLine = pickupLineV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdAndDeletionIndicator(
 //                    companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 48L, 0L);
 //            log.info("Pickupline statusId_48: " + dbPickupLine);
@@ -2478,16 +2476,14 @@ public class PickupLineService extends BaseService {
 //                    pickupLineV2Repository.save(pickupLineV2);
 //                }
 //            }
-            try {
                 pickupHeaderService.updatePickupHeaderForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            orderManagementLineService.updateOrderManagementLineForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+                orderManagementLineService.updateOrderManagementLineForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
 //            inventoryService.updateInventoryForBarcodeV2(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
-            log.info("BarcodeId Update Successful in ImPartner, PickupHeader, OrderManagementLine");
+                log.info("BarcodeId Update Successful in ImPartner, PickupHeader, OrderManagementLine");
+            }
+            return updateBarcode;
         }
-        return updateBarcode;
+        return null;
     }
 
     public List<PickupLineV2> updatePickupLineForConfirmationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,

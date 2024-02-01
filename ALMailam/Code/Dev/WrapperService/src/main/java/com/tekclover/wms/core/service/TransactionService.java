@@ -11130,28 +11130,19 @@ public class TransactionService {
     }
 
     // PATCH - BarcodeId
-    public ImPartner updatePickupLineForBarcodeId(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                  String itemCode, String manufacturerName, String barcodeId, String loginUserID, String authToken) {
+    public ImPartner updatePickupLineForBarcodeId(UpdateBarcodeInput updateBarcodeInput, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "ClassicWMS's RestTemplate");
             headers.add("Authorization", "Bearer " + authToken);
-            HttpEntity<?> entity = new HttpEntity<>(headers);
+            HttpEntity<?> entity = new HttpEntity<>(updateBarcodeInput, headers);
             HttpClient client = HttpClients.createDefault();
             RestTemplate restTemplate = getRestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
 
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "pickupline/v2/barcodeId")
-                            .queryParam("warehouseId", warehouseId)
-                            .queryParam("companyCodeId", companyCodeId)
-                            .queryParam("plantId", plantId)
-                            .queryParam("languageId", languageId)
-                            .queryParam("manufacturerName", manufacturerName)
-                            .queryParam("itemCode", itemCode)
-                            .queryParam("barcodeId", barcodeId)
-                            .queryParam("loginUserID", loginUserID);
+                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "pickupline/v2/barcodeId");
             ResponseEntity<ImPartner> result =
                     restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, ImPartner.class);
             log.info("result : " + result.getStatusCode());

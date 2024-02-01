@@ -124,7 +124,7 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
                                         @Param(value = "languageId") String languageId);
 
     //Partner_item_barcode - almailem
-    @Query(value = "select distinct partner_itm_bar from tblimpartner ip \n" +
+    @Query(value = "select partner_itm_bar from tblimpartner ip \n" +
             "WHERE ip.itm_code in (:itemCode) and \n" +
             "ip.c_id in (:companyCode) and \n" +
             "ip.plant_id in (:plantId) and \n" +

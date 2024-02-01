@@ -15,4 +15,6 @@ import com.tekclover.wms.api.idmaster.model.enterprise.WarehouseEnterprise;
 public interface WarehouseEnterpriseRepository extends JpaRepository<WarehouseEnterprise,Long>, JpaSpecificationExecutor<WarehouseEnterprise> {
 
 	public List<WarehouseEnterprise> findByZone(String zone);
+	public List<WarehouseEnterprise> findByCompanyIdAndPlantIdAndLanguageIdAndWarehouseIdAndZoneAndDeletionIndicator(
+			String companyCode, String plantId, String languageId, String warehouseId, String zone, Long deletionIndicator);
 }

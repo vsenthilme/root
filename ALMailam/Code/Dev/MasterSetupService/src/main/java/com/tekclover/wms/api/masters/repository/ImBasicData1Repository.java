@@ -53,12 +53,12 @@ public interface ImBasicData1Repository extends PagingAndSortingRepository<ImBas
 										   @Param("searchText3") String searchText3);
 
    @Query(
-			value = "select TOP 50 itm_code as itemCode, \n" +
+			value = "select TOP 50 itm_code as itemCode, mfr_part manufacturerName, \n" +
 					"text as description from tblimbasicdata1 \n" +
 					"where ( itm_code like :searchText1% or itm_code like %:searchText2 \n" +
 					"or text like %:searchText3% ) and \n" +
 					"c_id in (:companyCodeId) and plant_id in (:plantId) and lang_id in (:languageId) and wh_id in (:warehouseId)\n" +
-					"group by itm_code,text ",
+					"group by itm_code,mfr_part,text ",
 			nativeQuery = true
 	)
 	List<ItemListImpl> getItemListBySearchNew(	@Param("searchText1") String searchText1,
@@ -77,7 +77,7 @@ public interface ImBasicData1Repository extends PagingAndSortingRepository<ImBas
 		   			"(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
 		   			"(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
 		   			"(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) \n" +
-					"group by itm_code,text ", nativeQuery = true )
+					"group by itm_code,mfr_part,text ", nativeQuery = true )
 	List<ItemListImpl> getItemListBySearchV2(	@Param("searchText1") String searchText1,
 												@Param("searchText2") String searchText2,
 												@Param("searchText3") String searchText3,

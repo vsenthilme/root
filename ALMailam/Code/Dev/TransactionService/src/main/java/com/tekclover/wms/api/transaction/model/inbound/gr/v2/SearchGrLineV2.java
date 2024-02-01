@@ -4,6 +4,7 @@ import com.tekclover.wms.api.transaction.model.inbound.gr.SearchGrLine;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,4 +24,7 @@ public class SearchGrLineV2 extends SearchGrLine {
 	private List<String> brand;
 	private List<String> rejectType;
 	private List<String> rejectReason;
+
+	private Date startCreatedOn;
+	private Date endCreatedOn;
 }

@@ -191,7 +191,9 @@ public class UserManagementService {
 			log.info("version :" + version);
 			if (isSuccess) {
 				if (version != null && version.length() > 0) { // If the value is passed from Mobile
-					List<WarehouseEnterprise> optWarehouse = warehouseRepository.findByZone(version);
+//					List<WarehouseEnterprise> optWarehouse = warehouseRepository.findByZone(version);
+					List<WarehouseEnterprise> optWarehouse = warehouseRepository.findByCompanyIdAndPlantIdAndLanguageIdAndWarehouseIdAndZoneAndDeletionIndicator(
+							userManagement.getCompanyCode(), userManagement.getPlantId(), userManagement.getLanguageId(), userManagement.getWarehouseId(), version, 0L);
 					log.info("optWarehouse :" + optWarehouse);
 					if (optWarehouse.isEmpty()) {
 						throw new BadRequestException("You are not using the current version. Please install updated latest version.");

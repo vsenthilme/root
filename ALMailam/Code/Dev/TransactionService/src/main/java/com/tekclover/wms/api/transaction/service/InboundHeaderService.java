@@ -45,6 +45,8 @@ import java.util.stream.Stream;
 @Service
 public class InboundHeaderService extends BaseService {
     @Autowired
+    private PutAwayHeaderV2Repository putAwayHeaderV2Repository;
+    @Autowired
     private PutAwayLineV2Repository putAwayLineV2Repository;
     @Autowired
     private StagingHeaderV2Repository stagingHeaderV2Repository;
@@ -1462,8 +1464,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PreInboundLine updated");
             }
         }
-//        preInboundLineV2Repository.updatePreInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-//        log.info("PreInboundLine updated");
 
         grHeaderV2Repository.updateGrHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("grHeader updated");
@@ -1473,6 +1473,9 @@ public class InboundHeaderService extends BaseService {
 
         putAwayLineV2Repository.updatePutawayLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("putAwayLine updated");
+
+        putAwayHeaderV2Repository.updatePutAwayHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
+        log.info("PutAwayHeader Updated");
 
         axapiResponse.setStatusCode("200");                         //HardCode for Testing
         axapiResponse.setMessage("Success");                        //HardCode for Testing

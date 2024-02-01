@@ -3547,11 +3547,8 @@ public class TransactionServiceController {
 
     @ApiOperation(response = ImPartner.class, value = "Update BarcodeId") // label for swagger
     @PatchMapping("/pickupline/v2/barcodeId")
-    public ResponseEntity<?> patchPickupLineBarcodeIdV2(@RequestParam String warehouseId, @RequestParam String companyCodeId,
-                                                        @RequestParam String plantId, @RequestParam String languageId,
-                                                        @RequestParam String itemCode, @RequestParam String manufacturerName,
-                                                        @RequestParam String barcodeId, @RequestParam String loginUserID, @RequestParam String authToken) {
-        ImPartner results = transactionService.updatePickupLineForBarcodeId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID, authToken);
+    public ResponseEntity<?> patchPickupLineBarcodeIdV2(@Valid @RequestBody UpdateBarcodeInput updateBarcodeInput, @RequestParam String authToken) {
+        ImPartner results = transactionService.updatePickupLineForBarcodeId(updateBarcodeInput, authToken);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 

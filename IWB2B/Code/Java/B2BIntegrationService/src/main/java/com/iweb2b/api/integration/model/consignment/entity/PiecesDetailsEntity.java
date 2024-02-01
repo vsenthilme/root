@@ -23,7 +23,7 @@ public class PiecesDetailsEntity {
     @Column(name="CONSIGNMENT_ID")
     private Long consignmentId;
 
-    @Column(name="DESCRIPTION", columnDefinition = "nvarchar(255)")
+    @Column(name="DESCRIPTION", columnDefinition = "nvarchar(1000)")
     private String description;
 
     @Column(name="DECLARED_VALUE")
@@ -43,8 +43,8 @@ public class PiecesDetailsEntity {
 
     @Column(name="WIDTH")
     private Long width;
-
-    @Column(name="QUANTITY")
+	
+	@Column(name="QUANTITY")
     private String quantity;
 
     @Column(name="WEIGHT_UNIT", columnDefinition = "nvarchar(100)")

@@ -100,7 +100,7 @@ public class IntegrationService {
 		}
 	}
 	
-
+	// GET
 	public ConsignmentTracking getConsignmentTrackingByRefNumber(String referenceNumber) {
 		try {
 			AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
@@ -112,6 +112,27 @@ public class IntegrationService {
 			headers.add("Authorization", "Bearer " + authToken);
 			UriComponentsBuilder builder =
 					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/" + referenceNumber + "/shipment");
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<ConsignmentTracking> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, ConsignmentTracking.class);
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	// GET
+	public ConsignmentTracking getConsignmentTrackingByRefNumberV2(String referenceNumber) {
+		try {
+			AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+			String authToken = integAuthToken.getAccess_token();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/" + referenceNumber + "/shipment/v2");
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			ResponseEntity<ConsignmentTracking> result =
 					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, ConsignmentTracking.class);
@@ -160,6 +181,49 @@ public class IntegrationService {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	/**
+	 * 
+	 * @param referenceNumber
+	 * @return
+	 */
+	public byte[] getShippingLabelV2(String referenceNumber) {
+		try {
+			AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+			String authToken = integAuthToken.getAccess_token();
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/" + referenceNumber + "/shippingLabel/v2");
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<byte[]> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, byte[].class);
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	// POST
+	public CancelShipmentResponse cancelShipment (CancelShipmentRequest cancelShipmentRequest) {
+		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+		String authToken = integAuthToken.getAccess_token();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.add("User-Agent", "RestTemplate");
+		headers.add("Authorization", "Bearer " + authToken);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/cancel");
+
+		HttpEntity<?> entity = new HttpEntity<>(cancelShipmentRequest, headers);
+		ResponseEntity<CancelShipmentResponse> result =
+				getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, CancelShipmentResponse.class);
+		return result.getBody();
 	}
 	
 	// GET

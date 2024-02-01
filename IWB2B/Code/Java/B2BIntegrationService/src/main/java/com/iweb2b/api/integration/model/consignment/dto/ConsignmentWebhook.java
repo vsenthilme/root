@@ -1,9 +1,9 @@
 package com.iweb2b.api.integration.model.consignment.dto;
 
+import lombok.Data;
+
 import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
 
 @Data
 public class ConsignmentWebhook{
@@ -32,8 +32,11 @@ public class ConsignmentWebhook{
     private String worker_name;
     private Long attempt_count;
     private String poc_image;
+
     private List<String> poc_image_list;
+
     private List<String> quality_check_image_list;
+
     private String signature_image;
     private String failure_reason;
     private String type;

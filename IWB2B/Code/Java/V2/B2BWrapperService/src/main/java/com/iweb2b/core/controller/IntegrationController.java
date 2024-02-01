@@ -86,8 +86,9 @@ public class IntegrationController {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
-	private static final String BASIC = "Basic ";
-
+	private static final String BASIC = "Basic ";	
+	private String JNT_HUBCODE = "JT";
+    private String QAP_HUBCODE = "QATARPOST";
 
 	//-----------------------------------CONSIGNMENT-CREATION-----------------------------------------------------
 	@ApiOperation(response = Optional.class, value = "OAuth Token") // label for swagger
@@ -215,7 +216,7 @@ public class IntegrationController {
 		}
 		
 		JNTResponse response = integrationService.postJNTRequest(referenceNumber);
-		log.info("JNTRequest : " + response);
+//		log.info("JNTRequest : " + response);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -230,17 +231,13 @@ public class IntegrationController {
 	@GetMapping("/softdata/jnt/{billCode}/printLabel")
 	public ResponseEntity<?> printLabel(@PathVariable String billCode, @RequestHeader String authToken) throws Exception {
 		JNTPrintLabelResponse printLabelResponse = integrationService.printLabel(billCode, authToken);
-		log.info("printLabelResponse : " + printLabelResponse);
 		return new ResponseEntity<>(printLabelResponse, HttpStatus.OK);
 	}
 	
-	// NOT USED
 	@ApiOperation(response = JNTWebhookRequest.class, value = "Get PrintLabel") // label for swagger
 	@GetMapping("/softdata/jnt/{billCode}/pdf/printLabel")
 	public ResponseEntity<?> pdfPrintLabel(@PathVariable String billCode, @RequestHeader String authToken) throws Exception {
 		byte[] printLabelResponse = integrationService.pdfPrintLabel(billCode, authToken);
-		log.info("printLabelResponse : " + printLabelResponse);
-		
 		HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + billCode + ".pdf");
         header.add("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -258,7 +255,6 @@ public class IntegrationController {
 		for (String code : pdfLabelInput.getBillCodes()) {
 			OutputStream os = new FileOutputStream( code + ".pdf");
 			byte[] printLabelResponse = integrationService.pdfPrintLabel(code, authToken);
-			log.info("printLabelResponse : " + printLabelResponse);
 			os.write(printLabelResponse);
 			os.close();
 		}
@@ -314,7 +310,7 @@ public class IntegrationController {
 	@GetMapping("/softdata/qp")
 	public ResponseEntity<?> postQPRequest(@RequestParam String referenceNumber) throws Exception {
 		QPOrderCreateResponse response = integrationService.postQPRequest(referenceNumber);
-		log.info("QPRequest : " + response);
+//		log.info("QPRequest : " + response);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
@@ -323,8 +319,8 @@ public class IntegrationController {
 	@GetMapping("/{referenceNumber}/shippingLabel")
 	public ResponseEntity<?> getShippingLabel(@RequestHeader(value="Authorization") String authorization,
 			@PathVariable String referenceNumber) {
-		log.info("authorization passed: " + authorization);
-		log.info("referenceNumber passed: " + referenceNumber);
+//		log.info("authorization passed: " + authorization);
+//		log.info("referenceNumber passed: " + referenceNumber);
 		String LIFETIME_TOKEN = propertiesConfig.getB2bIntegrationToken();
 		if (!authorization.startsWith(BASIC)) {
 			throw new BadRequestException("Authorization should be supplied prefixing with Basic<space> " + authorization);
@@ -336,7 +332,7 @@ public class IntegrationController {
 //		}
 		
 		String passedToken = authorization.substring(6);
-		log.info("extracted : " + passedToken);
+//		log.info("extracted : " + passedToken);
 		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
 		CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
 		boolean matched = false;
@@ -351,7 +347,7 @@ public class IntegrationController {
 		
 		if (matched) {
 			byte[] dbSoftDataUpload = integrationService.getShippingLabel(referenceNumber);
-			log.info("ShippingLabel : " + dbSoftDataUpload);
+//			log.info("ShippingLabel : " + dbSoftDataUpload);
 			
 			HttpHeaders header = new HttpHeaders();
 	        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + referenceNumber + ".pdf");
@@ -366,6 +362,80 @@ public class IntegrationController {
 			throw new BadRequestException("Password wrong. Please enter correct password.");
 		}
 	}
+	
+	//--V2------------------------------------Shipping (AWB) label-----------------------------------------------------------------------
+    @ApiOperation(response = Optional.class, value = "Get a ClientLevel") // label for swagger
+    @GetMapping("/{wayBillNumber}/shippingLabel/v2")
+    public ResponseEntity<?> getShippingLabelV2(@RequestHeader(value="Authorization") String authorization, 
+    		@PathVariable String wayBillNumber) {
+//		log.info("authorization passed: " + authorization);
+//		log.info("referenceNumber passed: " + referenceNumber);
+		String LIFETIME_TOKEN = propertiesConfig.getB2bIntegrationToken();
+		if (!authorization.startsWith(BASIC)) {
+			throw new BadRequestException("Authorization should be supplied prefixing with Basic<space> " + authorization);
+		}
+		
+		String passedToken = authorization.substring(6);
+		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+		CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
+		boolean matched = false;
+		
+		if (LIFETIME_TOKEN.equalsIgnoreCase(passedToken)) {
+			matched = true;
+		} else if (customerToken.getToken().equalsIgnoreCase(passedToken)) {
+			matched = true;		
+		} else {
+			matched = false;
+		}
+		
+		if (matched) {
+			byte[] dbSoftDataUpload = integrationService.getShippingLabel(wayBillNumber);
+			HttpHeaders header = new HttpHeaders();
+	        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + wayBillNumber + ".pdf");
+	        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+	        header.add("Pragma", "no-cache");
+	        header.add("Expires", "0");
+	        return ResponseEntity.ok()
+	                .headers(header)
+	                .contentType(MediaType.APPLICATION_PDF)
+	                .body(dbSoftDataUpload);
+		} else {
+			throw new BadRequestException("Password wrong. Please enter correct password.");
+		}
+    }
+    
+//    //-------------------------------------Cancel-API------------------------------------------------------------------------------
+//    // POST /api/client/integration/consignment/cancellation
+//    @ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
+//    @PostMapping("/cancel")
+//    public ResponseEntity<?> cancelShipment(@RequestHeader(value="Authorization") String authorization,
+//    		@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+//		String LIFETIME_TOKEN = propertiesConfig.getB2bIntegrationToken();
+//		if (!authorization.startsWith(BASIC)) {
+//			throw new BadRequestException("Authorization should be supplied prefixing with Basic<space> " + authorization);
+//		}
+//		
+//		String passedToken = authorization.substring(6);
+//		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+//		CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
+//		boolean matched = false;
+//		
+//		if (LIFETIME_TOKEN.equalsIgnoreCase(passedToken)) {
+//			matched = true;
+//		} else if (customerToken.getToken().equalsIgnoreCase(passedToken)) {
+//			matched = true;		
+//		} else {
+//			matched = false;
+//		}
+//		
+//		if (matched) {
+//			com.iweb2b.core.model.integration.CancelShipmentResponse response = 
+//					integrationService.cancelShipment(cancelShipmentRequest);
+//			return new ResponseEntity<>(response, HttpStatus.OK);
+//		} else {
+//			throw new BadRequestException("Password wrong. Please enter correct password.");
+//		}
+//    }
 
 	//-----------------------------------ConsignmentTracking------------------------------------------------------------
 	@ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
@@ -385,7 +455,7 @@ public class IntegrationController {
 //		}
 		
 		String passedToken = authorization.substring(6);
-		log.info("extracted : " + passedToken);
+//		log.info("extracted : " + passedToken);
 		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
 		CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
 		boolean matched = false;
@@ -406,25 +476,23 @@ public class IntegrationController {
 		}
 	}
 	
-	//-----------------------------------WEBHOOK------------------------------------------------------------
-	@ApiOperation(response = ConsignmentWebhook.class, value = "Consignment Webhook") // label for swagger
-	@PostMapping("/tracking/webhook")
-	public ResponseEntity<?> listenWebhook(@RequestHeader(value="Authorization") String authorization,
-			@RequestBody ConsignmentWebhook consignmentWebhook) throws Exception {
-		log.info("Request Body received: " + consignmentWebhook);
-		String WEBHOOK_TOKEN = "$2a$10$nzkfksOOLCI7mupALKmlzOQE7Zq6dCl15d4W9ZAvjR/laGXGhHt5G";
+	@ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
+	@GetMapping("/{wayBillNumber}/shipment/v2")
+	public ResponseEntity<?> getConsignmentTrackingByWaybillNo(@RequestHeader(value="Authorization") String authorization,
+			@PathVariable String wayBillNumber) {
+		log.info("referenceNumber passed: " + wayBillNumber);
+		String LIFETIME_TOKEN = propertiesConfig.getB2bIntegrationToken();
 		
 		if (!authorization.startsWith(BASIC)) {
 			throw new BadRequestException("Authorization should be supplied prefixing with Basic<space> " + authorization);
 		} 
 		
 		String passedToken = authorization.substring(6);
-		log.info("extracted : " + passedToken);
 		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
 		CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
 		boolean matched = false;
 		
-		if (WEBHOOK_TOKEN.equalsIgnoreCase(passedToken)) {
+		if (LIFETIME_TOKEN.equalsIgnoreCase(passedToken)) {
 			matched = true;
 		} else if (customerToken.getToken().equalsIgnoreCase(passedToken)) {
 			matched = true;		
@@ -433,12 +501,51 @@ public class IntegrationController {
 		}
 		
 		if (matched) {
-			JNTResponse responseJNTResponse = integrationService.postConsignmentWebhookPayload(consignmentWebhook);
-			log.info("consignmentWebhook response: " + responseJNTResponse);
-			return new ResponseEntity<>( HttpStatus.OK );
+			ConsignmentTracking dbConsignmentTracking = integrationService.getConsignmentTrackingByRefNumberV2(wayBillNumber);
+			return new ResponseEntity<>(dbConsignmentTracking, HttpStatus.OK);
 		} else {
 			throw new BadRequestException("Password wrong. Please enter correct password.");
 		}
+	}
+	
+	//-----------------------------------WEBHOOK------------------------------------------------------------
+	@ApiOperation(response = ConsignmentWebhook.class, value = "Consignment Webhook") // label for swagger
+	@PostMapping("/tracking/webhook")
+	public ResponseEntity<?> listenWebhook(@RequestHeader(value="Authorization") String authorization,
+			@RequestBody ConsignmentWebhook consignmentWebhook) throws Exception {
+		 if (consignmentWebhook.getHub_code() != null &&
+				(consignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE) ||
+								consignmentWebhook.getHub_code().equalsIgnoreCase(QAP_HUBCODE))) {
+			log.info("Request Body received: " + consignmentWebhook);
+			String WEBHOOK_TOKEN = "$2a$10$nzkfksOOLCI7mupALKmlzOQE7Zq6dCl15d4W9ZAvjR/laGXGhHt5G";
+			
+			if (!authorization.startsWith(BASIC)) {
+				throw new BadRequestException("Authorization should be supplied prefixing with Basic<space> " + authorization);
+			} 
+			
+			String passedToken = authorization.substring(6);
+			log.info("extracted : " + passedToken);
+			AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+			CustomerAccessToken customerToken = integrationService.getCustomerToken(passedToken, integAuthToken.getAccess_token());
+			boolean matched = false;
+			
+			if (WEBHOOK_TOKEN.equalsIgnoreCase(passedToken)) {
+				matched = true;
+			} else if (customerToken.getToken().equalsIgnoreCase(passedToken)) {
+				matched = true;		
+			} else {
+				matched = false;
+			}
+			
+			if (matched) {
+				JNTResponse responseJNTResponse = integrationService.postConsignmentWebhookPayload(consignmentWebhook);
+				log.info("consignmentWebhook response: " + responseJNTResponse);
+				return new ResponseEntity<>( HttpStatus.OK );
+			} else {
+				throw new BadRequestException("Password wrong. Please enter correct password.");
+			}
+		}
+		return new ResponseEntity<>( HttpStatus.OK );
 	}
 	
 	//-----------------------------------JNT - WEBHOOK-----------------------------------------------------

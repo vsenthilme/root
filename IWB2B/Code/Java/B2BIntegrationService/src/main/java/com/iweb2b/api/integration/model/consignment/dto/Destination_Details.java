@@ -15,9 +15,6 @@ public class Destination_Details {
     private String state;
     private String country;
 
-    private String company_name;
-    private String district;
-
     private String address_line_3;
     private String address_line_4;
 }

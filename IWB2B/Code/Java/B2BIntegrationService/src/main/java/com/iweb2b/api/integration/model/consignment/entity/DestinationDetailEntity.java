@@ -41,12 +41,6 @@ public class DestinationDetailEntity {
 	@Column(name = "ADDRESS_LINE_2", columnDefinition = "nvarchar(500)")
 	private String address_line_2;
 
-	@Column(name = "ADDRESS_LINE_3", columnDefinition = "nvarchar(500)")
-	private String address_line_3;
-
-	@Column(name = "ADDRESS_LINE_4", columnDefinition = "nvarchar(500)")
-	private String address_line_4;
-
 	@Column(name = "PINCODE", columnDefinition = "nvarchar(50)")
 	private String pincode;
 
@@ -68,7 +62,9 @@ public class DestinationDetailEntity {
 	@Column(name = "LONGITUDE", columnDefinition = "nvarchar(100)")
 	private String longitude;
 
-	@Column(name = "COMPANY_NAME", columnDefinition = "nvarchar(150)")
-	private String company_name;
+	@Column(name = "ADDRESS_LINE_3", columnDefinition = "nvarchar(500)")
+	private String address_line_3;
 
+	@Column(name = "ADDRESS_LINE_4", columnDefinition = "nvarchar(500)")
+	private String address_line_4;
 }

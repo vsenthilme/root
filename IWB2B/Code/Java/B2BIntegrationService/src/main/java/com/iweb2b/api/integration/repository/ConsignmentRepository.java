@@ -25,43 +25,42 @@ public interface ConsignmentRepository extends JpaRepository<ConsignmentEntity, 
 			"FROM tblconsignment where reference_number in (:reference_number)", nativeQuery = true)
 	public ConsignmentEntity findConsigment (@Param("reference_number") String reference_number);
 	
-//	@Query(value = "SELECT REFERENCE_NUMBER FROM tblconsignment where reference_number like 'QAP%';", nativeQuery = true)
-//	public List<String> findConsigmentByQP();
+	@Query(value = "SELECT REFERENCE_NUMBER FROM tblconsignment where reference_number like 'QAP%';", nativeQuery = true)
+	public List<String> findConsigmentByQP();
 	
 	@Query(value = "SELECT REFERENCE_NUMBER FROM tblconsignment where AWB_3RD_PARTY=:jnt_billcode", nativeQuery = true)
 	public String findConsigmentByBillCode(@Param("jnt_billcode") String jnt_billcode);
+	
+	@Query(value = "SELECT REFERENCE_NUMBER FROM tblconsignment where CUSTOMER_REFERENCE_NUMBER=:customerReferenceNumber", nativeQuery = true)
+	public String findConsigmentByWayBillNumber(@Param("customerReferenceNumber") String customerReferenceNumber);
 
-	//select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = 'JT' GROUP BY tc.REFERENCE_NUMBER;
 	@Query(value ="select tc.REFERENCE_NUMBER \n"+
 			"from tblconsignment tc\n" +
 			"join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER \n" +
 			"WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER",nativeQuery = true)
 	public List<String> getByHubcode(@Param(value="hubCode") String hubCode);
-
-	@Query(value = "SELECT TOP 1 * \r\n" +
-			"FROM tblconsignment WHERE REFERENCE_NUMBER IN (:reference_number) ORDER BY CREATED_AT DESC", nativeQuery = true)
-	public ConsignmentEntity findConsigmentUniqueRecord (@Param("reference_number") String reference_number);
 	
-	/*
-	 *  public String getReferenceNumber();
-    public String getCustomerReferenceNumber();
-    public String getStatusDescription();
-    public String getAwb3rdParty();
-    public Date getCreatedAt();
-    public Boolean getIsAwbPrinted();
-    public String getScanType();
-    public String getCustomerCode();
-    public String getOrderType();
-	 */
 	@Query(value = "SELECT distinct c.REFERENCE_NUMBER AS referenceNumber, c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
 			+ "c.STATUS_DESCRIPTION AS statusDescription, c.AWB_3RD_PARTY AS awb3rdParty, c.CREATED_AT AS createdAt, \r\n"
 			+ "c.IS_AWB_PRINTED AS isAwbPrinted, j.scan_type AS scanType, c.ORDER_TYPE AS orderType, c.CUSTOMER_CODE AS customerCode \r\n"
 			+ "from tblconsignment c \r\n"
 			+ "left outer join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY\r\n"
 			+ "WHERE c.REFERENCE_NUMBER IN (select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER) \r\n"
-//			+ "WHERE c.REFERENCE_NUMBER IN (:reference_number) \r\n"
 			+ "ORDER BY c.CREATED_AT", nativeQuery = true)
 	public List<IConsignmentEntity> findConsigmentByReferenceNumber (@Param("hubCode") String hubCode);
+
+	@Query(value = "SELECT TOP 1 * \r\n" +
+			"FROM tblconsignment WHERE REFERENCE_NUMBER IN (:reference_number) ORDER BY CREATED_AT DESC", nativeQuery = true)
+	public ConsignmentEntity findConsigmentUniqueRecord (@Param("reference_number") String reference_number);
+	
+	@Query(value = "SELECT distinct c.REFERENCE_NUMBER AS referenceNumber, c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
+			+ "c.STATUS_DESCRIPTION AS statusDescription, c.AWB_3RD_PARTY AS awb3rdParty, c.CREATED_AT AS createdAt, \r\n"
+			+ "c.IS_AWB_PRINTED AS isAwbPrinted, j.scan_type AS scanType, c.ORDER_TYPE AS orderType, c.CUSTOMER_CODE AS customerCode \r\n"
+			+ "from tblconsignment c \r\n"
+			+ "left outer join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY\r\n"
+			+ "WHERE c.REFERENCE_NUMBER IN (:reference_number) \r\n"
+			+ "ORDER BY c.CREATED_AT", nativeQuery = true)
+	public List<IConsignmentEntity> findConsigmentByReferenceNumber (@Param("reference_number") List<String> reference_number);
 	
 	// SELECT TOP 1 jw.scan_type scanType FROM tbljntwebhook jw WHERE JW.BILL_CODE = 'JTE000145058765' ORDER BY SCAN_TIME DESC;
 	@Query(value ="SELECT TOP 1 jw.scan_type scanType \r\n"
@@ -106,7 +105,6 @@ public interface ConsignmentRepository extends JpaRepository<ConsignmentEntity, 
 								  @Param(value="customerCode") String customerCode,
 								 @Param(value="fromDate") Date fromDate,
 								 @Param(value="toDate") Date toDate );
-
 
 	@Query(value ="select\n" +
 			"tc.consignment_id consignmentId,\n" +
@@ -167,23 +165,24 @@ public interface ConsignmentRepository extends JpaRepository<ConsignmentEntity, 
 			"(COALESCE(:hubCode, null) IS NULL OR (tcw.hub_code IN (:hubCode))) and \n" +
 			"(COALESCE(CONVERT(VARCHAR(255), :startDate), null) IS NULL OR (tc.created_at between COALESCE(CONVERT(VARCHAR(255), :startDate), null) and COALESCE(CONVERT(VARCHAR(255), :endDate), null))) ", nativeQuery = true)
 	public List<ConsignmentImpl> findConsignment(@Param(value="awb_3rd_Party") List<String> awb_3rd_Party,
-												@Param(value="boutiqaatPushStatus") List<String> boutiqaatPushStatus,
-												@Param(value="consignmentId") List<Long> consignmentId,
-												@Param(value="consignment_type") List<String> consignment_type,
-												@Param(value="customer_civil_id") List<String> customer_civil_id,
-												@Param(value="customer_code") List<String> customer_code,
-												@Param(value="customer_reference_number") List<String> customer_reference_number,
-												@Param(value="hubCode_3rd_Party") List<String> hubCode_3rd_Party,
-												@Param(value="jntPushStatus") List<String> jntPushStatus,
-												@Param(value="orderType") List<String> orderType,
-												@Param(value="receiver_civil_id") List<String> receiver_civil_id,
-												@Param(value="reference_number") List<String> reference_number,
-												@Param(value="scanType_3rd_Party") List<String> scanType_3rd_Party,
-												@Param(value="service_type_id") List<String> service_type_id,
-												@Param(value="scanType") List<String> scanType,
-												@Param(value="hubCode") List<String> hubCode,
-												@Param(value="startDate") Date startDate,
-												@Param(value="endDate") Date endDate );
+												 @Param(value="boutiqaatPushStatus") List<String> boutiqaatPushStatus,
+												 @Param(value="consignmentId") List<Long> consignmentId,
+												 @Param(value="consignment_type") List<String> consignment_type,
+												 @Param(value="customer_civil_id") List<String> customer_civil_id,
+												 @Param(value="customer_code") List<String> customer_code,
+												 @Param(value="customer_reference_number") List<String> customer_reference_number,
+												 @Param(value="hubCode_3rd_Party") List<String> hubCode_3rd_Party,
+												 @Param(value="jntPushStatus") List<String> jntPushStatus,
+												 @Param(value="orderType") List<String> orderType,
+												 @Param(value="receiver_civil_id") List<String> receiver_civil_id,
+												 @Param(value="reference_number") List<String> reference_number,
+												 @Param(value="scanType_3rd_Party") List<String> scanType_3rd_Party,
+												 @Param(value="service_type_id") List<String> service_type_id,
+												 @Param(value="scanType") List<String> scanType,
+												 @Param(value="hubCode") List<String> hubCode,
+												 @Param(value="startDate") Date startDate,
+												 @Param(value="endDate") Date endDate );
+
 
 }
 

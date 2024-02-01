@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iweb2b.api.integration.config.PropertiesConfig;
 import com.iweb2b.api.integration.controller.exception.BadRequestException;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
 import com.iweb2b.api.integration.model.consignment.dto.Consignment;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentImpl;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentResponse;
@@ -71,11 +73,8 @@ import com.iweb2b.api.integration.model.consignment.entity.QualityCheckImageList
 import com.iweb2b.api.integration.model.tracking.ConsignmentTracking;
 import com.iweb2b.api.integration.repository.ConsignmentRepository;
 import com.iweb2b.api.integration.repository.ConsignmentWebhookRepository;
-import com.iweb2b.api.integration.repository.DestinationDetailRepository;
 import com.iweb2b.api.integration.repository.JNTFailureResponseRepository;
 import com.iweb2b.api.integration.repository.JNTWebhookRepository;
-import com.iweb2b.api.integration.repository.OriginDetailRepository;
-import com.iweb2b.api.integration.repository.PiecesDetailRepository;
 import com.iweb2b.api.integration.repository.PocImageListRepository;
 import com.iweb2b.api.integration.repository.QualityCheckImageListRepository;
 import com.iweb2b.api.integration.repository.Specification.ConsignmentSpecification;
@@ -101,16 +100,6 @@ public class IntegrationService {
 
     @Autowired
     ConsignmentRepository consignmentRepository;
-
-    @Autowired
-    private PiecesDetailRepository piecesDetailRepository;
-
-    @Autowired
-    private DestinationDetailRepository destinationDetailRepository;
-
-    @Autowired
-    private OriginDetailRepository originDetailRepository;
-
 
     @Autowired
     PocImageListRepository pocImageListRepository;
@@ -143,6 +132,19 @@ public class IntegrationService {
         restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
         return restTemplate;
     }
+    
+    /**
+     * 
+     * @param wayBillNumber
+     * @return
+     */
+    public String getConsigmentByWayBillNumber (String wayBillNumber) {
+    	String referenceNumber = consignmentRepository.findConsigmentByWayBillNumber (wayBillNumber);
+    	if (referenceNumber == null) {
+    		throw new BadRequestException("The given wayBillNumber is not found : " + wayBillNumber);
+    	}
+    	return referenceNumber;
+    }
 
     /**
      * POST - ClientSoftdataUpload
@@ -161,7 +163,8 @@ public class IntegrationService {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
-            headers.add("Authorization", "Basic " + authToken);
+			headers.add("Authorization", "Basic " + authToken);
+//            headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(newConsignment, headers);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(softdataUrl);
@@ -189,6 +192,7 @@ public class IntegrationService {
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_Portal RestTemplate");
             headers.add("Authorization", "Basic " + authToken);
+//            headers.add("api-key", authToken);
 
             HttpEntity<?> entity = new HttpEntity<>(orderStatusUpdate, headers);
             HttpClient client = HttpClients.createDefault();
@@ -222,6 +226,7 @@ public class IntegrationService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
         headers.add("Authorization", "Basic " + authToken);
+//        headers.add("api-key", authToken);
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         // https://app.shipsy.in/api/client/integration/consignment/track?reference_number=E12345678"
@@ -248,17 +253,46 @@ public class IntegrationService {
             HttpHeaders headers = new HttpHeaders();
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
             headers.add("Authorization", "Basic " + authToken);
+//            headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(headers);
 
             // https://demodashboardapi.shipsy.in/api/client/integration/consignment/shippinglabel/stream?reference_number=BLEND099
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(consignmentTrackingUrl + "?reference_number=" + refNumber);
-//			ResponseEntity<String> result = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
             ResponseEntity<byte[]> result = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, byte[].class);
             return result.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+    
+    /**
+     * 
+     * @param cancelShipmentRequest
+     * @return
+     */
+    public CancelShipmentResponse cancelShipment(@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+        // Invoke Shipsy API
+        try {
+            String authToken = propertiesConfig.getShipsyApiAuthtoken();
+            String cancelShipmentUrl = propertiesConfig.getShipsyApiOrderCancel();
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
+            headers.add("Authorization", "Basic " + authToken);
+//            headers.add("api-key", authToken);
+            HttpEntity<?> entity = new HttpEntity<>(cancelShipmentRequest, headers);
+
+            // https://apix.asyadexpress.com/v2/webhooks/incoming-integration?source=IW
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(cancelShipmentUrl);
+            ResponseEntity<CancelShipmentResponse> result = 
+            		getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, CancelShipmentResponse.class);
+            return result.getBody();
+        } catch (RestClientException e) {
+        	e.printStackTrace();
+        	throw e;
         }
     }
 
@@ -281,7 +315,6 @@ public class IntegrationService {
      * String.class); return result.getBody(); } catch (RestClientException e) {
      * e.printStackTrace(); } return referenceNumber; }
      */
-
     public ConsignmentWebhook listenWebhook(@RequestBody ConsignmentWebhook consignmentWebhook) {
         // Invoke Shipsy API
         try {
@@ -292,6 +325,7 @@ public class IntegrationService {
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
             headers.add("Authorization", "Basic " + authToken);
+//            headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(consignmentWebhook, headers);
 
             // https://apix.asyadexpress.com/v2/webhooks/incoming-integration?source=IW
@@ -460,142 +494,138 @@ public class IntegrationService {
      */
     public JNTResponse createConsignmentWebhook(ConsignmentWebhook newConsignmentWebhook) throws Exception {
         try {
-        	if (newConsignmentWebhook.getHub_code() != null && 
-        			(newConsignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE) || 
-        					newConsignmentWebhook.getHub_code().equalsIgnoreCase(QAP_HUBCODE))) {
-	            ConsignmentWebhookEntity dbConsignmentWebhookEntity = new ConsignmentWebhookEntity();
-	            BeanUtils.copyProperties(newConsignmentWebhook, dbConsignmentWebhookEntity,
-	                    CommonUtils.getNullPropertyNames(newConsignmentWebhook));
-				log.info("newConsignmentWebhook : " + newConsignmentWebhook);
-	
-	            ConsignmentWebhookEntity createdConsignmentWebhookEntity = consignmentWebhookRepository.save(dbConsignmentWebhookEntity);
-//	            log.info("createdConsignmentWebhookEntity ------->: " + createdConsignmentWebhookEntity);
-	//			log.info("Webhook Type() : " + createdConsignmentWebhookEntity.getType());
-	//			log.info("Webhook Hub_code() : " + createdConsignmentWebhookEntity.getHub_code());
-	            createdConsignmentWebhookEntity.setPoc_image_list(new HashSet<>());
-	            createdConsignmentWebhookEntity.setQuality_check_image_list(new HashSet<>());
-	
-	            if (newConsignmentWebhook.getPoc_image_list() != null) {
-	                for (String newPocImageListEntity : newConsignmentWebhook.getPoc_image_list()) {
-	                    PocImageListEntity dbPocImageListEntity = new PocImageListEntity();
-	                    dbPocImageListEntity.setDescription(newPocImageListEntity);
-	                    dbPocImageListEntity
-	                            .setConsignment_webhook_id(createdConsignmentWebhookEntity.getConsignment_webhook_id());
-	                    createdConsignmentWebhookEntity.getPoc_image_list()
-	                            .add(pocImageListRepository.save(dbPocImageListEntity));
-	                }
-	            }
-	
-	            if (newConsignmentWebhook.getQuality_check_image_list() != null) {
-	                for (String newQualityCheckImageListEntity : newConsignmentWebhook.getQuality_check_image_list()) {
-	                    QualityCheckImageListEntity dbQualityCheckImageListEntity = new QualityCheckImageListEntity();
-	                    dbQualityCheckImageListEntity.setDescription(newQualityCheckImageListEntity);
-	                    dbQualityCheckImageListEntity
-	                            .setConsignment_webhook_id(createdConsignmentWebhookEntity.getConsignment_webhook_id());
-	                    createdConsignmentWebhookEntity.getQuality_check_image_list()
-	                            .add(qualityCheckImageListRepository.save(dbQualityCheckImageListEntity));
-	                }
-	            }
-	
-	            ConsignmentWebhook createdConsignmentWebhook = new ConsignmentWebhook();
-	            List<String> pocImageList = new ArrayList<>();
-	            List<String> qualityCheckImageList = new ArrayList<>();
-	            BeanUtils.copyProperties(createdConsignmentWebhookEntity, createdConsignmentWebhook,
-	                    CommonUtils.getNullPropertyNames(createdConsignmentWebhookEntity));
-	            for (PocImageListEntity newPocImageListEntity : createdConsignmentWebhookEntity.getPoc_image_list()) {
-	                String dbPocImageList = newPocImageListEntity.getDescription();
-	                pocImageList.add(dbPocImageList);
-	            }
-	
-	            for (QualityCheckImageListEntity newQualityImageCheckList : createdConsignmentWebhookEntity
-	                    .getQuality_check_image_list()) {
-	                String dbQualityCheckImage = newQualityImageCheckList.getDescription();
-	                qualityCheckImageList.add(dbQualityCheckImage);
-	            }
-	            createdConsignmentWebhook.setPoc_image_list(pocImageList);
-	            createdConsignmentWebhook.setQuality_check_image_list(qualityCheckImageList);
-	
-	            // Push the order to JNT
-	            // type = intransittohub, hub_code = JT
-	            String INTRANSIT_TO_HUB = "intransittohub";
-	
-	            /*
-	             * -------------ROUTER-CONF-------------------------------------------------------------------------
-	             */
-	            if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
-	            		createdConsignmentWebhook.getHub_code() != null && 
-	                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE)) {
-	            	log.info("Webhook Type() : " + createdConsignmentWebhook.getType());
-	                log.info("Webhook Hub_code() : " + createdConsignmentWebhook.getHub_code());
-	                
-	                ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(newConsignmentWebhook.getReference_number());
-	                log.info("consignmentFromLocalDB : " + consignmentEntity);
-	                
-	                // POST JNT Request
-	                JNTResponse objJNTResponse = null;
-	                if (consignmentEntity == null) { // It is from Shipsy
-	                    objJNTResponse = postJNTRequest(createdConsignmentWebhook.getReference_number());
-	                } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() == null) {
-	                	objJNTResponse = postJNTRequest(createdConsignmentWebhook.getReference_number());
-	                } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() != null) {
-	                	throw new BadRequestException("Consignment :" + createdConsignmentWebhook.getReference_number() + 
-	                			" cannot be pushed to JNT since it is already sent to JNT");
-	                }
-	                
-	                if (objJNTResponse.getMsg() != null && objJNTResponse.getMsg().equalsIgnoreCase("success")) {
-	//					String OUT_FOR_PICKUP = "out_for_pickup";
-	                    if (consignmentEntity == null) {
-	                        try {
-	                            Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
-	                            consignment.setScanType(INTRANSIT_TO_HUB);
-	                            ConsignmentResponse response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
-	                            log.info("created Consignment in  LocalDB : " + response);
-	                        } catch (Exception e) {
-	                            log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
-	                        }
-	                    }
-	
-	                    /*
-	                     * Update BillCode with the created Consignment
-	                     */
-	                    ConsignmentEntity updatedConsignmentEntity =
-	                            softDataUploadService.updateConsignment(createdConsignmentWebhook.getReference_number(),
-	                                    objJNTResponse.getData().getBillCode(), JNT_HUBCODE);
-	//					log.info("updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
-	
-	//                    log.info("-----------Updating the status to Shipsy--------> : ");
-	//                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(objJNTResponse.getData().getCreateOrderTime());
-	//                    log.info("create Order Date&Time-------> : " + date.getTime());
-	//                    long milli = date.getTime();
-	//
-	//                    OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
-	//                    orderStatusUpdate.setReference_number(createdConsignmentWebhook.getReference_number());
-	//                    orderStatusUpdate.setEvent_time_epoch(milli);
-	//                    orderStatusUpdate.setWorker_code("");
-	//                    orderStatusUpdate.setLat("");
-	//                    orderStatusUpdate.setLng("");
-	//                    orderStatusUpdate.setNotes(objJNTResponse.getData().getBillCode());
-	//                    orderStatusUpdate.setHub_code("JT");
-	//                    log.info("Updating the status to Shipsy---#2--------> : " + orderStatusUpdate);
-	//
-	//                    OrderStatusUpdateResponse response = orderStatusUpdateToShipsy(orderStatusUpdate, INTRANSIT_TO_HUB);
-	//                    log.info("OrderStatusUpdateResponse : " + response);
-	                } else {
-	                    objJNTResponse = new JNTResponse();
-	                    objJNTResponse.setMsg("Ref_Number:"
-	                            + createdConsignmentWebhook.getReference_number()
-	                            + " created and status is not moved to " + INTRANSIT_TO_HUB
-	                            + " to push it to JNT. Please change it.");
-	                }
-	                return objJNTResponse;
-	            } //----------------QATAR-API----------------------------------------------------------------------------------
-	            else if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
-	                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(QAP_HUBCODE)) {
-	                QPOrderCreateResponse qpResponse = postQPRequest(createdConsignmentWebhook.getReference_number());
-	                log.info("QPOrderCreateResponse : " + qpResponse);
-	            }
-	            log.info("createdConsignmentWebhook : " + createdConsignmentWebhook);
-        	}
+            ConsignmentWebhookEntity dbConsignmentWebhookEntity = new ConsignmentWebhookEntity();
+            BeanUtils.copyProperties(newConsignmentWebhook, dbConsignmentWebhookEntity,
+                    CommonUtils.getNullPropertyNames(newConsignmentWebhook));
+//			log.info("newConsignmentWebhook : " + newConsignmentWebhook);
+
+            ConsignmentWebhookEntity createdConsignmentWebhookEntity = consignmentWebhookRepository.save(dbConsignmentWebhookEntity);
+            log.info("createdConsignmentWebhookEntity ------->: " + createdConsignmentWebhookEntity);
+//			log.info("Webhook Type() : " + createdConsignmentWebhookEntity.getType());
+//			log.info("Webhook Hub_code() : " + createdConsignmentWebhookEntity.getHub_code());
+            createdConsignmentWebhookEntity.setPoc_image_list(new HashSet<>());
+            createdConsignmentWebhookEntity.setQuality_check_image_list(new HashSet<>());
+
+            if (newConsignmentWebhook.getPoc_image_list() != null) {
+                for (String newPocImageListEntity : newConsignmentWebhook.getPoc_image_list()) {
+                    PocImageListEntity dbPocImageListEntity = new PocImageListEntity();
+                    dbPocImageListEntity.setDescription(newPocImageListEntity);
+                    dbPocImageListEntity
+                            .setConsignment_webhook_id(createdConsignmentWebhookEntity.getConsignment_webhook_id());
+                    createdConsignmentWebhookEntity.getPoc_image_list()
+                            .add(pocImageListRepository.save(dbPocImageListEntity));
+                }
+            }
+
+            if (newConsignmentWebhook.getQuality_check_image_list() != null) {
+                for (String newQualityCheckImageListEntity : newConsignmentWebhook.getQuality_check_image_list()) {
+                    QualityCheckImageListEntity dbQualityCheckImageListEntity = new QualityCheckImageListEntity();
+                    dbQualityCheckImageListEntity.setDescription(newQualityCheckImageListEntity);
+                    dbQualityCheckImageListEntity
+                            .setConsignment_webhook_id(createdConsignmentWebhookEntity.getConsignment_webhook_id());
+                    createdConsignmentWebhookEntity.getQuality_check_image_list()
+                            .add(qualityCheckImageListRepository.save(dbQualityCheckImageListEntity));
+                }
+            }
+
+            ConsignmentWebhook createdConsignmentWebhook = new ConsignmentWebhook();
+            List<String> pocImageList = new ArrayList<>();
+            List<String> qualityCheckImageList = new ArrayList<>();
+            BeanUtils.copyProperties(createdConsignmentWebhookEntity, createdConsignmentWebhook,
+                    CommonUtils.getNullPropertyNames(createdConsignmentWebhookEntity));
+            for (PocImageListEntity newPocImageListEntity : createdConsignmentWebhookEntity.getPoc_image_list()) {
+                String dbPocImageList = newPocImageListEntity.getDescription();
+                pocImageList.add(dbPocImageList);
+            }
+
+            for (QualityCheckImageListEntity newQualityImageCheckList : createdConsignmentWebhookEntity
+                    .getQuality_check_image_list()) {
+                String dbQualityCheckImage = newQualityImageCheckList.getDescription();
+                qualityCheckImageList.add(dbQualityCheckImage);
+            }
+            createdConsignmentWebhook.setPoc_image_list(pocImageList);
+            createdConsignmentWebhook.setQuality_check_image_list(qualityCheckImageList);
+
+            // Push the order to JNT
+            // type = intransittohub, hub_code = JT
+            String INTRANSIT_TO_HUB = "intransittohub";
+
+            /*
+             * -------------ROUTER-CONF-------------------------------------------------------------------------
+             */
+            if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
+            		createdConsignmentWebhook.getHub_code() != null && 
+                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE)) {
+            	log.info("Webhook Type() : " + createdConsignmentWebhook.getType());
+                log.info("Webhook Hub_code() : " + createdConsignmentWebhook.getHub_code());
+                
+                ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(newConsignmentWebhook.getReference_number());
+                log.info("consignmentFromLocalDB : " + consignmentEntity);
+                
+                // POST JNT Request
+                JNTResponse objJNTResponse = null;
+                if (consignmentEntity == null) { // It is from Shipsy
+                    objJNTResponse = postJNTRequest(createdConsignmentWebhook.getReference_number());
+                } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() == null) {
+                	objJNTResponse = postJNTRequest(createdConsignmentWebhook.getReference_number());
+                } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() != null) {
+                	throw new BadRequestException("Consignment :" + createdConsignmentWebhook.getReference_number() + 
+                			" cannot be pushed to JNT since it is already sent to JNT");
+                }
+                
+                if (objJNTResponse.getMsg() != null && objJNTResponse.getMsg().equalsIgnoreCase("success")) {
+//					String OUT_FOR_PICKUP = "out_for_pickup";
+                    if (consignmentEntity == null) {
+                        try {
+                            Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
+                            consignment.setScanType(INTRANSIT_TO_HUB);
+                            ConsignmentResponse response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+                            log.info("created Consignment in  LocalDB : " + response);
+                        } catch (Exception e) {
+                            log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
+                        }
+                    }
+
+                    /*
+                     * Update BillCode with the created Consignment
+                     */
+                    ConsignmentEntity updatedConsignmentEntity =
+                            softDataUploadService.updateConsignment(createdConsignmentWebhook.getReference_number(),
+                                    objJNTResponse.getData().getBillCode(), JNT_HUBCODE);
+//					log.info("updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
+
+//                    log.info("-----------Updating the status to Shipsy--------> : ");
+//                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(objJNTResponse.getData().getCreateOrderTime());
+//                    log.info("create Order Date&Time-------> : " + date.getTime());
+//                    long milli = date.getTime();
+//
+//                    OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
+//                    orderStatusUpdate.setReference_number(createdConsignmentWebhook.getReference_number());
+//                    orderStatusUpdate.setEvent_time_epoch(milli);
+//                    orderStatusUpdate.setWorker_code("");
+//                    orderStatusUpdate.setLat("");
+//                    orderStatusUpdate.setLng("");
+//                    orderStatusUpdate.setNotes(objJNTResponse.getData().getBillCode());
+//                    orderStatusUpdate.setHub_code("JT");
+//                    log.info("Updating the status to Shipsy---#2--------> : " + orderStatusUpdate);
+//
+//                    OrderStatusUpdateResponse response = orderStatusUpdateToShipsy(orderStatusUpdate, INTRANSIT_TO_HUB);
+//                    log.info("OrderStatusUpdateResponse : " + response);
+                } else {
+                    objJNTResponse = new JNTResponse();
+                    objJNTResponse.setMsg("Ref_Number:"
+                            + createdConsignmentWebhook.getReference_number()
+                            + " created and status is not moved to " + INTRANSIT_TO_HUB
+                            + " to push it to JNT. Please change it.");
+                }
+                return objJNTResponse;
+            } //----------------QATAR-API----------------------------------------------------------------------------------
+            else if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
+                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(QAP_HUBCODE)) {
+                QPOrderCreateResponse qpResponse = postQPRequest(createdConsignmentWebhook.getReference_number());
+                log.info("QPOrderCreateResponse : " + qpResponse);
+            }
+            log.info("createdConsignmentWebhook : " + createdConsignmentWebhook);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

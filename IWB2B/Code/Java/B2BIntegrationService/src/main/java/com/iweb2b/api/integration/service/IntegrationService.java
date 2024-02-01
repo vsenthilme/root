@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iweb2b.api.integration.config.PropertiesConfig;
 import com.iweb2b.api.integration.controller.exception.BadRequestException;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
 import com.iweb2b.api.integration.model.consignment.dto.Consignment;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentImpl;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentResponse;
@@ -73,11 +75,8 @@ import com.iweb2b.api.integration.model.consignment.entity.QualityCheckImageList
 import com.iweb2b.api.integration.model.tracking.ConsignmentTracking;
 import com.iweb2b.api.integration.repository.ConsignmentRepository;
 import com.iweb2b.api.integration.repository.ConsignmentWebhookRepository;
-import com.iweb2b.api.integration.repository.DestinationDetailRepository;
 import com.iweb2b.api.integration.repository.JNTFailureResponseRepository;
 import com.iweb2b.api.integration.repository.JNTWebhookRepository;
-import com.iweb2b.api.integration.repository.OriginDetailRepository;
-import com.iweb2b.api.integration.repository.PiecesDetailRepository;
 import com.iweb2b.api.integration.repository.PocImageListRepository;
 import com.iweb2b.api.integration.repository.QPWebhookRepository;
 import com.iweb2b.api.integration.repository.QualityCheckImageListRepository;
@@ -106,15 +105,6 @@ public class IntegrationService {
     ConsignmentRepository consignmentRepository;
 
     @Autowired
-    PiecesDetailRepository piecesDetailRepository;
-
-    @Autowired
-    DestinationDetailRepository destinationDetailRepository;
-
-    @Autowired
-    OriginDetailRepository originDetailRepository;
-
-    @Autowired
     PocImageListRepository pocImageListRepository;
 
     @Autowired
@@ -130,7 +120,7 @@ public class IntegrationService {
     QPWebhookRepository qpWebhookRepository;
 
     private String JNT_HUBCODE = "JT";
-    private String QAP_HUBCODE = "QAP";
+    private String QAP_HUBCODE = "QATARPOST";
     private final String PASS = "PASS";
 
     /**
@@ -147,6 +137,19 @@ public class IntegrationService {
                 .setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM));
         restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
         return restTemplate;
+    }
+    
+    /**
+     * 
+     * @param wayBillNumber
+     * @return
+     */
+    public String getConsigmentByWayBillNumber (String wayBillNumber) {
+    	String referenceNumber = consignmentRepository.findConsigmentByWayBillNumber (wayBillNumber);
+    	if (referenceNumber == null) {
+    		throw new BadRequestException("The given wayBillNumber is not found : " + wayBillNumber);
+    	}
+    	return referenceNumber;
     }
 
     /**
@@ -166,7 +169,7 @@ public class IntegrationService {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
-            //headers.add("Authorization", "Basic " + authToken);
+//			headers.add("Authorization", "Basic " + authToken);
             headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(newConsignment, headers);
 
@@ -194,7 +197,7 @@ public class IntegrationService {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_Portal RestTemplate");
-            // headers.add("Authorization", "Basic " + authToken);
+//            headers.add("Authorization", "Basic " + authToken);
             headers.add("api-key", authToken);
 
             HttpEntity<?> entity = new HttpEntity<>(orderStatusUpdate, headers);
@@ -228,11 +231,7 @@ public class IntegrationService {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
-
-        //----------For Production-------------------------
-        //headers.add("Authorization", "Basic " + authToken);
-
-        //----------For Dev-------------------------
+//        headers.add("Authorization", "Basic " + authToken);
         headers.add("api-key", authToken);
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
@@ -259,19 +258,47 @@ public class IntegrationService {
             RestTemplate restTemplate = getRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
-            //headers.add("Authorization", "Basic " + authToken);
+//            headers.add("Authorization", "Basic " + authToken);
             headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(headers);
 
             // https://demodashboardapi.shipsy.in/api/client/integration/consignment/shippinglabel/stream?reference_number=BLEND099
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(consignmentTrackingUrl + "?reference_number=" + refNumber);
-//			ResponseEntity<String> result = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
             ResponseEntity<byte[]> result = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, byte[].class);
             return result.getBody();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+    
+    /**
+     * 
+     * @param cancelShipmentRequest
+     * @return
+     */
+    public CancelShipmentResponse cancelShipment(@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+        // Invoke Shipsy API
+        try {
+            String authToken = propertiesConfig.getShipsyApiAuthtoken();
+            String cancelShipmentUrl = propertiesConfig.getShipsyApiOrderCancel();
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
+//            headers.add("Authorization", "Basic " + authToken);
+            headers.add("api-key", authToken);
+            HttpEntity<?> entity = new HttpEntity<>(cancelShipmentRequest, headers);
+
+            // https://apix.asyadexpress.com/v2/webhooks/incoming-integration?source=IW
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(cancelShipmentUrl);
+            ResponseEntity<CancelShipmentResponse> result = 
+            		getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, CancelShipmentResponse.class);
+            return result.getBody();
+        } catch (RestClientException e) {
+        	e.printStackTrace();
+        	throw e;
         }
     }
 
@@ -294,7 +321,6 @@ public class IntegrationService {
      * String.class); return result.getBody(); } catch (RestClientException e) {
      * e.printStackTrace(); } return referenceNumber; }
      */
-
     public ConsignmentWebhook listenWebhook(@RequestBody ConsignmentWebhook consignmentWebhook) {
         // Invoke Shipsy API
         try {
@@ -304,7 +330,8 @@ public class IntegrationService {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "B2B_IW_PortalRestTemplate");
-            headers.add("Authorization", "Basic " + authToken);
+//            headers.add("Authorization", "Basic " + authToken);
+            headers.add("api-key", authToken);
             HttpEntity<?> entity = new HttpEntity<>(consignmentWebhook, headers);
 
             // https://apix.asyadexpress.com/v2/webhooks/incoming-integration?source=IW
@@ -313,11 +340,10 @@ public class IntegrationService {
                     HttpMethod.POST, entity, ConsignmentWebhook.class);
 
             return result.getBody();
-
         } catch (RestClientException e) {
             e.printStackTrace();
+            throw e;
         }
-        return null;
     }
 
     /**
@@ -344,7 +370,7 @@ public class IntegrationService {
                 dbJNTWebhookEntity.setScanType(detail.getScanType());
                 JNTWebhookEntity createdJNTWebhookEntity = jntWebhookRepository.save(dbJNTWebhookEntity);
                 log.info("createdJNTWebhookEntity : " + createdJNTWebhookEntity);
-
+                
                 /*
                  * Send respective status to Shipsy
                  */
@@ -377,27 +403,28 @@ public class IntegrationService {
                     // Station sending/DC sending
                     if (shipsyStatusEvent.equalsIgnoreCase("intransit_to_hub")) {
                         orderStatusUpdate.setHub_code("JT");
+                        orderStatusUpdate.setDestination_hub_code("JT");
                     }
 
                     // Abnormal Parcel Scan
                     if (shipsyStatusEvent.equalsIgnoreCase("attempted")) {
-                        /*
-                         *  JNTWebhookEntity(jnt_webhook_id=2823, billCode=JTE000158664438, description=【Riyadh】[Riyadh Middle 1] has operated
-                         *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable],
-                         *  scanNetworkCity=Riyadh, scanNetworkId=192, scanNetworkName=Riyadh Middle 1, scanNetworkProvince=null, scanNetworkTypeName=网点,
-                         *  scanTime=2023-08-02 08:17:14, scanType=Abnormal parcel scan)
-                         */
-
-                        String reason_code = getJNTFailureResponseCode(parseReason(detail.getDesc()));
-                        log.info("OrderStatusUpdate----attempted--matched--> reason_code : " + reason_code);
+                    	/*
+                    	 *  JNTWebhookEntity(jnt_webhook_id=2823, billCode=JTE000158664438, description=【Riyadh】[Riyadh Middle 1] has operated 
+                    	 *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable], 
+                    	 *  scanNetworkCity=Riyadh, scanNetworkId=192, scanNetworkName=Riyadh Middle 1, scanNetworkProvince=null, scanNetworkTypeName=网点, 
+                    	 *  scanTime=2023-08-02 08:17:14, scanType=Abnormal parcel scan)
+                    	 */
+                    	
+                    	String reason_code = getJNTFailureResponseCode (parseReason(detail.getDesc()));
+                    	log.info("OrderStatusUpdate----attempted--matched--> reason_code : " + reason_code);
                         orderStatusUpdate.setReason_code(reason_code);
                     }
-
+                    
                     // Delivery-Scan/accept event
-                    if (shipsyStatusEvent.equalsIgnoreCase("accept")) {
-                        orderStatusUpdate.setWorker_code("3PLRider");
-                    }
-                    log.info("OrderStatusUpdate----Request----> : " + orderStatusUpdate + "----event----->" + shipsyStatusEvent);
+					if (shipsyStatusEvent.equalsIgnoreCase("accept")) {
+						orderStatusUpdate.setWorker_code("3PLRider");
+					}
+					log.info("OrderStatusUpdate----Request----> : " + orderStatusUpdate + "----event----->" + shipsyStatusEvent);
                     OrderStatusUpdateResponse response = orderStatusUpdateToShipsy(orderStatusUpdate, shipsyStatusEvent);
                     log.info("OrderStatusUpdateResponse : " + response);
                 } else {
@@ -413,23 +440,23 @@ public class IntegrationService {
     }
 
     /**
+     * 
      * @param desc
      * @return
      */
     private String parseReason(String desc) {
 //    	String desc = "【Riyadh】[Riyadh Middle 1] has operated \r\n"
 //    			+ "    	 *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable]";
-        desc = desc.substring(desc.lastIndexOf("abnormal"), desc.length());
-        desc = desc.substring(desc.indexOf('[') + 1, desc.length());
-        desc = desc.substring(0, desc.indexOf(']'));
-        log.info("Desc: " + desc);
-        return desc;
-    }
+    	desc = desc.substring(desc.lastIndexOf("abnormal"), desc.length());
+    	desc = desc.substring(desc.indexOf('[') + 1, desc.length());
+    	desc = desc.substring(0, desc.indexOf(']'));
+    	log.info("Desc: " + desc);
+    	return desc;
+	}
 
 
     /**
      * Update Order
-     *
      * @param orderStatusUpdate
      * @param shipsyStatusEvent
      * @return
@@ -527,17 +554,14 @@ public class IntegrationService {
             // Push the order to JNT
             // type = intransittohub, hub_code = JT
             String INTRANSIT_TO_HUB = "intransittohub";
-            
-            log.info("########Webhook Type() : " + createdConsignmentWebhook.getType());
-            log.info("###########Webhook Hub_code() : " + createdConsignmentWebhook.getHub_code());
-            
+
             /*
              * -------------ROUTER-CONF-------------------------------------------------------------------------
              */
             if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
-					createdConsignmentWebhook.getHub_code() != null && 
-                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE)) {					
-                log.info("Webhook Type() : " + createdConsignmentWebhook.getType());
+            		createdConsignmentWebhook.getHub_code() != null && 
+                    createdConsignmentWebhook.getHub_code().equalsIgnoreCase(JNT_HUBCODE)) {
+            	log.info("Webhook Type() : " + createdConsignmentWebhook.getType());
                 log.info("Webhook Hub_code() : " + createdConsignmentWebhook.getHub_code());
                 
                 ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(newConsignmentWebhook.getReference_number());
@@ -550,7 +574,7 @@ public class IntegrationService {
                 } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() == null) {
                 	objJNTResponse = postJNTRequest(createdConsignmentWebhook.getReference_number());
                 } else if (consignmentEntity != null && consignmentEntity.getAwb_3rd_Party() != null) {
-                	throw new BadRequestException("Consignment :" + createdConsignmentWebhook.getReference_number() +
+                	throw new BadRequestException("Consignment :" + createdConsignmentWebhook.getReference_number() + 
                 			" cannot be pushed to JNT since it is already sent to JNT");
                 }
                 
@@ -603,10 +627,28 @@ public class IntegrationService {
             } //----------------QATAR-API----------------------------------------------------------------------------------
             else if (createdConsignmentWebhook.getType().equalsIgnoreCase(INTRANSIT_TO_HUB) &&
                     createdConsignmentWebhook.getHub_code().equalsIgnoreCase(QAP_HUBCODE)) {
-            	log.info("------Webhook Type() : " + createdConsignmentWebhook.getType());
-                log.info("------Webhook Hub_code() : " + createdConsignmentWebhook.getHub_code());
                 QPOrderCreateResponse qpResponse = postQPRequest(createdConsignmentWebhook.getReference_number());
-                log.info("QPOrderCreateResponse : " + qpResponse);
+                log.info("--createConsignmentWebhook----QPOrderCreateResponse----1----> : " + qpResponse);
+                ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(newConsignmentWebhook.getReference_number());
+                log.info("---createConsignmentWebhook-----consignmentFromLocalDB---2----->: " + consignmentEntity);
+                if (consignmentEntity == null && qpResponse.isSuccessful() == true) {
+                    try {
+                        Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
+                        consignment.setScanType(INTRANSIT_TO_HUB);
+                        ConsignmentResponse response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+                        log.info("created Consignment in  LocalDB : " + response);
+                        
+                        /*
+                         * Update BillCode with the created Consignment
+                         */
+                        ConsignmentEntity updatedConsignmentEntity =
+                                softDataUploadService.updateConsignment(createdConsignmentWebhook.getReference_number(),
+                                		createdConsignmentWebhook.getReference_number(), QAP_HUBCODE);
+        				log.info("updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
+                    } catch (Exception e) {
+                        log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
+                    }
+                }
             }
             log.info("createdConsignmentWebhook : " + createdConsignmentWebhook);
         } catch (Exception e) {
@@ -656,47 +698,47 @@ public class IntegrationService {
         // Receiver
         newReceiver.setReceiverIdNumber(dbConsignment.getCustomer_civil_id());
         if (dbConsignment.getDestination_details() != null) {
-            log.info("########dbConsignment.getDestination_details().getAddress_line_1()----- : " + dbConsignment.getDestination_details().getAddress_line_1());
-            if (dbConsignment.getDestination_details().getAddress_line_1() != null) {
-                newReceiver.setAddress(dbConsignment.getDestination_details().getAddress_line_1());
+        	log.info("########dbConsignment.getDestination_details().getAddress_line_1()----- : " + dbConsignment.getDestination_details().getAddress_line_1());
+        	if (dbConsignment.getDestination_details().getAddress_line_1() != null) {
+        		newReceiver.setAddress(dbConsignment.getDestination_details().getAddress_line_1());
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getAddress_line_2() != null) {
+        		newReceiver.setArea(dbConsignment.getDestination_details().getAddress_line_2());
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getAlternate_phone() != null) {
+            	newReceiver.setPhone(dbConsignment.getDestination_details().getAlternate_phone());
             }
-
-            if (dbConsignment.getDestination_details().getAddress_line_2() != null) {
-                newReceiver.setArea(dbConsignment.getDestination_details().getAddress_line_2());
-            }
-
-            if (dbConsignment.getDestination_details().getAlternate_phone() != null) {
-                newReceiver.setPhone(dbConsignment.getDestination_details().getAlternate_phone());
-            }
-
-            if (dbConsignment.getDestination_details().getCity() != null) {
-                newReceiver.setCity(dbConsignment.getDestination_details().getCity());
+        	
+        	if (dbConsignment.getDestination_details().getCity() != null) {
+        		newReceiver.setCity(dbConsignment.getDestination_details().getCity());
                 newReceiver.setMobile(dbConsignment.getDestination_details().getPhone());
-            }
-
-            if (dbConsignment.getDestination_details().getPhone() != null) {
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getPhone() != null) {
                 newReceiver.setMobile(dbConsignment.getDestination_details().getPhone());
-            }
-
-            if (dbConsignment.getDestination_details().getName() != null) {
-                newReceiver.setName(dbConsignment.getDestination_details().getName());
-            }
-
-            if (dbConsignment.getDestination_details().getPincode() != null) {
-                newReceiver.setPostCode(dbConsignment.getDestination_details().getPincode());
-            }
-
-            if (dbConsignment.getDestination_details().getState() != null) {
-                newReceiver.setProv(dbConsignment.getDestination_details().getState());
-            }
-
-            if (dbConsignment.getDestination_details().getCountry() != null) {
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getName() != null) {
+        		newReceiver.setName(dbConsignment.getDestination_details().getName());
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getPincode() != null) {
+        		newReceiver.setPostCode(dbConsignment.getDestination_details().getPincode());
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getState() != null) {
+        		newReceiver.setProv(dbConsignment.getDestination_details().getState());
+        	}
+        	
+        	if (dbConsignment.getDestination_details().getCountry() != null) {
                 newReceiver.setCountryCode(dbConsignment.getDestination_details().getCountry().toUpperCase()); // Hardcoded as "KSA" during Testing
             }
         }
 
         if (newReceiver.getCountryCode() == null) {
-            newReceiver.setCountryCode("KSA");
+        	newReceiver.setCountryCode("KSA");
         }
         newReceiver.setCompany("");
         newReceiver.setTown("");
@@ -874,8 +916,9 @@ public class IntegrationService {
 //        }
 //        return consignmentList;
 //    }
-
+    
     /**
+     * 
      * @param hubCode
      * @return
      */
@@ -957,15 +1000,15 @@ public class IntegrationService {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(printLabelAddress);
             ResponseEntity<JNTPrintLabelResponse> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, JNTPrintLabelResponse.class);
             log.info("JNT Response : " + result.getBody());
-
+            
             /*
              * Update the Flag to TRUE after printing
              */
             if (result != null) {
-                String referenceNumber = softDataUploadService.getConsigmentByJntBillCode(billCode);
-                ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
-                consignmentEntity.setIs_awb_printed(Boolean.TRUE);
-                consignmentRepository.save(consignmentEntity);
+            	String referenceNumber = softDataUploadService.getConsigmentByJntBillCode(billCode);
+            	ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
+            	consignmentEntity.setIs_awb_printed(Boolean.TRUE);
+            	consignmentRepository.save(consignmentEntity);          	
             }
             return result.getBody();
         } catch (Exception e) {
@@ -1025,15 +1068,15 @@ public class IntegrationService {
             ResponseEntity<byte[]> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, byte[].class);
             log.info("JNT Response : " + result.getBody());
-
+            
             /*
              * Update the Flag to TRUE after printing
              */
             if (result != null) {
-                String referenceNumber = softDataUploadService.getConsigmentByJntBillCode(billCode);
-                ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
-                consignmentEntity.setIs_awb_printed(Boolean.TRUE);
-                consignmentRepository.save(consignmentEntity);
+            	String referenceNumber = softDataUploadService.getConsigmentByJntBillCode(billCode);
+            	ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
+            	consignmentEntity.setIs_awb_printed(Boolean.TRUE);
+            	consignmentRepository.save(consignmentEntity);          	
             }
             return result.getBody();
         } catch (Exception e) {
@@ -1109,71 +1152,73 @@ public class IntegrationService {
      */
     public QPOrderCreateResponse postQPRequest(String referenceNumber) throws Exception {
         Consignment dbConsignment = softDataUploadService.getConsignment(referenceNumber);
-        log.info("Consignment retrieved for QP: " + dbConsignment);
+        log.info("---postQPRequest----Consignment retrieved for QP:----> " + dbConsignment);
 
         List<QPOrder> qpOrderkList = new ArrayList<>();
-        for (Pieces_Details newPiecesDetail : dbConsignment.getPieces_detail()) {
-            QPOrder newQPOrder = new QPOrder();
-            newQPOrder.setOrderID(dbConsignment.getCustomer_reference_number());
-            newQPOrder.setSubOrderID("1");                                                    				// Hard coded
-            newQPOrder.setTrackingNumber(referenceNumber);                                                	// Hard coded
-            newQPOrder.setCustomerName(dbConsignment.getDestination_details().getName());
-            newQPOrder.setCustomerMobile(dbConsignment.getDestination_details().getPhone());
-            newQPOrder.setMerchantName(dbConsignment.getOrigin_details().getName());
-            newQPOrder.setMerchantStore(dbConsignment.getOrigin_details().getAddress_line_1());   
-            newQPOrder.setMerchantPhone(dbConsignment.getOrigin_details().getPhone());
-//			newQPOrder.setDelivery_Zone(dbConsignment.getDestination_details().getPincode());
-//			newQPOrder.setDelivery_Street(dbConsignment.getDestination_details().getAddress_line_1());
-//			newQPOrder.setPickup_Zone(dbConsignment.getOrigin_details().getPincode());
-//			newQPOrder.setPickup_Street(dbConsignment.getOrigin_details().getAddress_line_1());
-
-            newQPOrder.setDelivery_Zone("1");
-            newQPOrder.setDelivery_Street("1");
-            newQPOrder.setDelivery_BuildingNo("1");                                                        	// Hard coded
-            newQPOrder.setDelivery_UnitNo("1");                                                            	// Hard coded
-            newQPOrder.setPickup_Zone("1");
-            newQPOrder.setPickup_Street("1");
-            newQPOrder.setPickup_Building("1");                                                            	// Hard coded
-            newQPOrder.setPickup_Unitno("1");                                                            	// Hard coded
-            
-            String address = dbConsignment.getDestination_details().getAddress_line_1() + "," +
-            		dbConsignment.getDestination_details().getCity() + "," +
-            		dbConsignment.getDestination_details().getState()  + "," +
-            		dbConsignment.getDestination_details().getCountry();            
-            newQPOrder.setLocation_Details(address);
-            newQPOrder.setDeliveryType("HomeDelivery");                                                		// Hard coded
-            newQPOrder.setDeliveryScheduletype(getDeliveryScheduletype());                                                    	
-            newQPOrder.setZoneType("Inside Doha");                                                        	
-            newQPOrder.setProductDiscription(newPiecesDetail.getDescription());
-            newQPOrder.setWeight(newPiecesDetail.getWeight());
-            newQPOrder.setQuantity(dbConsignment.getNum_pieces());
-//            if (dbConsignment.getNum_pieces() != null) {
-////                Long quantity = Long.valueOf(newPiecesDetail.getQuantity());
-////                newQPOrder.setQuantity(quantity);
-//            	newQPOrder.setQuantity(dbConsignment.getNum_pieces());
-//            }
-
-            newQPOrder.setTransectionType(1L);                                                            // Hard coded
-            newQPOrder.setCurrentStatus(5L);                                                            // Hard coded
-
-            var current_timestamp = new Date();
-            newQPOrder.setCreatedDate(CommonUtils.toISOString(current_timestamp));
+        if (dbConsignment.getPieces_detail() != null) {
+	        for (Pieces_Details newPiecesDetail : dbConsignment.getPieces_detail()) {
+	        	QPOrder newQPOrder = prepareQPOrder(referenceNumber, dbConsignment, newPiecesDetail);
+	            qpOrderkList.add(newQPOrder);
+	        }
+        } else {
+        	QPOrder newQPOrder = prepareQPOrder(referenceNumber, dbConsignment, null);
             qpOrderkList.add(newQPOrder);
         }
-        log.info("QP---qpOrderkList----> : " + qpOrderkList);
+
         return sendOrder2QP(qpOrderkList);
     }
-    
+        
     /**
      * 
+     * @param referenceNumber
+     * @param dbConsignment
+     * @param newPiecesDetail
      * @return
-     * @throws Exception
      */
-    private String getDeliveryScheduletype() throws Exception {
-    	String date1 = CommonUtils.toISOString(CommonUtils.addTimeToDate(new Date()));
-		String date2 = CommonUtils.toISOString(CommonUtils.addDayEndTimeToDate(new Date()));
-		log.info("d1 : " + date1 + "-" + date2);
-		return date1 + "-" + date2;
+    private QPOrder prepareQPOrder (String referenceNumber, Consignment dbConsignment, Pieces_Details newPiecesDetail) {
+    	QPOrder newQPOrder = new QPOrder();
+        newQPOrder.setOrderID(referenceNumber);
+        newQPOrder.setSubOrderID(referenceNumber);                                                    // Hard coded
+        newQPOrder.setTrackingNumber(referenceNumber);                                                // Hard coded
+        newQPOrder.setCustomerName(dbConsignment.getDestination_details().getName());
+        newQPOrder.setCustomerMobile(dbConsignment.getDestination_details().getPhone());
+        newQPOrder.setMerchantName(dbConsignment.getOrigin_details().getName());
+        newQPOrder.setMerchantStore("");                                                            // Hard coded
+        newQPOrder.setMerchantPhone(dbConsignment.getOrigin_details().getPhone());
+//		newQPOrder.setDelivery_Zone(dbConsignment.getDestination_details().getPincode());
+//		newQPOrder.setDelivery_Street(dbConsignment.getDestination_details().getAddress_line_1());
+//		newQPOrder.setPickup_Zone(dbConsignment.getOrigin_details().getPincode());
+//		newQPOrder.setPickup_Street(dbConsignment.getOrigin_details().getAddress_line_1());
+
+        newQPOrder.setDelivery_Zone("1");
+        newQPOrder.setDelivery_Street("1");
+        newQPOrder.setDelivery_BuildingNo("1");                                                        // Hard coded
+        newQPOrder.setDelivery_UnitNo("1");                                                            // Hard coded
+        newQPOrder.setPickup_Zone("1");
+        newQPOrder.setPickup_Street("1");
+        newQPOrder.setPickup_Building("1");                                                            // Hard coded
+        newQPOrder.setPickup_Unitno("1");                                                            // Hard coded
+        newQPOrder.setLocation_Details(dbConsignment.getDestination_details().getAddress_line_1());
+        newQPOrder.setDeliveryType("NextDayDelivery");                                                // Hard coded
+        newQPOrder.setDeliveryScheduletype("NA");                                                    // Hard coded
+        newQPOrder.setZoneType("Inside Doha");                                                        // Hard coded
+        
+        if (newPiecesDetail != null) {
+        	newQPOrder.setProductDiscription(newPiecesDetail.getDescription());
+            newQPOrder.setWeight(newPiecesDetail.getWeight());
+            newQPOrder.setQuantity(dbConsignment.getNum_pieces());
+        } else {
+        	newQPOrder.setProductDiscription(dbConsignment.getDescription());
+        	newQPOrder.setWeight(dbConsignment.getWeight());
+        	newQPOrder.setQuantity(dbConsignment.getNum_pieces());
+        }
+
+        newQPOrder.setTransectionType(1L);                                                            // Hard coded
+        newQPOrder.setCurrentStatus(5L);                                                            // Hard coded
+
+        var current_timestamp = new Date();
+        newQPOrder.setCreatedDate(CommonUtils.toISOString(current_timestamp));
+        return newQPOrder;
     }
 
     /**
@@ -1266,40 +1311,6 @@ public class IntegrationService {
         }
 		return null;
     }
-    
-    /**
-     * 
-     * @param qpTrackingResponse
-     * @return 
-     */
-    private void createWebhook (QPTrackingResponse qpTrackingResponse) {
-    	/*
-    	 *  "tracking_No": "QP12333536TM",
-            "item_Action_Id": 5,
-            "item_Action_Name": "CREATED",
-            "action_Date": "2023-06-12T12:56:33.317",
-            "action_Time": "2023-06-12T12:56:33.317",
-            "operator_Name": "0",
-            "totalRows": 1
-    	 */
-    	List<QPData> qpDataList = qpTrackingResponse.getData();
-    	for (QPData qpData : qpDataList) {
-    		QPWebhook dbQPWebhook = qpWebhookRepository.findByTrackingNoAndItemActionName(qpData.getTracking_No(), qpData.getItem_Action_Name());
-    		if (dbQPWebhook == null) {
-    			QPWebhook qpWebhook = new QPWebhook();
-    			qpWebhook.setTrackingNo(qpData.getTracking_No());
-    			qpWebhook.setItemActionId(qpData.getItem_Action_Id());
-    			qpWebhook.setItemActionName(qpData.getItem_Action_Name());
-    			qpWebhook.setActionDate(qpData.getAction_Date());
-    			qpWebhook.setActionTime(qpData.getAction_Time());    			
-    			qpWebhook.setOperatorName(qpData.getOperator_Name());    	
-    			qpWebhook.setTotalRows(qpData.getTotalRows());
-    			
-    			QPWebhook createdQPWebhook = qpWebhookRepository.save(qpWebhook);
-            	log.info("------createdQPWebhook-------> " + createdQPWebhook);
-    		}
-    	}
-    }
 
     /**
      * @return
@@ -1341,6 +1352,40 @@ public class IntegrationService {
     }
     
     /**
+     * 
+     * @param qpTrackingResponse
+     * @return 
+     */
+    private void createWebhook (QPTrackingResponse qpTrackingResponse) {
+    	/*
+    	 *  "tracking_No": "QP12333536TM",
+            "item_Action_Id": 5,
+            "item_Action_Name": "CREATED",
+            "action_Date": "2023-06-12T12:56:33.317",
+            "action_Time": "2023-06-12T12:56:33.317",
+            "operator_Name": "0",
+            "totalRows": 1
+    	 */
+    	List<QPData> qpDataList = qpTrackingResponse.getData();
+    	for (QPData qpData : qpDataList) {
+    		QPWebhook dbQPWebhook = qpWebhookRepository.findByTrackingNoAndItemActionName(qpData.getTracking_No(), qpData.getItem_Action_Name());
+    		if (dbQPWebhook == null) {
+    			QPWebhook qpWebhook = new QPWebhook();
+    			qpWebhook.setTrackingNo(qpData.getTracking_No());
+    			qpWebhook.setItemActionId(qpData.getItem_Action_Id());
+    			qpWebhook.setItemActionName(qpData.getItem_Action_Name());
+    			qpWebhook.setActionDate(qpData.getAction_Date());
+    			qpWebhook.setActionTime(qpData.getAction_Time());    			
+    			qpWebhook.setOperatorName(qpData.getOperator_Name());    	
+    			qpWebhook.setTotalRows(qpData.getTotalRows());
+    			
+    			QPWebhook createdQPWebhook = qpWebhookRepository.save(qpWebhook);
+            	log.info("------createdQPWebhook-------> " + createdQPWebhook);
+    		}
+    	}
+    }
+
+    /**
      * @param qpOrderList
      * @return
      * @throws Exception
@@ -1377,6 +1422,7 @@ public class IntegrationService {
     }
 
     /**
+     * 
      * @return
      */
     private static QPOrder qpHardCodedOrder() {
@@ -1422,6 +1468,7 @@ public class IntegrationService {
     }
 
     /**
+     * 
      * @param countInput
      * @return
      * @throws java.text.ParseException
@@ -1488,17 +1535,18 @@ public class IntegrationService {
     }
 
     /**
-     * @param desc
+     * 
+     * @param jntFailureResponseDesc
      * @return
      */
     public String getJNTFailureResponseCode(String desc) {
         String responseCode = null;
         if (desc != null) {
-            responseCode = jntFailureResponseRepository.getFailureResponseCode(desc);
+        	responseCode = jntFailureResponseRepository.getFailureResponseCode(desc);
         }
         return responseCode;
     }
-
+    
 //    public String getJNTFailureResponseCode(JNTFailureResponseInput jntFailureResponseDesc) {
 //        String jntFailureResponseCode = null;
 //        if (jntFailureResponseDesc.getJntFailureResponseDescription() != null) {
@@ -1506,20 +1554,20 @@ public class IntegrationService {
 //        }
 //        return jntFailureResponseCode;
 //    }
-
+    
     public static void main(String[] args) {
-        /*
-         *  JNTWebhookEntity(jnt_webhook_id=2823, billCode=JTE000158664438, description=【Riyadh】[Riyadh Middle 1] has operated
-         *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable],
-         *  scanNetworkCity=Riyadh, scanNetworkId=192, scanNetworkName=Riyadh Middle 1, scanNetworkProvince=null, scanNetworkTypeName=网点,
-         *  scanTime=2023-08-02 08:17:14, scanType=Abnormal parcel scan)
-         */
-        String desc = "【Riyadh】[Riyadh Middle 1] has operated \r\n"
-                + "    	 *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable]";
-        desc = desc.substring(desc.lastIndexOf("abnormal"), desc.length());
-        desc = desc.substring(desc.indexOf('[') + 1, desc.length());
-        desc = desc.substring(0, desc.indexOf(']'));
-        log.info("Desc: " + desc);
+    	/*
+    	 *  JNTWebhookEntity(jnt_webhook_id=2823, billCode=JTE000158664438, description=【Riyadh】[Riyadh Middle 1] has operated 
+    	 *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable], 
+    	 *  scanNetworkCity=Riyadh, scanNetworkId=192, scanNetworkName=Riyadh Middle 1, scanNetworkProvince=null, scanNetworkTypeName=网点, 
+    	 *  scanTime=2023-08-02 08:17:14, scanType=Abnormal parcel scan)
+    	 */
+    	String desc = "【Riyadh】[Riyadh Middle 1] has operated \r\n"
+    			+ "    	 *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable]";
+    	desc = desc.substring(desc.lastIndexOf("abnormal"),desc.length());
+    	desc = desc.substring(desc.indexOf('[')+1, desc.length());
+    	desc = desc.substring(0,desc.indexOf(']'));
+    	log.info("Desc: " + desc);
     }
 
     /**

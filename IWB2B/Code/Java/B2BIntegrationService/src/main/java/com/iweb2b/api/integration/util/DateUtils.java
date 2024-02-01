@@ -1,18 +1,13 @@
 package com.iweb2b.api.integration.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DateUtils {
@@ -491,18 +486,13 @@ public class DateUtils {
 //		addTimeToDate (dateAlone, Integer.valueOf(time[0]), Integer.valueOf(time[1]), Integer.valueOf(time[2]));
 //		addTimeToDate (fromDeliveryDate, 13, 59, 59);
 		
-//		dateSubtract(1, 14, 0, 0);
-//		dateSubtract(0, 13, 59, 59);
-//		
-//		LocalDate today = LocalDate.now();
-//		LocalDate beginDayOfMonth = today.withDayOfMonth(1);
-//		addTimeToDate(beginDayOfMonth, 14, 0, 0);
-//		addTimeToDate(today, 13, 59, 59);
+		dateSubtract(1, 14, 0, 0);
+		dateSubtract(0, 13, 59, 59);
 		
-		String action_Time = "2023-06-12T12:56:33.317";
-    	String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-        Date date = new SimpleDateFormat(FORMAT_DATE_ISO).parse(action_Time);
-        log.info("convertStringToDate-------> : " + date.getTime());
+		LocalDate today = LocalDate.now();
+		LocalDate beginDayOfMonth = today.withDayOfMonth(1);
+		addTimeToDate(beginDayOfMonth, 14, 0, 0);
+		addTimeToDate(today, 13, 59, 59);
 	}
 
 	/**
@@ -591,13 +581,19 @@ public class DateUtils {
 	 */
 	public static Date dateSubtract (Date inputDate) {
 		try {
+
 			LocalDate eLocalDate =  LocalDate.ofInstant(inputDate.toInstant(), ZoneId.systemDefault()).minusDays(1);
 			log.info("LocalDate2------->  " + eLocalDate.atTime(23, 59, 0));
+
 			LocalDateTime eLocalDateTime = eLocalDate.atTime(23, 59, 0);
+
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
 			String eConvertedDateTime = formatter.format(eLocalDateTime);
+
 			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 			Date eDate = dateFormatter.parse(eConvertedDateTime);
+
 			return eDate;
 		} catch (Exception e) {
 			e.printStackTrace();

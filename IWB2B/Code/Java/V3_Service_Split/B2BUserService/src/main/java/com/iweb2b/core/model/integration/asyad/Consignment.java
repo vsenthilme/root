@@ -1,13 +1,14 @@
 package com.iweb2b.core.model.integration.asyad;
 
-import lombok.Data;
+import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.Date;
-import java.util.Set;
+
+import lombok.Data;
 
 /*
  *  {
@@ -96,7 +97,8 @@ public class Consignment {
     private String awb_3rd_Party;
     private String scanType;
     private String hubCode;
-
+    private String action_time;
+    private String qpWebhookStatus;
     private String orderType;
     private String jntPushStatus;
     private String boutiqaatPushStatus;
@@ -107,12 +109,12 @@ public class Consignment {
     private Boolean is_awb_printed;
     private String inco_terms;
     
-//    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Origin_Details origin_details;
 	
-//    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Destination_Details destination_details;
     
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Set<Pieces_Details> pieces_detail;
 }

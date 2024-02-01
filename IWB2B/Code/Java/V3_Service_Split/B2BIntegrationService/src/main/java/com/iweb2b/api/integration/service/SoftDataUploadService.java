@@ -409,4 +409,29 @@ public class SoftDataUploadService {
 
 		return consignmentRepository.save(consignmentEntity);
 	}
+	
+	/**
+	 * 
+	 * @param referenceNumber
+	 * @param billCode
+	 * @param jNT_HUBCODE
+	 * @return
+	 */
+	public ConsignmentEntity updateQPConsignment (String referenceNumber, String billCode, String jNT_HUBCODE) {
+		ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
+		consignmentEntity.setHubCode_3rd_Party(jNT_HUBCODE);
+		consignmentEntity.setQp_webhook_status("PASS");
+		consignmentEntity.setOrderType("1");
+
+		return consignmentRepository.save(consignmentEntity);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<String> getConsigmentByQP(String hubCode) {
+		List<String> qpConsignments = consignmentRepository.getByHubcode(hubCode);
+		return qpConsignments;
+	}
 }

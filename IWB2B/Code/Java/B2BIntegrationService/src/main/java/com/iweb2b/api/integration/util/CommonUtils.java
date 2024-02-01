@@ -6,12 +6,7 @@ import java.beans.XMLEncoder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -78,6 +73,35 @@ public class CommonUtils {
 	 * 
 	 * @return
 	 */
+	public static String getStatusMapping(String mapString) {
+		/*
+		 * Pickup scan - Pickup completed
+		 * Station sending/DC sending - Intransit to HUB
+		 * Station arrival - Intransit to Hub
+		 * DC arrival - Inscan at Hub
+		 * Delivery Scan - Attempted
+		 * Sign Scan - Delivered
+		 * Abnormal Parcel Scan - Cancel
+		 * Returned Parcel Scan - RTO
+		 * Returned Signed - RTO
+		 */
+		Map<String, String> mapStatus = new HashMap<>();
+		mapStatus.put("PICKUP SCAN", "shipment_clear_successfully");
+		mapStatus.put("STATION SENDING/DC SENDING", "intransit_to_hub");
+		mapStatus.put("STATION ARRIVAL", "inscan_at_hub");	
+		mapStatus.put("DC ARRIVAL", "reached_at_hub");
+		mapStatus.put("DELIVERY SCAN", "accept");
+		mapStatus.put("SIGN SCAN", "delivered");
+		mapStatus.put("ABNORMAL PARCEL SCAN", "attempted");
+		mapStatus.put("RETURNED PARCEL SCAN", "rto");
+		mapStatus.put("RETURNED SIGNED", "delivered");
+		return mapStatus.get(mapString);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public static String getStatusMapping_QP(String mapString) {
 		/*
 		 * Pickup scan - Pickup completed
@@ -102,31 +126,6 @@ public class CommonUtils {
 		mapStatus.put("PICKUP FAILED", "attempted");
 		mapStatus.put("RTS", "rto");
 		return mapStatus.get(mapString.toUpperCase());
-	}
-	
-	public static String getStatusMapping(String mapString) {
-		/*
-		 * Pickup scan - Pickup completed
-		 * Station sending/DC sending - Intransit to HUB
-		 * Station arrival - Intransit to Hub
-		 * DC arrival - Inscan at Hub
-		 * Delivery Scan - Attempted
-		 * Sign Scan - Delivered
-		 * Abnormal Parcel Scan - Cancel
-		 * Returned Parcel Scan - RTO
-		 * Returned Signed - RTO
-		 */
-		Map<String, String> mapStatus = new HashMap<>();
-		mapStatus.put("PICKUP SCAN", "shipment_clear_successfully");
-		mapStatus.put("STATION SENDING/DC SENDING", "intransit_to_hub");
-		mapStatus.put("STATION ARRIVAL", "inscan_at_hub");	
-		mapStatus.put("DC ARRIVAL", "reached_at_hub");
-		mapStatus.put("DELIVERY SCAN", "accept");
-		mapStatus.put("SIGN SCAN", "delivered");
-		mapStatus.put("ABNORMAL PARCEL SCAN", "attempted");
-		mapStatus.put("RETURNED PARCEL SCAN", "rto");
-		mapStatus.put("RETURNED SIGNED", "delivered");
-		return mapStatus.get(mapString);
 	}
 	
 	/**
@@ -158,43 +157,12 @@ public class CommonUtils {
     public static String toISOString (Date date) {
         return toISOString(date, TimeZone.getDefault());
     }
-    
-    public static Date addTimeToDate (Date startDate) throws ParseException {
-		LocalDate sLocalDate =  LocalDate.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
-		LocalDateTime sLocalDateTime = sLocalDate.atTime(0, 0, 0);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		String sConvertedDateTime = formatter.format(sLocalDateTime);
-		
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");  
-		Date sDate = dateFormatter.parse(sConvertedDateTime);
-		return sDate;
-	}
-	
-	/**
-	 * 
-	 * @param startDate
-	 * @return
-	 * @throws ParseException
-	 */
-	public static Date addDayEndTimeToDate (Date startDate) throws ParseException {
-		LocalDate sLocalDate =  LocalDate.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
-		LocalDateTime sLocalDateTime = sLocalDate.atTime(23, 59, 0);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-		String sConvertedDateTime = formatter.format(sLocalDateTime);
-		
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");  
-		Date sDate = dateFormatter.parse(sConvertedDateTime);
-		return sDate;
-	}
-	
-	
 
 	/**
 	 * 
 	 * @param args
-	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 //		LocalDate localDate = LocalDate.now();
 //		System.out.println(localDate);
 //		
@@ -205,9 +173,5 @@ public class CommonUtils {
 		
 		String date = toISOString(new Date());
 		log.info("date : " + date);
-		
-		String d1 = toISOString(addTimeToDate(new Date()));
-		String d2 = toISOString(addDayEndTimeToDate(new Date()));
-		log.info("d1 : " + d1 + "-" + d2);
 	}
 }

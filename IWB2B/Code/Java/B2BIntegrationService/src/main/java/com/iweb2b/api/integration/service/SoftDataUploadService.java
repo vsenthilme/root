@@ -140,12 +140,11 @@ public class SoftDataUploadService {
 					newConsignment.getPieces_detail().forEach(piece -> {
 						PiecesDetailsEntity dbPiecesDetailsEntity = new PiecesDetailsEntity();
 						BeanUtils.copyProperties(piece, dbPiecesDetailsEntity, CommonUtils.getNullPropertyNames(piece));
-						dbPiecesDetailsEntity.setPiecesId(System.currentTimeMillis());
-//						if(piecesDetailRepository.findPiecesId() != null) {
-//							dbPiecesDetailsEntity.setPiecesId(piecesDetailRepository.findPiecesId());
-//						} else {
-//							dbPiecesDetailsEntity.setPiecesId(recordId);
-//						}
+						if(piecesDetailRepository.findPiecesId() != null) {
+							dbPiecesDetailsEntity.setPiecesId(piecesDetailRepository.findPiecesId());
+						} else {
+							dbPiecesDetailsEntity.setPiecesId(recordId);
+						}
 						dbPiecesDetailsEntity.setDeclared_value(newConsignment.getDeclared_value());
 						dbPiecesDetailsEntity.setConsignmentId(createdConsignmentEntity.getConsignmentId());
 						piecesDetailRepository.save(dbPiecesDetailsEntity);
@@ -378,8 +377,8 @@ public class SoftDataUploadService {
 	 * 
 	 * @return
 	 */
-	public List<String> getConsigmentByQP(String hubCode) {
-		List<String> qpConsignments = consignmentRepository.getByHubcode(hubCode);
+	public List<String> getConsigmentByQP() {
+		List<String> qpConsignments = consignmentRepository.findConsigmentByQP();
 		return qpConsignments;
 	}
 	
@@ -409,5 +408,14 @@ public class SoftDataUploadService {
 		consignmentEntity.setOrderType("1");
 
 		return consignmentRepository.save(consignmentEntity);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<String> getConsigmentByQP(String hubCode) {
+		List<String> qpConsignments = consignmentRepository.getByHubcode(hubCode);
+		return qpConsignments;
 	}
 }

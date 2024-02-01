@@ -1,17 +1,11 @@
 package com.iweb2b.api.integration.model.usermanagement;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -30,15 +24,15 @@ import lombok.NoArgsConstructor;
 public class UserAccess {
 
     @Id
-    @Column(name = "USR_ID", columnDefinition = "nvarchar(100)")
+    @Column(name = "USR_ID",columnDefinition = "nvarchar(100)")
     private String userId;
     
     @Id
-    @Column(name = "LANG_ID", columnDefinition = "nvarchar(50)")
+    @Column(name = "LANG_ID",columnDefinition = "nvarchar(50)")
 	private String languageId;
     
     @Id
-    @Column(name = "C_ID", columnDefinition = "nvarchar(50)")
+    @Column(name = "C_ID",columnDefinition = "nvarchar(50)")
 	private String companyCode;
 
     @Column(name = "USR_ROLE_ID")

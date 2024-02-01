@@ -22,6 +22,7 @@ public class FindConsignment {
     private List<String> orderType;
     private List<String> jntPushStatus;
     private List<String> boutiqaatPushStatus;
+
     private List<String> scanType;
     private List<String> hubCode;
 

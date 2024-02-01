@@ -100,6 +100,36 @@ public class CommonUtils {
 	
 	/**
 	 * 
+	 * @return
+	 */
+	public static String getStatusMapping_QP(String mapString) {
+		/*
+		 * Pickup scan - Pickup completed
+		 * Station sending/DC sending - Intransit to HUB
+		 * Station arrival - Intransit to Hub
+		 * DC arrival - Inscan at Hub
+		 * Delivery Scan - Attempted
+		 * Sign Scan - Delivered
+		 * Abnormal Parcel Scan - Cancel
+		 * Returned Parcel Scan - RTO
+		 * Returned Signed - RTO
+		 */
+		Map<String, String> mapStatus = new HashMap<>();
+		mapStatus.put("CREATED", "No Mapping");
+		mapStatus.put("PICKUP", "pickup_completed");
+		mapStatus.put("RECEIVED", "reached_at_hub");	
+		mapStatus.put("ASSIGNEDTODRIVER", "accept");
+		mapStatus.put("OUTFORDELV", "accept");
+		mapStatus.put("DELIVERED", "delivered");
+		mapStatus.put("CANCELLED", "cancelled");
+		mapStatus.put("FAILED", "attempted");
+		mapStatus.put("PICKUP FAILED", "attempted");
+		mapStatus.put("RTS", "rto");
+		return mapStatus.get(mapString.toUpperCase());
+	}
+	
+	/**
+	 * 
 	 * @param date
 	 * @param tz
 	 * @return

@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.codec.binary.Base64;
@@ -869,9 +868,9 @@ public class IntegrationService {
 
         List<Consignment> consignmentList = new ArrayList<>();
         if (!consignmentReferenceNumberList.isEmpty()) {
-//            List<IConsignmentEntity> iConsignmentEntity = consignmentRepository.findConsigmentByReferenceNumber(consignmentReferenceNumberList);
-            List<IConsignmentEntity> iConsignmentEntity = consignmentRepository.findConsigmentByReferenceNumber(hubCode);
-            iConsignmentEntity.stream().forEach(c -> {
+        	if (hubCode.equalsIgnoreCase(JNT_HUBCODE)) {
+	            List<IConsignmentEntity> iConsignmentEntity = consignmentRepository.findConsigmentByReferenceNumber(hubCode);
+	            iConsignmentEntity.stream().forEach(c -> {
                         if (c != null && c.getOrderType() != null) {
                             Consignment consignment = new Consignment();
                             consignment.setReference_number(c.getReferenceNumber());
@@ -886,7 +885,28 @@ public class IntegrationService {
                             consignmentList.add(consignment);
                         }
                     }
-            );
+	            );
+        	} else if (hubCode.equalsIgnoreCase(QAP_HUBCODE)) {
+        		List<IConsignmentEntity> iConsignmentEntity = consignmentRepository.findQPConsigmentByReferenceNumber(hubCode);
+	            iConsignmentEntity.stream().forEach(c -> {
+                        if (c != null && c.getOrderType() != null) {
+                            Consignment consignment = new Consignment();
+                            consignment.setReference_number(c.getReferenceNumber());
+                            consignment.setCustomer_reference_number(c.getCustomerReferenceNumber());
+                            consignment.setStatus_description(c.getStatusDescription());
+                            consignment.setAwb_3rd_Party(c.getAwb3rdParty());
+                            consignment.setCreated_at(c.getCreatedAt());
+                            consignment.setIs_awb_printed(c.getIsAwbPrinted());
+                            consignment.setScanType(c.getScanType());
+                            consignment.setOrderType(c.getOrderType());
+                            consignment.setCustomer_code(c.getCustomerCode());
+                            consignment.setAction_time(c.getActionTime());
+                            consignment.setQpWebhookStatus(c.getQpWebhookStatus());
+                            consignmentList.add(consignment);
+                        }
+                    }
+	            );
+        	}
             return consignmentList;
         }
         return consignmentList;

@@ -1,10 +1,8 @@
 package com.iweb2b.core.model.integration;
 
-import lombok.Data;
-
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
+
+import lombok.Data;
 
 @Data
 public class ConsignmentTracking {
@@ -33,8 +31,32 @@ public class ConsignmentTracking {
 	private String origin_location_code;
 	private String destination_location_code;
 	private String drs_number;
-	private String pickup_attempt_count;
+	
+	private String rescheduled_date;
+	private String rescheduled_timeslot_start;
+	private String rescheduled_timeslot_end;
+	
+	private Long pickup_attempt_count;
 	private String carrier_payment_details;
+	private String pop_image;
+	private String pop_signature_image;
+	private String description;
+	private String shipment_type;
+	private String delivery_date;
+	private String raven_link;
+	private String delivery_time;
+	private Long  status_timestamp;
+	
+	private String signature_image;
+	private String location;
+	private String trip_reference_number;
+	private String courier_event_code;
+	private String sub_type;
+	private String consignment_movement_type;
+	private String leg_type;
+	private String carrier_bag_id;
+	private String event_time_utc;
+	private Boolean is_otp_verified;
 
 	private List<PiecesDetail> pieces_detail;
 	private OriginDetail origin_details;

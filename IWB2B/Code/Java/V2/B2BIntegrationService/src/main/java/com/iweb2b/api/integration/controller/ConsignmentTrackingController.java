@@ -37,7 +37,15 @@ public class ConsignmentTrackingController {
 	@GetMapping("/{referenceNumber}/shipment")
 	public ResponseEntity<?> getConsignmentTracking(@PathVariable String referenceNumber) {
 		ConsignmentTracking dbConsignmentTracking = consignmentTrackingService.getConsignmentTracking(referenceNumber);
-//		log.info("ConsignmentTracking : " + dbConsignmentTracking);
+		return new ResponseEntity<>(dbConsignmentTracking, HttpStatus.OK);
+	}
+	
+	// To fetch shipment tracking for AJEX Client
+	// API for shipment tracking by AJEX waybill number
+	@ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
+	@GetMapping("/{wayBillNumber}/shipment/v2")
+	public ResponseEntity<?> getConsignmentTrackingByWaybillNo(@PathVariable String wayBillNumber) {
+		ConsignmentTracking dbConsignmentTracking = consignmentTrackingService.getConsignmentTrackingByWayBillNo(wayBillNumber);
 		return new ResponseEntity<>(dbConsignmentTracking, HttpStatus.OK);
 	}
 }

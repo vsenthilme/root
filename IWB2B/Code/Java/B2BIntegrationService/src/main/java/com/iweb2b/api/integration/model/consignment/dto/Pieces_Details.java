@@ -21,7 +21,7 @@ public class Pieces_Details {
 	private Long length;
 	private Double volume;
 	private Double weight;
-	private String quantity;
+	private Long quantity;
  	private String description;
  	private String volume_unit;
  	private String weight_unit;

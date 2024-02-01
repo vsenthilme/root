@@ -104,6 +104,7 @@ public class Consignment {
     private String receiver_civil_id;
     private String currency;
     private Boolean is_awb_printed;
+    private String inco_terms;
     
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Origin_Details origin_details;

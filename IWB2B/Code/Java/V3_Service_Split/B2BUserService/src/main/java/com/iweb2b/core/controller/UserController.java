@@ -116,6 +116,7 @@ public class UserController {
 		userService.deleteUserAccess(userId, loginUserID, authToken);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+	
 	//FIND
 	@ApiOperation(response = UserAccess[].class, value = "Find UserAccess")//label for swagger
 	@PostMapping("/useraccess/findUserAccess")
@@ -146,7 +147,6 @@ public class UserController {
 	}
 
 	/* --------------------------------DASHBOARD-------------------------------------------------*/
-
 	@ApiOperation(response = DashboardCountOutput.class, value = "Get a DashboardCount") // label for swagger
 	@PostMapping("/dashboard/getDashboardCount")
 	public ResponseEntity<?> getDashboardCount(@RequestBody CountInput countInput, @RequestHeader String authToken) {
@@ -165,7 +165,6 @@ public class UserController {
 	@GetMapping("/softdata/{hubCode}/orders")
 	public ResponseEntity<?> getHubCodeOrders(@PathVariable String hubCode, @RequestHeader String authToken) throws Exception {
 		Consignment[] response = userService.getHubCodeOrders(hubCode, authToken);
-		log.info("Hub Code Orders : " + response);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -218,5 +217,4 @@ public class UserController {
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(result);
 	}
-
 }

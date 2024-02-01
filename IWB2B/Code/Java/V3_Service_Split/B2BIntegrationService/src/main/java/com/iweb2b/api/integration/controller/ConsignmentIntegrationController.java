@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
 import com.iweb2b.api.integration.model.consignment.dto.Consignment;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentImpl;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentWebhook;
@@ -27,8 +29,6 @@ import com.iweb2b.api.integration.model.consignment.dto.jnt.JNTOrderCreateReques
 import com.iweb2b.api.integration.model.consignment.dto.jnt.JNTPrintLabelResponse;
 import com.iweb2b.api.integration.model.consignment.dto.jnt.JNTWebhookRequest;
 import com.iweb2b.api.integration.model.consignment.dto.qp.QPOrderCreateResponse;
-import com.iweb2b.api.integration.model.consignment.dto.qp.QPTrackingRequest;
-import com.iweb2b.api.integration.model.consignment.dto.qp.QPTrackingResponse;
 import com.iweb2b.api.integration.model.consignment.entity.JNTWebhookEntity;
 import com.iweb2b.api.integration.model.tracking.ConsignmentTracking;
 import com.iweb2b.api.integration.service.ConsignmentTrackingService;
@@ -69,6 +69,24 @@ public class ConsignmentIntegrationController {
     public ResponseEntity<?> getShippingLabel(@PathVariable String referenceNumber) {
         byte[] shippingLabelArr = integrationService.getShippingLabel(referenceNumber);
         return new ResponseEntity<>(shippingLabelArr, HttpStatus.OK);
+    }
+    
+    //--------------------------------------Shipping (AWB) label-----------------------------------------------------------------------
+    @ApiOperation(response = Optional.class, value = "Get a ClientLevel") // label for swagger
+    @GetMapping("/{wayBillNumber}/shippingLabel/v2")
+    public ResponseEntity<?> getShippingLabelV2(@PathVariable String wayBillNumber) {
+    	String referenceNumber = integrationService.getConsigmentByWayBillNumber(wayBillNumber);
+        byte[] shippingLabelArr = integrationService.getShippingLabel(referenceNumber);
+        return new ResponseEntity<>(shippingLabelArr, HttpStatus.OK);
+    }
+    
+    //-------------------------------------Cancel-API------------------------------------------------------------------------------
+    // POST /api/client/integration/consignment/cancellation
+    @ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelShipment(@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+        CancelShipmentResponse cancelShipmentResponse = consignmentTrackingService.cancelShipment(cancelShipmentRequest);
+        return new ResponseEntity<>(cancelShipmentResponse, HttpStatus.OK);
     }
 
     //--------------------------------------Webhook Endpoint-----------------------------------------------------------------------
@@ -130,12 +148,12 @@ public class ConsignmentIntegrationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ApiOperation(response = JNTWebhookRequest.class, value = "Post QPWebhook")                // label for swagger
-    @PostMapping("/qp/webhook")
-    public ResponseEntity<?> listenQPWebhook(@RequestBody QPTrackingRequest qpTrackingRequest) throws Exception {
-        QPTrackingResponse webhookResponse = integrationService.listenQPWebhook(qpTrackingRequest);
-        return new ResponseEntity<>(webhookResponse, HttpStatus.OK);
-    }
+//    @ApiOperation(response = JNTWebhookRequest.class, value = "Post QPWebhook")                // label for swagger
+//    @PostMapping("/qp/webhook")
+//    public ResponseEntity<?> listenQPWebhook(@RequestBody QPTrackingRequest qpTrackingRequest) throws Exception {
+//        QPTrackingResponse webhookResponse = integrationService.listenQPWebhook(qpTrackingRequest);
+//        return new ResponseEntity<>(webhookResponse, HttpStatus.OK);
+//    }
 
     //--------------------------------------DashBoard Count-----------------------------------------------------------------------
 

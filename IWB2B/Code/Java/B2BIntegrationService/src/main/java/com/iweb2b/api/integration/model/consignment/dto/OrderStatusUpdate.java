@@ -24,6 +24,7 @@ public class OrderStatusUpdate {
 	private Long event_time_epoch;
 	private String worker_code;
 	private String hub_code;
+	private String destination_hub_code;
 	private String employee_code;
 	private String notes;
 	private String reason_code;

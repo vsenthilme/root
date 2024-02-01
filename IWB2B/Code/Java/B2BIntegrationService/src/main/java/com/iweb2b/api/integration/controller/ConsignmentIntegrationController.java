@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
 import com.iweb2b.api.integration.model.consignment.dto.Consignment;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentImpl;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentWebhook;
-import com.iweb2b.api.integration.model.consignment.dto.CountInput;
-import com.iweb2b.api.integration.model.consignment.dto.DashboardCountOutput;
 import com.iweb2b.api.integration.model.consignment.dto.FindConsignment;
 import com.iweb2b.api.integration.model.consignment.dto.JNTResponse;
 import com.iweb2b.api.integration.model.consignment.dto.OrderStatusUpdate;
@@ -70,6 +70,24 @@ public class ConsignmentIntegrationController {
         byte[] shippingLabelArr = integrationService.getShippingLabel(referenceNumber);
         return new ResponseEntity<>(shippingLabelArr, HttpStatus.OK);
     }
+    
+    //--------------------------------------Shipping (AWB) label-----------------------------------------------------------------------
+    @ApiOperation(response = Optional.class, value = "Get a ClientLevel") // label for swagger
+    @GetMapping("/{wayBillNumber}/shippingLabel/v2")
+    public ResponseEntity<?> getShippingLabelV2(@PathVariable String wayBillNumber) {
+    	String referenceNumber = integrationService.getConsigmentByWayBillNumber(wayBillNumber);
+        byte[] shippingLabelArr = integrationService.getShippingLabel(referenceNumber);
+        return new ResponseEntity<>(shippingLabelArr, HttpStatus.OK);
+    }
+    
+    //-------------------------------------Cancel-API------------------------------------------------------------------------------
+    // POST /api/client/integration/consignment/cancellation
+    @ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
+    @PostMapping("/cancel")
+    public ResponseEntity<?> cancelShipment(@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+        CancelShipmentResponse cancelShipmentResponse = consignmentTrackingService.cancelShipment(cancelShipmentRequest);
+        return new ResponseEntity<>(cancelShipmentResponse, HttpStatus.OK);
+    }
 
     //--------------------------------------Webhook Endpoint-----------------------------------------------------------------------
     @ApiOperation(response = ConsignmentWebhook.class, value = "Post Consignment Webhook") // label for swagger
@@ -115,12 +133,12 @@ public class ConsignmentIntegrationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ApiOperation(response = Consignment.class, value = "Get all HubCode Orders") // label for swagger
-    @GetMapping("/{hubCode}")
-    public ResponseEntity<?> getJNTRequest(@PathVariable String hubCode) throws Exception {
-        List<Consignment> response = integrationService.getConsignments(hubCode);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @ApiOperation(response = Consignment.class, value = "Get all HubCode Orders") // label for swagger
+//    @GetMapping("/{hubCode}")
+//    public ResponseEntity<?> getJNTRequest(@PathVariable String hubCode) throws Exception {
+//        List<Consignment> response = integrationService.getConsignments(hubCode);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     //--------------------------------------QatarPost-Request-Endpoint-----------------------------------------------------------------------
     @ApiOperation(response = QPOrderCreateResponse.class, value = "Post QPOrderCreateRequest") // label for swagger
@@ -153,12 +171,15 @@ public class ConsignmentIntegrationController {
 //		return new ResponseEntity<>(dashboard, HttpStatus.OK);
 //	}
 
-    @ApiOperation(response = DashboardCountOutput.class, value = "Get Dashboard Count") // label for swagger
-    @PostMapping("/dashboard/getDashboardCount")
-    public ResponseEntity<?> getBoutiqaatDashboardCount(@RequestBody CountInput countInput) throws Exception {
-        DashboardCountOutput dashboard = integrationService.getDashboardCount(countInput);
-        return new ResponseEntity<>(dashboard, HttpStatus.OK);
-    }
+    //------------------------------------OLD CODE---------------------------------------------------------------
+    // Commenting out - START
+//    @ApiOperation(response = DashboardCountOutput.class, value = "Get Dashboard Count") // label for swagger
+//    @PostMapping("/dashboard/getDashboardCount")
+//    public ResponseEntity<?> getBoutiqaatDashboardCount(@RequestBody CountInput countInput) throws Exception {
+//        DashboardCountOutput dashboard = integrationService.getDashboardCount(countInput);
+//        return new ResponseEntity<>(dashboard, HttpStatus.OK);
+//    }
+    // END
 
     @ApiOperation(response = Consignment.class, value = "Search Consignment") // label for swagger
     @PostMapping("/findConsignment")

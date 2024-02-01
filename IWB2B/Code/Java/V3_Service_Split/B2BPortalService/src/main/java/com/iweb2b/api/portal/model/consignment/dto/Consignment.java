@@ -95,11 +95,11 @@ public class Consignment {
     private String status_description;
     private String awb_3rd_Party;
     private String scanType;
-
+    private String action_time;
+    private String qpWebhookStatus;
     private String orderType;
     private String jntPushStatus;
     private String boutiqaatPushStatus;
-    
     private String customer_civil_id;
     private String receiver_civil_id;
     private String currency;

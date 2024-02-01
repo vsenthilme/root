@@ -38,12 +38,6 @@ public class OriginDetailsEntity {
 	@Column(name = "ADDRESS_LINE_2", columnDefinition = "nvarchar(500)")
 	private String address_line_2;
 
-	@Column(name = "ADDRESS_LINE_3", columnDefinition = "nvarchar(500)")
-	private String address_line_3;
-
-	@Column(name = "ADDRESS_LINE_4", columnDefinition = "nvarchar(500)")
-	private String address_line_4;
-
 	@Column(name = "PINCODE", columnDefinition = "nvarchar(50)")
 	private String pincode;
 
@@ -56,10 +50,10 @@ public class OriginDetailsEntity {
 	@Column(name = "COUNTRY", columnDefinition = "nvarchar(100)")
 	private String country;
 
-	@Column(name = "COMPANY_NAME", columnDefinition = "nvarchar(150)")
-	private String company_name;
+	@Column(name = "ADDRESS_LINE_3", columnDefinition = "nvarchar(500)")
+	private String address_line_3;
 
-	@Column(name = "DISTRICT", columnDefinition = "nvarchar(100)")
-    private String district;
+	@Column(name = "ADDRESS_LINE_4", columnDefinition = "nvarchar(500)")
+	private String address_line_4;
 	
 }

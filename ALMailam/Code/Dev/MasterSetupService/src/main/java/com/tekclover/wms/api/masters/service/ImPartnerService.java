@@ -179,8 +179,7 @@ public class ImPartnerService {
 						String newItmMfrName = newItemCode+newManufacturerName;
 						log.info("dbItmMfrName, newItmMfrName : " + dbItmMfrName + ", " + newItmMfrName);
 						if(!dbItmMfrName.equalsIgnoreCase(newItmMfrName)) {
-							throw new BadRequestException("BarcodeId already exist for different ItemCode MfrName: "
-									+ addImPartner.getPartnerItemBarcode() + ", " + dbItemCode + ", " + dbManufacturerName);
+							throw new BadRequestException("BarcodeId already exist: " + addImPartner.getPartnerItemBarcode());
 						}
 					}
 				}

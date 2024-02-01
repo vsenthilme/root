@@ -279,4 +279,12 @@ public class SparkController {
         QualityLine[] qualityLineList = sparkService.findQualityLine(findQualityLineV2);
         return new ResponseEntity<>(qualityLineList, HttpStatus.OK);
     }
+
+    // Find QualityLineV2
+    @ApiOperation(response = ImBasicData1V3.class, value = "Spark ImBasicData1 details")
+    @PostMapping("/imbasicdata1/v2")
+    public ResponseEntity<?> findImBasicData1V3(@RequestBody SearchImBasicData1 searchImBasicData1) throws Exception {
+        ImBasicData1V3[] imBasicData1V3s = sparkService.findImbasicData1V3(searchImBasicData1);
+        return new ResponseEntity<>(imBasicData1V3s, HttpStatus.OK);
+    }
 }

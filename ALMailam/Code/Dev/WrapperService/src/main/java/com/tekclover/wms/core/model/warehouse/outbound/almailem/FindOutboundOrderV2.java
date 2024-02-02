@@ -8,6 +8,11 @@ import java.util.List;
 @Data
 public class FindOutboundOrderV2 {
 
+    private List<String> branchCode;
+    private List<String> companyCode;
+    private List<String> warehouseID;
+    private List<String> languageId;
+
     private List<String> orderId;
     private List<String> refDocumentNo;
     private Date fromOrderReceivedOn;

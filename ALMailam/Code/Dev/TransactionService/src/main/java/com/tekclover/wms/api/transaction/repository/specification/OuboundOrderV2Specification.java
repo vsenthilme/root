@@ -25,6 +25,23 @@ public class OuboundOrderV2Specification implements Specification<OutboundOrderV
     public Predicate toPredicate(Root<OutboundOrderV2> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
 
+        if (findOutboundOrderV2.getLanguageId() != null && !findOutboundOrderV2.getLanguageId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("languageId");
+            predicates.add(group.in(findOutboundOrderV2.getLanguageId()));
+        }
+
+        if (findOutboundOrderV2.getCompanyCode() != null && !findOutboundOrderV2.getCompanyCode().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("companyCode");
+            predicates.add(group.in(findOutboundOrderV2.getCompanyCode()));
+        }
+        if (findOutboundOrderV2.getBranchCode() != null && !findOutboundOrderV2.getBranchCode().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("branchCode");
+            predicates.add(group.in(findOutboundOrderV2.getBranchCode()));
+        }
+        if (findOutboundOrderV2.getWarehouseID() != null && !findOutboundOrderV2.getWarehouseID().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("warehouseID");
+            predicates.add(group.in(findOutboundOrderV2.getWarehouseID()));
+        }
 
         if (findOutboundOrderV2.getMiddlewareId() != null && !findOutboundOrderV2.getMiddlewareId().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("middlewareId");

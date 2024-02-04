@@ -119,7 +119,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "lang_id in (:languageId) and \n" +
             "mfr_name in (:manufacturerName) and \n" +
             "c_id in (:companyCodeId) and is_deleted = 0 \n" +
-            "group by itm_code,mfr_name,pack_barcode,st_bin \n"
+            "group by itm_code,mfr_name,st_bin \n"
 
             + "SELECT LANG_ID languageId, \n"
             + "C_ID companyCodeId, \n"

@@ -43,24 +43,53 @@ public class SupplierInvoiceHeaderSpecification implements Specification<Supplie
             predicates.add(group.in(searchSupplierInvoiceHeader.getWarehouseId()));
         }
 
-        if (searchSupplierInvoiceHeader.getRefDocNumber() != null && !searchSupplierInvoiceHeader.getRefDocNumber().isEmpty()) {
-            final Path<Group> group = root.<Group>get("refDocNumber");
-            predicates.add(group.in(searchSupplierInvoiceHeader.getRefDocNumber()));
-        }
-
         if (searchSupplierInvoiceHeader.getInboundOrderTypeId() != null && !searchSupplierInvoiceHeader.getInboundOrderTypeId().isEmpty()) {
             final Path<Group> group = root.<Group>get("inboundOrderTypeId");
             predicates.add(group.in(searchSupplierInvoiceHeader.getInboundOrderTypeId()));
         }
 
-        if (searchSupplierInvoiceHeader.getContainerNo() != null && !searchSupplierInvoiceHeader.getContainerNo().isEmpty()) {
-            final Path<Group> group = root.<Group>get("containerNo");
-            predicates.add(group.in(searchSupplierInvoiceHeader.getContainerNo()));
+        if (searchSupplierInvoiceHeader.getPurchaseOrderNumber() != null && !searchSupplierInvoiceHeader.getPurchaseOrderNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("purchaseOrderNumber");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getPurchaseOrderNumber()));
+        }
+
+        if (searchSupplierInvoiceHeader.getNewContainerNo() != null && !searchSupplierInvoiceHeader.getNewContainerNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newContainerNo");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getNewContainerNo()));
+        }
+
+        if (searchSupplierInvoiceHeader.getOldContainerNo() != null && !searchSupplierInvoiceHeader.getOldContainerNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldContainerNo");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getOldContainerNo()));
+        }
+
+        if (searchSupplierInvoiceHeader.getNewPreInboundNo() != null && !searchSupplierInvoiceHeader.getNewPreInboundNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newPreInboundNo");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getNewPreInboundNo()));
+        }
+
+        if (searchSupplierInvoiceHeader.getOldPreInboundNo() != null && !searchSupplierInvoiceHeader.getOldPreInboundNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldPreInboundNo");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getOldPreInboundNo()));
+        }
+
+        if (searchSupplierInvoiceHeader.getNewRefDocNumber() != null && !searchSupplierInvoiceHeader.getNewRefDocNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newRefDocNumber");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getNewRefDocNumber()));
+        }
+
+        if (searchSupplierInvoiceHeader.getOldRefDocNumber() != null && !searchSupplierInvoiceHeader.getOldRefDocNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldRefDocNumber");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getOldRefDocNumber()));
         }
 
         if (searchSupplierInvoiceHeader.getStatusId() != null && !searchSupplierInvoiceHeader.getStatusId().isEmpty()) {
             final Path<Group> group = root.<Group>get("statusId");
             predicates.add(group.in(searchSupplierInvoiceHeader.getStatusId()));
+        }
+        if (searchSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId() != null && !searchSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId().isEmpty()) {
+            final Path<Group> group = root.<Group>get("supplierInvoiceCancelHeaderId");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId()));
         }
 
         if (searchSupplierInvoiceHeader.getStartCreatedOn() != null && searchSupplierInvoiceHeader.getEndCreatedOn() != null) {

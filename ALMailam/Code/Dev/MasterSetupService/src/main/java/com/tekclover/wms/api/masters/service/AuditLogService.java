@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -64,15 +65,15 @@ public class AuditLogService {
 	 * @return
 	 * @throws ParseException
 	 */
-	public List<AuditLog> findAuditLog(SearchAuditLog searchAuditLog) throws ParseException {
+	public Stream<AuditLog> findAuditLog(SearchAuditLog searchAuditLog) throws ParseException {
 		if (searchAuditLog.getStartCreatedOn() != null && searchAuditLog.getEndCreatedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchAuditLog.getStartCreatedOn(), searchAuditLog.getEndCreatedOn());
 			searchAuditLog.setStartCreatedOn(dates[0]);
 			searchAuditLog.setEndCreatedOn(dates[1]);
 		}
 		AuditLogSpecification spec = new AuditLogSpecification(searchAuditLog);
-		List<AuditLog> results = auditlogRepository.findAll(spec);
-		log.info("results: " + results);
+		Stream<AuditLog> results = auditlogRepository.stream(spec, AuditLog.class);
+//		log.info("results: " + results);
 		return results;
 	}
 

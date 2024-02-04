@@ -5,6 +5,7 @@ import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.*;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -1390,9 +1391,6 @@ public class PeriodicHeaderService extends BaseService {
         // CC_TYP_ID
         newPeriodicHeaderV2.setCycleCountTypeId(1L);
 
-//        newPeriodicHeaderV2.setMovementTypeId(1L);
-//        newPeriodicHeaderV2.setSubMovementTypeId(2L);
-
         // STATUS_ID - HardCoded Value "70"
         newPeriodicHeaderV2.setStatusId(70L);
         statusDescription = stagingLineV2Repository.getStatusDescription(70L, newPeriodicHeaderV2.getLanguageId());
@@ -1495,6 +1493,64 @@ public class PeriodicHeaderService extends BaseService {
                     periodicLineV2.setCreatedOn(new Date());
                     periodicLineV2s.add(periodicLineV2);
                 }
+            }
+
+            //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
+            if(dbInventoryList == null){
+                PeriodicLineV2 dbPeriodicLine = new PeriodicLineV2();
+                dbPeriodicLine.setCompanyCode(newPeriodicHeaderV2.getCompanyCode());
+                dbPeriodicLine.setPlantId(newPeriodicHeaderV2.getPlantId());
+                dbPeriodicLine.setWarehouseId(newPeriodicHeaderV2.getWarehouseId());
+                dbPeriodicLine.setLanguageId(newPeriodicHeaderV2.getLanguageId());
+                dbPeriodicLine.setItemCode(cycleCountLine.getItemCode());
+                dbPeriodicLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
+                dbPeriodicLine.setManufacturerName(cycleCountLine.getManufacturerName());
+                dbPeriodicLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+
+                dbPeriodicLine.setCycleCountNo(nextRangeNumber);
+                dbPeriodicLine.setReferenceNo(cycleCountLine.getCycleCountNo());
+
+                //Get Item Description
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(newPeriodicHeaderV2.getCompanyCode());
+                imBasicData.setPlantId(newPeriodicHeaderV2.getPlantId());
+                imBasicData.setLanguageId(newPeriodicHeaderV2.getLanguageId());
+                imBasicData.setWarehouseId(newPeriodicHeaderV2.getWarehouseId());
+                imBasicData.setItemCode(cycleCountLine.getItemCode());
+                imBasicData.setManufacturerName(cycleCountLine.getManufacturerName());
+                ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImBasicData1 : " + imBasicData1);
+
+                if(imBasicData1 != null) {
+                    dbPeriodicLine.setItemDesc(imBasicData1.getDescription());
+                }
+                dbPeriodicLine.setInventoryQuantity(0D);                              //Total Qty
+                dbPeriodicLine.setInventoryUom(cycleCountLine.getUom());
+                dbPeriodicLine.setFrozenQty(cycleCountLine.getFrozenQty());
+
+                dbPeriodicLine.setStatusId(70L);
+                dbPeriodicLine.setStatusDescription(statusDescription);
+
+                dbPeriodicLine.setCompanyDescription(description.getCompanyDesc());
+                dbPeriodicLine.setPlantDescription(description.getPlantDesc());
+                dbPeriodicLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                List<String> barcode = stagingLineV2Repository.getPartnerItemBarcode(cycleCountLine.getItemCode(),
+                        newPeriodicHeaderV2.getCompanyCode(),
+                        newPeriodicHeaderV2.getPlantId(),
+                        newPeriodicHeaderV2.getWarehouseId(),
+                        cycleCountLine.getManufacturerName(),
+                        newPeriodicHeaderV2.getLanguageId());
+                log.info("Barcode : " + barcode);
+                if (barcode != null && !barcode.isEmpty()) {
+                    dbPeriodicLine.setBarcodeId(barcode.get(0));
+                }
+
+
+                dbPeriodicLine.setDeletionIndicator(0L);
+                dbPeriodicLine.setCreatedBy("MSD_INT");
+                dbPeriodicLine.setCreatedOn(new Date());
+                periodicLineV2s.add(dbPeriodicLine);
             }
         }
 

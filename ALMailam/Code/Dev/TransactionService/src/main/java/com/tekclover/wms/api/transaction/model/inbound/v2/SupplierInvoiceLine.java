@@ -16,10 +16,10 @@ public class SupplierInvoiceLine {
 
 	@Id
 	@Column(name = "SI_CANCEL_LINE_ID")
-	private String supplierInvoiceCancelLineId;
+	private Long supplierInvoiceCancelLineId;
 
 	@Column(name = "SI_CANCEL_HEADER_ID")
-	private String supplierInvoiceCancelHeaderId;
+	private Long supplierInvoiceCancelHeaderId;
 
 	@Column(name = "LANG_ID")
 	private String languageId;
@@ -69,8 +69,11 @@ public class SupplierInvoiceLine {
 	@Column(name = "DAMAGE_QTY") 
 	private Double damageQty;
 	
-	@Column(name = "PA_CNF_QTY") 
-	private Double putawayConfirmedQty;
+	@Column(name = "OLD_PA_CNF_QTY")
+	private Double oldPutawayConfirmedQty;
+
+	@Column(name = "NEW_PA_CNF_QTY")
+	private Double newPutawayConfirmedQty;
 	
 	@Column(name = "VAR_QTY") 
 	private Double varianceQty;
@@ -219,4 +222,28 @@ public class SupplierInvoiceLine {
 
 	@Column(name = "IS_COMPLETED", columnDefinition = "nvarchar(20)")
 	private String isCompleted;
+
+	@Column(name = "OLD_PAWAY_HE_NO")
+	private String oldPutAwayHandlingEquipment;
+
+	@Column(name = "OLD_PA_QTY")
+	private Double oldPutAwayQuantity;
+
+	@Column(name = "OLD_PROP_ST_BIN")
+	private String oldProposedStorageBin;
+
+	@Column(name = "OLD_CNF_ST_BIN")
+	private String oldConfirmedStorageBin;
+
+	@Column(name = "NEW_PAWAY_HE_NO")
+	private String newPutAwayHandlingEquipment;
+
+	@Column(name = "NEW_PA_QTY")
+	private Double newPutAwayQuantity;
+
+	@Column(name = "NEW_PROP_ST_BIN")
+	private String newProposedStorageBin;
+
+	@Column(name = "NEW_CNF_ST_BIN")
+	private String newConfirmedStorageBin;
 }

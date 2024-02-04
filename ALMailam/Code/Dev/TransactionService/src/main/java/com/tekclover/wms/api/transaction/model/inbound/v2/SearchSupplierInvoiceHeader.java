@@ -13,10 +13,17 @@ public class SearchSupplierInvoiceHeader {
 	private List<String> plantId;
 
 	private List<String> warehouseId;
-	private List<String> refDocNumber;
 	private List<Long> inboundOrderTypeId;
-	private List<String> containerNo;
 	private List<Long> statusId;
+
+	private List<Long> supplierInvoiceCancelHeaderId;;
+	private List<String> oldRefDocNumber;
+	private List<String> newRefDocNumber;
+	private List<String> oldPreInboundNo;
+	private List<String> newPreInboundNo;
+	private List<String> oldContainerNo;
+	private List<String> newContainerNo;
+	private List<String> purchaseOrderNumber;
 
 	private Date startCreatedOn;
 	private Date endCreatedOn;

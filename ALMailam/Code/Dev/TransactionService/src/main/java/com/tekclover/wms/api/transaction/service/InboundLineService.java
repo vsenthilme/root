@@ -442,6 +442,30 @@ public class InboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<InboundLineV2> getInboundLineForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                      String warehouseId, String refDocNumber, Long statusId) {
+        List<InboundLineV2> inboundLine =
+                inboundLineV2Repository.findByRefDocNumberAndCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        statusId,
+                        0L);
+        log.info("inboundLine : " + inboundLine);
+        return inboundLine;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId

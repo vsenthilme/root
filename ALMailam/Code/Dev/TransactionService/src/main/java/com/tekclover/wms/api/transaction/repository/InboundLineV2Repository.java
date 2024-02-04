@@ -123,5 +123,6 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
 
     List<InboundLineV2> findByRefDocNumberAndCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
             String refDocNumber, String companyCode, String plantId, String languageId, String warehouseId, Long statusId, Long deletionIndicator);
+
 }
 

@@ -1690,7 +1690,12 @@ public class PickupLineService extends BaseService {
             if (existingPickupLine == null) {
 
                 try {
-                    String leadTime = pickupLineV2Repository.getleadtime(companyCodeId, plantId, languageId, warehouseId, dbPickupLine.getPickupNumber(), new Date());
+                    pickupNumber = dbPickupLine.getPickupNumber();
+                    companyCodeId = dbPickupLine.getCompanyCodeId();
+                    plantId = dbPickupLine.getPlantId();
+                    languageId = dbPickupLine.getLanguageId();
+                    warehouseId = dbPickupLine.getWarehouseId();
+                    String leadTime = pickupLineV2Repository.getleadtime(companyCodeId, plantId, languageId, warehouseId, pickupNumber, new Date());
                     dbPickupLine.setReferenceField1(leadTime);
                     log.info("LeadTime: " + leadTime);
                 } catch (Exception e) {

@@ -149,8 +149,15 @@ public interface PickupLineV2Repository extends JpaRepository<PickupLineV2, Long
                               @Param("plantId") String plantId,
                               @Param("languageId") String languageId,
                               @Param("warehouseId") String warehouseId,
-                              @Param(value = "pickupNumber") String pickupNumber,
+                              @Param("pickupNumber") String pickupNumber,
                               @Param("lDate") Date lDate);
+    @Query(value = "SELECT ib.PICK_CTD_ON from tblpickupheader ib \n"
+            + "where ib.pu_no = :pickupNumber and ib.wh_id = :warehouseId and ib.c_id = :companyCodeId and ib.plant_Id = :plantId and ib.lang_Id = :languageId and ib.is_deleted = 0", nativeQuery = true)
+    public Date getpickCtdOn(@Param("companyCodeId") String companyCodeId,
+                              @Param("plantId") String plantId,
+                              @Param("languageId") String languageId,
+                              @Param("warehouseId") String warehouseId,
+                              @Param("pickupNumber") String pickupNumber);
 
     List<PickupLineV2> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndAssignedPickerIdAndDeletionIndicatorAndPickupConfirmedOnBetweenOrderByPickupConfirmedOn(
             String companyCodeId, String plantId, String languageId, String warehouseId, Long StatusId,

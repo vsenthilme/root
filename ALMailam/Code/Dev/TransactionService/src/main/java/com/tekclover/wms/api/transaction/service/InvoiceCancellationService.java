@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
-import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
@@ -25,7 +24,6 @@ import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.SupplierInvoiceHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.SupplierInvoiceLineRepository;
 import com.tekclover.wms.api.transaction.repository.specification.SupplierInvoiceHeaderSpecification;
-import com.tekclover.wms.api.transaction.repository.specification.SupplierInvoiceLineSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -166,7 +164,7 @@ public class InvoiceCancellationService extends BaseService{
         //Get GrHeader NewInvoiceNo
         GrHeaderV2 grHeader = grHeaderService.getGrHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, newInvoiceNo);
         log.info("New Supplier Invoice - GrHeader : " + grHeader);
-
+        List<GrLineV2> createGrLine = null;
         List<PutAwayLineV2> createdPutawayLine = null;
         if (grHeader != null) {
 
@@ -274,7 +272,6 @@ public class InvoiceCancellationService extends BaseService{
                 }
             }
 
-            List<GrLineV2> createGrLine = null;
             try {
                 if (newGrLineList != null && !newGrLineList.isEmpty()) {
                     createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
@@ -333,6 +330,8 @@ public class InvoiceCancellationService extends BaseService{
             warehouseApiResponse.setStatusCode("200");
             warehouseApiResponse.setMessage("SupplierInvoice Cancellation Success");
         }
+        //Insert Record in SupplierInvoiceCancellation Table
+        createSupplierInvoiceHeader(inboundHeaderV2, inboundLineV2, grHeader, grLineList, createGrLine, putAwayLineV2List, createdPutawayLine, loginUserId);
         return warehouseApiResponse;
     }
 
@@ -360,50 +359,212 @@ public class InvoiceCancellationService extends BaseService{
         return searchResults;
     }
 
-    //Streaming
-    public Stream<SupplierInvoiceLine> findSupplierInvoiceLine(SearchSupplierInvoiceLine searchSupplierInvoiceLine) throws ParseException {
-
-        if (searchSupplierInvoiceLine.getStartConfirmedOn() != null
-                && searchSupplierInvoiceLine.getEndConfirmedOn() != null) {
-            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceLine.getStartConfirmedOn(),
-                    searchSupplierInvoiceLine.getEndConfirmedOn());
-            searchSupplierInvoiceLine.setStartConfirmedOn(dates[0]);
-            searchSupplierInvoiceLine.setEndConfirmedOn(dates[1]);
-        }
-        SupplierInvoiceLineSpecification spec = new SupplierInvoiceLineSpecification(searchSupplierInvoiceLine);
-        Stream<SupplierInvoiceLine> searchResults = supplierInvoiceLineRepository.stream(spec, SupplierInvoiceLine.class);
-
-        return searchResults;
-    }
-
     /**
      *
-     * @param supplierInvoiceHeader
+     * @param oldInboundHeader
+     * @param oldInboundLineList
+     * @param newGrHeader
+     * @param oldGrLineList
+     * @param newGrLineList
+     * @param oldPutAwayLineList
+     * @param newPutAwayLineList
+     * @param loginUserId
      * @return
      */
-    private SupplierInvoiceHeader createSupplierInvoiceHeader(SupplierInvoiceHeader supplierInvoiceHeader) {
+    private SupplierInvoiceHeader createSupplierInvoiceHeader(InboundHeaderV2 oldInboundHeader, List<InboundLineV2> oldInboundLineList,
+                                                              GrHeaderV2 newGrHeader, List<GrLineV2> oldGrLineList, List<GrLineV2> newGrLineList,
+                                                              List<PutAwayLineV2> oldPutAwayLineList, List<PutAwayLineV2> newPutAwayLineList, String loginUserId) {
+        String companyCodeId = newGrHeader.getCompanyCode();
+        String plantId = newGrHeader.getPlantId();
+        String languageId = newGrHeader.getLanguageId();
+        String warehouseId = newGrHeader.getWarehouseId();
+        String oldSupplierInvoiceNo = oldInboundHeader.getRefDocNumber();
+        String newSupplierInvoiceNo = newGrHeader.getRefDocNumber();
+
+        Long oldCountOfOrderedLines = 0L;
+        Long oldCountOfReceivedLines = 0L;
+        Long newCountOfOrderedLines = 0L;
+        Long newCountOfReceivedLines = 0L;
+        if(oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+            oldCountOfOrderedLines = oldInboundLineList.stream().count();
+        }
+        List<InboundLineV2> oldInboundLineConfirmedList = inboundLineService.getInboundLineForInvoiceCancellationV2(companyCodeId, plantId, languageId, warehouseId, oldSupplierInvoiceNo, 24L);
+        if(oldInboundLineConfirmedList != null && !oldInboundLineConfirmedList.isEmpty()) {
+            oldCountOfReceivedLines = oldInboundLineConfirmedList.stream().count();
+        }
+        List<InboundLineV2> newInboundLineList = inboundLineService.getInboundLineForInvoiceCancellationV2(companyCodeId, plantId, languageId, warehouseId, newSupplierInvoiceNo, 14L);
+        if(newInboundLineList != null && !newInboundLineList.isEmpty()) {
+            newCountOfOrderedLines = newInboundLineList.stream().count();
+        }
+        List<InboundLineV2> newInboundLineConfirmedList = inboundLineService.getInboundLineForInvoiceCancellationV2(companyCodeId, plantId, languageId, warehouseId, newSupplierInvoiceNo, 24L);
+        if(newInboundLineConfirmedList != null && !newInboundLineConfirmedList.isEmpty()) {
+            newCountOfReceivedLines = newInboundLineConfirmedList.stream().count();
+        }
         SupplierInvoiceHeader newSupplierInvoiceHeader = new SupplierInvoiceHeader();
-        BeanUtils.copyProperties(supplierInvoiceHeader, newSupplierInvoiceHeader, CommonUtils.getNullPropertyNames(supplierInvoiceHeader));
+        BeanUtils.copyProperties(oldInboundHeader, newSupplierInvoiceHeader, CommonUtils.getNullPropertyNames(oldInboundHeader));
+
+        newSupplierInvoiceHeader.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
+        newSupplierInvoiceHeader.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
+        newSupplierInvoiceHeader.setOldContainerNo(oldInboundHeader.getContainerNo());
+        newSupplierInvoiceHeader.setOldVechicleNo(oldInboundHeader.getVechicleNo());
+        newSupplierInvoiceHeader.setOldCountOfOrderLines(oldCountOfOrderedLines);
+        newSupplierInvoiceHeader.setOldReceivedLines(oldCountOfReceivedLines);
+
+        newSupplierInvoiceHeader.setNewPreInboundNo(newGrHeader.getPreInboundNo());
+        newSupplierInvoiceHeader.setNewRefDocNumber(newGrHeader.getRefDocNumber());
+        newSupplierInvoiceHeader.setNewContainerNo(newGrHeader.getContainerNo());
+        newSupplierInvoiceHeader.setNewVechicleNo(newGrHeader.getVechicleNo());
+        newSupplierInvoiceHeader.setNewCountOfOrderLines(newCountOfOrderedLines);
+        newSupplierInvoiceHeader.setNewReceivedLines(newCountOfReceivedLines);
 
         newSupplierInvoiceHeader.setDeletionIndicator(0L);
-        newSupplierInvoiceHeader.setCreatedBy(supplierInvoiceHeader.getCreatedBy());
+        newSupplierInvoiceHeader.setCreatedBy(loginUserId);
         newSupplierInvoiceHeader.setCreatedOn(new Date());
+        newSupplierInvoiceHeader.setSupplierInvoiceCancelHeaderId(System.currentTimeMillis());
         SupplierInvoiceHeader creatednewSupplierInvoiceHeader = supplierInvoiceHeaderRepository.save(newSupplierInvoiceHeader);
         log.info("newSupplierInvoiceHeader : " + creatednewSupplierInvoiceHeader);
-
         /*
          * newSupplierInvoice Line Table Insert
          */
-        Set<SupplierInvoiceLine> toBeCreatedSupplierInvoiceLineList = new HashSet<>();
-        for (SupplierInvoiceLine createdSupplierInvoiceLine : supplierInvoiceHeader.getLine()) {
-            SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
-            BeanUtils.copyProperties(createdSupplierInvoiceLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(createdSupplierInvoiceLine));
+        List<SupplierInvoiceLine> toBeCreatedSupplierInvoiceLineList = new ArrayList<>();
+        if(newPutAwayLineList != null && !newPutAwayLineList.isEmpty()) {
+            for (PutAwayLineV2 putAwayLine : oldPutAwayLineList) {
+                SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
+                BeanUtils.copyProperties(putAwayLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(putAwayLine));
 
-            supplierInvoiceLine.setDeletionIndicator(0L);
-            supplierInvoiceLine.setCreatedBy(createdSupplierInvoiceLine.getCreatedBy());
-            supplierInvoiceLine.setCreatedOn(new Date());
-            supplierInvoiceLineRepository.save(supplierInvoiceLine);
-            toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
+                if(oldInboundLineList != null && !oldInboundLineList.isEmpty()){
+                    oldInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(putAwayLine.getItemCode()) &&
+                            a.getManufacturerName().equalsIgnoreCase(putAwayLine.getManufacturerName())).collect(Collectors.toList());
+                    if(oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                        supplierInvoiceLine.setOldInvoiceNo(oldInboundLineList.get(0).getInvoiceNo());
+                    }
+                }
+
+                supplierInvoiceLine.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
+                supplierInvoiceLine.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
+                supplierInvoiceLine.setOldReferenceOrderNo(oldInboundHeader.getRefDocNumber());
+                supplierInvoiceLine.setOldContainerNo(oldInboundHeader.getContainerNo());
+                supplierInvoiceLine.setOldLineNo(putAwayLine.getLineNo());
+                supplierInvoiceLine.setOldOrderQty(putAwayLine.getOrderQty());
+                supplierInvoiceLine.setOldConfirmedStorageBin(putAwayLine.getConfirmedStorageBin());
+                supplierInvoiceLine.setOldProposedStorageBin(putAwayLine.getProposedStorageBin());
+                supplierInvoiceLine.setOldPutAwayQuantity(putAwayLine.getPutAwayQuantity());
+                supplierInvoiceLine.setOldPutawayConfirmedQty(putAwayLine.getPutawayConfirmedQty());
+                supplierInvoiceLine.setOldPutAwayHandlingEquipment(putAwayLine.getPutAwayHandlingEquipment());
+
+                supplierInvoiceLine.setNewRefDocNumber(newGrHeader.getRefDocNumber());
+                supplierInvoiceLine.setNewPreInboundNo(newGrHeader.getPreInboundNo());
+                supplierInvoiceLine.setNewReferenceOrderNo(newGrHeader.getRefDocNumber());
+                supplierInvoiceLine.setNewContainerNo(newGrHeader.getContainerNo());
+                List<PutAwayLineV2> filterList = newPutAwayLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(putAwayLine.getItemCode()) &&
+                        a.getManufacturerName().equalsIgnoreCase(putAwayLine.getManufacturerName())).collect(Collectors.toList());
+                log.info("Filtered Putaway List: " + filterList);
+                if(filterList != null && !filterList.isEmpty()){
+                    supplierInvoiceLine.setNewLineNo(filterList.get(0).getLineNo());
+                    supplierInvoiceLine.setNewOrderQty(filterList.get(0).getOrderQty());
+                    supplierInvoiceLine.setNewConfirmedStorageBin(filterList.get(0).getConfirmedStorageBin());
+                    supplierInvoiceLine.setNewProposedStorageBin(filterList.get(0).getProposedStorageBin());
+                    supplierInvoiceLine.setNewPutAwayQuantity(filterList.get(0).getPutAwayQuantity());
+                    supplierInvoiceLine.setNewPutawayConfirmedQty(filterList.get(0).getPutawayConfirmedQty());
+                    supplierInvoiceLine.setNewPutAwayHandlingEquipment(filterList.get(0).getPutAwayHandlingEquipment());
+                }
+
+                supplierInvoiceLine.setDeletionIndicator(0L);
+                supplierInvoiceLine.setCreatedBy(loginUserId);
+                supplierInvoiceLine.setCreatedOn(new Date());
+                supplierInvoiceLine.setSupplierInvoiceCancelHeaderId(creatednewSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId());
+                supplierInvoiceLine.setSupplierInvoiceCancelLineId(System.currentTimeMillis());
+                supplierInvoiceLineRepository.save(supplierInvoiceLine);
+                toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
+            }
+        }
+
+        if(newPutAwayLineList == null || newPutAwayLineList.isEmpty()) {
+            if(newGrLineList != null && !newGrLineList.isEmpty()) {
+                for (GrLineV2 grLine : oldGrLineList) {
+                    SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
+                    BeanUtils.copyProperties(grLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(grLine));
+
+                    if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                        oldInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(grLine.getItemCode()) &&
+                                a.getManufacturerName().equalsIgnoreCase(grLine.getManufacturerName())).collect(Collectors.toList());
+                        if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            supplierInvoiceLine.setOldInvoiceNo(oldInboundLineList.get(0).getInvoiceNo());
+                        }
+                    }
+
+                    supplierInvoiceLine.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
+                    supplierInvoiceLine.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
+                    supplierInvoiceLine.setOldReferenceOrderNo(oldInboundHeader.getRefDocNumber());
+                    supplierInvoiceLine.setOldContainerNo(oldInboundHeader.getContainerNo());
+                    supplierInvoiceLine.setOldLineNo(grLine.getLineNo());
+                    supplierInvoiceLine.setOldOrderQty(grLine.getOrderQty());
+                    supplierInvoiceLine.setOldPutAwayQuantity(grLine.getGoodReceiptQty());
+                    supplierInvoiceLine.setOldPutawayConfirmedQty(grLine.getGoodReceiptQty());
+
+                    supplierInvoiceLine.setNewRefDocNumber(newGrHeader.getRefDocNumber());
+                    supplierInvoiceLine.setNewPreInboundNo(newGrHeader.getPreInboundNo());
+                    supplierInvoiceLine.setNewReferenceOrderNo(newGrHeader.getRefDocNumber());
+                    supplierInvoiceLine.setNewContainerNo(newGrHeader.getContainerNo());
+                    List<GrLineV2> filterList = newGrLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(grLine.getItemCode()) &&
+                            a.getManufacturerName().equalsIgnoreCase(grLine.getManufacturerName())).collect(Collectors.toList());
+                    log.info("Filtered GrLine List: " + filterList);
+                    if (filterList != null && !filterList.isEmpty()) {
+                        supplierInvoiceLine.setNewLineNo(filterList.get(0).getLineNo());
+                        supplierInvoiceLine.setNewOrderQty(filterList.get(0).getOrderQty());
+                        supplierInvoiceLine.setNewPutAwayQuantity(filterList.get(0).getGoodReceiptQty());
+                        supplierInvoiceLine.setNewPutawayConfirmedQty(filterList.get(0).getGoodReceiptQty());
+                    }
+
+                    supplierInvoiceLine.setDeletionIndicator(0L);
+                    supplierInvoiceLine.setCreatedBy(loginUserId);
+                    supplierInvoiceLine.setCreatedOn(new Date());
+                    supplierInvoiceLine.setSupplierInvoiceCancelHeaderId(creatednewSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId());
+                    supplierInvoiceLine.setSupplierInvoiceCancelLineId(System.currentTimeMillis());
+                    supplierInvoiceLineRepository.save(supplierInvoiceLine);
+                    toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
+                }
+            }
+            if(newGrLineList == null || newGrLineList.isEmpty()) {
+                if(oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                    for (InboundLineV2 inboundLine : oldInboundLineList) {
+                        SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
+                        BeanUtils.copyProperties(inboundLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(inboundLine));
+
+                        supplierInvoiceLine.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
+                        supplierInvoiceLine.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
+                        supplierInvoiceLine.setOldReferenceOrderNo(oldInboundHeader.getRefDocNumber());
+                        supplierInvoiceLine.setOldContainerNo(oldInboundHeader.getContainerNo());
+                        supplierInvoiceLine.setOldInvoiceNo(inboundLine.getInvoiceNo());
+                        supplierInvoiceLine.setOldLineNo(inboundLine.getLineNo());
+                        supplierInvoiceLine.setOldOrderQty(inboundLine.getOrderQty());
+                        supplierInvoiceLine.setOldPutAwayQuantity(inboundLine.getAcceptedQty());
+                        supplierInvoiceLine.setOldPutawayConfirmedQty(inboundLine.getAcceptedQty());
+
+                        supplierInvoiceLine.setNewRefDocNumber(newGrHeader.getRefDocNumber());
+                        supplierInvoiceLine.setNewPreInboundNo(newGrHeader.getPreInboundNo());
+                        supplierInvoiceLine.setNewReferenceOrderNo(newGrHeader.getRefDocNumber());
+                        supplierInvoiceLine.setNewContainerNo(newGrHeader.getContainerNo());
+                        List<InboundLineV2> filterList = newInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(inboundLine.getItemCode()) &&
+                                a.getManufacturerName().equalsIgnoreCase(inboundLine.getManufacturerName())).collect(Collectors.toList());
+                        log.info("Filtered Inbound List: " + filterList);
+                        if (filterList != null && !filterList.isEmpty()) {
+                            supplierInvoiceLine.setNewLineNo(filterList.get(0).getLineNo());
+                            supplierInvoiceLine.setNewOrderQty(filterList.get(0).getOrderQty());
+                            supplierInvoiceLine.setNewPutAwayQuantity(filterList.get(0).getAcceptedQty());
+                            supplierInvoiceLine.setNewPutawayConfirmedQty(filterList.get(0).getAcceptedQty());
+                        }
+
+                        supplierInvoiceLine.setDeletionIndicator(0L);
+                        supplierInvoiceLine.setCreatedBy(loginUserId);
+                        supplierInvoiceLine.setCreatedOn(new Date());
+                        supplierInvoiceLine.setSupplierInvoiceCancelHeaderId(creatednewSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId());
+                        supplierInvoiceLine.setSupplierInvoiceCancelLineId(System.currentTimeMillis());
+                        supplierInvoiceLineRepository.save(supplierInvoiceLine);
+                        toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
+                    }
+                }
+            }
         }
 
         log.info("createdSupplierInvoiceLine : " + toBeCreatedSupplierInvoiceLineList);

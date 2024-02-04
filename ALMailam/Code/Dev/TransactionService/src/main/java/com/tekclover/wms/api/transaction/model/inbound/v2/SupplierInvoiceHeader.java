@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +17,7 @@ public class SupplierInvoiceHeader {
 
 	@Id
 	@Column(name = "SI_CANCEL_HEADER_ID")
-	private String supplierInvoiceCancelHeaderId;
+	private Long supplierInvoiceCancelHeaderId;
 
 	@Column(name = "LANG_ID", columnDefinition = "nvarchar(25)")
 	private String languageId;
@@ -168,5 +168,5 @@ public class SupplierInvoiceHeader {
 	private String sourceCompanyCode;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "supplierInvoiceCancelHeaderId", fetch = FetchType.EAGER)
-	private Set<SupplierInvoiceLine> line;
+	private List<SupplierInvoiceLine> line;
 }

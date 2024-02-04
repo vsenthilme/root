@@ -5,6 +5,8 @@ import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.*;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -1604,6 +1606,64 @@ public class PerpetualHeaderService extends BaseService {
                     dbPerpetualLine.setCreatedOn(new Date());
                     perpetualLines.add(dbPerpetualLine);
                 }
+            }
+            //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
+            if(dbInventoryList == null){
+                PerpetualLineV2 dbPerpetualLine = new PerpetualLineV2();
+
+                dbPerpetualLine.setCompanyCodeId(newPerpetualHeader.getCompanyCodeId());
+                dbPerpetualLine.setPlantId(newPerpetualHeader.getPlantId());
+                dbPerpetualLine.setWarehouseId(newPerpetualHeader.getWarehouseId());
+                dbPerpetualLine.setLanguageId(newPerpetualHeader.getLanguageId());
+                dbPerpetualLine.setItemCode(cycleCountLine.getItemCode());
+                dbPerpetualLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
+                dbPerpetualLine.setManufacturerName(cycleCountLine.getManufacturerName());
+                dbPerpetualLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+
+                dbPerpetualLine.setCycleCountNo(nextRangeNumber);
+                dbPerpetualLine.setReferenceNo(cycleCountLine.getCycleCountNo());
+
+                //Get Item Description
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(newPerpetualHeader.getCompanyCodeId());
+                imBasicData.setPlantId(newPerpetualHeader.getPlantId());
+                imBasicData.setLanguageId(newPerpetualHeader.getLanguageId());
+                imBasicData.setWarehouseId(newPerpetualHeader.getWarehouseId());
+                imBasicData.setItemCode(cycleCountLine.getItemCode());
+                imBasicData.setManufacturerName(cycleCountLine.getManufacturerName());
+                ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImBasicData1 : " + imBasicData1);
+
+                if(imBasicData1 != null) {
+                    dbPerpetualLine.setItemDesc(imBasicData1.getDescription());
+                }
+                dbPerpetualLine.setInventoryQuantity(0D);                              //Total Qty
+                dbPerpetualLine.setInventoryUom(cycleCountLine.getUom());
+                dbPerpetualLine.setFrozenQty(cycleCountLine.getFrozenQty());
+
+                dbPerpetualLine.setStatusId(70L);
+                dbPerpetualLine.setStatusDescription(statusDescription);
+
+                dbPerpetualLine.setCompanyDescription(description.getCompanyDesc());
+                dbPerpetualLine.setPlantDescription(description.getPlantDesc());
+                dbPerpetualLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                List<String> barcode = stagingLineV2Repository.getPartnerItemBarcode(cycleCountLine.getItemCode(),
+                        newPerpetualHeader.getCompanyCodeId(),
+                        newPerpetualHeader.getPlantId(),
+                        newPerpetualHeader.getWarehouseId(),
+                        cycleCountLine.getManufacturerName(),
+                        newPerpetualHeader.getLanguageId());
+                    log.info("Barcode : " + barcode);
+                    if (barcode != null && !barcode.isEmpty()) {
+                        dbPerpetualLine.setBarcodeId(barcode.get(0));
+                    }
+
+
+                dbPerpetualLine.setDeletionIndicator(0L);
+                dbPerpetualLine.setCreatedBy("MSD_INT");
+                dbPerpetualLine.setCreatedOn(new Date());
+                perpetualLines.add(dbPerpetualLine);
             }
         }
 

@@ -1324,14 +1324,13 @@ public class PreOutboundHeaderService extends BaseService {
         Optional<PreOutboundHeaderV2> orderProcessedStatus =
                 preOutboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(outboundIntegrationHeader.getRefDocumentNo(), 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedOrderV2(outboundIntegrationHeader.getRefDocumentNo(), 100L);
+//            orderService.updateProcessedOrderV2(outboundIntegrationHeader.getRefDocumentNo(), 100L);
             throw new BadRequestException("Order :" + outboundIntegrationHeader.getRefDocumentNo() +
                     " already processed. Reprocessing can't be allowed.");
         }
 
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-        Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> warehouse =
-                null;
+        Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> warehouse = null;
         String warehouseId = null;
         String companyCodeId = null;
         String plantId = null;
@@ -1480,7 +1479,7 @@ public class PreOutboundHeaderService extends BaseService {
             plantId = outboundIntegrationHeader.getBranchCode();
             warehouseId = outboundIntegrationHeader.getWarehouseID();
             languageId = outboundIntegrationHeader.getLanguageId();
-            String loginUserID = "AMS_INT";                                     //Hard Coded
+            String loginUserID = "MSD_INT";                                     //Hard Coded
 
             //Check WMS order table
             List<OutboundHeaderV2> outbound = outboundHeaderV2Repository.findBySalesOrderNumber(salesOrderNumber);

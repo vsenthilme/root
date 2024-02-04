@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class ImBasicData1V3 {
 
     private String uomId;
-    private String languageId;
+//    private String languageId;
     private String companyCodeId;
     private String plantId;
     private String warehouseId;
@@ -20,6 +20,6 @@ public class ImBasicData1V3 {
     private String warehouseDescription;
     private String createdBy;
     private Timestamp createdOn;
-    private String updatedBy;
-    private Timestamp updatedOn;
+//    private String updatedBy;
+//    private Timestamp updatedOn;
 }

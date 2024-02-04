@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -31,7 +29,7 @@ public class PickListHeaderService {
     public Stream<PickListHeader> findPickListHeader(SearchPickListHeader searchPickListHeader)
             throws ParseException, java.text.ParseException {
 
-        log.info("DeliveryConfirmedOn: " + searchPickListHeader.getStartDeliveryConfirmedOn());
+        log.info("searchPickListHeader: " + searchPickListHeader);
 
         if (searchPickListHeader.getStartRequiredDeliveryDate() != null && searchPickListHeader.getEndRequiredDeliveryDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPickListHeader.getStartRequiredDeliveryDate(), searchPickListHeader.getEndRequiredDeliveryDate());
@@ -85,7 +83,7 @@ public class PickListHeaderService {
         dbPickListHeader.setUpdatedOn(new Date());
         dbPickListHeader.setPickListCancelHeaderId(System.currentTimeMillis());
         PickListHeader createdPickListHeader = pickListHeaderRepository.save(dbPickListHeader);
-        Set<PickListLine> createdPickListLineList = new HashSet<>();
+        List<PickListLine> createdPickListLineList = new ArrayList<>();
         if(pickListHeader.getLine() != null){
             for (PickListLine pickListLine : pickListHeader.getLine()) {
                 pickListLine.setPickListCancelHeaderId(createdPickListHeader.getPickListCancelHeaderId());

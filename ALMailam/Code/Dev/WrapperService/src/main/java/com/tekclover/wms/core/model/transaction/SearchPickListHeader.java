@@ -1,4 +1,4 @@
-package com.tekclover.wms.api.transaction.model.outbound.v2;
+package com.tekclover.wms.core.model.transaction;
 
 import lombok.Data;
 

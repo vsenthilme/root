@@ -11400,6 +11400,28 @@ public class TransactionService {
         }
     }
 
+    // POST - findPickListHeader
+    public PickListHeader[] findPickListHeader(SearchPickListHeader searchPickListHeader, String authToken) throws ParseException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "/invoice/findPickListHeader");
+            HttpEntity<?> entity = new HttpEntity<>(searchPickListHeader, headers);
+            ResponseEntity<PickListHeader[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
+                    entity, PickListHeader[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // POST
     public QualityLineV2[] createQualityLineV2(@Valid List<AddQualityLine> newQualityLine, String loginUserID,
                                                String authToken) {

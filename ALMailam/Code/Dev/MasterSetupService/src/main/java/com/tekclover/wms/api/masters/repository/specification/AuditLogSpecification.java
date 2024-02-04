@@ -47,6 +47,21 @@ public class AuditLogSpecification implements Specification<AuditLog> {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("auditFileNumber");
             predicates.add(group.in(searchAuditLog.getAuditFileNumber()));
         }
+        if (searchAuditLog.getAuditLogNumber() != null && !searchAuditLog.getAuditLogNumber().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("auditLogNumber");
+            predicates.add(group.in(searchAuditLog.getAuditLogNumber()));
+        }
+        if (searchAuditLog.getObjectName() != null && !searchAuditLog.getObjectName().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("objectName");
+            predicates.add(group.in(searchAuditLog.getObjectName()));
+        }
+        if (searchAuditLog.getModifiedTableName() != null && !searchAuditLog.getModifiedTableName().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("modifiedTableName");
+            predicates.add(group.in(searchAuditLog.getModifiedTableName()));
+        }
+        if (searchAuditLog.getStartCreatedOn() != null && searchAuditLog.getEndCreatedOn() != null) {
+            predicates.add(cb.between(root.get("createdOn"), searchAuditLog.getStartCreatedOn(), searchAuditLog.getEndCreatedOn()));
+        }
         if (searchAuditLog.getFinancialYear() != null && !searchAuditLog.getFinancialYear().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("financialYear");
             predicates.add(group.in(searchAuditLog.getFinancialYear()));

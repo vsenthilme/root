@@ -43,10 +43,71 @@ public class PickListHeaderSpecification implements Specification<PickListHeader
             predicates.add(group.in(searchPickListHeader.getWarehouseId()));
         }
 
-        if (searchPickListHeader.getRefDocNumber() != null && !searchPickListHeader.getRefDocNumber().isEmpty()) {
-            final Path<Group> group = root.<Group>get("refDocNumber");
-            predicates.add(group.in(searchPickListHeader.getRefDocNumber()));
+        if (searchPickListHeader.getOldRefDocNumber() != null && !searchPickListHeader.getOldRefDocNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldRefDocNumber");
+            predicates.add(group.in(searchPickListHeader.getOldRefDocNumber()));
         }
+        if (searchPickListHeader.getNewRefDocNumber() != null && !searchPickListHeader.getNewRefDocNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newRefDocNumber");
+            predicates.add(group.in(searchPickListHeader.getNewRefDocNumber()));
+        }
+        if (searchPickListHeader.getOldPreOutboundNo() != null && !searchPickListHeader.getOldPreOutboundNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldPreOutboundNo");
+            predicates.add(group.in(searchPickListHeader.getOldPreOutboundNo()));
+        }
+        if (searchPickListHeader.getNewPreOutboundNo() != null && !searchPickListHeader.getNewPreOutboundNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newPreOutboundNo");
+            predicates.add(group.in(searchPickListHeader.getNewPreOutboundNo()));
+        }
+        if (searchPickListHeader.getOldInvoiceNumber() != null && !searchPickListHeader.getOldInvoiceNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldInvoiceNumber");
+            predicates.add(group.in(searchPickListHeader.getOldInvoiceNumber()));
+        }
+        if (searchPickListHeader.getNewInvoiceNumber() != null && !searchPickListHeader.getNewInvoiceNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newInvoiceNumber");
+            predicates.add(group.in(searchPickListHeader.getNewInvoiceNumber()));
+        }
+        if (searchPickListHeader.getOldSalesOrderNumber() != null && !searchPickListHeader.getOldSalesOrderNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldSalesOrderNumber");
+            predicates.add(group.in(searchPickListHeader.getOldSalesOrderNumber()));
+        }
+        if (searchPickListHeader.getNewSalesOrderNumber() != null && !searchPickListHeader.getNewSalesOrderNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newSalesOrderNumber");
+            predicates.add(group.in(searchPickListHeader.getNewSalesOrderNumber()));
+        }
+        if (searchPickListHeader.getOldSalesInvoiceNumber() != null && !searchPickListHeader.getOldSalesInvoiceNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldSalesInvoiceNumber");
+            predicates.add(group.in(searchPickListHeader.getOldSalesInvoiceNumber()));
+        }
+        if (searchPickListHeader.getNewSalesInvoiceNumber() != null && !searchPickListHeader.getNewSalesInvoiceNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newSalesInvoiceNumber");
+            predicates.add(group.in(searchPickListHeader.getNewSalesInvoiceNumber()));
+        }
+        if (searchPickListHeader.getOldSupplierInvoiceNo() != null && !searchPickListHeader.getOldSupplierInvoiceNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldSupplierInvoiceNo");
+            predicates.add(group.in(searchPickListHeader.getOldSupplierInvoiceNo()));
+        }
+        if (searchPickListHeader.getNewSupplierInvoiceNo() != null && !searchPickListHeader.getNewSupplierInvoiceNo().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newSupplierInvoiceNo");
+            predicates.add(group.in(searchPickListHeader.getNewSupplierInvoiceNo()));
+        }
+        if (searchPickListHeader.getOldPickListNumber() != null && !searchPickListHeader.getOldPickListNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldPickListNumber");
+            predicates.add(group.in(searchPickListHeader.getOldPickListNumber()));
+        }
+        if (searchPickListHeader.getNewPickListNumber() != null && !searchPickListHeader.getNewPickListNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newPickListNumber");
+            predicates.add(group.in(searchPickListHeader.getNewPickListNumber()));
+        }
+        if (searchPickListHeader.getOldTokenNumber() != null && !searchPickListHeader.getOldTokenNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldTokenNumber");
+            predicates.add(group.in(searchPickListHeader.getOldTokenNumber()));
+        }
+        if (searchPickListHeader.getNewTokenNumber() != null && !searchPickListHeader.getNewTokenNumber().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newTokenNumber");
+            predicates.add(group.in(searchPickListHeader.getNewTokenNumber()));
+        }
+
 
         if (searchPickListHeader.getPartnerCode() != null && !searchPickListHeader.getPartnerCode().isEmpty()) {
             final Path<Group> group = root.<Group>get("partnerCode");

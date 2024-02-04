@@ -723,10 +723,10 @@ public class MastersServiceController {
     @ApiOperation(response = ImPartner.class, value = "Get a ImPartner") // label for swagger
     @RequestMapping(value = "/impartner/{itemCode}", method = RequestMethod.GET)
     public ResponseEntity<?> getImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
-                                          @RequestParam String plantId, @RequestParam String languageId,
+                                          @RequestParam String plantId, @RequestParam String languageId, @RequestParam String partnerItemBarcode,
                                           @RequestParam String warehouseId, @RequestParam String authToken) {
 
-        ImPartner[] impartner = mastersService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, authToken);
+        ImPartner[] impartner = mastersService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, partnerItemBarcode, authToken);
 
         log.info("ImPartner : " + impartner);
         return new ResponseEntity<>(impartner, HttpStatus.OK);
@@ -757,8 +757,8 @@ public class MastersServiceController {
     @RequestMapping(value = "/impartner/{itemCode}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteImPartner(@RequestParam String authToken, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
                                              @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
-                                             @PathVariable String itemCode, @RequestParam String loginUserID) {
-        mastersService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, loginUserID, authToken);
+                                             @PathVariable String itemCode, @RequestParam String partnerItemBarcode, @RequestParam String loginUserID) {
+        mastersService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, partnerItemBarcode, loginUserID, authToken);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

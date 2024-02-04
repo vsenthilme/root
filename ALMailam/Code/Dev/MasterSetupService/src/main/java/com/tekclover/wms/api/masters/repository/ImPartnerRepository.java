@@ -46,4 +46,8 @@ List<ImPartner> findByBusinessPartnerCodeAndCompanyCodeIdAndPlantIdAndWarehouseI
 	List<ImPartner> findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPartnerItemBarcodeAndDeletionIndicator(
 			String companyCodeId, String plantId, String languageId, String warehouseId, String itemCode,
 			String manufacturerName, String partnerItemBarcode, Long deletionIndicator);
+
+	List<ImPartner> findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndItemCodeAndManufacturerNameAndPartnerItemBarcodeAndDeletionIndicator(
+			String companyCodeId, String plantId, String warehouseId, String languageId, String itemCode,
+			String manufacturerName, String partnerItemBarcode, Long deletionIndicator);
 }

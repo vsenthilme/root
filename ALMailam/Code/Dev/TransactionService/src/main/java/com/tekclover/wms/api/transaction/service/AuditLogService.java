@@ -55,7 +55,7 @@ public class AuditLogService {
 		
 		AuditLog dbAuditLog = new AuditLog();
 		BeanUtils.copyProperties(newAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(newAuditLog));
-		dbAuditLog.setAuditLogNumber(getAuditLogNumber());
+		dbAuditLog.setAuditLogNumber(System.currentTimeMillis());
 		dbAuditLog.setCreatedBy(loginUserID);
 		dbAuditLog.setUpdatedBy(loginUserID);
 		dbAuditLog.setCreatedOn(new Date());

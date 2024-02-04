@@ -34,6 +34,7 @@ public class AddImPartner {
 	@NotBlank(message = "Partner Item Bar Code is mandatory ")
 	private String partnerItemBarcode;
 	private String manufacturerCode;
+	@NotBlank(message = "ManufacturerName is mandatory ")
 	private String manufacturerName;
 	private String partnerName;
 	private String partnerItemNo;
@@ -54,5 +55,5 @@ public class AddImPartner {
 	private String referenceField9;
 	private String referenceField10;
 	private Long deletionIndicator;
-    
+	private String oldPartnerItemBarcode;
 }

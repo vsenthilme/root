@@ -1297,6 +1297,7 @@ public class OrderManagementLineService extends BaseService {
         statusIdList.add(41L);      //Order Allocation
         statusIdList.add(42L);      //Partial Allocation
         statusIdList.add(43L);      //Allocated
+        statusIdList.add(48L);      //InPicking
 
         List<OrderManagementLineV2> orderManagementLineList = orderManagementLineV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdInAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, statusIdList, 0L);
@@ -2217,6 +2218,24 @@ public class OrderManagementLineService extends BaseService {
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<OrderManagementLineV2> getOrderManagementLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                                       String warehouseId, String refDocNumber){
+        List<OrderManagementLineV2> orderManagementLineList =
+                orderManagementLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OrderManagementLine : " + orderManagementLineList);
+        return orderManagementLineList;
     }
 
     /**

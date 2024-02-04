@@ -17,10 +17,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tblauditlog")
 public class AuditLog { 
-	
-	@Id
+
 	@Column(name = "AUD_FILE_NO") 
 	private String auditFileNumber;
+	@Id
+	@Column(name = "AUD_LOG_NO")
+	private Long auditLogNumber;
 	
 	@Column(name = "LANG_ID")	
 	private String languageId;

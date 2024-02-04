@@ -39,5 +39,5 @@ public class ImPartner {
 	private Date createdOn = new Date();
 	private String updatedBy;
 	private Date updatedOn = new Date();
-
+	private String oldPartnerItemBarcode;
 }

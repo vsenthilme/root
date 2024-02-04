@@ -53,9 +53,9 @@ public class ImPartnerController {
     @ApiOperation(response = ImPartner.class, value = "Get a ImPartner") // label for swagger 
 	@GetMapping("/{itemCode}")
 	public ResponseEntity<?> getImPartner(@PathVariable String itemCode, @RequestParam String companyCodeId, @RequestParam String manufacturerName,
-										  @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId) {
+										  @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String partnerItemBarcode) {
     	List<ImPartner> impartner =
-				impartnerService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName);
+				impartnerService.getImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, partnerItemBarcode);
 		return new ResponseEntity<>(impartner, HttpStatus.OK);
 	}
     
@@ -92,10 +92,10 @@ public class ImPartnerController {
 	@DeleteMapping("/{itemCode}")
 	public ResponseEntity<?> deleteImPartner(@PathVariable String itemCode, @RequestParam String manufacturerName,
 											 @RequestParam String companyCodeId, @RequestParam String plantId,
-											 @RequestParam String languageId, @RequestParam String warehouseId,
-											 @RequestParam String loginUserID) throws ParseException {
+											 @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String partnerItemBarcode,
+											 @RequestParam String loginUserID) throws ParseException, InvocationTargetException, IllegalAccessException {
 
-		impartnerService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, loginUserID);
+		impartnerService.deleteImPartner(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, partnerItemBarcode, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

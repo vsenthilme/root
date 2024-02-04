@@ -1,6 +1,8 @@
 package com.tekclover.wms.api.masters.model.auditlog;
 
 import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -16,6 +18,11 @@ public class SearchAuditLog {
     private List<String> warehouseId;
 
     private List<String> auditFileNumber;
+    private List<Long> auditLogNumber;
 
     private List<Long> financialYear;
+    private List<String> objectName;
+    private List<String> modifiedTableName;
+    private Date startCreatedOn;
+    private Date endCreatedOn;
 }

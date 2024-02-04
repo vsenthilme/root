@@ -33,6 +33,17 @@ public class DateUtils {
 		String currentDatetime = datetime.format(newPattern);
 		return currentDatetime;
 	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static Long getCurrentYear() {
+		DateTimeFormatter newPattern = DateTimeFormatter.ofPattern("yyyy");
+		LocalDateTime datetime = LocalDateTime.now();
+		Long currentDatetime = Long.valueOf(datetime.format(newPattern));
+		return currentDatetime;
+	}
 	
 	/**
 	 * 

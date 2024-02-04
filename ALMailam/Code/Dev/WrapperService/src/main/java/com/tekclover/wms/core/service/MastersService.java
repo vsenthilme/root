@@ -1628,7 +1628,7 @@ public class MastersService {
 
     // GET ImPartner
     public ImPartner[] getImPartner(String companyCodeId, String plantId, String languageId,
-                                    String warehouseId, String itemCode, String manufacturerName, String authToken) {
+                                    String warehouseId, String itemCode, String manufacturerName, String partnerItemBarcode, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -1638,6 +1638,7 @@ public class MastersService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "impartner/" + itemCode)
                     .queryParam("manufacturerName", manufacturerName)
+                    .queryParam("partnerItemBarcode", partnerItemBarcode)
                     .queryParam("companyCodeId", companyCodeId)
                     .queryParam("languageId", languageId)
                     .queryParam("plantId", plantId)
@@ -1709,7 +1710,7 @@ public class MastersService {
 
     // Delete ImPartner
     public boolean deleteImPartner(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                   String itemCode, String manufacturerName, String loginUserID, String authToken) {
+                                   String itemCode, String manufacturerName, String partnerItemBarcode, String loginUserID, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -1721,6 +1722,7 @@ public class MastersService {
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "impartner/" + itemCode)
                             .queryParam("loginUserID", loginUserID)
                             .queryParam("manufacturerName", manufacturerName)
+                            .queryParam("partnerItemBarcode", partnerItemBarcode)
                             .queryParam("companyCodeId", companyCodeId)
                             .queryParam("plantId", plantId)
                             .queryParam("languageId", languageId)

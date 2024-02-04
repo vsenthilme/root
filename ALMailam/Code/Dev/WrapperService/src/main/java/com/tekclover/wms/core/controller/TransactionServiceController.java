@@ -4175,5 +4175,13 @@ public class TransactionServiceController {
         return new ResponseEntity<>(outboundOrderLineV2, HttpStatus.OK);
     }
 
+    //findPickListHeader - Pick List Cancellation
+    @ApiOperation(response = PickListHeader.class, value = "Search PickListHeader Cancellation") // label for swagger
+    @PostMapping("/pickListCancellation/v2/findPickListHeader")
+    public PickListHeader[] findPickListHeader(@RequestBody SearchPickListHeader searchPickListHeader,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findPickListHeader(searchPickListHeader, authToken);
+    }
+
 
 }

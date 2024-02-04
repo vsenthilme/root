@@ -45,16 +45,6 @@ public class PickListLineSpecification implements Specification<PickListLine> {
             predicates.add(group.in(searchPickListLine.getWarehouseId()));
         }
 
-        if (searchPickListLine.getPreOutboundNo() != null && !searchPickListLine.getPreOutboundNo().isEmpty()) {
-            final Path<Group> group = root.<Group>get("preOutboundNo");
-            predicates.add(group.in(searchPickListLine.getPreOutboundNo()));
-        }
-
-        if (searchPickListLine.getRefDocNumber() != null && !searchPickListLine.getRefDocNumber().isEmpty()) {
-            final Path<Group> group = root.<Group>get("refDocNumber");
-            predicates.add(group.in(searchPickListLine.getRefDocNumber()));
-        }
-
         if (searchPickListLine.getPartnerCode() != null && !searchPickListLine.getPartnerCode().isEmpty()) {
             final Path<Group> group = root.<Group>get("partnerCode");
             predicates.add(group.in(searchPickListLine.getPartnerCode()));

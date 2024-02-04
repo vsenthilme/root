@@ -3594,7 +3594,8 @@ public class OutboundLineService extends BaseService {
         }
 
         //----------------------------------------------------------------------------------------------------------
-        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L, 41L);
+//        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L, 41L);
+        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L);
         long outboundLineListCount = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusIdsToBeChecked);
         log.info("outboundLineListCount : " + outboundLineListCount);
         isConditionMet = (outboundLineListCount > 0 ? true : false);
@@ -3703,6 +3704,25 @@ public class OutboundLineService extends BaseService {
                 e.printStackTrace();
             }
         return null;
+    }
+
+    public List<OutboundLineV2> getOutBoundLine(String companyCodeId, String plantId, String languageId,
+                                                   String warehouseId, String refDocNumber, String loginUserID) throws Exception {
+
+        List<OutboundLineV2> outboundLineV2List = new ArrayList<>();
+        List<OutboundLineV2> dbOutBoundLine = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundLine : " + dbOutBoundLine);
+        if (dbOutBoundLine != null && !dbOutBoundLine.isEmpty()) {
+            for (OutboundLineV2 outboundLineV2 : dbOutBoundLine) {
+                outboundLineV2.setDeletionIndicator(1L);
+                outboundLineV2.setUpdatedBy(loginUserID);
+                outboundLineV2.setUpdatedOn(new Date());
+                OutboundLineV2 outboundLine = outboundLineV2Repository.save(outboundLineV2);
+                outboundLineV2List.add(outboundLine);
+            }
+        }
+        return outboundLineV2List;
     }
 
     /**

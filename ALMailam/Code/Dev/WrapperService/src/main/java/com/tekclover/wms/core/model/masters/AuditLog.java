@@ -1,6 +1,7 @@
 package com.tekclover.wms.core.model.masters;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ public class AuditLog {
 	private String warehouseId;
 	
 	private String auditFileNumber;
+	private Long auditLogNumber;
 	
 	private Long financialYear;
 	

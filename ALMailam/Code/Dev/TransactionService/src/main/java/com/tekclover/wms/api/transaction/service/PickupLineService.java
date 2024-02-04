@@ -2729,6 +2729,25 @@ public class PickupLineService extends BaseService {
      * @param languageId
      * @param warehouseId
      * @param refDocNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public List<PickupLineV2> getPickupLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                     String refDocNumber, String itemCode, String manufacturerName) {
+        List<PickupLineV2> pickupLine = pickupLineV2Repository
+                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, itemCode, manufacturerName, 0L);
+            return pickupLine;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
      * @param loginUserID
      * @return
      * @throws Exception

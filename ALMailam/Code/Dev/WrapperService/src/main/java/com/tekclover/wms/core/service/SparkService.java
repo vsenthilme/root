@@ -710,7 +710,7 @@ public class SparkService {
         }
     }
 
-    // Find QualityLine
+    // Find ImBasicData1
     public ImBasicData1V3[] findImbasicData1V3(SearchImBasicData1 searchImBasicData1) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -719,6 +719,26 @@ public class SparkService {
 //        headers.add("Authorization", "Bearer " + authToken);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getSparkServiceUrl() + "almailem/spark/imbasicdata1v3");
+            HttpEntity<?> entity = new HttpEntity<>(searchImBasicData1, headers);
+            ResponseEntity<ImBasicData1V3[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, ImBasicData1V3[].class);
+            log.info("result: " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    // Find ImBasicData1
+    public ImBasicData1V3[] findImbasicData1V5(SearchImBasicData1 searchImBasicData1) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", " RestTemplate");
+//        headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getSparkServiceUrl() + "almailem/spark/imbasicdata1v5");
             HttpEntity<?> entity = new HttpEntity<>(searchImBasicData1, headers);
             ResponseEntity<ImBasicData1V3[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, ImBasicData1V3[].class);
             log.info("result: " + result.getStatusCode());

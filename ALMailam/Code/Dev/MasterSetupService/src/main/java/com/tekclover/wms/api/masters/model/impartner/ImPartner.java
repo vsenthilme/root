@@ -66,6 +66,9 @@ public class ImPartner {
 	@Column(name="MFR_CODE")
 	private String manufacturerCode;
 
+	@Column(name = "OLD_BARCODE")				//field created for update
+	private String oldPartnerItemBarcode;
+
 	@Id
 	@Column(name="MFR_NAME")
 	private String manufacturerName;

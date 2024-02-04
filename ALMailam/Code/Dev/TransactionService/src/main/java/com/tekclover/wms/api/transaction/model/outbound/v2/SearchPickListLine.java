@@ -16,8 +16,6 @@ public class SearchPickListLine {
 	private List<String> salesOrderNumber;
 
 	private List<String> warehouseId;
-	private List<String> preOutboundNo;
-	private List<String> refDocNumber;
 	private List<String> partnerCode;
 	private List<Long> lineNumber;
 	private List<String> itemCode;

@@ -65,6 +65,11 @@ public class AuditLogService {
 	 * @throws ParseException
 	 */
 	public List<AuditLog> findAuditLog(SearchAuditLog searchAuditLog) throws ParseException {
+		if (searchAuditLog.getStartCreatedOn() != null && searchAuditLog.getEndCreatedOn() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(searchAuditLog.getStartCreatedOn(), searchAuditLog.getEndCreatedOn());
+			searchAuditLog.setStartCreatedOn(dates[0]);
+			searchAuditLog.setEndCreatedOn(dates[1]);
+		}
 		AuditLogSpecification spec = new AuditLogSpecification(searchAuditLog);
 		List<AuditLog> results = auditlogRepository.findAll(spec);
 		log.info("results: " + results);
@@ -81,18 +86,20 @@ public class AuditLogService {
 	public AuditLog createAuditLog (AddAuditLog newAuditLog, String loginUserID)
 			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AuditLog dbAuditLog = new AuditLog();
-		AuditLog duplicateAuditLog = auditlogRepository.findByAuditFileNumberAndDeletionIndicator(newAuditLog.getAuditFileNumber(), 0L);
-		if (duplicateAuditLog != null) {
-			throw new EntityNotFoundException("Record is Getting duplicated");
-		} else {
+//		AuditLog duplicateAuditLog = auditlogRepository.findByAuditFileNumberAndDeletionIndicator(newAuditLog.getAuditFileNumber(), 0L);
+//		if (duplicateAuditLog != null) {
+//			throw new EntityNotFoundException("Record is Getting duplicated");
+//		} else {
 			BeanUtils.copyProperties(newAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(newAuditLog));
+			dbAuditLog.setAuditLogNumber(System.currentTimeMillis());
+			dbAuditLog.setAuditFileNumber(String.valueOf(dbAuditLog.getAuditLogNumber()));
 			dbAuditLog.setDeletionIndicator(0L);
 			dbAuditLog.setCreatedBy(loginUserID);
 			dbAuditLog.setUpdatedBy(loginUserID);
 			dbAuditLog.setCreatedOn(new Date());
 			dbAuditLog.setUpdatedOn(new Date());
 			return auditlogRepository.save(dbAuditLog);
-		}
+//		}
 	}
 	/**
 	 * updateAuditLog

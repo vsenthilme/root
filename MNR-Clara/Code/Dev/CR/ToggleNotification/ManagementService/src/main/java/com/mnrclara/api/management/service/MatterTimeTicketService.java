@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import com.mnrclara.api.management.model.dto.*;
 import com.mnrclara.api.management.model.dto.IMatterTimeTicket;
+import com.mnrclara.api.management.model.matterrate.MatterRate;
 import com.mnrclara.api.management.model.mattertimeticket.*;
 import com.mnrclara.api.management.repository.MatterRateRepository;
 import com.mnrclara.api.management.repository.specification.TimeTicketNotificationSpecification;
@@ -61,6 +62,9 @@ public class MatterTimeTicketService {
     @Autowired
     private AuthTokenService authTokenService;
 
+    @Autowired
+    private MatterRateService matterRateService;
+
     /**
      * getMatterTimeTickets
      *
@@ -86,6 +90,50 @@ public class MatterTimeTicketService {
         if (matterTimeTicket != null &&
                 matterTimeTicket.getDeletionIndicator() != null && matterTimeTicket.getDeletionIndicator() == 0) {
             return matterTimeTicket;
+        } else {
+            throw new BadRequestException("The given MatterTimeTicket ID : " + timeTicketNumber + " doesn't exist.");
+        }
+    }
+
+    /**
+     *
+     * @param timeTicketNumber
+     * @return
+     */
+    public GetMatterTimeTicketMobile getMatterTimeTicketMobile(String timeTicketNumber) {
+
+        Optional<MatterTimeTicket> matterTimeTicket = matterTimeTicketRepository.findByTimeTicketNumberAndDeletionIndicator(timeTicketNumber, 0L);
+
+        if (matterTimeTicket != null) {
+
+            MatterTimeTicket dbMatterTimeTicket = matterTimeTicket.get();
+            AuthToken authTokenForSetupService = authTokenService.getSetupServiceAuthToken();
+
+            GetMatterTimeTicketMobile matterTimeTicketMobile = new GetMatterTimeTicketMobile();
+
+            TimekeeperCode timekeeperCode = setupService.getTimekeeperCode(dbMatterTimeTicket.getTimeKeeperCode(), authTokenForSetupService.getAccess_token());
+            MatterRate matterRate = matterRateService.getMatterRate(dbMatterTimeTicket.getMatterNumber(), dbMatterTimeTicket.getTimeKeeperCode());
+            IMatterTimeTicket iMatterTimeTicket = matterTimeTicketRepository.findDescriptionForMobile(timeTicketNumber);
+
+            BeanUtils.copyProperties(dbMatterTimeTicket, matterTimeTicketMobile, CommonUtils.getNullPropertyNames(dbMatterTimeTicket));
+            if (matterRate != null) {
+                matterTimeTicketMobile.setAssignedRatePerHourNew(matterRate.getAssignedRatePerHour());
+            }
+            if (timekeeperCode != null) {
+                matterTimeTicketMobile.setDefaultRatePerHourNew(timekeeperCode.getDefaultRate());
+            }
+            if(iMatterTimeTicket != null ) {
+                matterTimeTicketMobile.setSTimeTicketDate(iMatterTimeTicket.getStimeTicketDate());
+                matterTimeTicketMobile.setSCreatedOn(iMatterTimeTicket.getScreatedOn());
+                matterTimeTicketMobile.setClassIdDesc(iMatterTimeTicket.getClassIdDesc());
+                matterTimeTicketMobile.setClientIdDesc(iMatterTimeTicket.getClientIdDesc());
+                matterTimeTicketMobile.setMatterIdDesc(iMatterTimeTicket.getMatterIdDesc());
+                matterTimeTicketMobile.setStatusDesc(iMatterTimeTicket.getStatusDesc());
+                matterTimeTicketMobile.setClientName(iMatterTimeTicket.getClientName());
+            }
+
+            return matterTimeTicketMobile;
+
         } else {
             throw new BadRequestException("The given MatterTimeTicket ID : " + timeTicketNumber + " doesn't exist.");
         }
@@ -777,7 +825,15 @@ public class MatterTimeTicketService {
                 searchMatterTimeTicket.setEndTimeTicketDate(dates[1]);
             }
 
-            if(searchMatterTimeTicket.getTimeTicketNumber() == null || searchMatterTimeTicket.getTimeTicketNumber().isEmpty()){
+            if (searchMatterTimeTicket.getSEndTimeTicketDate() != null && searchMatterTimeTicket.getSStartTimeTicketDate() != null) {
+                Date startDate = DateUtils.convertStringToYYYYMMDD(searchMatterTimeTicket.getSStartTimeTicketDate());
+                Date endDate = DateUtils.convertStringToYYYYMMDD(searchMatterTimeTicket.getSEndTimeTicketDate());
+                Date[] dates = DateUtils.addTimeToDatesForSearch(startDate, endDate);
+                searchMatterTimeTicket.setStartTimeTicketDate(dates[0]);
+                searchMatterTimeTicket.setEndTimeTicketDate(dates[1]);
+            }
+
+            if (searchMatterTimeTicket.getTimeTicketNumber() == null || searchMatterTimeTicket.getTimeTicketNumber().isEmpty()) {
                 searchMatterTimeTicket.setTimeTicketNumber(null);
             }
             if(searchMatterTimeTicket.getMatterNumber() == null || searchMatterTimeTicket.getMatterNumber().isEmpty()){
@@ -789,12 +845,38 @@ public class MatterTimeTicketService {
             if(searchMatterTimeTicket.getStatusId() == null || searchMatterTimeTicket.getStatusId().isEmpty()){
                 searchMatterTimeTicket.setStatusId(null);
             }
-            List<IMatterTimeTicket> data = matterTimeTicketRepository.getClientDesc(searchMatterTimeTicket.getTimeTicketNumber(),
+//            List<IMatterTimeTicket> data = matterTimeTicketRepository.getClientDesc(searchMatterTimeTicket.getTimeTicketNumber(),
+//                    searchMatterTimeTicket.getBillType(),
+//                    searchMatterTimeTicket.getTimeKeeperCode(),
+//                    searchMatterTimeTicket.getStatusId(),
+//                    searchMatterTimeTicket.getMatterNumber());
+            matterTimeTicketRepository.truncateTempTable();
+
+            matterTimeTicketRepository.createFindTimeTicket(searchMatterTimeTicket.getTimeTicketNumber(),
                     searchMatterTimeTicket.getBillType(),
                     searchMatterTimeTicket.getTimeKeeperCode(),
                     searchMatterTimeTicket.getStatusId(),
-                    searchMatterTimeTicket.getMatterNumber());
-			return data;
+                    searchMatterTimeTicket.getMatterNumber(),
+                    searchMatterTimeTicket.getStartTimeTicketDate(),
+                    searchMatterTimeTicket.getEndTimeTicketDate()
+            );
+            log.info("table created");
+            matterTimeTicketRepository.UPDATE_CLASS_DESC();
+            log.info("class desc updated");
+            matterTimeTicketRepository.UPDATE_CLIENT_NAME();
+            log.info("client name updated");
+            matterTimeTicketRepository.UPDATE_MATTER_TEXT();
+            log.info("matter desc updated");
+            matterTimeTicketRepository.UPDATE_STATUS_DESCRIPTION();
+            log.info("status desc updated");
+
+//            CompletableFuture<List<IMatterTimeTicket>> asyncCall = matterTimeTicketAsyncService.getAllMatterTimeTicket(searchMatterTimeTicket);
+
+            List<IMatterTimeTicket> data = matterTimeTicketRepository.findMatterTimeTicket();
+            log.info("findMatterTimeTicketOutput Generated");
+
+
+            return data;
         } catch (Exception e) {
 			e.printStackTrace();
 		}

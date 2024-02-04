@@ -30,7 +30,9 @@ public class SearchMatterTimeTicket {
 	
 	private Date startCreatedOn;
 	private Date endCreatedOn;
-	
+
 	private Date startTimeTicketDate;
 	private Date endTimeTicketDate;
+	private String sStartTimeTicketDate;
+	private String sEndTimeTicketDate;
 }

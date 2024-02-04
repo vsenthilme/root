@@ -60,6 +60,13 @@ public class MatterTimeTicketController {
     	MatterTimeTicket mattertimeticket = matterTimeTicketService.getMatterTimeTicket(timeTicketNumber);
 		return new ResponseEntity<>(mattertimeticket, HttpStatus.OK);
 	}
+
+	@ApiOperation(response = GetMatterTimeTicketMobile.class, value = "Get a MatterTimeTicketMobile") // label for swagger
+	@GetMapping("/mobile/{timeTicketNumber}")
+	public ResponseEntity<?> getMatterTimeTicketMobile(@PathVariable String timeTicketNumber) {
+		GetMatterTimeTicketMobile mattertimeticket = matterTimeTicketService.getMatterTimeTicketMobile(timeTicketNumber);
+		return new ResponseEntity<>(mattertimeticket, HttpStatus.OK);
+	}
     
     @ApiOperation(response = MatterTimeTicket.class, value = "Get MatterTimeTickets by PrebillNumber") // label for swagger 
 	@GetMapping("/{preBillNumber}/preBillApprove")

@@ -70,7 +70,8 @@ public class BatchJobScheduler {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Scheduled(cron = "0 0 10 * * *") 
+//	@Scheduled(cron = "0 0 10 * * *") 
+	@Scheduled(fixedDelay = 300000)
 	public void sendReminderSMSForExpirationDoc() {
 		log.info("sendReminderSMS - ExpirationDoc called at :" + new Date());
 		managementService.sendReminderSMS();

@@ -8,7 +8,9 @@ import java.util.Set;
 import com.mnrclara.api.management.model.dto.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public interface MatterTimeTicketRepository extends JpaRepository<MatterTimeTick
     public List<MatterTimeTicket> findAll();
 
     public Optional<MatterTimeTicket> findByTimeTicketNumber(String timeTicketNumber);
+
+    Optional<MatterTimeTicket> findByTimeTicketNumberAndDeletionIndicator(String timeTicketNumber, long l);
 
     public List<MatterTimeTicket> findByReferenceField1AndDeletionIndicator(String referenceField1, Long deletionIndicator);
 
@@ -374,4 +378,124 @@ public interface MatterTimeTicketRepository extends JpaRepository<MatterTimeTick
             @Param(value = "statusId") List<Long> statusId,
             @Param(value = "matterNumber") List<String> matterNumber);
 
+    @Query(value = "select \n" +
+            "tm.CLASS_ID AS classId, \n" +
+            "tm.CLIENT_ID AS clientId, \n" +
+            "tc.FIRST_LAST_NM AS clientName, \n" +
+            "tm.MATTER_NO AS matterNumber, \n" +
+            "concat(tcl.class_id,'-',tcl.class) AS classIdDesc, \n" +
+            "concat(mg.matter_no,'-',mg.matter_text) AS matterIdDesc, \n" +
+            "concat(tc.client_id,'-',tc.FIRST_LAST_NM) AS clientIdDesc, \n" +
+            "date_format(tm.time_ticket_date,'%m-%d-%Y') stimeTicketDate, \n" +
+            "date_format(tm.ctd_on,'%m-%d-%Y') screatedOn, \n" +
+            "tm.STATUS_ID AS statusId, \n" +
+            "ts.STATUS_TEXT AS statusDesc \n" +
+            "from tblmattertimeticketid tm  \n" +
+            "join tblclientgeneralid tc on tc.CLIENT_ID = tm.CLIENT_ID  \n" +
+            "join tblclassid tcl on tcl.CLASS_ID = tc.CLASS_ID  \n" +
+            "join tblmattergenaccid mg on mg.MATTER_NO = tm.MATTER_NO \n" +
+            "join tblstatusid ts on ts.STATUS_ID = tm.STATUS_ID \n" +
+            "where \n" +
+            "(COALESCE(:timeTicketNumber, null) IS NULL OR (tm.TIME_TICKET_NO IN (:timeTicketNumber))) and \n" +
+            "tm.is_deleted = 0", nativeQuery = true)
+    public IMatterTimeTicket findDescriptionForMobile(@Param("timeTicketNumber") String timeTicketNumber);
+
+    @Transactional
+    @Modifying
+    @Query(value ="insert into tblmattertimeticketformobile\n" +
+            "(LANG_ID, CLASS_ID, MATTER_NO, CLIENT_ID, TIME_TICKET_NO, TK_CODE, \n" +
+            "CASE_CATEGORY_ID, CASE_SUB_CATEGORY_ID, TIME_TICKET_HRS, TIME_TICKET_DATE, ACTIVITY_CODE, \n" +
+            "TASK_CODE, DEF_RATE, RATE_UNIT, TIME_TICKET_AMOUNT, BILL_TYPE, TIME_TICKET_TEXT, \n" +
+            "ASS_PARTNER, ASS_ON, APP_BILL_TIME, APP_BILL_AMOUNT, APP_ON, STATUS_ID, IS_DELETED, \n" +
+            "REF_FIELD_1, REF_FIELD_2, REF_FIELD_3, REF_FIELD_4, REF_FIELD_5, REF_FIELD_6, \n" +
+            "REF_FIELD_7, REF_FIELD_8, REF_FIELD_9, REF_FIELD_10, CTD_BY, CTD_ON, UTD_BY, UTD_ON) \n" +
+            "select \n" +
+            "LANG_ID, CLASS_ID, MATTER_NO, CLIENT_ID, TIME_TICKET_NO, TK_CODE, CASE_CATEGORY_ID, \n" +
+            "CASE_SUB_CATEGORY_ID, TIME_TICKET_HRS, TIME_TICKET_DATE, ACTIVITY_CODE, TASK_CODE, \n" +
+            "DEF_RATE, RATE_UNIT, TIME_TICKET_AMOUNT, BILL_TYPE, TIME_TICKET_TEXT, ASS_PARTNER, \n" +
+            "ASS_ON, APP_BILL_TIME, APP_BILL_AMOUNT, APP_ON, STATUS_ID, IS_DELETED, REF_FIELD_1, \n" +
+            "REF_FIELD_2, REF_FIELD_3, REF_FIELD_4, REF_FIELD_5, REF_FIELD_6, REF_FIELD_7, \n" +
+            "REF_FIELD_8, REF_FIELD_9, REF_FIELD_10, CTD_BY, CTD_ON, UTD_BY, UTD_ON \n" +
+            "from tblmattertimeticketid tm\n" +
+            "where \n" +
+            "(COALESCE(:timeTicketNumber) IS NULL OR (tm.TIME_TICKET_NO IN (:timeTicketNumber))) and \n" +
+            "(COALESCE(:billType) IS NULL OR (tm.BILL_TYPE IN (:billType))) and \n" +
+            "(COALESCE(:timeKeeperCode) IS NULL OR (tm.TK_CODE IN (:timeKeeperCode))) and \n" +
+            "(COALESCE(:statusId) IS NULL OR (tm.STATUS_ID IN (:statusId))) and \n" +
+            "(COALESCE(:matterNumber) IS NULL OR (tm.MATTER_NO IN (:matterNumber))) and \n" +
+            "(COALESCE(:startDate) IS NULL OR (tm.TIME_TICKET_DATE between (:startDate) and (:endDate))) and \n" +
+            "tm.IS_DELETED=0", nativeQuery = true)
+    public void createFindTimeTicket(
+            @Param(value = "timeTicketNumber") List<String> timeTicketNumber,
+            @Param(value = "billType") List<String> billType,
+            @Param(value = "timeKeeperCode") List<String> timeKeeperCode,
+            @Param(value = "statusId") List<Long> statusId,
+            @Param(value = "matterNumber") List<String> matterNumber,
+            @Param(value = "startDate") Date startDate,
+            @Param(value = "endDate") Date endDate);
+
+    @Transactional
+    @Modifying
+    @Query(value ="truncate table tblmattertimeticketformobile", nativeQuery = true)
+    void truncateTempTable();
+
+    @Procedure
+    void UPDATE_CLASS_DESC();
+
+    @Procedure
+    void UPDATE_CLIENT_NAME();
+
+    @Procedure
+    void UPDATE_MATTER_TEXT();
+
+    @Procedure
+    void UPDATE_STATUS_DESCRIPTION();
+
+    @Query(value = "select tm.TIME_TICKET_NO AS timeTicketNumber,\n" +
+            "tm.LANG_ID AS languageId,\n" +
+            "tm.CLASS_ID AS classId,\n" +
+            "tm.CLASS_ID_TEXT AS classIdDesc,\n" +
+            "tm.MATTER_NO AS matterNumber,\n" +
+            "tm.MATTER_NO_TEXT AS matterIdDesc,\n" +
+            "tm.CLIENT_ID AS clientId,\n" +
+            "tm.CLIENT_NAME AS clientName,\n" +
+            "tm.CLIENT_ID_TEXT AS clientIdDesc,\n" +
+            "tm.TK_CODE AS timeKeeperCode,\n" +
+            "tm.CASE_CATEGORY_ID AS caseCategoryId,\n" +
+            "tm.CASE_SUB_CATEGORY_ID AS caseSubCategoryId,\n" +
+            "tm.TIME_TICKET_HRS AS timeTicketHours,\n" +
+            "tm.TIME_TICKET_DATE AS timeTicketDate,\n" +
+            "DATE_FORMAT(tm.TIME_TICKET_DATE, '%m-%d-%Y') AS sTimeTicketDate,\n" +
+            "tm.ACTIVITY_CODE AS activityCode,\n" +
+            "tm.TASK_CODE AS taskCode,\n" +
+            "tm.DEF_RATE AS defaultRate,\n" +
+            "tm.RATE_UNIT AS rateUnit,\n" +
+            "tm.TIME_TICKET_AMOUNT AS timeTicketAmount,\n" +
+            "tm.BILL_TYPE AS billType,\n" +
+            "tm.TIME_TICKET_TEXT AS timeTicketDescription,\n" +
+            "tm.ASS_PARTNER AS assignedPartner,\n" +
+            "tm.ASS_ON AS assignedOn,\n" +
+            "tm.APP_BILL_TIME AS approvedBillableTimeInHours,\n" +
+            "tm.APP_BILL_AMOUNT AS approvedBillableAmount,\n" +
+            "tm.APP_ON AS approvedOn,\n" +
+            "tm.STATUS_ID AS statusId,\n" +
+            "tm.STATUS_TEXT AS statusDesc,\n" +
+            "tm.REF_FIELD_1 AS referenceField1,\n" +
+            "tm.REF_FIELD_2 AS referenceField2,\n" +
+            "tm.REF_FIELD_3 AS referenceField3,\n" +
+            "tm.REF_FIELD_4 AS referenceField4,\n" +
+            "tm.REF_FIELD_5 AS referenceField5,\n" +
+            "tm.REF_FIELD_6 AS referenceField6,\n" +
+            "tm.REF_FIELD_7 AS referenceField7,\n" +
+            "tm.REF_FIELD_8 AS referenceField8,\n" +
+            "tm.REF_FIELD_9 AS referenceField9,\n" +
+            "tm.REF_FIELD_10 AS referenceField10, \n" +
+            "tm.IS_DELETED AS deletionIndicator, \n" +
+            "tm.CTD_BY AS createdBy, \n " +
+            "tm.CTD_ON AS createdON, \n " +
+            "DATE_FORMAT(tm.CTD_ON, '%m-%d-%Y') AS sCreatedON, \n " +
+            "tm.UTD_BY AS updatedBy, \n " +
+            "tm.UTD_ON AS updatedON \n " +
+            " from tblmattertimeticketformobile tm ", nativeQuery = true)
+    public List<IMatterTimeTicket> findMatterTimeTicket();
 }

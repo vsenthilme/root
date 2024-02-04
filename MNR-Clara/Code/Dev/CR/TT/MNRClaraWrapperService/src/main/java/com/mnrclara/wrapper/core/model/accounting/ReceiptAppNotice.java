@@ -30,6 +30,7 @@ public class ReceiptAppNotice {
 	private Long statusId;
 	private String receiptNote;
 	private Long reminderDays;
+	private Long toggleNotification;
 	private Long deletionIndicator = 0L;
 	private String referenceField1;
 	private String referenceField2;

@@ -49,4 +49,6 @@ public interface IMatterTimeTicket {
 	public String getMatterIdDesc();
 	public String getClientIdDesc();
 	public String getStatusDesc();
+	public String getStimeTicketDate();
+	public String getScreatedOn();
 }

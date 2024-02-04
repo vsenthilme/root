@@ -456,7 +456,31 @@ public class ManagementServiceController {
 		MatterDropdownList matterDropdownList = managementService.getMatterDropdownList(authToken);
 		return new ResponseEntity<>(matterDropdownList, HttpStatus.OK);
 	}
-    
+
+
+	@ApiOperation(response = Dropdown.class, value = "Get Matter Dropdown") // label for swagger
+	@GetMapping("/mattergenacc/dropdown/matter/new")
+	public ResponseEntity<?> getMatterDropdown(@RequestParam String authToken) {
+		MatterNumberDropDown[] matterDropdownList = managementService.getMatterNumberDropdown(authToken);
+		return new ResponseEntity<>(matterDropdownList, HttpStatus.OK);
+	}
+
+
+	@ApiOperation(response = Dropdown.class, value = "Get Matter Dropdown") // label for swagger
+	@GetMapping("/mattergenacc/dropdown/matterList")
+	public ResponseEntity<?> getMatterDropdownNew(@RequestParam String authToken) {
+		MatterNumberDropDown[] matterDropdownList = managementService.getMatterNumberDropdownNew(authToken);
+		return new ResponseEntity<>(matterDropdownList, HttpStatus.OK);
+	}
+
+	//Get Dates - For Mobile API
+	@ApiOperation(response = MatterGenAccDate.class, value = "Get a MatterGeneralAccount Date") // label for swagger
+	@GetMapping("/mattergenacc/date/{matterNumber}")
+	public ResponseEntity<?> getMatterGenAccDate(@PathVariable String matterNumber, @RequestParam String authToken) {
+		MatterGenAccDate matterGenAcc = managementService.getMatterGenAccDate(matterNumber, authToken);
+		log.info("MatterGenAcc : " + matterGenAcc);
+		return new ResponseEntity<>(matterGenAcc, HttpStatus.OK);
+	}
     @ApiOperation(response = Dropdown.class, value = "Get a Dropdown") // label for swagger
 	@GetMapping("/dropdown/matter/open")
 	public ResponseEntity<?> getOpenMatterDropdownList(@RequestParam String authToken) {
@@ -495,7 +519,17 @@ public class ManagementServiceController {
 		FindMatterGenNew[] data = managementService.findMatterGeneralNew(searchMatterGeneral, authToken);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
-	
+
+	//Find Matter General for Mobile
+	@ApiOperation(response = MatterGenMobileResponse.class, value = "Search MatterGeneralAcc-for Mobile")
+	// label for swagger
+	@PostMapping("/mattergenacc/findMatterGeneralMobile")
+	public ResponseEntity<?> findMatterGenAccMobile(@RequestBody FindMatterGeneral searchMatterGeneral,
+													@RequestParam String authToken) throws ParseException {
+		MatterGenMobileResponse[] data = managementService.findMatterGeneralMobile(searchMatterGeneral, authToken);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+
 	@ApiOperation(response = MatterGenAcc.class, value = "Dashboard MatterGenAcc - Total") // label for swagger
 	@GetMapping("/mattergenacc/dashboard/total")
 	public ResponseEntity<?> getDashboardTotalForMatter(@RequestParam String loginUserID, @RequestParam String authToken) {
@@ -886,7 +920,15 @@ public class ManagementServiceController {
     	log.info("MatterTimeTicket : " + mattertimeticket);
 		return new ResponseEntity<>(mattertimeticket, HttpStatus.OK);
 	}
-    
+
+	@ApiOperation(response = MatterTimeTicketMobile.class, value = "Get a MatterTimeTicket Mobile") // label for swagger
+	@GetMapping("/mattertimeticket/mobile/{timeTicketNumber}")
+	public ResponseEntity<?> getMatterTimeTicketMobile(@PathVariable String timeTicketNumber, @RequestParam String authToken) {
+		MatterTimeTicketMobile mattertimeticket = managementService.getMatterTimeTicketMobile(timeTicketNumber, authToken);
+		log.info("MatterTimeTicket : " + mattertimeticket);
+		return new ResponseEntity<>(mattertimeticket, HttpStatus.OK);
+	}
+
     @ApiOperation(response = MatterTimeTicket.class, value = "Search MatterTimeTicket") // label for swagger
 	@PostMapping("/mattertimeticket/findMatterTimeTicket")
 	public MatterTimeTicket[] findMatterTimeTicket(@RequestBody SearchMatterTimeTicket searchMatterTimeTicket, 

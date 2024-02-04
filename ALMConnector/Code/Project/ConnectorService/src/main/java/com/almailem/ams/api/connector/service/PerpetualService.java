@@ -3,6 +3,7 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.perpetual.FindPerpetualHeader;
+import com.almailem.ams.api.connector.model.perpetual.FindPerpetualLine;
 import com.almailem.ams.api.connector.model.perpetual.PerpetualHeader;
 import com.almailem.ams.api.connector.model.perpetual.PerpetualLine;
 import com.almailem.ams.api.connector.model.wms.Perpetual;
@@ -11,6 +12,7 @@ import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PerpetualHeaderRepository;
 import com.almailem.ams.api.connector.repository.PerpetualLineRepository;
 import com.almailem.ams.api.connector.repository.specification.PerpetualHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.PerpetualLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,6 +187,14 @@ public class PerpetualService {
 
         PerpetualHeaderSpecification spec = new PerpetualHeaderSpecification(findPerpetualHeader);
         List<PerpetualHeader> results = perpetualHeaderRepo.findAll(spec);
+        return results;
+    }
+
+    // Find PerpetualLine
+    public List<PerpetualLine> findPerpetualLine(FindPerpetualLine findPerpetualLine) throws ParseException {
+
+        PerpetualLineSpecification spec = new PerpetualLineSpecification(findPerpetualLine);
+        List<PerpetualLine> results = perpetualLineRepository.findAll(spec);
         return results;
     }
 

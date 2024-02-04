@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.purchasereturn.FindPurchaseReturnHeader;
+import com.almailem.ams.api.connector.model.purchasereturn.FindPurchaseReturnLine;
 import com.almailem.ams.api.connector.model.purchasereturn.PurchaseReturnHeader;
+import com.almailem.ams.api.connector.model.purchasereturn.PurchaseReturnLine;
 import com.almailem.ams.api.connector.service.ReturnPOService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +48,13 @@ public class ReturnPOController {
     public ResponseEntity<?> searchPurchaseReturnHeader(@RequestBody FindPurchaseReturnHeader findPurchaseReturnHeader) throws ParseException {
         List<PurchaseReturnHeader> purchaseReturnHeaders = returnPOService.findPurchaseReturnHeader(findPurchaseReturnHeader);
         return new ResponseEntity<>(purchaseReturnHeaders, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PurchaseReturnLine.class, value = "Find PurchaseReturnLine") // label for Swagger
+    @PostMapping("/findPurchaseReturnLine")
+    public ResponseEntity<?> searchPurchaseReturnLine(@RequestBody FindPurchaseReturnLine findPurchaseReturnLine) throws ParseException {
+        List<PurchaseReturnLine> purchaseReturnLines = returnPOService.findPurchaseReturnLine(findPurchaseReturnLine);
+        return new ResponseEntity<>(purchaseReturnLines, HttpStatus.OK);
     }
 
 }

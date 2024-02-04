@@ -3,11 +3,15 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.transferout.FindTransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.FindTransferOutLine;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.TransferOutLine;
 import com.almailem.ams.api.connector.model.wms.ShipmentOrder;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.TransferOutHeaderRepository;
+import com.almailem.ams.api.connector.repository.TransferOutLineRepository;
 import com.almailem.ams.api.connector.repository.specification.TransferOutHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.TransferOutLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class ShipmentOrderService {
 
     @Autowired
     TransferOutHeaderRepository transferOutHeaderRepository;
+
+    @Autowired
+    TransferOutLineRepository transferOutLineRepository;
 
     @Autowired
     AuthTokenService authTokenService;
@@ -117,6 +124,15 @@ public class ShipmentOrderService {
 
         TransferOutHeaderSpecification spec = new TransferOutHeaderSpecification(findTransferOutHeader);
         List<TransferOutHeader> results = transferOutHeaderRepository.findAll(spec);
+        return results;
+    }
+
+    public List<TransferOutLine> findShipmentOrderLine(FindTransferOutLine findTransferOutLine) throws ParseException {
+
+
+
+        TransferOutLineSpecification spec = new TransferOutLineSpecification(findTransferOutLine);
+        List<TransferOutLine> results = transferOutLineRepository.findAll(spec);
         return results;
     }
 

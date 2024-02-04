@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.transferin.SearchTransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.SearchTransferInLine;
 import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.TransferInLine;
 import com.almailem.ams.api.connector.service.B2BTransferInService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +49,14 @@ public class B2BTransferInController {
     public ResponseEntity<?> findTransferInHeader(@RequestBody SearchTransferInHeader searchTransferInHeader) throws ParseException {
         List<TransferInHeader> transferInHeaderList = b2BTransferInService.findB2BTransferInHeader(searchTransferInHeader);
         return new ResponseEntity<>(transferInHeaderList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = TransferInLine.class, value = "Find B2BTransferInLine details")
+    // label for swagger
+    @PostMapping("/findB2BTransferInLine")
+    public ResponseEntity<?> findB2BTransferInLine(@RequestBody SearchTransferInLine searchTransferInLine) throws ParseException {
+        List<TransferInLine> transferInLineList = b2BTransferInService.findB2BTransferInLine(searchTransferInLine);
+        return new ResponseEntity<>(transferInLineList, HttpStatus.OK);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.periodic.FindPeriodicHeader;
+import com.almailem.ams.api.connector.model.periodic.FindPeriodicLine;
 import com.almailem.ams.api.connector.model.periodic.PeriodicHeader;
+import com.almailem.ams.api.connector.model.periodic.PeriodicLine;
 import com.almailem.ams.api.connector.model.wms.UpdateStockCountLine;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.service.PeriodicService;
@@ -51,6 +53,13 @@ public class PeriodicController {
     public ResponseEntity<?> findPeriodicHeader(@RequestBody FindPeriodicHeader findPeriodicHeader) throws ParseException {
         List<PeriodicHeader> periodicHeaders = periodicService.findPeriodicHeader(findPeriodicHeader);
         return new ResponseEntity<>(periodicHeaders, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PeriodicLine.class, value = "Find PeriodicLine") // label for Swagger
+    @PostMapping("/findPeriodicLine")
+    public ResponseEntity<?> findPeriodicLine(@RequestBody FindPeriodicLine findPeriodicLine) throws ParseException {
+        List<PeriodicLine> periodicLines = periodicService.findPeriodicLine(findPeriodicLine);
+        return new ResponseEntity<>(periodicLines, HttpStatus.OK);
     }
 
 }

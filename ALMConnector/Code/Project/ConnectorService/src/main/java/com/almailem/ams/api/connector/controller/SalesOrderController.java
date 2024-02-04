@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.picklist.FindPickListHeader;
+import com.almailem.ams.api.connector.model.picklist.FindPickListLine;
 import com.almailem.ams.api.connector.model.picklist.PickListHeader;
+import com.almailem.ams.api.connector.model.picklist.PickListLine;
 import com.almailem.ams.api.connector.service.SalesOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,5 +48,15 @@ public class SalesOrderController {
     public ResponseEntity<?> searchPickListHeader(@RequestBody FindPickListHeader findPickListHeader) throws ParseException {
         List<PickListHeader> pickListHeaders = salesOrderService.findPickListHeader(findPickListHeader);
         return new ResponseEntity<>(pickListHeaders, HttpStatus.OK);
+    }
+
+
+
+    // FInd PickListLine
+    @ApiOperation(response = PickListLine.class, value = "Find PickListLine") // label for Swagger
+    @PostMapping("/findPickListLine")
+    public ResponseEntity<?> searchPickListLine(@RequestBody FindPickListLine findPickListLine) throws ParseException {
+        List<PickListLine> pickListLines = salesOrderService.findPickListLine(findPickListLine);
+        return new ResponseEntity<>(pickListLines, HttpStatus.OK);
     }
 }

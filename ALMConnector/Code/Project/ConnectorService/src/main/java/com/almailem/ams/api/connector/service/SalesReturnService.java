@@ -4,11 +4,15 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.salesreturn.FindSalesReturnHeader;
+import com.almailem.ams.api.connector.model.salesreturn.FindSalesReturnLine;
 import com.almailem.ams.api.connector.model.salesreturn.SalesReturnHeader;
+import com.almailem.ams.api.connector.model.salesreturn.SalesReturnLine;
 import com.almailem.ams.api.connector.model.wms.SaleOrderReturn;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.SalesReturnHeaderRepository;
+import com.almailem.ams.api.connector.repository.SalesReturnLineRepository;
 import com.almailem.ams.api.connector.repository.specification.SalesReturnHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.SalesReturnLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,9 @@ public class SalesReturnService {
 
     @Autowired
     private SalesReturnHeaderRepository salesReturnHeaderRepository;
+
+    @Autowired
+    private SalesReturnLineRepository salesReturnLineRepository;
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -111,6 +118,19 @@ public class SalesReturnService {
 
         SalesReturnHeaderSpecification spec = new SalesReturnHeaderSpecification(findSalesReturnHeader);
         List<SalesReturnHeader> results = salesReturnHeaderRepository.findAll(spec);
+        return results;
+    }
+
+    public List<SalesReturnLine> findSalesReturnLine(FindSalesReturnLine findSalesReturnLine) throws ParseException {
+
+        if (findSalesReturnLine.getFromReturnOrderDate() != null && findSalesReturnLine.getToReturnOrderDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(findSalesReturnLine.getFromReturnOrderDate(), findSalesReturnLine.getToReturnOrderDate());
+            findSalesReturnLine.setFromReturnOrderDate(dates[0]);
+            findSalesReturnLine.setToReturnOrderDate(dates[1]);
+        }
+
+        SalesReturnLineSpecification spec = new SalesReturnLineSpecification(findSalesReturnLine);
+        List<SalesReturnLine> results = salesReturnLineRepository.findAll(spec);
         return results;
     }
 

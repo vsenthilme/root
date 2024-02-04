@@ -3,11 +3,15 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.picklist.FindPickListHeader;
+import com.almailem.ams.api.connector.model.picklist.FindPickListLine;
 import com.almailem.ams.api.connector.model.picklist.PickListHeader;
+import com.almailem.ams.api.connector.model.picklist.PickListLine;
 import com.almailem.ams.api.connector.model.wms.SalesOrder;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PickListHeaderRepository;
+import com.almailem.ams.api.connector.repository.PickListLineRepository;
 import com.almailem.ams.api.connector.repository.specification.PickListHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.PickListLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,9 @@ public class SalesOrderService {
 
     @Autowired
     PickListHeaderRepository pickListHeaderRepository;
+
+    @Autowired
+    PickListLineRepository pickListLineRepository;
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -125,6 +132,15 @@ public class SalesOrderService {
         }
         PickListHeaderSpecification spec = new PickListHeaderSpecification(findPickListHeader);
         List<PickListHeader> results = pickListHeaderRepository.findAll(spec);
+        return results;
+    }
+
+
+    // Find PickListLine
+    public List<PickListLine> findPickListLine(FindPickListLine findPickListLine) throws ParseException {
+
+        PickListLineSpecification spec = new PickListLineSpecification(findPickListLine);
+        List<PickListLine> results = pickListLineRepository.findAll(spec);
         return results;
     }
 

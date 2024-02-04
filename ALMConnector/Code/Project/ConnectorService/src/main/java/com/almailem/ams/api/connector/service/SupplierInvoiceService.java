@@ -5,7 +5,9 @@ import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.supplierinvoice.*;
 import com.almailem.ams.api.connector.model.wms.*;
 import com.almailem.ams.api.connector.repository.SupplierInvoiceHeaderRepository;
+import com.almailem.ams.api.connector.repository.SupplierInvoiceLineRepository;
 import com.almailem.ams.api.connector.repository.specification.SupplierInvoiceHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.SupplierInvoiceLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class SupplierInvoiceService {
 
     @Autowired
     private SupplierInvoiceHeaderRepository supplierInvoiceHeaderRepository;
+
+    @Autowired
+    private SupplierInvoiceLineRepository supplierInvoiceLineRepository;
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -117,4 +122,19 @@ public class SupplierInvoiceService {
         return results;
 
     }
+    public List<SupplierInvoiceLine> findSupplierInvoiceLine(SearchSupplierInvoiceLine searchSupplierInvoiceLine) throws ParseException {
+
+        if (searchSupplierInvoiceLine.getFromInvoiceDate() != null && searchSupplierInvoiceLine.getToInvoiceDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchSupplierInvoiceLine.getFromInvoiceDate(), searchSupplierInvoiceLine.getToInvoiceDate());
+            searchSupplierInvoiceLine.setFromInvoiceDate(dates[0]);
+            searchSupplierInvoiceLine.setToInvoiceDate(dates[1]);
+        }
+
+
+        SupplierInvoiceLineSpecification spec = new SupplierInvoiceLineSpecification(searchSupplierInvoiceLine);
+        List<SupplierInvoiceLine> results = supplierInvoiceLineRepository.findAll(spec);
+        return results;
+
+    }
+
 }

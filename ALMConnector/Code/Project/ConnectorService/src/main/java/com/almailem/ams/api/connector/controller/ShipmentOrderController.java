@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.transferout.FindTransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.FindTransferOutLine;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.TransferOutLine;
 import com.almailem.ams.api.connector.service.ShipmentOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +44,13 @@ public class ShipmentOrderController {
     public ResponseEntity<?> findShipmentOrder(@RequestBody FindTransferOutHeader findTransferOutHeader) throws ParseException {
         List<TransferOutHeader> transferOutHeaders = soV2Service.findShipmentOrder(findTransferOutHeader);
         return new ResponseEntity<>(transferOutHeaders, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = TransferOutLine.class, value = "Find ShipmentOrderLine") // label for Swagger
+    @PostMapping("/findShipmentOrderLine")
+    public ResponseEntity<?> findShipmentOrderLine(@RequestBody FindTransferOutLine findTransferOutLine) throws ParseException {
+        List<TransferOutLine> transferOutLines = soV2Service.findShipmentOrderLine(findTransferOutLine);
+        return new ResponseEntity<>(transferOutLines, HttpStatus.OK);
     }
 
 }

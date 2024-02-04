@@ -2,7 +2,9 @@ package com.almailem.ams.api.connector.controller;
 
 
 import com.almailem.ams.api.connector.model.salesreturn.FindSalesReturnHeader;
+import com.almailem.ams.api.connector.model.salesreturn.FindSalesReturnLine;
 import com.almailem.ams.api.connector.model.salesreturn.SalesReturnHeader;
+import com.almailem.ams.api.connector.model.salesreturn.SalesReturnLine;
 import com.almailem.ams.api.connector.repository.SalesReturnHeaderRepository;
 import com.almailem.ams.api.connector.service.SalesReturnService;
 import io.swagger.annotations.Api;
@@ -47,6 +49,13 @@ public class SalesReturnController {
     public ResponseEntity<?> searchSalesReturnHeader(@RequestBody FindSalesReturnHeader findSalesReturnHeader) throws ParseException {
         List<SalesReturnHeader> salesReturnHeaderList = salesReturnService.findSalesReturnHeader(findSalesReturnHeader);
         return new ResponseEntity<>(salesReturnHeaderList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = SalesReturnLine.class, value = "Find Sales Return Line") // label for Swagger
+    @PostMapping("/findsalesreturnline")
+    public ResponseEntity<?> searchSalesReturnLine(@RequestBody FindSalesReturnLine findSalesReturnLine) throws ParseException {
+        List<SalesReturnLine> salesReturnLineList = salesReturnService.findSalesReturnLine(findSalesReturnLine);
+        return new ResponseEntity<>(salesReturnLineList, HttpStatus.OK);
     }
 
 }

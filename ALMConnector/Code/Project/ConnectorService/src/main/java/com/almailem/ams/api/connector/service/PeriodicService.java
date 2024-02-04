@@ -3,6 +3,7 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.periodic.FindPeriodicHeader;
+import com.almailem.ams.api.connector.model.periodic.FindPeriodicLine;
 import com.almailem.ams.api.connector.model.periodic.PeriodicHeader;
 import com.almailem.ams.api.connector.model.periodic.PeriodicLine;
 import com.almailem.ams.api.connector.model.wms.Periodic;
@@ -11,6 +12,7 @@ import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PeriodicHeaderRepository;
 import com.almailem.ams.api.connector.repository.PeriodicLineRepository;
 import com.almailem.ams.api.connector.repository.specification.PeriodicHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.PeriodicLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,6 +186,14 @@ public class PeriodicService {
 
         PeriodicHeaderSpecification spec = new PeriodicHeaderSpecification(findPeriodicHeader);
         List<PeriodicHeader> results = periodicHeaderRepo.findAll(spec);
+        return results;
+    }
+
+    public List<PeriodicLine> findPeriodicLine(FindPeriodicLine findPeriodicLine) throws ParseException {
+
+
+        PeriodicLineSpecification spec = new PeriodicLineSpecification(findPeriodicLine);
+        List<PeriodicLine> results = periodicLineRepository.findAll(spec);
         return results;
     }
 

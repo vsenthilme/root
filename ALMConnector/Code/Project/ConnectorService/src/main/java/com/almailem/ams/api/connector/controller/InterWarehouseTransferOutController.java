@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.transferout.FindTransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.FindTransferOutLine;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
+import com.almailem.ams.api.connector.model.transferout.TransferOutLine;
 import com.almailem.ams.api.connector.service.InterWarehouseTransferOutService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,5 +45,14 @@ public class InterWarehouseTransferOutController {
         List<TransferOutHeader> transferOutHeaders = iWhTransferOutV2Service.findInterWarehouseTransferOut(findTransferOutHeader);
         return new ResponseEntity<>(transferOutHeaders, HttpStatus.OK);
     }
+
+    @ApiOperation(response = TransferOutLine.class, value = "Find InterWarehouseTransferOutLine") // label for Swagger
+    @PostMapping("/findInterWarehouseTransferOutLine")
+    public ResponseEntity<?> findInterWarehouseTransferOutLine(@RequestBody FindTransferOutLine findTransferOutLine) throws ParseException {
+        List<TransferOutLine> transferOutLine = iWhTransferOutV2Service.findInterWarehouseTransferOutLine(findTransferOutLine);
+        return new ResponseEntity<>(transferOutLine, HttpStatus.OK);
+    }
+
+
 
 }

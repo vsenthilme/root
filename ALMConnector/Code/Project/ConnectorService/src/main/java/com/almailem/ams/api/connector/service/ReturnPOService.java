@@ -3,12 +3,16 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.purchasereturn.FindPurchaseReturnHeader;
+import com.almailem.ams.api.connector.model.purchasereturn.FindPurchaseReturnLine;
 import com.almailem.ams.api.connector.model.purchasereturn.PurchaseReturnHeader;
+import com.almailem.ams.api.connector.model.purchasereturn.PurchaseReturnLine;
 import com.almailem.ams.api.connector.model.salesreturn.SalesReturnHeader;
 import com.almailem.ams.api.connector.model.wms.ReturnPO;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PurchaseReturnHeaderRepository;
+import com.almailem.ams.api.connector.repository.PurchaseReturnLineRepository;
 import com.almailem.ams.api.connector.repository.specification.PurchaseReturnHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.PurchaseReturnLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,9 @@ public class ReturnPOService {
 
     @Autowired
     PurchaseReturnHeaderRepository purchaseReturnHeaderRepository;
+
+    @Autowired
+    PurchaseReturnLineRepository purchaseReturnLineRepository;
 
     @Autowired
     PropertiesConfig propertiesConfig;
@@ -129,6 +136,14 @@ public class ReturnPOService {
 
         PurchaseReturnHeaderSpecification spec = new PurchaseReturnHeaderSpecification(findPurchaseReturnHeader);
         List<PurchaseReturnHeader> results = purchaseReturnHeaderRepository.findAll(spec);
+        return results;
+    }
+
+    public List<PurchaseReturnLine> findPurchaseReturnLine(FindPurchaseReturnLine findPurchaseReturnLine) throws ParseException {
+
+
+        PurchaseReturnLineSpecification spec = new PurchaseReturnLineSpecification(findPurchaseReturnLine);
+        List<PurchaseReturnLine> results = purchaseReturnLineRepository.findAll(spec);
         return results;
     }
 

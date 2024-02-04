@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.stockreceipt.SearchStockReceiptHeader;
+import com.almailem.ams.api.connector.model.stockreceipt.SearchStockReceiptLine;
 import com.almailem.ams.api.connector.model.stockreceipt.StockReceiptHeader;
+import com.almailem.ams.api.connector.model.stockreceipt.StockReceiptLine;
 import com.almailem.ams.api.connector.service.StockReceiptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +44,13 @@ public class StockReceiptController {
     public ResponseEntity<?> findStockReceiptHeader(@RequestBody SearchStockReceiptHeader searchStockReceiptHeader) throws ParseException {
         List<StockReceiptHeader> stockReceiptHeaderList = stockReceiptService.findStockReceiptHeader(searchStockReceiptHeader);
         return new ResponseEntity<>(stockReceiptHeaderList, HttpStatus.OK);
+    }
+    @ApiOperation(response = StockReceiptLine.class, value = "Find StockReceiptLine details")
+    // label for swagger
+    @PostMapping("/findStockReceiptLine")
+    public ResponseEntity<?> findStockReceiptLine(@RequestBody SearchStockReceiptLine searchStockReceiptLine) throws ParseException {
+        List<StockReceiptLine> stockReceiptLineList = stockReceiptService.findStockReceiptLine(searchStockReceiptLine);
+        return new ResponseEntity<>(stockReceiptLineList, HttpStatus.OK);
     }
 
 }

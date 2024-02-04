@@ -65,4 +65,5 @@ public class TransferOutLine {
 
     @Column(name = "Is_completed", columnDefinition = "nvarchar(10)")
     private String isCompleted;
+
 }

@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.util.List;
 
 import com.almailem.ams.api.connector.model.supplierinvoice.SearchSupplierInvoiceHeader;
+import com.almailem.ams.api.connector.model.supplierinvoice.SearchSupplierInvoiceLine;
 import com.almailem.ams.api.connector.model.supplierinvoice.SupplierInvoiceHeader;
+import com.almailem.ams.api.connector.model.supplierinvoice.SupplierInvoiceLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,4 +45,14 @@ public class SupplierInvoiceController {
         List<SupplierInvoiceHeader>  supplierInvoiceHeaderList = supplierInvoiceService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader);
         return new ResponseEntity<>(supplierInvoiceHeaderList, HttpStatus.OK);
     }
+
+
+    @ApiOperation(response = SupplierInvoiceLine.class, value = "Find Supplier Invoice Line details") // label for swagger
+    @PostMapping("/findSupplierInvoiceLine")
+    public  ResponseEntity<?> findSupplierInvoiceLine(@RequestBody SearchSupplierInvoiceLine searchSupplierInvoiceLine) throws ParseException {
+        List<SupplierInvoiceLine>  supplierInvoiceLineList = supplierInvoiceService.findSupplierInvoiceLine(searchSupplierInvoiceLine);
+        return new ResponseEntity<>(supplierInvoiceLineList, HttpStatus.OK);
+    }
+
+
 }

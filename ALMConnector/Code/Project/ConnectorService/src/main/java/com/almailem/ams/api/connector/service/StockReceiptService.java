@@ -3,10 +3,14 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.stockreceipt.SearchStockReceiptHeader;
+import com.almailem.ams.api.connector.model.stockreceipt.SearchStockReceiptLine;
 import com.almailem.ams.api.connector.model.stockreceipt.StockReceiptHeader;
+import com.almailem.ams.api.connector.model.stockreceipt.StockReceiptLine;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.StockReceiptHeaderRepository;
+import com.almailem.ams.api.connector.repository.StockReceiptLineRepository;
 import com.almailem.ams.api.connector.repository.specification.StockReceiptHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.StockReceiptLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,9 @@ public class StockReceiptService {
 
     @Autowired
     StockReceiptHeaderRepository stockReceiptHeaderRepo;
+
+    @Autowired
+    StockReceiptLineRepository stockReceiptLineRepo;
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -115,6 +122,20 @@ public class StockReceiptService {
 
         StockReceiptHeaderSpecification spec = new StockReceiptHeaderSpecification(searchStockReceiptHeader);
         List<StockReceiptHeader> results = stockReceiptHeaderRepo.findAll(spec);
+        return results;
+    }
+
+    public List<StockReceiptLine> findStockReceiptLine(SearchStockReceiptLine searchStockReceiptLine) throws ParseException {
+
+
+        if (searchStockReceiptLine.getFromReceiptDate() != null && searchStockReceiptLine.getToReceiptDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchStockReceiptLine.getFromReceiptDate(), searchStockReceiptLine.getToReceiptDate());
+            searchStockReceiptLine.setFromReceiptDate(dates[0]);
+            searchStockReceiptLine.setToReceiptDate(dates[1]);
+        }
+
+        StockReceiptLineSpecification spec = new StockReceiptLineSpecification(searchStockReceiptLine);
+        List<StockReceiptLine> results = stockReceiptLineRepo.findAll(spec);
         return results;
     }
 

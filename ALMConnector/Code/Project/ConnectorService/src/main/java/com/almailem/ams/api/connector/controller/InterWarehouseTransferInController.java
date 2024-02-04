@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.transferin.SearchTransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.SearchTransferInLine;
 import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.TransferInLine;
 import com.almailem.ams.api.connector.service.InterWarehouseTransferInService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,12 +43,20 @@ public class InterWarehouseTransferInController {
     }
 
     //Find InterWareHouseTransferInHeader
-    @ApiOperation(response = SearchTransferInHeader.class, value = "Find InterWareHouseTransferInHeader details")
+    @ApiOperation(response = TransferInHeader.class, value = "Find InterWareHouseTransferInHeader details")
     // label for swagger
     @PostMapping("/findInterWareHouseTransferInHeader")
     public ResponseEntity<?> findInterWareHouseTransferInHeader(@RequestBody SearchTransferInHeader searchTransferInHeader) throws ParseException {
         List<TransferInHeader> transferInHeaderList = interWhTransferInV2Service.findInterWareHouseTransferInHeader(searchTransferInHeader);
         return new ResponseEntity<>(transferInHeaderList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = TransferInLine.class, value = "Find InterWareHouseTransferInLine details")
+    // label for swagger
+    @PostMapping("/findInterWareHouseTransferInLine")
+    public ResponseEntity<?> findInterWareHouseTransferInLine(@RequestBody SearchTransferInLine searchTransferInLine) throws ParseException {
+        List<TransferInLine> transferInLineList = interWhTransferInV2Service.findInterWareHouseTransferInLine(searchTransferInLine);
+        return new ResponseEntity<>(transferInLineList, HttpStatus.OK);
     }
 
 }

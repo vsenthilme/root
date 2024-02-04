@@ -3,10 +3,14 @@ package com.almailem.ams.api.connector.service;
 import com.almailem.ams.api.connector.config.PropertiesConfig;
 import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.transferin.SearchTransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.SearchTransferInLine;
 import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
+import com.almailem.ams.api.connector.model.transferin.TransferInLine;
 import com.almailem.ams.api.connector.model.wms.*;
 import com.almailem.ams.api.connector.repository.TransferInHeaderRepository;
+import com.almailem.ams.api.connector.repository.TransferInLineRepository;
 import com.almailem.ams.api.connector.repository.specification.TransferInHeaderSpecification;
+import com.almailem.ams.api.connector.repository.specification.TransferInLineSpecification;
 import com.almailem.ams.api.connector.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,9 @@ public class B2BTransferInService {
 
     @Autowired
     TransferInHeaderRepository transferInHeaderRepository;
+
+    @Autowired
+    TransferInLineRepository transferInLineRepository;
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -141,7 +148,14 @@ public class B2BTransferInService {
         TransferInHeaderSpecification spec = new TransferInHeaderSpecification(searchTransferInHeader);
         List<TransferInHeader> results = transferInHeaderRepository.findAll(spec);
         return results;
+    }
 
+    public List<TransferInLine> findB2BTransferInLine(SearchTransferInLine searchTransferInLine) throws ParseException {
+
+        TransferInLineSpecification spec = new TransferInLineSpecification(searchTransferInLine);
+        List<TransferInLine> results = transferInLineRepository.findAll(spec);
+        return results;
+        // findB2BTransferInLine
     }
 
 }

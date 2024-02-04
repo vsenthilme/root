@@ -1,7 +1,9 @@
 package com.almailem.ams.api.connector.controller;
 
 import com.almailem.ams.api.connector.model.perpetual.FindPerpetualHeader;
+import com.almailem.ams.api.connector.model.perpetual.FindPerpetualLine;
 import com.almailem.ams.api.connector.model.perpetual.PerpetualHeader;
+import com.almailem.ams.api.connector.model.perpetual.PerpetualLine;
 import com.almailem.ams.api.connector.model.wms.UpdateStockCountLine;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.service.PerpetualService;
@@ -51,6 +53,14 @@ public class PerpetualController {
     public ResponseEntity<?> findItemMaster(@RequestBody FindPerpetualHeader findPerpetualHeader) throws ParseException {
         List<PerpetualHeader> perpetualHeader = perpetualService.findPerpetualHeader(findPerpetualHeader);
         return new ResponseEntity<>(perpetualHeader, HttpStatus.OK);
+    }
+
+    // Find PerpetualLine
+    @ApiOperation(response = PerpetualLine.class, value = "Find PerpetualLine") // label for Swagger
+    @PostMapping("/findPerpetualLine")
+    public ResponseEntity<?> findPerpetualLine(@RequestBody FindPerpetualLine findPerpetualLine) throws ParseException {
+        List<PerpetualLine> perpetualLine= perpetualService.findPerpetualLine(findPerpetualLine);
+        return new ResponseEntity<>(perpetualLine, HttpStatus.OK);
     }
 
 }

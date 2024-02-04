@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.moduleid.ModuleId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.AdhocModuleIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +125,7 @@ public class AdhocModuleIdService {
 	 * @throws InvocationTargetException
 	 */
 	public AdhocModuleId createAdhocModuleId (AddAdhocModuleId newAdhocModuleId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AdhocModuleId dbAdhocModuleId = new AdhocModuleId();
 		Optional<AdhocModuleId> duplicateAdhocModuleId = adhocModuleIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndModuleIdAndAdhocModuleIdAndLanguageIdAndDeletionIndicator(newAdhocModuleId.getCompanyCodeId(), newAdhocModuleId.getPlantId(), newAdhocModuleId.getWarehouseId(),
 				newAdhocModuleId.getModuleId(), newAdhocModuleId.getAdhocModuleId(), newAdhocModuleId.getLanguageId(), 0L);
@@ -170,7 +171,7 @@ public class AdhocModuleIdService {
 	 */
 	public AdhocModuleId updateAdhocModuleId (String warehouseId, String moduleId, String adhocModuleId,String companyCodeId,String languageId,String plantId,String loginUserID,
 											  UpdateAdhocModuleId updateAdhocModuleId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AdhocModuleId dbAdhocModuleId = getAdhocModuleId(warehouseId, moduleId, adhocModuleId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateAdhocModuleId, dbAdhocModuleId, CommonUtils.getNullPropertyNames(updateAdhocModuleId));
 		dbAdhocModuleId.setUpdatedBy(loginUserID);

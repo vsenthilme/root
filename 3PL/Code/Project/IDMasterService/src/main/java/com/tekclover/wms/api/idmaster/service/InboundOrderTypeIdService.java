@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.InboundOrderTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,7 @@ public class InboundOrderTypeIdService {
      * @throws InvocationTargetException
      */
     public InboundOrderTypeId createInboundOrderTypeId (AddInboundOrderTypeId newInboundOrderTypeId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundOrderTypeId dbnewInboundOrderTypeId = new InboundOrderTypeId();
         Optional<InboundOrderTypeId> duplicateInboundOrderTypeId = inboundOrderTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndInboundOrderTypeIdAndLanguageIdAndDeletionIndicator(newInboundOrderTypeId.getCompanyCodeId(), newInboundOrderTypeId.getPlantId(), newInboundOrderTypeId.getWarehouseId(), newInboundOrderTypeId.getInboundOrderTypeId(), newInboundOrderTypeId.getLanguageId(), 0L);
         if (!duplicateInboundOrderTypeId.isEmpty()) {
@@ -147,7 +148,7 @@ public class InboundOrderTypeIdService {
      */
     public InboundOrderTypeId updateInboundOrderTypeId (String warehouseId, String inboundOrderTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
                                                             UpdateInboundOrderTypeId updateInboundOrderTypeId)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundOrderTypeId dbInboundOrderTypeId = getInboundOrderTypeId( warehouseId, inboundOrderTypeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateInboundOrderTypeId, dbInboundOrderTypeId, CommonUtils.getNullPropertyNames(updateInboundOrderTypeId));
         dbInboundOrderTypeId.setUpdatedBy(loginUserID);

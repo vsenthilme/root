@@ -104,7 +104,7 @@ public class FileStorageService {
 			ex.printStackTrace();
 			throw new BadRequestException("Could not store file " + fileName + ". Please try again!");
 		}
-		return null;
+		return Collections.singletonMap("message", "File uploaded successfully!");
 	}
 
 	/**

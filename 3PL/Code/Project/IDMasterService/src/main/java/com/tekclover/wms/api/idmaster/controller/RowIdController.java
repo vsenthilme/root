@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -62,7 +63,7 @@ public class RowIdController {
     @ApiOperation(response = RowId.class, value = "Create RowId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postRowId(@Valid @RequestBody AddRowId newRowId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		RowId createdRowId = rowidService.createRowId(newRowId, loginUserID);
 		return new ResponseEntity<>(createdRowId, HttpStatus.OK);
 	}
@@ -71,7 +72,7 @@ public class RowIdController {
 	public ResponseEntity<?> patchRowId(@RequestParam String warehouseId, @RequestParam Long floorId, @RequestParam String storageSectionId,@PathVariable String rowId,
 										@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 										@Valid @RequestBody UpdateRowId updateRowId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		RowId createdRowId =
 				rowidService.updateRowId(warehouseId, floorId, storageSectionId, rowId,companyCodeId,languageId,plantId,loginUserID, updateRowId);
 		return new ResponseEntity<>(createdRowId, HttpStatus.OK);

@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,8 @@ import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegra
 
 @Repository
 @Transactional
-public interface InboundIntegrationLogRepository extends JpaRepository<InboundIntegrationLog,Long>, JpaSpecificationExecutor<InboundIntegrationLog> {
+public interface InboundIntegrationLogRepository extends JpaRepository<InboundIntegrationLog,Long>,
+		JpaSpecificationExecutor<InboundIntegrationLog>, StreamableJpaSpecificationRepository<InboundIntegrationLog> {
 	
 	public List<InboundIntegrationLog> findAll();
 	public Optional<InboundIntegrationLog> 

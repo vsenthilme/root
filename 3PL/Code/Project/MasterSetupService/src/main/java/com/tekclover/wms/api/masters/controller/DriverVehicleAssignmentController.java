@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -59,7 +60,7 @@ public class DriverVehicleAssignmentController {
     @PostMapping("")
     public ResponseEntity<?> postDriverVehicleAssignment(@Valid @RequestBody AddDriverVehicleAssignment newDriverVehicleAssignment,
                                                          @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         DriverVehicleAssignment createDriverVehicleAssignment =
                 driverVehicleAssignmentService.createDriverVehicleAssignment(newDriverVehicleAssignment, loginUserID);
@@ -74,7 +75,7 @@ public class DriverVehicleAssignmentController {
                                                           @RequestParam String languageId, @RequestParam String plantId,
                                                           @RequestParam String warehouseId, @RequestParam String loginUserID,
                                                           @Valid @RequestBody UpdateDriverVehicleAssignment updateDriverVehicleAssignment)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         DriverVehicleAssignment createDriverVehicleAssignment =
                 driverVehicleAssignmentService.updateDriverVehicleAssignment(companyCodeId,plantId,warehouseId,
@@ -88,7 +89,7 @@ public class DriverVehicleAssignmentController {
     public ResponseEntity<?> deleteDriverVehicleAssignment(@PathVariable Long driverId,@RequestParam Long routeId,
                                                            @RequestParam String vehicleNumber,@RequestParam String companyCodeId,
                                                            @RequestParam String languageId, @RequestParam String plantId,
-                                                           @RequestParam String warehouseId,@RequestParam String loginUserID) {
+                                                           @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
 
         driverVehicleAssignmentService.deleteDriverVehicleAssignment(companyCodeId,languageId,plantId,warehouseId,
                 driverId,vehicleNumber,routeId,loginUserID);

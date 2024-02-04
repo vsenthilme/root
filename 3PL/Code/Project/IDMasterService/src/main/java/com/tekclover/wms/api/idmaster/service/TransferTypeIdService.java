@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.Specification.TransferTypeIdSpe
 import com.tekclover.wms.api.idmaster.repository.TransferTypeIdRepository;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class TransferTypeIdService  {
 	 * @throws InvocationTargetException
 	 */
 	public TransferTypeId createTransferTypeId (AddTransferTypeId newTransferTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		TransferTypeId dbTransferTypeId = new TransferTypeId();
 		Optional<TransferTypeId> duplicateTransferTypeId = transferTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndTransferTypeIdAndLanguageIdAndDeletionIndicator(newTransferTypeId.getCompanyCodeId(), newTransferTypeId.getPlantId(), newTransferTypeId.getWarehouseId(), newTransferTypeId.getTransferTypeId(), newTransferTypeId.getLanguageId(), 0L);
 		if (!duplicateTransferTypeId.isEmpty()) {
@@ -150,7 +151,7 @@ public class TransferTypeIdService  {
 	 */
 	public TransferTypeId updateTransferTypeId (String warehouseId, String transferTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 												UpdateTransferTypeId updateTransferTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		TransferTypeId dbTransferTypeId = getTransferTypeId( warehouseId,transferTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateTransferTypeId, dbTransferTypeId, CommonUtils.getNullPropertyNames(updateTransferTypeId));
 		dbTransferTypeId.setUpdatedBy(loginUserID);

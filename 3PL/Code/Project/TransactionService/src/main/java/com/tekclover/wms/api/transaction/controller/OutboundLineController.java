@@ -1,12 +1,16 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import com.tekclover.wms.api.transaction.model.impl.OutBoundLineImpl;
-import com.tekclover.wms.api.transaction.model.impl.StockMovementReportImpl;
+import com.tekclover.wms.api.transaction.model.outbound.outboundreversal.v2.OutboundReversalV2;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineOutput;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
+import com.tekclover.wms.api.transaction.model.outbound.v2.SearchOutboundLineV2;
 import com.tekclover.wms.api.transaction.model.report.StockMovementReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -139,6 +143,116 @@ public class OutboundLineController {
    	public ResponseEntity<?> doReversal(@RequestParam String refDocNumber, @RequestParam String itemCode,
    			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
        	List<OutboundReversal> deliveryLines = outboundlineService.doReversal(refDocNumber, itemCode, loginUserID);
+       	log.info("deliveryLines : " + deliveryLines);
+   		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
+   	}
+
+	//=======================================================V2============================================================
+   @ApiOperation(response = OutboundLineV2.class, value = "Get all OutboundLine details") // label for swagger
+	@GetMapping("/v2")
+	public ResponseEntity<?> getAllOutboundLineV2() {
+		List<OutboundLineV2> outboundlineList = outboundlineService.getOutboundLinesV2();
+		return new ResponseEntity<>(outboundlineList, HttpStatus.OK);
+	}
+
+    @ApiOperation(response = OutboundLineV2.class, value = "Get a OutboundLine") // label for swagger
+	@GetMapping("/v2/delivery/line")
+	public ResponseEntity<?> getOutboundLineV2(@RequestParam String warehouseId, @RequestParam String companyCodeId,
+											 @RequestParam String plantId, @RequestParam String languageId,
+											 @RequestParam String preOutboundNo, @RequestParam String refDocNumber, @RequestParam String partnerCode) {
+    	List<OutboundLineV2> outboundline =
+    			outboundlineService.getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode);
+    	log.info("OutboundLine : " + outboundline);
+		return new ResponseEntity<>(outboundline, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = OutboundLineV2.class, value = "Search OutboundLine") // label for swagger
+	@PostMapping("/v2/findOutboundLine")
+	public List<OutboundLineV2> findOutboundLineV2(@RequestBody SearchOutboundLineV2 searchOutboundLine)
+			throws Exception {
+		return outboundlineService.findOutboundLineV2(searchOutboundLine);
+	}
+
+	@ApiOperation(response = OutboundLineV2.class, value = "Search OutboundLine") // label for swagger
+	@PostMapping("/v2/findOutboundLineStream")
+	public Stream<OutboundLineV2> findOutboundLineNewStreamV2(@RequestBody SearchOutboundLineV2 searchOutboundLine)
+			throws Exception {
+		return outboundlineService.findOutboundLineNewStreamV2(searchOutboundLine);
+	}
+
+//	@ApiOperation(response = OutboundLineV2.class, value = "Update OutboundLines v2") // label for swagger
+//	@PatchMapping("/v2/lineNumbers")
+//	public ResponseEntity<?> patchOutboundLines(@Valid @RequestBody List<OutboundLineV2> updateOutboundLine, @RequestParam String loginUserID)
+//			throws IllegalAccessException, InvocationTargetException {
+//		List<OutboundLineV2> outboundLines = outboundlineService.updateOutboundLinesV2(loginUserID, updateOutboundLine);
+//		return new ResponseEntity<>(outboundLines, HttpStatus.OK);
+//	}
+
+	@ApiOperation(response = OutboundLineOutput.class, value = "Search OutboundLine") // label for swagger
+	@PostMapping("/v2/findOutboundLineNew")
+	public List<OutboundLineOutput> findOutboundLineNewV2(@RequestBody SearchOutboundLineV2 searchOutboundLine)
+			throws Exception {
+		return outboundlineService.findOutboundLineNewV2(searchOutboundLine);
+	}
+
+
+    @ApiOperation(response = OutboundLineV2.class, value = "Create OutboundLine") // label for swagger
+	@PostMapping("/v2")
+	public ResponseEntity<?> postOutboundLineV2(@Valid @RequestBody OutboundLineV2 newOutboundLine, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
+		OutboundLineV2 createdOutboundLine = outboundlineService.createOutboundLineV2(newOutboundLine, loginUserID);
+		return new ResponseEntity<>(createdOutboundLine , HttpStatus.OK);
+	}
+
+    @ApiOperation(response = OutboundLineV2.class, value = "Update OutboundLine") // label for swagger
+    @GetMapping("/v2/delivery/confirmation")
+	public ResponseEntity<?> deliveryConfirmationV2 (@RequestParam String warehouseId, @RequestParam String companyCodeId,
+												   @RequestParam String plantId, @RequestParam String languageId,
+													 @RequestParam String preOutboundNo, @RequestParam String refDocNumber,
+													 @RequestParam String partnerCode, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		List<OutboundLineV2> createdOutboundLine =
+				outboundlineService.deliveryConfirmationV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, loginUserID);
+		return new ResponseEntity<>(createdOutboundLine , HttpStatus.OK);
+	}
+
+    @ApiOperation(response = OutboundLineV2.class, value = "Update OutboundLine") // label for swagger
+    @PatchMapping("/v2/{lineNumber}")
+	public ResponseEntity<?> patchOutboundLineV2(@PathVariable Long lineNumber, @RequestParam String companyCodeId, @RequestParam String plantId,
+											   @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String preOutboundNo,
+											   @RequestParam String refDocNumber, @RequestParam String partnerCode, @RequestParam String itemCode,
+			@Valid @RequestBody OutboundLineV2 updateOutboundLine, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
+		OutboundLineV2 updatedOutboundLine =
+				outboundlineService.updateOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode,
+						lineNumber, itemCode, loginUserID, updateOutboundLine);
+		return new ResponseEntity<>(updatedOutboundLine , HttpStatus.OK);
+	}
+
+    @ApiOperation(response = OutboundLineV2.class, value = "Delete OutboundLine") // label for swagger
+	@DeleteMapping("/v2/{lineNumber}")
+	public ResponseEntity<?> deleteOutboundLine(@PathVariable Long lineNumber, @RequestParam String companyCodeId,
+												@RequestParam String plantId, @RequestParam String languageId,
+												@RequestParam String warehouseId, @RequestParam String preOutboundNo, @RequestParam String refDocNumber,
+			@RequestParam String partnerCode, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
+    	outboundlineService.deleteOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber,
+    			itemCode, loginUserID);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@ApiOperation(response = OutboundLine.class, value = "Search OutboundLine for Stock movement report") // label for swagger
+	@PostMapping("/stock-movement-report/v2/findOutboundLine")
+	public List<StockMovementReport> findLinesForStockMovementV2(@RequestBody SearchOutboundLineV2 searchOutboundLine)
+			throws Exception {
+		return outboundlineService.findLinesForStockMovementV2(searchOutboundLine);
+	}
+
+    /*--------------------Shipping Reversal-----------------------------------------------------------*/
+    @ApiOperation(response = OutboundLineV2.class, value = "Get Delivery Lines") // label for swagger
+   	@GetMapping("/v2/reversal/new")
+   	public ResponseEntity<?> doReversalV2(@RequestParam String refDocNumber, @RequestParam String itemCode, @RequestParam String manufacturerName,
+   			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+       	List<OutboundReversalV2> deliveryLines = outboundlineService.doReversalV2(refDocNumber, itemCode, manufacturerName, loginUserID);
        	log.info("deliveryLines : " + deliveryLines);
    		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
    	}

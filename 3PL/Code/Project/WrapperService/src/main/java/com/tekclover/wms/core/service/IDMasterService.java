@@ -4123,7 +4123,7 @@ public class IDMasterService {
 	}
 
 	// GET
-	public HhtUserOutput getHhtUser (String userId, String warehouseId,String companyCodeId,Long levelId,
+	public HhtUserOutput getHhtUser (String userId, String warehouseId,String companyCodeId,
 									 String plantId,String languageId,String authToken) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
@@ -4136,7 +4136,6 @@ public class IDMasterService {
 							.queryParam("warehouseId", warehouseId)
 							.queryParam("companyCodeId",companyCodeId)
 							.queryParam("plantId",plantId)
-							.queryParam("levelId",levelId)
 							.queryParam("languageId",languageId);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			ResponseEntity<HhtUserOutput> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, HhtUserOutput.class);
@@ -4185,65 +4184,64 @@ public class IDMasterService {
 		return result.getBody();
 	}
 
-	// PATCH
-	public HhtUser updateHhtUser (String userId, String warehouseId,String companyCodeId,String languageId,
-								  String plantId,UpdateHhtUser modifiedHhtUser, String loginUserID,
-								  Long levelId,String authToken) {
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-			headers.add("User-Agent", "MNRClara's RestTemplate");
-			headers.add("Authorization", "Bearer " + authToken);
+	//PATCH
 
-			HttpEntity<?> entity = new HttpEntity<>(modifiedHhtUser, headers);
+	public HhtUser updateHhtUser(String userId, String warehouseId, String companyCodeId, String languageId,
+                                 String plantId, UpdateHhtUser modifiedHhtUser, String loginUserID,
+                                 String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "MNRClara's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
 
-			HttpClient client = HttpClients.createDefault();
-			RestTemplate restTemplate = getRestTemplate();
-			restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+            HttpEntity<?> entity = new HttpEntity<>(modifiedHhtUser, headers);
 
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtuser/" + userId)
-					.queryParam("warehouseId", warehouseId)
-					.queryParam("companyCodeId",companyCodeId)
-					.queryParam("languageId",languageId)
-					.queryParam("plantId",plantId)
-					.queryParam("levelId",levelId)
-					.queryParam("loginUserID", loginUserID);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
 
-			ResponseEntity<HhtUser> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, HhtUser.class);
-			log.info("result : " + result.getStatusCode());
-			return result.getBody();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtuser/" + userId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("loginUserID", loginUserID);
 
-	// DELETE
-	public boolean deleteHhtUser ( String warehouseId, String userId,String companyCodeId,String languageId,
-								   String plantId, String loginUserID,Long levelId, String authToken) {
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-			headers.add("User-Agent", "MNRClara's RestTemplate");
-			headers.add("Authorization", "Bearer " + authToken);
+            ResponseEntity<HhtUser> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, HhtUser.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
-			HttpEntity<?> entity = new HttpEntity<>(headers);
-			UriComponentsBuilder builder =
-					UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtuser/" + userId)
-							.queryParam("warehouseId", warehouseId)
-							.queryParam("companyCodeId",companyCodeId)
-							.queryParam("plantId",plantId)
-							.queryParam("levelId",levelId)
-							.queryParam("languageId",languageId)
-							.queryParam("loginUserID", loginUserID);
-			ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.DELETE, entity, String.class);
-			log.info("result : " + result);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
+	 // DELETE
+    public boolean deleteHhtUser(String warehouseId, String userId, String companyCodeId, String languageId,
+                                 String plantId, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "MNRClara's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtuser/" + userId)
+                            .queryParam("warehouseId", warehouseId)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("plantId", plantId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("loginUserID", loginUserID);
+            ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.DELETE, entity, String.class);
+            log.info("result : " + result);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
 	//SEARCH
 	public HhtUserOutput[] findHhtUser(FindHhtUser findHhtUser,String authToken){
@@ -9954,7 +9952,7 @@ public class IDMasterService {
 	 * @throws InvocationTargetException
 	 */
 	public com.tekclover.wms.core.model.dto.Country createCountry (AddCountry newCountry,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		com.tekclover.wms.core.model.dto.Country dbCountry = new com.tekclover.wms.core.model.dto.Country();
 		Optional<com.tekclover.wms.core.model.dto.Country> duplicateCountry = countryRepository.findByCountryIdAndLanguageId(newCountry.getCountryId(), newCountry.getLanguageId());
 		if (!duplicateCountry.isEmpty()) {
@@ -9965,8 +9963,8 @@ public class IDMasterService {
 			dbCountry.setDeletionIndicator(0L);
 			dbCountry.setCreatedBy(loginUserID);
 			dbCountry.setUpdatedBy(loginUserID);
-			dbCountry.setCreatedOn(new Date());
-			dbCountry.setUpdatedOn(new Date());
+			dbCountry.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+			dbCountry.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 			return countryRepository.save(dbCountry);
 		}
 	}
@@ -9980,12 +9978,12 @@ public class IDMasterService {
 	 * @throws InvocationTargetException
 	 */
 	public com.tekclover.wms.core.model.dto.Country updateCountry (String countryId,String languageId,String loginUserID,UpdateCountry updateCountry)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		com.tekclover.wms.core.model.dto.Country dbCountry = getCountry(countryId,languageId);
 		BeanUtils.copyProperties(updateCountry, dbCountry, CommonUtils.getNullPropertyNames(updateCountry));
 		dbCountry.setUpdatedBy(loginUserID);
 		dbCountry.setDeletionIndicator(0L);
-		dbCountry.setUpdatedOn(new Date());
+		dbCountry.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 		return countryRepository.save(dbCountry);
 	}
 

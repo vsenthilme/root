@@ -10,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.masters.model.auditlog.SearchAuditLog;
 import com.tekclover.wms.api.masters.repository.specification.AuditLogSpecification;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +79,7 @@ public class AuditLogService {
 	 * @throws InvocationTargetException
 	 */
 	public AuditLog createAuditLog (AddAuditLog newAuditLog, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AuditLog dbAuditLog = new AuditLog();
 		AuditLog duplicateAuditLog = auditlogRepository.findByAuditFileNumberAndDeletionIndicator(newAuditLog.getAuditFileNumber(), 0L);
 		if (duplicateAuditLog != null) {
@@ -102,7 +103,7 @@ public class AuditLogService {
 	 * @throws InvocationTargetException
 	 */
 	public AuditLog updateAuditLog (String auditFileNumber, UpdateAuditLog updateAuditLog, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AuditLog dbAuditLog = getAuditLog(auditFileNumber);
 		BeanUtils.copyProperties(updateAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(updateAuditLog));
 		dbAuditLog.setUpdatedBy(loginUserID);

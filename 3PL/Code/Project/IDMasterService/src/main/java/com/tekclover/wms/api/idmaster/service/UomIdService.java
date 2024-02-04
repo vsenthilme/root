@@ -19,6 +19,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.UomIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,7 +138,7 @@ public class UomIdService {
 	 * @throws InvocationTargetException
 	 */
 	public UomId createUomId (AddUomId newUomId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UomId dbUomId = new UomId();
 		Optional<UomId> duplicateUomId = uomIdRepository.findByCompanyCodeIdAndUomIdAndWarehouseIdAndPlantIdAndLanguageIdAndDeletionIndicator(newUomId.getCompanyCodeId(), newUomId.getUomId(), newUomId.getWarehouseId(), newUomId.getPlantId(), newUomId.getLanguageId(), 0L);
 		if (!duplicateUomId.isEmpty()) {
@@ -169,7 +170,7 @@ public class UomIdService {
 	 */
 	public UomId updateUomId (String uomId,String companyCodeId,String warehouseId,String plantId,String languageId,String loginUserID,
 							  UpdateUomId updateUomId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UomId dbUomId = getUomId(uomId,companyCodeId,warehouseId,plantId,languageId);
 		BeanUtils.copyProperties(updateUomId, dbUomId, CommonUtils.getNullPropertyNames(updateUomId));
 		dbUomId.setUpdatedBy(loginUserID);

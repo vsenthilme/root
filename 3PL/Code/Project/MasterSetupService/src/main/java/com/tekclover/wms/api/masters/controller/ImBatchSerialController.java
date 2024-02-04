@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -56,7 +57,7 @@ public class ImBatchSerialController {
     @ApiOperation(response = ImBatchSerial.class, value = "Create ImBatchSerial") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postImBatchSerial(@Valid @RequestBody AddImBatchSerial newImBatchSerial, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImBatchSerial createdImBatchSerial = imBatchSerialService.createImBatchSerial(newImBatchSerial, loginUserID);
         return new ResponseEntity<>(createdImBatchSerial , HttpStatus.OK);
     }
@@ -65,14 +66,14 @@ public class ImBatchSerialController {
     @PatchMapping("/{storageMethod}")
     public ResponseEntity<?> patchImBatchSerial(@PathVariable String storageMethod, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,@RequestParam String itemCode,
                                                 @Valid @RequestBody UpdateImBatchSerial updateImBatchSerial, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImBatchSerial createdImBatchSerial = imBatchSerialService.updateBatchSerial(companyCodeId,plantId,warehouseId,languageId,itemCode,storageMethod,updateImBatchSerial, loginUserID);
         return new ResponseEntity<>(createdImBatchSerial , HttpStatus.OK);
     }
 
     @ApiOperation(response = ImBatchSerial.class, value = "Delete ImBatchSerial") // label for swagger
     @DeleteMapping("/{storageMethod}")
-    public ResponseEntity<?> deleteImBatchSerial(@PathVariable String storageMethod,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String itemCode,@RequestParam String loginUserID) {
+    public ResponseEntity<?> deleteImBatchSerial(@PathVariable String storageMethod,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String itemCode,@RequestParam String loginUserID) throws ParseException {
         imBatchSerialService.deleteImBatchSerial(companyCodeId,languageId,plantId,warehouseId,itemCode,storageMethod,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

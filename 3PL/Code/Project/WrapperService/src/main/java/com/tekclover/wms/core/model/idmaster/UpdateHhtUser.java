@@ -3,6 +3,7 @@ package com.tekclover.wms.core.model.idmaster;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -34,4 +35,9 @@ public class UpdateHhtUser {
     private String referenceField9;
     private String referenceField10;
     private Long deletionIndicator = 0L;
+
+    private Date startDate;
+    private Date endDate;
+    private String userPresent;
+    private String noOfDaysLeave;
 }

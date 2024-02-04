@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.rowid.FindRowId;
 import com.tekclover.wms.api.idmaster.model.storagesectionid.StorageSectionId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.RowIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -153,7 +154,7 @@ public class RowIdService{
 	 * @throws InvocationTargetException
 	 */
 	public RowId createRowId (AddRowId newRowId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		RowId dbRowId = new RowId();
 		Optional<RowId> duplicateRowId=rowIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndFloorIdAndStorageSectionIdAndRowIdAndLanguageIdAndDeletionIndicator(newRowId.getCompanyCodeId(), newRowId.getPlantId(), newRowId.getWarehouseId(),
 				newRowId.getFloorId(), newRowId.getStorageSectionId(), newRowId.getRowId(), newRowId.getLanguageId(), 0L);
@@ -188,7 +189,7 @@ public class RowIdService{
 	 * @throws InvocationTargetException
 	 */
 	public RowId updateRowId (String warehouseId, Long floorId, String storageSectionId, String rowId, String companyCodeId, String languageId, String plantId, String loginUserID,
-							  UpdateRowId updateRowId) throws IllegalAccessException, InvocationTargetException {
+							  UpdateRowId updateRowId) throws IllegalAccessException, InvocationTargetException, ParseException {
 		RowId dbRowId = getRowId(warehouseId,floorId,storageSectionId,rowId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateRowId, dbRowId, CommonUtils.getNullPropertyNames(updateRowId));
 		dbRowId.setUpdatedBy(loginUserID);

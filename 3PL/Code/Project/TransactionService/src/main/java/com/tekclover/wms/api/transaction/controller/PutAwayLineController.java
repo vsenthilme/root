@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -169,7 +170,7 @@ public class PutAwayLineController {
 	@PostMapping("/confirm/v2")
 	public ResponseEntity<?> postPutAwayLineConfirmV2(@Valid @RequestBody List<PutAwayLineV2> newPutAwayLine,
 													  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		log.info("Request for putAwayLines to confirm : " + newPutAwayLine);
 		List<PutAwayLineV2> createdPutAwayLine = putawaylineService.putAwayLineConfirmV2(newPutAwayLine, loginUserID);
 		return new ResponseEntity<>(createdPutAwayLine, HttpStatus.OK);
@@ -185,7 +186,7 @@ public class PutAwayLineController {
 	@ApiOperation(response = PutAwayLineV2.class, value = "Create PutAwayLine V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postPutAwayLineV2(@Valid @RequestBody PutAwayLineV2 newPutAwayLine, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PutAwayLineV2 createdPutAwayLine = putawaylineService.createPutAwayLineV2(newPutAwayLine, loginUserID);
 		return new ResponseEntity<>(createdPutAwayLine, HttpStatus.OK);
 	}
@@ -212,7 +213,7 @@ public class PutAwayLineController {
 												 @RequestParam String warehouseId, @RequestParam String goodsReceiptNo,
 												 @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 												 @RequestParam String putAwayNumber, @RequestParam Long lineNo,
-												 @RequestParam String itemCode, @RequestParam String proposedStorageBin, @RequestParam String loginUserID) {
+												 @RequestParam String itemCode, @RequestParam String proposedStorageBin, @RequestParam String loginUserID) throws ParseException {
 		putawaylineService.deletePutAwayLineV2(languageId, companyCode, plantId, warehouseId,
 				goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber,
 				lineNo, itemCode, proposedStorageBin, confirmedStorageBin, loginUserID);

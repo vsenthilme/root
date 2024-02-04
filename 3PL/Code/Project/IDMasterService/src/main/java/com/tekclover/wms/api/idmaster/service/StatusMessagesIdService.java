@@ -9,6 +9,7 @@ import com.tekclover.wms.api.idmaster.model.statusmessagesid.UpdateStatusMessage
 import com.tekclover.wms.api.idmaster.repository.Specification.StatusMessagesIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.StatusMessagesIdRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class StatusMessagesIdService{
 	 * @throws InvocationTargetException
 	 */
 	public StatusMessagesId createStatusMessagesId (AddStatusMessagesId newStatusMessagesId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusMessagesId dbStatusMessagesId = new StatusMessagesId();
 		Optional<StatusMessagesId> duplicateStatusMessageId = statusMessagesIdRepository.findByMessageIdAndLanguageIdAndMessageTypeAndDeletionIndicator(newStatusMessagesId.getMessageId(), newStatusMessagesId.getLanguageId(), newStatusMessagesId.getMessageType(), 0L);
 		if (!duplicateStatusMessageId.isEmpty()) {
@@ -104,7 +105,7 @@ public class StatusMessagesIdService{
 	 */
 	public StatusMessagesId updateStatusMessagesId (String messagesId, String languageId, String messageType, String loginUserID,
 													UpdateStatusMessagesId updateStatusMessagesId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusMessagesId dbStatusMessagesId = getStatusMessagesId(messagesId, languageId, messageType);
 		BeanUtils.copyProperties(updateStatusMessagesId, dbStatusMessagesId, CommonUtils.getNullPropertyNames(updateStatusMessagesId));
 		dbStatusMessagesId.setUpdatedBy(loginUserID);

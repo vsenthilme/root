@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -149,7 +150,7 @@ public class GrHeaderController {
 	@ApiOperation(response = GrHeaderV2.class, value = "Create GrHeader V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postGrHeaderV2(@Valid @RequestBody GrHeaderV2 newGrHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		GrHeaderV2 createdGrHeader = grheaderService.createGrHeaderV2(newGrHeader, loginUserID);
 		return new ResponseEntity<>(createdGrHeader, HttpStatus.OK);
 	}
@@ -161,7 +162,7 @@ public class GrHeaderController {
 											 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String stagingNo,
 											 @RequestParam String palletCode, @RequestParam String caseCode,
 											 @Valid @RequestBody GrHeaderV2 updateGrHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		GrHeaderV2 createdGrHeader =
 				grheaderService.updateGrHeaderV2(companyCode, languageId, plantId, warehouseId,
 						preInboundNo, refDocNumber, stagingNo, goodsReceiptNo, palletCode, caseCode, loginUserID, updateGrHeader);
@@ -173,7 +174,7 @@ public class GrHeaderController {
 	public ResponseEntity<?> deleteGrHeaderV2(@PathVariable String goodsReceiptNo, @RequestParam String companyCode,
 											  @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
 											  @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String stagingNo,
-											  @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String loginUserID) {
+											  @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String loginUserID) throws ParseException {
 		grheaderService.deleteGrHeaderV2(companyCode, languageId, plantId, warehouseId,
 				preInboundNo, refDocNumber, stagingNo, goodsReceiptNo,
 				palletCode, caseCode, loginUserID);

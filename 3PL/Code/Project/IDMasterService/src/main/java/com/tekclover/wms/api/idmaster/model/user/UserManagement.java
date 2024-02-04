@@ -69,6 +69,12 @@ public class UserManagement {
     @Column(name="WH_ID_DESC")
     private String warehouseIdAndDescription;
 
+    @Column(name="USR_ROLE_ID_DESC")
+    private String userRoleIdAndDescription;
+
+    @Column(name="USR_TYP_ID_DESC")
+    private String userTypeIdAndDescription;
+
 	@Column(name = "USR_TYP_ID")
 	private Long userTypeId;
 	
@@ -93,12 +99,18 @@ public class UserManagement {
     
     @Column(name = "CUR_DECIMAL")
    	private Long currencyDecimal;
+
+    @Column(name = "CREATE_HHT_USR")
+    private Boolean createHhtUser;
     
     @Column(name = "TIME_ZONE")
     private String timeZone;
 
     @Column(name="IS_LOGGED_IN")
-    private Boolean isLoggedIn;
+    private Boolean portalLoggedIn;
+
+    @Column(name="HHT_LOGGED_IN")
+    private Boolean hhtLoggedIn;
 
     @Column(name="RESET_PASSWORD")
     private Boolean resetPassword;

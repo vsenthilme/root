@@ -8,6 +8,7 @@ import com.tekclover.wms.api.masters.model.route.UpdateRoute;
 import com.tekclover.wms.api.masters.repository.RouteRepository;
 import com.tekclover.wms.api.masters.repository.specification.RouteSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -92,7 +94,7 @@ public class RouteService {
      * @throws InvocationTargetException
      */
     public Route createRoute (AddRoute newRoute, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Route dbRoute = new Route();
         Optional<Route> duplicateRoute = routeRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRouteIdAndDeletionIndicator(
                 newRoute.getCompanyCodeId(),
@@ -129,7 +131,7 @@ public class RouteService {
      */
     public Route updateRoute (String companyCodeId, String plantId, String warehouseId, String languageId,
                               Long routeId, UpdateRoute updateRoute, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Route dbRoute = getRoute(routeId,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateRoute, dbRoute, CommonUtils.getNullPropertyNames(updateRoute));
         dbRoute.setUpdatedBy(loginUserID);
@@ -147,7 +149,7 @@ public class RouteService {
      * @param loginUserID
      */
     public void deleteRoute (String companyCodeId,String languageId,String plantId,String warehouseId,
-                             Long routeId,String loginUserID) {
+                             Long routeId,String loginUserID) throws ParseException {
         Route dbRoute = getRoute(routeId,companyCodeId,plantId,languageId,warehouseId);
         if ( dbRoute != null) {
             dbRoute.setDeletionIndicator (1L);

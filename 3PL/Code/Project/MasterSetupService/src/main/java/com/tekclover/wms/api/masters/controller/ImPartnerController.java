@@ -71,7 +71,7 @@ public class ImPartnerController {
 	@PostMapping("")
 	public ResponseEntity<?> postImPartner(@Valid @RequestBody List<AddImPartner> newImPartner,
 										   @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ImPartner> createdImPartner = impartnerService.createImPartner(newImPartner, loginUserID);
 		return new ResponseEntity<>(createdImPartner , HttpStatus.OK);
 	}
@@ -82,7 +82,7 @@ public class ImPartnerController {
 											@RequestParam String plantId, @RequestParam String languageId,
 											@RequestParam String warehouseId, @Valid @RequestBody List<AddImPartner> updateImPartner,
 											@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImPartner> createdImPartner =
 				impartnerService.updateImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode,updateImPartner, loginUserID);
@@ -94,7 +94,7 @@ public class ImPartnerController {
 	public ResponseEntity<?> deleteImPartner(@PathVariable String itemCode,
 											 @RequestParam String companyCodeId,@RequestParam String plantId,
 											 @RequestParam String languageId,@RequestParam String warehouseId,
-											 @RequestParam String loginUserID) {
+											 @RequestParam String loginUserID) throws ParseException {
 
 		impartnerService.deleteImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

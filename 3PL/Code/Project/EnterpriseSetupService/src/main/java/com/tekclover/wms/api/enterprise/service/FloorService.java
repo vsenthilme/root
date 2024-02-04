@@ -164,7 +164,7 @@ public class FloorService {
 	 * @throws InvocationTargetException
 	 */
 	public Floor createFloor (AddFloor newFloor, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<Floor> optFloor =
 				floorRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndFloorIdAndDeletionIndicator(
 						newFloor.getLanguageId(),
@@ -214,7 +214,7 @@ public class FloorService {
 	 * @throws InvocationTargetException
 	 */
 	public Floor updateFloor (String warehouseId,String companyId,String plantId,String languageId, Long floorId, UpdateFloor updateFloor, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Floor dbFloor = getFloor(warehouseId,companyId,plantId,languageId,floorId);
 		BeanUtils.copyProperties(updateFloor, dbFloor, CommonUtils.getNullPropertyNames(updateFloor));
 		dbFloor.setUpdatedBy(loginUserID);
@@ -226,7 +226,7 @@ public class FloorService {
 	 * deleteFloor
 	 * @param floorId
 	 */
-	public void deleteFloor (String warehouseId,String companyId,String plantId,String languageId,Long floorId, String loginUserID) {
+	public void deleteFloor (String warehouseId,String companyId,String plantId,String languageId,Long floorId, String loginUserID) throws ParseException {
 		Floor floor = getFloor(warehouseId,companyId,plantId,languageId,floorId);
 		if ( floor != null) {
 			floor.setDeletionIndicator (1L);

@@ -2,12 +2,14 @@ package com.tekclover.wms.api.transaction.model.inbound.containerreceipt.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.containerreceipt.ContainerReceipt;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Data
 @Entity
+@ToString(callSuper = true)
 public class ContainerReceiptV2 extends ContainerReceipt {
 
 	@Column(name = "C_TEXT", columnDefinition = "nvarchar(255)")
@@ -21,4 +23,8 @@ public class ContainerReceiptV2 extends ContainerReceipt {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
+
+	@Column(name = "PURCHASE_ORDER_NUMBER", columnDefinition = "nvarchar(150)")
+	private String purchaseOrderNumber;
+
 }

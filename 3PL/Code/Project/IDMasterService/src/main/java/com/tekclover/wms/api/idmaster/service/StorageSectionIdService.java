@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.model.floorid.FloorId;
 import com.tekclover.wms.api.idmaster.model.storagesectionid.FindStorageSectionId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.StorageSectionIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -144,7 +145,7 @@ public class StorageSectionIdService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageSectionId createStorageSectionId (AddStorageSectionId newStorageSectionId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSectionId dbStorageSectionId = new StorageSectionId();
 		Optional<StorageSectionId> duplicateStorageSectionId=storageSectionIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndFloorIdAndStorageSectionIdAndLanguageIdAndDeletionIndicator(newStorageSectionId.getCompanyCodeId(), newStorageSectionId.getPlantId(), newStorageSectionId.getWarehouseId(), newStorageSectionId.getFloorId(), newStorageSectionId.getStorageSectionId(), newStorageSectionId.getLanguageId(), 0L);
 		if(!duplicateStorageSectionId.isEmpty()){
@@ -179,7 +180,7 @@ public class StorageSectionIdService {
 	public StorageSectionId updateStorageSectionId (String warehouseId,Long floorId,String storageSectionId,
 													String companyCodeId,String languageId,String plantId,String loginUserID,
 													UpdateStorageSectionId updateStorageSectionId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSectionId dbStorageSectionId = getStorageSectionId(warehouseId,floorId,storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageSectionId, dbStorageSectionId, CommonUtils.getNullPropertyNames(updateStorageSectionId));
 		dbStorageSectionId.setUpdatedBy(loginUserID);

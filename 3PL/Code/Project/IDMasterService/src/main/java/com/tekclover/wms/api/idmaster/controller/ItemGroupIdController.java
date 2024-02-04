@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -68,7 +69,7 @@ public class ItemGroupIdController {
     @ApiOperation(response = ItemGroupId.class, value = "Create ItemGroupId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postItemGroupId(@Valid @RequestBody AddItemGroupId newItemGroupId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemGroupId createdItemGroupId = itemgroupidService.createItemGroupId(newItemGroupId, loginUserID);
 		return new ResponseEntity<>(createdItemGroupId , HttpStatus.OK);
 	}
@@ -77,8 +78,8 @@ public class ItemGroupIdController {
     @PatchMapping("/{itemGroupId}")
 	public ResponseEntity<?> patchItemGroupId(@PathVariable Long itemGroupId, 
 			@RequestParam String warehouseId, @RequestParam Long itemTypeId,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateItemGroupId updateItemGroupId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateItemGroupId updateItemGroupId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemGroupId createdItemGroupId = 
 				itemgroupidService.updateItemGroupId(warehouseId, itemTypeId, itemGroupId,companyCodeId,plantId,languageId,loginUserID, updateItemGroupId);
 		return new ResponseEntity<>(createdItemGroupId , HttpStatus.OK);

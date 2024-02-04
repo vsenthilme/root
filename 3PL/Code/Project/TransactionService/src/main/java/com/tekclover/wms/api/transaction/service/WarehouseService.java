@@ -1,11 +1,13 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.warehouse.Warehouse;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountHeader;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountLine;
@@ -16,6 +18,11 @@ import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.perpetual.Pe
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.perpetual.PerpetualHeaderV1;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.perpetual.PerpetualLineV1;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.*;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.*;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.*;
+import com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment;
+import com.tekclover.wms.api.transaction.repository.IntegrationApiResponseRepository;
+import com.tekclover.wms.api.transaction.repository.OutboundOrderV2Repository;
 import com.tekclover.wms.api.transaction.repository.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -47,20 +54,6 @@ import com.tekclover.wms.api.transaction.model.warehouse.inbound.StoreReturnHead
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.StoreReturnLine;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.AXApiResponse;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.InterWarehouseTransfer;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.InterWarehouseTransferOut;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.InterWarehouseTransferOutHeader;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.InterWarehouseTransferOutLine;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.OutboundOrder;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.OutboundOrderLine;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.ReturnPO;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.ReturnPOHeader;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.ReturnPOLine;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.SOHeader;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.SOLine;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.SalesOrder;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.SalesOrderHeader;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.SalesOrderLine;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.ShipmentOrder;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.confirmation.InterWarehouseShipment;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.confirmation.Shipment;
 import com.tekclover.wms.api.transaction.util.DateUtils;
@@ -70,7 +63,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WarehouseService extends BaseService {
-	
+	@Autowired
+	private IntegrationApiResponseRepository integrationApiResponseRepository;
+
 	@Autowired
 	PropertiesConfig propertiesConfig;
 	
@@ -79,7 +74,13 @@ public class WarehouseService extends BaseService {
 
 	@Autowired
 	WarehouseRepository warehouseRepository;
-	
+
+	@Autowired
+	OutboundOrderV2Repository outboundOrderV2Repository;
+
+	@Autowired
+	StockAdjustmentMiddlewareService stockAdjustmentService;
+
 	/**
 	 * 
 	 * @return
@@ -359,11 +360,17 @@ public class WarehouseService extends BaseService {
 	 */
 	private boolean validateWarehouseId(String wareHouseId) {
 		log.info("wareHouseId: " + wareHouseId);
-		if (wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_110) || wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_111)) {
+//		if (wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_110) || wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_111)) {
+//			log.info("wareHouseId:------------> " + wareHouseId);
+//			return true;
+//		} else {
+//			throw new BadRequestException("Warehouse Id must be either 110 or 111");
+//		}
+		if (wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_100) || wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_200)) {
 			log.info("wareHouseId:------------> " + wareHouseId);
 			return true;
 		} else {
-			throw new BadRequestException("Warehouse Id must be either 110 or 111");
+			throw new BadRequestException("Warehouse Id must be either 100 or 200");
 		}
 	}
 	
@@ -965,7 +972,7 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
-//=============================================================================================================================
+//==================================================Inbound V2===========================================================================
 	/**
 	 *
 	 * @param asnv2
@@ -989,9 +996,15 @@ public class WarehouseService extends BaseService {
 			apiHeader.setCompanyCode(asnV2Header.getCompanyCode());
 			apiHeader.setBranchCode(asnV2Header.getBranchCode());
 			apiHeader.setRefDocumentNo(asnV2Header.getAsnNumber());
-			apiHeader.setRefDocumentType("ASNV2");
+			apiHeader.setRefDocumentType("SupplierInvoice");
 			apiHeader.setInboundOrderTypeId(1L);
 			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(asnV2Header.getMiddlewareId());
+			apiHeader.setMiddlewareTable(asnV2Header.getMiddlewareTable());
+
+			apiHeader.setIsCancelled(asnV2Header.getIsCancelled());
+			apiHeader.setIsCompleted(asnV2Header.getIsCompleted());
+			apiHeader.setUpdatedOn(asnV2Header.getUpdatedOn());
 
 			// Get Warehouse
 			Optional<Warehouse> dbWarehouse =
@@ -1013,32 +1026,67 @@ public class WarehouseService extends BaseService {
 				apiLine.setContainerNumber(asnLineV2.getContainerNumber());			// CONT_NO
 				apiLine.setSupplierCode(asnLineV2.getSupplierCode());				// PARTNER_CODE
 				apiLine.setSupplierPartNumber(asnLineV2.getSupplierPartNumber());  // PARTNER_ITM_CODE
-				apiLine.setManufacturerName(asnLineV2.getManufacturerName());		// BRND_NM
+				apiLine.setManufacturerName(asnLineV2.getManufacturerName());		// BRAND_NM
 				apiLine.setManufacturerCode(asnLineV2.getManufacturerCode());
 				apiLine.setOrigin(asnLineV2.getOrigin());
+				apiLine.setCompanyCode(asnLineV2.getCompanyCode());
+				apiLine.setBranchCode(asnLineV2.getBranchCode());
 				apiLine.setExpectedQty(asnLineV2.getExpectedQty());
 				apiLine.setSupplierName(asnLineV2.getSupplierName());
 				apiLine.setBrand(asnLineV2.getBrand());
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setManufacturerFullName(asnLineV2.getManufacturerFullName());
+				apiLine.setPurchaseOrderNumber(asnLineV2.getPurchaseOrderNumber());
+				apiHeader.setPurchaseOrderNumber(asnLineV2.getPurchaseOrderNumber());
 
+				apiLine.setSupplierInvoiceNo(asnLineV2.getSupplierInvoiceNo());
+				apiLine.setReceivedBy(asnLineV2.getReceivedBy());
+				apiLine.setReceivedQty(asnLineV2.getReceivedQty());
+				apiLine.setReceivedDate(asnLineV2.getReceivedDate());
+				apiLine.setIsCancelled(asnLineV2.getIsCancelled());
+				apiLine.setIsCompleted(asnLineV2.getIsCompleted());
 
-				// EA_DATE
-				try {
-					ZoneId defaultZoneId = ZoneId.systemDefault();
-					String sdate = asnLineV2.getExpectedDate();
-					String firstHalf = sdate.substring(0,sdate.lastIndexOf("/"));
-					String secondHalf = sdate.substring(sdate.lastIndexOf("/")+1);
-					secondHalf = "/20" + secondHalf;
-					sdate = firstHalf + secondHalf;
-					log.info("sdate--------> : " + sdate);
+				apiLine.setMiddlewareHeaderId(asnLineV2.getMiddlewareHeaderId());
+				apiLine.setMiddlewareId(asnLineV2.getMiddlewareId());
+				apiLine.setMiddlewareTable(asnLineV2.getMiddlewareTable());
 
-					LocalDate localDate = DateUtils.dateConv2(sdate);
-					log.info("localDate--------> : " + localDate);
-					Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
-					apiLine.setExpectedDate(date);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
+				if (asnLineV2.getExpectedDate() != null) {
+					if (asnLineV2.getExpectedDate().contains("-")) {
+						// EA_DATE
+						try {
+							Date reqDelDate = new Date();
+							if(asnLineV2.getExpectedDate().length() > 10) {
+								reqDelDate = DateUtils.convertStringToDateWithTime(asnLineV2.getExpectedDate());
+							}
+							if(asnLineV2.getExpectedDate().length() == 10) {
+								reqDelDate = DateUtils.convertStringToDate2(asnLineV2.getExpectedDate());
+							}
+							apiLine.setExpectedDate(reqDelDate);
+						} catch (Exception e) {
+							e.printStackTrace();
+							throw new BadRequestException("Date format should be MM-dd-yyyy");
+						}
+					}
+					if (asnLineV2.getExpectedDate().contains("/")) {
+						// EA_DATE
+						try {
+							ZoneId defaultZoneId = ZoneId.systemDefault();
+							String sdate = asnLineV2.getExpectedDate();
+							String firstHalf = sdate.substring(0, sdate.lastIndexOf("/"));
+							String secondHalf = sdate.substring(sdate.lastIndexOf("/") + 1);
+							secondHalf = "/20" + secondHalf;
+							sdate = firstHalf + secondHalf;
+							log.info("sdate--------> : " + sdate);
+
+							LocalDate localDate = DateUtils.dateConv2(sdate);
+							log.info("localDate--------> : " + localDate);
+							Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
+							apiLine.setExpectedDate(date);
+						} catch (Exception e) {
+							e.printStackTrace();
+							throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
+						}
+					}
 				}
 
 				apiLine.setOrderedQty(asnLineV2.getExpectedQty());				// ORD_QTY
@@ -1068,35 +1116,133 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
+	public InboundOrderV2 postWarehouseStockReceipt (StockReceiptHeader stockReceipt) {
+		log.info("StockReceipt received from External: " + stockReceipt);
+		InboundOrderV2 savedStockReceipt = saveStockReceipt (stockReceipt);
+		log.info("savedStockReceipt: " + savedStockReceipt);
+		return savedStockReceipt;
+	}
+
+	// POST StockReceiptHeader
+	private InboundOrderV2 saveStockReceipt (StockReceiptHeader stockReceipt) {
+		try {
+//			StockReceiptHeader stockReceiptHeader = stockReceipt.getStockReceiptHeader();
+			List<StockReceiptLine> stockReceiptLines = stockReceipt.getStockReceiptLines();
+
+			InboundOrderV2 apiHeader = new InboundOrderV2();
+
+			apiHeader.setOrderId(stockReceipt.getReceiptNo());
+			apiHeader.setCompanyCode(stockReceipt.getCompanyCode());
+			apiHeader.setBranchCode(stockReceipt.getBranchCode());
+			apiHeader.setRefDocumentNo(stockReceipt.getReceiptNo());
+
+			apiHeader.setIsCompleted(stockReceipt.getIsCompleted());
+			apiHeader.setUpdatedOn(stockReceipt.getUpdatedOn());
+
+			apiHeader.setRefDocumentType("DirectReceipt");
+			apiHeader.setInboundOrderTypeId(5L);
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(stockReceipt.getMiddlewareId());
+			apiHeader.setMiddlewareTable(stockReceipt.getMiddlewareTable());
+
+			// Get Warehouse
+			Optional<Warehouse> dbWarehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							stockReceipt.getCompanyCode(),
+							stockReceipt.getBranchCode(),
+							"EN",
+							0L
+					);
+			log.info("dbWarehouse : " + dbWarehouse);
+			apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
+
+			Set<InboundOrderLinesV2> orderLines = new HashSet<>();
+			for (StockReceiptLine stockReceiptLine : stockReceiptLines) {
+				InboundOrderLinesV2 apiLine = new InboundOrderLinesV2();
+				apiLine.setLineReference(stockReceiptLine.getLineNoForEachItem()); 			// IB_LINE_NO
+				apiLine.setItemCode(stockReceiptLine.getItemCode());							// ITM_CODE
+				apiLine.setItemText(stockReceiptLine.getItemDescription()); 				// ITEM_TEXT
+//				apiLine.setContainerNumber(stockReceiptLine.getContainerNumber());			// CONT_NO
+				apiLine.setSupplierCode(stockReceiptLine.getSupplierCode());				// PARTNER_CODE
+				apiLine.setSupplierPartNumber(stockReceiptLine.getSupplierPartNo());  // PARTNER_ITM_CODE
+				apiLine.setManufacturerName(stockReceiptLine.getManufacturerShortName());		// BRAND_NM
+				apiLine.setManufacturerCode(stockReceiptLine.getManufacturerCode());
+				apiLine.setSupplierName(stockReceiptLine.getSupplierName());
+				apiLine.setExpectedQty(stockReceiptLine.getReceiptQty());
+				apiLine.setOrderId(stockReceiptLine.getReceiptNo());
+				apiLine.setCompanyCode(stockReceiptLine.getCompanyCode());
+				apiLine.setBranchCode(stockReceiptLine.getBranchCode());
+				apiLine.setManufacturerFullName(stockReceiptLine.getManufacturerFullName());
+				apiLine.setIsCompleted(stockReceiptLine.getIsCompleted());
+				apiLine.setMiddlewareHeaderId(stockReceiptLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareId(stockReceiptLine.getMiddlewareId());
+				apiLine.setMiddlewareTable(stockReceiptLine.getMiddlewareTable());
+
+				if (stockReceiptLine.getReceiptDate() != null) {
+//						 EA_DATE
+							apiLine.setExpectedDate(stockReceiptLine.getReceiptDate());
+					}
+
+				apiLine.setOrderedQty(stockReceiptLine.getReceiptQty());				// ORD_QTY
+				apiLine.setUom(stockReceiptLine.getUnitOfMeasure());								// ORD_UOM
+				orderLines.add(apiLine);
+			}
+			apiHeader.setLine(orderLines);
+			apiHeader.setOrderProcessedOn(new Date());
+			if (stockReceipt.getStockReceiptLines() != null && !stockReceipt.getStockReceiptLines().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader : " + apiHeader);
+				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
+				log.info("stockReceipt Order Success : " + createdOrder);
+				return createdOrder;
+			} else if (stockReceipt.getStockReceiptLines() == null || stockReceipt.getStockReceiptLines().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader : " + apiHeader);
+				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
+				log.info("stockReceipt Order Failed : " + createdOrder);
+				throw new BadRequestException("stockReceipt Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
 	/**
-	 *
 	 * @param soReturnV2
 	 * @return
 	 */
 	public InboundOrderV2 postSOReturnV2(SaleOrderReturnV2 soReturnV2) {
 		log.info("StoreReturnHeader received from External: " + soReturnV2);
-		InboundOrderV2 savedSOReturn = saveSOReturnV2 (soReturnV2);
+		InboundOrderV2 savedSOReturn = saveSOReturnV2(soReturnV2);
 		log.info("soReturnHeader: " + savedSOReturn);
 		return savedSOReturn;
 	}
 
 	// SOReturnV2
-	private InboundOrderV2 saveSOReturnV2 (SaleOrderReturnV2 soReturnV2) {
+	private InboundOrderV2 saveSOReturnV2(SaleOrderReturnV2 soReturnV2) {
 		try {
 			SOReturnHeaderV2 soReturnHeaderV2 = soReturnV2.getSoReturnHeader();
 			List<SOReturnLineV2> salesOrderReturnLinesV2 = soReturnV2.getSoReturnLine();
+
 			InboundOrderV2 apiHeader = new InboundOrderV2();
 			apiHeader.setTransferOrderNumber(soReturnHeaderV2.getTransferOrderNumber());
 			apiHeader.setRefDocumentNo(soReturnHeaderV2.getTransferOrderNumber());
 			apiHeader.setBranchCode(soReturnHeaderV2.getBranchCode());
 			apiHeader.setOrderId(soReturnHeaderV2.getTransferOrderNumber());
 			apiHeader.setCompanyCode(soReturnHeaderV2.getCompanyCode());
-			apiHeader.setRefDocumentType("SORETURNV2");
-			apiHeader.setInboundOrderTypeId(1L);                                        // Hardcoded Value 4
+			apiHeader.setRefDocumentType("SalesReturn");
+			apiHeader.setInboundOrderTypeId(2L);                                        // Hardcoded Value 2
 			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(soReturnHeaderV2.getMiddlewareId());
+			apiHeader.setMiddlewareTable(soReturnHeaderV2.getMiddlewareTable());
+			apiHeader.setIsCompleted(soReturnHeaderV2.getIsCompleted());
+			apiHeader.setIsCancelled(soReturnHeaderV2.getIsCancelled());
+			apiHeader.setUpdatedOn(soReturnHeaderV2.getUpdatedOn());
 
 			// Get Warehouse
-			Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> dbWarehouse =
+			Optional<Warehouse> dbWarehouse =
 					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
 							soReturnHeaderV2.getCompanyCode(),
 							soReturnHeaderV2.getBranchCode(),
@@ -1122,9 +1268,19 @@ public class WarehouseService extends BaseService {
 				apiLine.setPackQty(soReturnLineV2.getPackQty());
 				apiLine.setOrigin(soReturnLineV2.getOrigin());
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setManufacturerFullName(soReturnLineV2.getManufacturerFullName());
+				apiLine.setMiddlewareId(soReturnLineV2.getMiddlewareId());
+				apiLine.setMiddlewareTable(soReturnLineV2.getMiddlewareTable());
+				apiLine.setMiddlewareHeaderId(soReturnLineV2.getMiddlewareHeaderId());
 				// EA_DATE
 				try {
-					Date reqDelDate = DateUtils.convertStringToDate(soReturnLineV2.getExpectedDate());
+					Date reqDelDate = new Date();
+//					if (soReturnLineV2.getExpectedDate().length() > 10) {
+//						reqDelDate = DateUtils.convertStringToDateWithTime(soReturnLineV2.getExpectedDate());
+//					}
+					if (soReturnLineV2.getExpectedDate() != null) {
+						reqDelDate = DateUtils.convertStringToDate2(soReturnLineV2.getExpectedDate());
+					}
 					apiLine.setExpectedDate(reqDelDate);
 				} catch (Exception e) {
 					throw new BadRequestException("Date format should be MM-dd-yyyy");
@@ -1137,7 +1293,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setLine(orderLinesV2);
 			apiHeader.setOrderProcessedOn(new Date());
 
-			if (soReturnV2.getSoReturnLine() != null && ! soReturnV2.getSoReturnLine().isEmpty()) {
+			if (soReturnV2.getSoReturnLine() != null && !soReturnV2.getSoReturnLine().isEmpty()) {
 
 				apiHeader.setProcessedStatusId(0L);
 				log.info("apiHeader : " + apiHeader);
@@ -1160,35 +1316,40 @@ public class WarehouseService extends BaseService {
 
 
 	/**
-	 *
 	 * @param interWarehouseTransferInV2
 	 * @return
 	 */
-	public InboundOrderV2 postInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	public InboundOrderV2 postInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
 		log.info("InterWarehouseTransferHeaderV2 received from External: " + interWarehouseTransferInV2);
-		InboundOrderV2 savedIWHReturnV2 = saveInterWarehouseTransferInV2 (interWarehouseTransferInV2);
+		InboundOrderV2 savedIWHReturnV2 = saveInterWarehouseTransferInV2Upload(interWarehouseTransferInV2);
 		log.info("interWarehouseTransferHeaderV2: " + savedIWHReturnV2);
 		return savedIWHReturnV2;
 	}
 
 
 	// InterWarehouseTransferInV2
-	private InboundOrderV2 saveInterWarehouseTransferInV2 (InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	private InboundOrderV2 saveInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
 		try {
 			InterWarehouseTransferInHeaderV2 interWarehouseTransferInHeaderV2 = interWarehouseTransferInV2.getInterWarehouseTransferInHeader();
 			List<InterWarehouseTransferInLineV2> interWarehouseTransferInLinesV2 = interWarehouseTransferInV2.getInterWarehouseTransferInLine();
+
 			InboundOrderV2 apiHeader = new InboundOrderV2();
 			apiHeader.setRefDocumentNo(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
 			apiHeader.setOrderId(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
 			apiHeader.setCompanyCode(interWarehouseTransferInHeaderV2.getToCompanyCode());
 			apiHeader.setTransferOrderNumber(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
 			apiHeader.setBranchCode(interWarehouseTransferInHeaderV2.getToBranchCode());
-			apiHeader.setInboundOrderTypeId(3L);				// Hardcoded Value 3
-			apiHeader.setRefDocumentType("IWTV2");
+			apiHeader.setInboundOrderTypeId(4L);                // Hardcoded Value 3
+			apiHeader.setRefDocumentType("WMS to WMS");
 			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(interWarehouseTransferInHeaderV2.getMiddlewareId());
+			apiHeader.setMiddlewareTable(interWarehouseTransferInHeaderV2.getMiddlewareTable());
+			apiHeader.setTransferOrderDate(interWarehouseTransferInHeaderV2.getTransferOrderDate());
+			apiHeader.setIsCompleted(interWarehouseTransferInHeaderV2.getIsCompleted());
+			apiHeader.setUpdatedOn(interWarehouseTransferInHeaderV2.getUpdatedOn());
 
 			// Get Warehouse
-			Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> dbWarehouse =
+			Optional<Warehouse> dbWarehouse =
 					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
 							interWarehouseTransferInHeaderV2.getToCompanyCode(),
 							interWarehouseTransferInHeaderV2.getToBranchCode(),
@@ -1197,6 +1358,7 @@ public class WarehouseService extends BaseService {
 					);
 			log.info("dbWarehouse : " + dbWarehouse);
 			apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
+
 			Set<InboundOrderLinesV2> orderLinesV2 = new HashSet<>();
 			for (InterWarehouseTransferInLineV2 iwhTransferLineV2 : interWarehouseTransferInLinesV2) {
 				InboundOrderLinesV2 apiLine = new InboundOrderLinesV2();
@@ -1215,14 +1377,20 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerCode(iwhTransferLineV2.getManufacturerCode());
 				apiLine.setBrand(iwhTransferLineV2.getBrand());
 				apiLine.setOrderId(apiHeader.getOrderId());
+
+				apiLine.setTransferOrderNumber(iwhTransferLineV2.getTransferOrderNo());
+				apiLine.setMiddlewareHeaderId(iwhTransferLineV2.getMiddlewareHeaderId());
+				apiLine.setMiddlewareId(iwhTransferLineV2.getMiddlewareId());
+				apiLine.setMiddlewareTable(iwhTransferLineV2.getMiddlewareTable());
+
 				orderLinesV2.add(apiLine);
 
 				// EA_DATE
 				try {
 					ZoneId defaultZoneId = ZoneId.systemDefault();
 					String sdate = iwhTransferLineV2.getExpectedDate();
-					String firstHalf = sdate.substring(0,sdate.lastIndexOf("/"));
-					String secondHalf = sdate.substring(sdate.lastIndexOf("/")+1);
+					String firstHalf = sdate.substring(0, sdate.lastIndexOf("/"));
+					String secondHalf = sdate.substring(sdate.lastIndexOf("/") + 1);
 					secondHalf = "/20" + secondHalf;
 					sdate = firstHalf + secondHalf;
 					log.info("sdate--------> : " + sdate);
@@ -1260,42 +1428,51 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
+
+
 	/**
-	 *
 	 * @param
 	 * @return
 	 */
 	public InboundOrderV2 postB2bTransferIn(B2bTransferIn b2bTransferIn) {
 		log.info("B2bTransferIn received from External: " + b2bTransferIn);
-		InboundOrderV2 savedB2bTransferIn = saveB2BTransferIn (b2bTransferIn);
+		InboundOrderV2 savedB2bTransferIn = saveB2BTransferIn(b2bTransferIn);
 		log.info("B2bTransferIn: " + savedB2bTransferIn);
 		return savedB2bTransferIn;
 	}
 
-
 	// B2bTransferIn
-	private InboundOrderV2 saveB2BTransferIn (B2bTransferIn b2bTransferIn) {
+	private InboundOrderV2 saveB2BTransferIn(B2bTransferIn b2bTransferIn) {
 		try {
 			B2bTransferInHeader b2BTransferInHeader = b2bTransferIn.getB2bTransferInHeader();
-
-//			// Warehouse ID Validation
-//			validateWarehouseId (b2BTransferInHeader.getBranchCode());
-
-			// Checking for duplicate RefDocNumber
-			InboundOrderV2 dbApiHeader = orderService.getOrderByIdV2(b2BTransferInHeader.getTransferOrderNumber());
-			if (dbApiHeader != null) {
-				throw new InboundOrderRequestException("Return Order Reference is already posted and it can't be duplicated.");
-			}
-
 			List<B2bTransferInLine> b2bTransferInLines = b2bTransferIn.getB2bTransferLine();
+
 			InboundOrderV2 apiHeader = new InboundOrderV2();
 			apiHeader.setTransferOrderNumber(b2BTransferInHeader.getTransferOrderNumber());
 			apiHeader.setCompanyCode(b2BTransferInHeader.getCompanyCode());
 			apiHeader.setBranchCode(b2BTransferInHeader.getBranchCode());
 			apiHeader.setOrderId(b2BTransferInHeader.getTransferOrderNumber());
-			apiHeader.setRefDocumentType("B2BIN");
-			apiHeader.setInboundOrderTypeId(4L);                                        // Hardcoded Value 4
+			apiHeader.setRefDocumentNo(b2BTransferInHeader.getTransferOrderNumber());
+			apiHeader.setRefDocumentType("Non-WMS to WMS");
+			apiHeader.setInboundOrderTypeId(3L);                                        // Hardcoded Value 2
 			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(b2BTransferInHeader.getMiddlewareId());
+			apiHeader.setMiddlewareTable(b2BTransferInHeader.getMiddlewareTable());
+			apiHeader.setSourceBranchCode(b2BTransferInHeader.getSourceBranchCode());
+			apiHeader.setSourceCompanyCode(b2BTransferInHeader.getSourceCompanyCode());
+			apiHeader.setTransferOrderDate(b2BTransferInHeader.getTransferOrderDate());
+			apiHeader.setIsCompleted(b2BTransferInHeader.getIsCompleted());
+			apiHeader.setUpdatedOn(b2BTransferInHeader.getUpdatedOn());
+
+			// Get Warehouse
+			Optional<Warehouse> dbWarehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							b2BTransferInHeader.getCompanyCode(),
+							b2BTransferInHeader.getBranchCode(),
+							"EN",
+							0L
+					);
+			apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
 
 			Set<InboundOrderLinesV2> orderLines = new HashSet<>();
 			for (B2bTransferInLine b2bTransferInLine : b2bTransferInLines) {
@@ -1312,16 +1489,34 @@ public class WarehouseService extends BaseService {
 				apiLine.setBrand(b2bTransferInLine.getBrand());
 				apiLine.setSupplierName(b2bTransferInLine.getSupplierName());
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setManufacturerFullName(b2bTransferInLine.getManufacturerFullName());
+				apiLine.setStoreID(b2bTransferInLine.getStoreID());
+
+				apiLine.setTransferOrderNumber(b2bTransferInLine.getTransferOrderNo());
+				apiLine.setMiddlewareId(b2bTransferInLine.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(b2bTransferInLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(b2bTransferInLine.getMiddlewareTable());
+//				apiLine.setOrigin(b2bTransferInLine.getOrigin());
+
+				apiLine.setIsCompleted(b2bTransferInLine.getIsCompleted());
+				apiLine.setTransferOrderNumber(b2bTransferInLine.getTransferOrderNo());
 
 				// EA_DATE
 				try {
-					Date reqDelDate = DateUtils.convertStringToDate(String.valueOf(b2bTransferInLine.getExpectedDate()));
+					Date reqDelDate = new Date();
+//					if (b2bTransferInLine.getExpectedDate().length() > 10) {
+//						reqDelDate = DateUtils.convertStringToDateWithTime(b2bTransferInLine.getExpectedDate());
+//					}
+					if (b2bTransferInLine.getExpectedDate() != null) {
+						reqDelDate = DateUtils.convertStringToDate2(b2bTransferInLine.getExpectedDate());
+					}
 					apiLine.setExpectedDate(reqDelDate);
 				} catch (Exception e) {
 					throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
 				}
 
 				apiLine.setUom(b2bTransferInLine.getUom());                                    // ORD_UOM
+
 				apiLine.setItemCaseQty(Double.valueOf(b2bTransferInLine.getPackQty()));        // ITM_CASE_QTY
 				orderLines.add(apiLine);
 			}
@@ -1348,10 +1543,218 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
+//	private InboundOrderV2 saveB2BTransferIn(B2bTransferIn b2bTransferIn) {
+//		try {
+//			B2bTransferInHeader b2BTransferInHeader = b2bTransferIn.getB2bTransferInHeader();
+//			List<B2bTransferInLine> b2bTransferInLines = b2bTransferIn.getB2bTransferLine();
+//
+//			InboundOrderV2 apiHeader = new InboundOrderV2();
+//			apiHeader.setTransferOrderNumber(b2BTransferInHeader.getTransferOrderNumber());
+//			apiHeader.setCompanyCode(b2BTransferInHeader.getCompanyCode());
+//			apiHeader.setBranchCode(b2BTransferInHeader.getBranchCode());
+//			apiHeader.setOrderId(b2BTransferInHeader.getTransferOrderNumber());
+//			apiHeader.setRefDocumentNo(b2BTransferInHeader.getTransferOrderNumber());
+//			apiHeader.setRefDocumentType("Non-WMS to WMS");
+//			apiHeader.setInboundOrderTypeId(3L);                                        // Hardcoded Value 2
+//			apiHeader.setOrderReceivedOn(new Date());
+//			apiHeader.setMiddlewareId(b2BTransferInHeader.getMiddlewareId());
+//			apiHeader.setMiddlewareTable(b2BTransferInHeader.getMiddlewareTable());
+//			apiHeader.setSourceBranchCode(b2BTransferInHeader.getSourceBranchCode());
+//			apiHeader.setSourceCompanyCode(b2BTransferInHeader.getSourceCompanyCode());
+//			apiHeader.setTransferOrderDate(b2BTransferInHeader.getTransferOrderDate());
+//			apiHeader.setIsCompleted(b2BTransferInHeader.getIsCompleted());
+//			apiHeader.setUpdatedOn(b2BTransferInHeader.getUpdatedOn());
+//
+//			// Get Warehouse
+//			Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> dbWarehouse =
+//					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+//							b2BTransferInHeader.getCompanyCode(),
+//							b2BTransferInHeader.getBranchCode(),
+//							"EN",
+//							0L
+//					);
+//			if(dbWarehouse != null && !dbWarehouse.isEmpty()) {
+//				apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
+//			}
+//
+//			Set<InboundOrderLinesV2> orderLines = new HashSet<>();
+//			for (B2bTransferInLine b2bTransferInLine : b2bTransferInLines) {
+//				InboundOrderLinesV2 apiLine = new InboundOrderLinesV2();
+//				apiLine.setLineReference(b2bTransferInLine.getLineReference());                 // IB_LINE_NO
+//				apiLine.setItemCode(b2bTransferInLine.getSku());                                // ITM_CODE
+//				apiLine.setItemText(b2bTransferInLine.getSkuDescription());                     // ITEM_TEXT
+//				apiLine.setSourceBranchCode(b2bTransferInLine.getStoreID());
+//				apiLine.setSupplierPartNumber(b2bTransferInLine.getSupplierPartNumber());
+//				apiLine.setManufacturerName(b2bTransferInLine.getManufacturerName());
+//				apiLine.setExpectedQty(b2bTransferInLine.getExpectedQty());
+//				apiLine.setCountryOfOrigin(b2bTransferInLine.getOrigin());
+//				apiLine.setManufacturerCode(b2bTransferInLine.getManufacturerCode());
+//				apiLine.setBrand(b2bTransferInLine.getBrand());
+//				apiLine.setSupplierName(b2bTransferInLine.getSupplierName());
+//				apiLine.setOrderId(apiHeader.getOrderId());
+//				apiLine.setManufacturerFullName(b2bTransferInLine.getManufacturerFullName());
+//				apiLine.setStoreID(b2bTransferInLine.getStoreID());
+//
+//				apiLine.setTransferOrderNumber(b2bTransferInLine.getTransferOrderNo());
+//				apiLine.setMiddlewareId(b2bTransferInLine.getMiddlewareId());
+//				apiLine.setMiddlewareHeaderId(b2bTransferInLine.getMiddlewareHeaderId());
+//				apiLine.setMiddlewareTable(b2bTransferInLine.getMiddlewareTable());
+////				apiLine.setOrigin(b2bTransferInLine.getOrigin());
+//
+//				apiLine.setIsCompleted(b2bTransferInLine.getIsCompleted());
+//				apiLine.setTransferOrderNumber(b2bTransferInLine.getTransferOrderNo());
+//
+//				// EA_DATE
+//				try {
+//					Date reqDelDate = new Date();
+////					if (b2bTransferInLine.getExpectedDate().length() > 10) {
+////						reqDelDate = DateUtils.convertStringToDateWithTime(b2bTransferInLine.getExpectedDate());
+////					}
+//					if (b2bTransferInLine.getExpectedDate() != null) {
+//						reqDelDate = DateUtils.convertStringToDate2(b2bTransferInLine.getExpectedDate());
+//					}
+//					apiLine.setExpectedDate(reqDelDate);
+//				} catch (Exception e) {
+//					throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
+//				}
+//
+//				apiLine.setUom(b2bTransferInLine.getUom());                                    // ORD_UOM
+//
+//				apiLine.setItemCaseQty(Double.valueOf(b2bTransferInLine.getPackQty()));        // ITM_CASE_QTY
+//				orderLines.add(apiLine);
+//			}
+//			apiHeader.setLine(orderLines);
+//			apiHeader.setOrderProcessedOn(new Date());
+//
+//			if (b2bTransferIn.getB2bTransferLine() != null && !b2bTransferIn.getB2bTransferLine().isEmpty()) {
+//				apiHeader.setProcessedStatusId(0L);
+//				log.info("apiHeader : " + apiHeader);
+//				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
+//				log.info("Return Order Reference Order Success: " + createdOrder);
+//				return createdOrder;
+//			} else if (b2bTransferIn.getB2bTransferLine() == null || b2bTransferIn.getB2bTransferLine().isEmpty()) {
+//				// throw the error as Lines are Empty and set the Indicator as '100'
+//				apiHeader.setProcessedStatusId(100L);
+//				log.info("apiHeader : " + apiHeader);
+//				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
+//				log.info("Return Order Reference Order Failed : " + createdOrder);
+//				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
+//			}
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//		return null;
+//	}
+
+	/**
+	 * @param interWarehouseTransferInV2
+	 * @return
+	 */
+	public InboundOrderV2 postInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+		log.info("InterWarehouseTransferHeaderV2 received from External: " + interWarehouseTransferInV2);
+		InboundOrderV2 savedIWHReturnV2 = saveInterWarehouseTransferInV2(interWarehouseTransferInV2);
+		log.info("interWarehouseTransferHeaderV2: " + savedIWHReturnV2);
+		return savedIWHReturnV2;
+	}
+
+	// InterWarehouseTransferInV2
+	private InboundOrderV2 saveInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+		try {
+			InterWarehouseTransferInHeaderV2 interWarehouseTransferInHeaderV2 = interWarehouseTransferInV2.getInterWarehouseTransferInHeader();
+			List<InterWarehouseTransferInLineV2> interWarehouseTransferInLinesV2 = interWarehouseTransferInV2.getInterWarehouseTransferInLine();
+
+			InboundOrderV2 apiHeader = new InboundOrderV2();
+			apiHeader.setRefDocumentNo(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
+			apiHeader.setOrderId(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
+			apiHeader.setCompanyCode(interWarehouseTransferInHeaderV2.getToCompanyCode());
+			apiHeader.setTransferOrderNumber(interWarehouseTransferInHeaderV2.getTransferOrderNumber());
+			apiHeader.setBranchCode(interWarehouseTransferInHeaderV2.getToBranchCode());
+			apiHeader.setInboundOrderTypeId(4L);                // Hardcoded Value 3
+			apiHeader.setRefDocumentType("WMS to WMS");
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setMiddlewareId(interWarehouseTransferInHeaderV2.getMiddlewareId());
+			apiHeader.setMiddlewareTable(interWarehouseTransferInHeaderV2.getMiddlewareTable());
+			apiHeader.setIsCompleted(interWarehouseTransferInHeaderV2.getIsCompleted());
+			apiHeader.setUpdatedOn(interWarehouseTransferInHeaderV2.getUpdatedOn());
+
+			// Get Warehouse
+			Optional<Warehouse> dbWarehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							interWarehouseTransferInHeaderV2.getToCompanyCode(),
+							interWarehouseTransferInHeaderV2.getToBranchCode(),
+							"EN",
+							0L
+					);
+			log.info("dbWarehouse : " + dbWarehouse);
+			apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
+			Set<InboundOrderLinesV2> orderLinesV2 = new HashSet<>();
+			for (InterWarehouseTransferInLineV2 iwhTransferLineV2 : interWarehouseTransferInLinesV2) {
+				InboundOrderLinesV2 apiLine = new InboundOrderLinesV2();
+				apiLine.setLineReference(iwhTransferLineV2.getLineReference());                 // IB_LINE_NO
+				apiLine.setItemCode(iwhTransferLineV2.getSku());                                // ITM_CODE
+				apiLine.setItemText(iwhTransferLineV2.getSkuDescription());                     // ITEM_TEXT
+				apiLine.setFromCompanyCode(iwhTransferLineV2.getFromCompanyCode());
+				apiLine.setSourceBranchCode(iwhTransferLineV2.getFromBranchCode());
+				apiLine.setSupplierPartNumber(iwhTransferLineV2.getSupplierPartNumber());        // PARTNER_ITM_CODE
+				apiLine.setManufacturerName(iwhTransferLineV2.getManufacturerName());            // BRND_NM
+				apiLine.setExpectedQty(iwhTransferLineV2.getExpectedQty());
+				apiLine.setUom(iwhTransferLineV2.getUom());
+				apiLine.setPackQty(iwhTransferLineV2.getPackQty());
+				apiLine.setOrigin(iwhTransferLineV2.getOrigin());
+				apiLine.setSupplierName(iwhTransferLineV2.getSupplierName());
+				apiLine.setManufacturerCode(iwhTransferLineV2.getManufacturerCode());
+
+				apiLine.setTransferOrderNumber(iwhTransferLineV2.getTransferOrderNo());
+				apiLine.setMiddlewareId(iwhTransferLineV2.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(iwhTransferLineV2.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(iwhTransferLineV2.getMiddlewareTable());
+
+				// EA_DATE
+				try {
+					Date reqDelDate = new Date();
+//					if (iwhTransferLineV2.getExpectedDate().length() > 10) {
+//						reqDelDate = DateUtils.convertStringToDateWithTime(iwhTransferLineV2.getExpectedDate());
+//					}
+					if (iwhTransferLineV2.getExpectedDate() != null) {
+						reqDelDate = DateUtils.convertStringToDate2(iwhTransferLineV2.getExpectedDate());
+					}
+					apiLine.setExpectedDate(reqDelDate);
+				} catch (Exception e) {
+					throw new BadRequestException("Date format should be MM-dd-yyyy");
+				}
+				apiLine.setBrand(iwhTransferLineV2.getBrand());
+				apiLine.setOrderId(apiHeader.getOrderId());
+				orderLinesV2.add(apiLine);
+			}
+			apiHeader.setLine(orderLinesV2);
+			apiHeader.setOrderProcessedOn(new Date());
+			if (interWarehouseTransferInV2.getInterWarehouseTransferInLine() != null &&
+					!interWarehouseTransferInV2.getInterWarehouseTransferInLine().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader : " + apiHeader);
+				InboundOrderV2 createdOrderV2 = orderService.createInboundOrdersV2(apiHeader);
+				log.info("InterWarehouseTransferV2 Order Success: " + createdOrderV2);
+				return createdOrderV2;
+			} else if (interWarehouseTransferInV2.getInterWarehouseTransferInLine() == null ||
+					interWarehouseTransferInV2.getInterWarehouseTransferInLine().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader : " + apiHeader);
+				InboundOrderV2 createdOrderV2 = orderService.createInboundOrdersV2(apiHeader);
+				log.info("InterWarehouseTransferV2 Order Failed : " + createdOrderV2);
+				throw new BadRequestException("InterWarehouseTransferInV2 Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+
 	//-------------------------------------------------------------------------------------------------------------------------------------------------
 	// ASN
-	public AXApiResponse postASNConfirmationV2 (com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.ASNV2 asn,
-											  String authToken) {
+	public AXApiResponse postASNConfirmationV2 (ASNV2 asn,
+                                                String authToken) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 		headers.add("User-Agent", "AX-API RestTemplate");
@@ -1425,9 +1828,9 @@ public class WarehouseService extends BaseService {
 
 	/*---------------------------------CycleCountOrder------------------------------------------*/
 
-	// 	Perpetual
+	/*---------------------------------CycleCountOrder------------------------------------------*/
+
 	/**
-	 *
 	 * @param perpetual
 	 * @return
 	 */
@@ -1451,26 +1854,40 @@ public class WarehouseService extends BaseService {
 			apiHeader.setBranchName(perpetualHeaderV1.getBranchName());
 			apiHeader.setIsNew(perpetualHeaderV1.getIsNew());
 			apiHeader.setCycleCountCreationDate(new Date());
+			apiHeader.setMiddlewareId(perpetualHeaderV1.getMiddlewareId());
+			apiHeader.setMiddlewareTable(perpetualHeaderV1.getMiddlewareTable());
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setStockCountType("PERPETUAL");
+			apiHeader.setIsCancelled(perpetualHeaderV1.getIsCancelled());
+			apiHeader.setIsCompleted(perpetualHeaderV1.getIsCompleted());
+			apiHeader.setUpdatedOn(perpetualHeaderV1.getUpdatedOn());
 
 			Set<CycleCountLine> cycleCountLines = new HashSet<>();
 			for (PerpetualLineV1 perpetualLineV1 : perpetualLineV1List) {
 				CycleCountLine apiLine = new CycleCountLine();
-				apiLine.setCycleCountNo(perpetualLineV1.getCycleCountNo());								// CC_NO
-				apiLine.setLineOfEachItemCode(perpetualLineV1.getLineNoOfEachItemCode());                	// INV_NO
-				apiLine.setItemCode(perpetualLineV1.getItemCode());										// ITM_CODE
-				apiLine.setItemDescription(perpetualLineV1.getItemDescription());                 		// ITM_DESC
-				apiLine.setUom(perpetualLineV1.getUom());                                					// UOM
-				apiLine.setManufacturerCode(perpetualLineV1.getManufacturerCode());                     	// MANU_FAC_CODE
-				apiLine.setManufacturerName(perpetualLineV1.getManufacturerName());        				// MANU_FAC_NM
+				apiLine.setCycleCountNo(perpetualLineV1.getCycleCountNo());                                // CC_NO
+				apiLine.setLineOfEachItemCode(perpetualLineV1.getLineNoOfEachItemCode());                    // INV_NO
+				apiLine.setItemCode(perpetualLineV1.getItemCode());                                        // ITM_CODE
+				apiLine.setItemDescription(perpetualLineV1.getItemDescription());                        // ITM_DESC
+				apiLine.setUom(perpetualLineV1.getUom());                                                    // UOM
+				apiLine.setManufacturerCode(perpetualLineV1.getManufacturerCode());                        // MANU_FAC_CODE
+				apiLine.setManufacturerName(perpetualLineV1.getManufacturerName());                        // MANU_FAC_NM
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setMiddlewareId(perpetualLineV1.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(perpetualLineV1.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(perpetualLineV1.getMiddlewareTable());
+				apiLine.setFrozenQty(perpetualLineV1.getFrozenQty());
+				apiLine.setCountedQty(perpetualLineV1.getCountedQty());
+				apiLine.setIsCancelled(perpetualLineV1.getIsCancelled());
+				apiLine.setIsCompleted(perpetualLineV1.getIsCompleted());
+				apiLine.setStockCountType("PERPETUAL");
 
 				cycleCountLines.add(apiLine);
 			}
 			apiHeader.setLines(cycleCountLines);
 			apiHeader.setOrderProcessedOn(new Date());
 
-			if (perpetual.getPerpetualLineV1() != null && ! perpetual.getPerpetualLineV1().isEmpty()) {
-
+			if (perpetual.getPerpetualLineV1() != null && !perpetual.getPerpetualLineV1().isEmpty()) {
 				apiHeader.setProcessedStatusId(0L);
 				log.info("apiHeader : " + apiHeader);
 				CycleCountHeader cycleCountHeader = orderService.createCycleCountOrder(apiHeader);
@@ -1481,7 +1898,7 @@ public class WarehouseService extends BaseService {
 				apiHeader.setProcessedStatusId(100L);
 				log.info("apiHeader : " + apiHeader);
 				CycleCountHeader createOrder = orderService.createCycleCountOrder(apiHeader);
-				log.info("Periodic Order Failed : " + createOrder);
+				log.info("Perpetual Order Failed : " + createOrder);
 				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
@@ -1490,10 +1907,9 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
-
 	//Periodic
+
 	/**
-	 *
 	 * @param periodic
 	 * @return
 	 */
@@ -1505,38 +1921,51 @@ public class WarehouseService extends BaseService {
 	}
 
 	// periodic
-	private CycleCountHeader savePeriodic (Periodic periodic) {
+	private CycleCountHeader savePeriodic(Periodic periodic) {
 		try {
-			PeriodicHeaderV1 perpetualHeaderV1 = periodic.getPeriodicHeaderV1();
+			PeriodicHeaderV1 periodicHeaderV1 = periodic.getPeriodicHeaderV1();
 			List<PeriodicLineV1> periodicLineV1List = periodic.getPeriodicLineV1();
 			CycleCountHeader apiHeader = new CycleCountHeader();
-			apiHeader.setCompanyCode(perpetualHeaderV1.getCompanyCode());
-			apiHeader.setCycleCountNo(perpetualHeaderV1.getCycleCountNo());
-			apiHeader.setOrderId(perpetualHeaderV1.getCycleCountNo());
-			apiHeader.setBranchCode(perpetualHeaderV1.getBranchCode());
-			apiHeader.setBranchName(perpetualHeaderV1.getBranchName());
-			apiHeader.setIsNew(perpetualHeaderV1.getIsNew());
-			apiHeader.setCycleCountCreationDate(new Date());
+			apiHeader.setCompanyCode(periodicHeaderV1.getCompanyCode());
+			apiHeader.setCycleCountNo(periodicHeaderV1.getCycleCountNo());
+			apiHeader.setOrderId(periodicHeaderV1.getCycleCountNo());
+			apiHeader.setBranchCode(periodicHeaderV1.getBranchCode());
+			apiHeader.setBranchName(periodicHeaderV1.getBranchName());
+			apiHeader.setIsNew(periodicHeaderV1.getIsNew());
+			apiHeader.setIsCancelled(periodicHeaderV1.getIsCancelled());
+			apiHeader.setIsCompleted(periodicHeaderV1.getIsCompleted());
+			apiHeader.setUpdatedOn(periodicHeaderV1.getUpdatedOn());
+			apiHeader.setCycleCountCreationDate(periodicHeaderV1.getCycleCountCreationDate());
+			apiHeader.setStockCountType("PERIODIC");
+			apiHeader.setMiddlewareId(periodicHeaderV1.getMiddlewareId());
+			apiHeader.setMiddlewareTable(periodicHeaderV1.getMiddlewareTable());
 
 			Set<CycleCountLine> cycleCountLines = new HashSet<>();
 			for (PeriodicLineV1 periodicLineV1 : periodicLineV1List) {
 				CycleCountLine apiLine = new CycleCountLine();
-				apiLine.setCycleCountNo(periodicLineV1.getCycleCountNo());								// CC_NO
-				apiLine.setLineOfEachItemCode(periodicLineV1.getLineNoOfEachItemCode());                	// INV_NO
-				apiLine.setItemCode(periodicLineV1.getItemCode());										// ITM_CODE
-				apiLine.setItemDescription(periodicLineV1.getItemDescription());                 		// ITM_DESC
-				apiLine.setUom(periodicLineV1.getUom());                                					// UOM
-				apiLine.setManufacturerCode(periodicLineV1.getManufacturerCode());                     	// MANU_FAC_CODE
-				apiLine.setManufacturerName(periodicLineV1.getManufacturerName());        				// MANU_FAC_NM
+				apiLine.setCycleCountNo(periodicLineV1.getCycleCountNo());                                // CC_NO
+				apiLine.setLineOfEachItemCode(periodicLineV1.getLineNoOfEachItemCode());                    // INV_NO
+				apiLine.setItemCode(periodicLineV1.getItemCode());                                        // ITM_CODE
+				apiLine.setItemDescription(periodicLineV1.getItemDescription());                        // ITM_DESC
+				apiLine.setUom(periodicLineV1.getUom());                                                    // UOM
+				apiLine.setManufacturerCode(periodicLineV1.getManufacturerCode());                        // MANU_FAC_CODE
+				apiLine.setManufacturerName(periodicLineV1.getManufacturerName());                        // MANU_FAC_NM
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setCountedQty(periodicLineV1.getCountedQty());
+				apiLine.setFrozenQty(periodicLineV1.getFrozenQty());
+				apiLine.setIsCancelled(periodicLineV1.getIsCancelled());
+				apiLine.setIsCompleted(periodicLineV1.getIsCompleted());
+				apiLine.setStockCountType("PERIODIC");
+				apiLine.setMiddlewareId(periodicLineV1.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(periodicLineV1.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(periodicLineV1.getMiddlewareTable());
 
 				cycleCountLines.add(apiLine);
 			}
 			apiHeader.setLines(cycleCountLines);
 			apiHeader.setOrderProcessedOn(new Date());
 
-			if (periodic.getPeriodicLineV1() != null && ! periodic.getPeriodicLineV1().isEmpty()) {
-
+			if (periodic.getPeriodicLineV1() != null && !periodic.getPeriodicLineV1().isEmpty()) {
 				apiHeader.setProcessedStatusId(0L);
 				log.info("apiHeader : " + apiHeader);
 				CycleCountHeader cycleCountHeader = orderService.createCycleCountOrder(apiHeader);
@@ -1556,5 +1985,805 @@ public class WarehouseService extends BaseService {
 		return null;
 	}
 
+
+//====================================================OutBound V2===========================================================================
+
+	/**
+	 * ShipmentOrder
+	 *
+	 * @param shipmenOrder
+	 * @return
+	 */
+	public ShipmentOrderV2 postSOV2(ShipmentOrderV2 shipmenOrder, boolean isRerun) throws ParseException {
+		log.info("ShipmenOrder received from External: " + shipmenOrder);
+		OutboundOrderV2 savedSoHeader = saveSOV2(shipmenOrder, isRerun);                        // Without Nongo
+		log.info("savedSoHeader: " + savedSoHeader.getRefDocumentNo());
+		return shipmenOrder;
+	}
+
+	/**
+	 * @param salesOrder
+	 * @return
+	 */
+	public SalesOrderV2 postSalesOrderV2(SalesOrderV2 salesOrder) throws ParseException {
+		log.info("SalesOrderHeader received from External: " + salesOrder);
+		OutboundOrderV2 savedSoHeader = saveSalesOrderV2(salesOrder);                                // Without Nongo
+		log.info("salesOrderHeader: " + savedSoHeader);
+		return salesOrder;
+	}
+
+	/**
+	 * @param returnPO
+	 * @return
+	 */
+	public ReturnPOV2 postReturnPOV2(ReturnPOV2 returnPO) throws ParseException {
+		log.info("ReturnPOHeader received from External: " + returnPO);
+		OutboundOrderV2 savedReturnPOHeader = saveReturnPOV2(returnPO);                    // Without Nongo
+		log.info("savedReturnPOHeader: " + savedReturnPOHeader);
+		return returnPO;
+	}
+
+	/**
+	 * @param interWarehouseTransfer
+	 * @return
+	 */
+	public InterWarehouseTransferOutV2 postInterWarehouseTransferOutboundV2(InterWarehouseTransferOutV2 interWarehouseTransfer) throws ParseException {
+		log.info("InterWarehouseTransferHeader received from External: " + interWarehouseTransfer);
+		OutboundOrderV2 savedInterWarehouseTransferHeader = saveIWHTransferV2(interWarehouseTransfer);                                                    // Without Nongo
+		log.info("savedInterWarehouseTransferHeader: " + savedInterWarehouseTransferHeader);
+		return interWarehouseTransfer;
+	}
+
+	/**
+	 * Post SalesInvoice
+	 *
+	 * @param salesInvoice
+	 * @return
+	 */
+	public OutboundOrderV2 postSalesInvoice(SalesInvoice salesInvoice) throws ParseException {
+		log.info("SalesInvoice received from external: " + salesInvoice);
+		OutboundOrderV2 savedSalesInvoice = saveSalesInvoice(salesInvoice);
+		log.info("Saved SalesInvoice: " + savedSalesInvoice);
+		return savedSalesInvoice;
+	}
+
+	/**
+	 *
+	 * @param stockAdjustment
+	 * @return
+	 */
+	public StockAdjustment postStockAdjustment(StockAdjustment stockAdjustment) {
+		log.info("StockAdjustment received from external: " + stockAdjustment);
+		StockAdjustment savedStockAdjustment = saveStockAdjustment(stockAdjustment);
+		log.info("Saved StockAdjustment: " + savedStockAdjustment);
+		return savedStockAdjustment;
+	}
+
+	/*---------------------------------------------------------------------------------------------------------------------------------*/
+
+//	// POST ShipmentOrderV2
+	private OutboundOrderV2 saveSOV2(ShipmentOrderV2 shipmentOrder, boolean isRerun) throws ParseException {
+		try {
+			SOHeaderV2 soHeader = shipmentOrder.getSoHeader();
+
+			Optional<Warehouse> warehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							soHeader.getCompanyCode(), soHeader.getBranchCode(), "EN", 0L);
+			// Warehouse ID Validation
+			validateWarehouseId(warehouse.get().getWarehouseId());
+
+			// Checking for duplicate RefDocNumber
+			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(soHeader.getTransferOrderNumber());
+			if (obOrder != null) {
+				throw new OutboundOrderRequestException("TransferOrderNumber is getting duplicated. This order already exists in the System.");
+			}
+
+			List<SOLineV2> soLines = shipmentOrder.getSoLine();
+
+			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+
+			apiHeader.setBranchCode(soHeader.getBranchCode());
+			apiHeader.setCompanyCode(soHeader.getCompanyCode());
+			apiHeader.setWarehouseID(warehouse.get().getWarehouseId());
+
+			apiHeader.setMiddlewareId(soHeader.getMiddlewareId());
+			apiHeader.setMiddlewareTable(soHeader.getMiddlewareTable());
+			apiHeader.setOrderId(soHeader.getTransferOrderNumber());
+			apiHeader.setPartnerCode(soHeader.getStoreID());
+			apiHeader.setPartnerName(soHeader.getStoreName());
+			apiHeader.setRefDocumentNo(soHeader.getTransferOrderNumber());
+			apiHeader.setOutboundOrderTypeID(0L);
+			apiHeader.setRefDocumentType("WMS to Non-WMS");                        // Hardcoded value "SO"
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setTargetCompanyCode(soHeader.getTargetCompanyCode());
+			apiHeader.setTargetBranchCode(soHeader.getTargetBranchCode());
+
+			try {
+				Date date = DateUtils.convertStringToDate2(soHeader.getRequiredDeliveryDate());
+				apiHeader.setRequiredDeliveryDate(date);
+			} catch (Exception e) {
+				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
+			}
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					soHeader.getCompanyCode(), soHeader.getBranchCode(), warehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+				apiHeader.setBranchName(iKeyValuePair.getPlantDesc());
+				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+			}
+
+			Set<OutboundOrderLineV2> orderLines = new HashSet<>();
+			for (SOLineV2 soLine : soLines) {
+				OutboundOrderLineV2 apiLine = new OutboundOrderLineV2();
+
+				apiLine.setBrand(soLine.getManufacturerFullName());
+				apiLine.setOrigin(soLine.getOrigin());
+				apiLine.setPackQty(soLine.getPackQty());
+				apiLine.setExpectedQty(soLine.getExpectedQty());
+				apiLine.setSupplierName(soLine.getSupplierName());
+				apiLine.setSourceBranchCode(apiHeader.getBranchCode());
+				apiLine.setCountryOfOrigin(soLine.getCountryOfOrigin());
+				apiLine.setFromCompanyCode(apiHeader.getCompanyCode());
+				apiLine.setStoreID(soLine.getStoreID());
+
+				apiLine.setRefField1ForOrderType(soLine.getOrderType());
+				apiLine.setLineReference(soLine.getLineReference());            // IB_LINE_NO
+				apiLine.setItemCode(soLine.getSku());                            // ITM_CODE
+				apiLine.setItemText(soLine.getSkuDescription());                // ITEM_TEXT
+				apiLine.setOrderedQty(soLine.getOrderedQty());                    // ORD_QTY
+				apiLine.setUom(soLine.getUom());                                // ORD_UOM
+				apiLine.setManufacturerCode(soLine.getManufacturerCode());
+				apiLine.setManufacturerName(soLine.getManufacturerName());
+				apiLine.setRefField1ForOrderType(soLine.getOrderType());        // ORDER_TYPE
+				apiLine.setOrderId(apiHeader.getOrderId());
+
+				apiLine.setTransferOrderNumber(soLine.getTransferOrderNumber());
+				apiLine.setMiddlewareId(soLine.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(soLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(soLine.getMiddlewareTable());
+
+				orderLines.add(apiLine);
+			}
+			apiHeader.setLine(orderLines);
+			apiHeader.setOrderProcessedOn(new Date());
+
+			if (shipmentOrder.getSoLine() != null && !shipmentOrder.getSoLine().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("ShipmentOrder Order Success: " + createdOrder);
+				return apiHeader;
+			} else if (shipmentOrder.getSoLine() == null || shipmentOrder.getSoLine().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader: " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("ShipmentOrder Order Failed: " + createdOrder);
+				throw new BadRequestException("ShipmentOrder Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+	// POST ShipmentOrderV2
+//	private OutboundOrderV2 saveSOV2(ShipmentOrderV2 shipmentOrder, boolean isRerun) {
+//		try {
+//			SOHeaderV2 soHeader = shipmentOrder.getSoHeader();
+//
+//			Optional<Warehouse> warehouse =
+//					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+//							soHeader.getCompanyCode(), soHeader.getBranchCode(), "EN", 0L);
+//			// Warehouse ID Validation
+////			validateWarehouseId(warehouse.get().getWarehouseId());
+//
+//			// Checking for duplicate RefDocNumber
+//			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(soHeader.getTransferOrderNumber());
+//			if (obOrder != null) {
+//				throw new OutboundOrderRequestException("TransferOrderNumber is getting duplicated. This order already exists in the System.");
+//			}
+//
+//			List<SOLineV2> soLines = shipmentOrder.getSoLine();
+//
+//			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+//
+//			apiHeader.setBranchCode(soHeader.getBranchCode());
+//			apiHeader.setCompanyCode(soHeader.getCompanyCode());
+//			if(warehouse != null && !warehouse.isEmpty()) {
+//				apiHeader.setWarehouseID(warehouse.get().getWarehouseId());
+//			}
+//
+//			apiHeader.setMiddlewareId(soHeader.getMiddlewareId());
+//			apiHeader.setMiddlewareTable(soHeader.getMiddlewareTable());
+//			apiHeader.setOrderId(soHeader.getTransferOrderNumber());
+//			apiHeader.setPartnerCode(soHeader.getStoreID());
+//			apiHeader.setPartnerName(soHeader.getStoreName());
+//			apiHeader.setRefDocumentNo(soHeader.getTransferOrderNumber());
+//			apiHeader.setOutboundOrderTypeID(0L);
+//			apiHeader.setRefDocumentType("WMS to Non-WMS");                        // Hardcoded value "SO"
+//			apiHeader.setOrderReceivedOn(new Date());
+//			apiHeader.setTargetCompanyCode(soHeader.getTargetCompanyCode());
+//			apiHeader.setTargetBranchCode(soHeader.getTargetBranchCode());
+//
+//			try {
+//				Date date = DateUtils.convertStringToDate2(soHeader.getRequiredDeliveryDate());
+//				apiHeader.setRequiredDeliveryDate(date);
+//			} catch (Exception e) {
+//				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
+//			}
+//
+////			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+////					soHeader.getCompanyCode(), soHeader.getBranchCode(), warehouse.get().getWarehouseId());
+////			if (iKeyValuePair != null) {
+////				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+////				apiHeader.setBranchName(iKeyValuePair.getPlantDesc());
+////				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+////			}
+//
+//			Set<OutboundOrderLineV2> orderLines = new HashSet<>();
+//			for (SOLineV2 soLine : soLines) {
+//				OutboundOrderLineV2 apiLine = new OutboundOrderLineV2();
+//
+//				apiLine.setBrand(soLine.getManufacturerFullName());
+//				apiLine.setOrigin(soLine.getOrigin());
+//				apiLine.setPackQty(soLine.getPackQty());
+//				apiLine.setExpectedQty(soLine.getExpectedQty());
+//				apiLine.setSupplierName(soLine.getSupplierName());
+//				apiLine.setSourceBranchCode(apiHeader.getBranchCode());
+//				apiLine.setCountryOfOrigin(soLine.getCountryOfOrigin());
+//				apiLine.setFromCompanyCode(apiHeader.getCompanyCode());
+//				apiLine.setStoreID(soLine.getStoreID());
+//
+//				apiLine.setRefField1ForOrderType(soLine.getOrderType());
+//				apiLine.setLineReference(soLine.getLineReference());            // IB_LINE_NO
+//				apiLine.setItemCode(soLine.getSku());                            // ITM_CODE
+//				apiLine.setItemText(soLine.getSkuDescription());                // ITEM_TEXT
+//				apiLine.setOrderedQty(soLine.getOrderedQty());                    // ORD_QTY
+//				apiLine.setUom(soLine.getUom());                                // ORD_UOM
+//				apiLine.setManufacturerCode(soLine.getManufacturerCode());
+//				apiLine.setManufacturerName(soLine.getManufacturerName());
+//				apiLine.setRefField1ForOrderType(soLine.getOrderType());        // ORDER_TYPE
+//				apiLine.setOrderId(apiHeader.getOrderId());
+//
+//				apiLine.setTransferOrderNumber(soLine.getTransferOrderNumber());
+//				apiLine.setMiddlewareId(soLine.getMiddlewareId());
+//				apiLine.setMiddlewareHeaderId(soLine.getMiddlewareHeaderId());
+//				apiLine.setMiddlewareTable(soLine.getMiddlewareTable());
+//
+//				orderLines.add(apiLine);
+//			}
+//			apiHeader.setLine(orderLines);
+//			apiHeader.setOrderProcessedOn(new Date());
+//
+//			if (shipmentOrder.getSoLine() != null && !shipmentOrder.getSoLine().isEmpty()) {
+//				apiHeader.setProcessedStatusId(0L);
+//				log.info("apiHeader : " + apiHeader);
+//				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+//				log.info("ShipmentOrder Order Success: " + createdOrder);
+//				return apiHeader;
+//			} else if (shipmentOrder.getSoLine() == null || shipmentOrder.getSoLine().isEmpty()) {
+//				// throw the error as Lines are Empty and set the Indicator as '100'
+//				apiHeader.setProcessedStatusId(100L);
+//				log.info("apiHeader: " + apiHeader);
+//				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+//				log.info("ShipmentOrder Order Failed: " + createdOrder);
+//				throw new BadRequestException("ShipmentOrder Order doesn't contain any Lines.");
+//			}
+//		} catch (Exception e) {
+//			throw e;
+//		}
+//		return null;
+//	}
+
+	// POST
+	private OutboundOrderV2 saveSalesOrderV2(@Valid SalesOrderV2 salesOrder) throws ParseException {
+		try {
+			SalesOrderHeaderV2 salesOrderHeader = salesOrder.getSalesOrderHeader();
+
+			Optional<Warehouse> warehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							salesOrderHeader.getCompanyCode(), salesOrderHeader.getStoreID(),
+							"EN", 0L);
+			// Warehouse ID Validation
+			validateWarehouseId(warehouse.get().getWarehouseId());
+
+			// Checking for duplicate RefDocNumber
+			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(salesOrderHeader.getSalesOrderNumber());
+			if (obOrder != null) {
+				throw new OutboundOrderRequestException("SalesOrderNumber is already posted and it can't be duplicated.");
+			}
+
+			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+			apiHeader.setBranchCode(salesOrderHeader.getBranchCode());
+			apiHeader.setCompanyCode(salesOrderHeader.getCompanyCode());
+			apiHeader.setLanguageId(warehouse.get().getLanguageId());
+			apiHeader.setWarehouseID(warehouse.get().getWarehouseId());
+
+			apiHeader.setOrderId(salesOrderHeader.getPickListNumber());
+			apiHeader.setPartnerCode(salesOrderHeader.getStoreID());
+			apiHeader.setPartnerName(salesOrderHeader.getStoreName());
+			apiHeader.setPickListNumber(salesOrderHeader.getPickListNumber());
+			apiHeader.setPickListStatus(salesOrderHeader.getStatus());
+			apiHeader.setRefDocumentNo(salesOrderHeader.getPickListNumber());
+			apiHeader.setOutboundOrderTypeID(3L);                                   // Hardcoded Value "3"
+			apiHeader.setRefDocumentType("PICK LIST");                              // Hardcoded value "SaleOrder"
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setSalesOrderNumber(salesOrderHeader.getSalesOrderNumber());
+			apiHeader.setTokenNumber(salesOrderHeader.getTokenNumber());
+
+			apiHeader.setMiddlewareId(salesOrderHeader.getMiddlewareId());
+			apiHeader.setMiddlewareTable(salesOrderHeader.getMiddlewareTable());
+
+			try {
+				Date reqDate = DateUtils.convertStringToDate2(salesOrderHeader.getRequiredDeliveryDate());
+				apiHeader.setRequiredDeliveryDate(reqDate);
+			} catch (Exception e) {
+				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
+			}
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					salesOrderHeader.getCompanyCode(), salesOrderHeader.getStoreID(), warehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+			}
+
+			List<SalesOrderLineV2> salesOrderLines = salesOrder.getSalesOrderLine();
+			Set<OutboundOrderLineV2> orderLines = new HashSet<>();
+			for (SalesOrderLineV2 soLine : salesOrderLines) {
+				OutboundOrderLineV2 apiLine = new OutboundOrderLineV2();
+				apiLine.setBrand(soLine.getBrand());
+				apiLine.setOrigin(soLine.getOrigin());
+				apiLine.setPackQty(soLine.getPackQty());
+				apiLine.setExpectedQty(soLine.getExpectedQty());
+				apiLine.setSupplierName(soLine.getSupplierName());
+				apiLine.setSourceBranchCode(salesOrderHeader.getStoreID());
+				apiLine.setCountryOfOrigin(soLine.getCountryOfOrigin());
+				apiLine.setFromCompanyCode(salesOrderHeader.getCompanyCode());
+				apiLine.setManufacturerCode(soLine.getManufacturerCode());
+				apiLine.setManufacturerName(soLine.getManufacturerName());
+				apiLine.setManufacturerFullName(soLine.getManufacturerFullName());
+				apiLine.setStoreID(salesOrderHeader.getStoreID());
+				apiLine.setRefField1ForOrderType(soLine.getOrderType());
+
+				apiLine.setLineReference(soLine.getLineReference());            // IB_LINE_NO
+				apiLine.setItemCode(soLine.getSku());                            // ITM_CODE
+				apiLine.setItemText(soLine.getSkuDescription());                // ITEM_TEXT
+				apiLine.setOrderedQty(soLine.getOrderedQty());                    // ORD_QTY
+				apiLine.setUom(soLine.getUom());                                // ORD_UOM
+				apiLine.setRefField1ForOrderType(soLine.getOrderType());        // ORDER_TYPE
+				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setSalesOrderNo(soLine.getSalesOrderNo());
+				apiLine.setPickListNo(soLine.getPickListNo());
+
+				apiLine.setMiddlewareId(soLine.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(soLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(soLine.getMiddlewareTable());
+
+				orderLines.add(apiLine);
+			}
+			apiHeader.setLine(orderLines);
+			apiHeader.setOrderProcessedOn(new Date());
+
+			if (salesOrder.getSalesOrderLine() != null && !salesOrder.getSalesOrderLine().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("SalesOrder Order Success: " + createdOrder);
+				return apiHeader;
+			} else if (salesOrder.getSalesOrderLine() == null || salesOrder.getSalesOrderLine().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("SalesOrder Order Failed: " + createdOrder);
+				throw new BadRequestException("SalesOrder Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+
+	/**
+	 * @param returnPO
+	 * @return
+	 */
+	private OutboundOrderV2 saveReturnPOV2(ReturnPOV2 returnPO) throws ParseException {
+		try {
+			ReturnPOHeaderV2 returnPOHeader = returnPO.getReturnPOHeader();
+
+			Optional<Warehouse> warehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							returnPOHeader.getCompanyCode(), returnPOHeader.getStoreID(),
+							"EN", 0L);
+
+			// Warehouse ID Validation
+			validateWarehouseId(warehouse.get().getWarehouseId());
+
+			// Checking for duplicate RefDocNumber
+			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(returnPOHeader.getPoNumber());
+
+			if (obOrder != null) {
+				throw new OutboundOrderRequestException("PO number is already posted and it can't be duplicated");
+			}
+
+			List<ReturnPOLineV2> returnPOLines = returnPO.getReturnPOLine();
+
+			// Mongo Primary Key
+			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+
+			apiHeader.setCompanyCode(returnPOHeader.getCompanyCode());
+			apiHeader.setBranchCode(returnPOHeader.getBranchCode());
+			apiHeader.setLanguageId(returnPOHeader.getLanguageId());
+			apiHeader.setWarehouseID(warehouse.get().getWarehouseId());
+
+			apiHeader.setOrderId(returnPOHeader.getPoNumber());
+			apiHeader.setPartnerCode(returnPOHeader.getStoreID());
+			apiHeader.setPartnerName(returnPOHeader.getStoreName());
+			apiHeader.setRefDocumentNo(returnPOHeader.getPoNumber());
+			apiHeader.setOutboundOrderTypeID(2L);                            // Hardcoded Value "2"
+			apiHeader.setRefDocumentType("PURCHASE RETURN");                        // Hardcoded value "RETURNPO"
+			apiHeader.setOrderReceivedOn(new Date());
+
+			apiHeader.setIsCompleted(returnPOHeader.getIsCompleted());
+			apiHeader.setIsCancelled(returnPOHeader.getIsCancelled());
+			apiHeader.setUpdatedOn(returnPOHeader.getUpdatedOn());
+			apiHeader.setMiddlewareId(returnPOHeader.getMiddlewareId());
+			apiHeader.setMiddlewareTable(returnPOHeader.getMiddlewareTable());
+
+			try {
+				Date date = DateUtils.convertStringToDate2(returnPOHeader.getRequiredDeliveryDate());
+				apiHeader.setRequiredDeliveryDate(date);
+			} catch (Exception e) {
+				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
+			}
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					returnPOHeader.getCompanyCode(),
+					returnPOHeader.getStoreID(),
+					warehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+			}
+
+			Set<OutboundOrderLineV2> orderLines = new HashSet<>();
+			for (ReturnPOLineV2 rpoLine : returnPOLines) {
+				OutboundOrderLineV2 apiLine = new OutboundOrderLineV2();
+				apiLine.setBrand(rpoLine.getBrand());
+				apiLine.setOrigin(rpoLine.getOrigin());
+				apiLine.setPackQty(rpoLine.getPackQty());
+				apiLine.setExpectedQty(rpoLine.getExpectedQty());
+				apiLine.setSupplierName(rpoLine.getSupplierName());
+				apiLine.setSourceBranchCode(returnPOHeader.getStoreID());
+				apiLine.setCountryOfOrigin(rpoLine.getCountryOfOrigin());
+				apiLine.setFromCompanyCode(returnPOHeader.getCompanyCode());
+				apiLine.setReturnOrderNo(rpoLine.getReturnOrderNo());
+				apiLine.setStoreID(returnPOHeader.getStoreID());
+				apiLine.setLineReference(rpoLine.getLineReference());            // IB_LINE_NO
+				apiLine.setItemCode(rpoLine.getSku());                            // ITM_CODE
+				apiLine.setItemText(rpoLine.getSkuDescription());                // ITEM_TEXT
+				apiLine.setOrderedQty(rpoLine.getReturnQty());                    // ORD_QTY
+				apiLine.setUom(rpoLine.getUom());                                // ORD_UOM
+				apiLine.setRefField1ForOrderType(rpoLine.getOrderType());        // ORDER_TYPE
+				apiLine.setManufacturerCode(rpoLine.getManufacturerCode());
+				apiLine.setManufacturerName(rpoLine.getManufacturerName());
+				apiLine.setOrderId(apiHeader.getOrderId());
+
+				apiLine.setSupplierInvoiceNo(rpoLine.getSupplierInvoiceNo());
+				apiLine.setIsCompleted(rpoLine.getIsCompleted());
+				apiLine.setIsCancelled(rpoLine.getIsCancelled());
+				apiLine.setMiddlewareId(rpoLine.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(rpoLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(rpoLine.getMiddlewareTable());
+
+				orderLines.add(apiLine);
+			}
+			apiHeader.setLine(orderLines);
+			apiHeader.setOrderProcessedOn(new Date());
+
+			if (returnPO.getReturnPOLine() != null && !returnPO.getReturnPOLine().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("ReturnPO Order Success: " + createdOrder);
+				return apiHeader;
+			} else if (returnPO.getReturnPOLine() == null || returnPO.getReturnPOLine().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("ReturnPO Order Failed: " + createdOrder);
+				throw new BadRequestException("ReturnPO Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+
+	/**
+	 * @param iWhTransferOutV2
+	 * @return
+	 */
+	private OutboundOrderV2 saveIWHTransferV2(InterWarehouseTransferOutV2 iWhTransferOutV2) throws ParseException {
+		try {
+			InterWarehouseTransferOutHeaderV2 interWhTransferOutHeader =
+					iWhTransferOutV2.getInterWarehouseTransferOutHeader();
+
+			Optional<Warehouse> warehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							interWhTransferOutHeader.getToCompanyCode(), interWhTransferOutHeader.getToBranchCode(),
+							"EN", 0L);
+
+			// Warehouse ID Validation
+			validateWarehouseId(warehouse.get().getWarehouseId());
+
+			// Checking for duplicate RefDocNumber
+			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(interWhTransferOutHeader.getTransferOrderNumber());
+
+			if (obOrder != null) {
+				throw new OutboundOrderRequestException("TransferOrderNumber is already posted and it can't be duplicated");
+			}
+
+			List<InterWarehouseTransferOutLineV2> interWarehouseTransferOutLines =
+					iWhTransferOutV2.getInterWarehouseTransferOutLine();
+
+			// Mongo Primary Key
+			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+
+			apiHeader.setBranchCode(interWhTransferOutHeader.getFromBranchCode());
+			apiHeader.setCompanyCode(interWhTransferOutHeader.getFromCompanyCode());
+			apiHeader.setLanguageId(warehouse.get().getLanguageId());
+			apiHeader.setWarehouseID(warehouse.get().getWarehouseId());
+			apiHeader.setFromBranchCode(interWhTransferOutHeader.getFromBranchCode());
+
+			apiHeader.setOrderId(interWhTransferOutHeader.getTransferOrderNumber());
+//			apiHeader.setWarehouseID(interWhTransferOutHeader.getFromWhsID());
+			apiHeader.setPartnerCode(interWhTransferOutHeader.getToBranchCode());
+			apiHeader.setPartnerName(interWhTransferOutHeader.getStoreName());
+
+			apiHeader.setSourceCompanyCode(interWhTransferOutHeader.getFromCompanyCode());
+			apiHeader.setTargetCompanyCode(interWhTransferOutHeader.getToCompanyCode());
+			apiHeader.setTargetBranchCode(interWhTransferOutHeader.getToBranchCode());
+
+			apiHeader.setRefDocumentNo(interWhTransferOutHeader.getTransferOrderNumber());
+			apiHeader.setOutboundOrderTypeID(1L);                             // Hardcoded Value "1"
+			apiHeader.setRefDocumentType("WMS to WMS");                            // Hardcoded value "WH to WH"
+			apiHeader.setOrderReceivedOn(new Date());
+
+			apiHeader.setMiddlewareId(interWhTransferOutHeader.getMiddlewareId());
+			apiHeader.setMiddlewareTable(interWhTransferOutHeader.getMiddlewareTable());
+
+			try {
+				Date reqDate = DateUtils.convertStringToDate2(interWhTransferOutHeader.getRequiredDeliveryDate());
+				apiHeader.setRequiredDeliveryDate(reqDate);
+			} catch (Exception e) {
+				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
+			}
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					interWhTransferOutHeader.getFromCompanyCode(),
+					interWhTransferOutHeader.getFromBranchCode(),
+					warehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+				apiHeader.setBranchName(iKeyValuePair.getPlantDesc());
+				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+			}
+
+			Set<OutboundOrderLineV2> orderLines = new HashSet<>();
+			for (InterWarehouseTransferOutLineV2 iwhTransferLine : interWarehouseTransferOutLines) {
+				OutboundOrderLineV2 apiLine = new OutboundOrderLineV2();
+
+				apiLine.setBrand(iwhTransferLine.getBrand());
+				apiLine.setOrigin(iwhTransferLine.getOrigin());
+				apiLine.setPackQty(iwhTransferLine.getPackQty());
+				apiLine.setExpectedQty(iwhTransferLine.getExpectedQty());
+				apiLine.setSupplierName(iwhTransferLine.getSupplierName());
+				apiLine.setSourceBranchCode(iwhTransferLine.getSourceBranchCode());
+				apiLine.setCountryOfOrigin(iwhTransferLine.getCountryOfOrigin());
+				apiLine.setFromCompanyCode(iwhTransferLine.getFromCompanyCode());
+				apiLine.setStoreID(iwhTransferLine.getStoreID());
+
+				apiLine.setLineReference(iwhTransferLine.getLineReference());            // IB_LINE_NO
+				apiLine.setItemCode(iwhTransferLine.getSku());                            // ITM_CODE
+				apiLine.setItemText(iwhTransferLine.getSkuDescription());                // ITEM_TEXT
+				apiLine.setOrderedQty(iwhTransferLine.getOrderedQty());                    // ORD_QTY
+				apiLine.setUom(iwhTransferLine.getUom());                                // ORD_UOM
+				apiLine.setRefField1ForOrderType(iwhTransferLine.getOrderType());        // ORDER_TYPE
+				apiLine.setManufacturerCode(iwhTransferLine.getManufacturerCode());
+				apiLine.setManufacturerName(iwhTransferLine.getManufacturerName());
+				apiLine.setOrderId(apiHeader.getOrderId());
+
+				apiLine.setMiddlewareId(iwhTransferLine.getMiddlewareId());
+				apiLine.setMiddlewareHeaderId(iwhTransferLine.getMiddlewareHeaderId());
+				apiLine.setMiddlewareTable(iwhTransferLine.getMiddlewareTable());
+
+				orderLines.add(apiLine);
+			}
+			apiHeader.setLine(orderLines);
+			apiHeader.setOrderProcessedOn(new Date());
+
+			if (iWhTransferOutV2.getInterWarehouseTransferOutLine() != null &&
+					!iWhTransferOutV2.getInterWarehouseTransferOutLine().isEmpty()) {
+				apiHeader.setProcessedStatusId(0L);
+				log.info("apiHeader: " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("InterWarehouseTransferOut Order Success: " + createdOrder);
+				return apiHeader;
+			} else if (iWhTransferOutV2.getInterWarehouseTransferOutLine() == null ||
+					iWhTransferOutV2.getInterWarehouseTransferOutLine().isEmpty()) {
+				// throw the error as Lines are Empty and set the Indicator as '100'
+				apiHeader.setProcessedStatusId(100L);
+				log.info("apiHeader : " + apiHeader);
+				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+				log.info("InterWarehouseTransferOut Order Failed: " + createdOrder);
+				throw new BadRequestException("InterWarehouseTransferOut Order doesn't contain any Lines.");
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+
+	//Save SalesInvoice
+	private OutboundOrderV2 saveSalesInvoice(SalesInvoice salesInvoice) throws ParseException {
+		try {
+			OutboundOrderV2 duplicateOrder = orderService.getOBOrderByIdV2(salesInvoice.getSalesInvoiceNumber());
+			if (duplicateOrder != null) {
+				throw new OutboundOrderRequestException("Sales Invoice is already posted and it can't be duplicated");
+			}
+
+			OutboundOrderV2 apiHeader = new OutboundOrderV2();
+			apiHeader.setCompanyCode(salesInvoice.getCompanyCode());
+			apiHeader.setOrderId(salesInvoice.getSalesInvoiceNumber());
+			apiHeader.setBranchCode(salesInvoice.getBranchCode());
+			apiHeader.setSalesOrderNumber(salesInvoice.getSalesOrderNumber());
+			apiHeader.setPickListNumber(salesInvoice.getPickListNumber());
+
+			apiHeader.setCustomerId(salesInvoice.getCustomerId());
+			apiHeader.setCustomerName(salesInvoice.getCustomerName());
+			apiHeader.setPhoneNumber(salesInvoice.getPhoneNumber());
+			apiHeader.setAlternateNo(salesInvoice.getAlternateNo());
+			apiHeader.setSalesInvoiceNumber(salesInvoice.getSalesInvoiceNumber());
+			apiHeader.setDeliveryType(salesInvoice.getDeliveryType());
+			apiHeader.setAddress(salesInvoice.getAddress());
+			apiHeader.setStatus(salesInvoice.getStatus());
+
+			apiHeader.setMiddlewareId(salesInvoice.getMiddlewareId());
+			apiHeader.setMiddlewareTable(salesInvoice.getMiddlewareTable());
+
+			// Get Warehouse
+			Optional<Warehouse> dbWarehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							salesInvoice.getCompanyCode(), salesInvoice.getBranchCode(),
+							"EN", 0L);
+			log.info("dbWarehouse: " + dbWarehouse);
+			validateWarehouseId(dbWarehouse.get().getWarehouseId());
+			apiHeader.setWarehouseID(dbWarehouse.get().getWarehouseId());
+
+			try {
+				Date date = DateUtils.convertStringToDate2(salesInvoice.getInvoiceDate());
+				apiHeader.setSalesInvoiceDate(date);
+				apiHeader.setRequiredDeliveryDate(date);
+			} catch (Exception e) {
+				throw new OutboundOrderRequestException("Date format should be yyyy-MM-dd");
+			}
+
+			apiHeader.setRefDocumentNo(salesInvoice.getSalesInvoiceNumber());
+			apiHeader.setRefDocumentType("Sales Invoice");
+			apiHeader.setOutboundOrderTypeID(4L);
+			apiHeader.setOrderReceivedOn(new Date());
+			apiHeader.setOrderProcessedOn(new Date());
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					salesInvoice.getCompanyCode(), salesInvoice.getBranchCode(), dbWarehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				apiHeader.setCompanyName(iKeyValuePair.getCompanyDesc());
+				apiHeader.setBranchName(iKeyValuePair.getPlantDesc());
+				apiHeader.setWarehouseName(iKeyValuePair.getWarehouseDesc());
+			}
+
+			if (salesInvoice != null) {
+				try {
+					apiHeader.setProcessedStatusId(0L);
+					log.info("SalesInvoice: " + apiHeader);
+					OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+					log.info("SalesInvoice Order Success: " + createdOrder);
+					return createdOrder;
+				} catch (Exception e) {
+					apiHeader.setProcessedStatusId(100L);
+					log.info("SalesInvoice: " + apiHeader);
+					OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+					log.info("SalesInvoice Order Failed: " + createdOrder);
+					throw new RuntimeException(e);
+				}
+			}
+//			else if (salesInvoice == null) {
+//				// throw the error as Lines are Empty and set the Indicator as '100'
+//				apiHeader.setProcessedStatusId(100L);
+//				log.info("SalesInvoice: " + apiHeader);
+//				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
+//				log.info("SalesInvoice Order Failed: " + createdOrder);
+//				throw new BadRequestException("SalesInvoice Order doesn't contain any Lines.");
+//			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
+
+	//Save StockAdjustment
+	private StockAdjustment saveStockAdjustment(StockAdjustment stockAdjustment) {
+		try {
+
+			StockAdjustment dbStockAdjustment = new StockAdjustment();
+			dbStockAdjustment.setCompanyCode(stockAdjustment.getCompanyCode());
+			dbStockAdjustment.setBranchCode(stockAdjustment.getBranchCode());
+			dbStockAdjustment.setBranchName(stockAdjustment.getBranchName());
+			dbStockAdjustment.setDateOfAdjustment(stockAdjustment.getDateOfAdjustment());
+			dbStockAdjustment.setIsDamage(stockAdjustment.getIsDamage());
+			dbStockAdjustment.setIsCycleCount(stockAdjustment.getIsCycleCount());
+			dbStockAdjustment.setItemCode(stockAdjustment.getItemCode());
+			dbStockAdjustment.setItemDescription(stockAdjustment.getItemDescription());
+			dbStockAdjustment.setAdjustmentQty(stockAdjustment.getAdjustmentQty());
+			dbStockAdjustment.setUnitOfMeasure(stockAdjustment.getUnitOfMeasure());
+			dbStockAdjustment.setManufacturerCode(stockAdjustment.getManufacturerCode());
+			dbStockAdjustment.setManufacturerName(stockAdjustment.getManufacturerName());
+			dbStockAdjustment.setRemarks(stockAdjustment.getRemarks());
+			dbStockAdjustment.setAmsReferenceNo(stockAdjustment.getAmsReferenceNo());
+			dbStockAdjustment.setIsCompleted(stockAdjustment.getIsCompleted());
+			dbStockAdjustment.setUpdatedOn(stockAdjustment.getUpdatedOn());
+			dbStockAdjustment.setMiddlewareId(stockAdjustment.getStockAdjustmentId());
+			dbStockAdjustment.setMiddlewareTable(stockAdjustment.getMiddlewareTable());
+
+			// Get Warehouse
+			Optional<Warehouse> dbWarehouse =
+					warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+							stockAdjustment.getCompanyCode(), stockAdjustment.getBranchCode(),
+							"EN", 0L);
+			log.info("dbWarehouse: " + dbWarehouse);
+			validateWarehouseId(dbWarehouse.get().getWarehouseId());
+			dbStockAdjustment.setWarehouseId(dbWarehouse.get().getWarehouseId());
+
+			dbStockAdjustment.setRefDocType("Stock Adjustment");
+			dbStockAdjustment.setOrderReceivedOn(new Date());
+//			dbStockAdjustment.setOrderProcessedOn(new Date());
+
+			IKeyValuePair iKeyValuePair = outboundOrderV2Repository.getV2Description(
+					stockAdjustment.getCompanyCode(), stockAdjustment.getBranchCode(), dbWarehouse.get().getWarehouseId());
+			if (iKeyValuePair != null) {
+				dbStockAdjustment.setCompanyDescription(iKeyValuePair.getCompanyDesc());
+				dbStockAdjustment.setPlantDescription(iKeyValuePair.getPlantDesc());
+				dbStockAdjustment.setWarehouseDescription(iKeyValuePair.getWarehouseDesc());
+			}
+
+			if (dbStockAdjustment != null) {
+				try {
+					dbStockAdjustment.setProcessedStatusId(0L);
+					log.info("stockAdjustment: " + dbStockAdjustment);
+					StockAdjustment createdOrder = stockAdjustmentService.createStockAdjustment(dbStockAdjustment);
+					log.info("StockAdjustment Order Success: " + createdOrder);
+					return createdOrder;
+				} catch (Exception e) {
+					dbStockAdjustment.setProcessedStatusId(100L);
+					log.info("StockAdjustment: " + dbStockAdjustment);
+					StockAdjustment createdOrder = stockAdjustmentService.createStockAdjustment(dbStockAdjustment);
+					log.info("StockAdjustment Order Failed: " + createdOrder);
+					throw new RuntimeException(e);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return null;
+	}
 
 }

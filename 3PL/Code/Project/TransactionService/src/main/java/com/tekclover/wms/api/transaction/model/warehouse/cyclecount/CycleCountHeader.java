@@ -25,7 +25,16 @@ public class CycleCountHeader {
     private Date cycleCountCreationDate;
     private String isNew;
     private Date orderProcessedOn;
+    private Date orderReceivedOn;
     private Long processedStatusId;
+
+    //MiddleWare Fields
+    private Long middlewareId;
+    private String middlewareTable;
+    private String isCompleted;
+    private String isCancelled;
+    private String stockCountType;
+    private Date updatedOn;
 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderId",fetch = FetchType.EAGER)

@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.InboundOrderStatusIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class InboundOrderStatusIdService{
 	 * @throws InvocationTargetException
 	 */
 	public InboundOrderStatusId createInboundOrderStatusId (AddInboundOrderStatusId newInboundOrderStatusId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		InboundOrderStatusId dbInboundOrderStatusId = new InboundOrderStatusId();
 		Optional<InboundOrderStatusId> duplicateInboundOrderStatusId = inboundOrderStatusIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndInboundOrderStatusIdAndLanguageIdAndDeletionIndicator(newInboundOrderStatusId.getCompanyCodeId(), newInboundOrderStatusId.getPlantId(), newInboundOrderStatusId.getWarehouseId(), newInboundOrderStatusId.getInboundOrderStatusId(), newInboundOrderStatusId.getLanguageId(), 0L);
 		if (!duplicateInboundOrderStatusId.isEmpty()) {
@@ -147,7 +148,7 @@ public class InboundOrderStatusIdService{
 	 */
 	public InboundOrderStatusId updateInboundOrderStatusId (String warehouseId, String inboundOrderStatusId,String companyCodeId,String languageId,String plantId,String loginUserID,
 															UpdateInboundOrderStatusId updateInboundOrderStatusId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		InboundOrderStatusId dbInboundOrderStatusId = getInboundOrderStatusId( warehouseId,inboundOrderStatusId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateInboundOrderStatusId, dbInboundOrderStatusId, CommonUtils.getNullPropertyNames(updateInboundOrderStatusId));
 		dbInboundOrderStatusId.setUpdatedBy(loginUserID);

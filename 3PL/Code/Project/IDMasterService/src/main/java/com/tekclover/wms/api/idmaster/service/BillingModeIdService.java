@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.BillingModeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,7 @@ public class BillingModeIdService {
      * @throws InvocationTargetException
      */
     public BillingModeId createBillingModeId(AddBillingModeId newBillingModeId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingModeId dbBillingModeId = new BillingModeId();
         log.info("newBillingModeId:" + newBillingModeId);
         Optional<BillingModeId> duplicateBillingModeId = billingModeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBillModeIdAndLanguageIdAndDeletionIndicator(newBillingModeId.getCompanyCodeId(), newBillingModeId.getPlantId(), newBillingModeId.getWarehouseId(), newBillingModeId.getBillModeId(), newBillingModeId.getLanguageId(), 0L);
@@ -144,7 +145,7 @@ public class BillingModeIdService {
      * @throws InvocationTargetException
      */
     public BillingModeId updateBillingModeId(String warehouseId, Long billModeId,String companyCodeId,String languageId,String plantId, String loginUserID,
-                                             UpdateBillingModeId updateBillingModeId)throws IllegalAccessException,InvocationTargetException{
+                                             UpdateBillingModeId updateBillingModeId) throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingModeId dbBillingModeId=getBillingModeId(warehouseId,billModeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingModeId,dbBillingModeId,CommonUtils.getNullPropertyNames(updateBillingModeId));
         dbBillingModeId.setUpdatedBy(loginUserID);

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -118,7 +119,7 @@ public class PreInboundLineController {
 	@ApiOperation(response = PreInboundLineEntityV2.class, value = "Create PreInboundLine V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postPreInboundLineV2(@Valid @RequestBody PreInboundLineEntityV2 newPreInboundLine, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PreInboundLineEntityV2 createdPreInboundLine = preinboundlineService.createPreInboundLineV2(newPreInboundLine, loginUserID);
 		return new ResponseEntity<>(createdPreInboundLine, HttpStatus.OK);
 	}
@@ -154,7 +155,7 @@ public class PreInboundLineController {
 	@DeleteMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> deletePreInboundLineV2(@PathVariable String preInboundNo, @RequestParam String warehouseId, @RequestParam String companyCode,
 													@RequestParam String plantId, @RequestParam String languageId, @RequestParam String refDocNumber,
-													@RequestParam Long lineNo, @RequestParam String itemCode, @RequestParam String loginUserID) {
+													@RequestParam Long lineNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
 		preinboundlineService.deletePreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

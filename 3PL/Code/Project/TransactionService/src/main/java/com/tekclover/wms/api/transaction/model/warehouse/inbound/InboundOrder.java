@@ -29,6 +29,8 @@ public class InboundOrder {
 	private Date orderReceivedOn;
 	private Date orderProcessedOn;
 	private Long processedStatusId;
+
+	private String purchaseOrderNumber;
 	
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "orderId",fetch = FetchType.EAGER)
     private Set<InboundOrderLines> lines;

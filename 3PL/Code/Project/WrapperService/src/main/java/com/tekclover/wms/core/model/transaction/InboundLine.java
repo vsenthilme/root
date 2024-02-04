@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 	public class InboundLine { 
 
 	private String languageId;
-	private String companyCodeId;
+	private String companyCode;
 	private String plantId;
 	private String warehouseId;
 	private String refDocNumber;
@@ -59,5 +59,8 @@ import lombok.NoArgsConstructor;
 	private Date createdOn = new Date();
 	private String confirmedBy;
 	private Date confirmedOn = new Date();
+
+	private String middlewareId;
+	private String middlewareTable;
 
 }

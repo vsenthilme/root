@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.BinSectionIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class BinSectionIdService {
 	 * @throws InvocationTargetException
 	 */
 	public BinSectionId createBinSectionId (AddBinSectionId newBinSectionId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinSectionId dbBinSectionId = new BinSectionId();
 		Optional<BinSectionId> duplicateBinSectionId = binSectionIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBinSectionIdAndLanguageIdAndDeletionIndicator(newBinSectionId.getCompanyCodeId(), newBinSectionId.getPlantId(), newBinSectionId.getWarehouseId(), newBinSectionId.getBinSectionId(), newBinSectionId.getLanguageId(), 0L);
 		if (!duplicateBinSectionId.isEmpty()) {
@@ -151,7 +152,7 @@ public class BinSectionIdService {
 	 */
 	public BinSectionId updateBinSectionId (String warehouseId, String binSectionId,String companyCodeId,String languageId,String plantId,String loginUserID,
 											UpdateBinSectionId updateBinSectionId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinSectionId dbBinSectionId = getBinSectionId( warehouseId,binSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBinSectionId, dbBinSectionId, CommonUtils.getNullPropertyNames(updateBinSectionId));
 		dbBinSectionId.setUpdatedBy(loginUserID);

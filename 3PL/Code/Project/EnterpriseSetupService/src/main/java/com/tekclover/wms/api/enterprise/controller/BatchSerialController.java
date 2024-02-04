@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,7 +67,7 @@ public class BatchSerialController {
     @ApiOperation(response = BatchSerial.class, value = "Create BatchSerial") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postBatchSerial(@Valid @RequestBody List<AddBatchSerial> newBatchSerial, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<BatchSerial> createdBatchSerial = batchserialService.createBatchSerial(newBatchSerial, loginUserID);
 		return new ResponseEntity<>(createdBatchSerial , HttpStatus.OK);
 	}
@@ -78,7 +79,7 @@ public class BatchSerialController {
 											  @RequestParam String warehouseId,@RequestParam Long levelId,
 											  @Valid @RequestBody List<UpdateBatchSerial> updateBatchSerial,@RequestParam String maintenance,
 											  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<BatchSerial> createdBatchSerial = batchserialService.updateBatchSerial(storageMethod,companyId,plantId,
 				languageId,maintenance,warehouseId,levelId,updateBatchSerial, loginUserID);
@@ -90,7 +91,7 @@ public class BatchSerialController {
 	public ResponseEntity<?> deleteBatchSerial(@PathVariable String storageMethod,@RequestParam String companyId,
 											   @RequestParam String languageId,@RequestParam String plantId,
 											   @RequestParam Long levelId,@RequestParam String warehouseId,@RequestParam String maintenance,
-											   @RequestParam String loginUserID)  {
+											   @RequestParam String loginUserID) throws ParseException {
     	batchserialService.deleteBatchSerial(storageMethod,companyId,languageId,plantId,warehouseId,levelId,maintenance,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

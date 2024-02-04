@@ -2,32 +2,18 @@ package com.tekclover.wms.api.transaction.model.inbound.gr.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.gr.GrHeader;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Data
 @Entity
+@ToString(callSuper = true)
 public class GrHeaderV2 extends GrHeader {
 
 
-	@Column(name = "BILL_STATUS", columnDefinition = "nvarchar(100)")
-	private String billStatus;
-
-	@Column(name = "LENGTH")
-	private Double length;
-
-	@Column(name = "WIDTH")
-	private Double width;
-
-	@Column(name = "HEIGHT")
-	private Double height;
-
-	@Column(name = "CBM")
-	private Double cbm;
-
-	@Column(name = "CBM_UNIT", columnDefinition = "nvarchar(255)")
-	private String cbmUnit;
 
 	@Column(name = "ACCEPT_QTY")
 	private Double acceptedQuantity;
@@ -46,4 +32,17 @@ public class GrHeaderV2 extends GrHeader {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
+
+	@Column(name = "MANUFACTURER_FULL_NAME", columnDefinition = "nvarchar(150)")
+	private String manufacturerFullName;
+
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
+	private String manufacturerName;
+
+	@Column(name = "REF_DOC_TYPE", columnDefinition = "nvarchar(150)")
+	private String referenceDocumentType;
+
+
+
+
 }

@@ -110,6 +110,18 @@ public class ImBasicData1 {
 	
 	@Column(name = "SAFTY_STCK") 
 	private Double safetyStock;
+
+	@Column(name = "CAP_UNIT")
+	private String capacityUnit;
+
+	@Column(name = "CAP_UOM")
+	private String capacityUom;
+
+	@Column(name = "QUANTITY")
+	private String quantity;
+
+	@Column(name = "WEIGHT")
+	private Double weight;
 	
 	@Column(name = "STATUS_ID") 
 	private Long statusId;
@@ -154,13 +166,13 @@ public class ImBasicData1 {
 	private String createdBy;
 
 	@Column(name = "CTD_ON")
-    private Date createdOn = new Date();
+    private Date createdOn;
 
 	@Column(name = "UTD_BY")
     private String updatedBy;
 
 	@Column(name = "UTD_ON")
-	private Date updatedOn = new Date();
+	private Date updatedOn;
 
 	//fields from ImBasicData2
 	@Column(name = "LENGTH")

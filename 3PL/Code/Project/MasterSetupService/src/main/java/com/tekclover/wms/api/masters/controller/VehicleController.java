@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -68,7 +69,7 @@ public class VehicleController {
     @ApiOperation(response = Vehicle.class, value = "Create Vehicle") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postVehicle(@Valid @RequestBody AddVehicle newVehicle, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Vehicle createVehicle = vehicleService.createVehicle(newVehicle, loginUserID);
         return new ResponseEntity<>(createVehicle , HttpStatus.OK);
     }
@@ -79,7 +80,7 @@ public class VehicleController {
     public ResponseEntity<?> patchImVariant(@PathVariable String vehicleNumber, @RequestParam String companyCodeId, @RequestParam String plantId,
                                             @RequestParam String warehouseId, @RequestParam String languageId,
                                             @Valid @RequestBody UpdateVehicle updateVehicle, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         Vehicle createVehicle = vehicleService.updateVehicle(companyCodeId,plantId,warehouseId,languageId,vehicleNumber,updateVehicle,loginUserID);
         return new ResponseEntity<>(createVehicle , HttpStatus.OK);
@@ -89,7 +90,7 @@ public class VehicleController {
     @ApiOperation(response = Vehicle.class, value = "Delete Vehicle") // label for swagger
     @DeleteMapping("/{vehicleNumber}")
     public ResponseEntity<?> deleteVehicleNumber(@PathVariable String vehicleNumber,@RequestParam String companyCodeId,@RequestParam String plantId,
-                                                 @RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) {
+                                                 @RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) throws ParseException {
 
         vehicleService.deleteVehicle(companyCodeId,languageId,plantId,warehouseId,vehicleNumber,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

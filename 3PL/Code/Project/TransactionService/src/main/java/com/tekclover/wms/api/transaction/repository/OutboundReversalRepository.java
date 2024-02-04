@@ -13,13 +13,14 @@ import com.tekclover.wms.api.transaction.model.outbound.outboundreversal.Outboun
 
 @Repository
 @Transactional
-public interface OutboundReversalRepository extends JpaRepository<OutboundReversal,Long>,
-													JpaSpecificationExecutor<OutboundReversal>,
-													StreamableJpaSpecificationRepository<OutboundReversal> {
-	
-	public List<OutboundReversal> findAll();
-	public Optional<OutboundReversal> 
-		findByLanguageIdAndRefDocNumberAndPlantIdAndWarehouseIdAndOutboundReversalNoAndReversalTypeAndDeletionIndicator(
-				String languageId, String refDocNumber, String plantId, String warehouseId, String outboundReversalNo, String reversalType, Long deletionIndicator);
-	public Optional<OutboundReversal> findByOutboundReversalNo(String outboundReversalNo);
+public interface OutboundReversalRepository extends JpaRepository<OutboundReversal, Long>,
+        JpaSpecificationExecutor<OutboundReversal>, StreamableJpaSpecificationRepository<OutboundReversal> {
+
+    public List<OutboundReversal> findAll();
+
+    public Optional<OutboundReversal>
+    findByLanguageIdAndRefDocNumberAndPlantIdAndWarehouseIdAndOutboundReversalNoAndReversalTypeAndDeletionIndicator(
+            String languageId, String refDocNumber, String plantId, String warehouseId, String outboundReversalNo, String reversalType, Long deletionIndicator);
+
+    public Optional<OutboundReversal> findByOutboundReversalNo(String outboundReversalNo);
 }

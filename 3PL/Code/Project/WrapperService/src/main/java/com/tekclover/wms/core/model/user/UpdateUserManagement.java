@@ -28,4 +28,8 @@ public class UpdateUserManagement {
     private Date createdOn = new Date();
     private String updatedBy;
 	private Date updatedOn = new Date();
+
+	private Boolean portalLoggedIn;
+	private Boolean hhtLoggedIn;
+	private Boolean createHhtUser;
 }

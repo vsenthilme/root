@@ -20,7 +20,9 @@ public class PerpetualHeaderV1 {
 
     private String branchName;
 
-    @NotBlank(message = "Is-New is mandatory")
+    //    @NotBlank(message = "Is-New is mandatory")
     private String isNew;
-
+    private String isCompleted;
+    private String isCancelled;
+    private Date updatedOn;
 }

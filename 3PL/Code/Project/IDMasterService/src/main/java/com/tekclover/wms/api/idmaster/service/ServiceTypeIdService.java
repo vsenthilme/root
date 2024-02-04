@@ -12,6 +12,7 @@ import com.tekclover.wms.api.idmaster.model.threepl.servicetypeid.UpdateServiceT
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ServiceTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,7 @@ public class ServiceTypeIdService{
      * @throws InvocationTargetException
      */
    public ServiceTypeId createServiceTypeId(AddServiceTypeId newServiceTypeId, String loginUserID)
-           throws IllegalAccessException, InvocationTargetException {
+           throws IllegalAccessException, InvocationTargetException, ParseException {
        ServiceTypeId dbServiceTypeId = new ServiceTypeId();
        Optional<ServiceTypeId> duplicateServiceTypeId = serviceTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndModuleIdAndServiceTypeIdAndLanguageIdAndDeletionIndicator(newServiceTypeId.getCompanyCodeId(), newServiceTypeId.getPlantId(), newServiceTypeId.getWarehouseId(), newServiceTypeId.getModuleId(), newServiceTypeId.getServiceTypeId(), newServiceTypeId.getLanguageId(), 0L);
        if (!duplicateServiceTypeId.isEmpty()) {
@@ -168,7 +169,7 @@ public class ServiceTypeIdService{
      * @throws InvocationTargetException
      */
    public ServiceTypeId updateServiceTypeId(String warehouseId, String moduleId, Long serviceTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
-                                        UpdateServiceTypeId updateServiceTypeId)throws IllegalAccessException,InvocationTargetException{
+                                        UpdateServiceTypeId updateServiceTypeId) throws IllegalAccessException, InvocationTargetException, ParseException {
    ServiceTypeId dbServiceTypeId =getServiceTypeId(warehouseId,moduleId,serviceTypeId,companyCodeId,languageId,plantId);
    BeanUtils.copyProperties(updateServiceTypeId, dbServiceTypeId,CommonUtils.getNullPropertyNames(updateServiceTypeId));
    dbServiceTypeId.setUpdatedBy(loginUserID);

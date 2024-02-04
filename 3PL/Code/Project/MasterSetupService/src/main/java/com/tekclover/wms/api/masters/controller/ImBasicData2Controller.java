@@ -67,8 +67,8 @@ public class ImBasicData2Controller {
 	
     @ApiOperation(response = ImBasicData2.class, value = "Create ImBasicData2") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postImBasicData2(@Valid @RequestBody AddImBasicData2 newImBasicData2, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postImBasicData2(@Valid @RequestBody AddImBasicData2 newImBasicData2, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ImBasicData2 createdImBasicData2 = imbasicdata2Service.createImBasicData2(newImBasicData2, loginUserID);
 		return new ResponseEntity<>(createdImBasicData2 , HttpStatus.OK);
 	}
@@ -76,15 +76,15 @@ public class ImBasicData2Controller {
     @ApiOperation(response = ImBasicData2.class, value = "Update ImBasicData2") // label for swagger
     @PatchMapping("/{itemCode}")
 	public ResponseEntity<?> patchImBasicData2(@PathVariable String itemCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateImBasicData2 updateImBasicData2, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateImBasicData2 updateImBasicData2, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ImBasicData2 createdImBasicData2 = imbasicdata2Service.updateImBasicData2(itemCode,companyCodeId,plantId,warehouseId,languageId,updateImBasicData2, loginUserID);
 		return new ResponseEntity<>(createdImBasicData2 , HttpStatus.OK);
 	}
     
     @ApiOperation(response = ImBasicData2.class, value = "Delete ImBasicData2") // label for swagger
 	@DeleteMapping("/{itemCode}")
-	public ResponseEntity<?> deleteImBasicData2(@PathVariable String itemCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) {
+	public ResponseEntity<?> deleteImBasicData2(@PathVariable String itemCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) throws ParseException {
     	imbasicdata2Service.deleteImBasicData2(itemCode,companyCodeId,plantId,warehouseId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

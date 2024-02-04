@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.DockIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,7 @@ public class DockIdService {
 	 * @throws InvocationTargetException
 	 */
 	public DockId createDockId (AddDockId newDockId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DockId dbDockId = new DockId();
 		Optional<DockId>duplicateDockId=dockIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDockIdAndLanguageIdAndDeletionIndicator(newDockId.getCompanyCodeId(), newDockId.getPlantId(), newDockId.getWarehouseId(), newDockId.getDockId(), newDockId.getLanguageId(), 0L);
 		if(!duplicateDockId.isEmpty()){
@@ -148,7 +149,7 @@ public class DockIdService {
 	 */
 	public DockId updateDockId (String warehouseId,String dockId,String companyCodeId,String languageId,String plantId,String loginUserID,
 								UpdateDockId updateDockId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DockId dbDockId = getDockId(warehouseId,dockId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDockId, dbDockId, CommonUtils.getNullPropertyNames(updateDockId));
 		dbDockId.setUpdatedBy(loginUserID);

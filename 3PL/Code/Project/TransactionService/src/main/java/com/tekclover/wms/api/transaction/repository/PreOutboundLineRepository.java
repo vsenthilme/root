@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,56 +16,54 @@ import com.tekclover.wms.api.transaction.model.outbound.preoutbound.PreOutboundL
 
 @Repository
 @Transactional
-public interface PreOutboundLineRepository extends JpaRepository<PreOutboundLine,Long>, JpaSpecificationExecutor<PreOutboundLine> {
-	
-	public List<PreOutboundLine> findAll();
-	
-	public List<PreOutboundLine> findByPreOutboundNo(String preOutboundNo);
-	
-	/**
-	 * 
-	 * @param languageId
-	 * @param companyCodeId
-	 * @param plantId
-	 * @param warehouseId
-	 * @param refDocNumber
-	 * @param preOutboundNo
-	 * @param partnerCode
-	 * @param lineNumber
-	 * @param itemCode
-	 * @param deletionIndicator
-	 * @return
-	 */
-	public Optional<PreOutboundLine> 
-		findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndPartnerCodeAndLineNumberAndItemCodeAndDeletionIndicator(
-				String languageId, String companyCodeId, String plantId, String warehouseId, String refDocNumber, String preOutboundNo, String partnerCode, 
-				Long lineNumber, String itemCode, Long deletionIndicator);
+public interface PreOutboundLineRepository extends JpaRepository<PreOutboundLine, Long>,
+        JpaSpecificationExecutor<PreOutboundLine>, StreamableJpaSpecificationRepository<PreOutboundLine> {
 
-	/**
-	 * 
-	 * @param languageId
-	 * @param companyCodeId
-	 * @param plantId
-	 * @param warehouseId
-	 * @param refDocNumber
-	 * @param preOutboundNo
-	 * @param partnerCode
-	 * @param l
-	 * @return
-	 */
-	public List<PreOutboundLine> findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndPartnerCodeAndDeletionIndicator(
-			String languageId, String companyCodeId, String plantId, String warehouseId, String refDocNumber,
-			String preOutboundNo, String partnerCode, long l);
-	
-	/**
-	 * 
-	 * @param warehouseId
-	 * @param refDocNumber
-	 * @param statusId
-	 */
-	@Modifying(clearAutomatically = true)
-	@Query("UPDATE PreOutboundLine ob SET ob.statusId = :statusId WHERE ob.warehouseId = :warehouseId AND ob.refDocNumber = :refDocNumber")
-	void updatePreOutboundLineStatus(@Param ("warehouseId") String warehouseId,
-			@Param ("refDocNumber") String refDocNumber, @Param ("statusId") Long statusId);
-	
+    public List<PreOutboundLine> findAll();
+
+    public List<PreOutboundLine> findByPreOutboundNo(String preOutboundNo);
+
+    /**
+     * @param languageId
+     * @param companyCodeId
+     * @param plantId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param preOutboundNo
+     * @param partnerCode
+     * @param lineNumber
+     * @param itemCode
+     * @param deletionIndicator
+     * @return
+     */
+    public Optional<PreOutboundLine>
+    findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndPartnerCodeAndLineNumberAndItemCodeAndDeletionIndicator(
+            String languageId, String companyCodeId, String plantId, String warehouseId, String refDocNumber, String preOutboundNo, String partnerCode,
+            Long lineNumber, String itemCode, Long deletionIndicator);
+
+    /**
+     * @param languageId
+     * @param companyCodeId
+     * @param plantId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param preOutboundNo
+     * @param partnerCode
+     * @param l
+     * @return
+     */
+    public List<PreOutboundLine> findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndPartnerCodeAndDeletionIndicator(
+            String languageId, String companyCodeId, String plantId, String warehouseId, String refDocNumber,
+            String preOutboundNo, String partnerCode, long l);
+
+    /**
+     * @param warehouseId
+     * @param refDocNumber
+     * @param statusId
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE PreOutboundLine ob SET ob.statusId = :statusId WHERE ob.warehouseId = :warehouseId AND ob.refDocNumber = :refDocNumber")
+    void updatePreOutboundLineStatus(@Param("warehouseId") String warehouseId,
+                                     @Param("refDocNumber") String refDocNumber, @Param("statusId") Long statusId);
+
 }

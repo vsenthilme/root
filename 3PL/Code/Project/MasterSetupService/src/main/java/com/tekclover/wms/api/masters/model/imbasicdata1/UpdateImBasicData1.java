@@ -28,6 +28,10 @@ public class UpdateImBasicData1 {
 	private Double reorderLevel;
 	private Double replenishmentQty;
 	private Double safetyStock;
+	private String capacityUnit;
+	private String capacityUom;
+	private String quantity;
+	private Double weight;
 	private Long statusId;
 	private Boolean shelfLifeIndicator;
 	private String referenceField1;

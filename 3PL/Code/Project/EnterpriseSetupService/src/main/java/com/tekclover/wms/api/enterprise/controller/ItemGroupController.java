@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class ItemGroupController {
     @ApiOperation(response = ItemGroup.class, value = "Create ItemGroup") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postItemGroup(@Valid @RequestBody List<AddItemGroup> newItemGroup, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ItemGroup> createdItemGroup = itemgroupService.createItemGroup(newItemGroup, loginUserID);
 		return new ResponseEntity<>(createdItemGroup , HttpStatus.OK);
 	}
@@ -81,7 +82,7 @@ public class ItemGroupController {
 											@RequestParam String languageId,@RequestParam String plantId,
 											@RequestParam String warehouseId,@Valid @RequestBody List<AddItemGroup> updateItemGroup,
 											@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ItemGroup> createdItemGroup = itemgroupService.updateItemGroup(companyId,languageId,plantId,warehouseId,
 				itemTypeId, updateItemGroup, loginUserID);
@@ -92,7 +93,7 @@ public class ItemGroupController {
 	@DeleteMapping("/{itemTypeId}")
 	public ResponseEntity<?> deleteItemGroup(@PathVariable Long itemTypeId,@RequestParam String companyId,
 											 @RequestParam String languageId,@RequestParam String plantId,
-											 @RequestParam String warehouseId,@RequestParam String loginUserID) {
+											 @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
 
     	itemgroupService.deleteItemGroup(companyId,languageId,plantId,warehouseId,itemTypeId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

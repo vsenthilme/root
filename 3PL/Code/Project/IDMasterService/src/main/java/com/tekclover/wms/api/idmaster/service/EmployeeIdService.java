@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.EmployeeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class EmployeeIdService  {
 	 * @throws InvocationTargetException
 	 */
 	public EmployeeId createEmployeeId (AddEmployeeId newEmployeeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		EmployeeId dbEmployeeId = new EmployeeId();
 		Optional<EmployeeId> duplicateEmployeeId = employeeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndEmployeeIdAndLanguageIdAndDeletionIndicator(newEmployeeId.getCompanyCodeId(), newEmployeeId.getPlantId(), newEmployeeId.getWarehouseId(), newEmployeeId.getEmployeeId(), newEmployeeId.getLanguageId(), 0L);
 		if (!duplicateEmployeeId.isEmpty()) {
@@ -149,7 +150,7 @@ public class EmployeeIdService  {
 	 */
 	public EmployeeId updateEmployeeId (String warehouseId, String employeeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 										UpdateEmployeeId updateEmployeeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		EmployeeId dbEmployeeId = getEmployeeId( warehouseId,employeeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateEmployeeId, dbEmployeeId, CommonUtils.getNullPropertyNames(updateEmployeeId));
 		dbEmployeeId.setUpdatedBy(loginUserID);

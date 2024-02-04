@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import com.tekclover.wms.api.idmaster.model.languageid.LanguageId;
 import com.tekclover.wms.api.idmaster.model.vertical.FindVertical;
 import com.tekclover.wms.api.idmaster.repository.Specification.VerticalSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +66,7 @@ public class VerticalService {
 	 * @throws InvocationTargetException
 	 */
 	public Vertical createVertical (AddVertical newVertical,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Vertical dbVertical = new Vertical();
 		Optional<Vertical> duplicateVertical=verticalRepository.findByVerticalIdAndLanguageId(newVertical.getVerticalId(), newVertical.getLanguageId());
 		if(!duplicateVertical.isEmpty()){
@@ -92,7 +93,7 @@ public class VerticalService {
 	 * @throws InvocationTargetException
 	 */
 	public Vertical updateVertical (Long verticalId,String languageId,String loginUserID,UpdateVertical updateVertical)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Vertical dbVertical = getVertical(verticalId,languageId);
 		BeanUtils.copyProperties(updateVertical, dbVertical, CommonUtils.getNullPropertyNames(updateVertical));
 		dbVertical.setUpdatedBy(loginUserID);

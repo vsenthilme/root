@@ -22,8 +22,10 @@ public class InboundLineV2Specification implements Specification<InboundLineV2> 
     public Predicate toPredicate(Root<InboundLineV2> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<Predicate>();
 
-        if (searchInboundLine.getWarehouseId() != null) {
-            predicates.add(cb.equal(root.get("warehouseId"), searchInboundLine.getWarehouseId()));
+        if (searchInboundLine.getWarehouseId() != null && !searchInboundLine.getWarehouseId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("warehouseId");
+            predicates.add(group.in(searchInboundLine.getWarehouseId()));
+//            predicates.add(cb.equal(root.get("warehouseId"), searchInboundLine.getWarehouseId()));
         }
 
         if (searchInboundLine.getStartConfirmedOn() != null && searchInboundLine.getEndConfirmedOn() != null) {
@@ -41,6 +43,16 @@ public class InboundLineV2Specification implements Specification<InboundLineV2> 
             predicates.add(group.in(searchInboundLine.getCompanyCodeId()));
         }
 
+        if (searchInboundLine.getItemCode() != null && !searchInboundLine.getItemCode().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("itemCode");
+            predicates.add(group.in(searchInboundLine.getItemCode()));
+        }
+
+        if (searchInboundLine.getRefDocNumber() != null && !searchInboundLine.getRefDocNumber().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("refDocNumber");
+            predicates.add(group.in(searchInboundLine.getRefDocNumber()));
+        }
+
         if (searchInboundLine.getPlantId() != null && !searchInboundLine.getPlantId().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("plantId");
             predicates.add(group.in(searchInboundLine.getPlantId()));
@@ -51,8 +63,10 @@ public class InboundLineV2Specification implements Specification<InboundLineV2> 
             predicates.add(group.in(searchInboundLine.getLanguageId()));
         }
 
-        predicates.add(cb.equal(root.get("referenceField1"), searchInboundLine.getReferenceField1()));
-
+        if (searchInboundLine.getReferenceField1() != null) {
+            predicates.add(cb.equal(root.get("referenceField1"), searchInboundLine.getReferenceField1()));
+        }
+        predicates.add(cb.equal(root.get("deletionIndicator"), 0L));
         return cb.and(predicates.toArray(new Predicate[]{}));
     }
 }

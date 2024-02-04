@@ -16,9 +16,9 @@ public class DeliveryLineCompositeKey implements Serializable {
     private String companyCodeId;
     private String plantId;
     private String warehouseId;
-    private String deliveryNo;
+    private Long deliveryNo;
     private String itemCode;
-    private Long lineNo;
+    private Long lineNumber;
     private String refDocNumber;
     private String invoiceNumber;
 }

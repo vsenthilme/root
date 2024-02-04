@@ -178,7 +178,7 @@ public class StorageSectionService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageSection createStorageSection (AddStorageSection newStorageSection, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<StorageSection> optStorageSection =
 				storagesectionRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndFloorIdAndStorageSectionIdAndDeletionIndicator(
 						newStorageSection.getLanguageId(),
@@ -233,7 +233,7 @@ public class StorageSectionService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageSection updateStorageSection (String warehouseId, Long floorId,String companyId,String languageId,String plantId,String storageSectionId, UpdateStorageSection updateStorageSection, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSection dbStorageSection = getStorageSection(warehouseId, floorId, storageSectionId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageSection, dbStorageSection, CommonUtils.getNullPropertyNames(updateStorageSection));
 		dbStorageSection.setUpdatedBy(loginUserID);
@@ -245,7 +245,7 @@ public class StorageSectionService {
 	 * deleteStorageSection
 	 * @param storageSectionId
 	 */
-	public void deleteStorageSection (String warehouseId, Long floorId, String storageSectionId,String companyId,String plantId,String languageId, String loginUserID) {
+	public void deleteStorageSection (String warehouseId, Long floorId, String storageSectionId,String companyId,String plantId,String languageId, String loginUserID) throws ParseException {
 		StorageSection storagesection = getStorageSection(warehouseId, floorId, storageSectionId,companyId,languageId,plantId);
 		if ( storagesection != null) {
 			storagesection.setDeletionIndicator (1L);

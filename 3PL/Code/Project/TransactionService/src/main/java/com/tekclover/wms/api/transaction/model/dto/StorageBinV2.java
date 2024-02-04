@@ -1,22 +1,18 @@
 package com.tekclover.wms.api.transaction.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table
+@ToString(callSuper = true)
 public class StorageBinV2 extends StorageBin {
 
 	@Column(name = "CAP_CHECK")
-	private Long capacityCheck;
+	private boolean capacityCheck;
 
 	@Column(name="ALLOC_VOL")
 	private Double allocatedVolume;

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -69,7 +70,7 @@ public class StorageBinTypeIdController {
     @ApiOperation(response = StorageBinTypeId.class, value = "Create StorageBinTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStorageBinTypeId(@Valid @RequestBody AddStorageBinTypeId newStorageBinTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinTypeId createdStorageBinTypeId = storagebintypeidService.createStorageBinTypeId(newStorageBinTypeId, loginUserID);
 		return new ResponseEntity<>(createdStorageBinTypeId , HttpStatus.OK);
 	}
@@ -79,7 +80,7 @@ public class StorageBinTypeIdController {
 	public ResponseEntity<?> patchStorageBinTypeId(@RequestParam String warehouseId,@PathVariable Long storageBinTypeId, @RequestParam Long storageClassId,
 												   @RequestParam Long storageTypeId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 													@Valid @RequestBody UpdateStorageBinTypeId updateStorageBinTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinTypeId createdStorageBinTypeId = 
 				storagebintypeidService.updateStorageBinTypeId(warehouseId,storageBinTypeId,storageClassId,storageTypeId,companyCodeId,languageId,plantId,
 						loginUserID, updateStorageBinTypeId);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class DockIdController {
     @ApiOperation(response = DockId.class, value = "Create DockId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postDockId(@Valid @RequestBody AddDockId newDockId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		DockId createdDockId = dockidService.createDockId(newDockId, loginUserID);
 		return new ResponseEntity<>(createdDockId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class DockIdController {
     @PatchMapping("/{dockId}")
 	public ResponseEntity<?> patchDockId(@PathVariable String dockId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateDockId updateDockId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateDockId updateDockId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DockId createdDockId = 
 				dockidService.updateDockId(warehouseId,dockId,companyCodeId,languageId,plantId,loginUserID, updateDockId);
 		return new ResponseEntity<>(createdDockId , HttpStatus.OK);

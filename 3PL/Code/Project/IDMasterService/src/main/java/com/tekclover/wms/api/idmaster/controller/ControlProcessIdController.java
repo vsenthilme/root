@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class ControlProcessIdController {
     @ApiOperation(response = ControlProcessId.class, value = "Create ControlProcessId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postControlProcessId(@Valid @RequestBody AddControlProcessId newControlProcessId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlProcessId createdControlProcessId = controlprocessidService.createControlProcessId(newControlProcessId, loginUserID);
 		return new ResponseEntity<>(createdControlProcessId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class ControlProcessIdController {
     @PatchMapping("/{controlProcessId}")
 	public ResponseEntity<?> patchControlProcessId(@PathVariable String controlProcessId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateControlProcessId updateControlProcessId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateControlProcessId updateControlProcessId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlProcessId createdControlProcessId = 
 				controlprocessidService.updateControlProcessId(warehouseId, controlProcessId,companyCodeId,languageId,plantId,loginUserID, updateControlProcessId);
 		return new ResponseEntity<>(createdControlProcessId , HttpStatus.OK);

@@ -14,4 +14,6 @@ public interface OrderTypeIdRepository extends JpaRepository<OrderTypeId,String>
 
     List<OrderTypeId> findByUserIdAndDeletionIndicator(String userId, Long deletionIndicator);
 
+    List<OrderTypeId> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndUserIdAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String userId, Long deletionIndicator);
 }

@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.OutboundOrderStatusIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,7 @@ public class OutboundOrderStatusIdService {
 	 * @throws InvocationTargetException
 	 */
 	public OutboundOrderStatusId createOutboundOrderStatusId (AddOutboundOrderStatusId newOutboundOrderStatusId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		OutboundOrderStatusId dbOutboundOrderStatusId = new OutboundOrderStatusId();
 		Optional<OutboundOrderStatusId> duplicateOutboundOrderStatusId = outboundOrderStatusIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndOutboundOrderStatusIdAndLanguageIdAndDeletionIndicator(newOutboundOrderStatusId.getCompanyCodeId(), newOutboundOrderStatusId.getPlantId(), newOutboundOrderStatusId.getWarehouseId(), newOutboundOrderStatusId.getOutboundOrderStatusId(), newOutboundOrderStatusId.getLanguageId(), 0L);
 		if (!duplicateOutboundOrderStatusId.isEmpty()) {
@@ -148,11 +149,11 @@ public class OutboundOrderStatusIdService {
 	 */
 	public OutboundOrderStatusId updateOutboundOrderStatusId (String warehouseId, String outboundOrderStatusId, String companyCodeId, String languageId, String plantId,String loginUserID,
 															  UpdateOutboundOrderStatusId updateOutboundOrderStatusId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		OutboundOrderStatusId dbOutboundOrderStatusId = getOutboundOrderStatusId( warehouseId,outboundOrderStatusId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateOutboundOrderStatusId, dbOutboundOrderStatusId, CommonUtils.getNullPropertyNames(updateOutboundOrderStatusId));
 		dbOutboundOrderStatusId.setUpdatedBy(loginUserID);
-		dbOutboundOrderStatusId.setUpdatedOn(new Date());
+		dbOutboundOrderStatusId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 		return outboundOrderStatusIdRepository.save(dbOutboundOrderStatusId);
 	}
 

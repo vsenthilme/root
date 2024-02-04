@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class BillingFrequencyIdController {
     @ApiOperation(response = BillingFrequencyId.class, value = "Create BillingFrequencyId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postBillingFrequencyId(@Valid @RequestBody AddBillingFrequencyId newBillingFrequencyId,
-                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFrequencyId createdBillingFrequencyId = billingFrequencyIdService.createBillingFrequencyId(newBillingFrequencyId, loginUserID);
         return new ResponseEntity<>(createdBillingFrequencyId , HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class BillingFrequencyIdController {
     @PatchMapping("/{billFrequencyId}")
     public ResponseEntity<?> patchBillingFrequencyId(@RequestParam String warehouseId, @PathVariable Long billFrequencyId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
                                                      @Valid @RequestBody UpdateBillingFrequencyId updateBillingFrequencyId, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFrequencyId createdBillingFrequencyId =
                 billingFrequencyIdService.updateBillingFrequencyId(warehouseId, billFrequencyId,companyCodeId,languageId,plantId,loginUserID, updateBillingFrequencyId);
         return new ResponseEntity<>(createdBillingFrequencyId , HttpStatus.OK);

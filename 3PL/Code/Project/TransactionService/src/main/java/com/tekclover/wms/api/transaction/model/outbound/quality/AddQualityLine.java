@@ -54,6 +54,8 @@ public class AddQualityLine {
 	private String qualityReversedBy;
 	private Date qualityReversedOn;
 
+	private String manufactureName;
+
 	/**
 	 * 
 	 * @return

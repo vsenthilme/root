@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -50,7 +51,7 @@ public class AisleIdController {
     @ApiOperation(response = AisleId.class, value = "Create AisleId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postAisleId(@Valid @RequestBody AddAisleId newAisleId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		AisleId createdAisleId = aisleidService.createAisleId(newAisleId, loginUserID);
 		return new ResponseEntity<>(createdAisleId , HttpStatus.OK);
 	}
@@ -60,7 +61,7 @@ public class AisleIdController {
 	public ResponseEntity<?> patchAisleId(@RequestParam String warehouseId,@PathVariable String aisleId, @RequestParam Long floorId, @RequestParam String storageSectionId,
 										  @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
 										  @Valid @RequestBody UpdateAisleId updateAisleId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AisleId createdAisleId = 
 				aisleidService.updateAisleId(warehouseId,aisleId,floorId,storageSectionId,companyCodeId,languageId,plantId,loginUserID,updateAisleId);
 		return new ResponseEntity<>(createdAisleId , HttpStatus.OK);

@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.model.processid.ProcessId;
 import com.tekclover.wms.api.idmaster.model.processsequenceid.FindProcessSequenceId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ProcessSequenceIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,7 +146,7 @@ public class ProcessSequenceIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ProcessSequenceId createProcessSequenceId (AddProcessSequenceId newProcessSequenceId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessSequenceId dbProcessSequenceId = new ProcessSequenceId();
 		Optional<ProcessSequenceId> duplicateProcessSequenceId = processSequenceIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndProcessIdAndProcessSequenceIdAndLanguageIdAndDeletionIndicator(newProcessSequenceId.getCompanyCodeId(), newProcessSequenceId.getPlantId(), newProcessSequenceId.getWarehouseId(), newProcessSequenceId.getProcessId(), newProcessSequenceId.getProcessSequenceId(), newProcessSequenceId.getLanguageId(), 0L);
 		if (!duplicateProcessSequenceId.isEmpty()) {

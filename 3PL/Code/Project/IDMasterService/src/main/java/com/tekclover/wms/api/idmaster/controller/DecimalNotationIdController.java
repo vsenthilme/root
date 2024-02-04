@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class DecimalNotationIdController {
     @ApiOperation(response = DecimalNotationId.class, value = "Create DecimalNotationId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postDecimalNotationId(@Valid @RequestBody AddDecimalNotationId newDecimalNotationId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		DecimalNotationId createdDecimalNotationId = decimalnotationidService.createDecimalNotationId(newDecimalNotationId, loginUserID);
 		return new ResponseEntity<>(createdDecimalNotationId , HttpStatus.OK);
 	}
@@ -66,8 +67,8 @@ public class DecimalNotationIdController {
     @PatchMapping("/{decimalNotationId}")
 	public ResponseEntity<?> patchDecimalNotationId(@PathVariable String decimalNotationId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateDecimalNotationId updateDecimalNotationId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateDecimalNotationId updateDecimalNotationId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DecimalNotationId createdDecimalNotationId = 
 				decimalnotationidService.updateDecimalNotationId(warehouseId, decimalNotationId,companyCodeId,languageId,plantId,loginUserID, updateDecimalNotationId);
 		return new ResponseEntity<>(createdDecimalNotationId , HttpStatus.OK);

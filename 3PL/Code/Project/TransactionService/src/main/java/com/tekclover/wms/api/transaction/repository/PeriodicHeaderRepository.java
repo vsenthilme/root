@@ -10,11 +10,11 @@ import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicHeade
 
 @Repository
 @Transactional
-public interface PeriodicHeaderRepository extends JpaRepository<PeriodicHeader,Long>,
-		JpaSpecificationExecutor<PeriodicHeader>, StreamableJpaSpecificationRepository<PeriodicHeader> {
-	
-	public PeriodicHeader findByCompanyCodeAndPlantIdAndWarehouseIdAndCycleCountTypeIdAndCycleCountNo(
-			String companyCode, String plantId, String warehouseId, Long cycleCountTypeId, String cycleCountNo);
+public interface PeriodicHeaderRepository extends JpaRepository<PeriodicHeader, Long>,
+        JpaSpecificationExecutor<PeriodicHeader>, StreamableJpaSpecificationRepository<PeriodicHeader> {
 
-	public PeriodicHeader findByCycleCountNo(String cycleCountNo);
+    public PeriodicHeader findByCompanyCodeAndPlantIdAndWarehouseIdAndCycleCountTypeIdAndCycleCountNo(
+            String companyCode, String plantId, String warehouseId, Long cycleCountTypeId, String cycleCountNo);
+
+    public PeriodicHeader findByCycleCountNo(String cycleCountNo);
 }

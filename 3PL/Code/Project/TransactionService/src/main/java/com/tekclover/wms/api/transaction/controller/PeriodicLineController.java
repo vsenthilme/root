@@ -1,9 +1,14 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicLineV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicUpdateResponseV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.SearchPeriodicLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,4 +77,42 @@ public class PeriodicLineController {
 				periodicLineService.updatePeriodicLine (cycleCountNo, updatePeriodicLine, loginUserID);
 		return new ResponseEntity<>(createdPeriodicLine , HttpStatus.OK);
 	}
+
+
+	//=========================================================V2===============================================
+
+	@ApiOperation(response = PeriodicLineV2.class, value = "SearchPeriodicLineV2") // label for swagger
+	@PostMapping("/v2/findPeriodicLine")
+	public Stream<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
+			throws Exception {
+		return periodicLineService.findPeriodicLineStreamV2(searchPeriodicLineV2);
+	}
+
+	@ApiOperation(response = PeriodicLineV2[].class, value = "AssignHHTUser") // label for swagger
+	@PatchMapping("/v2/assigingHHTUser")
+	public ResponseEntity<?> patchAssingHHTUserV2(@RequestBody List<AssignHHTUserCC> assignHHTUser,
+												  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+		List<PeriodicLineV2> createdPeriodicLine = periodicLineService.updateAssingHHTUserV2(assignHHTUser, loginUserID);
+		return new ResponseEntity<>(createdPeriodicLine, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = PeriodicLineV2.class, value = "Update PeriodicLineV2") // label for swagger
+	@PatchMapping("/v2/{cycleCountNo}")
+	public ResponseEntity<?> patchPeriodicLineV2(@PathVariable String cycleCountNo,
+												  @RequestBody List<PeriodicLineV2> updatePeriodicLine, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
+		PeriodicUpdateResponseV2 createdPeriodicResponse =
+				periodicLineService.updatePeriodicLineV2(cycleCountNo, updatePeriodicLine, loginUserID);
+		return new ResponseEntity<>(createdPeriodicResponse, HttpStatus.OK);
+	}
+
+//	@ApiOperation(response = WarehouseApiResponse.class, value = "Update PeriodicLine") // label for swagger
+//	@PatchMapping("/v2/confirm/{cycleCountNo}")
+//	public ResponseEntity<?> patchPeriodicLineConfirmV2(@PathVariable String cycleCountNo,
+//														 @RequestBody List<PeriodicLineV2> updatePerpetualLine, @RequestParam String loginUserID)
+//			throws IllegalAccessException, InvocationTargetException {
+//		WarehouseApiResponse createdPerpetualLine =
+//				periodicLineService.updatePeriodicLineConfirmV2(cycleCountNo, updatePerpetualLine, loginUserID);
+//		return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
+//	}
 }

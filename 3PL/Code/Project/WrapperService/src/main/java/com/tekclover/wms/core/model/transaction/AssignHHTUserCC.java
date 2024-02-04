@@ -14,4 +14,9 @@ public class AssignHHTUserCC {
 	private String storageBin;
 	private String itemCode;
 	private String packBarcodes;
+
+	//Almailem Fields
+	private String companyCodeId;
+	private String plantId;
+	private String languageId;
 }

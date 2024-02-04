@@ -1,17 +1,16 @@
 package com.tekclover.wms.api.transaction.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryMovementV2;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryMovementV2;
-import com.tekclover.wms.api.transaction.repository.InventoryMovementV2Repository;
-import com.tekclover.wms.api.transaction.repository.specification.InventoryMovementV2Specification;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -32,9 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class InventoryMovementService extends BaseService {
-	@Autowired
-	private InventoryMovementV2Repository inventoryMovementV2Repository;
-
+	
 	@Autowired
 	private InventoryMovementRepository inventoryMovementRepository;
 	
@@ -86,25 +83,40 @@ public class InventoryMovementService extends BaseService {
 		} 
 		return inventoryMovement.get();
 	}
-	
+
 	/**
-	 * 
 	 * @param searchInventoryMovement
 	 * @return
+	 * @throws ParseException
+	 * @throws java.text.ParseException
 	 */
-	public List<InventoryMovement> findInventoryMovement(SearchInventoryMovement searchInventoryMovement)
+	public Stream<InventoryMovement> findInventoryMovement(SearchInventoryMovement searchInventoryMovement)
 			throws ParseException, java.text.ParseException {
 		if (searchInventoryMovement.getFromCreatedOn() != null && searchInventoryMovement.getToCreatedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInventoryMovement.getFromCreatedOn(), searchInventoryMovement.getToCreatedOn());
 			searchInventoryMovement.setFromCreatedOn(dates[0]);
 			searchInventoryMovement.setToCreatedOn(dates[1]);
 		}
-
 		InventoryMovementSpecification spec = new InventoryMovementSpecification(searchInventoryMovement);
-		List<InventoryMovement> results = inventoryMovementRepository.findAll(spec);
+		Stream<InventoryMovement> results = inventoryMovementRepository.stream(spec, InventoryMovement.class);
+
+//		List<InventoryMovement> inventoryMovementList = new ArrayList<>();
+//		for (InventoryMovement dbInventoryMovement : results) {
+//			IKeyValuePair iKeyValuePair = inventoryMovementRepository.getDescription(
+//					dbInventoryMovement.getLanguageId(), dbInventoryMovement.getCompanyCodeId(),
+//					dbInventoryMovement.getPlantId(), dbInventoryMovement.getWarehouseId());
+//			if (iKeyValuePair != null) {
+//				dbInventoryMovement.setCompanyDescription(iKeyValuePair.getCompanyDesc());
+//				dbInventoryMovement.setPlantDescription(iKeyValuePair.getPlantDesc());
+//				dbInventoryMovement.setWarehouseDescription(iKeyValuePair.getWarehouseDesc());
+//			}
+//			inventoryMovementList.add(dbInventoryMovement);
+//		}
 		return results;
 	}
-	
+
+
+
 	/**
 	 * 		
 	 * @param newInventoryMovement
@@ -123,16 +135,21 @@ public class InventoryMovementService extends BaseService {
 		dbInventoryMovement.setCreatedOn(new Date());
 		return inventoryMovementRepository.save(dbInventoryMovement);
 	}
-
+	
 	/**
-	 *
+	 * 
 	 * @param warehouseId
 	 * @param movementType
 	 * @param submovementType
+	 * @param palletCode
+	 * @param caseCode
 	 * @param packBarcodes
 	 * @param itemCode
+	 * @param variantCode
+	 * @param variantSubCode
 	 * @param batchSerialNumber
 	 * @param movementDocumentNo
+	 * @param loginUserID
 	 * @param updateInventoryMovement
 	 * @return
 	 * @throws IllegalAccessException
@@ -146,15 +163,15 @@ public class InventoryMovementService extends BaseService {
 		BeanUtils.copyProperties(updateInventoryMovement, dbInventoryMovement, CommonUtils.getNullPropertyNames(updateInventoryMovement));
 		return inventoryMovementRepository.save(dbInventoryMovement);
 	}
-	
+
 	/**
 	 * deleteInventoryMovement
-	 * @param loginUserID 
+	 * @param loginUserID
 	 * @param movementType
 	 */
-	public void deleteInventoryMovement (String warehouseId, Long movementType, Long submovementType, String packBarcodes, 
-			String itemCode, String batchSerialNumber, String movementDocumentNo, String loginUserID) {
-		InventoryMovement inventoryMovement = 
+	public void deleteInventoryMovement (String warehouseId, Long movementType, Long submovementType, String packBarcodes,
+										 String itemCode, String batchSerialNumber, String movementDocumentNo, String loginUserID) {
+		InventoryMovement inventoryMovement =
 				getInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, batchSerialNumber, movementDocumentNo);
 		if ( inventoryMovement != null) {
 			inventoryMovement.setDeletionIndicator(1L);
@@ -164,62 +181,30 @@ public class InventoryMovementService extends BaseService {
 		}
 	}
 
-	//==================================================================V2=======================================================================
-
-	/**
-	 * getInventoryMovement
-	 * @param movementType
-	 * @return
-	 */
-	public InventoryMovementV2 getInventoryMovement (String companyCode, String plantId, String languageId,
-													 String warehouseId, Long movementType, Long submovementType, String packBarcodes,
-													 String itemCode, String batchSerialNumber, String movementDocumentNo) {
-		/*
-		 * LANG_ID, C_ID, PLANT_ID, WH_ID, MVT_TYP_ID, SUB_MVT_TYP_ID, PACK_BARCODE, ITM_CODE, STR_NO, MVT_DOC_NO
-		 */
-		Optional<InventoryMovementV2> inventoryMovement =
-				inventoryMovementV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndMovementTypeAndSubmovementTypeAndPackBarcodesAndItemCodeAndBatchSerialNumberAndMovementDocumentNoAndDeletionIndicator(
-						languageId,
-						companyCode,
-						plantId,
-						warehouseId,
-						movementType,
-						submovementType,
-						packBarcodes,
-						itemCode,
-						batchSerialNumber,
-						movementDocumentNo,
-						0L
-				);
-		if (inventoryMovement.isEmpty()) {
-			throw new BadRequestException("The given InventoryMovement ID : " +
-					", warehouseId: " + warehouseId +
-					", movementType: " + movementType +
-					", submovementType: " + submovementType +
-					", packBarcodes: " + packBarcodes +
-					", itemCode: " + itemCode +
-					", batchSerialNumber: " + batchSerialNumber +
-					", movementDocumentNo: " + movementDocumentNo +
-					" doesn't exist.");
-		}
-		return inventoryMovement.get();
-	}
-
 	/**
 	 *
-	 * @param searchInventoryMovement
+	 * @param warehouseId
+	 * @param companyCodeId
+	 * @param plantId
+	 * @param languageId
+	 * @param refDocNumber
+	 * @param loginUserID
 	 * @return
 	 */
-	public List<InventoryMovementV2> findInventoryMovementV2(SearchInventoryMovementV2 searchInventoryMovement)
-			throws ParseException, java.text.ParseException {
-		if (searchInventoryMovement.getFromCreatedOn() != null && searchInventoryMovement.getToCreatedOn() != null) {
-			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInventoryMovement.getFromCreatedOn(), searchInventoryMovement.getToCreatedOn());
-			searchInventoryMovement.setFromCreatedOn(dates[0]);
-			searchInventoryMovement.setToCreatedOn(dates[1]);
+	// Delete InventoryMovement
+	public List<InventoryMovement> deleteInventoryMovement (String warehouseId, String companyCodeId, String plantId,
+															String languageId, String refDocNumber, String loginUserID) {
+		List<InventoryMovement> inventoryMovements = new ArrayList<>();
+		List<InventoryMovement> inventoryMovementList = inventoryMovementRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+				companyCodeId, plantId, languageId,warehouseId, refDocNumber, 0L);
+		log.info("InventoryMovement - cancellation : " + inventoryMovementList);
+		if ( inventoryMovementList != null && !inventoryMovementList.isEmpty()) {
+			for (InventoryMovement inventoryMovement : inventoryMovementList) {
+				inventoryMovement.setDeletionIndicator(1L);
+				inventoryMovementRepository.save(inventoryMovement);
+				inventoryMovements.add(inventoryMovement);
+			}
 		}
-
-		InventoryMovementV2Specification spec = new InventoryMovementV2Specification(searchInventoryMovement);
-		List<InventoryMovementV2> results = inventoryMovementV2Repository.findAll(spec);
-		return results;
+		return inventoryMovements;
 	}
 }

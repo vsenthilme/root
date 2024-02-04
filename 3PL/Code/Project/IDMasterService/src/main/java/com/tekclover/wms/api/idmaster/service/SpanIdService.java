@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.storagesectionid.StorageSectionId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.SpanIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +161,7 @@ public class SpanIdService {
 	 * @throws InvocationTargetException
 	 */
 	public SpanId createSpanId (AddSpanId newSpanId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpanId dbSpanId = new SpanId();
 		Optional<SpanId> duplicateSpanId = spanIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndAisleIdAndSpanIdAndFloorIdAndStorageSectionIdAndLanguageIdAndDeletionIndicator(newSpanId.getCompanyCodeId(), newSpanId.getPlantId(), newSpanId.getWarehouseId(), newSpanId.getAisleId(), newSpanId.getSpanId(), newSpanId.getFloorId(), newSpanId.getStorageSectionId(), newSpanId.getLanguageId(), 0L);
 		if (!duplicateSpanId.isEmpty()) {
@@ -197,7 +198,7 @@ public class SpanIdService {
 	public SpanId updateSpanId (String warehouseId,String aisleId,String spanId,Long floorId,String storageSectionId,
 								String companyCodeId,String languageId,String plantId, String loginUserID,
 								UpdateSpanId updateSpanId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpanId dbSpanId = getSpanId(warehouseId, aisleId, spanId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSpanId, dbSpanId, CommonUtils.getNullPropertyNames(updateSpanId));
 		dbSpanId.setUpdatedBy(loginUserID);

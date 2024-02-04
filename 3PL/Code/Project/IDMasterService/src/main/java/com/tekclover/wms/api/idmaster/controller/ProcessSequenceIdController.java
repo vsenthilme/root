@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -64,7 +65,7 @@ public class ProcessSequenceIdController {
     @ApiOperation(response = ProcessSequenceId.class, value = "Create ProcessSequenceId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postProcessSequenceId(@Valid @RequestBody AddProcessSequenceId newProcessSequenceId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessSequenceId createdProcessSequenceId = processsequenceidService.createProcessSequenceId(newProcessSequenceId, loginUserID);
 		return new ResponseEntity<>(createdProcessSequenceId , HttpStatus.OK);
 	}

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -56,7 +57,7 @@ public class CityController {
     @ApiOperation(response = City.class, value = "Create City") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> addCity(@Valid @RequestBody AddCity newCity,@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		City createdCity = cityService.createCity(newCity,loginUserID);
 		return new ResponseEntity<>(createdCity , HttpStatus.OK);
 	}
@@ -66,7 +67,7 @@ public class CityController {
     @PatchMapping("/{cityId}")
 	public ResponseEntity<?> patchCity(@PathVariable String cityId, @RequestParam String stateId,@RequestParam String countryId,
 									   @RequestParam String languageId,@RequestParam String loginUserID,
-			@RequestBody UpdateCity updateCity) throws IllegalAccessException, InvocationTargetException {
+			@RequestBody UpdateCity updateCity) throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		City updatedCity = cityService.updateCity(cityId,stateId,countryId,languageId,loginUserID,updateCity);
 		return new ResponseEntity<>(updatedCity , HttpStatus.OK);

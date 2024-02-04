@@ -253,7 +253,7 @@ public class ItemGroupService {
 	 * @throws InvocationTargetException
 	 */
 	public List<ItemGroup> createItemGroup (List<AddItemGroup> newItemGroup, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ItemGroup>dbItemGroupList=new ArrayList<>();
 
@@ -343,7 +343,7 @@ public class ItemGroupService {
 	 */
 	public List<ItemGroup> updateItemGroup (String companyId,String languageId,String plantId,String warehouseId,
 											Long itemTypeId, List<AddItemGroup> updateItemGroup, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 			List<ItemGroup> dbItemGroup =
 					itemgroupRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndItemTypeIdAndAndDeletionIndicator(
@@ -379,7 +379,7 @@ public class ItemGroupService {
 		 * @param loginUserID
 		 */
 		public void deleteItemGroup (String companyId,String languageId,String plantId,String warehouseId,
-				Long itemTypeId, String loginUserID) {
+				Long itemTypeId, String loginUserID) throws ParseException {
 			List<ItemGroup> itemgroup = getItemGroup(companyId,languageId,plantId,warehouseId, itemTypeId);
 
 			if ( itemgroup != null) {

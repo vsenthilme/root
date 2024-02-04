@@ -2,11 +2,10 @@ package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryMovementV2;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryMovementV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,17 +62,9 @@ public class InventoryMovementController {
     
 	@ApiOperation(response = InventoryMovement.class, value = "Search InventoryMovement") // label for swagger
 	@PostMapping("/findInventoryMovement")
-	public List<InventoryMovement> findInventoryMovement(@RequestBody SearchInventoryMovement searchInventoryMovement)
+	public Stream<InventoryMovement> findInventoryMovement(@RequestBody SearchInventoryMovement searchInventoryMovement)
 			throws Exception {
 		return inventorymovementService.findInventoryMovement(searchInventoryMovement);
-	}
-
-	//V2
-	@ApiOperation(response = InventoryMovementV2.class, value = "Search InventoryMovement V2") // label for swagger
-	@PostMapping("/v2/findInventoryMovement")
-	public List<InventoryMovementV2> findInventoryMovementV2(@RequestBody SearchInventoryMovementV2 searchInventoryMovement)
-			throws Exception {
-		return inventorymovementService.findInventoryMovementV2(searchInventoryMovement);
 	}
     
     @ApiOperation(response = InventoryMovement.class, value = "Create InventoryMovement") // label for swagger

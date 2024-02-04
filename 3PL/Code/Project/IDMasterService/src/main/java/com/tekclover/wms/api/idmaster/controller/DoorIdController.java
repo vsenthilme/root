@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class DoorIdController {
     @ApiOperation(response = DoorId.class, value = "Create DoorId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postDoorId(@Valid @RequestBody AddDoorId newDoorId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		DoorId createdDoorId = dooridService.createDoorId(newDoorId, loginUserID);
 		return new ResponseEntity<>(createdDoorId , HttpStatus.OK);
 	}
@@ -60,7 +61,7 @@ public class DoorIdController {
     @PatchMapping("/{doorId}")
 	public ResponseEntity<?> patchDoorId(@RequestParam String warehouseId,@PathVariable String doorId,@RequestParam String companyCodeId,@RequestParam String languageId,
 			@RequestParam String plantId,@Valid @RequestBody UpdateDoorId updateDoorId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DoorId createdDoorId = 
 				dooridService.updateDoorId(warehouseId, doorId,companyCodeId,languageId,plantId,loginUserID, updateDoorId);
 		return new ResponseEntity<>(createdDoorId , HttpStatus.OK);

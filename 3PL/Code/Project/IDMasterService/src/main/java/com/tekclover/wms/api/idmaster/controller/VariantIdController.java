@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -72,7 +73,7 @@ public class VariantIdController {
     @ApiOperation(response = VariantId.class, value = "Create VariantId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postVariantId(@Valid @RequestBody AddVariantId newVariantId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		VariantId createdVariantId = variantidService.createVariantId(newVariantId, loginUserID);
 		return new ResponseEntity<>(createdVariantId , HttpStatus.OK);
 	}
@@ -81,8 +82,8 @@ public class VariantIdController {
     @PatchMapping("/{variantCode}")
 	public ResponseEntity<?> patchVariantId(@PathVariable String variantCode, 
 			@RequestParam String warehouseId, @RequestParam String variantType, @RequestParam String variantSubCode, @RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateVariantId updateVariantId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateVariantId updateVariantId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		VariantId createdVariantId = 
 				variantidService.updateVariantId(warehouseId, variantCode, variantType, variantSubCode,companyCodeId,plantId,languageId,loginUserID, updateVariantId);
 		return new ResponseEntity<>(createdVariantId , HttpStatus.OK);

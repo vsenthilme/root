@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.repository.Specification.StockTypeIdSpecif
 import com.tekclover.wms.api.idmaster.repository.StockTypeIdRepository;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class StockTypeIdService{
 	 * @throws InvocationTargetException
 	 */
 	public StockTypeId createStockTypeId (AddStockTypeId newStockTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StockTypeId dbStockTypeId = new StockTypeId();
 		Optional<StockTypeId> duplicateStockTypeId = stockTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStockTypeIdAndLanguageIdAndDeletionIndicator(newStockTypeId.getCompanyCodeId(), newStockTypeId.getPlantId(), newStockTypeId.getWarehouseId(), newStockTypeId.getStockTypeId(), newStockTypeId.getLanguageId(), 0L);
 		if (!duplicateStockTypeId.isEmpty()) {
@@ -152,7 +153,7 @@ public class StockTypeIdService{
 	 */
 	public StockTypeId updateStockTypeId (String warehouseId, String stockTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 										  UpdateStockTypeId updateStockTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StockTypeId dbStockTypeId = getStockTypeId( warehouseId,stockTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStockTypeId, dbStockTypeId, CommonUtils.getNullPropertyNames(updateStockTypeId));
 		dbStockTypeId.setUpdatedBy(loginUserID);

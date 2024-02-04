@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -260,8 +261,8 @@ public class BatchSerialService {
 //		dbBatchSerial.setLevelIdAndDescription(ikeyValuePair3.getLevelId()+"-"+ikeyValuePair3.getDescription());
 //		dbBatchSerial.setCreatedBy(loginUserID);
 //		dbBatchSerial.setUpdatedBy(loginUserID);
-//		dbBatchSerial.setCreatedOn(new Date());
-//		dbBatchSerial.setUpdatedOn(new Date());
+//		dbBatchSerial.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//		dbBatchSerial.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 //		BatchSerial savedBatchSerial=batchSerialRepository.save(dbBatchSerial);
 //
 //		savedBatchSerial.setLevelReferences(new HashSet<>());
@@ -272,8 +273,8 @@ public class BatchSerialService {
 //				dblevelReference.setDeletionIndicator(0L);
 //				dblevelReference.setCreatedBy(loginUserID);
 //				dblevelReference.setUpdatedBy(loginUserID);
-//				dblevelReference.setCreatedOn(new Date());
-//				dblevelReference.setUpdatedOn(new Date());
+//				dblevelReference.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//				dblevelReference.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 //				dblevelReference.setStorageMethod(savedBatchSerial.getStorageMethod());
 //				LevelReference savedLevelReference = levelReferenceRepository.save(dblevelReference);
 //				savedBatchSerial.getLevelReferences().add(savedLevelReference);
@@ -291,7 +292,7 @@ public class BatchSerialService {
 	 * @throws InvocationTargetException
 	 */
 	public List<BatchSerial> createBatchSerial (List<AddBatchSerial> newBatchSerial, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<BatchSerial> batchSerialList = new ArrayList<>();
 
 		for (AddBatchSerial dbBatchSerial : newBatchSerial) {
@@ -371,8 +372,8 @@ public class BatchSerialService {
 //					dblevelReference.setDeletionIndicator(0L);
 //					dblevelReference.setCreatedBy(loginUserID);
 //					dblevelReference.setUpdatedBy(loginUserID);
-//					dblevelReference.setCreatedOn(new Date());
-//					dblevelReference.setUpdatedOn(new Date());
+//					dblevelReference.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//					dblevelReference.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 //					dblevelReference.setStorageMethod(savedBatchSerial.getStorageMethod());
 //					LevelReference savedLevelReference = levelReferenceRepository.save(dblevelReference);
 //					savedBatchSerial.getLevelReferences().add(savedLevelReference);
@@ -396,7 +397,7 @@ public class BatchSerialService {
 	 */
 	public List<BatchSerial> updateBatchSerial (String storageMethod,String companyId,String plantId,String languageId,String maintenance,
 												String warehouseId,Long levelId, List<UpdateBatchSerial> updateBatchSerial, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<BatchSerial> batchSerialList = new ArrayList<>();
 
@@ -468,10 +469,10 @@ public class BatchSerialService {
 //							LevelReference dbLevelReference = new LevelReference();
 //							BeanUtils.copyProperties(newLevelReference, dbLevelReference, CommonUtils.getNullPropertyNames(newLevelReference));
 //							dbLevelReference.setDeletionIndicator(0L);
-//							dbLevelReference.setCreatedOn(new Date());
+//							dbLevelReference.setCreatedOn(DateUtils.getCurrentKWTDateTime());
 //							dbLevelReference.setCreatedBy(loginUserID);
 //							dbLevelReference.setUpdatedBy(loginUserID);
-//							dbLevelReference.setUpdatedOn(new Date());
+//							dbLevelReference.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 //							dbLevelReference.setStorageMethod(savedBatchSerial.getStorageMethod());
 //							LevelReference savedLevelReference = levelReferenceRepository.save(dbLevelReference);
 //							savedBatchSerial.getLevelReferences().add(savedLevelReference);
@@ -490,7 +491,7 @@ public class BatchSerialService {
 	 // * @param batchserialCode
 	 */
 	public void deleteBatchSerial (String storageMethod,String companyId,String languageId,String plantId,
-								   String warehouseId,Long levelId,String maintenance,String loginUserID) {
+								   String warehouseId,Long levelId,String maintenance,String loginUserID) throws ParseException {
 		List<BatchSerial> dbBatchSerial = batchSerialRepository.findByStorageMethodAndPlantIdAndCompanyIdAndLanguageIdAndWarehouseIdAndLevelIdAndMaintenanceAndDeletionIndicator(
 				storageMethod,
 				plantId,

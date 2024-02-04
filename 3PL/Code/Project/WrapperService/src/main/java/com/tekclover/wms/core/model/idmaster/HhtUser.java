@@ -51,4 +51,9 @@ public class HhtUser {
 	private Date createdOn = new Date();
 	private String updatedBy;
 	private Date updatedOn = new Date();
+
+	private Date startDate;
+	private Date endDate;
+	private String userPresent;
+	private String noOfDaysLeave;
 }

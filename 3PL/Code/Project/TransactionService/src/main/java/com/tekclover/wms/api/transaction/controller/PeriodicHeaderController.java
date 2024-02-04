@@ -1,11 +1,23 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicHeaderEntityV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicHeaderV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicLineTempV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.SearchPeriodicHeaderV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualHeader;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLineEntityImpl;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.RunPerpetualHeader;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualHeaderEntityV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualHeaderV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.SearchPerpetualHeaderV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -118,4 +130,78 @@ public class PeriodicHeaderController {
     	periodicheaderService.deletePeriodicHeader(companyCodeId, palntId, warehouseId, cycleCountTypeId, cycleCountNo, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	//==========================================================V2=======================================================
+
+	@ApiOperation(response = PeriodicHeaderEntityV2.class, value = "Get all PeriodicHeaderV2 details") // label for swagger
+	@GetMapping("/v2")
+	public ResponseEntity<?> getAllPerpetualHeaderV2() {
+		List<PeriodicHeaderEntityV2> periodicHeaderEntity = periodicheaderService.getPeriodicHeadersV2();
+		return new ResponseEntity<>(periodicHeaderEntity, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = PeriodicHeaderEntityV2.class, value = "Get a PeriodicHeaderV2") // label for swagger
+	@GetMapping("/v2/{cycleCountNo}")
+	public ResponseEntity<?> getPeriodicHeaderV2(@PathVariable String cycleCountNo, @RequestParam String companyCode, @RequestParam String plantId,
+												  @RequestParam String languageId, @RequestParam String warehouseId,
+												  @RequestParam Long cycleCountTypeId) {
+		PeriodicHeaderEntityV2 periodicHeaderV2 =
+				periodicheaderService.getPeriodicHeaderWithLineV2(companyCode, plantId, languageId, warehouseId, cycleCountTypeId, cycleCountNo);
+		return new ResponseEntity<>(periodicHeaderV2, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = PeriodicHeaderV2.class, value = "Search PeriodicHeader") // label for swagger
+	@PostMapping("/v2/findPeriodicHeader")
+	public Stream<PeriodicHeaderV2> findPeriodicHeader(@RequestBody SearchPeriodicHeaderV2 searchPeriodicHeader)
+			throws Exception {
+		return periodicheaderService.findPeriodicHeaderV2(searchPeriodicHeader);
+	}
+
+	@ApiOperation(response = PeriodicHeaderEntityV2.class, value = "Search PeriodicHeader") // label for swagger
+	@PostMapping("/v2/findPeriodicHeaderEntity")
+	public List<PeriodicHeaderEntityV2> findPeriodicHeaderEntity(@RequestBody SearchPeriodicHeaderV2 searchPeriodicHeader)
+			throws Exception {
+		return periodicheaderService.findPeriodicHeaderEntityV2(searchPeriodicHeader);
+	}
+
+	@ApiOperation(response = PeriodicHeaderEntityV2.class, value = "Create PeriodicHeaderV2") // label for swagger
+	@PostMapping("/v2")
+	public ResponseEntity<?> postPeriodicHeaderV2(@Valid @RequestBody PeriodicHeaderEntityV2 newPerpetualHeader,
+												   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+		PeriodicHeaderEntityV2 createdPeriodicHeader =
+				periodicheaderService.createPeriodicHeaderV2(newPerpetualHeader, loginUserID);
+		return new ResponseEntity<>(createdPeriodicHeader, HttpStatus.OK);
+	}
+
+//	@ApiOperation(response = PeriodicLineEntity.class, value = "Create PerpetualHeader") // label for swagger
+//	@PostMapping("/v2/run")
+//	public ResponseEntity<?> postRunPerpetualHeaderV2(@Valid @RequestBody RunPerpetualHeader runPerpetualHeader)
+//			throws IllegalAccessException, InvocationTargetException, ParseException {
+//		Set<PerpetualLineEntityImpl> inventoryMovements = perpetualheaderService.runPerpetualHeaderNewV2(runPerpetualHeader);
+//		return new ResponseEntity<>(inventoryMovements, HttpStatus.OK);
+//	}
+
+	@ApiOperation(response = PeriodicHeaderV2.class, value = "Update PeriodicHeader") // label for swagger
+	@PatchMapping("/v2/{cycleCountNo}")
+	public ResponseEntity<?> patchPeriodicHeader(@PathVariable String cycleCountNo, @RequestParam String companyCode,
+												 @RequestParam String plantId, @RequestParam String languageId,
+												 @RequestParam String warehouseId, @RequestParam Long cycleCountTypeId,
+												 @Valid @RequestBody PeriodicHeaderEntityV2 updatePeriodicHeader, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		PeriodicHeaderV2 createPeriodicHeader =
+				periodicheaderService.updatePeriodicHeaderV2(companyCode, plantId, languageId, warehouseId,
+						cycleCountTypeId, cycleCountNo, loginUserID, updatePeriodicHeader);
+		return new ResponseEntity<>(createPeriodicHeader, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = PeriodicHeaderV2.class, value = "Delete PeriodicHeader") // label for swagger
+	@DeleteMapping("/v2/{cycleCountNo}")
+	public ResponseEntity<?> deletePeriodicHeader(@PathVariable String cycleCountNo, @RequestParam String companyCodeId, @RequestParam String plantId,
+													 @RequestParam String languageId, @RequestParam String warehouseId,
+													 @RequestParam Long cycleCountTypeId, @RequestParam String loginUserID) throws ParseException {
+		periodicheaderService.deletePeriodicHeaderV2(
+				companyCodeId, plantId, languageId, warehouseId, cycleCountTypeId, cycleCountNo, loginUserID);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
 }

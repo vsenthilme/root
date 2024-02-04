@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -59,6 +60,15 @@ public class StatusIdController {
     	log.info("StatusId : " + statusid);
 		return new ResponseEntity<>(statusid, HttpStatus.OK);
 	}
+
+//	@ApiOperation(response = StatusId.class, value = "Get a StatusId") // label for swagger
+//	@GetMapping("/v2/{statusId}")
+//	public ResponseEntity<?> getStatusId(@PathVariable Long statusId, @RequestParam String languageId, @RequestParam String warehouseId) {
+//    	StatusId statusid =
+//    			statusidService.getStatusId(statusId,languageId, warehouseId);
+//    	log.info("StatusId : " + statusid);
+//		return new ResponseEntity<>(statusid, HttpStatus.OK);
+//	}
     
 //	@ApiOperation(response = StatusId.class, value = "Search StatusId") // label for swagger
 //	@PostMapping("/findStatusId")
@@ -70,7 +80,7 @@ public class StatusIdController {
     @ApiOperation(response = StatusId.class, value = "Create StatusId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStatusId(@Valid @RequestBody AddStatusId newStatusId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusId createdStatusId = statusidService.createStatusId(newStatusId, loginUserID);
 		return new ResponseEntity<>(createdStatusId , HttpStatus.OK);
 	}
@@ -79,8 +89,8 @@ public class StatusIdController {
     @PatchMapping("/{statusId}")
 	public ResponseEntity<?> patchStatusId(@PathVariable Long statusId, 
 			 @RequestParam String languageId,
-			@Valid @RequestBody UpdateStatusId updateStatusId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateStatusId updateStatusId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusId createdStatusId = 
 				statusidService.updateStatusId(statusId,languageId,loginUserID, updateStatusId);
 		return new ResponseEntity<>(createdStatusId , HttpStatus.OK);

@@ -254,8 +254,8 @@ public class WrapperServiceController {
     }
     
     /*--------------------------------imbasicdata1_110--------------------------------------------------------*/
-    @ApiOperation(response = Optional.class, value = "Imbasicdata1 WH_ID 110") // label for swagger
-    @PostMapping("/batch-upload/imbasicdata1-110")
+    @ApiOperation(response = Optional.class, value = "Imbasicdata1") // label for swagger
+    @PostMapping("/batch-upload/imbasicdata1")
     public ResponseEntity<?> imbasicdata1110Upload (@RequestParam("file") MultipartFile file) 
     		throws Exception {
         Map<String, String> response = fileStorageService.storeFile(file);
@@ -263,19 +263,19 @@ public class WrapperServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    /*--------------------------------imbasicdata1_111--------------------------------------------------------*/
-    @ApiOperation(response = Optional.class, value = "Imbasicdata1 WH_ID 111") // label for swagger
-    @PostMapping("/batch-upload/imbasicdata1-111")
-    public ResponseEntity<?> imbasicdata1111Upload (@RequestParam("file") MultipartFile file) 
-    		throws Exception {
-        Map<String, String> response = fileStorageService.storeFile(file);
-        batchJobScheduler.runJobImBasicData1WhId111();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    /*--------------------------------imbasicdata1_111--------------------------------------------------------*/
+//    @ApiOperation(response = Optional.class, value = "Imbasicdata1 WH_ID 111") // label for swagger
+//    @PostMapping("/batch-upload/imbasicdata1-111")
+//    public ResponseEntity<?> imbasicdata1111Upload (@RequestParam("file") MultipartFile file)
+//    		throws Exception {
+//        Map<String, String> response = fileStorageService.storeFile(file);
+//        batchJobScheduler.runJobImBasicData1WhId111();
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
     
     /*--------------------------------Impartner_110--------------------------------------------------------*/
-    @ApiOperation(response = Optional.class, value = "Impartner_110") // label for swagger
-    @PostMapping("/batch-upload/impartner-110")
+    @ApiOperation(response = Optional.class, value = "Impartner") // label for swagger
+    @PostMapping("/batch-upload/impartner")
     public ResponseEntity<?> impartner110Upload (@RequestParam("file") MultipartFile file) 
     		throws Exception {
         Map<String, String> response = fileStorageService.storeFile(file);
@@ -283,15 +283,15 @@ public class WrapperServiceController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    /*--------------------------------Impartner_111--------------------------------------------------------*/
-    @ApiOperation(response = Optional.class, value = "Impartner_111") // label for swagger
-    @PostMapping("/batch-upload/impartner-111")
-    public ResponseEntity<?> impartner111Upload (@RequestParam("file") MultipartFile file) 
-    		throws Exception {
-        Map<String, String> response = fileStorageService.storeFile(file);
-        batchJobScheduler.runJobIMPartnerWhId111();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    /*--------------------------------Impartner_111--------------------------------------------------------*/
+//    @ApiOperation(response = Optional.class, value = "Impartner_111") // label for swagger
+//    @PostMapping("/batch-upload/impartner-111")
+//    public ResponseEntity<?> impartner111Upload (@RequestParam("file") MultipartFile file)
+//    		throws Exception {
+//        Map<String, String> response = fileStorageService.storeFile(file);
+//        batchJobScheduler.runJobIMPartnerWhId111();
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
     
     /*--------------------------------Inventory--------------------------------------------------------*/
     @ApiOperation(response = Optional.class, value = "Inventory") // label for swagger
@@ -330,7 +330,155 @@ public class WrapperServiceController {
    		Map<String, Object> response = reportService.getOrderDetails(warehouseID, statusId, date);
        	return new ResponseEntity<>(response, HttpStatus.OK);
    	}
-    
+
+    /*-----------------------------IMAGE-UPLOAD----------------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "DeliveryModule") // label for swagger
+    @PostMapping("/batch-upload/delivery")
+    public ResponseEntity<?> deliveryUpload (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*=======================================ImBasicData1 - PatchUpload=============================================== */
+
+    @ApiOperation(response = Optional.class, value = "ImBasicData1-PatchUpload") // label for swagger
+    @PostMapping("/patch-upload/imbasicdata1/update")
+    public ResponseEntity<String> uploadImBasicData1(@RequestParam("file") MultipartFile file) throws Exception {
+        try {
+            Map<String, String> response = fileStorageService.storeFile(file);
+            batchJobScheduler.runJobImBasicData1Patch();
+            return ResponseEntity.ok(response.get("message"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload ImBasicData1." + e.getMessage());
+        }
+    }
+
+    /*========================================IMPartner - PatchUpload==================================================*/
+
+    @ApiOperation(response = Optional.class, value = "IMPartner - PatchUpload") // label for swagger
+    @PostMapping("/patch-upload/impartner/update")
+    public ResponseEntity<String> uploadImPartner(@RequestParam("file") MultipartFile file) throws Exception {
+
+        try {
+            Map<String, String> response = fileStorageService.storeFile(file);
+            batchJobScheduler.runIMPartnerPatchJob();
+            return ResponseEntity.ok(response.get("message"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload ImPartner." + e.getMessage());
+        }
+    }
+
+    /*========================================BinLocation - PatchUpload==================================================*/
+
+    @ApiOperation(response = Optional.class, value = "BinLocation - PatchUpload") // label for swagger
+    @PostMapping("/patch-upload/binlocation/update")
+    public ResponseEntity<String> uploadBinLocationPatch(@RequestParam("file") MultipartFile file) throws Exception {
+
+        try {
+            Map<String, String> response = fileStorageService.storeFile(file);
+            batchJobScheduler.runBinLocationPatchJob();
+            return ResponseEntity.ok(response.get("message"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload StorageBin." + e.getMessage());
+        }
+    }
+
+    /*========================================Inventory - PatchUpload==================================================*/
+
+    @ApiOperation(response = Optional.class, value = "BinLocation - PatchUpload") // label for swagger
+    @PostMapping("/patch-upload/inventory/update")
+    public ResponseEntity<String> uploadInventoryPatch(@RequestParam("file") MultipartFile file) throws Exception {
+
+        try {
+            Map<String, String> response = fileStorageService.storeFile(file);
+            batchJobScheduler.runInventoryJob();
+            return ResponseEntity.ok(response.get("message"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload StorageBin." + e.getMessage());
+        }
+    }
+
+    /*--------------------------------PreInboundHeader-Insert---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader") // label for swagger
+    @PostMapping("/batch-upload/preInboundHeader")
+    public ResponseEntity<?> preInboundHeader (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreInboundHeader();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreInboundLine-Insert---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader") // label for swagger
+    @PostMapping("/batch-upload/preInboundLine")
+    public ResponseEntity<?> preInboundLine (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreInboundLine();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreInboundHeader-Update---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader Patch") // label for swagger
+    @PostMapping("/batch-upload/preInboundHeader/patch")
+    public ResponseEntity<?> preInboundHeaderPatch (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreInboundHeaderPatch();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreInboundLine-Update---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader Patch") // label for swagger
+    @PostMapping("/batch-upload/preInboundLine/patch")
+    public ResponseEntity<?> preInboundLinePatch (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreInboundLinePatch();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreOutboundHeader-Insert---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader Insert") // label for swagger
+    @PostMapping("/batch-upload/preOutboundHeader")
+    public ResponseEntity<?> preOutboundHeader (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreOutboundHeader();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreOutboundLine-Insert---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreOutboundLine Insert") // label for swagger
+    @PostMapping("/batch-upload/preOutboundLine")
+    public ResponseEntity<?> preOutboundLine (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreOutboundLine();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreOutboundHeader-Update---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreOutboundHeader Update") // label for swagger
+    @PostMapping("/batch-upload/preOutboundHeaderBatch")
+    public ResponseEntity<?> preOutboundHeaderPatch (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreOutboundHeaderPatch();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /*--------------------------------PreOutboundLine-Update---------------------------------------------------*/
+    @ApiOperation(response = Optional.class, value = "PreInboundHeader Update") // label for swagger
+    @PostMapping("/batch-upload/preOutboundLineBatch")
+    public ResponseEntity<?> preOutboundHeaderBatch (@RequestParam("file") MultipartFile file)
+            throws Exception {
+        Map<String, String> response = fileStorageService.storeFile(file);
+        batchJobScheduler.runJobPreOutboundLinePatch();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /*------------------------------------------------------------------------------------------------------*/
     @ApiOperation(response = Optional.class, value = "Document Storage Download") // label for swagger
    	@GetMapping("/report/inventory/download")

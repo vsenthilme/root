@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.strategyid.FindStrategyId;
 import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.StrategyIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,7 +138,7 @@ public class StrategyIdService {
 	 * @throws InvocationTargetException
 	 */
 	public StrategyId createStrategyId (AddStrategyId newStrategyId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StrategyId dbStrategyId = new StrategyId();
 		Optional<StrategyId>duplicateStrategyId=strategyIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStrategyTypeIdAndStrategyNoAndLanguageIdAndDeletionIndicator(newStrategyId.getCompanyCodeId(), newStrategyId.getPlantId(), newStrategyId.getWarehouseId(), newStrategyId.getStrategyTypeId(), newStrategyId.getStrategyNo(), newStrategyId.getLanguageId(), 0L);
 		if(!duplicateStrategyId.isEmpty()){
@@ -170,7 +171,7 @@ public class StrategyIdService {
 	public StrategyId updateStrategyId ( String warehouseId, Long strategyTypeId, String strategyNo,
 										 String companyCodeId,String languageId,String plantId,String loginUserID,
 										 UpdateStrategyId updateStrategyId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StrategyId dbStrategyId = getStrategyId(warehouseId, strategyTypeId,strategyNo,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStrategyId, dbStrategyId, CommonUtils.getNullPropertyNames(updateStrategyId));
 		dbStrategyId.setUpdatedBy(loginUserID);

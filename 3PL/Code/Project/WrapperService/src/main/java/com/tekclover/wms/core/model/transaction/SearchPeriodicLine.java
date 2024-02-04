@@ -7,7 +7,9 @@ import lombok.Data;
 
 @Data
 public class SearchPeriodicLine {
-	
+
+	private List<String> companyCode;
+	private List<String> languageId;
 	private String plantId;
 	private String warehouseId;
 	private String cycleCountNo;

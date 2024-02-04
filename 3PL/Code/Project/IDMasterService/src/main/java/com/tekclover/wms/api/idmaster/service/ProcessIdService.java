@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.ProcessIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.ProcessIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +123,7 @@ public class ProcessIdService{
 	 * @throws InvocationTargetException
 	 */
 	public ProcessId createProcessId (AddProcessId newProcessId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessId dbProcessId = new ProcessId();
 		Optional<ProcessId>duplicateProcessId=processIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndProcessIdAndLanguageIdAndDeletionIndicator(newProcessId.getCompanyCodeId(), newProcessId.getPlantId(), newProcessId.getWarehouseId(), newProcessId.getProcessId(), newProcessId.getLanguageId(), 0L);
 		if(!duplicateProcessId.isEmpty()) {
@@ -154,7 +155,7 @@ public class ProcessIdService{
 	 */
 	public ProcessId updateProcessId (String warehouseId,String processId,String companyCodeId,String languageId,String plantId,String loginUserID,
 									  UpdateProcessId updateProcessId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessId dbProcessId = getProcessId(warehouseId,processId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateProcessId, dbProcessId, CommonUtils.getNullPropertyNames(updateProcessId));
 		dbProcessId.setUpdatedBy(loginUserID);

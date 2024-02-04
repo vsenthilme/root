@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import com.tekclover.wms.api.masters.model.driver.Driver;
 import com.tekclover.wms.api.masters.model.driver.SearchDriver;
 import com.tekclover.wms.api.masters.repository.specification.BomLineSpecification;
 import com.tekclover.wms.api.masters.repository.specification.DriverSpecification;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,7 +94,7 @@ public class BomLineService {
 	 * @throws InvocationTargetException
 	 */
 	public BomLine createBomLine (BomLine newBomLine, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BomLine dbBomLine = new BomLine();
 		Optional<BomLine> duplicateBomLine = bomLineRepository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndBomNumberAndChildItemCodeAndDeletionIndicator(newBomLine.getLanguageId(), newBomLine.getCompanyCode(), newBomLine.getPlantId(), newBomLine.getWarehouseId(), newBomLine.getBomNumber(), newBomLine.getChildItemCode(), 0L);
 		if (!duplicateBomLine.isEmpty()) {
@@ -120,7 +122,7 @@ public class BomLineService {
 	 */
 	public BomLine updateBomLine (String warehouseId, Long bomNumber,String companyCode,String languageId,String plantId, String childItemCode,
 								  String loginUserID, BomLine updateBomLine)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BomLine dbBomLine = getBomLine(warehouseId, bomNumber, childItemCode,companyCode,plantId,languageId);
 		BeanUtils.copyProperties(updateBomLine, dbBomLine, CommonUtils.getNullPropertyNames(updateBomLine));
 		dbBomLine.setUpdatedBy(loginUserID);

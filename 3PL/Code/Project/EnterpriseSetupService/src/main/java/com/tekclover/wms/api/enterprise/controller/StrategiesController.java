@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -69,7 +70,7 @@ public class StrategiesController {
     @ApiOperation(response = Strategies.class, value = "Create Strategies") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStrategies(@Valid @RequestBody List<AddStrategies> newStrategies, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<Strategies> createdStrategies = strategiesService.createStrategies(newStrategies, loginUserID);
 		return new ResponseEntity<>(createdStrategies , HttpStatus.OK);
 	}
@@ -80,7 +81,7 @@ public class StrategiesController {
 											 @RequestParam String languageId, @RequestParam String plantId,
 											 @Valid @RequestBody List<AddStrategies> updateStrategies,
 											 @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Strategies> createdStrategies = strategiesService.updateStrategies(companyId,languageId,plantId,warehouseId,updateStrategies, loginUserID);
 		return new ResponseEntity<>(createdStrategies , HttpStatus.OK);
@@ -90,7 +91,7 @@ public class StrategiesController {
 	@DeleteMapping("/strategies")
 	public ResponseEntity<?> deleteStrategies(@RequestParam String companyId,
 											  @RequestParam String languageId,@RequestParam String plantId,
-											  @RequestParam String warehouseId,@RequestParam String loginUserID) {
+											  @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
 
 		strategiesService.deleteStrategies(companyId,languageId,plantId,warehouseId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

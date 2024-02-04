@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class ImPalletizationController {
     @PostMapping("")
     public ResponseEntity<?> postImPalletization(@Valid @RequestBody List<AddImPalletization> newImPalletization,
                                                  @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         List<ImPalletization> createdPalletization = imPalletizationService.createImPalletization(newImPalletization, loginUserID);
         return new ResponseEntity<>(createdPalletization , HttpStatus.OK);
     }
@@ -68,7 +69,7 @@ public class ImPalletizationController {
                                                 @RequestParam String plantId,@RequestParam String languageId,
                                                 @RequestParam String warehouseId,@Valid @RequestBody List<AddImPalletization> updateImPalletization,
                                                 @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         List<ImPalletization> createdImPalletization =
                 imPalletizationService.updateImPalletization(companyCodeId,plantId,warehouseId,languageId,itemCode,
@@ -80,7 +81,7 @@ public class ImPalletizationController {
     @DeleteMapping("/{itemCode}")
     public ResponseEntity<?> deleteImPalletization(@PathVariable String itemCode, @RequestParam String companyCodeId,
                                                    @RequestParam String plantId,@RequestParam String languageId,
-                                                   @RequestParam String warehouseId, @RequestParam String loginUserID) {
+                                                   @RequestParam String warehouseId, @RequestParam String loginUserID) throws ParseException {
         imPalletizationService.deleteImPalletization(companyCodeId,languageId,plantId,warehouseId,itemCode,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

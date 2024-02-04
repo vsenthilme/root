@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class NumberRangeItemController {
     @ApiOperation(response = NumberRangeItem.class, value = "Create NumberRangeItem") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postNumberRangeItem(@Valid @RequestBody AddNumberRangeItem addNumberRangeItem, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeItem createdNumberRangeItem= numberRangeItemService.createNumberRangeItem(addNumberRangeItem, loginUserID);
         return new ResponseEntity<>(createdNumberRangeItem , HttpStatus.OK);
     }
@@ -67,7 +68,7 @@ public class NumberRangeItemController {
     public ResponseEntity<?> patchCycleCountScheduler(@PathVariable Long itemTypeId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,
                                                       @RequestParam Long sequenceNo, @RequestParam String warehouseId,
                                                       @Valid @RequestBody UpdateNumberRangeItem updateNumberRangeItem, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeItem createdNumberRangeItem = numberRangeItemService.updateNumberRangeItem(companyCodeId,plantId,warehouseId,languageId,itemTypeId,sequenceNo,updateNumberRangeItem, loginUserID);
         return new ResponseEntity<>(createdNumberRangeItem , HttpStatus.OK);
     }
@@ -75,7 +76,7 @@ public class NumberRangeItemController {
     @ApiOperation(response = NumberRangeItem.class, value = "Delete NumberRangeItem") // label for swagger
     @DeleteMapping("/{itemTypeId}")
     public ResponseEntity<?> deleteNumberRangeItem(@PathVariable Long itemTypeId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,@RequestParam Long sequenceNo,
-                                                   @RequestParam String warehouseId,@RequestParam String loginUserID) {
+                                                   @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
         numberRangeItemService.deleteNumberRangeItem(companyCodeId,languageId,plantId,warehouseId,sequenceNo,itemTypeId,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

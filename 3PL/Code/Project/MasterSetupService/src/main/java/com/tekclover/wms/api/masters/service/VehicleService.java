@@ -15,6 +15,7 @@ import com.tekclover.wms.api.masters.repository.VehicleRepository;
 import com.tekclover.wms.api.masters.repository.specification.DriverSpecification;
 import com.tekclover.wms.api.masters.repository.specification.VehicleSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +97,7 @@ public class VehicleService {
      * @throws InvocationTargetException
      */
     public Vehicle createVehicle (AddVehicle newVehicle, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Vehicle dbVehicle = new Vehicle();
         Optional<Vehicle> duplicateVehicle = vehicleRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndVehicleNumberAndDeletionIndicator(
                 newVehicle.getCompanyCodeId(),
@@ -126,7 +128,7 @@ public class VehicleService {
      * @throws InvocationTargetException
      */
     public Vehicle updateVehicle (String companyCodeId, String plantId, String warehouseId, String languageId, String vehicleNumber, UpdateVehicle updateVehicle, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Vehicle dbVehicle = getVehicle(vehicleNumber,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateVehicle, dbVehicle, CommonUtils.getNullPropertyNames(updateVehicle));
         dbVehicle.setUpdatedBy(loginUserID);
@@ -139,7 +141,7 @@ public class VehicleService {
      * @param vehicleNumber
      * @param companyCodeId
      */
-    public void deleteVehicle (String companyCodeId,String languageId,String plantId,String warehouseId,String vehicleNumber,String loginUserID) {
+    public void deleteVehicle (String companyCodeId,String languageId,String plantId,String warehouseId,String vehicleNumber,String loginUserID) throws ParseException {
         Vehicle dbVehicle = getVehicle(vehicleNumber,companyCodeId,plantId,languageId,warehouseId);
         if ( dbVehicle != null) {
             dbVehicle.setDeletionIndicator (1L);

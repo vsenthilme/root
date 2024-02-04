@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class StorageClassController {
     
     @ApiOperation(response = StorageClass.class, value = "Create StorageClass") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postStorageClass(@Valid @RequestBody AddStorageClass newStorageClass, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postStorageClass(@Valid @RequestBody AddStorageClass newStorageClass, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageClass createdStorageClass = storageclassService.createStorageClass(newStorageClass, loginUserID);
 		return new ResponseEntity<>(createdStorageClass , HttpStatus.OK);
 	}
@@ -75,8 +76,8 @@ public class StorageClassController {
     @ApiOperation(response = StorageClass.class, value = "Update StorageClass") // label for swagger
     @PatchMapping("/{storageClassId}")
 	public ResponseEntity<?> patchStorageClass(@PathVariable Long storageClassId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateStorageClass updateStorageClass, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateStorageClass updateStorageClass, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageClass createdStorageClass = storageclassService.updateStorageClass(warehouseId, storageClassId,companyId,languageId,plantId,updateStorageClass, loginUserID);
 		return new ResponseEntity<>(createdStorageClass , HttpStatus.OK);
 	}
@@ -84,7 +85,7 @@ public class StorageClassController {
     @ApiOperation(response = StorageClass.class, value = "Delete StorageClass") // label for swagger
 	@DeleteMapping("/{storageClassId}")
 	public ResponseEntity<?> deleteStorageClass(@PathVariable Long storageClassId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@RequestParam String loginUserID) {
+			@RequestParam String loginUserID) throws ParseException {
     	storageclassService.deleteStorageClass(warehouseId, storageClassId,companyId,languageId,plantId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class PriceListAssignmentController {
     @ApiOperation(response = PriceListAssignment.class, value = "Create PriceListAssignment") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postPriceListAssignment(@Valid @RequestBody AddPriceListAssignment newPriceListAssignment,
-                                         @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                         @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceListAssignment createdPriceListAssignment = priceListAssignmentService.createPriceListAssignment(newPriceListAssignment, loginUserID);
         return new ResponseEntity<>(createdPriceListAssignment, HttpStatus.OK);
     }
@@ -60,7 +61,7 @@ public class PriceListAssignmentController {
     @PatchMapping("/{priceListId}")
     public ResponseEntity<?> patchPriceListAssignment(@RequestParam String warehouseId, @PathVariable Long priceListId,@RequestParam String partnerCode,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
                                                       @Valid @RequestBody UpdatePriceListAssignment updatePriceListAssignment, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceListAssignment createdPriceListAssignment =
                 priceListAssignmentService.updatePriceListAssignment(warehouseId, priceListId, partnerCode,companyCodeId,languageId,plantId,loginUserID,updatePriceListAssignment);
         return new ResponseEntity<>(createdPriceListAssignment, HttpStatus.OK);

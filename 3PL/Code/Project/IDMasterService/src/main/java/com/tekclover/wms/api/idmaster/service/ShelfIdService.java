@@ -7,6 +7,7 @@ import com.tekclover.wms.api.idmaster.model.spanid.SpanId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ShelfIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,7 +172,7 @@ public class ShelfIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ShelfId createShelfId (AddShelfId newShelfId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ShelfId dbShelfId = new ShelfId();
 		Optional<ShelfId> duplicateShelfId = shelfIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndAisleIdAndShelfIdAndSpanIdAndFloorIdAndStorageSectionIdAndLanguageIdAndDeletionIndicator(newShelfId.getCompanyCodeId(), newShelfId.getPlantId(), newShelfId.getWarehouseId(), newShelfId.getAisleId(), newShelfId.getShelfId(), newShelfId.getSpanId(),
 				newShelfId.getFloorId(), newShelfId.getStorageSectionId(), newShelfId.getLanguageId(), 0L);
@@ -210,7 +211,7 @@ public class ShelfIdService {
 	 */
 	public ShelfId updateShelfId (String warehouseId,String aisleId,String shelfId,String spanId,Long floorId,String storageSectionId,String companyCodeId,String languageId,String plantId, String loginUserID,
 								  UpdateShelfId updateShelfId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ShelfId dbShelfId = getShelfId(warehouseId, aisleId, shelfId,spanId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateShelfId, dbShelfId, CommonUtils.getNullPropertyNames(updateShelfId));
 		dbShelfId.setUpdatedBy(loginUserID);

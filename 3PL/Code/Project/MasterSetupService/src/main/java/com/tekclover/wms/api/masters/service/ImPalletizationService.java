@@ -9,6 +9,7 @@ import com.tekclover.wms.api.masters.model.impartner.ImPartner;
 import com.tekclover.wms.api.masters.repository.ImPalletizationRepository;
 import com.tekclover.wms.api.masters.repository.specification.ImPalletizationSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,7 +97,7 @@ public class ImPalletizationService {
      * @throws InvocationTargetException
      */
     public List<ImPalletization> createImPalletization (List<AddImPalletization> newImPalletization, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         List<ImPalletization>imPalletizationList = new ArrayList<>();
 
@@ -140,7 +142,7 @@ public class ImPalletizationService {
      */
     public List<ImPalletization> updateImPalletization (String companyCodeId, String plantId, String warehouseId,String languageId,
                                                         String itemCode, List<AddImPalletization> updateImPalletization, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         List<ImPalletization> palletizationList = imPalletizationRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndDeletionIndicator(
                 companyCodeId,
                 plantId,
@@ -174,7 +176,7 @@ public class ImPalletizationService {
      * @param itemCode
      * @param loginUserID
      */
-    public void deleteImPalletization (String companyCodeId,String languageId,String plantId,String warehouseId,String itemCode,String loginUserID) {
+    public void deleteImPalletization (String companyCodeId,String languageId,String plantId,String warehouseId,String itemCode,String loginUserID) throws ParseException {
         List<ImPalletization> imPalletization = getImPalletization(warehouseId,companyCodeId,languageId,plantId,itemCode);
         if ( imPalletization != null) {
             for(ImPalletization newImPalletization : imPalletization) {

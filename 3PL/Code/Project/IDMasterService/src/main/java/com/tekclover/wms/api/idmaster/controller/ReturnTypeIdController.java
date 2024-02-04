@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class ReturnTypeIdController {
     @ApiOperation(response = ReturnTypeId.class, value = "Create ReturnTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postReturnTypeId(@Valid @RequestBody AddReturnTypeId newReturnTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ReturnTypeId createdReturnTypeId = returntypeidService.createReturnTypeId(newReturnTypeId, loginUserID);
 		return new ResponseEntity<>(createdReturnTypeId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class ReturnTypeIdController {
     @PatchMapping("/{returnTypeId}")
 	public ResponseEntity<?> patchReturnTypeId(@PathVariable String returnTypeId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateReturnTypeId updateReturnTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateReturnTypeId updateReturnTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ReturnTypeId createdReturnTypeId = 
 				returntypeidService.updateReturnTypeId(warehouseId,returnTypeId,companyCodeId,languageId,plantId,loginUserID,updateReturnTypeId);
 		return new ResponseEntity<>(createdReturnTypeId , HttpStatus.OK);

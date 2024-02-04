@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class DockController {
     @ApiOperation(response = Dock.class, value = "Create Dock") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postDock(@Valid @RequestBody AddDock newDock, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Dock createdDock= dockService.createDock(newDock, loginUserID);
         return new ResponseEntity<>(createdDock , HttpStatus.OK);
     }
@@ -60,14 +61,14 @@ public class DockController {
     @PatchMapping("/{dockId}")
     public ResponseEntity<?> patchDock(@PathVariable String dockId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId, @RequestParam String dockType, @RequestParam String warehouseId,
                                        @Valid @RequestBody UpdateDock updateDock, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Dock createdDock = dockService.updateDock(companyCodeId,plantId,warehouseId,languageId,dockType,dockId,updateDock,loginUserID);
         return new ResponseEntity<>(createdDock , HttpStatus.OK);
     }
 
     @ApiOperation(response = Dock.class, value = "Delete Dock") // label for swagger
     @DeleteMapping("/{dockId}")
-    public ResponseEntity<?> deleteDock(@PathVariable String dockId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,@RequestParam String dockType, @RequestParam String warehouseId,@RequestParam String loginUserID) {
+    public ResponseEntity<?> deleteDock(@PathVariable String dockId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,@RequestParam String dockType, @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
         dockService.deleteDock(companyCodeId,languageId,plantId,warehouseId,dockId,dockType,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

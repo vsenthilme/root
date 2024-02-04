@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 		uniqueConstraints = { 
 				@UniqueConstraint (
 						name = "unique_key_impartner", 
-						columnNames = {"LANG_ID","C_ID", "PLANT_ID", "WH_ID", "ITM_CODE","PARTNER_CODE","PARTNER_TYP","PARTNER_ITM_BAR"})
+						columnNames = {"LANG_ID","C_ID", "PLANT_ID", "WH_ID", "ITM_CODE","PARTNER_CODE","PARTNER_TYP","PARTNER_ITM_BAR","MFR_NAME"})
 				}
 		)
 @IdClass(ImPartnerCompositeKey.class)
@@ -66,6 +66,7 @@ public class ImPartner {
 	@Column(name="MFR_CODE")
 	private String manufacturerCode;
 
+	@Id
 	@Column(name="MFR_NAME")
 	private String manufacturerName;
 

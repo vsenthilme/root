@@ -4,6 +4,13 @@ import java.util.Date;
 
 public interface StockMovementReportImpl {
     String getWarehouseId();
+    String getWarehouseDescription();
+    String getCompanyCodeId();
+    String getCompanyDescription();
+    String getPlantId();
+    String getPlantDescription();
+    String getStatusDescription();
+    String getLanguageId();
     String getManufacturerSKU();
     String getItemCode();
     String getItemText();

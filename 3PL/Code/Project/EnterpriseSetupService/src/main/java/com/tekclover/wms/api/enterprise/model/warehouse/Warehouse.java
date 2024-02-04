@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 		uniqueConstraints = { 
 				@UniqueConstraint (
 						name = "unique_key_warehouse", 
-						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "IMP_MTD", "WH_TYP_ID"})
+						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "WH_TYP_ID"})
 				}
 		)
 @IdClass(WarehouseCompositeKey.class)
@@ -47,7 +47,7 @@ public class Warehouse {
 	@Column(name = "WH_ID") 
 	private String warehouseId;
 	
-	@Id
+//	@Id
 	@Column(name = "IMP_MTD")
 	private String modeOfImplementation;
 	

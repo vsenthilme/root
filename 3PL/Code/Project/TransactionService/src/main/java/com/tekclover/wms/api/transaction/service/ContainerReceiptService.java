@@ -420,7 +420,7 @@ public class ContainerReceiptService extends BaseService {
      * @throws InvocationTargetException
      */
     public ContainerReceiptV2 createContainerReceiptV2(ContainerReceiptV2 newContainerReceipt, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         log.info("newContainerReceipt : " + newContainerReceipt);
 
@@ -452,6 +452,8 @@ public class ContainerReceiptService extends BaseService {
         newContainerReceipt.setDeletionIndicator(0L);
         newContainerReceipt.setCreatedBy(loginUserID);
         newContainerReceipt.setUpdatedBy(loginUserID);
+//        newContainerReceipt.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//        newContainerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         newContainerReceipt.setCreatedOn(new Date());
         newContainerReceipt.setUpdatedOn(new Date());
         return containerReceiptV2Repository.save(newContainerReceipt);
@@ -470,7 +472,7 @@ public class ContainerReceiptService extends BaseService {
     public ContainerReceiptV2 updateContainerReceiptV2(String companyCode, String plantId, String languageId,
                                                        String warehouseId, String containerReceiptNo,
                                                        ContainerReceiptV2 updateContainerReceipt, String loginUserId)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         log.info("update container receipt no : " + containerReceiptNo);
         log.info("update container receipt data : " + updateContainerReceipt);
@@ -507,6 +509,7 @@ public class ContainerReceiptService extends BaseService {
         }
 
         dbContainerReceipt.setUpdatedBy(loginUserId);
+//        dbContainerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbContainerReceipt.setUpdatedOn(new Date());
         return containerReceiptV2Repository.save(dbContainerReceipt);
     }
@@ -518,12 +521,14 @@ public class ContainerReceiptService extends BaseService {
      * @param containerReceiptNo
      */
     public void deleteContainerReceiptV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                         String preInboundNo, String refDocNumber, String containerReceiptNo, String loginUserID) {
+                                         String preInboundNo, String refDocNumber, String containerReceiptNo, String loginUserID) throws ParseException {
         ContainerReceiptV2 containerReceipt = getContainerReceiptV2(companyCode, plantId, languageId, warehouseId,
                 													preInboundNo, refDocNumber, containerReceiptNo);
         if (containerReceipt != null) {
             containerReceipt.setDeletionIndicator(1L);
             containerReceipt.setUpdatedBy(loginUserID);
+//            containerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            containerReceipt.setUpdatedOn(new Date());
             containerReceiptV2Repository.save(containerReceipt);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + containerReceiptNo);

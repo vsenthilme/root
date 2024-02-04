@@ -1,0 +1,2 @@
+languageId,companyCode,plantId,warehouseId,preInboundNo,refDocNumber,inboundOrderTypeId,referenceDocumentType,statusId,containerNo,noOfContainers,containerType,refDocDate,referenceField1,referenceField2,referenceField3,referenceField4,referenceField5,referenceField6,referenceField7,referenceField8,referenceField9,referenceField10,deletionIndicator,createdBy,dType,companyDescription,plantDescription,warehouseDescription,statusDescription
+EN,21,222,200,34,12,1,t-20,5,,,,,,,,,,,,,,,,,,,,,

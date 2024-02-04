@@ -88,7 +88,7 @@ public class ImAlternateUomService {
 	 * @throws InvocationTargetException
 	 */
 	public List<ImAlternateUom> createImAlternateUom (List<AddImAlternateUom> newImAlternateUom, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ImAlternateUom> dbImAlternateUomList = new ArrayList<>();
 
 //		String uomId = imalternateuomRepository.getUomId();
@@ -175,7 +175,7 @@ public class ImAlternateUomService {
 	public List<ImAlternateUom> updateImAlternateUom (String alternateUom,String companyCodeId,String plantId,
 													  String warehouseId,String itemCode,String uomId,String languageId,
 													  List<UpdateImAlternateUom> updateImAlternateUom, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImAlternateUom> dbImAlternateUomList = new ArrayList<>();
 
@@ -252,7 +252,7 @@ public class ImAlternateUomService {
 	 * deleteImAlternateUom
 	 * @param alternateUom
 	 */
-	public void deleteImAlternateUom (String alternateUom,String companyCodeId,String plantId,String warehouseId,String itemCode,String uomId,String languageId, String loginUserID) {
+	public void deleteImAlternateUom (String alternateUom,String companyCodeId,String plantId,String warehouseId,String itemCode,String uomId,String languageId, String loginUserID) throws ParseException {
 		List<ImAlternateUom> imalternateuom = getImAlternateUom(alternateUom,companyCodeId,plantId,
 				warehouseId,itemCode,uomId,languageId);
 		if ( imalternateuom != null) {

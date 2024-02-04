@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.tekclover.wms.api.transaction.model.impl.InventoryImpl;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,5 +140,11 @@ public class InventoryController {
 	public List<InventoryV2> findInventoryV2(@RequestBody SearchInventoryV2 searchInventory)
 			throws Exception {
 		return inventoryService.findInventoryV2(searchInventory);
+	}
+	@ApiOperation(response = IInventoryImpl.class, value = "Search Inventory V2") // label for swagger
+	@PostMapping("/findInventoryNew/v2")
+	public List<IInventoryImpl> findInventoryNewV2(@RequestBody SearchInventoryV2 searchInventory)
+			throws Exception {
+		return inventoryService.findInventoryNewV2(searchInventory);
 	}
 }

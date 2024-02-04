@@ -69,4 +69,7 @@ public class StagingLineEntity {
 	private Date updatedOn = new Date();
 	private String confirmedBy;
 	private Date confirmedOn = new Date();
+
+	private String middlewareId;
+	private String middlewareTable;
 }

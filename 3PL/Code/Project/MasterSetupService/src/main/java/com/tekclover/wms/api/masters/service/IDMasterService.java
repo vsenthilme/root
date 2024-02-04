@@ -2,6 +2,7 @@ package com.tekclover.wms.api.masters.service;
 
 import java.util.Collections;
 
+import com.tekclover.wms.api.masters.model.dto.PlantId;
 import com.tekclover.wms.api.masters.model.idmaster.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -199,6 +200,29 @@ public class IDMasterService {
 							.queryParam("languageId",languageId);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			ResponseEntity<WarehouseId> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, WarehouseId.class);
+//			log.info("result : " + result.getStatusCode());
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// GET
+	public PlantId[] getPlantId (String companyCodeId, String languageId, String authToken) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "plantid/branchCode")
+							.queryParam("companyCodeId",companyCodeId)
+							.queryParam("languageId",languageId);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<PlantId[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, PlantId[].class);
 //			log.info("result : " + result.getStatusCode());
 			return result.getBody();
 		} catch (Exception e) {

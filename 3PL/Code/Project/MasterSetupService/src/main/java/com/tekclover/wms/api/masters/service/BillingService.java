@@ -10,6 +10,7 @@ import com.tekclover.wms.api.masters.repository.BillingRepository;
 import com.tekclover.wms.api.masters.repository.PriceListRepository;
 import com.tekclover.wms.api.masters.repository.specification.BillingSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,7 +165,7 @@ public class BillingService{
      * @throws InvocationTargetException
      */
     public Billing createBilling (AddBilling newBilling, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Billing dbBilling = new Billing();
         Optional<Billing> duplicateBilling = billingRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPartnerCodeAndModuleIdAndLanguageIdAndDeletionIndicator(newBilling.getCompanyCodeId(), newBilling.getPlantId(), newBilling.getWarehouseId(), newBilling.getPartnerCode(), newBilling.getModuleId(), newBilling.getLanguageId(), 0L);
         if (!duplicateBilling.isEmpty()) {
@@ -210,7 +211,7 @@ public class BillingService{
      */
     public Billing updateBilling(String warehouseId, String moduleId,String partnerCode,String companyCodeId,String languageId,String plantId,String loginUserID,
                                       UpdateBilling updateBilling)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Billing dbBilling = getBilling(warehouseId,moduleId,partnerCode,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBilling, dbBilling, CommonUtils.getNullPropertyNames(updateBilling));
         dbBilling.setUpdatedBy(loginUserID);

@@ -38,6 +38,12 @@ public class PropertiesConfig {
 	
 	@Value("${idmaster.oauth.access_token_url}")
 	private String idmasterAccessTokenUrl;
+
+//	@Value("${spark.oauth.access_token_url}")
+//	private String sparkAccessTokenUrl;
+//
+//	@Value("${connector.oauth.access_token_url}")
+//	private String connectorAccessTokenUrl;
 	
 	//-----------------------------------------------------------------------------------
 	@Value("${api.transaction.service.url}")
@@ -51,7 +57,12 @@ public class PropertiesConfig {
 	
 	@Value("${api.idmaster.service.url}")
 	private String idmasterServiceUrl;
-	
+
+//	@Value("${api.spark.service.url}")
+//	private String sparkServiceUrl;
+//
+//	@Value("${api.connector.service.url}")
+//	private String connectorServiceUrl;
 	//-----------------------------------------------------------------------------------
 	
 	@Value("${file.upload-dir}")
@@ -92,18 +103,55 @@ public class PropertiesConfig {
 	@Value("${file.inventory}")
 	private String inventoryFileName;
 	
-	@Value("${file.imbasicdata1.110}")
-	private String imbasicdata1110FileName;
+	@Value("${file.imbasicdata1}")
+	private String imbasicdata1FileName;
 	
-	@Value("${file.imbasicdata1.111}")
-	private String imbasicdata1111FileName;
+//	@Value("${file.imbasicdata1.111}")
+//	private String imbasicdata1111FileName;
 	
-	@Value("${file.impartner110}")
-	private String impartner110FileName;
+	@Value("${file.impartner}")
+	private String impartnerFileName;
 	
-	@Value("${file.impartner_111}")
-	private String impartner111FileName;
-	
+//	@Value("${file.impartner_111}")
+//	private String impartner111FileName;
+
+	@Value("${file.imbasicdata1patch}")
+	private String imbasicdata1PatchFileName;
+
+	@Value("${file.impartnerpatch}")
+	private String impartnerPatchFileName;
+
+	@Value("${file.binlocationpatch}")
+	private String binLocationPatchFileName;
+
+	@Value("${file.inventorypatch}")
+	private String inventoryPatchFileName;
+
+	@Value("${file.preinboundheader}")
+	private String preInboundHeaderFileName;
+
+	@Value("${file.preinboundline}")
+	private String preInboundLineFileName;
+
+	@Value("${file.preinboundheaderpatch}")
+	private String preInboundHeaderPatchFileName;
+
+	@Value("${file.preinboundlinepatch}")
+	private String preInboundLinePatchFileName;
+
+	@Value("${file.preoutboundheader}")
+	private String preOutBoundHeaderFileName;
+
+	@Value("${file.preoutboundline}")
+	private String preOutboundLineFileName;
+
+	@Value("${file.preoutboundheaderpatch}")
+	private String preOutboundHeaderPatchFileName;
+
+	@Value("${file.preoutboundlinepatch}")
+	private String preOutboundLinePatchFileName;
+
+
 	/*-----------------Report-Path------------------------*/
 	@Value("${report.path}")
 	private String reportPath;

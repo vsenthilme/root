@@ -5,6 +5,8 @@ import java.util.Date;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.Column;
+
 @Slf4j
 @Data
 public class AddPickupLine {
@@ -50,13 +52,23 @@ public class AddPickupLine {
 	private String referenceField10;
 	private Long deletionIndicator;
 	private String pickupCreatedBy;
-	private Date pickupCreatedOn = new Date();
+	private Date pickupCreatedOn;
 	private String pickupConfirmedBy;
-	private Date pickupConfirmedOn = new Date();
+	private Date pickupConfirmedOn;
 	private String pickupUpdatedBy;
-	private Date pickupupdatedOn = new Date();
+	private Date pickupupdatedOn;
 	private String pickupReversedBy;
-	private Date pickupReversedOn = new Date();
+	private Date pickupReversedOn;
+
+	private Double inventoryQuantity;
+	private Double pickedCbm;
+	private String cbmUnit;
+	private String manufacturerCode;
+	private String manufacturerName;
+	private String origin;
+	private String brand;
+	private String barcodeId;
+	private String levelId;
 	
 	/**
 	 * 

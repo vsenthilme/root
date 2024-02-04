@@ -10,6 +10,7 @@ import com.tekclover.wms.api.idmaster.model.submovementtypeid.UpdateSubMovementT
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.SubMovementTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,7 @@ public class SubMovementTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public SubMovementTypeId createSubMovementTypeId (AddSubMovementTypeId newSubMovementTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubMovementTypeId dbSubMovementTypeId = new SubMovementTypeId();
 		Optional<SubMovementTypeId> duplicateSubMovementTypeId = subMovementTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndSubMovementTypeIdAndMovementTypeIdAndLanguageIdAndDeletionIndicator(newSubMovementTypeId.getCompanyCodeId(), newSubMovementTypeId.getPlantId(), newSubMovementTypeId.getWarehouseId(), newSubMovementTypeId.getSubMovementTypeId(), newSubMovementTypeId.getMovementTypeId(), newSubMovementTypeId.getLanguageId(), 0l);
 		if (!duplicateSubMovementTypeId.isEmpty()) {
@@ -161,7 +162,7 @@ public class SubMovementTypeIdService {
 	 */
 	public SubMovementTypeId updateSubMovementTypeId (String warehouseId,String movementTypeId, String subMovementTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 													  UpdateSubMovementTypeId updateSubMovementTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubMovementTypeId dbSubMovementTypeId = getSubMovementTypeId( warehouseId,movementTypeId,subMovementTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSubMovementTypeId, dbSubMovementTypeId, CommonUtils.getNullPropertyNames(updateSubMovementTypeId));
 		dbSubMovementTypeId.setUpdatedBy(loginUserID);

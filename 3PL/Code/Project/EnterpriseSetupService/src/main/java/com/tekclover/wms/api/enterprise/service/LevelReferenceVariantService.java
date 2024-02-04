@@ -2,11 +2,13 @@ package com.tekclover.wms.api.enterprise.service;
 
 import com.tekclover.wms.api.enterprise.model.variant.LevelReferenceVariant;
 import com.tekclover.wms.api.enterprise.repository.LevelReferenceVariantRepository;
+import com.tekclover.wms.api.enterprise.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ public class LevelReferenceVariantService {
     /**
      * deleteLevelReferences
      */
-    public void deleteLevelReferences (String variantId, String loginUserID) {
+    public void deleteLevelReferences (String variantId, String loginUserID) throws ParseException {
         List<LevelReferenceVariant> levelReferences= getLevelReferenceVariant(variantId);
         if (levelReferences != null) {
             for(LevelReferenceVariant newLevelReference: levelReferences){

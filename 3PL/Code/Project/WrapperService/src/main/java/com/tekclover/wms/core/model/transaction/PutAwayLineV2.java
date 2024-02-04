@@ -1,10 +1,12 @@
 package com.tekclover.wms.core.model.transaction;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Data
+@ToString(callSuper = true)
 public class PutAwayLineV2 extends PutAwayLine {
 
 	private Double inventoryQuantity;
@@ -23,4 +25,10 @@ public class PutAwayLineV2 extends PutAwayLine {
 	private String plantDescription;
 	private String warehouseDescription;
 	private String statusDescription;
+
+	private String middlewareId;
+	private String middlewareHeaderId;
+	private String middlewareTable;
+	private String purchaseOrderNumber;
+	private String manufactureFullName;
 }

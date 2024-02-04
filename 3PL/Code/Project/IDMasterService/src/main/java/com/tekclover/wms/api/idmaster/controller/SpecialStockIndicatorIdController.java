@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class SpecialStockIndicatorIdController {
     @ApiOperation(response = SpecialStockIndicatorId.class, value = "Create SpecialStockIndicatorId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postSpecialStockIndicatorId(@Valid @RequestBody AddSpecialStockIndicatorId newSpecialStockIndicatorId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpecialStockIndicatorId createdSpecialStockIndicatorId = specialstockindicatoridService.createSpecialStockIndicatorId(newSpecialStockIndicatorId, loginUserID);
 		return new ResponseEntity<>(createdSpecialStockIndicatorId , HttpStatus.OK);
 	}
@@ -61,7 +62,7 @@ public class SpecialStockIndicatorIdController {
 	public ResponseEntity<?> patchSpecialStockIndicatorId(@PathVariable String specialStockIndicatorId,@RequestParam String stockTypeId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 			@Valid @RequestBody UpdateSpecialStockIndicatorId updateSpecialStockIndicatorId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpecialStockIndicatorId createdSpecialStockIndicatorId = 
 				specialstockindicatoridService.updateSpecialStockIndicatorId(warehouseId,stockTypeId,specialStockIndicatorId,companyCodeId,languageId,plantId,loginUserID,updateSpecialStockIndicatorId);
 		return new ResponseEntity<>(createdSpecialStockIndicatorId , HttpStatus.OK);

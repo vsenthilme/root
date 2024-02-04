@@ -17,6 +17,7 @@ import com.tekclover.wms.api.idmaster.model.spanid.SpanId;
 import com.tekclover.wms.api.idmaster.model.state.FindState;
 import com.tekclover.wms.api.idmaster.repository.CountryRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.StateSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,7 +92,7 @@ public class StateService {
 	 * @throws InvocationTargetException
 	 */
 	public State createState (AddState newState,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		State dbState = new State();
 		Optional<State> duplicateState = stateRepository.findByStateIdAndCountryIdAndLanguageId(newState.getStateId(), newState.getCountryId(), newState.getLanguageId());
 		if (!duplicateState.isEmpty()) {
@@ -118,7 +119,7 @@ public class StateService {
 	 * @throws InvocationTargetException
 	 */
 	public State updateState (String stateId,String countryId,String languageId,String loginUserID,UpdateState updateState)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		State dbState = getState(stateId,countryId,languageId);
 		BeanUtils.copyProperties(updateState, dbState, CommonUtils.getNullPropertyNames(updateState));
 		dbState.setUpdatedBy(loginUserID);

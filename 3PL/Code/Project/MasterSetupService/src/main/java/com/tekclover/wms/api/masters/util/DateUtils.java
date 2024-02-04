@@ -2,9 +2,7 @@ package com.tekclover.wms.api.masters.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -45,6 +43,22 @@ public class DateUtils {
 		LocalDateTime datetime = LocalDateTime.now();
 		String currentDatetime = datetime.format(newPattern);
 		return currentDatetime;
+	}
+
+	public static Date getCurrentKWTDateTime() throws ParseException {
+
+		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kuwait")) ;
+		LocalDateTime kwtLocalDateTime = zdt.toLocalDateTime();
+		System.out.println(kwtLocalDateTime);
+		log.info("kwt time: " + kwtLocalDateTime);
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		String sConvertedDateTime = formatter.format(kwtLocalDateTime);
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		Date kwtDate = dateFormatter.parse(sConvertedDateTime);
+		System.out.println(kwtDate);
+		log.info("kwt date time: " + kwtDate);
+		return kwtDate;
 	}
 	
 	/**
@@ -217,4 +231,38 @@ public class DateUtils {
 		Date out = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
 //		log.info("dbMatterGenAcc--PriorityDate-------> : " + out);
 	}
+
+	public static Date convertStringToDate(String strDate) throws ParseException {
+		LocalTime time = LocalTime.now();
+		System.out.println("---------> " + time);
+		strDate = strDate + " " + time.getHour() + ":" + time.getMinute() + ":" + time.getSecond();
+		Date date = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse(strDate);
+		return date;
+	}
+	/**
+	 *
+	 * @param strDate
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date convertStringToDate2(String strDate) throws ParseException {
+		LocalTime time = LocalTime.now();
+		System.out.println("---------> " + time);
+		strDate = strDate + " " + time.getHour() + ":" + time.getMinute() + ":" + time.getSecond();
+		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strDate);
+//		log.info("convertStringToDate-------> : " + date);
+		return date;
+	}
+
+	/**
+	 *
+	 * @param strDate
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date convertStringToDateWithTime(String strDate) throws ParseException {
+		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strDate);
+		return date;
+	}
+
 }

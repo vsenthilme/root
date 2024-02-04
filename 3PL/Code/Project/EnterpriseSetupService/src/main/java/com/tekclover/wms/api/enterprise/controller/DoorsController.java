@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -58,8 +59,8 @@ public class DoorsController {
     
     @ApiOperation(response = Doors.class, value = "Create Doors") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postDoors(@Valid @RequestBody AddDoors newDoors, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postDoors(@Valid @RequestBody AddDoors newDoors, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Doors createdDoors = doorsService.createDoors(newDoors, loginUserID);
 		return new ResponseEntity<>(createdDoors , HttpStatus.OK);
 	}
@@ -67,15 +68,15 @@ public class DoorsController {
     @ApiOperation(response = Doors.class, value = "Update Doors") // label for swagger
     @PatchMapping("/{doorNumber}")
 	public ResponseEntity<?> patchDoors(@PathVariable String doorNumber, 
-			@Valid @RequestBody UpdateDoors updateDoors, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateDoors updateDoors, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Doors createdDoors = doorsService.updateDoors(doorNumber, updateDoors, loginUserID);
 		return new ResponseEntity<>(createdDoors , HttpStatus.OK);
 	}
     
     @ApiOperation(response = Doors.class, value = "Delete Doors") // label for swagger
 	@DeleteMapping("/{doorNumber}")
-	public ResponseEntity<?> deleteDoors(@PathVariable String doorNumber, @RequestParam String loginUserID) {
+	public ResponseEntity<?> deleteDoors(@PathVariable String doorNumber, @RequestParam String loginUserID) throws ParseException {
     	doorsService.deleteDoors(doorNumber, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

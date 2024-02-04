@@ -108,4 +108,8 @@ public class InhouseTransferHeader {
 
 	@Column(name = "IT_UTD_ON")
 	private Date updatedOn = new Date();
+
+	//Almailem Code
+	@Column(name = "MFR_NAME")
+	private String manufacturerName;
 }

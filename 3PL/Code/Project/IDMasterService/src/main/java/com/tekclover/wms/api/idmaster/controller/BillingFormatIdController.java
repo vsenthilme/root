@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -47,7 +48,7 @@ public class BillingFormatIdController {
     @ApiOperation(response = BillingFormatId.class, value = "Create BillingFormatId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postBillingFormatId(@Valid @RequestBody AddBillingFormatId newBillingFormatId,
-                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFormatId createdBillingFormatId = billingFormatIdService.createBillingFormatId(newBillingFormatId, loginUserID);
         return new ResponseEntity<>(createdBillingFormatId , HttpStatus.OK);
     }
@@ -56,7 +57,7 @@ public class BillingFormatIdController {
     public ResponseEntity<?> patchBillingFormatId(@RequestParam String warehouseId, @PathVariable Long billFormatId,@RequestParam String companyCodeId,
                                                   @RequestParam String languageId,@RequestParam String plantId,
                                                   @Valid @RequestBody UpdateBillingFormatId updateBillingFormatId, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFormatId createdBillingFormatId =
                 billingFormatIdService.updateBillingFormatId(warehouseId, billFormatId,companyCodeId,languageId,plantId,loginUserID, updateBillingFormatId);
         return new ResponseEntity<>(createdBillingFormatId , HttpStatus.OK);

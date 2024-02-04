@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -53,7 +54,7 @@ public class ImAlternatePartController {
     @ApiOperation(response = ImAlternatePart.class, value = "Create ImAlternatePart") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postHandlingUnit(@Valid @RequestBody List<AddImAlternatePart> newImAlternatePart, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         List<ImAlternatePart> createdImAlternatePart= imAlternatePartService.createAlternatePart(newImAlternatePart, loginUserID);
         return new ResponseEntity<>(createdImAlternatePart , HttpStatus.OK);
     }
@@ -64,7 +65,7 @@ public class ImAlternatePartController {
                                                @RequestParam String languageId, @RequestParam String plantId,
                                                @RequestParam String warehouseId, @RequestParam String loginUserID,
                                                @Valid @RequestBody List<AddImAlternatePart> updateImAlternatePart)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         List<ImAlternatePart> createdImAlternatePart = imAlternatePartService.updateImAlternatePart(companyCodeId,
                 languageId,plantId,warehouseId,itemCode, updateImAlternatePart, loginUserID);
@@ -75,7 +76,7 @@ public class ImAlternatePartController {
     @DeleteMapping("/{itemCode}")
     public ResponseEntity<?> deleteHandlingUnit(@PathVariable String itemCode, @RequestParam String companyCodeId,
                                                 @RequestParam String languageId, @RequestParam String plantId,
-                                                 @RequestParam String warehouseId,@RequestParam String loginUserID) {
+                                                 @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
 
         imAlternatePartService.deleteImAlternateUom(companyCodeId,languageId,plantId,warehouseId,itemCode,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

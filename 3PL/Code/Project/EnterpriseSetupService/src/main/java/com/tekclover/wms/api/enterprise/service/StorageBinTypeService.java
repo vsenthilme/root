@@ -187,7 +187,7 @@ public class StorageBinTypeService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageBinType createStorageBinType (AddStorageBinType newStorageBinType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<StorageBinType> optStorageBinType =
 				storagebintypeRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndStorageTypeIdAndStorageClassIdAndStorageBinTypeIdAndDeletionIndicator(
 						newStorageBinType.getLanguageId(),
@@ -246,7 +246,7 @@ public class StorageBinTypeService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageBinType updateStorageBinType (String warehouseId, Long storageTypeId, Long storageBinTypeId,String companyId,Long storageClassId,String plantId,String languageId,UpdateStorageBinType updateStorageBinType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinType dbStorageBinType = getStorageBinType(warehouseId, storageTypeId, storageBinTypeId,storageClassId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageBinType, dbStorageBinType, CommonUtils.getNullPropertyNames(updateStorageBinType));
 		dbStorageBinType.setUpdatedBy(loginUserID);
@@ -258,7 +258,7 @@ public class StorageBinTypeService {
 	 * deleteStorageBinType
 	 * @param storageBinTypeId
 	 */
-	public void deleteStorageBinType (String warehouseId, Long storageTypeId,Long storageClassId, Long storageBinTypeId,String companyId,String plantId,String languageId, String loginUserID) {
+	public void deleteStorageBinType (String warehouseId, Long storageTypeId,Long storageClassId, Long storageBinTypeId,String companyId,String plantId,String languageId, String loginUserID) throws ParseException {
 		StorageBinType storagebintype = getStorageBinType(warehouseId, storageTypeId, storageBinTypeId,storageClassId,companyId,languageId,plantId);
 		if ( storagebintype != null) {
 			storagebintype.setDeletionIndicator (1L);

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 @Slf4j
 @Validated
@@ -50,7 +51,7 @@ public class OutboundOrderTypeIdController {
     @ApiOperation(response = OutboundOrderTypeId.class, value = "Create OutboundOrderTypeId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postOutboundOrderTypeId(@Valid @RequestBody AddOutboundOrderTypeId newOutboundOrderTypeId,
-                                                     @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                                     @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         OutboundOrderTypeId createdOutboundOrderTypeId = outboundOrderTypeIdService.CreateOutboundOrderTypeId(newOutboundOrderTypeId, loginUserID);
         return new ResponseEntity<>(createdOutboundOrderTypeId, HttpStatus.OK);
     }
@@ -60,7 +61,7 @@ public class OutboundOrderTypeIdController {
     public ResponseEntity<?> patchOutboundOrderTypeId(@PathVariable String outboundOrderTypeId,
                                                       @RequestParam String warehouseId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
                                                       @Valid @RequestBody UpdateOutboundOrderTypeId  updateOutboundOrderTypeId, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         OutboundOrderTypeId createdOutboundOrderTypeId =
                 outboundOrderTypeIdService.updateOutboundOrderTypeId(warehouseId, outboundOrderTypeId,companyCodeId,languageId,plantId, loginUserID, updateOutboundOrderTypeId);
         return new ResponseEntity<>(createdOutboundOrderTypeId, HttpStatus.OK);

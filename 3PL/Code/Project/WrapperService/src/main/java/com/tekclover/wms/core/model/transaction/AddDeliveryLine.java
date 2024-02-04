@@ -2,6 +2,7 @@ package com.tekclover.wms.core.model.transaction;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 @Data
@@ -15,15 +16,37 @@ public class AddDeliveryLine {
 
     private String warehouseId;
 
-    private String deliveryNo;
+    private Long deliveryNo;
 
     private String itemCode;
 
-    private Long lineNo;
+    private Long lineNumber;
+
+    private String vehicleNo;
+
+    private String driverId;
+
+    private String driverName;
+
+    private String routeId;
+
+    private String companyDescription;
+
+    private String plantDescription;
+
+    private String warehouseDescription;
+
+    private String statusDescription;
 
     private String invoiceNumber;
 
     private String refDocNumber;
+
+    private String remarks;
+
+    private Boolean picked;
+
+    private Boolean delivered;
 
     private String partnerCode;
 
@@ -60,6 +83,8 @@ public class AddDeliveryLine {
     private String deliveryFailiureReason;
 
     private String paymentMode;
+
+    private Boolean reDelivery;
 
     private Long statusId;
 

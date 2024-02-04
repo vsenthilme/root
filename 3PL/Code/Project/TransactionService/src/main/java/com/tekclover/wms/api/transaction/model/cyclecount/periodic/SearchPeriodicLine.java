@@ -9,6 +9,8 @@ import lombok.Data;
 public class SearchPeriodicLine {
 	
 	private String plantId;
+	private String languageId;
+	private String companyCode;
 	private String warehouseId;
 	private String cycleCountNo;
 	private List<Long> lineStatusId;

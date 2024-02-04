@@ -14,6 +14,7 @@ import com.tekclover.wms.api.masters.repository.PriceListRepository;
 import com.tekclover.wms.api.masters.repository.specification.BillingSpecification;
 import com.tekclover.wms.api.masters.repository.specification.CbmInboundSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,7 @@ public class CbmInboundService {
      * @throws InvocationTargetException
      */
     public CbmInbound createCbmInbound (AddCbmInbound newCbmInbound, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CbmInbound dbCbmInbound = new CbmInbound();
         Optional<CbmInbound>duplicateCbmInbound=cbmInboundRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndLanguageIdAndDeletionIndicator(newCbmInbound.getCompanyCodeId(), newCbmInbound.getPlantId(), newCbmInbound.getWarehouseId(), newCbmInbound.getItemCode(), newCbmInbound.getLanguageId(), 0L);
         if(!duplicateCbmInbound.isEmpty()){
@@ -167,7 +168,7 @@ public class CbmInboundService {
      */
     public CbmInbound updateCbmInbound(String warehouseId, String itemCode,String companyCodeId,String languageId,String plantId,String loginUserID,
                                  UpdateCbmInbound updateCbmInbound)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CbmInbound dbCbmInbound = getCbmInbound(warehouseId,itemCode,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateCbmInbound, dbCbmInbound, CommonUtils.getNullPropertyNames(updateCbmInbound));
         dbCbmInbound.setUpdatedBy(loginUserID);

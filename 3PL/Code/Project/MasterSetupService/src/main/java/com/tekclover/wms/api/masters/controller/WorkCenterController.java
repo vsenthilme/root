@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class WorkCenterController {
     @ApiOperation(response = WorkCenter.class, value = "Create WorkCenter") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postWorkCenter(@Valid @RequestBody AddWorkCenter newWorkCenter, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         WorkCenter createdWorkCenter = workCenterService.createWorkCenter(newWorkCenter, loginUserID);
         return new ResponseEntity<>(createdWorkCenter , HttpStatus.OK);
@@ -67,14 +68,14 @@ public class WorkCenterController {
     @PatchMapping("/{workCenterId}")
     public ResponseEntity<?> patchWorkCenter(@PathVariable Long workCenterId, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,@RequestParam String workCenterType,
                                              @Valid @RequestBody UpdateWorkCenter updateWorkCenter, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         WorkCenter createdWorkCenter = workCenterService.updateWorkCenter(workCenterId,companyCodeId,plantId,warehouseId,workCenterType,languageId,updateWorkCenter, loginUserID);
         return new ResponseEntity<>(createdWorkCenter , HttpStatus.OK);
     }
 
     @ApiOperation(response = WorkCenter.class, value = "Delete WorkCenter") // label for swagger
     @DeleteMapping("/{workCenterId}")
-    public ResponseEntity<?> deleteWorkCenter(@PathVariable Long workCenterId, @RequestParam String loginUserID, @RequestParam String warehouseId,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String workCenterType,@RequestParam String languageId) {
+    public ResponseEntity<?> deleteWorkCenter(@PathVariable Long workCenterId, @RequestParam String loginUserID, @RequestParam String warehouseId,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String workCenterType,@RequestParam String languageId) throws ParseException {
         workCenterService.deleteWorkCenterId(workCenterId,companyCodeId,plantId,warehouseId,workCenterType,languageId,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

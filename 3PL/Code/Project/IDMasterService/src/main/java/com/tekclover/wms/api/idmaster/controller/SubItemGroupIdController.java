@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -77,7 +78,7 @@ public class SubItemGroupIdController {
     @ApiOperation(response = SubItemGroupId.class, value = "Create SubItemGroupId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postSubItemGroupId(@Valid @RequestBody AddSubItemGroupId newSubItemGroupId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		SubItemGroupId createdSubItemGroupId = subitemgroupidService.createSubItemGroupId(newSubItemGroupId, loginUserID);
 		return new ResponseEntity<>(createdSubItemGroupId , HttpStatus.OK);
@@ -91,7 +92,7 @@ public class SubItemGroupIdController {
 												 @RequestParam Long itemTypeId, @RequestParam Long itemGroupId,
 												 @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
 												 @Valid @RequestBody UpdateSubItemGroupId updateSubItemGroupId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		SubItemGroupId createdSubItemGroupId = subitemgroupidService.updateSubItemGroupId(warehouseId, itemTypeId,
 				itemGroupId,subItemGroupId,companyCodeId,languageId,plantId,loginUserID, updateSubItemGroupId);

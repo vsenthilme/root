@@ -54,6 +54,14 @@ public class UserManagementSpecification implements Specification<UserManagement
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("userRoleId");
             predicates.add(group.in(findUserManagement.getUserRoleId()));
         }
+        if (findUserManagement.getHhtLoggedIn() != null) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("hhtLoggedIn");
+            predicates.add(group.in(findUserManagement.getHhtLoggedIn()));
+        }
+        if (findUserManagement.getPortalLoggedIn() != null) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("portalLoggedIn");
+            predicates.add(group.in(findUserManagement.getPortalLoggedIn()));
+        }
 
 
         return cb.and(predicates.toArray(new Predicate[] {}));

@@ -19,6 +19,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.ModuleIdRepository;
 import com.tekclover.wms.api.idmaster.repository.RoleAccessRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.PlantIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,23 @@ public class PlantIdService{
 		return newPlantId;
 	}
 
+	/**
+	 *
+	 * @param companyCodeId
+	 * @param languageId
+	 * @return
+	 */
+	public List<PlantId> getPlantId (String companyCodeId,String languageId) {
+		List<PlantId> dbPlantId =
+				plantIdRepository.findByCompanyCodeIdAndLanguageIdAndDeletionIndicator(
+						companyCodeId, languageId, 0L);
+		if (dbPlantId.isEmpty()) {
+			return null;
+		}
+
+		return dbPlantId;
+	}
+
 //	/**
 //	 *
 //	 * @param searchPlantId
@@ -115,7 +133,7 @@ public class PlantIdService{
 	 * @throws InvocationTargetException
 	 */
 	public PlantId createPlantId (AddPlantId newPlantId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		PlantId dbPlantId = new PlantId();
 		Optional<PlantId> duplicatePlantId=plantIdRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(newPlantId.getCompanyCodeId(), newPlantId.getPlantId(), newPlantId.getLanguageId(), 0L);
@@ -146,7 +164,7 @@ public class PlantIdService{
 	 * @throws InvocationTargetException
 	 */
 	public PlantId updatePlantId (String plantId,String companyCodeId,String languageId,String loginUserID, UpdatePlantId updatePlantId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PlantId dbPlantId = getPlantId(plantId,companyCodeId,languageId);
 		BeanUtils.copyProperties(updatePlantId, dbPlantId, CommonUtils.getNullPropertyNames(updatePlantId));
 		dbPlantId.setUpdatedBy(loginUserID);

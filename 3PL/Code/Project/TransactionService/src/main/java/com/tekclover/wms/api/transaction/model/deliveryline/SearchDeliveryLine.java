@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.model.deliveryline;
 
 import lombok.Data;
+
 import java.util.List;
 
 @Data
@@ -12,7 +13,11 @@ public class SearchDeliveryLine  {
     private List<String> warehouseId;
     private List<String> deliveryNo;
     private List<String> itemCode;
-    private List<Long> lineNo;
+    private List<Long> lineNumber;
     private List<String> refDocNumber;
     private List<String> invoiceNumber;
+    private List<Long> statusId;
+    private List<String> remarks;
+    private List<String> vehicleNo;
+    private List<Boolean> reDelivery;
 }

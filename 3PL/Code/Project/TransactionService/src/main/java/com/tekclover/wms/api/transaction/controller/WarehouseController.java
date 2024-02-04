@@ -9,10 +9,9 @@ import javax.validation.Valid;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountHeader;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.periodic.Periodic;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.perpetual.Perpetual;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.ASNV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InterWarehouseTransferInV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.SaleOrderReturnV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.*;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.*;
+import com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -275,7 +274,56 @@ public class WarehouseController {
 		return null;
    	}
 //==================================================================================================================
-// ASNV2
+
+	// ASN V2
+	@ApiOperation(response = ASNV2.class, value = "ASN V2") // label for swagger
+	@PostMapping("/inbound/asn/v2")
+	public ResponseEntity<?> postASNV2 (@Valid @RequestBody ASNV2 asn)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			InboundOrderV2 createdASNHeader = warehouseService.postWarehouseASNV2(asn);
+			if (createdASNHeader != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("ASN Order Error: " + asn);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+	// StockReceipt
+	@ApiOperation(response = StockReceiptHeader.class, value = "StockReceipt") // label for swagger
+	@PostMapping("/inbound/stockReceipt")
+	public ResponseEntity<?> postStockReceipt (@Valid @RequestBody StockReceiptHeader stockReceipt)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			InboundOrderV2 createdStockReceipt = warehouseService.postWarehouseStockReceipt(stockReceipt);
+			if (createdStockReceipt != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("StockReceipt Order Error: " + stockReceipt);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+// ASNV2 upload
 @ApiOperation(response = ASNV2.class, value = "Upload Asn V2") // label for swagger
 @PostMapping("/inbound/asn/upload/v2")
 public ResponseEntity<?> postAsnUploadV2 (@Valid @RequestBody List<ASNV2> asnv2List)
@@ -361,7 +409,7 @@ public ResponseEntity<?> postAsnUploadV2 (@Valid @RequestBody List<ASNV2> asnv2L
 			List<WarehouseApiResponse> responseList = new ArrayList<>();
 			for (InterWarehouseTransferInV2 interWarehouseTransferInV2 : interWarehouseTransferInV2List) {
 				InboundOrderV2 createdInterWarehouseTransferInV2 =
-						warehouseService.postInterWarehouseTransferInV2(interWarehouseTransferInV2);
+						warehouseService.postInterWarehouseTransferInV2Upload(interWarehouseTransferInV2);
 				if (createdInterWarehouseTransferInV2 != null) {
 					WarehouseApiResponse response = new WarehouseApiResponse();
 					response.setStatusCode("200");
@@ -378,6 +426,32 @@ public ResponseEntity<?> postAsnUploadV2 (@Valid @RequestBody List<ASNV2> asnv2L
 			response.setMessage("Not Success: " + e.getLocalizedMessage());
 			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+
+
+	/*-----------------B2bTransferIn-Inbound---------------------------------------------------------*/
+	@ApiOperation(response = B2bTransferIn.class, value = "B2bTransferIn") // label for swagger
+	@PostMapping("/inbound/b2bTransferIn")
+	public ResponseEntity<?> postB2bTransferIn(@Valid @RequestBody B2bTransferIn b2bTransferIn)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			InboundOrderV2 createdB2bTransferIn =
+					warehouseService.postB2bTransferIn(b2bTransferIn);
+			if (createdB2bTransferIn != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("interWarehouseTransfer order Error: " + b2bTransferIn);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
 	}
 
 	/*-----------------------------CycleCountOrder---------------------------------------------------*/
@@ -422,6 +496,183 @@ public ResponseEntity<?> postAsnUploadV2 (@Valid @RequestBody List<ASNV2> asnv2L
 			}
 		} catch (Exception e) {
 			log.info("periodic order Error: " + periodic);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+	/*--------------------------------Outbound V2--------------------------------------------------------------*/
+	/*--------------------------------Outbound V2--------------------------------------------------------------*/
+	/*----------------------------Shipment order V2------------------------------------------------------------*/
+	@ApiOperation(response = ShipmentOrderV2.class, value = "Create Shipment Order") // label for swagger
+	@PostMapping("/outbound/so/v2")
+	public ResponseEntity<?> postShipmenOrderV2(@Valid @RequestBody ShipmentOrderV2 shipmenOrder)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			ShipmentOrderV2 createdSO = warehouseService.postSOV2(shipmenOrder, false);
+			if (createdSO != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("ShipmentOrder order Error: " + shipmenOrder);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+	//----------------------------Bulk Orders---------------------------------------------------------------------
+	@ApiOperation(response = ShipmentOrderV2.class, value = "Create Bulk Shipment Orders") // label for swagger
+	@PostMapping("/outbound/so/bulk/v2")
+	public ResponseEntity<?> postShipmenOrdersV2(@Valid @RequestBody List<ShipmentOrderV2> shipmenOrders)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			List<WarehouseApiResponse> responseList = new ArrayList<>();
+			for (ShipmentOrderV2 shipmentOrder : shipmenOrders) {
+				ShipmentOrderV2 createdSO = warehouseService.postSOV2(shipmentOrder, false);
+				if (createdSO != null) {
+					WarehouseApiResponse response = new WarehouseApiResponse();
+					response.setStatusCode("200");
+					response.setMessage("Success");
+					responseList.add(response);
+				}
+			}
+			return new ResponseEntity<>(responseList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+	}
+
+
+	/*----------------------------Sale order True Express-------------------------------------------------------*/
+	@ApiOperation(response = SalesOrderV2.class, value = "Sales order") // label for swagger
+	@PostMapping("/outbound/salesorderv2")
+	public ResponseEntity<?> postSalesOrderV2(@Valid @RequestBody SalesOrderV2 salesOrder)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			SalesOrderV2 createdSalesOrder = warehouseService.postSalesOrderV2(salesOrder);
+			if (createdSalesOrder != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("SalesOrder order Error: " + salesOrder);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+
+	/*----------------------------Return PO------------------------------------------------------------*/
+	@ApiOperation(response = ReturnPOV2.class, value = "Return PO") // label for swagger
+	@PostMapping("/outbound/returnpov2")
+	public ResponseEntity<?> postReturnPOV2(@Valid @RequestBody ReturnPOV2 returnPO)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			ReturnPOV2 createdReturnPO = warehouseService.postReturnPOV2(returnPO);
+			if (createdReturnPO != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("ReturnPO order Error: " + returnPO);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+
+	/*----------------------------Inter-warehouse Transfer_Out------------------------------------------------------------*/
+	@ApiOperation(response = InterWarehouseTransferOutV2.class, value = "Inter Warehouse Transfer Out")
+	@PostMapping("/outbound/interwarehousetransferoutv2")
+	public ResponseEntity<?> postReturnPOV2(@Valid @RequestBody InterWarehouseTransferOutV2 interWarehouseTransfer)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			InterWarehouseTransferOutV2 createdInterWarehouseTransfer =
+					warehouseService.postInterWarehouseTransferOutboundV2(interWarehouseTransfer);
+			if (createdInterWarehouseTransfer != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("InterWarehouseTransferOut order Error: " + interWarehouseTransfer);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+
+	//Sales Invoice
+	@ApiOperation(response = SalesInvoice.class, value = "Create SalesInvoice") //label for Swagger
+	@PostMapping("/outbound/salesinvoice")
+	public ResponseEntity<?> createSalesInvoice(@Valid @RequestBody SalesInvoice salesInvoice)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			OutboundOrderV2 createdObOrderV2 = warehouseService.postSalesInvoice(salesInvoice);
+			if (createdObOrderV2 != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("SalesInvoice order Error: " + salesInvoice);
+			e.printStackTrace();
+			WarehouseApiResponse response = new WarehouseApiResponse();
+			response.setStatusCode("1400");
+			response.setMessage("Not Success: " + e.getLocalizedMessage());
+			return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+		return null;
+	}
+
+	//Stock Adjustment
+	@ApiOperation(response = StockAdjustment.class, value = "Create StockAdjustment") //label for Swagger
+	@PostMapping("/stockAdjustment")
+	public ResponseEntity<?> createStockAdjustment(@Valid @RequestBody StockAdjustment stockAdjustment)
+			throws IllegalAccessException, InvocationTargetException {
+		try {
+			StockAdjustment createdStockAdjustment = warehouseService.postStockAdjustment(stockAdjustment);
+			if (createdStockAdjustment != null) {
+				WarehouseApiResponse response = new WarehouseApiResponse();
+				response.setStatusCode("200");
+				response.setMessage("Success");
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			log.info("StockAdjustment order Error: " + stockAdjustment);
 			e.printStackTrace();
 			WarehouseApiResponse response = new WarehouseApiResponse();
 			response.setStatusCode("1400");

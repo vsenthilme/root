@@ -16,38 +16,46 @@ import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLin
 
 @Repository
 @Transactional
-public interface PerpetualLineRepository extends JpaRepository<PerpetualLine,Long>,
-		JpaSpecificationExecutor<PerpetualLine> , StreamableJpaSpecificationRepository<PerpetualLine> {
-	
-	public PerpetualLine 
-		findByCompanyCodeIdAndPlantIdAndWarehouseIdAndCycleCountNoAndStorageBinAndItemCodeAndPackBarcodesAndDeletionIndicator(
-				String companyCodeId, String plantId, String warehouseId, String cycleCountNo, 
-				String storageBin, String itemCode, String packBarcodes, Long deletionIndicator);
-	
-	public List<PerpetualLine> findByWarehouseIdAndStorageBinAndItemCodeAndPackBarcodesAndDeletionIndicator(
-			String warehouseId, String storageBin, String itemCode, String packBarcodes, Long deletionIndicator);
-	
-	@Modifying(clearAutomatically = true)
-	@Query("UPDATE PerpetualLine pl \r\n"
-			+ " SET pl.cycleCounterId = :cycleCounterId, pl.cycleCounterName = :cycleCounterName, pl.statusId = :statusId,  \r\n"
-			+ " pl.countedBy = :countedBy, pl.countedOn = :countedOn "
-			+ " WHERE pl.warehouseId = :warehouseId AND \r\n "
-			+ " pl.cycleCountNo = :cycleCountNo AND pl.storageBin in :storageBin AND pl.itemCode = :itemCode AND pl.packBarcodes = :packBarcodes"
-			+ " AND deletionIndicator = 0")
-	public void updateHHTUser (
-			@Param ("cycleCounterId") String cycleCounterId, 
-			@Param ("cycleCounterName") String cycleCounterName,
-			@Param ("statusId") Long statusId, 
-			@Param ("countedBy") String countedBy,
-			@Param ("countedOn") Date countedOn,
-			@Param ("warehouseId") String warehouseId,
-			@Param ("cycleCountNo") String cycleCountNo,
-			@Param ("storageBin") String storageBin,
-			@Param ("itemCode") String itemCode,
-			@Param ("packBarcodes") String packBarcodes);
-	
-	public List<PerpetualLine> findByCycleCountNoAndDeletionIndicator(String cycleCountNo, Long deletionIndicator);
+public interface PerpetualLineRepository extends JpaRepository<PerpetualLine, Long>,
+        JpaSpecificationExecutor<PerpetualLine>, StreamableJpaSpecificationRepository<PerpetualLine> {
 
-	public List<PerpetualLine> findByCycleCountNoAndCycleCounterIdInAndDeletionIndicator(String cycleCountNo,
-			List<String> cycleCounterId, Long deletionIndicator);
+    public PerpetualLine
+    findByCompanyCodeIdAndPlantIdAndWarehouseIdAndCycleCountNoAndStorageBinAndItemCodeAndPackBarcodesAndDeletionIndicator(
+            String companyCodeId, String plantId, String warehouseId, String cycleCountNo,
+            String storageBin, String itemCode, String packBarcodes, Long deletionIndicator);
+
+    public List<PerpetualLine> findByWarehouseIdAndStorageBinAndItemCodeAndPackBarcodesAndDeletionIndicator(
+            String warehouseId, String storageBin, String itemCode, String packBarcodes, Long deletionIndicator);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE PerpetualLine pl \r\n"
+            + " SET pl.cycleCounterId = :cycleCounterId, pl.cycleCounterName = :cycleCounterName, pl.statusId = :statusId,  \r\n"
+            + " pl.countedBy = :countedBy, pl.countedOn = :countedOn "
+            + " WHERE pl.warehouseId = :warehouseId AND \r\n "
+            + " pl.cycleCountNo = :cycleCountNo AND pl.storageBin in :storageBin AND pl.itemCode = :itemCode AND pl.packBarcodes = :packBarcodes"
+            + " AND deletionIndicator = 0")
+    public void updateHHTUser(
+            @Param("cycleCounterId") String cycleCounterId,
+            @Param("cycleCounterName") String cycleCounterName,
+            @Param("statusId") Long statusId,
+            @Param("countedBy") String countedBy,
+            @Param("countedOn") Date countedOn,
+            @Param("warehouseId") String warehouseId,
+            @Param("cycleCountNo") String cycleCountNo,
+            @Param("storageBin") String storageBin,
+            @Param("itemCode") String itemCode,
+            @Param("packBarcodes") String packBarcodes);
+
+    public List<PerpetualLine> findByCycleCountNoAndDeletionIndicator(String cycleCountNo, Long deletionIndicator);
+
+    public List<PerpetualLine> findByCycleCountNoAndCycleCounterIdInAndDeletionIndicator(String cycleCountNo,
+                                                                                         List<String> cycleCounterId, Long deletionIndicator);
+
+    List<PerpetualLine> findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndStatusIdInAndDeletionIndicator(
+            String companyCode, String languageId, String plantId, String warehouseId, List<Long> statusId, Long deletionIndicator);
+
+    List<PerpetualLine> findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndCycleCounterIdAndStatusIdInAndDeletionIndicator(
+            String companyCode, String languageId, String plantId, String warehouseId,String cycleCounterId, List<Long> statusId, Long deletionIndicator);
+
+
 }

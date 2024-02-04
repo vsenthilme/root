@@ -1,8 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
-import com.tekclover.wms.api.transaction.model.threepl.proformainvoiceheader.AddProformaInvoiceHeader;
-import com.tekclover.wms.api.transaction.model.threepl.proformainvoiceheader.ProformaInvoiceHeader;
-import com.tekclover.wms.api.transaction.model.threepl.proformainvoiceheader.UpdateProformaInvoiceHeader;
+import com.tekclover.wms.api.transaction.model.threepl.proformainvoiceheader.*;
 import com.tekclover.wms.api.transaction.service.ProformaInvoiceHeaderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

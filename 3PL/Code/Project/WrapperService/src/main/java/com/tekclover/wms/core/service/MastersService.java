@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.tekclover.wms.core.model.masters.*;
 import com.tekclover.wms.core.model.threepl.*;
+import com.tekclover.wms.core.model.warehouse.inbound.WarehouseApiResponse;
+import com.tekclover.wms.core.model.warehouse.mastersorder.Customer;
+import com.tekclover.wms.core.model.warehouse.mastersorder.Item;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -28,6 +31,8 @@ import com.tekclover.wms.core.config.PropertiesConfig;
 import com.tekclover.wms.core.model.transaction.PaginatedResponse;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.validation.Valid;
 
 @Slf4j
 @Service
@@ -377,7 +382,7 @@ public class MastersService {
     }
 
     // GET BusinessPartner
-    public BusinessPartner getBusinessPartner(String partnerCode, String companyCodeId, String plantId,
+    public BusinessPartnerV2 getBusinessPartner(String partnerCode, String companyCodeId, String plantId,
                                               String warehouseId, String languageId, Long businessPartnerType, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -386,13 +391,13 @@ public class MastersService {
             headers.add("Authorization", "Bearer " + authToken);
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "businesspartner/" + partnerCode)
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "businesspartner/v2/" + partnerCode)
                     .queryParam("companyCodeId", companyCodeId)
                     .queryParam("plantId", plantId)
                     .queryParam("warehouseId", warehouseId)
                     .queryParam("languageId", languageId)
                     .queryParam("businessPartnerType", businessPartnerType);
-            ResponseEntity<BusinessPartner> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, BusinessPartner.class);
+            ResponseEntity<BusinessPartnerV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, BusinessPartnerV2.class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
         } catch (Exception e) {
@@ -478,6 +483,40 @@ public class MastersService {
         }
     }
 
+    // Patch BusinessPartner
+    public BusinessPartnerV2 updateBusinessPartnerV2(String partnerCode, String companyCodeId, String plantId,
+                                                 String warehouseId, String languageId, Long businessPartnerType,
+                                                 BusinessPartnerV2 modifiedBusinessPartner,
+                                                 String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(modifiedBusinessPartner, headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "businesspartner/v2/" + partnerCode)
+                            .queryParam("loginUserID", loginUserID)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("warehouseId", warehouseId)
+                            .queryParam("plantId", plantId)
+                            .queryParam("businessPartnerType", businessPartnerType);
+
+            ResponseEntity<BusinessPartnerV2> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, BusinessPartnerV2.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // Delete BusinessPartner
     public boolean deleteBusinessPartner(String partnerCode, String companyCodeId, String plantId,
                                          String warehouseId, String languageId, Long businessPartnerType,
@@ -551,7 +590,8 @@ public class MastersService {
     }
 
     // GET
-    public HandlingEquipment getHandlingEquipment(String warehouseId, String heId, String authToken) {
+    public HandlingEquipment getHandlingEquipmentV2(String warehouseId, String heBarcode, String companyCodeId,
+                                                  String languageId, String plantId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -560,7 +600,32 @@ public class MastersService {
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder =
-                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "handlingequipment/" + heId)
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "handlingequipment/" + heBarcode + "/v2/barCode")
+                            .queryParam("warehouseId", warehouseId)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("plantId", plantId);
+            ResponseEntity<HandlingEquipment> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, HandlingEquipment.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // GET
+    public HandlingEquipment getHandlingEquipment(String warehouseId, String heBarcode, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "handlingequipment/" + heBarcode + "/barCode")
                             .queryParam("warehouseId", warehouseId);
             ResponseEntity<HandlingEquipment> result =
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, HandlingEquipment.class);
@@ -2229,6 +2294,35 @@ public class MastersService {
         }
     }
 
+    // POST - findImBasicData1LikeSearchNew
+    public StorageBinDesc[] findStorageBinLikeSearchNew(String likeSearchByStorageBinNDesc,
+                                                        String companyCodeId,
+                                                        String plantId,
+                                                        String languageId,
+                                                        String warehouseId,
+                                                        String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "WMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponents builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/findStorageBinByLikeNew")
+                            .queryParam("likeSearchByStorageBinNDesc", likeSearchByStorageBinNDesc)
+                            .queryParam("companyCodeId",companyCodeId)
+                            .queryParam("plantId",plantId)
+                            .queryParam("languageId",languageId)
+                            .queryParam("warehouseId",warehouseId).build();
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<StorageBinDesc[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, StorageBinDesc[].class);
+            return result.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     // POST StorageBin
     public StorageBin addStorageBin(StorageBin storagebin, String loginUserID, String authToken) {
         try {
@@ -2315,6 +2409,87 @@ public class MastersService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/" + storageBin)
+                            .queryParam("warehouseId", warehouseId)
+                            .queryParam("loginUserID", loginUserID)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("plantId", plantId);
+            ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.DELETE, entity, String.class);
+            log.info("result : " + result);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    // GET StorageBinV2
+    public StorageBinV2 getStorageBinV2(String storageBin, String companyCodeId, String plantId,
+                                        String warehouseId, String languageId, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/v2/" + storageBin)
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("warehouseId", warehouseId);
+            ResponseEntity<StorageBinV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, StorageBinV2.class);
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Patch StorageBinV2
+    public StorageBinV2 updateStorageBinV2(String storageBin, String companyCodeId, String plantId,
+                                           String languageId, String warehouseId, StorageBinV2 modifiedStorageBinV2,
+                                           String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(modifiedStorageBinV2, headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/storageBinV2/" + storageBin)
+                            .queryParam("loginUserID", loginUserID)
+                            .queryParam("companyCodeId", companyCodeId)
+                            .queryParam("languageId", languageId)
+                            .queryParam("plantId", plantId)
+                            .queryParam("warehouseId", warehouseId);
+
+            ResponseEntity<StorageBinV2> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, StorageBinV2.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Delete StorageBinV2
+    public boolean deleteStorageBinV2(String storageBin, String warehouseId, String companyCodeId,
+                                      String languageId, String plantId, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "storagebin/v2/" + storageBin)
                             .queryParam("warehouseId", warehouseId)
                             .queryParam("loginUserID", loginUserID)
                             .queryParam("companyCodeId", companyCodeId)
@@ -5036,6 +5211,37 @@ public class MastersService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    //--------------------------------------Item Master -------------------------------------
+
+    //Post Item
+    public WarehouseApiResponse postItem(@Valid Item item, String authToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("User-Agent", "ClassicWMS RestTemplate");
+        headers.add("Authorization", "Bearer " + authToken);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "masterorder/master/item");
+        HttpEntity<?> entity = new HttpEntity<>(item, headers);
+        ResponseEntity<WarehouseApiResponse> result =
+                getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
+        log.info("result: " + result.getStatusCode());
+        return result.getBody();
+    }
+
+    //Post Customer
+    public WarehouseApiResponse postCustomer(@Valid Customer customer, String authToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("User-Agent", "ClassicWMS RestTemplate");
+        headers.add("Authorization", "Bearer " + authToken);
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "masterorder/master/customer");
+        HttpEntity<?> entity = new HttpEntity<>(customer, headers);
+        ResponseEntity<WarehouseApiResponse> result =
+                getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse.class);
+        log.info("result: " + result.getStatusCode());
+        return result.getBody();
     }
 }
 		

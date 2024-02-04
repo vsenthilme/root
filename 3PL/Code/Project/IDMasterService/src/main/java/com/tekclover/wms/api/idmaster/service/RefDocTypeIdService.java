@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.repository.RefDocTypeIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.RefDocTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class RefDocTypeIdService{
 	 * @throws InvocationTargetException
 	 */
 	public RefDocTypeId createRefDocTypeId (AddRefDocTypeId newRefDocTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		RefDocTypeId dbRefDocTypeId = new RefDocTypeId();
 		Optional<RefDocTypeId> duplicateRefDocTypeId = refDocTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndReferenceDocumentTypeIdAndLanguageIdAndDeletionIndicator(newRefDocTypeId.getCompanyCodeId(), newRefDocTypeId.getPlantId(), newRefDocTypeId.getWarehouseId(), newRefDocTypeId.getReferenceDocumentTypeId(), newRefDocTypeId.getLanguageId(), 0L);
 		if (!duplicateRefDocTypeId.isEmpty()) {
@@ -149,7 +150,7 @@ public class RefDocTypeIdService{
 	 */
 	public RefDocTypeId updateRefDocTypeId (String warehouseId, String referenceDocumentTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 											UpdateRefDocTypeId updateRefDocTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		RefDocTypeId dbRefDocTypeId = getRefDocTypeId( warehouseId, referenceDocumentTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateRefDocTypeId, dbRefDocTypeId, CommonUtils.getNullPropertyNames(updateRefDocTypeId));
 		dbRefDocTypeId.setUpdatedBy(loginUserID);

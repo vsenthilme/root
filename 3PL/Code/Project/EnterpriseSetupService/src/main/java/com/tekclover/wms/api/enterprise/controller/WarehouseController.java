@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -67,8 +68,8 @@ public class WarehouseController {
     
     @ApiOperation(response = Warehouse.class, value = "Create Warehouse") 
 	@PostMapping("")
-	public ResponseEntity<?> postWarehouse(@Valid @RequestBody AddWarehouse newWarehouse, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postWarehouse(@Valid @RequestBody AddWarehouse newWarehouse, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse createdWarehouse = warehouseService.createWarehouse(newWarehouse, loginUserID);
 		return new ResponseEntity<>(createdWarehouse , HttpStatus.OK);
 	}
@@ -77,8 +78,8 @@ public class WarehouseController {
     @PatchMapping("/{warehouseId}")
 	public ResponseEntity<?> patchWarehouse(@PathVariable String warehouseId,@RequestParam String modeOfImplementation,@RequestParam Long warehouseTypeId,
 											@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateWarehouse updateWarehouse, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateWarehouse updateWarehouse, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse updatedWarehouse = warehouseService.updateWarehouse(warehouseId,modeOfImplementation,warehouseTypeId,companyId,plantId,languageId,updateWarehouse, loginUserID);
 		return new ResponseEntity<>(updatedWarehouse , HttpStatus.OK);
 	}
@@ -86,7 +87,7 @@ public class WarehouseController {
     @ApiOperation(response = Warehouse.class, value = "Delete Warehouse") 
 	@DeleteMapping("/{warehouseId}")
 	public ResponseEntity<?> deleteWarehouse(@PathVariable String warehouseId,@RequestParam String modeOfImplementation,@RequestParam Long warehouseTypeId,
-											 @RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId, @RequestParam String loginUserID) {
+											 @RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId, @RequestParam String loginUserID) throws ParseException {
     	warehouseService.deleteWarehouse(warehouseId,modeOfImplementation,warehouseTypeId,companyId,plantId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

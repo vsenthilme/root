@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -69,7 +70,7 @@ public class StorageBinTypeController {
     @ApiOperation(response = StorageBinType.class, value = "Create StorageBinType") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStorageBinType(@Valid @RequestBody AddStorageBinType newStorageBinType, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinType createdStorageBinType = 
 				storagebintypeService.createStorageBinType(newStorageBinType, loginUserID);
 		return new ResponseEntity<>(createdStorageBinType , HttpStatus.OK);
@@ -78,8 +79,8 @@ public class StorageBinTypeController {
     @ApiOperation(response = StorageBinType.class, value = "Update StorageBinType") // label for swagger
     @PatchMapping("/{storageBinTypeId}")
 	public ResponseEntity<?> patchStorageBinType(@PathVariable Long storageBinTypeId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam Long storageClassId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam Long storageTypeId,
-			@Valid @RequestBody UpdateStorageBinType updateStorageBinType, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateStorageBinType updateStorageBinType, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinType createdStorageBinType = storagebintypeService.updateStorageBinType(warehouseId, storageTypeId, storageBinTypeId,companyId,storageClassId,plantId,languageId,updateStorageBinType, loginUserID);
 		return new ResponseEntity<>(createdStorageBinType , HttpStatus.OK);
 	}
@@ -87,7 +88,7 @@ public class StorageBinTypeController {
     @ApiOperation(response = StorageBinType.class, value = "Delete StorageBinType") // label for swagger
 	@DeleteMapping("/{storageBinTypeId}")
 	public ResponseEntity<?> deleteStorageBinType(@PathVariable Long storageBinTypeId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam Long storageClassId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam Long storageTypeId,
-			@RequestParam String loginUserID) {
+			@RequestParam String loginUserID) throws ParseException {
     	storagebintypeService.deleteStorageBinType(warehouseId, storageTypeId,storageClassId,storageBinTypeId,companyId,plantId,languageId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

@@ -10,8 +10,8 @@ import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpeci
 
 @Repository
 @Transactional
-public interface StockMovementReportRepository extends JpaRepository<StockMovementReport,Long>, 
-		JpaSpecificationExecutor<StockMovementReport>,
-		StreamableJpaSpecificationRepository<StockMovementReport> {
-	
+public interface StockMovementReportRepository extends JpaRepository<StockMovementReport, Long>,
+        JpaSpecificationExecutor<StockMovementReport>,
+        StreamableJpaSpecificationRepository<StockMovementReport> {
+
 }

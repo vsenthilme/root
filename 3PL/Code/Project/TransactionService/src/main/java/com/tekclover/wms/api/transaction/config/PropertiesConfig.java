@@ -39,6 +39,9 @@ public class PropertiesConfig {
 	
 	@Value("${idmaster.oauth.access_token_url}")
 	private String idmasterAccessTokenUrl;
+
+//	@Value("${connector.oauth.access_token_url}")
+//	private String connectorAccessTokenUrl;
 	
 	//-----------------------------------------------------------------------------------
 	@Value("${api.transaction.service.url}")
@@ -52,6 +55,9 @@ public class PropertiesConfig {
 	
 	@Value("${api.idmaster.service.url}")
 	private String idmasterServiceUrl;
+
+//	@Value("${api.connector.service.url}")
+//	private String connectorServiceUrl;
 	
 	//------------------------AX-API-----------------------------------------------------
 	// axapi.service.access_token.url=http://168.187.214.59:8040/api/ax/gettoken

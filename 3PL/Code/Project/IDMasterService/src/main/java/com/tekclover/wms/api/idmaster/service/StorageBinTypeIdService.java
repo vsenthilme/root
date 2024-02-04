@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.storageclassid.StorageClassId;
 import com.tekclover.wms.api.idmaster.model.storagetypeid.StorageTypeId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.StorageBinTypeSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -158,7 +159,7 @@ public class StorageBinTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageBinTypeId createStorageBinTypeId (AddStorageBinTypeId newStorageBinTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinTypeId dbStorageBinTypeId = new StorageBinTypeId();
 		Optional<StorageBinTypeId>duplicateStorageBinTypeId=storageBinTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStorageClassIdAndStorageTypeIdAndStorageBinTypeIdAndLanguageIdAndDeletionIndicator(newStorageBinTypeId.getCompanyCodeId(), newStorageBinTypeId.getPlantId(), newStorageBinTypeId.getWarehouseId(), newStorageBinTypeId.getStorageClassId(), newStorageBinTypeId.getStorageTypeId(), newStorageBinTypeId.getStorageBinTypeId(), newStorageBinTypeId.getLanguageId(), 0L);
 		if(!duplicateStorageBinTypeId.isEmpty()){
@@ -192,7 +193,7 @@ public class StorageBinTypeIdService {
 	 */
 	public StorageBinTypeId updateStorageBinTypeId (String warehouseId,Long storageBinTypeId, Long storageClassId,Long storageTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 													UpdateStorageBinTypeId updateStorageBinTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageBinTypeId dbStorageBinTypeId = getStorageBinTypeId(warehouseId,storageBinTypeId,storageClassId,storageTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageBinTypeId, dbStorageBinTypeId, CommonUtils.getNullPropertyNames(updateStorageBinTypeId));
 		dbStorageBinTypeId.setUpdatedBy(loginUserID);

@@ -1,4 +1,4 @@
-//package com.tekclover.wms.api.transaction.model.outbound.packing;
+package com.tekclover.wms.api.transaction.model.outbound.packing;//package com.tekclover.wms.api.transaction.model.outbound.packing;
 //
 //import java.util.Date;
 //

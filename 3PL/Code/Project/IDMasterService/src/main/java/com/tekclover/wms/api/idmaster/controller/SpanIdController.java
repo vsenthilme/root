@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class SpanIdController {
     @ApiOperation(response = SpanId.class, value = "Create SpanId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postSpanId(@Valid @RequestBody AddSpanId newSpanId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpanId createdSpanId = spanidService.createSpanId(newSpanId, loginUserID);
 		return new ResponseEntity<>(createdSpanId , HttpStatus.OK);
 	}
@@ -60,7 +61,7 @@ public class SpanIdController {
 										 @RequestParam Long floorId, @RequestParam String storageSectionId,@RequestParam String companyCodeId,
 										 @RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
 			@Valid @RequestBody UpdateSpanId updateSpanId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpanId createdSpanId = 
 				spanidService.updateSpanId(warehouseId,aisleId, spanId,floorId, storageSectionId,companyCodeId,languageId,plantId,loginUserID, updateSpanId);
 		return new ResponseEntity<>(createdSpanId , HttpStatus.OK);

@@ -9,6 +9,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.AisledSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +147,7 @@ public class AisleIdService{
 	 * @throws InvocationTargetException
 	 */
 	public AisleId createAisleId (AddAisleId newAisleId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AisleId dbAisleId = new AisleId();
 		Optional<AisleId> duplicateAisledId = aisleIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndAisleIdAndFloorIdAndStorageSectionIdAndLanguageIdAndDeletionIndicator(newAisleId.getCompanyCodeId(), newAisleId.getPlantId(), newAisleId.getWarehouseId(), newAisleId.getAisleId(), newAisleId.getFloorId(), newAisleId.getStorageSectionId(), newAisleId.getLanguageId(), 0L);
 		if (!duplicateAisledId.isEmpty()) {
@@ -180,7 +181,7 @@ public class AisleIdService{
 	 */
 	public AisleId updateAisleId (String warehouseId, String aisleId,Long floorId, String storageSectionId,String companyCodeId,String languageId,String plantId,String loginUserID,
 								  UpdateAisleId updateAisleId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AisleId dbAisleId = getAisleId(warehouseId, aisleId, floorId, storageSectionId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateAisleId, dbAisleId, CommonUtils.getNullPropertyNames(updateAisleId));
 		dbAisleId.setUpdatedBy(loginUserID);

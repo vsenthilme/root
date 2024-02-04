@@ -4,7 +4,6 @@ package com.tekclover.wms.core.model.warehouse.cyclecount.periodic;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
@@ -21,7 +20,11 @@ public class PeriodicHeaderV1 {
 
     private String branchName;
 
-    @NotBlank(message = "IS-NEW is mandatory")
+    //    @NotBlank(message = "IS-NEW is mandatory")
     private String isNew;
+
+    private String isCancelled;
+    private String isCompleted;
+    private Date updatedOn;
 
 }

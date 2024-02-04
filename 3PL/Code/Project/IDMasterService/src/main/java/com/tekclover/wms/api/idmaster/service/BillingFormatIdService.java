@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.BillingFormatIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +111,7 @@ public class BillingFormatIdService{
      * @throws InvocationTargetException
      */
     public BillingFormatId createBillingFormatId(AddBillingFormatId newBillingFormatId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFormatId dbBillingFormatId = new BillingFormatId();
         Optional<BillingFormatId> duplicateBillingFormatId = billingFormatIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBillFormatIdAndLanguageIdAndDeletionIndicator(newBillingFormatId.getCompanyCodeId(), newBillingFormatId.getPlantId(), newBillingFormatId.getWarehouseId(), newBillingFormatId.getBillFormatId(), newBillingFormatId.getLanguageId(), 0L);
         if (!duplicateBillingFormatId.isEmpty()) {
@@ -141,7 +142,7 @@ public class BillingFormatIdService{
      */
     public BillingFormatId updateBillingFormatId(String warehouseId, Long billFormatId,String companyCodeId,String languageId,
                                                  String plantId,String loginUserID,
-                                             UpdateBillingFormatId updateBillingFormatId)throws IllegalAccessException,InvocationTargetException{
+                                             UpdateBillingFormatId updateBillingFormatId) throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFormatId dbBillingFormatId=getBillingFormatId(warehouseId,billFormatId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingFormatId,dbBillingFormatId,CommonUtils.getNullPropertyNames(updateBillingFormatId));
         dbBillingFormatId.setUpdatedBy(loginUserID);

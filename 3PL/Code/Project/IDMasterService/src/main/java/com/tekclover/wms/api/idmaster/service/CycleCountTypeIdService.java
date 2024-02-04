@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.CycleCountTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class CycleCountTypeIdService{
 	 * @throws InvocationTargetException
 	 */
 	public CycleCountTypeId createCycleCountTypeId (AddCycleCountTypeId newCycleCountTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CycleCountTypeId dbCycleCountTypeId = new CycleCountTypeId();
 		Optional<CycleCountTypeId> duplicateCycleCountTypeId = cycleCountTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndCycleCountTypeIdAndLanguageIdAndDeletionIndicator(newCycleCountTypeId.getCompanyCodeId(), newCycleCountTypeId.getPlantId(), newCycleCountTypeId.getWarehouseId(), newCycleCountTypeId.getCycleCountTypeId(), newCycleCountTypeId.getLanguageId(), 0L);
 		if (!duplicateCycleCountTypeId.isEmpty()) {
@@ -150,7 +151,7 @@ public class CycleCountTypeIdService{
 	 */
 	public CycleCountTypeId updateCycleCountTypeId (String warehouseId, String cycleCountTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 													UpdateCycleCountTypeId updateCycleCountTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CycleCountTypeId dbCycleCountTypeId = getCycleCountTypeId( warehouseId, cycleCountTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateCycleCountTypeId, dbCycleCountTypeId, CommonUtils.getNullPropertyNames(updateCycleCountTypeId));
 		dbCycleCountTypeId.setUpdatedBy(loginUserID);

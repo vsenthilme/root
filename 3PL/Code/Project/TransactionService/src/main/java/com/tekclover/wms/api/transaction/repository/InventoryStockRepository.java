@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.repository;
 
 import java.util.List;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -13,7 +14,8 @@ import com.tekclover.wms.api.transaction.model.inbound.stock.InventoryStock;
 
 @Repository
 @Transactional
-public interface InventoryStockRepository extends PagingAndSortingRepository<InventoryStock,Long>, JpaSpecificationExecutor<InventoryStock> {
+public interface InventoryStockRepository extends PagingAndSortingRepository<InventoryStock,Long>,
+		JpaSpecificationExecutor<InventoryStock>, StreamableJpaSpecificationRepository<InventoryStock> {
 	
 	public List<InventoryStock> findAll();
 	

@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.model.storageclassid.StorageClassId;
 import com.tekclover.wms.api.idmaster.model.storagetypeid.FindStorageTypeId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.StorageTypeIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -146,7 +147,7 @@ public class StorageTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageTypeId createStorageTypeId (AddStorageTypeId newStorageTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageTypeId dbStorageTypeId = new StorageTypeId();
 		Optional<StorageTypeId> duplicateStorageTypeId = storageTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStorageClassIdAndStorageTypeIdAndLanguageIdAndDeletionIndicator(newStorageTypeId.getCompanyCodeId(), newStorageTypeId.getPlantId(), newStorageTypeId.getWarehouseId(),
 				newStorageTypeId.getStorageClassId(), newStorageTypeId.getStorageTypeId(), newStorageTypeId.getLanguageId(), 0L);
@@ -180,7 +181,7 @@ public class StorageTypeIdService {
 	 */
 	public StorageTypeId updateStorageTypeId (String warehouseId, Long storageClassId, Long storageTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 											  UpdateStorageTypeId updateStorageTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageTypeId dbStorageTypeId = getStorageTypeId(warehouseId, storageClassId, storageTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageTypeId, dbStorageTypeId, CommonUtils.getNullPropertyNames(updateStorageTypeId));
 		dbStorageTypeId.setUpdatedBy(loginUserID);

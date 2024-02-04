@@ -12,6 +12,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.DecimalNotationIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class DecimalNotationIdService  {
 	 * @throws InvocationTargetException
 	 */
 	public DecimalNotationId createDecimalNotationId (AddDecimalNotationId newDecimalNotationId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DecimalNotationId dbDecimalNotationId = new DecimalNotationId();
 		Optional<DecimalNotationId> duplicateDecimalNotationId = decimalNotationIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDecimalNotationIdAndLanguageIdAndDeletionIndicator(newDecimalNotationId.getCompanyCodeId(), newDecimalNotationId.getPlantId(), newDecimalNotationId.getWarehouseId(), newDecimalNotationId.getDecimalNotationId(), newDecimalNotationId.getLanguageId(), 0L);
 		if (!duplicateDecimalNotationId.isEmpty()) {
@@ -150,7 +151,7 @@ public class DecimalNotationIdService  {
 	 */
 	public DecimalNotationId updateDecimalNotationId (String warehouseId, String decimalNotationId,String companyCodeId,String languageId,String plantId, String loginUserID,
 													  UpdateDecimalNotationId updateDecimalNotationId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DecimalNotationId dbDecimalNotationId = getDecimalNotationId( warehouseId, decimalNotationId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDecimalNotationId, dbDecimalNotationId, CommonUtils.getNullPropertyNames(updateDecimalNotationId));
 		dbDecimalNotationId.setUpdatedBy(loginUserID);

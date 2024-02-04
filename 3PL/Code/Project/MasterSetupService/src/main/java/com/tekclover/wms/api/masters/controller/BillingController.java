@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -47,7 +48,7 @@ public class BillingController {
     @ApiOperation(response = Billing.class, value = "Create Billing") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postBilling(@Valid @RequestBody AddBilling newBilling,
-                                             @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                             @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         Billing createdBilling = billingService.createBilling(newBilling, loginUserID);
         return new ResponseEntity<>(createdBilling, HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class BillingController {
     public ResponseEntity<?> patchBilling(@RequestParam String warehouseId,@RequestParam String moduleId,@PathVariable String partnerCode,@RequestParam String companyCodeId,
                                           @RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
                                           @Valid @RequestBody UpdateBilling updateBilling )
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Billing createdBilling =
                 billingService.updateBilling(warehouseId, moduleId, partnerCode,companyCodeId,languageId,plantId,loginUserID, updateBilling);
         return new ResponseEntity<>(createdBilling, HttpStatus.OK);

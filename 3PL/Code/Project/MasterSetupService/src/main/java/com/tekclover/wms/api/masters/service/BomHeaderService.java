@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -223,7 +224,7 @@ public class BomHeaderService extends BaseService{
 	 * @throws InvocationTargetException
 	 */
 	public AddBomHeader createBomHeader (AddBomHeader newBomHeader, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		/*
 		 * Creating BOM Number
 		 * ------------------------
@@ -291,7 +292,7 @@ public class BomHeaderService extends BaseService{
 	 */
 	public UpdateBomHeader updateBomHeader (String warehouseId, String parentItemCode,String languageId,String companyCode,String plantId,
 											String loginUserID, UpdateBomHeader updateBomHeader)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BomHeader dbBomHeader = getBomHeaderByEntity (warehouseId, parentItemCode,languageId,companyCode,plantId);
 		BeanUtils.copyProperties(updateBomHeader, dbBomHeader, CommonUtils.getNullPropertyNames(updateBomHeader));
 		dbBomHeader.setUpdatedBy(loginUserID);

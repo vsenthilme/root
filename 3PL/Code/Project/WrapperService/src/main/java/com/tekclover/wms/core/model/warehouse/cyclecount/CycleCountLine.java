@@ -1,18 +1,12 @@
 package com.tekclover.wms.core.model.warehouse.cyclecount;
 
-
 import lombok.Data;
 
 import javax.persistence.*;
 
-
-@Entity
 @Data
-@Table(name = "cyclecountline")
 public class CycleCountLine {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cycleCountNo;
@@ -23,4 +17,13 @@ public class CycleCountLine {
     private String manufacturerCode;
     private String manufacturerName;
     private String orderId;
+
+    private Double countedQty;
+    private Double frozenQty;
+    private String stockCountType;
+
+    //MiddleWare Fields
+
+    private String isCompleted;
+    private String isCancelled;
 }

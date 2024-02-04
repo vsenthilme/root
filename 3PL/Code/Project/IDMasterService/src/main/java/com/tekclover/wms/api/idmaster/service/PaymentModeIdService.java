@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.PaymentModeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class PaymentModeIdService{
      * @throws InvocationTargetException
      */
     public PaymentModeId createPaymentModeId(AddPaymentModeId newPaymentModeId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentModeId dbPaymentModeId = new PaymentModeId();
         Optional<PaymentModeId> duplicatePaymentModeId = paymentModeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPaymentModeIdAndLanguageIdAndDeletionIndicator(newPaymentModeId.getCompanyCodeId(), newPaymentModeId.getPlantId(), newPaymentModeId.getWarehouseId(), newPaymentModeId.getPaymentModeId(), newPaymentModeId.getLanguageId(), 0L);
         if (!duplicatePaymentModeId.isEmpty()) {
@@ -145,7 +146,7 @@ public class PaymentModeIdService{
      * @throws InvocationTargetException
      */
     public PaymentModeId updatePaymentModeId(String warehouseId, Long paymentModeId,String companyCodeId,String languageId,String plantId,String loginUserID,
-                                             UpdatePaymentModeId updatePaymentModeId)throws IllegalAccessException,InvocationTargetException{
+                                             UpdatePaymentModeId updatePaymentModeId) throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentModeId dbPaymentModeId=getPaymentModeId(warehouseId,paymentModeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePaymentModeId,dbPaymentModeId,CommonUtils.getNullPropertyNames(updatePaymentModeId));
         dbPaymentModeId.setUpdatedBy(loginUserID);

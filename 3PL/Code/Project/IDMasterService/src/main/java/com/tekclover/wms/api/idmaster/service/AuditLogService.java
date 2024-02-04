@@ -1,11 +1,13 @@
 package com.tekclover.wms.api.idmaster.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,8 +46,8 @@ public class AuditLogService {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public AuditLog createAuditLog (AuditLog newAuditLog, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public AuditLog createAuditLog (AuditLog newAuditLog, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		
 		AuditLog dbAuditLog = new AuditLog();
 		BeanUtils.copyProperties(newAuditLog, dbAuditLog, CommonUtils.getNullPropertyNames(newAuditLog));

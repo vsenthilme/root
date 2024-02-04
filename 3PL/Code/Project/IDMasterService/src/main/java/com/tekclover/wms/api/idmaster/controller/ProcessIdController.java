@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Struct;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -55,7 +56,7 @@ public class ProcessIdController {
     @ApiOperation(response = ProcessId.class, value = "Create ProcessId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postProcessId(@Valid @RequestBody AddProcessId newProcessId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessId createdProcessId = processidService.createProcessId(newProcessId, loginUserID);
 		return new ResponseEntity<>(createdProcessId , HttpStatus.OK);
 	}
@@ -65,7 +66,7 @@ public class ProcessIdController {
 	public ResponseEntity<?> patchProcessId(@RequestParam String warehouseId,@PathVariable String processId,@RequestParam String companyCodeId,
 											@RequestParam String languageId,@RequestParam String plantId,
 											@Valid @RequestBody UpdateProcessId updateProcessId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ProcessId createdProcessId = 
 				processidService.updateProcessId(warehouseId, processId,companyCodeId,languageId,plantId,loginUserID,updateProcessId);
 		return new ResponseEntity<>(createdProcessId , HttpStatus.OK);

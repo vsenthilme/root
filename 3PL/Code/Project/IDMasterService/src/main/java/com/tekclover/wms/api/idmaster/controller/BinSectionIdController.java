@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class BinSectionIdController {
     @ApiOperation(response = BinSectionId.class, value = "Create BinSectionId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postBinSectionId(@Valid @RequestBody AddBinSectionId newBinSectionId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinSectionId createdBinSectionId = binsectionidService.createBinSectionId(newBinSectionId, loginUserID);
 		return new ResponseEntity<>(createdBinSectionId , HttpStatus.OK);
 	}
@@ -61,7 +62,7 @@ public class BinSectionIdController {
 	public ResponseEntity<?> patchBinSectionId(@RequestParam String warehouseId, @PathVariable String binSectionId,
 											   @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
 			@Valid @RequestBody UpdateBinSectionId updateBinSectionId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinSectionId createdBinSectionId = 
 				binsectionidService.updateBinSectionId(warehouseId, binSectionId,companyCodeId,languageId,plantId,loginUserID,updateBinSectionId);
 		return new ResponseEntity<>(createdBinSectionId , HttpStatus.OK);

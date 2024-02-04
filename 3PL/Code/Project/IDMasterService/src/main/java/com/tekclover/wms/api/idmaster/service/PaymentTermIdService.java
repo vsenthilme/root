@@ -12,6 +12,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.PaymentTermIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,7 @@ public class PaymentTermIdService{
      * @throws InvocationTargetException
      */
     public PaymentTermId createPaymentTermId(AddPaymentTermId newPaymentTermId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentTermId dbPaymentTermId = new PaymentTermId();
         Optional<PaymentTermId> duplicatePaymentTermId = paymentTermIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPaymentTermIdAndLanguageIdAndDeletionIndicator(newPaymentTermId.getCompanyCodeId(), newPaymentTermId.getPlantId(), newPaymentTermId.getWarehouseId(), newPaymentTermId.getPaymentTermId(), newPaymentTermId.getLanguageId(), 0L);
         if (!duplicatePaymentTermId.isEmpty()) {
@@ -142,7 +143,7 @@ public class PaymentTermIdService{
      * @throws InvocationTargetException
      */
     public PaymentTermId updatePaymentTermId(String warehouseId, Long paymentTermId,String companyCodeId,String languageId,String plantId,String loginUserID,
-                                     UpdatePaymentTermId updatePaymentTermId)throws IllegalAccessException,InvocationTargetException{
+                                     UpdatePaymentTermId updatePaymentTermId) throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentTermId dbPaymentTermId=getPaymentTermId(warehouseId,paymentTermId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePaymentTermId,dbPaymentTermId,CommonUtils.getNullPropertyNames(updatePaymentTermId));
         dbPaymentTermId.setUpdatedBy(loginUserID);

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -54,7 +55,7 @@ public class MovementTypeIdController {
     @ApiOperation(response = MovementTypeId.class, value = "Create MovementTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postMovementTypeId(@Valid @RequestBody AddMovementTypeId newMovementTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		MovementTypeId createdMovementTypeId = movementtypeidService.createMovementTypeId(newMovementTypeId, loginUserID);
 		return new ResponseEntity<>(createdMovementTypeId , HttpStatus.OK);
 	}
@@ -63,8 +64,8 @@ public class MovementTypeIdController {
     @PatchMapping("/{movementTypeId}")
 	public ResponseEntity<?> patchMovementTypeId(@RequestParam String warehouseId,@PathVariable String movementTypeId,
 												 @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateMovementTypeId updateMovementTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateMovementTypeId updateMovementTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		MovementTypeId createdMovementTypeId = 
 				movementtypeidService.updateMovementTypeId(warehouseId, movementTypeId,companyCodeId,languageId,plantId,loginUserID, updateMovementTypeId);
 		return new ResponseEntity<>(createdMovementTypeId , HttpStatus.OK);

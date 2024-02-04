@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.inbound.gr.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.gr.SearchGrLine;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
+@ToString(callSuper = true)
 public class SearchGrLineV2 extends SearchGrLine {
 
 	private List<String> languageId;

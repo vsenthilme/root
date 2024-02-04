@@ -140,11 +140,11 @@ public class BusinessPartner {
 	private String createdBy;
 
 	@Column(name = "CTD_ON")
-    private Date createdOn = new Date();
+    private Date createdOn;
 
 	@Column(name = "UTD_BY")
     private String updatedBy;
 
 	@Column(name = "UTD_ON")
-	private Date updatedOn = new Date();
+	private Date updatedOn;
 }

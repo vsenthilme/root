@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,7 +67,7 @@ public class VariantController {
     @ApiOperation(response = Variant.class, value = "Create Variant") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postVariant(@Valid @RequestBody List<AddVariant> newVariant, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<Variant> createdVariant = variantService.createVariant(newVariant, loginUserID);
 		return new ResponseEntity<>(createdVariant , HttpStatus.OK);
 	}
@@ -77,7 +78,7 @@ public class VariantController {
 										  @RequestParam String plantId,@RequestParam String warehouseId,
 										  @RequestParam String languageId,@RequestParam Long levelId,@RequestParam String variantSubId,
 										  @Valid @RequestBody List<UpdateVariant> updateVariant, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Variant> createdVariant = variantService.updateVariant(variantId,companyId,languageId,plantId,variantSubId,
 				warehouseId,levelId,updateVariant,loginUserID);
@@ -89,7 +90,7 @@ public class VariantController {
 	public ResponseEntity<?> deleteVariant(@PathVariable String variantId,@RequestParam String companyId,
 										   @RequestParam String plantId,@RequestParam String languageId,
 										   @RequestParam String warehouseId,@RequestParam Long levelId,
-										   @RequestParam String variantSubId,@RequestParam String loginUserID) {
+										   @RequestParam String variantSubId,@RequestParam String loginUserID) throws ParseException {
     	variantService.deleteVariant(variantId,companyId,languageId,plantId,variantSubId,warehouseId,levelId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

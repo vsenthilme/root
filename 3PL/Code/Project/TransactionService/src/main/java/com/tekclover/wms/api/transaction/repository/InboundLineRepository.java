@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
@@ -22,7 +23,8 @@ import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 
 @Repository
 @Transactional
-public interface InboundLineRepository extends JpaRepository<InboundLine, Long>, JpaSpecificationExecutor<InboundLine> {
+public interface InboundLineRepository extends JpaRepository<InboundLine, Long>,
+        JpaSpecificationExecutor<InboundLine>, StreamableJpaSpecificationRepository<InboundLine> {
 
     String UPGRADE_SKIPLOCKED = "-2";
 
@@ -111,7 +113,7 @@ public interface InboundLineRepository extends JpaRepository<InboundLine, Long>,
 
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE InboundLine ib SET ib.statusId = :statusId, ib.confirmedBy = :confirmedBy, ib.confirmedOn = :confirmedOn \n" +
+    @Query("UPDATE InboundLine ib SET ib.statusId = :statusId, ib.confirmedBy = :confirmedBy, ib.confirmedOn = :confirmedOn, ib.statusDescription = :statusDescription \n" +
             "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
     void updateInboundLineStatus(@Param("warehouseId") String warehouseId,
                                  @Param("companyCode") String companyCode,
@@ -119,6 +121,7 @@ public interface InboundLineRepository extends JpaRepository<InboundLine, Long>,
                                  @Param("languageId") String languageId,
                                  @Param("refDocNumber") String refDocNumber,
                                  @Param("statusId") Long statusId,
+                                 @Param("statusDescription") String statusDescription,
                                  @Param("confirmedBy") String confirmedBy,
                                  @Param("confirmedOn") Date confirmedOn);
 }

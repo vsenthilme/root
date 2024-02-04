@@ -18,6 +18,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.LevelIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,7 @@ public class LevelIdService {
 	 * @throws InvocationTargetException
 	 */
 	public LevelId createLevelId (AddLevelId newLevelId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LevelId dbLevelId = new LevelId();
 		Optional<LevelId> duplicateLevelId = levelIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLevelIdAndLanguageIdAndDeletionIndicator(newLevelId.getCompanyCodeId(),
 				newLevelId.getPlantId(), newLevelId.getWarehouseId(), newLevelId.getLevelId(), newLevelId.getLanguageId(), 0L);
@@ -169,7 +170,7 @@ public class LevelIdService {
 	 */
 	public LevelId updateLevelId (String warehouseId, Long levelId,String companyCodeId,String languageId,String plantId,String loginUserID,
 								  UpdateLevelId updateLevelId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LevelId dbLevelId = getLevelId(warehouseId, levelId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateLevelId, dbLevelId, CommonUtils.getNullPropertyNames(updateLevelId));
 		dbLevelId.setUpdatedBy(loginUserID);

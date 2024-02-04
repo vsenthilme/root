@@ -16,6 +16,7 @@ import com.tekclover.wms.api.masters.repository.WorkCenterRepository;
 import com.tekclover.wms.api.masters.repository.specification.ImStrategiesSpecification;
 import com.tekclover.wms.api.masters.repository.specification.WorkCenterSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.BeanUtils;
@@ -96,7 +97,7 @@ public class WorkCenterService {
      * @throws InvocationTargetException
      */
     public WorkCenter createWorkCenter (AddWorkCenter newWorkCenter, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         WorkCenter dbWorkCenter = new WorkCenter();
         Optional<WorkCenter> duplicateWorkCenter =
                 workCenterRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndWorkCenterIdAndWorkCenterTypeAndDeletionIndicator(newWorkCenter.getCompanyCodeId(), newWorkCenter.getPlantId(),
@@ -124,7 +125,7 @@ public class WorkCenterService {
      * @throws InvocationTargetException
      */
     public WorkCenter updateWorkCenter (Long workCenterId, String companyCodeId, String plantId, String warehouseId, String workCenterType, String languageId, UpdateWorkCenter updateWorkCenter, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         WorkCenter dbWorkCenter = getWorkCenter(workCenterId,companyCodeId,plantId,languageId,warehouseId,workCenterType);
         BeanUtils.copyProperties(updateWorkCenter, dbWorkCenter, CommonUtils.getNullPropertyNames(updateWorkCenter));
         dbWorkCenter.setUpdatedBy(loginUserID);
@@ -137,7 +138,7 @@ public class WorkCenterService {
      * @param workCenterId
      * @param workCenterType
      */
-    public void deleteWorkCenterId (Long workCenterId,String companyCodeId,String plantId,String warehouseId,String workCenterType,String languageId,String loginUserID) {
+    public void deleteWorkCenterId (Long workCenterId,String companyCodeId,String plantId,String warehouseId,String workCenterType,String languageId,String loginUserID) throws ParseException {
         WorkCenter workCenter = getWorkCenter(workCenterId,companyCodeId,plantId,languageId,warehouseId,workCenterType);
         if ( workCenter != null) {
             workCenter.setDeletionIndicator (1L);

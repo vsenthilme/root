@@ -2,6 +2,8 @@ package com.tekclover.wms.api.masters.model.imbasicdata1;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+
 @Data
 public class AddImBasicData1 {
 
@@ -29,6 +31,10 @@ public class AddImBasicData1 {
 	private Double reorderLevel;
 	private Double replenishmentQty;
 	private Double safetyStock;
+	private String capacityUnit;
+	private String capacityUom;
+	private String quantity;
+	private Double weight;
 	private Long statusId;
 	private Boolean shelfLifeIndicator;
 	private String referenceField1;

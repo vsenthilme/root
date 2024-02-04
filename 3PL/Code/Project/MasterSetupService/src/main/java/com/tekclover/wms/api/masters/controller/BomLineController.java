@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -74,7 +75,7 @@ public class BomLineController {
     @ApiOperation(response = BomLine.class, value = "Create BomLine") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postBomLine(@Valid @RequestBody BomLine newBomLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BomLine createdBomLine = bomlineService.createBomLine(newBomLine, loginUserID);
         return new ResponseEntity<>(createdBomLine, HttpStatus.OK);
     }
@@ -85,7 +86,7 @@ public class BomLineController {
                                           @RequestParam String companyCode, @RequestParam String languageId,
                                           @RequestParam String plantId, @RequestParam String childItemCode,
                                           @Valid @RequestBody BomLine updateBomLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BomLine createdBomLine =
                 bomlineService.updateBomLine(warehouseId, bomNumber, companyCode, languageId, plantId, childItemCode, loginUserID, updateBomLine);
         return new ResponseEntity<>(createdBomLine, HttpStatus.OK);

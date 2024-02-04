@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -53,7 +54,7 @@ public class VerticalController {
 	@ApiOperation(response = Vertical.class, value = "Create Vertical") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> addVertical(@Valid @RequestBody AddVertical newVertical,@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Vertical createdVertical = verticalService.createVertical(newVertical,loginUserID);
 		return new ResponseEntity<>(createdVertical , HttpStatus.OK);
 	}
@@ -62,7 +63,7 @@ public class VerticalController {
 	@PatchMapping("/{verticalId}")
 	public ResponseEntity<?> patchVertical(@PathVariable Long verticalId,@RequestParam String languageId,@RequestParam String loginUserID,
 										   @RequestBody UpdateVertical updateVertical)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Vertical updatedVertical = verticalService.updateVertical(verticalId,languageId,loginUserID,updateVertical);
 		return new ResponseEntity<>(updatedVertical , HttpStatus.OK);
 	}

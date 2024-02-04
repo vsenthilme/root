@@ -18,6 +18,10 @@ public class SearchOutboundHeaderModel {
 	 * DLV_CNF_ON
 	 * ORD_REC_DATE
 	 */
+
+	private List<String> languageId;
+	private List<String> companyCodeId;
+	private List<String> plantId;
 	 
 	private List<String> warehouseId;
 	private List<String> refDocNumber;

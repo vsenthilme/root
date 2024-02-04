@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.ModuleIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,14 +172,14 @@ public class ModuleIdService {
 //			dbModuleId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 //			dbModuleId.setCreatedBy(loginUserID);
 //			dbModuleId.setUpdatedBy(loginUserID);
-//			dbModuleId.setCreatedOn(new Date());
-//			dbModuleId.setUpdatedOn(new Date());
+//			dbModuleId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//			dbModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 //			return moduleIdRepository.save(dbModuleId);
 //		}
 //	}
 
 	public List<ModuleId> createModuleId (List<AddModuleId> newModuleId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ModuleId> moduleIdList = new ArrayList<>();
 //		String moduleId = moduleIdRepository.getModuleId();
@@ -284,14 +285,14 @@ public class ModuleIdService {
 		ModuleId dbModuleId = getModuleId( warehouseId, moduleId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateModuleId, dbModuleId, CommonUtils.getNullPropertyNames(updateModuleId));
 		dbModuleId.setUpdatedBy(loginUserID);
-		dbModuleId.setUpdatedOn(new Date());
+		dbModuleId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 		return moduleIdRepository.save(dbModuleId);
 	}*/
 
 	public List<ModuleId> updateModuleId (String warehouseId,String moduleId,String companyCodeId,
 										  String languageId,String plantId, String loginUserID,
 										  List<UpdateModuleId> updateModuleId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ModuleId> moduleIdList = new ArrayList<>();
 

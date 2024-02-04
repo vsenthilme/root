@@ -17,6 +17,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.FloorIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,7 @@ public class FloorIdService {
 	 * @throws InvocationTargetException
 	 */
 	public FloorId createFloorId (AddFloorId newFloorId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		FloorId dbFloorId = new FloorId();
 		Optional<FloorId> duplicateFloorId=floorIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndFloorIdAndLanguageIdAndDeletionIndicator(newFloorId.getCompanyCodeId(), newFloorId.getPlantId(), newFloorId.getWarehouseId(), newFloorId.getFloorId(), newFloorId.getLanguageId(), 0L);
 		if(!duplicateFloorId.isEmpty()){
@@ -169,7 +170,7 @@ public class FloorIdService {
 	 */
 	public FloorId updateFloorId (String warehouseId,Long floorId,String companyCodeId,String languageId,String plantId,String loginUserID,
 								  UpdateFloorId updateFloorId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		FloorId dbFloorId = getFloorId( warehouseId, floorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateFloorId, dbFloorId, CommonUtils.getNullPropertyNames(updateFloorId));
 		dbFloorId.setUpdatedBy(loginUserID);

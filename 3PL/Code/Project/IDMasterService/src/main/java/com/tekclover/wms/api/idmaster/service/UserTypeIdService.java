@@ -18,6 +18,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.UserTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,7 +137,7 @@ public class UserTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public UserTypeId createUserTypeId (AddUserTypeId newUserTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UserTypeId dbUserTypeId = new UserTypeId();
 		Optional<UserTypeId> duplicateUsertypeId = userTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndUserTypeIdAndLanguageIdAndDeletionIndicator(newUserTypeId.getCompanyCodeId(), newUserTypeId.getPlantId(), newUserTypeId.getWarehouseId(), newUserTypeId.getUserTypeId(), newUserTypeId.getLanguageId(), 0L);
 		if (!duplicateUsertypeId.isEmpty()) {
@@ -168,7 +169,7 @@ public class UserTypeIdService {
 	 */
 	public UserTypeId updateUserTypeId ( String warehouseId,Long userTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 										 UpdateUserTypeId updateUserTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UserTypeId dbUserTypeId = getUserTypeId(warehouseId,userTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateUserTypeId, dbUserTypeId, CommonUtils.getNullPropertyNames(updateUserTypeId));
 		dbUserTypeId.setUpdatedBy(loginUserID);

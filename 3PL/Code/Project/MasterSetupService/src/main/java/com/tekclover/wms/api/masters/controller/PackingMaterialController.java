@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class PackingMaterialController {
 	
     @ApiOperation(response = PackingMaterial.class, value = "Create PackingMaterial") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postPackingMaterial(@Valid @RequestBody AddPackingMaterial newPackingMaterial, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postPackingMaterial(@Valid @RequestBody AddPackingMaterial newPackingMaterial, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PackingMaterial createdPackingMaterial = packingmaterialService.createPackingMaterial(newPackingMaterial, loginUserID);
 		return new ResponseEntity<>(createdPackingMaterial , HttpStatus.OK);
 	}
@@ -75,15 +76,15 @@ public class PackingMaterialController {
     @ApiOperation(response = PackingMaterial.class, value = "Update PackingMaterial") // label for swagger
     @PatchMapping("/{packingMaterialNo}")
 	public ResponseEntity<?> patchPackingMaterial(@PathVariable String packingMaterialNo, @RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,
-			@Valid @RequestBody UpdatePackingMaterial updatePackingMaterial, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdatePackingMaterial updatePackingMaterial, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PackingMaterial createdPackingMaterial = packingmaterialService.updatePackingMaterial(packingMaterialNo,companyCodeId,plantId,warehouseId,languageId,updatePackingMaterial, loginUserID);
 		return new ResponseEntity<>(createdPackingMaterial , HttpStatus.OK);
 	}
     
     @ApiOperation(response = PackingMaterial.class, value = "Delete PackingMaterial") // label for swagger
 	@DeleteMapping("/{packingMaterialNo}")
-	public ResponseEntity<?> deletePackingMaterial(@PathVariable String packingMaterialNo,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId, @RequestParam String loginUserID) {
+	public ResponseEntity<?> deletePackingMaterial(@PathVariable String packingMaterialNo,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId, @RequestParam String loginUserID) throws ParseException {
     	packingmaterialService.deletePackingMaterial(packingMaterialNo,companyCodeId,plantId,warehouseId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

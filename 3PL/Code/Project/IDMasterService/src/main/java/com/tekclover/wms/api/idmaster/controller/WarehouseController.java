@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -71,7 +72,7 @@ public class WarehouseController {
     @ApiOperation(response = Warehouse.class, value = "Create Warehouse") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postWarehouse(@Valid @RequestBody AddWarehouse newWarehouse, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse createdWarehouse = warehouseService.createWarehouse(newWarehouse, loginUserID);
 		return new ResponseEntity<>(createdWarehouse , HttpStatus.OK);
 	}
@@ -79,8 +80,8 @@ public class WarehouseController {
     @ApiOperation(response = Warehouse.class, value = "Update Warehouse") // label for swagger
     @PatchMapping("/{warehouseId}")
 	public ResponseEntity<?> patchWarehouse(@PathVariable String warehouseId, @RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateWarehouse updateWarehouse, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateWarehouse updateWarehouse, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse createdWarehouse = 
 				warehouseService.updateWarehouse(warehouseId,companyCodeId,plantId,languageId,loginUserID, updateWarehouse);
 		return new ResponseEntity<>(createdWarehouse , HttpStatus.OK);

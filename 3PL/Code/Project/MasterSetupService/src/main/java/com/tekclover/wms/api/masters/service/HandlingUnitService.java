@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +104,7 @@ public class HandlingUnitService {
 	 * @throws InvocationTargetException
 	 */
 	public HandlingUnit createHandlingUnit (AddHandlingUnit newHandlingUnit, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnit dbHandlingUnit = new HandlingUnit();
 		Optional<HandlingUnit> duplicateHandlingUnitId = handlingunitRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndHandlingUnitAndLanguageIdAndDeletionIndicator(newHandlingUnit.getCompanyCodeId(), newHandlingUnit.getPlantId(), newHandlingUnit.getWarehouseId(), newHandlingUnit.getHandlingUnit(), newHandlingUnit.getLanguageId(), 0L);
 		if (!duplicateHandlingUnitId.isEmpty()) {
@@ -128,7 +129,7 @@ public class HandlingUnitService {
 	 * @throws InvocationTargetException
 	 */
 	public HandlingUnit updateHandlingUnit (String handlingUnit,String companyCodeId,String plantId,String warehouseId,String languageId,UpdateHandlingUnit updateHandlingUnit, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnit dbHandlingUnit = getHandlingUnit(warehouseId,handlingUnit,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateHandlingUnit, dbHandlingUnit, CommonUtils.getNullPropertyNames(updateHandlingUnit));
 		dbHandlingUnit.setUpdatedBy(loginUserID);
@@ -140,7 +141,7 @@ public class HandlingUnitService {
 	 * deleteHandlingUnit
 	 * @param handlingUnit
 	 */
-	public void deleteHandlingUnit (String handlingUnit,String companyCodeId,String plantId,String languageId,String warehouseId,String loginUserID) {
+	public void deleteHandlingUnit (String handlingUnit,String companyCodeId,String plantId,String languageId,String warehouseId,String loginUserID) throws ParseException {
 		HandlingUnit handlingunit = getHandlingUnit(warehouseId,handlingUnit,companyCodeId,languageId,plantId);
 		if ( handlingunit != null) {
 			handlingunit.setDeletionIndicator (1L);

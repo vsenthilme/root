@@ -1,20 +1,22 @@
 package com.tekclover.wms.api.transaction.repository;
 
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface StagingLineV2Repository extends JpaRepository<StagingLineEntityV2, Long>,
-        JpaSpecificationExecutor<StagingLineEntityV2> {
+        JpaSpecificationExecutor<StagingLineEntityV2>, StreamableJpaSpecificationRepository<StagingLineEntityV2> {
 
     Optional<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndStagingNoAndPalletCodeAndCaseCodeAndLineNoAndItemCodeAndManufacturerCodeAndDeletionIndicator(
             String languageId, String companyCode, String plantId,
@@ -112,14 +114,30 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
             "ip.plant_id in (:plantId) and \n" +
             "ip.wh_id in (:warehouseId) and \n" +
             "ip.lang_id in (:languageId) and \n" +
-            "ip.mfr_code in (:manufactureCode) and \n" +
+            "ip.mfr_name in (:manufactureName) and \n" +
             "ip.is_deleted = 0) x", nativeQuery = true)
-    public String getPartnerItemBarcode(@Param(value = "itemCode") String itemCode,
+    public String getItemBarcode(@Param(value = "itemCode") String itemCode,
                                         @Param(value = "companyCode") String companyCode,
                                         @Param(value = "plantId") String plantId,
                                         @Param(value = "warehouseId") String warehouseId,
-                                        @Param(value = "manufactureCode") String manufactureCode,
+                                        @Param(value = "manufactureName") String manufactureName,
                                         @Param(value = "languageId") String languageId);
+
+    //Partner_item_barcode - almailem
+    @Query(value = "select distinct partner_itm_bar from tblimpartner ip \n" +
+            "WHERE ip.itm_code in (:itemCode) and \n" +
+            "ip.c_id in (:companyCode) and \n" +
+            "ip.plant_id in (:plantId) and \n" +
+            "ip.wh_id in (:warehouseId) and \n" +
+            "ip.lang_id in (:languageId) and \n" +
+            "ip.mfr_name in (:manufactureName) and \n" +
+            "ip.is_deleted = 0", nativeQuery = true)
+    public List<String> getPartnerItemBarcode(@Param(value = "itemCode") String itemCode,
+                                       @Param(value = "companyCode") String companyCode,
+                                       @Param(value = "plantId") String plantId,
+                                       @Param(value = "warehouseId") String warehouseId,
+                                       @Param(value = "manufactureName") String manufactureName,
+                                       @Param(value = "languageId") String languageId);
 
     //Partner_item_barcode - almailem - interim only
     @Query(value = "select string_agg(barcode,', ') from (select distinct barcode from tblinterimbarcodeid ip \n" +
@@ -159,6 +177,21 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
     public String getStatusDescription(@Param(value = "statusId") Long statusId,
                                        @Param(value = "languageId") String languageId);
 
+    @Query(value = "select tc.stck_typ_text stockTypeDescription from \n" +
+            "tblstocktypeid tc\n" +
+            "where\n" +
+            "tc.stck_typ_id IN (:stockTypeId) and \n" +
+            "tc.c_id IN (:companyCodeId) and \n" +
+            "tc.lang_id IN (:languageId) and \n" +
+            "tc.plant_id IN(:plantId) and \n" +
+            "tc.wh_id IN (:warehouseId) and \n" +
+            "tc.is_deleted=0", nativeQuery = true)
+    public String getStockTypeDescription(@Param(value = "companyCodeId") String companyCodeId,
+                                          @Param(value = "plantId") String plantId,
+                                          @Param(value = "languageId") String languageId,
+                                          @Param(value = "warehouseId") String warehouseId,
+                                          @Param(value = "stockTypeId") Long stockTypeId);
+
     List<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndDeletionIndicator(
             String languageId, String companyCodeId, String plantId, String warehouseId,
             String refDocNumber, String preInboundNo, Long lineNo, String itemCode, Long deletionIndicator);
@@ -181,21 +214,59 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
             String preInboundNo, String refDocNumber, String stagingNo, Long lineNo,
             String itemCode, String caseCode, Long deletionIndicator);
 
-    //getInventory - almailem
-    @Query(value = "select * from tblinventory ip \n" +
-            "WHERE ip.itm_code in (:itemCode) and \n" +
-            "ip.c_id in (:companyCode) and \n" +
-            "ip.plant_id in (:plantId) and \n" +
-            "ip.wh_id in (:warehouseId) and \n" +
-            "ip.lang_id in (:languageId) and \n" +
-            "ip.mfr_code in (:manufactureCode) and \n" +
-            "ip.pack_barcode in (:packBarcode) and \n" +
-            "ip.is_deleted = 0", nativeQuery = true)
-    public InventoryV2 getInventory(@Param(value = "itemCode") String itemCode,
-                                    @Param(value = "companyCode") String companyCode,
-                                    @Param(value = "plantId") String plantId,
-                                    @Param(value = "warehouseId") String warehouseId,
-                                    @Param(value = "manufactureCode") String manufactureCode,
-                                    @Param(value = "packBarcode") String packBarcode,
-                                    @Param(value = "languageId") String languageId);
+    List<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndStagingNoAndCaseCodeAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String stagingNo, String caseCode, Long deletionIndicator);
+
+    //HHt User by order type id
+    @Query(value = "select ht.usr_id \n" +
+            "from tblhhtuser ht join tblordertypeid ot on  ot.usr_id = ht.usr_id \n" +
+            "where \n" +
+            "ht.c_id IN (:companyCodeId) and \n" +
+            "ht.lang_id IN (:languageId) and \n" +
+            "ht.plant_id IN (:plantId) and \n" +
+            "ht.wh_id IN (:warehouseId) and \n" +
+            "ot.ob_ord_typ_id IN (:inboundOrderTypeId) and \n" +
+            "ht.is_deleted=0", nativeQuery = true)
+    public List<String> getHhtUserByOrderType(@Param(value = "companyCodeId") String companyCodeId,
+                                              @Param(value = "languageId") String languageId,
+                                              @Param(value = "plantId") String plantId,
+                                              @Param(value = "warehouseId") String warehouseId,
+                                              @Param(value = "inboundOrderTypeId") Long inboundOrderTypeId);
+
+    //HHt User
+    @Query(value = "select ht.usr_id \n" +
+            "from tblhhtuser ht \n" +
+            "where \n" +
+            "ht.c_id IN (:companyCodeId) and \n" +
+            "ht.lang_id IN (:languageId) and \n" +
+            "ht.plant_id IN (:plantId) and \n" +
+            "ht.wh_id IN (:warehouseId) and \n" +
+            "ht.is_deleted=0", nativeQuery = true)
+    public List<String> getHhtUser(@Param(value = "companyCodeId") String companyCodeId,
+                                   @Param(value = "languageId") String languageId,
+                                   @Param(value = "plantId") String plantId,
+                                   @Param(value = "warehouseId") String warehouseId);
+
+    Optional<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndManufacturerCodeAndDeletionIndicator(
+            String languageId, String companyCodeId, String plantId, String warehouseId, String preInboundNo,
+            String refDocNumber, Long lineNo, String itemCode, String manufacturerCode, Long deletionIndicator);
+
+    Optional<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String languageId, String companyCodeId, String plantId, String warehouseId, String preInboundNo,
+            String refDocNumber, Long lineNo, String itemCode, String manufacturerName, Long deletionIndicator);
+
+    List<StagingLineEntityV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber, String preInboundNo, Long deletionIndicator);
+
+    StagingLineEntityV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+            String preInboundNo, Long lineNo, String itemCode, String manufacturerName, Long deletionIndicator);
+
+    StagingLineEntityV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndItemCodeAndManufacturerNameAndCaseCodeAndPalletCodeAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+            String preInboundNo, String itemCode, String manufacturerName, String caseCode, String palletCode, Long deletionIndicator);
+
+    List<StagingLineEntityV2> findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
+
 }

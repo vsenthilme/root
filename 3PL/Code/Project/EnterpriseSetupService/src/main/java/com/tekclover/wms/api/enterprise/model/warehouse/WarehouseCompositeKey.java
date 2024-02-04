@@ -16,6 +16,6 @@ public class WarehouseCompositeKey implements Serializable {
 	private String companyId;
 	private String plantId;
 	private String warehouseId;
-	private String modeOfImplementation;
+//	private String modeOfImplementation;
 	private Long warehouseTypeId;
 }

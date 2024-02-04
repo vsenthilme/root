@@ -1702,17 +1702,18 @@ public class IDMasterServiceController {
 		return new ResponseEntity<>(userIdList, HttpStatus.OK);
 	}
 
-	@ApiOperation(response = HhtUserOutput.class, value = "Get a HhtUser") // label for swagger
-	@GetMapping("/hhtuser/{userId}")
-	public ResponseEntity<?> getHhtUser(@PathVariable String userId,@RequestParam String companyCodeId,
-										@RequestParam String languageId,@RequestParam String plantId, @RequestParam String warehouseId,
-										@RequestParam Long levelId,@RequestParam String authToken) {
+	 @ApiOperation(response = HhtUserOutput.class, value = "Get a HhtUser") // label for swagger
+    @GetMapping("/hhtuser/{userId}")
+    public ResponseEntity<?> getHhtUser(@PathVariable String userId, @RequestParam String companyCodeId,
+                                        @RequestParam String languageId, @RequestParam String plantId, @RequestParam String warehouseId,
+                                        @RequestParam String authToken) {
 
-		HhtUserOutput dbHhtUser =
-				idmasterService.getHhtUser(userId,warehouseId, companyCodeId,levelId,plantId,languageId, authToken);
-		log.info("HhtUser : " + dbHhtUser);
-		return new ResponseEntity<>(dbHhtUser, HttpStatus.OK);
-	}
+        HhtUserOutput dbHhtUser =
+                idmasterService.getHhtUser(userId, warehouseId, companyCodeId, plantId, languageId, authToken);
+        log.info("HhtUser : " + dbHhtUser);
+        return new ResponseEntity<>(dbHhtUser, HttpStatus.OK);
+    }
+
 
 	@ApiOperation(response = HhtUserOutput.class, value = "Get HhtUsers") // label for swagger
 	@GetMapping("/hhtuser/{warehouseId}/hhtUser")
@@ -1730,27 +1731,27 @@ public class IDMasterServiceController {
 		return new ResponseEntity<>(createdHhtUser, HttpStatus.OK);
 	}
 
-	@ApiOperation(response = HhtUser.class, value = "Update HhtUser") // label for swagger
-	@RequestMapping(value = "/hhtuser/{userId}", method = RequestMethod.PATCH)
-	public ResponseEntity<?> patchHhtUser(@PathVariable String userId, @RequestParam String warehouseId,@RequestParam String companyCodeId,
-										  @RequestParam String languageId,@RequestParam String plantId,@RequestParam Long levelId,
-										  @RequestParam String loginUserID, @RequestParam String authToken,
-										  @Valid @RequestBody UpdateHhtUser updateHhtUser) throws IllegalAccessException, InvocationTargetException {
+	 @ApiOperation(response = HhtUser.class, value = "Update HhtUser") // label for swagger
+    @RequestMapping(value = "/hhtuser/{userId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> patchHhtUser(@PathVariable String userId, @RequestParam String warehouseId, @RequestParam String companyCodeId,
+                                          @RequestParam String languageId, @RequestParam String plantId,
+                                          @RequestParam String loginUserID, @RequestParam String authToken,
+                                          @Valid @RequestBody UpdateHhtUser updateHhtUser) throws IllegalAccessException, InvocationTargetException {
 
-		HhtUser updatedHhtUser = idmasterService.updateHhtUser(userId, warehouseId,companyCodeId,languageId,plantId,
-				updateHhtUser,loginUserID,levelId,authToken);
-		return new ResponseEntity<>(updatedHhtUser, HttpStatus.OK);
-	}
+        HhtUser updatedHhtUser = idmasterService.updateHhtUser(userId, warehouseId, companyCodeId, languageId, plantId,
+                updateHhtUser, loginUserID, authToken);
+        return new ResponseEntity<>(updatedHhtUser, HttpStatus.OK);
+    }
 
-	@ApiOperation(response = HhtUser.class, value = "Delete HhtUser") // label for swagger
-	@DeleteMapping("/hhtuser/{userId}")
-	public ResponseEntity<?> deleteHhtUser(@PathVariable String userId,@RequestParam String warehouseId,@RequestParam String companyCodeId,
-										   @RequestParam String plantId,@RequestParam String languageId,@RequestParam Long levelId,
-										   @RequestParam String loginUserID, @RequestParam String authToken) {
+	 @ApiOperation(response = HhtUser.class, value = "Delete HhtUser") // label for swagger
+    @DeleteMapping("/hhtuser/{userId}")
+    public ResponseEntity<?> deleteHhtUser(@PathVariable String userId, @RequestParam String warehouseId, @RequestParam String companyCodeId,
+                                           @RequestParam String plantId, @RequestParam String languageId,
+                                           @RequestParam String loginUserID, @RequestParam String authToken) {
 
-		idmasterService.deleteHhtUser(warehouseId, userId,companyCodeId,languageId,plantId,loginUserID,levelId,authToken);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+        idmasterService.deleteHhtUser(warehouseId, userId, companyCodeId, languageId, plantId, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 	//FIND
 	@ApiOperation(response = HhtUserOutput[].class, value = "Find HhtUser")//label for swagger
@@ -4145,7 +4146,7 @@ public class IDMasterServiceController {
 	@ApiOperation(response = Country.class, value = "Create Country") // label for swagger
 	@PostMapping("/test")
 	public ResponseEntity<?> addCountry(@Valid @RequestBody AddCountry newCountry,@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		com.tekclover.wms.core.model.dto.Country createdCountry = idmasterService.createCountry(newCountry,loginUserID);
 		return new ResponseEntity<>(createdCountry , HttpStatus.OK);
 	}
@@ -4154,7 +4155,7 @@ public class IDMasterServiceController {
 	@PatchMapping("/test/{countryId}")
 	public ResponseEntity<?> patchCountry(@PathVariable String countryId,@RequestParam String languageId,@RequestParam String loginUserID,
 										  @Valid @RequestBody UpdateCountry updateCountry)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		com.tekclover.wms.core.model.dto.Country updatedCountry = idmasterService.updateCountry(countryId,languageId,loginUserID,updateCountry);
 		return new ResponseEntity<>(updatedCountry , HttpStatus.OK);
 	}

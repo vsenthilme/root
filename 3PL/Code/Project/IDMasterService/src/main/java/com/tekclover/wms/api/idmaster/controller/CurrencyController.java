@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -52,7 +53,7 @@ public class CurrencyController {
     @ApiOperation(response = Currency.class, value = "Create Currency") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> addCurrency(@Valid @RequestBody AddCurrency newCurrency,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Currency createdCurrency = currencyService.createCurrency(newCurrency,loginUserID);
 		return new ResponseEntity<>(createdCurrency , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class CurrencyController {
     @ApiOperation(response = Currency.class, value = "Update Currency") // label for swagger
     @PatchMapping("/{currencyId}")
 	public ResponseEntity<?> patchCurrency(@PathVariable Long currencyId, @RequestParam String languageId,@RequestParam String loginUserID,
-			@Valid @RequestBody UpdateCurrency updateCurrency) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateCurrency updateCurrency)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Currency updatedCurrency = currencyService.updateCurrency(currencyId,languageId,loginUserID,updateCurrency);
 		return new ResponseEntity<>(updatedCurrency , HttpStatus.OK);
 	}

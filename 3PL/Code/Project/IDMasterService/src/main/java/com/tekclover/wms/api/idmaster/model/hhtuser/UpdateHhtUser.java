@@ -38,4 +38,9 @@ public class UpdateHhtUser {
 	private String referenceField9;
 	private String referenceField10;
 	private Long deletionIndicator;
+
+	private Date startDate;
+	private Date endDate;
+	private String userPresent;
+	private String noOfDaysLeave;
 }

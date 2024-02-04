@@ -9,7 +9,11 @@ import lombok.Data;
 public class FindImBasicData1 {
 	
 	private String warehouseId;
+	private String companyCodeId;
+	private String plantId;
+	private String languageId;
 	private List<String> itemCode;
+	private String manufacturerName;
 	private Date fromCreatedOn;
 	private Date toCreatedOn;
 }

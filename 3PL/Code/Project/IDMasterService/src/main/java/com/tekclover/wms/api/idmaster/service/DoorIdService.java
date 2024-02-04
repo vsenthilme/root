@@ -13,6 +13,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.DoorIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,7 @@ public class DoorIdService {
 	 * @throws InvocationTargetException
 	 */
 	public DoorId createDoorId (AddDoorId newDoorId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DoorId dbDoorId = new DoorId();
 		Optional<DoorId> duplicateDoorId = doorIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDoorIdAndLanguageIdAndDeletionIndicator(newDoorId.getCompanyCodeId(), newDoorId.getPlantId(), newDoorId.getWarehouseId()
 				, newDoorId.getDoorId(), newDoorId.getLanguageId(), 0L);
@@ -151,7 +152,7 @@ public class DoorIdService {
 	 */
 	public DoorId updateDoorId (String warehouseId,String doorId,String companyCodeId,String languageId,String plantId,String loginUserID,
 								UpdateDoorId updateDoorId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DoorId dbDoorId = getDoorId( warehouseId,doorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDoorId, dbDoorId, CommonUtils.getNullPropertyNames(updateDoorId));
 		dbDoorId.setUpdatedBy(loginUserID);

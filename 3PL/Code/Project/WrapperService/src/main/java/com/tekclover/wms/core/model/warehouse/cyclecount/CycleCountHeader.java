@@ -1,19 +1,13 @@
 package com.tekclover.wms.core.model.warehouse.cyclecount;
 
-
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
 @Data
-@Table(name = "tblcyclecountheader")
 public class CycleCountHeader {
 
-    @Id
-    @Column(name = "order_id",nullable = false)
     private String orderId;
 
     private String companyCode;
@@ -24,8 +18,15 @@ public class CycleCountHeader {
     private String isNew;
     private Date orderProcessedOn;
 
+    private Date orderReceivedOn;
+    private Long processedStatusId;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderId",fetch = FetchType.EAGER)
+    //MiddleWare Fields
+    private String isCompleted;
+    private String isCancelled;
+    private String stockCountType;
+    private Date updatedOn;
+
     private Set<CycleCountLine> lines;
 
 }

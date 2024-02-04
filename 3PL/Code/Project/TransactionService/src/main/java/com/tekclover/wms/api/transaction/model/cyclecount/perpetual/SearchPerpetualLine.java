@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class SearchPerpetualLine {
-	
+
 	private List<String> cycleCountNo;
 	private List<Long> lineStatusId;
 	private String cycleCounterId;

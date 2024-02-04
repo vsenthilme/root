@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @AllArgsConstructor
 @NoArgsConstructor
 /*

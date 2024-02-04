@@ -77,7 +77,7 @@ public class AuthTokenService {
 			accessTokenUrl = propertiesConfig.getIdmasterAccessTokenUrl();
 		} else if (apiUrl.equalsIgnoreCase("wms-transaction-service")) {
 			accessTokenUrl = propertiesConfig.getTransactionAccessTokenUrl();
-		} else {
+		}else  {
 			log.info("The givem URL is not available. Quiting.");
 			throw new BadRequestException("The givem URL is not available. Quiting");
 		}
@@ -140,6 +140,30 @@ public class AuthTokenService {
 	public AuthToken getTransactionServiceAuthToken() {
 		AuthTokenRequest authTokenRequest = new AuthTokenRequest();
 		authTokenRequest.setApiName("wms-transaction-service");
+		authTokenRequest.setClientId(propertiesConfig.getClientId());
+		authTokenRequest.setClientSecretKey(propertiesConfig.getClientSecretKey());
+		authTokenRequest.setGrantType(propertiesConfig.getGrantType());
+		authTokenRequest.setOauthUserName(propertiesConfig.getUsername());
+		authTokenRequest.setOauthPassword(propertiesConfig.getPassword());
+		return getAuthToken(authTokenRequest);
+	}
+
+	// Generate AuthToken for SparkService
+	public AuthToken getSparkServiceAuthToken() {
+		AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+		authTokenRequest.setApiName("mnr-spark-service");
+		authTokenRequest.setClientId(propertiesConfig.getClientId());
+		authTokenRequest.setClientSecretKey(propertiesConfig.getClientSecretKey());
+		authTokenRequest.setGrantType(propertiesConfig.getGrantType());
+		authTokenRequest.setOauthUserName(propertiesConfig.getUsername());
+		authTokenRequest.setOauthPassword(propertiesConfig.getPassword());
+		return getAuthToken(authTokenRequest);
+	}
+
+	// Generate AuthToken for SparkService
+	public AuthToken getConnectorServiceAuthToken() {
+		AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+		authTokenRequest.setApiName("wms-connector-service");
 		authTokenRequest.setClientId(propertiesConfig.getClientId());
 		authTokenRequest.setClientSecretKey(propertiesConfig.getClientSecretKey());
 		authTokenRequest.setGrantType(propertiesConfig.getGrantType());

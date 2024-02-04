@@ -2,12 +2,14 @@ package com.tekclover.wms.api.transaction.model.inbound.putaway.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.putaway.PutAwayHeader;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
+@ToString(callSuper = true)
 public class PutAwayHeaderV2 extends PutAwayHeader {
 
 	@Column(name = "INV_QTY")
@@ -66,4 +68,7 @@ public class PutAwayHeaderV2 extends PutAwayHeader {
 
 	@Column(name = "ACTUAL_PACK_BARCODE")
 	private String actualPackBarcodes;
+
+	@Column(name = "LEVEL_ID", columnDefinition = "nvarchar(255)")
+	private String levelId;
 }

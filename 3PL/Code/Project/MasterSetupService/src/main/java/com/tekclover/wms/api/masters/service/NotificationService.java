@@ -1,10 +1,12 @@
 package com.tekclover.wms.api.masters.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.tekclover.wms.api.masters.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -39,7 +41,7 @@ public class NotificationService {
      * @param message
      * @param userId
      */
-    public void sendMessage(String topic, String message, String userId) {
+    public void sendMessage(String topic, String message, String userId) throws ParseException {
         final String time = new SimpleDateFormat("HH:mm").format(new Date());
         simpMessagingTemplate.convertAndSend("/topic/messages",
                 new OutputMessage(topic, message, time, userId, null));

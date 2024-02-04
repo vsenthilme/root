@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +12,8 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.repository.InboundLineV2Repository;
-import com.tekclover.wms.api.transaction.repository.PreInboundLineV2Repository;
+import com.tekclover.wms.api.transaction.repository.*;
+import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,6 @@ import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.AddPreInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLineEntity;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.UpdatePreInboundLine;
-import com.tekclover.wms.api.transaction.repository.InboundLineRepository;
-import com.tekclover.wms.api.transaction.repository.PreInboundLineRepository;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class PreInboundLineService extends BaseService {
-    @Autowired
-    private InboundLineV2Repository inboundLineV2Repository;
-    @Autowired
-    private PreInboundLineV2Repository preInboundLineV2Repository;
 
     @Autowired
     private PreInboundLineRepository preInboundLineRepository;
@@ -52,6 +47,18 @@ public class PreInboundLineService extends BaseService {
 
     @Autowired
     private AuthTokenService authTokenService;
+
+    //--------------------------------------------------------------------------------------
+    @Autowired
+    private InboundLineV2Repository inboundLineV2Repository;
+    @Autowired
+    private PreInboundLineV2Repository preInboundLineV2Repository;
+
+    @Autowired
+    private StagingLineV2Repository stagingLineV2Repository;
+
+    String statusDescription = null;
+    //--------------------------------------------------------------------------------------
 
     /**
      * getPreInboundLines
@@ -181,10 +188,10 @@ public class PreInboundLineService extends BaseService {
                         BeanUtils.copyProperties(createdPreInboundLine, inboundLine, CommonUtils.getNullPropertyNames(createdPreInboundLine));
 
                         // OrdQty
-                        inboundLine.setOrderedQuantity(createdPreInboundLine.getOrderQty());
+                        inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
 
                         // OrdUOM
-                        inboundLine.setOrderedUnitOfMeasure(createdPreInboundLine.getOrderUom());
+                        inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
                         // IB_order_type_id
                         inboundLine.setInboundOrderTypeId(createdPreInboundLine.getInboundOrderTypeId());
@@ -440,7 +447,7 @@ public class PreInboundLineService extends BaseService {
      * @throws InvocationTargetException
      */
     public PreInboundLineEntityV2 createPreInboundLineV2(PreInboundLineEntityV2 newPreInboundLine, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         PreInboundLineEntityV2 dbPreInboundLine = new PreInboundLineEntityV2();
         log.info("newPreInboundLine : " + newPreInboundLine);
@@ -448,6 +455,8 @@ public class PreInboundLineService extends BaseService {
         dbPreInboundLine.setDeletionIndicator(0L);
         dbPreInboundLine.setCreatedBy(loginUserID);
         dbPreInboundLine.setUpdatedBy(loginUserID);
+//        dbPreInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setCreatedOn(new Date());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
@@ -495,10 +504,10 @@ public class PreInboundLineService extends BaseService {
                         BeanUtils.copyProperties(createdPreInboundLine, inboundLine, CommonUtils.getNullPropertyNames(createdPreInboundLine));
 
                         // OrdQty
-                        inboundLine.setOrderedQuantity(createdPreInboundLine.getOrderQty());
+                        inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
 
                         // OrdUOM
-                        inboundLine.setOrderedUnitOfMeasure(createdPreInboundLine.getOrderUom());
+                        inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
                         // IB_order_type_id
                         inboundLine.setInboundOrderTypeId(createdPreInboundLine.getInboundOrderTypeId());
@@ -546,7 +555,7 @@ public class PreInboundLineService extends BaseService {
     private PreInboundLineEntityV2 createPreInboundLineBOMBasedV2(String companyCode, String plantId, String languageId,
                                                                   String preInboundNo, String refDocNumber,
                                                                   String warehouseId, Long lineNo, String itemCode,
-                                                                  BomLine bomLine, PreInboundLineEntityV2 preInboundLineEntity, String loginUserID) {
+                                                                  BomLine bomLine, PreInboundLineEntityV2 preInboundLineEntity, String loginUserID) throws ParseException {
         Warehouse warehouse = getWarehouse(warehouseId, companyCode, plantId, languageId);
 
         PreInboundLineEntityV2 preInboundLine = new PreInboundLineEntityV2();
@@ -600,6 +609,7 @@ public class PreInboundLineService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy(loginUserID);
+//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -643,10 +653,13 @@ public class PreInboundLineService extends BaseService {
     public PreInboundLineEntityV2 updatePreInboundLineV2(String companyCode, String plantId, String languageId,
                                                          String preInboundNo, String warehouseId,
                                                        String refDocNumber, Long lineNo, String itemCode, Long statusId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PreInboundLineEntityV2 dbPreInboundLine = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
         dbPreInboundLine.setStatusId(statusId);
+        statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
+        dbPreInboundLine.setStatusDescription(statusDescription);
         dbPreInboundLine.setUpdatedBy(loginUserID);
+//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
     }
@@ -668,15 +681,52 @@ public class PreInboundLineService extends BaseService {
      */
     public void deletePreInboundLineV2(String companyCode, String plantId, String languageId,
                                        String preInboundNo, String warehouseId,
-                                       String refDocNumber, Long lineNo, String itemCode, String loginUserID) {
+                                       String refDocNumber, Long lineNo, String itemCode, String loginUserID) throws ParseException {
         PreInboundLineEntityV2 preInboundLine = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
         if (preInboundLine != null && preInboundLine.getStatusId() == 6L) {
             preInboundLine.setDeletionIndicator(1L);
             preInboundLine.setUpdatedBy(loginUserID);
+//            preInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             preInboundLine.setUpdatedOn(new Date());
             preInboundLineV2Repository.save(preInboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + preInboundNo);
         }
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     */
+    //DELETE
+    public List<PreInboundLineEntityV2> deletePreInboundLine(String companyCode, String plantId, String languageId,
+                                                             String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+        List<PreInboundLineEntityV2> preInboundLineEntityV2List = new ArrayList<>();
+        List<PreInboundLineEntityV2> preInboundLineList =
+                preInboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        0L);
+        log.info("preInboundLineList - Cancellation : " + preInboundLineList);
+        if(preInboundLineList != null && !preInboundLineList.isEmpty()) {
+            for (PreInboundLineEntityV2 updatePreInboundLine : preInboundLineList) {
+                updatePreInboundLine.setDeletionIndicator(1L);
+                updatePreInboundLine.setUpdatedBy(loginUserID);
+                updatePreInboundLine.setUpdatedOn(new Date());
+                PreInboundLineEntityV2 preInboundLineEntityV2 = preInboundLineV2Repository.save(updatePreInboundLine);
+                preInboundLineEntityV2List.add(preInboundLineEntityV2);
+            }
+        }
+        return preInboundLineEntityV2List;
     }
 }

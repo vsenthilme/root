@@ -49,7 +49,7 @@ public class DeliveryHeaderController {
     // Get DeliveryHeader
     @ApiOperation(response = DeliveryHeader.class, value = "Get a DeliveryHeader") // label for swagger
     @GetMapping("/{deliveryNo}")
-    public ResponseEntity<?> getDeliveryHeader(@PathVariable String deliveryNo,@RequestParam String companyCodeId,
+    public ResponseEntity<?> getDeliveryHeader(@PathVariable Long deliveryNo,@RequestParam String companyCodeId,
                                                @RequestParam String languageId,@RequestParam String plantId,
                                                @RequestParam String warehouseId){
 
@@ -76,7 +76,7 @@ public class DeliveryHeaderController {
     @PatchMapping("/{deliveryNo}")
     public ResponseEntity<?> patchDeliveryHeader(@RequestParam String companyCodeId, @RequestParam String plantId,
                                                  @RequestParam String warehouseId,@RequestParam String loginUserID,
-                                                 @RequestParam String languageId,@PathVariable String deliveryNo,
+                                                 @RequestParam String languageId,@PathVariable Long deliveryNo,
                                                  @Valid @RequestBody UpdateDeliveryHeader updateDeliveryHeader)
             throws IllegalAccessException,InvocationTargetException {
 
@@ -89,7 +89,7 @@ public class DeliveryHeaderController {
     // Delete DeliveryHeader
     @ApiOperation(response = DeliveryHeader.class, value = "Delete DeliveryHeader") // label for swagger
     @DeleteMapping("/{deliveryNo}")
-    public ResponseEntity<?> deleteAisleId(@PathVariable String deliveryNo,@RequestParam String companyCodeId,
+    public ResponseEntity<?> deleteAisleId(@PathVariable Long deliveryNo,@RequestParam String companyCodeId,
                                            @RequestParam String plantId,@RequestParam String warehouseId,
                                            @RequestParam String languageId,@RequestParam String loginUserID){
 

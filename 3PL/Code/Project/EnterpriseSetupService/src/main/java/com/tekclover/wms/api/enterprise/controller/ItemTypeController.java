@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class ItemTypeController {
     
     @ApiOperation(response = ItemType.class, value = "Create ItemType") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postItemType(@Valid @RequestBody AddItemType newItemType, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postItemType(@Valid @RequestBody AddItemType newItemType, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemType createdItemType = itemtypeService.createItemType(newItemType, loginUserID);
 		return new ResponseEntity<>(createdItemType , HttpStatus.OK);
 	}
@@ -75,8 +76,8 @@ public class ItemTypeController {
     @ApiOperation(response = ItemType.class, value = "Update ItemType") // label for swagger
     @PatchMapping("/{itemTypeId}")
 	public ResponseEntity<?> patchItemType(@PathVariable Long itemTypeId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateItemType updateItemType, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateItemType updateItemType, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemType createdItemType = itemtypeService.updateItemType(warehouseId, itemTypeId,companyId,languageId,plantId,updateItemType, loginUserID);
 		return new ResponseEntity<>(createdItemType , HttpStatus.OK);
 	}
@@ -84,7 +85,7 @@ public class ItemTypeController {
     @ApiOperation(response = ItemType.class, value = "Delete ItemType") // label for swagger
 	@DeleteMapping("/{itemTypeId}")
 	public ResponseEntity<?> deleteItemType(@PathVariable Long itemTypeId, @RequestParam String warehouseId, @RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@RequestParam String loginUserID) {
+			@RequestParam String loginUserID) throws ParseException {
     	itemtypeService.deleteItemType(warehouseId, itemTypeId,companyId,languageId,plantId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

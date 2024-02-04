@@ -32,4 +32,24 @@ public interface CompanyIdRepository extends JpaRepository<CompanyId,Long>, JpaS
 	public IKeyValuePair getCompanyIdAndDescription(@Param(value="companyCodeId") String companyCodeId,
 													@Param(value="languageId") String languageId);
 
+	//Description
+	@Query(value = "select CONCAT(tc.c_id,'-',tc.c_text) companyDesc,\n" +
+			"CONCAT(tp.plant_id,'-',tp.plant_text) plantDesc,\n" +
+			"CONCAT(tw.wh_id,'-',tw.wh_text) warehouseDesc from \n" +
+			"tblcompanyid tc\n" +
+			"join tblplantid tp on tp.c_id = tc.c_id and tp.lang_id = tc.lang_id\n" +
+			"join tblwarehouseid tw on tw.c_id = tc.c_id and tw.lang_id=tc.lang_id and tw.plant_id = tp.plant_id\n" +
+			"where\n" +
+			"tc.c_id IN (:companyCodeId) and \n" +
+			"tc.lang_id IN (:languageId) and \n" +
+			"tp.plant_id IN(:plantId) and \n" +
+			"tw.wh_id IN (:warehouseId) and \n" +
+			"tc.is_deleted=0 and \n" +
+			"tp.is_deleted=0 and \n" +
+			"tw.is_deleted=0", nativeQuery = true)
+	public IKeyValuePair getDescription(@Param(value = "companyCodeId") String companyCodeId,
+										@Param(value = "languageId") String languageId,
+										@Param(value = "plantId") String plantId,
+										@Param(value = "warehouseId") String warehouseId);
+
 }

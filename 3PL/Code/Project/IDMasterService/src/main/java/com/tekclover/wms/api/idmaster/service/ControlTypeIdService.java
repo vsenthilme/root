@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ControlTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,7 @@ public class ControlTypeIdService{
 	 * @throws InvocationTargetException
 	 */
 	public ControlTypeId createControlTypeId (AddControlTypeId newControlTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlTypeId dbControlTypeId = new ControlTypeId();
 		Optional<ControlTypeId> duplicateControlTypeId = controlTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndControlTypeIdAndLanguageIdAndDeletionIndicator(newControlTypeId.getCompanyCodeId(), newControlTypeId.getPlantId(), newControlTypeId.getWarehouseId(),
 				newControlTypeId.getControlTypeId(), newControlTypeId.getLanguageId(), 0L);
@@ -147,7 +148,7 @@ public class ControlTypeIdService{
 	 */
 	public ControlTypeId updateControlTypeId (String warehouseId, String controlTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 											  UpdateControlTypeId updateControlTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlTypeId dbControlTypeId = getControlTypeId( warehouseId, controlTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateControlTypeId, dbControlTypeId, CommonUtils.getNullPropertyNames(updateControlTypeId));
 		dbControlTypeId.setUpdatedBy(loginUserID);

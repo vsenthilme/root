@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -147,7 +148,7 @@ public class StagingHeaderController {
 	@ApiOperation(response = StagingHeaderV2.class, value = "Create StagingHeader V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postStagingHeaderV2(@Valid @RequestBody StagingHeaderV2 newStagingHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StagingHeaderV2 createdStagingHeader = stagingheaderService.createStagingHeaderV2(newStagingHeader, loginUserID);
 		return new ResponseEntity<>(createdStagingHeader, HttpStatus.OK);
 	}
@@ -159,7 +160,7 @@ public class StagingHeaderController {
 												  @RequestParam String warehouseId, @RequestParam String preInboundNo,
 												  @RequestParam String refDocNumber, @Valid @RequestBody StagingHeaderV2 updateStagingHeader,
 												  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StagingHeaderV2 createdStagingHeader =
 				stagingheaderService.updateStagingHeaderV2(companyCode, plantId, languageId, warehouseId,
 						preInboundNo, refDocNumber, stagingNo, loginUserID, updateStagingHeader);
@@ -171,7 +172,7 @@ public class StagingHeaderController {
 	public ResponseEntity<?> deleteStagingHeaderV2(@PathVariable String stagingNo, @RequestParam String languageId,
 												   @RequestParam String companyCode, @RequestParam String plantId,
 												   @RequestParam String warehouseId, @RequestParam String preInboundNo,
-												   @RequestParam String refDocNumber, @RequestParam String loginUserID) {
+												   @RequestParam String refDocNumber, @RequestParam String loginUserID) throws ParseException {
 		stagingheaderService.deleteStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

@@ -1,34 +1,27 @@
 package com.tekclover.wms.api.masters.service;
 
+import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
+import com.tekclover.wms.api.masters.model.storagebin.*;
+import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
+import com.tekclover.wms.api.masters.repository.StorageBinRepository;
+import com.tekclover.wms.api.masters.repository.StorageBinV2Repository;
+import com.tekclover.wms.api.masters.repository.specification.StorageBinSpecification;
+import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.persistence.EntityNotFoundException;
-
-import com.tekclover.wms.api.masters.model.impl.ItemListImpl;
-import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
-import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
-import com.tekclover.wms.api.masters.repository.StorageBinV2Repository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.tekclover.wms.api.masters.exception.BadRequestException;
-import com.tekclover.wms.api.masters.model.storagebin.AddStorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.SearchStorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.StorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.StorageBinPutAway;
-import com.tekclover.wms.api.masters.model.storagebin.UpdateStorageBin;
-import com.tekclover.wms.api.masters.repository.StorageBinRepository;
-import com.tekclover.wms.api.masters.repository.specification.StorageBinSpecification;
-import com.tekclover.wms.api.masters.util.CommonUtils;
-import com.tekclover.wms.api.masters.util.DateUtils;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -98,7 +91,6 @@ public class StorageBinService {
     }
 
     /**
-     *
      * @param warehouseId
      * @param binClassId
      * @param companyCodeId
@@ -106,13 +98,13 @@ public class StorageBinService {
      * @param languageId
      * @return
      */
-    public StorageBinV2 getStorageBinByBinClassId(String warehouseId, Long binClassId, String companyCodeId, String plantId,  String languageId) {
+    public StorageBinV2 getStorageBinByBinClassId(String warehouseId, Long binClassId, String companyCodeId, String plantId, String languageId) {
         StorageBinV2 storagebin = storageBinV2Repository.getStorageBinByBinClassId(
-                                                            binClassId,
-                                                            companyCodeId,
-                                                            plantId,
-                                                            warehouseId,
-                                                            languageId);
+                binClassId,
+                companyCodeId,
+                plantId,
+                warehouseId,
+                languageId);
         if (storagebin == null) {
             throw new BadRequestException("The Given Values: " +
                     "binClassId" + binClassId +
@@ -124,7 +116,6 @@ public class StorageBinService {
     }
 
     /**
-     *
      * @param warehouseId
      * @param binClassId
      * @param companyCodeId
@@ -132,13 +123,13 @@ public class StorageBinService {
      * @param languageId
      * @return
      */
-    public StorageBinV2 getStorageBinByBinClassIdV2(String warehouseId, Long binClassId, String companyCodeId, String plantId,  String languageId) {
+    public StorageBinV2 getStorageBinByBinClassIdV2(String warehouseId, Long binClassId, String companyCodeId, String plantId, String languageId) {
         Optional<StorageBinV2> storagebin = storageBinV2Repository.findTopByBinClassIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeletionIndicator(
-                                                            binClassId,
-                                                            companyCodeId,
-                                                            plantId,
-                                                            warehouseId,
-                                                            languageId,0L);
+                binClassId,
+                companyCodeId,
+                plantId,
+                warehouseId,
+                languageId, 0L);
         if (storagebin.isEmpty()) {
             throw new BadRequestException("The Given Values: " +
                     "binClassId" + binClassId +
@@ -174,7 +165,10 @@ public class StorageBinService {
      */
     public List<StorageBinV2> getStorageBinV2(StorageBinPutAway storageBinPutAway) {
         List<StorageBinV2> storagebinList =
-                storageBinV2Repository.findByWarehouseIdAndStorageBinInAndBinClassIdAndPutawayBlockAndPickingBlockAndDeletionIndicatorOrderByStorageBinDesc(
+                storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinInAndBinClassIdAndPutawayBlockAndPickingBlockAndDeletionIndicatorOrderByStorageBinDesc(
+                        storageBinPutAway.getCompanyCodeId(),
+                        storageBinPutAway.getPlantId(),
+                        storageBinPutAway.getLanguageId(),
                         storageBinPutAway.getWarehouseId(),
                         storageBinPutAway.getStorageBin(),
                         storageBinPutAway.getBinClassId(),
@@ -183,6 +177,238 @@ public class StorageBinService {
                         0L);
         if (!storagebinList.isEmpty()) {
             return storagebinList;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getaStorageBinV2(StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin =
+                storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndDeletionIndicator(
+                        storageBinPutAway.getCompanyCodeId(),
+                        storageBinPutAway.getPlantId(),
+                        storageBinPutAway.getLanguageId(),
+                        storageBinPutAway.getWarehouseId(),
+                        storageBinPutAway.getBin(),
+                        0L);
+        if (storagebin != null) {
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinNonCBM(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+        if (storageBinPutAway.getBinClassId() != 7 && !storageBinPutAway.getStorageBin().isEmpty()) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBM(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getStatusId(),
+                    storageBinPutAway.getStorageBin(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storageBinPutAway.getBinClassId() != 7 && storageBinPutAway.getStorageBin().isEmpty()) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBM(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getStatusId(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storageBinPutAway.getBinClassId() == 7) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBMBinClassId(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storagebin != null) {
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinNonCBMLastPicked(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+        if (storageBinPutAway.getBinClassId() != 7 && !storageBinPutAway.getStorageBin().isEmpty()) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBMLastPick(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getStatusId(),
+                    storageBinPutAway.getStorageBin(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        log.info("ProposedStorageBinNonCBMLastPicked: " + storagebin);
+        if (storagebin != null) {
+            log.info("ProposedStorageBinNonCBMLastPickedBin: " + storagebin.getStorageBin());
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinCBMLastPicked(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+        if (storageBinPutAway.getBinClassId() != 7 && !storageBinPutAway.getStorageBin().isEmpty()) {
+            storagebin = storageBinV2Repository.getStorageBinLastPickCBM(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getCbm(),
+                    storageBinPutAway.getStatusId(),
+                    storageBinPutAway.getStorageBin(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        log.info("ProposedStorageBinCBMLastPicked: " + storagebin);
+        if (storagebin != null) {
+            log.info("ProposedStorageBinCBMLastPickedBin: " + storagebin.getStorageBin());
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinCBMPerQtyLastPicked(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+        if (storageBinPutAway.getBinClassId() != 7 && !storageBinPutAway.getStorageBin().isEmpty()) {
+            storagebin = storageBinV2Repository.getStorageBinCbmPerQtyLastPick(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getCbmPerQty(),
+                    storageBinPutAway.getStatusId(),
+                    storageBinPutAway.getStorageBin(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        log.info("ProposedStorageBinCBMPerQtyLastPicked: " + storagebin);
+        if (storagebin != null) {
+            log.info("ProposedStorageBinCBMPerQtyLastPickedBin: " + storagebin.getStorageBin());
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getExistingProposedStorageBinNonCBM(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+        if (storageBinPutAway.getBinClassId() != 7) {
+            storagebin = storageBinV2Repository.getExistingStorageBinNonCBM(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getStorageBin(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storageBinPutAway.getBinClassId() == 7) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBMBinClassId(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storagebin != null) {
+            log.info("Inventory Existing StorageBin: " + storagebin.getStorageBin());
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getStorageBinBinClassId7(StorageBinPutAway storageBinPutAway) {
+
+        StorageBinV2 storagebin = null;
+
+        if (storageBinPutAway.getBinClassId() == 7) {
+            storagebin = storageBinV2Repository.getStorageBinNonCBMBinClassId(
+                    storageBinPutAway.getBinClassId(),
+                    storageBinPutAway.getCompanyCodeId(),
+                    storageBinPutAway.getPlantId(),
+                    storageBinPutAway.getLanguageId(),
+                    storageBinPutAway.getWarehouseId());
+        }
+        if (storagebin != null) {
+            log.info("BinClassId 7 StorageBin: " + storagebin.getStorageBin());
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinCBM(StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin =
+                storageBinV2Repository.getStorageBinCBM(
+                        storageBinPutAway.getBinClassId(),
+                        storageBinPutAway.getCompanyCodeId(),
+                        storageBinPutAway.getPlantId(),
+                        storageBinPutAway.getLanguageId(),
+                        storageBinPutAway.getCbm(),
+                        storageBinPutAway.getStatusId(),
+                        storageBinPutAway.getWarehouseId());
+        if (storagebin != null) {
+            return storagebin;
+        }
+        return null;
+    }
+
+    /**
+     * @param storageBinPutAway
+     * @return
+     */
+    public StorageBinV2 getProposedStorageBinCbmPerQty(StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin =
+                storageBinV2Repository.getStorageBinCbmPerQty(
+                        storageBinPutAway.getBinClassId(),
+                        storageBinPutAway.getCompanyCodeId(),
+                        storageBinPutAway.getPlantId(),
+                        storageBinPutAway.getLanguageId(),
+                        storageBinPutAway.getCbmPerQty(),
+                        storageBinPutAway.getStatusId(),
+                        storageBinPutAway.getWarehouseId());
+        if (storagebin != null) {
+            return storagebin;
         }
         return null;
     }
@@ -202,12 +428,14 @@ public class StorageBinService {
     }
 
     //V2
-    public List<StorageBinV2> getStorageBinByStatusV2(String warehouseId, Long statusId) {
-        List<StorageBinV2> storagebin = storageBinV2Repository.findByWarehouseIdAndStatusIdAndDeletionIndicator(warehouseId, statusId, 0L);
+    public List<StorageBinV2> getStorageBinByStatusV2(String companyCodeId, String plantId, String languageId, String warehouseId, Long statusId) {
+        List<StorageBinV2> storagebin = storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, statusId, 0L);
         if (storagebin != null) {
             return storagebin;
         } else {
-            throw new BadRequestException("The given StorageBin ID : " + warehouseId + ", statusId: " + statusId + " doesn't exist.");
+            return null;
+//            throw new BadRequestException("The given StorageBin ID : " + warehouseId + ", statusId: " + statusId + " doesn't exist.");
         }
     }
 
@@ -235,6 +463,30 @@ public class StorageBinService {
         if (likeSearchByStorageBinNDesc != null && !likeSearchByStorageBinNDesc.trim().isEmpty()) {
             List<StorageBinListImpl> data = storagebinRepository.getStorageBinListBySearch(likeSearchByStorageBinNDesc.trim(),
                     likeSearchByStorageBinNDesc.trim());
+            return data;
+        } else {
+            throw new BadRequestException("Search string must not be empty");
+        }
+    }
+
+    /**
+     * @param likeSearchByStorageBinNDesc
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @return
+     */
+    public List<StorageBinListImpl> findStorageBinLikeSearchNew(String likeSearchByStorageBinNDesc, String companyCodeId,
+                                                                String plantId, String languageId, String warehouseId) {
+        if (likeSearchByStorageBinNDesc != null && !likeSearchByStorageBinNDesc.trim().isEmpty()) {
+            List<StorageBinListImpl> data = storagebinRepository.getStorageBinListBySearchNew(likeSearchByStorageBinNDesc.trim(),
+                    likeSearchByStorageBinNDesc.trim(),
+                    likeSearchByStorageBinNDesc.trim(),
+                    companyCodeId,
+                    plantId,
+                    languageId,
+                    warehouseId);
             return data;
         } else {
             throw new BadRequestException("Search string must not be empty");
@@ -358,7 +610,7 @@ public class StorageBinService {
      * @throws InvocationTargetException
      */
     public StorageBin createStorageBin(AddStorageBin newStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBin dbStorageBin = new StorageBin();
         Optional<StorageBin> duplicateStorageBin = storagebinRepository.findByStorageBinAndCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeletionIndicator(newStorageBin.getStorageBin(), newStorageBin.getCompanyCodeId(), newStorageBin.getPlantId(), newStorageBin.getWarehouseId(), newStorageBin.getLanguageId(), 0L);
         if (!duplicateStorageBin.isEmpty()) {
@@ -384,7 +636,7 @@ public class StorageBinService {
      * @throws InvocationTargetException
      */
     public StorageBin updateStorageBin(String storageBin, String companyCodeId, String plantId, String warehouseId, String languageId, UpdateStorageBin updateStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBin dbStorageBin = getStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId);
         BeanUtils.copyProperties(updateStorageBin, dbStorageBin, CommonUtils.getNullPropertyNames(updateStorageBin));
         dbStorageBin.setUpdatedBy(loginUserID);
@@ -401,7 +653,7 @@ public class StorageBinService {
      * @throws InvocationTargetException
      */
     public StorageBinV2 createStorageBinV2(StorageBinV2 newStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBinV2 dbStorageBin = new StorageBinV2();
         Optional<StorageBinV2> duplicateStorageBin = storageBinV2Repository.
                 findByStorageBinAndCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeletionIndicator(
@@ -433,7 +685,7 @@ public class StorageBinService {
     public StorageBinV2 updateStorageBinV2(String storageBin, String companyCodeId,
 										   String plantId, String warehouseId,
 										   String languageId, StorageBinV2 updateStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 //        StorageBinV2 dbStorageBin = storageBinV2Repository.getStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId);
         StorageBinV2 dbStorageBin = getStorageBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId);
         log.info("dbstorageBin: " + dbStorageBin);
@@ -448,7 +700,7 @@ public class StorageBinService {
      *
      * @param storageBin
      */
-    public void deleteStorageBin(String storageBin, String companyCodeId, String plantId, String warehouseId, String languageId, String loginUserID) {
+    public void deleteStorageBin(String storageBin, String companyCodeId, String plantId, String warehouseId, String languageId, String loginUserID) throws ParseException {
         StorageBin storagebin = getStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId);
         if (storagebin != null) {
             storagebin.setDeletionIndicator(1L);
@@ -459,4 +711,78 @@ public class StorageBinService {
             throw new EntityNotFoundException("Error in deleting Id:" + storageBin);
         }
     }
+
+    /**
+     * GET STORAGE BIN V2
+     * @param storageBin
+     * @param companyCodeId
+     * @param plantId
+     * @param warehouseId
+     * @param languageId
+     * @return
+     */
+    public StorageBinV2 getStoreBinV2(String storageBin, String companyCodeId, String plantId, String warehouseId, String languageId) {
+        Optional<StorageBinV2> storagebin = storageBinV2Repository.findByStorageBinAndCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeletionIndicator(
+                storageBin,
+                companyCodeId,
+                plantId,
+                warehouseId,
+                languageId,
+                0L);
+        if (storagebin.isEmpty()) {
+            throw new BadRequestException("The Given Values: " +
+                    "storageBin" + storageBin +
+                    "companyCodeId " + companyCodeId +
+                    "plantId " + plantId +
+                    "warehouseId " + warehouseId + " doesn't exist:");
+        }
+        return storagebin.get();
+    }
+
+
+    /**
+     *
+     * @param storageBin
+     * @param companyCodeId
+     * @param plantId
+     * @param warehouseId
+     * @param languageId
+     * @param storageBinV2
+     * @param loginUserID
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public StorageBinV2 updateStoreBinV2(String storageBin, String companyCodeId, String plantId, String warehouseId, String languageId, StorageBinV2 storageBinV2, String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, ParseException {
+        StorageBinV2 dbStorageBin = getStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId);
+        BeanUtils.copyProperties(storageBinV2, dbStorageBin, CommonUtils.getNullPropertyNames(storageBinV2));
+        dbStorageBin.setUpdatedBy(loginUserID);
+        dbStorageBin.setUpdatedOn(new Date());
+        return storagebinRepository.save(dbStorageBin);
+    }
+
+    /**
+     * DELETE STORAGE BIN V2
+     *
+     * @param storageBin
+     * @param companyCodeId
+     * @param plantId
+     * @param warehouseId
+     * @param languageId
+     * @param loginUserID
+     */
+    public void deleteStoreBinV2(String storageBin, String companyCodeId, String plantId, String warehouseId,
+                                 String languageId, String loginUserID) throws ParseException {
+        StorageBinV2 storeBinV2 = getStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId);
+        if (storeBinV2 != null) {
+            storeBinV2.setDeletionIndicator(1L);
+            storeBinV2.setUpdatedBy(loginUserID);
+            storeBinV2.setUpdatedOn(new Date());
+            storagebinRepository.save(storeBinV2);
+        } else {
+            throw new EntityNotFoundException("Error in deleting Id:" + storageBin);
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.languageid.UpdateLanguageId;
 import com.tekclover.wms.api.idmaster.repository.LanguageIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.LanguageIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class LanguageIdService {
 	 * @throws InvocationTargetException
 	 */
 	public LanguageId createLanguageId (AddLanguageId newLanguageId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LanguageId dbLanguageId = new LanguageId();
 		Optional<LanguageId> duplicateLanguageId = languageIdRepository.findByLanguageIdAndDeletionIndicator(newLanguageId.getLanguageId(), 0L);
 		if (!duplicateLanguageId.isEmpty()) {
@@ -95,7 +96,7 @@ public class LanguageIdService {
 	 */
 	public LanguageId updateLanguageId (String languageId, String loginUserID,
 										UpdateLanguageId updateLanguageId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LanguageId dbLanguageId = getLanguageId(languageId);
 		BeanUtils.copyProperties(updateLanguageId, dbLanguageId, CommonUtils.getNullPropertyNames(updateLanguageId));
 		dbLanguageId.setUpdatedBy(loginUserID);

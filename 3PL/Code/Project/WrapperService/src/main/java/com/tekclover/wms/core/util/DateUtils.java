@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
@@ -350,5 +351,21 @@ public class DateUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Date getCurrentKWTDateTime() throws ParseException {
+
+		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kuwait")) ;
+		LocalDateTime kwtLocalDateTime = zdt.toLocalDateTime();
+		System.out.println(kwtLocalDateTime);
+		log.info("kwt time: " + kwtLocalDateTime);
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		String sConvertedDateTime = formatter.format(kwtLocalDateTime);
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		Date kwtDate = dateFormatter.parse(sConvertedDateTime);
+		System.out.println(kwtDate);
+		log.info("kwt date time: " + kwtDate);
+		return kwtDate;
 	}
 }

@@ -122,6 +122,12 @@ public class PutAwayLineV2Specification implements Specification<PutAwayLineV2> 
             predicates.add(group.in(searchPutAwayLine.getBrand()));
         }
 
+        if (searchPutAwayLine.getStatusId() != null && !searchPutAwayLine.getStatusId().isEmpty()) {
+            final Path<Group> group = root.<Group> get("statusId");
+            predicates.add(group.in(searchPutAwayLine.getStatusId()));
+        }
+
+
         predicates.add(cb.equal(root.get("deletionIndicator"), 0L));
         return cb.and(predicates.toArray(new Predicate[]{}));
     }

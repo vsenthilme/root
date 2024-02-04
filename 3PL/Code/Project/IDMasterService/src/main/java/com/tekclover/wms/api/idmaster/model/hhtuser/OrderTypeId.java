@@ -18,8 +18,23 @@ public class OrderTypeId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ORDER_ID")
+    private Long orderId;
+
     @Column(name = "ID")
     private Long id;
+
+    @Column(name = "LANG_ID", columnDefinition = "nvarchar(10)")
+    private String languageId;
+
+    @Column(name = "C_ID", columnDefinition = "nvarchar(25)")
+    private String companyCodeId;
+
+    @Column(name = "PLANT_ID", columnDefinition = "nvarchar(25)")
+    private String plantId;
+
+    @Column(name = "WH_ID", columnDefinition = "nvarchar(25)")
+    private String warehouseId;
 
     @Column(name="OB_ORD_TYP_ID",columnDefinition = "nvarchar(50)")
     private String orderTypeId;
@@ -36,7 +51,7 @@ public class OrderTypeId {
     @Column(name = "CTD_ON")
     private Date createdOn;
 
-    @Column(name = "UTD_BY",columnDefinition = "nvarchar(50)")
+    @Column(name = "UTD_BY", columnDefinition = "nvarchar(50)")
     private String updatedBy;
 
     @Column(name = "UTD_ON")

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class CycleCountTypeIdController {
     @ApiOperation(response = CycleCountTypeId.class, value = "Create CycleCountTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postCycleCountTypeId(@Valid @RequestBody AddCycleCountTypeId newCycleCountTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		CycleCountTypeId createdCycleCountTypeId = cyclecounttypeidService.createCycleCountTypeId(newCycleCountTypeId, loginUserID);
 		return new ResponseEntity<>(createdCycleCountTypeId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class CycleCountTypeIdController {
     @PatchMapping("/{cycleCountTypeId}")
 	public ResponseEntity<?> patchCycleCountTypeId(@PathVariable String cycleCountTypeId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateCycleCountTypeId updateCycleCountTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateCycleCountTypeId updateCycleCountTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CycleCountTypeId createdCycleCountTypeId = 
 				cyclecounttypeidService.updateCycleCountTypeId(warehouseId, cycleCountTypeId,companyCodeId,languageId,plantId,loginUserID,updateCycleCountTypeId);
 		return new ResponseEntity<>(createdCycleCountTypeId , HttpStatus.OK);

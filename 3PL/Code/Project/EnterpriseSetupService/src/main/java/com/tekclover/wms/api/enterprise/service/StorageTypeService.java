@@ -174,7 +174,7 @@ public class StorageTypeService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageType createStorageType (AddStorageType newStorageType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<StorageType> optStorageType =
 				storagetypeRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndStorageClassIdAndStorageTypeIdAndDeletionIndicator(
 						newStorageType.getLanguageId(),
@@ -228,7 +228,7 @@ public class StorageTypeService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageType updateStorageType (String warehouseId, Long storageClassId, Long storageTypeId,String companyId,String languageId,String plantId,UpdateStorageType updateStorageType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageType dbStorageType = getStorageType(warehouseId, storageClassId, storageTypeId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageType, dbStorageType, CommonUtils.getNullPropertyNames(updateStorageType));
 		dbStorageType.setUpdatedBy(loginUserID);
@@ -240,7 +240,7 @@ public class StorageTypeService {
 	 * deleteStorageType
 	 * @param storagetypeCode
 	 */
-	public void deleteStorageType (String warehouseId, Long storageClassId, Long storageTypeId,String companyId,String plantId,String languageId, String loginUserID) {
+	public void deleteStorageType (String warehouseId, Long storageClassId, Long storageTypeId,String companyId,String plantId,String languageId, String loginUserID) throws ParseException {
 		StorageType storagetype = getStorageType(warehouseId, storageClassId, storageTypeId,companyId,languageId,plantId);
 		if ( storagetype != null) {
 			storagetype.setDeletionIndicator (1L);

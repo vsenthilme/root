@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.plantid.PlantId;
 import com.tekclover.wms.api.idmaster.model.roleaccess.RoleAccess;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.CompanyIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,7 @@ public class CompanyIdService{
 	 * @throws InvocationTargetException
 	 */
 	public CompanyId createCompanyId (AddCompanyId newCompanyId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CompanyId dbCompanyId = new CompanyId();
 		Optional<CompanyId> duplicateCompanyId=companyIdRepository.findByCompanyCodeIdAndLanguageIdAndDeletionIndicator(newCompanyId.getCompanyCodeId(), newCompanyId.getLanguageId(),0L);
 
@@ -128,7 +129,7 @@ public class CompanyIdService{
 	 */
 	public CompanyId updateCompanyId (String companyCodeId,String languageId,String loginUserID,
 									  UpdateCompanyId updateCompanyId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CompanyId dbCompanyId = getCompanyId(companyCodeId,languageId);
 		BeanUtils.copyProperties(updateCompanyId, dbCompanyId, CommonUtils.getNullPropertyNames(updateCompanyId));
 		dbCompanyId.setUpdatedBy(loginUserID);

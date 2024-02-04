@@ -15,6 +15,7 @@ import com.tekclover.wms.api.masters.repository.ImCapacityRepository;
 import com.tekclover.wms.api.masters.repository.specification.ImBatchSerialSpecification;
 import com.tekclover.wms.api.masters.repository.specification.ImCapacitySpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -99,7 +101,7 @@ public class ImCapacityService {
      * @throws InvocationTargetException
      */
     public ImCapacity createImCapacity (AddImCapacity newImCapacity, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImCapacity dbImCapacity = new ImCapacity();
         Optional<ImCapacity> duplicateImCapacity = imCapacityRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndItemCodeAndDeletionIndicator(
                 newImCapacity.getCompanyCodeId(),
@@ -129,7 +131,7 @@ public class ImCapacityService {
      * @throws InvocationTargetException
      */
     public ImCapacity updateImCapacity (String companyCodeId, String plantId, String warehouseId, String languageId, String itemCode, UpdateImCapacity updateImCapacity, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImCapacity dbImCapacity = getImCapacity(warehouseId,companyCodeId,languageId,plantId,itemCode);
         BeanUtils.copyProperties(updateImCapacity, dbImCapacity, CommonUtils.getNullPropertyNames(updateImCapacity));
         dbImCapacity.setUpdatedBy(loginUserID);
@@ -141,7 +143,7 @@ public class ImCapacityService {
      * deleteImCapacity
      * @param itemCode
      */
-    public void deleteImCapacity (String companyCodeId,String languageId,String plantId,String warehouseId,String itemCode,String loginUserID) {
+    public void deleteImCapacity (String companyCodeId,String languageId,String plantId,String warehouseId,String itemCode,String loginUserID) throws ParseException {
         ImCapacity imCapacity = getImCapacity(warehouseId,companyCodeId,languageId,plantId,itemCode);
         if ( imCapacity != null) {
             imCapacity.setDeletionIndicator (1L);

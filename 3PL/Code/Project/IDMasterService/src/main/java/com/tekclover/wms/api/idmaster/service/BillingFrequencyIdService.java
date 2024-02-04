@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.BillingFrequencyIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,7 @@ public class BillingFrequencyIdService{
      * @throws InvocationTargetException
      */
     public BillingFrequencyId createBillingFrequencyId(AddBillingFrequencyId newBillingFrequencyId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFrequencyId dbBillingFrequencyId = new BillingFrequencyId();
         Optional<BillingFrequencyId> duplicateBillingFrequencyId = billingFrequencyIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBillFrequencyIdAndLanguageIdAndDeletionIndicator(newBillingFrequencyId.getCompanyCodeId(), newBillingFrequencyId.getPlantId(), newBillingFrequencyId.getWarehouseId(), newBillingFrequencyId.getBillFrequencyId(), newBillingFrequencyId.getLanguageId(), 0L);
         if (!duplicateBillingFrequencyId.isEmpty()) {
@@ -142,7 +143,7 @@ public class BillingFrequencyIdService{
      * @throws InvocationTargetException
      */
     public BillingFrequencyId updateBillingFrequencyId(String warehouseId, Long billFrequencyId,String companyCodeId,String languageId,String plantId,String loginUserID,
-                                             UpdateBillingFrequencyId updateBillingFrequencyId)throws IllegalAccessException,InvocationTargetException{
+                                             UpdateBillingFrequencyId updateBillingFrequencyId) throws IllegalAccessException, InvocationTargetException, ParseException {
         BillingFrequencyId dbBillingFrequencyId=getBillingFrequencyId(warehouseId,billFrequencyId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updateBillingFrequencyId,dbBillingFrequencyId,CommonUtils.getNullPropertyNames(updateBillingFrequencyId));
         dbBillingFrequencyId.setUpdatedBy(loginUserID);

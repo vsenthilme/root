@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class BarcodeTypeIdController {
     @ApiOperation(response = BarcodeTypeId.class, value = "Create BarcodeTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postBarcodeTypeId(@Valid @RequestBody AddBarcodeTypeId newBarcodeTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeTypeId createdBarcodeTypeId = barcodetypeidService.createBarcodeTypeId(newBarcodeTypeId, loginUserID);
 		return new ResponseEntity<>(createdBarcodeTypeId , HttpStatus.OK);
 	}
@@ -79,8 +80,8 @@ public class BarcodeTypeIdController {
     @PatchMapping("/{barcodeTypeId}")
 	public ResponseEntity<?> patchBarcodeTypeId(@RequestParam String warehouseId,@PathVariable Long barcodeTypeId,
 												@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateBarcodeTypeId updateBarcodeTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateBarcodeTypeId updateBarcodeTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeTypeId createdBarcodeTypeId = 
 				barcodetypeidService.updateBarcodeTypeId(warehouseId, barcodeTypeId,companyCodeId,languageId,plantId,loginUserID, updateBarcodeTypeId);
 		return new ResponseEntity<>(createdBarcodeTypeId , HttpStatus.OK);

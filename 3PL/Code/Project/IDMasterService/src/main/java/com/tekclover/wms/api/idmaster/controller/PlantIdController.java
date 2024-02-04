@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -60,10 +61,18 @@ public class PlantIdController {
 		return new ResponseEntity<>(plantid, HttpStatus.OK);
 	}
 
+	@ApiOperation(response = PlantId.class, value = "Get a PlantId") // label for swagger
+	@GetMapping("/branchCode")
+	public ResponseEntity<?> getPlantIdForAlmailem(@RequestParam String companyCodeId,@RequestParam String languageId) {
+		List<PlantId> plantid = plantidService.getPlantId(companyCodeId,languageId);
+		log.info("PlantId : " + plantid);
+		return new ResponseEntity<>(plantid, HttpStatus.OK);
+	}
+
 	@ApiOperation(response = PlantId.class, value = "Create PlantId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postPlantId(@Valid @RequestBody AddPlantId newPlantId,
-										 @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+										 @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		PlantId createdPlantId = plantidService.createPlantId(newPlantId, loginUserID);
 		return new ResponseEntity<>(createdPlantId , HttpStatus.OK);
 	}
@@ -71,7 +80,7 @@ public class PlantIdController {
 	@ApiOperation(response = PlantId.class, value = "Update PlantId") // label for swagger
 	@PatchMapping("/{plantId}")
 	public ResponseEntity<?> patchPlantId(@PathVariable String plantId,@RequestParam String companyCodeId,@RequestParam String languageId,@Valid @RequestBody UpdatePlantId updatePlantId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PlantId createdPlantId = plantidService.updatePlantId(plantId,companyCodeId,languageId,loginUserID, updatePlantId);
 		return new ResponseEntity<>(createdPlantId , HttpStatus.OK);
 	}

@@ -37,7 +37,17 @@ public class PeriodicLineSpecification implements Specification<PeriodicLine> {
 	       	 final Path<Group> group = root.<Group> get("warehouseId");
 	       	 predicates.add(group.in(searchPeriodicLine.getWarehouseId()));
         }
-     	
+
+		if (searchPeriodicLine.getCompanyCode() != null && !searchPeriodicLine.getCompanyCode().isEmpty()) {
+			final Path<Group> group = root.<Group> get("companyCode");
+			predicates.add(group.in(searchPeriodicLine.getCompanyCode()));
+		}
+
+		if (searchPeriodicLine.getLanguageId() != null && !searchPeriodicLine.getLanguageId().isEmpty()) {
+			final Path<Group> group = root.<Group> get("languageId");
+			predicates.add(group.in(searchPeriodicLine.getLanguageId()));
+		}
+
 		if (searchPeriodicLine.getCycleCounterId() != null && !searchPeriodicLine.getCycleCounterId().isEmpty()) {
 			final Path<Group> group = root.<Group> get("cycleCounterId");
 			predicates.add(group.in(searchPeriodicLine.getCycleCounterId()));

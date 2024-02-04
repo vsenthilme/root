@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -68,7 +69,7 @@ public class LevelIdController {
     @ApiOperation(response = LevelId.class, value = "Create LevelId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postLevelId(@Valid @RequestBody AddLevelId newLevelId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		LevelId createdLevelId = levelIdService.createLevelId(newLevelId, loginUserID);
 		return new ResponseEntity<>(createdLevelId , HttpStatus.OK);
 	}
@@ -78,8 +79,8 @@ public class LevelIdController {
 	public ResponseEntity<?> patchLevelId(@PathVariable Long levelId, 
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,
 										  @RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateLevelId updateLevelId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateLevelId updateLevelId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LevelId createdLevelId = 
 				levelIdService.updateLevelId(warehouseId, levelId,companyCodeId,languageId,plantId,loginUserID, updateLevelId);
 		return new ResponseEntity<>(createdLevelId , HttpStatus.OK);

@@ -11,4 +11,5 @@ public class OutboundIntegrationLine {
 	private Double orderedQty;								// ORD_QTY
 	private String uom;										// ORD_UOM
 	private String refField1ForOrderType;					// REF_FIELD_1
+
 }

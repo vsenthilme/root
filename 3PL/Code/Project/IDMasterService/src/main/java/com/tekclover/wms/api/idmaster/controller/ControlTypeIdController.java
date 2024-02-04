@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -48,7 +49,7 @@ public class ControlTypeIdController {
     @ApiOperation(response = ControlTypeId.class, value = "Create ControlTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postControlTypeId(@Valid @RequestBody AddControlTypeId newControlTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlTypeId createdControlTypeId = controltypeidService.createControlTypeId(newControlTypeId, loginUserID);
 		return new ResponseEntity<>(createdControlTypeId , HttpStatus.OK);
 	}
@@ -57,8 +58,8 @@ public class ControlTypeIdController {
     @PatchMapping("/{controlTypeId}")
 	public ResponseEntity<?> patchControlTypeId(@RequestParam String warehouseId,@PathVariable String controlTypeId,
 												@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateControlTypeId updateControlTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateControlTypeId updateControlTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlTypeId createdControlTypeId = 
 				controltypeidService.updateControlTypeId(warehouseId, controlTypeId,companyCodeId,languageId,plantId,loginUserID, updateControlTypeId);
 		return new ResponseEntity<>(createdControlTypeId , HttpStatus.OK);

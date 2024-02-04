@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -213,7 +214,7 @@ public class StrategiesService {
 	 * @throws InvocationTargetException
 	 */
 	public List<Strategies> createStrategies(List<AddStrategies> newStrategies, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Strategies> strategiesList = new ArrayList<>();
 
@@ -292,7 +293,7 @@ public class StrategiesService {
 	 */
 	public List<Strategies> updateStrategies(String companyId, String languageId, String plantId, String warehouseId,
 											 List<AddStrategies> updateStrategies, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Strategies> dbStrategies = strategiesRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndDeletionIndicator(
 				languageId, companyId, plantId, warehouseId,0L);
@@ -323,7 +324,7 @@ public class StrategiesService {
 	 * @param warehouseId
 	 * @param loginUserID
 	 */
-	public void deleteStrategies (String companyId,String languageId,String plantId,String warehouseId,String loginUserID) {
+	public void deleteStrategies (String companyId,String languageId,String plantId,String warehouseId,String loginUserID) throws ParseException {
 
 		List<Strategies> strategies = getStrategies(companyId,languageId,plantId,warehouseId);
 		if ( strategies != null) {

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -50,7 +51,7 @@ public class LanguageIdController {
     @ApiOperation(response = LanguageId.class, value = "Create LanguageId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postLanguageId(@Valid @RequestBody AddLanguageId newLanguageId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		LanguageId createdLanguageId = languageidService.createLanguageId(newLanguageId, loginUserID);
 		return new ResponseEntity<>(createdLanguageId , HttpStatus.OK);
 	}
@@ -58,8 +59,8 @@ public class LanguageIdController {
     @ApiOperation(response = LanguageId.class, value = "Update LanguageId") // label for swagger
     @PatchMapping("/{languageId}")
 	public ResponseEntity<?> patchLanguageId(@PathVariable String languageId,
-			@Valid @RequestBody UpdateLanguageId updateLanguageId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateLanguageId updateLanguageId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		LanguageId createdLanguageId = 
 				languageidService.updateLanguageId(languageId, loginUserID, updateLanguageId);
 		return new ResponseEntity<>(createdLanguageId , HttpStatus.OK);

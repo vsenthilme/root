@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class HandlingUnitController {
 	
     @ApiOperation(response = HandlingUnit.class, value = "Create HandlingUnit") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postHandlingUnit(@Valid @RequestBody AddHandlingUnit newHandlingUnit, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postHandlingUnit(@Valid @RequestBody AddHandlingUnit newHandlingUnit, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnit createdHandlingUnit = handlingUnitService.createHandlingUnit(newHandlingUnit, loginUserID);
 		return new ResponseEntity<>(createdHandlingUnit , HttpStatus.OK);
 	}
@@ -75,15 +76,15 @@ public class HandlingUnitController {
     @ApiOperation(response = HandlingUnit.class, value = "Update HandlingUnit") // label for swagger
     @PatchMapping("/{handlingUnit}")
 	public ResponseEntity<?> patchHandlingUnit(@PathVariable String handlingUnit, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String warehouseId,
-			@Valid @RequestBody UpdateHandlingUnit updateHandlingUnit, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateHandlingUnit updateHandlingUnit, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnit createdHandlingUnit = handlingUnitService.updateHandlingUnit(handlingUnit,companyCodeId,plantId,warehouseId,languageId, updateHandlingUnit, loginUserID);
 		return new ResponseEntity<>(createdHandlingUnit , HttpStatus.OK);
 	}
     
     @ApiOperation(response = HandlingUnit.class, value = "Delete HandlingUnit") // label for swagger
 	@DeleteMapping("/{handlingUnit}")
-	public ResponseEntity<?> deleteHandlingUnit(@PathVariable String handlingUnit,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String loginUserID) {
+	public ResponseEntity<?> deleteHandlingUnit(@PathVariable String handlingUnit,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
     	handlingUnitService.deleteHandlingUnit(handlingUnit,companyCodeId,plantId,languageId,warehouseId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

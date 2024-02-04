@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -56,7 +57,7 @@ public class ImCapacityController {
     @ApiOperation(response = ImCapacity.class, value = "Create ImCapacity") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postImCapacity(@Valid @RequestBody AddImCapacity newImCapacity, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImCapacity createdImCapacity = imCapacityService.createImCapacity(newImCapacity, loginUserID);
         return new ResponseEntity<>(createdImCapacity , HttpStatus.OK);
     }
@@ -65,14 +66,14 @@ public class ImCapacityController {
     @PatchMapping("/{itemCode}")
     public ResponseEntity<?> patchImCapacity(@PathVariable String itemCode, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,
                                              @Valid @RequestBody UpdateImCapacity updateImCapacity, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         ImCapacity createdImCapacity = imCapacityService.updateImCapacity(companyCodeId,plantId,warehouseId,languageId,itemCode,updateImCapacity, loginUserID);
         return new ResponseEntity<>(createdImCapacity , HttpStatus.OK);
     }
 
     @ApiOperation(response = ImCapacity.class, value = "Delete ImCapacity") // label for swagger
     @DeleteMapping("/{itemCode}")
-    public ResponseEntity<?> deleteImCapacity(@PathVariable String itemCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) {
+    public ResponseEntity<?> deleteImCapacity(@PathVariable String itemCode,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String loginUserID) throws ParseException {
         imCapacityService.deleteImCapacity(companyCodeId,languageId,plantId,warehouseId,itemCode,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

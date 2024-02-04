@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -55,7 +56,7 @@ public class CountryController {
     @ApiOperation(response = Country.class, value = "Create Country") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> addCountry(@Valid @RequestBody AddCountry newCountry,@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Country createdCountry = countryService.createCountry(newCountry,loginUserID);
 		return new ResponseEntity<>(createdCountry , HttpStatus.OK);
 	}
@@ -63,8 +64,8 @@ public class CountryController {
     @ApiOperation(response = Country.class, value = "Update Country") // label for swagger
     @PatchMapping("/{countryId}")
 	public ResponseEntity<?> patchCountry(@PathVariable String countryId,@RequestParam String languageId,@RequestParam String loginUserID,
-			@Valid @RequestBody UpdateCountry updateCountry) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateCountry updateCountry)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Country updatedCountry = countryService.updateCountry(countryId,languageId,loginUserID,updateCountry);
 		return new ResponseEntity<>(updatedCountry , HttpStatus.OK);
 	}

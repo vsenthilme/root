@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -148,7 +149,7 @@ public class PutAwayHeaderController {
         PutAwayHeaderV2 putawayheader = putawayheaderService.getPutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
                 caseCode, packBarcodes, putAwayNumber, proposedStorageBin);
-//    	log.info("PutAwayHeader : " + putawayheader);
+    	log.info("PutAwayHeader : " + putawayheader);
         return new ResponseEntity<>(putawayheader, HttpStatus.OK);
     }
 
@@ -159,15 +160,15 @@ public class PutAwayHeaderController {
                                                 @RequestParam String preInboundNo, @RequestParam String refDocNumber) {
         List<PutAwayHeaderV2> putawayheader = putawayheaderService.getPutAwayHeaderV2(warehouseId, preInboundNo, refDocNumber,
                 putAwayNumber, companyCode, plantId, languageId);
-//    	log.info("PutAwayHeader : " + putawayheader);
+    	log.info("PutAwayHeader : " + putawayheader);
         return new ResponseEntity<>(putawayheader, HttpStatus.OK);
     }
 
     @ApiOperation(response = PutAwayHeaderV2.class, value = "Get a PutAwayHeader V2") // label for swagger
     @GetMapping("/{refDocNumber}/inboundreversal/asn/v2")
     public ResponseEntity<?> getPutAwayHeaderForASNV2(@RequestParam String companyCode, @RequestParam String plantId,
-                                                      @RequestParam String languageId, @PathVariable String refDocNumber) {
-        List<PutAwayHeaderV2> putawayheader = putawayheaderService.getPutAwayHeaderV2(companyCode, plantId, languageId, refDocNumber);
+                                                      @RequestParam String languageId, @RequestParam String warehouseId, @PathVariable String refDocNumber) {
+        List<PutAwayHeaderV2> putawayheader = putawayheaderService.getPutAwayHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
 //    	log.info("PutAwayHeader : " + putawayheader);
         return new ResponseEntity<>(putawayheader, HttpStatus.OK);
     }
@@ -175,7 +176,7 @@ public class PutAwayHeaderController {
     @ApiOperation(response = PutAwayHeaderV2.class, value = "Create PutAwayHeader V2") // label for swagger
     @PostMapping("/v2")
     public ResponseEntity<?> postPutAwayHeaderV2(@Valid @RequestBody PutAwayHeaderV2 newPutAwayHeader, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
         PutAwayHeaderV2 createdPutAwayHeader = putawayheaderService.createPutAwayHeaderV2(newPutAwayHeader, loginUserID);
         return new ResponseEntity<>(createdPutAwayHeader, HttpStatus.OK);
     }
@@ -195,7 +196,7 @@ public class PutAwayHeaderController {
                                                   @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
                                                   @RequestParam String proposedStorageBin, @Valid @RequestBody PutAwayHeaderV2 updatePutAwayHeader,
                                                   @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
         PutAwayHeaderV2 createdPutAwayHeader =
                 putawayheaderService.updatePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                         preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
@@ -207,7 +208,7 @@ public class PutAwayHeaderController {
     @PatchMapping("/{refDocNumber}/reverse/v2")
     public ResponseEntity<?> patchPutAwayHeaderV2(@PathVariable String refDocNumber, @RequestParam String packBarcodes, @RequestParam String warehouseId,
                                                   @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
-                                                  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                                  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         putawayheaderService.updatePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 refDocNumber, packBarcodes, loginUserID);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -225,4 +226,15 @@ public class PutAwayHeaderController {
                 packBarcodes, putAwayNumber, proposedStorageBin, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+	@ApiOperation(response = PutAwayHeaderV2.class, value = "Update PutAwayHeader V2") // label for swagger
+	@PatchMapping("/v2/putAway")
+	public ResponseEntity<?> patchPutAwayHeaderBatchV2(@Valid @RequestBody List <PutAwayHeaderV2> updatePutAwayHeader,
+												  @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
+		List <PutAwayHeaderV2> createdPutAwayHeader =
+				putawayheaderService.updatePutAwayHeaderBatchV2(loginUserID, updatePutAwayHeader);
+		return new ResponseEntity<>(createdPutAwayHeader, HttpStatus.OK);
+	}
+
 }

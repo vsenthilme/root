@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class CompanyController {
     
     @ApiOperation(response = Company.class, value = "Create Company") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postCompany(@Valid @RequestBody AddCompany newCompany, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postCompany(@Valid @RequestBody AddCompany newCompany, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Company createdCompany = companyService.createCompany(newCompany, loginUserID);
 		return new ResponseEntity<>(createdCompany , HttpStatus.OK);
 	}
@@ -75,15 +76,15 @@ public class CompanyController {
     @ApiOperation(response = Company.class, value = "Update Company") // label for swagger
     @PatchMapping("/{companyId}")
 	public ResponseEntity<?> patchCompany(@PathVariable String companyId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateCompany updateCompany, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateCompany updateCompany, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Company createdCompany = companyService.updateCompany(companyId,languageId, updateCompany, loginUserID);
 		return new ResponseEntity<>(createdCompany , HttpStatus.OK);
 	}
     
     @ApiOperation(response = Company.class, value = "Delete Company") // label for swagger
 	@DeleteMapping("/{companyId}")
-	public ResponseEntity<?> deleteCompany(@PathVariable String companyId,@RequestParam String languageId,@RequestParam String loginUserID) {
+	public ResponseEntity<?> deleteCompany(@PathVariable String companyId,@RequestParam String languageId,@RequestParam String loginUserID) throws ParseException {
     	companyService.deleteCompany(companyId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

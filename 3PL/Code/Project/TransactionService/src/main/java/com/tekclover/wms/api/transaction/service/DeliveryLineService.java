@@ -1,11 +1,10 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
-import com.tekclover.wms.api.transaction.model.deliveryline.AddDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.DeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.SearchDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.UpdateDeliveryLine;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
+import com.tekclover.wms.api.transaction.model.deliveryline.*;
 import com.tekclover.wms.api.transaction.repository.DeliveryLineRepository;
+import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.specification.DeliveryLineSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +24,11 @@ public class DeliveryLineService {
 
     @Autowired
     private DeliveryLineRepository deliveryLineRepository;
+
+    @Autowired
+    private StagingLineV2Repository stagingLineV2Repository;
+
+    String statusDescription = null;
 
     /**
      * getAllDeliveryLine
@@ -44,7 +46,6 @@ public class DeliveryLineService {
 
 
     /**
-     *
      * @param companyCodeId
      * @param plantId
      * @param warehouseId
@@ -53,21 +54,21 @@ public class DeliveryLineService {
      * @param languageId
      * @param deliveryNo
      * @param itemCode
-     * @param lineNo
+     * @param lineNumber
      * @return
      */
     public DeliveryLine getDeliveryLine(String companyCodeId, String plantId, String warehouseId,
-                                        String invoiceNumber,String refDocNumber,String languageId,
-                                        String deliveryNo,String itemCode,Long lineNo) {
+                                        String invoiceNumber, String refDocNumber, String languageId,
+                                        Long deliveryNo, String itemCode, Long lineNumber) {
         Optional<DeliveryLine> dbDeliveryLine =
-                deliveryLineRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeliveryNoAndItemCodeAndLineNoAndInvoiceNumberAndRefDocNumberAndDeletionIndicator(
+                deliveryLineRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeliveryNoAndItemCodeAndLineNumberAndInvoiceNumberAndRefDocNumberAndDeletionIndicator(
                         companyCodeId,
                         plantId,
                         warehouseId,
                         languageId,
                         deliveryNo,
                         itemCode,
-                        lineNo,
+                        lineNumber,
                         invoiceNumber,
                         refDocNumber,
                         0L
@@ -80,7 +81,7 @@ public class DeliveryLineService {
                     + languageId + " DeliveryNo "
                     + deliveryNo + " Item Code "
                     + itemCode + " Line No "
-                    + lineNo +  " Invoice Number "
+                    + lineNumber + " Invoice Number "
                     + invoiceNumber + " Ref Doc Number "
                     + refDocNumber + " doesn't exist.");
 
@@ -90,73 +91,133 @@ public class DeliveryLineService {
 
 
     /**
-     *
-     * @param newDeliveryLine
+     * @param newDeliveryLineList
      * @param loginUserID
      * @return
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public DeliveryLine createDeliveryLine (AddDeliveryLine newDeliveryLine, String loginUserID)
+    public List<DeliveryLine> createDeliveryLine(List<AddDeliveryLine> newDeliveryLineList, String loginUserID)
             throws IllegalAccessException, InvocationTargetException {
-        Optional<DeliveryLine> deliveryLine =
-                deliveryLineRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeliveryNoAndItemCodeAndLineNoAndInvoiceNumberAndRefDocNumberAndDeletionIndicator(
-                        newDeliveryLine.getCompanyCodeId(),
-                        newDeliveryLine.getPlantId(),
-                        newDeliveryLine.getWarehouseId(),
-                        newDeliveryLine.getLanguageId(),
-                        newDeliveryLine.getDeliveryNo(),
-                        newDeliveryLine.getItemCode(),
-                        newDeliveryLine.getLineNo(),
-                        newDeliveryLine.getInvoiceNumber(),
-                        newDeliveryLine.getRefDocNumber(),
-                        0L);
-        if (!deliveryLine.isEmpty()) {
-            throw new BadRequestException("Record is getting duplicated with the given values");
+        List<DeliveryLine> dbDeliveryLineList = new ArrayList<>();
+
+        for (AddDeliveryLine addDeliveryLine : newDeliveryLineList) {
+            List<DeliveryLine> duplicateDeliveryLine =
+                    deliveryLineRepository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndDeliveryNoAndItemCodeAndLineNumberAndInvoiceNumberAndRefDocNumberAndDeletionIndicator(
+                            addDeliveryLine.getLanguageId(), addDeliveryLine.getCompanyCodeId(), addDeliveryLine.getPlantId(),
+                            addDeliveryLine.getWarehouseId(), addDeliveryLine.getDeliveryNo(), addDeliveryLine.getItemCode(),
+                            addDeliveryLine.getLineNumber(), addDeliveryLine.getInvoiceNumber(), addDeliveryLine.getRefDocNumber(), 0L);
+            if (!duplicateDeliveryLine.isEmpty()) {
+                throw new BadRequestException("Record is getting duplicated with the given values");
+            } else {
+                DeliveryLine dbDeliveryLine = new DeliveryLine();
+                BeanUtils.copyProperties(addDeliveryLine, dbDeliveryLine, CommonUtils.getNullPropertyNames(addDeliveryLine));
+
+                //V2 Code
+                IKeyValuePair description = stagingLineV2Repository.getDescription(dbDeliveryLine.getCompanyCodeId(),
+                        dbDeliveryLine.getLanguageId(),
+                        dbDeliveryLine.getPlantId(),
+                        dbDeliveryLine.getWarehouseId());
+
+                dbDeliveryLine.setCompanyDescription(description.getCompanyDesc());
+                dbDeliveryLine.setPlantDescription(description.getPlantDesc());
+                dbDeliveryLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                if (dbDeliveryLine.getStatusId() != null) {
+                    statusDescription = stagingLineV2Repository.getStatusDescription(dbDeliveryLine.getStatusId(), dbDeliveryLine.getLanguageId());
+                    dbDeliveryLine.setStatusDescription(statusDescription);
+                }
+                dbDeliveryLine.setDeletionIndicator(0L);
+                dbDeliveryLine.setCreatedBy(loginUserID);
+                dbDeliveryLine.setUpdatedBy(loginUserID);
+                dbDeliveryLine.setCreatedOn(new Date());
+                dbDeliveryLine.setUpdatedOn(new Date());
+                DeliveryLine savedDeliveryLine = deliveryLineRepository.save(dbDeliveryLine);
+                dbDeliveryLineList.add(savedDeliveryLine);
+            }
         }
-        DeliveryLine dbDeliveryLine = new DeliveryLine();
-        BeanUtils.copyProperties(newDeliveryLine, dbDeliveryLine, CommonUtils.getNullPropertyNames(newDeliveryLine));
-        dbDeliveryLine.setDeletionIndicator(0L);
-        dbDeliveryLine.setCreatedBy(loginUserID);
-        dbDeliveryLine.setUpdatedBy(loginUserID);
-        dbDeliveryLine.setCreatedOn(new Date());
-        dbDeliveryLine.setUpdatedOn(new Date());
-        return deliveryLineRepository.save(dbDeliveryLine);
+        return dbDeliveryLineList;
     }
 
-    /**
-     *
-     * @param companyCodeId
-     * @param plantId
-     * @param warehouseId
-     * @param deliveryNo
-     * @param languageId
-     * @param itemCode
-     * @param lineNo
-     * @param invoiceNumber
-     * @param refDocNumber
-     * @param updateDeliveryLine
-     * @param loginUserId
-     * @return
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    public DeliveryLine UpdateDeliveryLine(String companyCodeId, String plantId, String warehouseId, String deliveryNo,
-                                           String languageId, String itemCode, Long lineNo, String invoiceNumber,
-                                           String refDocNumber, UpdateDeliveryLine updateDeliveryLine, String loginUserId)
+
+//    /**
+//     * @param companyCodeId
+//     * @param plantId
+//     * @param warehouseId
+//     * @param deliveryNo
+//     * @param languageId
+//     * @param itemCode
+//     * @param lineNumber
+//     * @param invoiceNumber
+//     * @param refDocNumber
+//     * @param updateDeliveryLine
+//     * @param loginUserId
+//     * @return
+//     * @throws IllegalAccessException
+//     * @throws InvocationTargetException
+//     */
+//    public List<DeliveryLine> updateDeliveryLine(String companyCodeId, String plantId, String warehouseId, Long deliveryNo,
+//                                                 String languageId, String itemCode, Long lineNumber, String invoiceNumber,
+//                                                 String refDocNumber, List<UpdateDeliveryLine> updateDeliveryLine, String loginUserId)
+//            throws IllegalAccessException, InvocationTargetException {
+//
+//        List<DeliveryLine> deliveryLineList = new ArrayList<>();
+//        for (UpdateDeliveryLine deliveryLine : updateDeliveryLine) {
+//
+//            DeliveryLine dbDeliveryLine = getDeliveryLine(companyCodeId, plantId, warehouseId, invoiceNumber,
+//                    refDocNumber, languageId, deliveryNo, itemCode, lineNumber);
+//
+//            if (dbDeliveryLine != null) {
+//                BeanUtils.copyProperties(deliveryLine, dbDeliveryLine, CommonUtils.getNullPropertyNames(deliveryLine));
+//                dbDeliveryLine.setUpdatedBy(loginUserId);
+//                dbDeliveryLine.setUpdatedOn(new Date());
+//                DeliveryLine updatedDeliveryLine = deliveryLineRepository.save(dbDeliveryLine);
+//                deliveryLineList.add(updatedDeliveryLine);
+//            } else {
+//                throw new BadRequestException("DeliveryLine not found for parameters: " +
+//                        "companyCodeId=" + companyCodeId +
+//                        ", plantId=" + plantId +
+//                        ", warehouseId=" + warehouseId +
+//                        ", languageId=" + languageId +
+//                        ", itemCode=" + itemCode +
+//                        ", lineNumber=" + lineNumber);
+//            }
+//        }
+//        return deliveryLineList;
+//    }
+
+    public List<DeliveryLine> updateDeliveryLine(List<UpdateDeliveryLine> updateDeliveryLine, String loginUserId)
             throws IllegalAccessException, InvocationTargetException {
 
-        DeliveryLine dbDeliveryLine = getDeliveryLine(companyCodeId,plantId,warehouseId,invoiceNumber,
-                refDocNumber,languageId,deliveryNo,itemCode,lineNo);
-        BeanUtils.copyProperties(updateDeliveryLine,dbDeliveryLine,CommonUtils.getNullPropertyNames(updateDeliveryLine));
-        dbDeliveryLine.setUpdatedBy(loginUserId);
-        dbDeliveryLine.setUpdatedOn(new Date());
-        return deliveryLineRepository.save(dbDeliveryLine);
+        List<DeliveryLine> deliveryLineList = new ArrayList<>();
+        for (UpdateDeliveryLine deliveryLine : updateDeliveryLine) {
+
+            DeliveryLine dbDeliveryLine = getDeliveryLine(deliveryLine.getCompanyCodeId(), deliveryLine.getPlantId(),
+                    deliveryLine.getWarehouseId(), deliveryLine.getInvoiceNumber(),
+                    deliveryLine.getRefDocNumber(), deliveryLine.getLanguageId(), deliveryLine.getDeliveryNo(),
+                    deliveryLine.getItemCode(), deliveryLine.getLineNumber());
+
+            if (dbDeliveryLine != null) {
+                BeanUtils.copyProperties(deliveryLine, dbDeliveryLine, CommonUtils.getNullPropertyNames(deliveryLine));
+                dbDeliveryLine.setUpdatedBy(loginUserId);
+                dbDeliveryLine.setUpdatedOn(new Date());
+                DeliveryLine updatedDeliveryLine = deliveryLineRepository.save(dbDeliveryLine);
+                deliveryLineList.add(updatedDeliveryLine);
+            } else {
+                throw new BadRequestException("DeliveryLine not found for parameters: " +
+                        "companyCodeId=" + deliveryLine.getCompanyCodeId() +
+                        ", plantId=" + deliveryLine.getPlantId() +
+                        ", warehouseId=" + deliveryLine.getWarehouseId() +
+                        ", languageId=" + deliveryLine.getLanguageId() +
+                        ", itemCode=" + deliveryLine.getItemCode() +
+                        ", lineNumber=" + deliveryLine.getLineNumber());
+            }
+        }
+        return deliveryLineList;
     }
 
 
     /**
-     *
      * @param companyCodeId
      * @param plantId
      * @param warehouseId
@@ -164,17 +225,17 @@ public class DeliveryLineService {
      * @param refDocNumber
      * @param invoiceNumber
      * @param itemCode
-     * @param lineNo
+     * @param lineNumber
      * @param languageId
      * @param loginUserID
      */
-    public void deleteDeliveryLine(String companyCodeId,String plantId,String warehouseId,String deliveryNo,
-                                   String refDocNumber,String invoiceNumber,String itemCode,
-                                   Long lineNo,String languageId,String loginUserID){
+    public void deleteDeliveryLine(String companyCodeId, String plantId, String warehouseId, Long deliveryNo,
+                                   String refDocNumber, String invoiceNumber, String itemCode,
+                                   Long lineNumber, String languageId, String loginUserID) {
 
-        DeliveryLine deliveryLine = getDeliveryLine(companyCodeId,plantId,warehouseId,invoiceNumber,
-                refDocNumber,languageId,deliveryNo,itemCode,lineNo);
-        if(deliveryLine != null){
+        DeliveryLine deliveryLine = getDeliveryLine(companyCodeId, plantId, warehouseId, invoiceNumber,
+                refDocNumber, languageId, deliveryNo, itemCode, lineNumber);
+        if (deliveryLine != null) {
             deliveryLine.setDeletionIndicator(1L);
             deliveryLine.setUpdatedBy(loginUserID);
             deliveryLineRepository.save(deliveryLine);
@@ -184,7 +245,6 @@ public class DeliveryLineService {
     }
 
     /**
-     *
      * @param searchDeliveryLine
      * @return
      * @throws ParseException
@@ -193,8 +253,56 @@ public class DeliveryLineService {
 
         DeliveryLineSpecification spec = new DeliveryLineSpecification(searchDeliveryLine);
         List<DeliveryLine> results = deliveryLineRepository.findAll(spec);
-        results = results.stream().filter(n-> n.getDeletionIndicator() == 0).collect(Collectors.toList());
-        log.info("results: " + results);
-        return results;
+        results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
+
+        List<DeliveryLine> deliveryLineList = new ArrayList<>();
+        for (DeliveryLine deliveryLine : results) {
+            IKeyValuePair description = stagingLineV2Repository.getDescription(deliveryLine.getCompanyCodeId(),
+                    deliveryLine.getLanguageId(),
+                    deliveryLine.getPlantId(),
+                    deliveryLine.getWarehouseId());
+
+            if (description != null) {
+                deliveryLine.setCompanyDescription(description.getCompanyDesc());
+                deliveryLine.setPlantDescription(description.getPlantDesc());
+                deliveryLine.setWarehouseDescription(description.getWarehouseDesc());
+            }
+            if (deliveryLine.getStatusId() != null) {
+                statusDescription = stagingLineV2Repository.getStatusDescription(deliveryLine.getStatusId(), deliveryLine.getLanguageId());
+                deliveryLine.setStatusDescription(statusDescription);
+            }
+            deliveryLineList.add(deliveryLine);
+        }
+
+        return deliveryLineList;
+    }
+
+
+    //Delivery Line Count
+    public DeliveryLineCount getDeliveryLineCount(String companyCodeId, String languageId, String plantId, String warehouseId, String driverId){
+
+        DeliveryLineCount deliveryLineCount = new DeliveryLineCount();
+
+        //new
+        List<Long> newDeliveryLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 90L);
+        Long newLineCount = newDeliveryLineCount.stream().count();
+        deliveryLineCount.setNewCount(newLineCount);
+
+        //InTransit
+        List<Long> inTransitLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 91L);
+        Long transitCount = inTransitLineCount.stream().count();
+        deliveryLineCount.setInTransitCount(transitCount);
+
+        //Completed
+        List<Long> completedLineCount = deliveryLineRepository.getNewRecordCount(companyCodeId, plantId, warehouseId, languageId, driverId, 92L);
+        Long completedCount = completedLineCount.stream().count();
+        deliveryLineCount.setCompletedCount(completedCount);
+
+        //ReDelivery
+        List<Long> reDeliveryLineCount = deliveryLineRepository.getReDeliveryLineCount(companyCodeId, plantId, warehouseId, languageId, driverId, 92L,true);
+        Long reDeliveryCount = reDeliveryLineCount.stream().count();
+        deliveryLineCount.setRedeliveryCount(reDeliveryCount);
+
+        return deliveryLineCount;
     }
 }

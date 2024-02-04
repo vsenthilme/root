@@ -4,6 +4,8 @@ import java.util.Date;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+
 @Data
 public class UserManagement {
 
@@ -28,4 +30,16 @@ public class UserManagement {
 	private Date createdOn = new Date();
 	private String updatedBy;
 	private Date updatedOn = new Date();
+
+	private Boolean portalLoggedIn;
+	private Boolean hhtLoggedIn;
+	private Boolean createHhtUser;
+	private String companyIdAndDescription;
+
+	private String plantIdAndDescription;
+
+	private String warehouseIdAndDescription;
+
+	private String userRoleIdAndDescription;
+	private String userTypeIdAndDescription;
 }

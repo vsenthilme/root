@@ -18,6 +18,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.BarcodeTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,7 +138,7 @@ public class BarcodeTypeIdService{
 	 * @throws InvocationTargetException
 	 */
 	public BarcodeTypeId createBarcodeTypeId (AddBarcodeTypeId newBarcodeTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeTypeId dbBarcodeTypeId = new BarcodeTypeId();
 		Optional<BarcodeTypeId> duplicateBarcodeTypeId = barcodeTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBarcodeTypeIdAndLanguageIdAndDeletionIndicator(newBarcodeTypeId.getCompanyCodeId(), newBarcodeTypeId.getPlantId(), newBarcodeTypeId.getWarehouseId(), newBarcodeTypeId.getBarcodeTypeId(), newBarcodeTypeId.getLanguageId(), 0L);
 		if (!duplicateBarcodeTypeId.isEmpty()) {
@@ -170,7 +171,7 @@ public class BarcodeTypeIdService{
 	public BarcodeTypeId updateBarcodeTypeId (String warehouseId, Long barcodeTypeId,
 											  String companyCodeId,String languageId,String plantId,String loginUserID,
 											  UpdateBarcodeTypeId updateBarcodeTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeTypeId dbBarcodeTypeId = getBarcodeTypeId(warehouseId,barcodeTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBarcodeTypeId, dbBarcodeTypeId, CommonUtils.getNullPropertyNames(updateBarcodeTypeId));
 		dbBarcodeTypeId.setUpdatedBy(loginUserID);

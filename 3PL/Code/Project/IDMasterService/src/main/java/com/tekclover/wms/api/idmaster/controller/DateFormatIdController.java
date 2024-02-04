@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class DateFormatIdController {
     @ApiOperation(response = DateFormatId.class, value = "Create DateFormatId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postDateFormatId(@Valid @RequestBody AddDateFormatId newDateFormatId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		DateFormatId createdDateFormatId = dateformatidService.createDateFormatId(newDateFormatId, loginUserID);
 		return new ResponseEntity<>(createdDateFormatId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class DateFormatIdController {
     @PatchMapping("/{dateFormatId}")
 	public ResponseEntity<?> patchDateFormatId(@PathVariable String dateFormatId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateDateFormatId updateDateFormatId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateDateFormatId updateDateFormatId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DateFormatId createdDateFormatId = 
 				dateformatidService.updateDateFormatId(warehouseId, dateFormatId,companyCodeId,languageId,plantId,loginUserID, updateDateFormatId);
 		return new ResponseEntity<>(createdDateFormatId , HttpStatus.OK);

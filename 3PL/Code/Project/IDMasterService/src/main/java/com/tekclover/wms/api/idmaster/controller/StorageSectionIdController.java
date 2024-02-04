@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -62,7 +63,7 @@ public class StorageSectionIdController {
 	@ApiOperation(response = StorageSectionId.class, value = "Create StorageSectionId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStorageSectionId(@Valid @RequestBody AddStorageSectionId newStorageSectionId,
-												  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+												  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSectionId createdStorageSectionId = storagesectionidService.createStorageSectionId(newStorageSectionId, loginUserID);
 		return new ResponseEntity<>(createdStorageSectionId , HttpStatus.OK);
 	}
@@ -72,7 +73,7 @@ public class StorageSectionIdController {
 	public ResponseEntity<?> patchStorageSectionId(@RequestParam String warehouseId, @RequestParam Long floorId,@PathVariable String storageSectionId,
 												   @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 												   @Valid @RequestBody UpdateStorageSectionId updateStorageSectionId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSectionId createdStorageSectionId =
 				storagesectionidService.updateStorageSectionId(warehouseId,floorId,storageSectionId,companyCodeId,languageId,plantId,loginUserID, updateStorageSectionId);
 		return new ResponseEntity<>(createdStorageSectionId , HttpStatus.OK);

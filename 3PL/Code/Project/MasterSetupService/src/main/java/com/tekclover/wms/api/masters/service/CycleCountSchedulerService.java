@@ -8,6 +8,7 @@ import com.tekclover.wms.api.masters.model.cyclecountscheduler.UpdateCycleCountS
 import com.tekclover.wms.api.masters.repository.CycleCountSchedulerRepository;
 import com.tekclover.wms.api.masters.repository.specification.CycleCountSchedulerSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +60,7 @@ public class CycleCountSchedulerService {
     }
 
     public CycleCountScheduler createCycleCountScheduler(AddCycleCountScheduler newCycleCountScheduler, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CycleCountScheduler cycleCountScheduler=new CycleCountScheduler();
         Optional<CycleCountScheduler>duplicateCycleCountScheduler=cycleCountSchedulerRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndCycleCountTypeIdAndSchedulerNumberAndLevelIdAndDeletionIndicator(
                 newCycleCountScheduler.getCompanyCodeId(),
@@ -93,7 +95,7 @@ public class CycleCountSchedulerService {
      * @throws InvocationTargetException
      */
     public CycleCountScheduler updateCycleCountScheduler(String companyCodeId, String languageId, String plantId, String warehouseId, Long levelId, Long cycleCountTypeId,String schedulerNumber,UpdateCycleCountScheduler updateCycleCountScheduler, String loginUserID)
-            throws  IllegalAccessException,InvocationTargetException{
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CycleCountScheduler dbCycleCountScheduler = getCycleCountScheduler(companyCodeId,languageId,warehouseId,plantId,levelId,cycleCountTypeId,schedulerNumber);
         BeanUtils.copyProperties(updateCycleCountScheduler, dbCycleCountScheduler, CommonUtils.getNullPropertyNames(updateCycleCountScheduler));
         dbCycleCountScheduler.setUpdatedBy(loginUserID);
@@ -105,7 +107,7 @@ public class CycleCountSchedulerService {
      * deleteCycleCountScheduler
      * @param cycleCountTypeId
      */
-    public void deleteCycleCountScheduler (String companyCodeId, String languageId, String plantId, String warehouseId, Long levelId, Long cycleCountTypeId,String schedulerNumber, String loginUserID) {
+    public void deleteCycleCountScheduler (String companyCodeId, String languageId, String plantId, String warehouseId, Long levelId, Long cycleCountTypeId,String schedulerNumber, String loginUserID) throws ParseException {
         CycleCountScheduler cycleCountScheduler = getCycleCountScheduler(companyCodeId,languageId,warehouseId,plantId,levelId,cycleCountTypeId,schedulerNumber);
         if ( cycleCountScheduler != null) {
             cycleCountScheduler.setDeletionIndicator (1L);

@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ReturnTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +118,7 @@ public class ReturnTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ReturnTypeId createReturnTypeId (AddReturnTypeId newReturnTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ReturnTypeId dbReturnTypeId = new ReturnTypeId();
 		Optional<ReturnTypeId> duplicateReturnTypeId = returnTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndReturnTypeIdAndLanguageIdAndDeletionIndicator(newReturnTypeId.getCompanyCodeId(), newReturnTypeId.getPlantId(), newReturnTypeId.getWarehouseId(), newReturnTypeId.getReturnTypeId(), newReturnTypeId.getLanguageId(), 0L);
 		if (!duplicateReturnTypeId.isEmpty()) {
@@ -132,8 +133,8 @@ public class ReturnTypeIdService {
 			dbReturnTypeId.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
 			dbReturnTypeId.setCreatedBy(loginUserID);
 			dbReturnTypeId.setUpdatedBy(loginUserID);
-			dbReturnTypeId.setCreatedOn(new Date());
-			dbReturnTypeId.setUpdatedOn(new Date());
+			dbReturnTypeId.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+			dbReturnTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 			return returnTypeIdRepository.save(dbReturnTypeId);
 		}
 	}
@@ -149,11 +150,11 @@ public class ReturnTypeIdService {
 	 */
 	public ReturnTypeId updateReturnTypeId (String warehouseId, String returnTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 											UpdateReturnTypeId updateReturnTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ReturnTypeId dbReturnTypeId = getReturnTypeId( warehouseId, returnTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateReturnTypeId, dbReturnTypeId, CommonUtils.getNullPropertyNames(updateReturnTypeId));
 		dbReturnTypeId.setUpdatedBy(loginUserID);
-		dbReturnTypeId.setUpdatedOn(new Date());
+		dbReturnTypeId.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
 		return returnTypeIdRepository.save(dbReturnTypeId);
 	}
 

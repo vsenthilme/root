@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -54,7 +55,7 @@ public class InboundOrderTypeIdController {
     @ApiOperation(response = InboundOrderTypeId.class, value = "Create InboundOrderTypeId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postInboundOrderTypeId(@Valid @RequestBody AddInboundOrderTypeId newInboundOrderTypeId,
-                                                      @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                                      @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundOrderTypeId createdInboundOrderTypeId = inboundOrderTypeIdService.createInboundOrderTypeId(newInboundOrderTypeId, loginUserID);
         return new ResponseEntity<>(createdInboundOrderTypeId , HttpStatus.OK);
     }
@@ -63,7 +64,7 @@ public class InboundOrderTypeIdController {
     @PatchMapping("/{inboundOrderTypeId}")
     public ResponseEntity<?> patchInboundOrderStatusId(@RequestParam String warehouseId,@PathVariable String inboundOrderTypeId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
                                                        @Valid @RequestBody UpdateInboundOrderTypeId updateInboundOrderTypeId)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundOrderTypeId createdInboundOrderTypeId =
                 inboundOrderTypeIdService.updateInboundOrderTypeId(warehouseId, inboundOrderTypeId,companyCodeId,languageId,plantId,loginUserID, updateInboundOrderTypeId);
         return new ResponseEntity<>(createdInboundOrderTypeId , HttpStatus.OK);

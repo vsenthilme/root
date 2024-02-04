@@ -30,4 +30,11 @@ public interface IKeyValuePair {
     String getPlantDesc();
     String getWarehouseDesc();
 
+    Long getUserTypeId();
+
+    String getUserTypeDescription();
+
+    Long getRoleId();
+
+    String getRoleDescription();
 }

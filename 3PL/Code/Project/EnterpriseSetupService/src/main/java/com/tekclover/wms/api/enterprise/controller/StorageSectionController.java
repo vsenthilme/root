@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -69,7 +70,7 @@ public class StorageSectionController {
     @ApiOperation(response = StorageSection.class, value = "Create StorageSection") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStorageSection(@Valid @RequestBody AddStorageSection newStorageSection, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSection createdStorageSection = 
 				storagesectionService.createStorageSection(newStorageSection, loginUserID);
 		return new ResponseEntity<>(createdStorageSection , HttpStatus.OK);
@@ -79,7 +80,7 @@ public class StorageSectionController {
     @PatchMapping("/{storageSectionId}")
 	public ResponseEntity<?> patchStorageSection(@PathVariable String storageSectionId, @RequestParam String warehouseId, 
 			@RequestParam Long floorId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,@Valid @RequestBody UpdateStorageSection updateStorageSection,
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageSection createdStorageSection = 
 				storagesectionService.updateStorageSection(warehouseId, floorId, companyId,languageId,plantId,storageSectionId,updateStorageSection, loginUserID);
 		return new ResponseEntity<>(createdStorageSection , HttpStatus.OK);
@@ -87,7 +88,7 @@ public class StorageSectionController {
     
     @ApiOperation(response = StorageSection.class, value = "Delete StorageSection") // label for swagger
 	@DeleteMapping("/{storageSectionId}")
-	public ResponseEntity<?> deleteStorageSection(@PathVariable String storageSectionId,@RequestParam String companyId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String warehouseId, @RequestParam Long floorId, @RequestParam String loginUserID) {
+	public ResponseEntity<?> deleteStorageSection(@PathVariable String storageSectionId,@RequestParam String companyId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String warehouseId, @RequestParam Long floorId, @RequestParam String loginUserID) throws ParseException {
     	storagesectionService.deleteStorageSection(warehouseId, floorId, storageSectionId,companyId,plantId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

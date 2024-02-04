@@ -12,6 +12,7 @@ import com.tekclover.wms.api.masters.repository.PriceListAssignmentRepository;
 import com.tekclover.wms.api.masters.repository.PriceListRepository;
 import com.tekclover.wms.api.masters.repository.specification.PriceListAssignmentSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +153,7 @@ public class PriceListAssignmentService {
      * @throws InvocationTargetException
      */
     public PriceListAssignment createPriceListAssignment(AddPriceListAssignment newPriceListAssignment, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceListAssignment dbPriceListAssignment = new PriceListAssignment();
         Optional<PriceListAssignment> duplicatePriceListAssignment = priceListAssignmentRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPartnerCodeAndPriceListIdAndLanguageIdAndDeletionIndicator(newPriceListAssignment.getCompanyCodeId(), newPriceListAssignment.getPlantId(), newPriceListAssignment.getWarehouseId(), newPriceListAssignment.getPartnerCode(), newPriceListAssignment.getPriceListId(), newPriceListAssignment.getLanguageId(), 0L);
         if (!duplicatePriceListAssignment.isEmpty()) {
@@ -195,7 +196,7 @@ public class PriceListAssignmentService {
     public PriceListAssignment updatePriceListAssignment(String warehouseId, Long priceListId, String partnerCode,
                                                          String companyCodeId, String languageId, String plantId, String loginUserID,
                                                          UpdatePriceListAssignment updatePriceListAssignment)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceListAssignment dbPriceListAssignment = getPriceListAssignment(warehouseId, partnerCode, priceListId, companyCodeId, languageId, plantId);
         BeanUtils.copyProperties(updatePriceListAssignment, dbPriceListAssignment, CommonUtils.getNullPropertyNames(updatePriceListAssignment));
         dbPriceListAssignment.setUpdatedBy(loginUserID);

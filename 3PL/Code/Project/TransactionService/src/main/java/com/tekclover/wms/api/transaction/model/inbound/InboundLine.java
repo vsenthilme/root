@@ -60,10 +60,10 @@ public class InboundLine {
 	private String itemCode;
 	
 	@Column(name = "ORD_QTY")
-	private Double orderedQuantity;
+	private Double orderQty;
 	
 	@Column(name = "ORD_UOM") 
-	private String orderedUnitOfMeasure;
+	private String orderUom;
 	
 	@Column(name = "ACCEPT_QTY") 
 	private Double acceptedQty;

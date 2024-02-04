@@ -17,9 +17,30 @@ import javax.persistence.Table;
 public class StorageBinV2 extends StorageBin {
 
 	@Column(name = "CAP_CHECK")
-	private Long capacityCheck;
+	private boolean capacityCheck;
 
 	@Column(name="ALLOC_VOL")
 	private Double allocatedVolume;
+
+	@Column(name = "CAP_UNIT")
+	private String capacityUnit;
+
+	@Column(name = "LENGTH")
+	private Double length;
+
+	@Column(name = "WIDTH")
+	private Double width;
+
+	@Column(name = "HEIGHT")
+	private Double height;
+
+	@Column(name = "CAP_UOM")
+	private String capacityUom;
+
+	@Column(name = "QUANTITY")
+	private String quantity;
+
+	@Column(name = "WEIGHT")
+	private Double weight;
 
 }

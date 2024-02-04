@@ -42,8 +42,8 @@ public class DeliveryLine {
     private String warehouseId;
 
     @Id
-    @Column(name="DLV_NO",columnDefinition = "nvarchar(50)")
-    private String deliveryNo;
+    @Column(name="DLV_NO")
+    private Long deliveryNo;
 
     @Id
     @Column(name="ITM_CODE",columnDefinition = "nvarchar(50)")
@@ -51,7 +51,7 @@ public class DeliveryLine {
 
     @Id
     @Column(name="OB_LINE_NO")
-    private Long lineNo;
+    private Long lineNumber;
 
     @Id
     @Column(name="INVOICE_NO",columnDefinition = "nvarchar(50)")
@@ -61,11 +61,44 @@ public class DeliveryLine {
     @Column(name="REF_DOC_NO",columnDefinition = "nvarchar(50)")
     private String refDocNumber;
 
+    @Column(name = "VEHICLE_ID", columnDefinition = "nvarchar(50)")
+    private String vehicleNo;
+
+    @Column(name = "DRIVER_ID", columnDefinition = "nvarchar(50)")
+    private String driverId;
+
+    @Column(name = "DRIVER_NM", columnDefinition = "nvarchar(255)")
+    private String driverName;
+
+    @Column(name = "ROUTE_ID", columnDefinition = "nvarchar(50)")
+    private String routeId;
+
+    @Column(name = "REMARKS",columnDefinition = "nvarchar(50)")
+    private String remarks;
+
+    @Column(name = "PICKED")
+    private Boolean picked;
+
+    @Column(name = "DELIVERED")
+    private Boolean delivered;
+
     @Column(name="PARTNER_CODE",columnDefinition = "nvarchar(50)")
     private String partnerCode;
 
     @Column(name="OB_ORD_TYP_ID")
     private Long outboundOrderTypeId;
+
+    @Column(name = "C_DESC", columnDefinition = "nvarchar(500)")
+    private String companyDescription;
+
+    @Column(name = "PLANT_DESC",columnDefinition = "nvarchar(500)")
+    private String plantDescription;
+
+    @Column(name = "WAREHOUSE_DESC",columnDefinition = "nvarchar(500)")
+    private String warehouseDescription;
+
+    @Column(name = "STATUS_DESC",columnDefinition = "nvarchar(500)")
+    private String statusDescription;
 
     @Column(name="ADD_1",columnDefinition = "nvarchar(500)")
     private String address1;
@@ -114,6 +147,9 @@ public class DeliveryLine {
 
     @Column(name="PAYMENT_MODE",columnDefinition = "nvarchar(50)")
     private String paymentMode;
+
+    @Column(name = "RE_DELIVERY")
+    private Boolean reDelivery;
 
     @Column(name="STATUS_ID")
     private Long statusId;

@@ -8,6 +8,7 @@ import lombok.Data;
 public class Warehouse { 
 	
 	private String companyCode;
+	private String companyCodeId;
 	private String warehouseId;
 	private String languageId;
 	private String plantId;

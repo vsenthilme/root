@@ -2,6 +2,8 @@ package com.tekclover.wms.api.transaction.model.deliveryheader;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+
 @Data
 public class AddDeliveryHeader {
 
@@ -13,7 +15,13 @@ public class AddDeliveryHeader {
 
     private String warehouseId;
 
-    private String deliveryNo;
+    private Long deliveryNo;
+
+    private String noOfAttend;
+
+    private String refDocNumber;
+
+    private String remarks;
 
     private String vehicleNo;
 
@@ -25,7 +33,15 @@ public class AddDeliveryHeader {
 
     private String deliveryFailureReason;
 
-    private String statusId;
+    private Long statusId;
+
+    private String companyDescription;
+
+    private String plantDescription;
+
+    private String warehouseDescription;
+
+    private String statusDescription;
 
     private Long deletionIndicator;
 

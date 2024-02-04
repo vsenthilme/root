@@ -52,6 +52,12 @@ public class DateUtils {
 		String currentDatetime = datetime.format(newPattern);
 		return currentDatetime;
 	}
+	//current Time without Date
+	public static int getCurrentTime () {
+		LocalDateTime dateTime = LocalDateTime.now(ZoneId.systemDefault());
+		int currentHour = dateTime.getHour();
+		return currentHour;
+	}
 	
 	/**
 	 * getCurrentMonthFirstAndLastDates - Using by Dashboard
@@ -78,9 +84,9 @@ public class DateUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param date
-	 * @param time
+	 * @param timeFlag
 	 * @return
 	 */
 	public static LocalDateTime convertDateToLocalDateTime(Date date, String timeFlag) {
@@ -311,6 +317,21 @@ public class DateUtils {
 	 * @return
 	 * @throws ParseException
 	 */
+	public static Date convertStringToDate2(String strDate) throws ParseException {
+		LocalTime time = LocalTime.now();
+		System.out.println("---------> " + time);
+		strDate = strDate + " " + time.getHour() + ":" + time.getMinute() + ":" + time.getSecond();
+		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strDate);
+//		log.info("convertStringToDate-------> : " + date);
+		return date;
+	}
+
+	/**
+	 *
+	 * @param strDate
+	 * @return
+	 * @throws ParseException
+	 */
 	public static Date convertStringToDateWithTime(String strDate) throws ParseException {
 		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strDate);
 		return date;
@@ -359,12 +380,14 @@ public class DateUtils {
 		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kuwait")) ;
 		LocalDateTime kwtLocalDateTime = zdt.toLocalDateTime();
 		System.out.println(kwtLocalDateTime);
+//		log.info("Kuwait Time: " + kwtLocalDateTime);
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 		String sConvertedDateTime = formatter.format(kwtLocalDateTime);
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");  
 		Date kwtDate = dateFormatter.parse(sConvertedDateTime);
 		System.out.println(kwtDate);
+		log.info("Kuwait Date Time: " + kwtDate);
 		return kwtDate;
 	}
 	

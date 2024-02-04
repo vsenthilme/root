@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class ServiceTypeIdController {
         @ApiOperation(response = ServiceTypeId.class, value = "Create ServiceTypeId") // label for swagger
         @PostMapping("")
         public ResponseEntity<?> postServiceTypeId(@Valid @RequestBody AddServiceTypeId newServiceTypeId,
-                                                   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                                   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
             ServiceTypeId createdServiceTypeId = serviceTypeIdService.createServiceTypeId(newServiceTypeId, loginUserID);
             return new ResponseEntity<>(createdServiceTypeId, HttpStatus.OK);
         }
@@ -54,7 +55,7 @@ public class ServiceTypeIdController {
         @PatchMapping("/{serviceTypeId}")
         public ResponseEntity<?> patchServiceTypeId(@RequestParam String warehouseId, @RequestParam String moduleId, @PathVariable Long serviceTypeId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
                                                     @Valid @RequestBody UpdateServiceTypeId updateServiceTypeId, @RequestParam String loginUserID)
-                throws IllegalAccessException, InvocationTargetException {
+                throws IllegalAccessException, InvocationTargetException, ParseException {
             ServiceTypeId createdServiceTypeId =
                     serviceTypeIdService.updateServiceTypeId(warehouseId, moduleId, serviceTypeId,companyCodeId,languageId,plantId,loginUserID, updateServiceTypeId);
             return new ResponseEntity<>(createdServiceTypeId, HttpStatus.OK);

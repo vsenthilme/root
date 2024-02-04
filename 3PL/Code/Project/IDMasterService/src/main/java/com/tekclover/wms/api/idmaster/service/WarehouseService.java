@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -158,7 +159,7 @@ public class WarehouseService  {
 	 * @throws InvocationTargetException
 	 */
 	public Warehouse createWarehouse (AddWarehouse newWarehouse, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse dbWarehouse = new Warehouse();
 		Optional<Warehouse> duplicateWarehouse=warehouseRepository.findByCompanyCodeIdAndWarehouseIdAndLanguageIdAndPlantIdAndDeletionIndicator(newWarehouse.getCompanyCodeId(), newWarehouse.getWarehouseId(), newWarehouse.getLanguageId(), newWarehouse.getPlantId(), 0L);
 		if(!duplicateWarehouse.isEmpty()){
@@ -190,7 +191,7 @@ public class WarehouseService  {
 	 */
 	public Warehouse updateWarehouse (String warehouseId,String companyCodeId,String plantId,String languageId, String loginUserID,
 									  UpdateWarehouse updateWarehouse)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Warehouse dbWarehouse = getWarehouse(warehouseId,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateWarehouse, dbWarehouse, CommonUtils.getNullPropertyNames(updateWarehouse));
 		dbWarehouse.setUpdatedBy(loginUserID);

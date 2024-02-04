@@ -1,42 +1,28 @@
 package com.tekclover.wms.api.transaction.controller;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.stream.Stream;
-
-import javax.validation.Valid;
-
+import com.tekclover.wms.api.transaction.model.inbound.*;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SearchInboundHeaderV2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.tekclover.wms.api.transaction.model.inbound.AddInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.InboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.InboundHeaderEntity;
-import com.tekclover.wms.api.transaction.model.inbound.SearchInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.AXApiResponse;
 import com.tekclover.wms.api.transaction.service.InboundHeaderService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Validated
@@ -92,7 +78,7 @@ public class InboundHeaderController {
     @ApiOperation(response = InboundHeader.class, value = "Create InboundHeader") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postInboundHeader(@Valid @RequestBody AddInboundHeader newInboundHeader,
-                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundHeader createdInboundHeader = inboundheaderService.createInboundHeader(newInboundHeader, loginUserID);
         return new ResponseEntity<>(createdInboundHeader, HttpStatus.OK);
     }
@@ -135,14 +121,14 @@ public class InboundHeaderController {
     }
 
     //=================================================V2==========================================================
-    @ApiOperation(response = InboundHeader.class, value = "Search InboundHeader V2") // label for swagger
+    @ApiOperation(response = InboundHeaderV2.class, value = "Search InboundHeader V2") // label for swagger
     @PostMapping("/findInboundHeader/v2")
     public List<InboundHeaderV2> findInboundHeaderV2(@RequestBody SearchInboundHeaderV2 searchInboundHeader)
             throws Exception {
         return inboundheaderService.findInboundHeaderV2(searchInboundHeader);
     }
 
-    @ApiOperation(response = InboundHeader.class, value = "Create InboundHeader V2") // label for swagger
+    @ApiOperation(response = InboundHeaderV2.class, value = "Create InboundHeader V2") // label for swagger
     @GetMapping("/replaceASN/v2")
     public ResponseEntity<?> replaceASNV2(@RequestParam String refDocNumber, @RequestParam String preInboundNo,
                                           @RequestParam String asnNumber)
@@ -161,15 +147,35 @@ public class InboundHeaderController {
         return new ResponseEntity<>(inboundheader, HttpStatus.OK);
     }
 
-    @ApiOperation(response = InboundHeader.class, value = "Inbound Header & Line Confirm") // label for swagger
+    @ApiOperation(response = InboundHeaderV2.class, value = "Inbound Header & Line Confirm") // label for swagger
     @GetMapping("/v2/confirmIndividual")
     public ResponseEntity<?> updateInboundHeaderConfirmV2(@RequestParam String warehouseId, @RequestParam String preInboundNo,
                                                           @RequestParam String refDocNumber, @RequestParam String companyCode,
                                                           @RequestParam String plantId, @RequestParam String languageId,
                                                           @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         AXApiResponse createdInboundHeaderResponse =
                 inboundheaderService.updateInboundHeaderConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
         return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InboundHeaderV2.class, value = "Update InboundHeader") // label for swagger
+    @PatchMapping("/v2/{refDocNumber}")
+    public ResponseEntity<?> patchInboundHeaderV2(@PathVariable String refDocNumber, @RequestParam String companyCode, @RequestParam String plantId,
+                                                  @RequestParam String languageId, @RequestParam String warehouseId,
+                                                  @RequestParam String preInboundNo, @Valid @RequestBody InboundHeaderV2 updateInboundHeader,
+                                                  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+        InboundHeaderV2 createdInboundHeader =
+                inboundheaderService.updateInboundHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserID, updateInboundHeader);
+        return new ResponseEntity<>(createdInboundHeader, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InboundHeaderV2.class, value = "Delete InboundHeader") // label for swagger
+    @DeleteMapping("/v2/{refDocNumber}")
+    public ResponseEntity<?> deleteInboundHeaderV2(@PathVariable String refDocNumber, @RequestParam String companyCode, @RequestParam String plantId,
+                                                   @RequestParam String languageId, @RequestParam String warehouseId,
+                                                   @RequestParam String preInboundNo, @RequestParam String loginUserID) throws ParseException {
+        inboundheaderService.deleteInboundHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserID);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

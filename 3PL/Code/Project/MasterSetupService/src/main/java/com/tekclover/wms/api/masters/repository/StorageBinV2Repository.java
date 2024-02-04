@@ -49,6 +49,129 @@ public interface StorageBinV2Repository extends JpaRepository<StorageBinV2, Long
 
     Optional<StorageBinV2> findTopByBinClassIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndDeletionIndicator(
             Long binClassId, String companyCodeId, String plantId, String warehouseId, String languageId, long l);
+
+    List<StorageBinV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, Long statusId, Long deletionIndicator);
+
+    List<StorageBinV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinInAndBinClassIdAndPutawayBlockAndPickingBlockAndDeletionIndicatorOrderByStorageBinDesc(
+            String companyCodeId, String plantId, String languageId, String warehouseId, List<String> storageBin, Long binClassId, int i, int j, Long deletionIndicator);
+
+    List<StorageBinV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndBinClassIdAndCapacityCheckAndPutawayBlockAndPickingBlockAndDeletionIndicatorOrderByStorageBinDesc(
+            String companyCodeId, String plantId, String languageId, String warehouseId,
+            Long binClassId, boolean capacityCheck, int i, int j, Long deletionIndicator);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and CAP_CHECK = 'TRUE' and \n" +
+            "pick_block = 0 and putaway_block = 0 and status_id = :statusId and \n" +
+            "(case when ISNUMERIC(remain_vol)=1 then CAST(remain_vol AS NUMERIC) else 0 end) > :cbm and \n" +
+            "is_deleted = 0  order by remain_vol", nativeQuery = true)
+    public StorageBinV2 getStorageBinCBM(@Param("binclassId") Long binclassId,
+                                         @Param("companyCode") String companyCode,
+                                         @Param("plantId") String plantId,
+                                         @Param("languageId") String languageId,
+                                         @Param("cbm") Double cbm,
+                                         @Param("statusId") Long statusId,
+                                         @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and CAP_CHECK = 'TRUE' and \n" +
+            "pick_block = 0 and putaway_block = 0 and status_id = :statusId and \n" +
+            "(case when ISNUMERIC(remain_vol)=1 then CAST(remain_vol AS NUMERIC) else 0 end) > :cbmPerQty and \n" +
+            "is_deleted = 0  order by remain_vol", nativeQuery = true)
+    public StorageBinV2 getStorageBinCbmPerQty(@Param("binclassId") Long binclassId,
+                                               @Param("companyCode") String companyCode,
+                                               @Param("plantId") String plantId,
+                                               @Param("languageId") String languageId,
+                                               @Param("cbmPerQty") Double cbmPerQty,
+                                               @Param("statusId") Long statusId,
+                                               @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and CAP_CHECK = 'TRUE' and st_bin in (:storageBin) and\n" +
+            "pick_block = 0 and putaway_block = 0 and status_id = :statusId and \n" +
+            "(case when ISNUMERIC(remain_vol)=1 then CAST(remain_vol AS NUMERIC) else 0 end) > :cbm and \n" +
+            "is_deleted = 0  order by remain_vol", nativeQuery = true)
+    public StorageBinV2 getStorageBinLastPickCBM(@Param("binclassId") Long binclassId,
+                                                 @Param("companyCode") String companyCode,
+                                                 @Param("plantId") String plantId,
+                                                 @Param("languageId") String languageId,
+                                                 @Param("cbm") Double cbm,
+                                                 @Param("statusId") Long statusId,
+                                                 @Param("storageBin") List<String> storageBin,
+                                                 @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and CAP_CHECK = 'TRUE' and st_bin in (:storageBin) and\n" +
+            "pick_block = 0 and putaway_block = 0 and status_id = :statusId and \n" +
+            "(case when ISNUMERIC(remain_vol)=1 then CAST(remain_vol AS NUMERIC) else 0 end) > :cbmPerQty and \n" +
+            "is_deleted = 0  order by remain_vol", nativeQuery = true)
+    public StorageBinV2 getStorageBinCbmPerQtyLastPick(@Param("binclassId") Long binclassId,
+                                                       @Param("companyCode") String companyCode,
+                                                       @Param("plantId") String plantId,
+                                                       @Param("languageId") String languageId,
+                                                       @Param("cbmPerQty") Double cbmPerQty,
+                                                       @Param("statusId") Long statusId,
+                                                       @Param("storageBin") List<String> storageBin,
+                                                       @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and st_bin not in (:storageBin) and \n" +
+            "CAP_CHECK = 'FALSE' and pick_block = 0 and status_id = :statusId and \n" +
+            "putaway_block = 0 and is_deleted = 0 order by st_bin", nativeQuery = true)
+    public StorageBinV2 getStorageBinNonCBM(@Param("binclassId") Long binclassId,
+                                            @Param("companyCode") String companyCode,
+                                            @Param("plantId") String plantId,
+                                            @Param("languageId") String languageId,
+                                            @Param("statusId") Long statusId,
+                                            @Param("storageBin") List<String> storageBin,
+                                            @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and st_bin in (:storageBin) and \n" +
+            "CAP_CHECK = 'FALSE' and pick_block = 0 and status_id = :statusId and \n" +
+            "putaway_block = 0 and is_deleted = 0 ", nativeQuery = true)
+    public StorageBinV2 getStorageBinNonCBMLastPick(@Param("binclassId") Long binclassId,
+                                                    @Param("companyCode") String companyCode,
+                                                    @Param("plantId") String plantId,
+                                                    @Param("languageId") String languageId,
+                                                    @Param("statusId") Long statusId,
+                                                    @Param("storageBin") List<String> storageBin,
+                                                    @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and \n" +
+            "CAP_CHECK = 'FALSE' and pick_block = 0 and status_id = :statusId and \n" +
+            "putaway_block = 0 and is_deleted = 0 order by st_bin", nativeQuery = true)
+    public StorageBinV2 getStorageBinNonCBM(@Param("binclassId") Long binclassId,
+                                            @Param("companyCode") String companyCode,
+                                            @Param("plantId") String plantId,
+                                            @Param("languageId") String languageId,
+                                            @Param("statusId") Long statusId,
+                                            @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and st_bin in (:storageBin) and \n" +
+            "CAP_CHECK = 'FALSE' and pick_block = 0 and \n" +
+            "putaway_block = 0 and is_deleted = 0 order by st_bin", nativeQuery = true)
+    public StorageBinV2 getExistingStorageBinNonCBM(@Param("binclassId") Long binclassId,
+                                                    @Param("companyCode") String companyCode,
+                                                    @Param("plantId") String plantId,
+                                                    @Param("languageId") String languageId,
+                                                    @Param("storageBin") List<String> storageBin,
+                                                    @Param("warehouseId") String warehouseId);
+
+    @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
+            "wh_id = :warehouseId and lang_id = :languageId and \n" +
+//            "CAP_CHECK = 'FALSE' and pick_block = 0 and putaway_block = 0 and \n" +
+            " is_deleted = 0 order by st_bin", nativeQuery = true)
+    public StorageBinV2 getStorageBinNonCBMBinClassId(@Param("binclassId") Long binclassId,
+                                                      @Param("companyCode") String companyCode,
+                                                      @Param("plantId") String plantId,
+                                                      @Param("languageId") String languageId,
+                                                      @Param("warehouseId") String warehouseId);
+
+    StorageBinV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String storageBin, Long deletionIndicator);
 }
 
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class WorkCenterIdController {
     @ApiOperation(response = WorkCenterId.class, value = "Create WorkCenterId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postWorkCenterId(@Valid @RequestBody AddWorkCenterId newWorkCenterId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		WorkCenterId createdWorkCenterId = workcenteridService.createWorkCenterId(newWorkCenterId, loginUserID);
 		return new ResponseEntity<>(createdWorkCenterId , HttpStatus.OK);
 	}

@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.service;
 
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.deliveryheader.AddDeliveryHeader;
 import com.tekclover.wms.api.transaction.model.deliveryheader.DeliveryHeader;
 import com.tekclover.wms.api.transaction.model.deliveryheader.SearchDeliveryHeader;
 import com.tekclover.wms.api.transaction.model.deliveryheader.UpdateDeliveryHeader;
 import com.tekclover.wms.api.transaction.repository.DeliveryHeaderRepository;
+import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.specification.DeliveryHeaderSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,10 @@ public class DeliveryHeaderService {
     @Autowired
     private DeliveryHeaderRepository deliveryHeaderRepository;
 
+    @Autowired
+    private StagingLineV2Repository stagingLineV2Repository;
+
+    String statusDescription = null;
 
     /**
      * getAllDeliveryLine
@@ -54,7 +61,7 @@ public class DeliveryHeaderService {
      * @return
      */
     public DeliveryHeader getDeliveryHeader(String companyCodeId, String plantId,
-                                            String warehouseId, String languageId, String deliveryNo) {
+                                            String warehouseId, String languageId, Long deliveryNo) {
         Optional<DeliveryHeader> dbDeliveryHeader =
                 deliveryHeaderRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDeliveryNoAndLanguageIdAndDeletionIndicator(
                         companyCodeId,
@@ -78,38 +85,56 @@ public class DeliveryHeaderService {
 
 
     /**
-     *
      * @param newDeliveryHeader
      * @param loginUserID
      * @return
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public DeliveryHeader createDeliveryHeader (AddDeliveryHeader newDeliveryHeader, String loginUserID)
-                throws IllegalAccessException, InvocationTargetException {
-            Optional<DeliveryHeader> deliveryHeader =
-                    deliveryHeaderRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDeliveryNoAndLanguageIdAndDeletionIndicator(
-                            newDeliveryHeader.getCompanyCodeId(),
-                            newDeliveryHeader.getPlantId(),
-                            newDeliveryHeader.getWarehouseId(),
-                            newDeliveryHeader.getDeliveryNo(),
-                            newDeliveryHeader.getLanguageId(),
-                            0L);
-            if (!deliveryHeader.isEmpty()) {
-                throw new BadRequestException("Record is getting duplicated with the given values");
-            }
-            DeliveryHeader dbDeliveryHeader = new DeliveryHeader();
-            BeanUtils.copyProperties(newDeliveryHeader, dbDeliveryHeader, CommonUtils.getNullPropertyNames(newDeliveryHeader));
-            dbDeliveryHeader.setDeletionIndicator(0L);
-            dbDeliveryHeader.setCreatedBy(loginUserID);
-            dbDeliveryHeader.setUpdatedBy(loginUserID);
-            dbDeliveryHeader.setCreatedOn(new Date());
-            dbDeliveryHeader.setUpdatedOn(new Date());
-            return deliveryHeaderRepository.save(dbDeliveryHeader);
+    public DeliveryHeader createDeliveryHeader(AddDeliveryHeader newDeliveryHeader, String loginUserID)
+            throws IllegalAccessException, InvocationTargetException {
+        Optional<DeliveryHeader> deliveryHeader =
+                deliveryHeaderRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDeliveryNoAndLanguageIdAndDeletionIndicator(
+                        newDeliveryHeader.getCompanyCodeId(),
+                        newDeliveryHeader.getPlantId(),
+                        newDeliveryHeader.getWarehouseId(),
+                        newDeliveryHeader.getDeliveryNo(),
+                        newDeliveryHeader.getLanguageId(),
+                        0L);
+        if (!deliveryHeader.isEmpty()) {
+            throw new BadRequestException("Record is getting duplicated with the given values");
         }
+        DeliveryHeader dbDeliveryHeader = new DeliveryHeader();
+        BeanUtils.copyProperties(newDeliveryHeader, dbDeliveryHeader, CommonUtils.getNullPropertyNames(newDeliveryHeader));
+
+        IKeyValuePair description = stagingLineV2Repository.getDescription(dbDeliveryHeader.getCompanyCodeId(),
+                dbDeliveryHeader.getLanguageId(),
+                dbDeliveryHeader.getPlantId(),
+                dbDeliveryHeader.getWarehouseId());
+
+        dbDeliveryHeader.setCompanyDescription(description.getCompanyDesc());
+        dbDeliveryHeader.setPlantDescription(description.getPlantDesc());
+        dbDeliveryHeader.setWarehouseDescription(description.getWarehouseDesc());
+
+        if (dbDeliveryHeader.getStatusId() != null) {
+            statusDescription = stagingLineV2Repository.getStatusDescription(dbDeliveryHeader.getStatusId(), dbDeliveryHeader.getLanguageId());
+            dbDeliveryHeader.setStatusDescription(statusDescription);
+        }
+        Long deliveryNo = deliveryHeaderRepository.getDeliveryNo();
+        if (deliveryNo != null) {
+            dbDeliveryHeader.setDeliveryNo(deliveryNo);
+        } else {
+            dbDeliveryHeader.setDeliveryNo(1L);
+        }
+        dbDeliveryHeader.setDeletionIndicator(0L);
+        dbDeliveryHeader.setCreatedBy(loginUserID);
+        dbDeliveryHeader.setUpdatedBy(loginUserID);
+        dbDeliveryHeader.setCreatedOn(new Date());
+        dbDeliveryHeader.setUpdatedOn(new Date());
+        return deliveryHeaderRepository.save(dbDeliveryHeader);
+    }
 
     /**
-     *
      * @param companyCodeId
      * @param plantId
      * @param warehouseId
@@ -121,21 +146,20 @@ public class DeliveryHeaderService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public DeliveryHeader UpdateDeliveryHeader(String companyCodeId, String plantId, String warehouseId, String deliveryNo,
+    public DeliveryHeader UpdateDeliveryHeader(String companyCodeId, String plantId, String warehouseId, Long deliveryNo,
                                                String languageId, UpdateDeliveryHeader updateDeliveryHeader, String loginUserId)
-        throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException {
 
-            DeliveryHeader dbDeliveryHeader =
-                    getDeliveryHeader(companyCodeId,plantId,warehouseId,languageId,deliveryNo);
-            BeanUtils.copyProperties(updateDeliveryHeader,dbDeliveryHeader,CommonUtils.getNullPropertyNames(updateDeliveryHeader));
-            dbDeliveryHeader.setUpdatedBy(loginUserId);
-            dbDeliveryHeader.setUpdatedOn(new Date());
-            return deliveryHeaderRepository.save(dbDeliveryHeader);
-        }
+        DeliveryHeader dbDeliveryHeader =
+                getDeliveryHeader(companyCodeId, plantId, warehouseId, languageId, deliveryNo);
+        BeanUtils.copyProperties(updateDeliveryHeader, dbDeliveryHeader, CommonUtils.getNullPropertyNames(updateDeliveryHeader));
+        dbDeliveryHeader.setUpdatedBy(loginUserId);
+        dbDeliveryHeader.setUpdatedOn(new Date());
+        return deliveryHeaderRepository.save(dbDeliveryHeader);
+    }
 
 
     /**
-     *
      * @param companyCodeId
      * @param plantId
      * @param warehouseId
@@ -143,31 +167,49 @@ public class DeliveryHeaderService {
      * @param languageId
      * @param loginUserID
      */
-    public void deleteDeliveryHeader(String companyCodeId,String plantId,String warehouseId,
-                                     String deliveryNo,String languageId,String loginUserID){
+    public void deleteDeliveryHeader(String companyCodeId, String plantId, String warehouseId,
+                                     Long deliveryNo, String languageId, String loginUserID) {
 
-        DeliveryHeader deliveryHeader = getDeliveryHeader(companyCodeId,plantId,warehouseId,languageId,deliveryNo);
-        if(deliveryHeader != null){
+        DeliveryHeader deliveryHeader = getDeliveryHeader(companyCodeId, plantId, warehouseId, languageId, deliveryNo);
+        if (deliveryHeader != null) {
             deliveryHeader.setDeletionIndicator(1L);
             deliveryHeader.setUpdatedBy(loginUserID);
             deliveryHeaderRepository.save(deliveryHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + deliveryNo);
         }
-        }
+    }
 
     /**
-     *
      * @param searchDeliveryHeader
      * @return
      * @throws ParseException
      */
     public List<DeliveryHeader> findDeliveryHeader(SearchDeliveryHeader searchDeliveryHeader) throws ParseException {
 
-       DeliveryHeaderSpecification spec = new DeliveryHeaderSpecification(searchDeliveryHeader);
-       List<DeliveryHeader> results = deliveryHeaderRepository.findAll(spec);
-        results = results.stream().filter(n-> n.getDeletionIndicator() == 0).collect(Collectors.toList());
+        DeliveryHeaderSpecification spec = new DeliveryHeaderSpecification(searchDeliveryHeader);
+        List<DeliveryHeader> results = deliveryHeaderRepository.findAll(spec);
+        results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
+
+        List<DeliveryHeader> deliveryHeaderList = new ArrayList<>();
+        for(DeliveryHeader deliveryHeader : results) {
+
+            IKeyValuePair description = stagingLineV2Repository.getDescription(deliveryHeader.getCompanyCodeId(),
+                    deliveryHeader.getLanguageId(),
+                    deliveryHeader.getPlantId(),
+                    deliveryHeader.getWarehouseId());
+            if(description != null) {
+                deliveryHeader.setCompanyDescription(description.getCompanyDesc());
+                deliveryHeader.setPlantDescription(description.getPlantDesc());
+                deliveryHeader.setWarehouseDescription(description.getWarehouseDesc());
+            }
+            if (deliveryHeader.getStatusId() != null) {
+                statusDescription = stagingLineV2Repository.getStatusDescription(deliveryHeader.getStatusId(), deliveryHeader.getLanguageId());
+                deliveryHeader.setStatusDescription(statusDescription);
+            }
+            deliveryHeaderList.add(deliveryHeader);
+        }
         log.info("results: " + results);
-        return results;
+        return deliveryHeaderList;
     }
 }

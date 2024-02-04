@@ -1,0 +1,3 @@
+languageId,companyCodeId,plantId,warehouseId,storageBin,floorId,storageSectionId,rowId,aisleNumber,spanId,shelfId,binSectionId,storageTypeId,binClassId,description,binBarcode,putawayBlock,pickingBlock,blockReason,statusId,occupiedVolume,occupiedWeight,occupiedQuantity,remainingVolume,remainingWeight,remainingQuantity,totalVolume,totalWeight,totalQuantity,capacityCheck,allocatedVolume,deletionIndicator,dType,createdBy
+EN,21,212,100,10,5,1,1,1,1,1,1,1,1,bharathi,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,BINLOCATION,arm
+EN,21,212,100,15,5,1,1,1,1,1,1,1,1,bharathi,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,BINLOCATION,mrm

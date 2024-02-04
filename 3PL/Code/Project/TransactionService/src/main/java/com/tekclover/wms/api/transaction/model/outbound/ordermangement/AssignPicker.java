@@ -1,7 +1,5 @@
 package com.tekclover.wms.api.transaction.model.outbound.ordermangement;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import lombok.Data;
 
 @Data

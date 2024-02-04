@@ -12,6 +12,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.SubLevelIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,7 @@ public class SubLevelIdService{
 	 * @throws InvocationTargetException
 	 */
 	public SubLevelId createSubLevelId (AddSubLevelId newSubLevelId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubLevelId dbSubLevelId = new SubLevelId();
 		Optional<SubLevelId> duplicateSubLevelId = subLevelIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndSubLevelIdAndLevelIdAndLanguageIdAndDeletionIndicator(newSubLevelId.getCompanyCodeId(), newSubLevelId.getPlantId(), newSubLevelId.getWarehouseId(), newSubLevelId.getSubLevelId(), newSubLevelId.getLevelId(), newSubLevelId.getLanguageId(), 0L);
 		if (!duplicateSubLevelId.isEmpty()) {
@@ -161,7 +162,7 @@ public class SubLevelIdService{
 	 */
 	public SubLevelId updateSubLevelId (String warehouseId, String subLevelId,Long levelId,String companyCodeId,String languageId,String plantId,String loginUserID,
 										UpdateSubLevelId updateSubLevelId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubLevelId dbSubLevelId = getSubLevelId(warehouseId, subLevelId,levelId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSubLevelId, dbSubLevelId, CommonUtils.getNullPropertyNames(updateSubLevelId));
 		dbSubLevelId.setUpdatedBy(loginUserID);

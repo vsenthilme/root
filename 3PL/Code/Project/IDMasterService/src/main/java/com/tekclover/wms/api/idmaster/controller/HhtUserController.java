@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -32,74 +33,75 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Validated
 @Api(tags = {"HhtUser"}, value = "HhtUser  Operations related to HhtUserController") // label for swagger
-@SwaggerDefinition(tags = {@Tag(name = "HhtUser ",description = "Operations related to HhtUser ")})
+@SwaggerDefinition(tags = {@Tag(name = "HhtUser ", description = "Operations related to HhtUser ")})
 @RequestMapping("/hhtuser")
 @RestController
 public class HhtUserController {
-	
-	@Autowired
-	HhtUserService hhtuserService;
-	
-    @ApiOperation(response = HhtUserOutput.class, value = "Get all HhtUser details") // label for swagger
-	@GetMapping("")
-	public ResponseEntity<?> getAll() {
-		List<HhtUserOutput> hhtuserList = hhtuserService.getHhtUsers();
-		return new ResponseEntity<>(hhtuserList, HttpStatus.OK); 
-	}
-    
-    @ApiOperation(response = HhtUserOutput.class, value = "Get a HhtUser") // label for swagger
-	@GetMapping("/{userId}")
-	public ResponseEntity<?> getHhtUser(@PathVariable String userId, @RequestParam String warehouseId,
-										@RequestParam String companyCodeId, @RequestParam Long levelId,
-										@RequestParam String languageId,@RequestParam String plantId) {
 
-		HhtUserOutput hhtuser = hhtuserService.getHhtUser(userId, warehouseId,companyCodeId,levelId,plantId,languageId);
-    	log.info("HhtUser : " + hhtuser);
-		return new ResponseEntity<>(hhtuser, HttpStatus.OK);
-	}
-    
+    @Autowired
+    HhtUserService hhtuserService;
+
+    @ApiOperation(response = HhtUserOutput.class, value = "Get all HhtUser details") // label for swagger
+    @GetMapping("")
+    public ResponseEntity<?> getAll() {
+        List<HhtUserOutput> hhtuserList = hhtuserService.getHhtUsers();
+        return new ResponseEntity<>(hhtuserList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = HhtUserOutput.class, value = "Get a HhtUser") // label for swagger
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getHhtUser(@PathVariable String userId, @RequestParam String warehouseId,
+                                        @RequestParam String companyCodeId, @RequestParam String languageId,
+                                        @RequestParam String plantId) {
+
+        HhtUserOutput hhtuser = hhtuserService.getHhtUser(userId, warehouseId, companyCodeId, plantId, languageId);
+        log.info("HhtUser : " + hhtuser);
+        return new ResponseEntity<>(hhtuser, HttpStatus.OK);
+    }
+
     @ApiOperation(response = HhtUserOutput.class, value = "Get HhtUsers") // label for swagger
-   	@GetMapping("/{warehouseId}/hhtUser")
-   	public ResponseEntity<?> getHhtUser(@PathVariable String warehouseId) {
-       	List<HhtUserOutput> hhtuser = hhtuserService.getHhtUser(warehouseId);
-       	log.info("HhtUser : " + hhtuser);
-   		return new ResponseEntity<>(hhtuser, HttpStatus.OK);
-   	}
-    
+    @GetMapping("/{warehouseId}/hhtUser")
+    public ResponseEntity<?> getHhtUser(@PathVariable String warehouseId) {
+        List<HhtUserOutput> hhtuser = hhtuserService.getHhtUser(warehouseId);
+        log.info("HhtUser : " + hhtuser);
+        return new ResponseEntity<>(hhtuser, HttpStatus.OK);
+    }
+
     @ApiOperation(response = HhtUser.class, value = "Create HhtUser") // label for swagger
-	@PostMapping("")
-	public ResponseEntity<?> postHhtUser(@Valid @RequestBody AddHhtUser newHhtUser, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
-		HhtUser createdHhtUser = hhtuserService.createHhtUser(newHhtUser, loginUserID);
-		return new ResponseEntity<>(createdHhtUser , HttpStatus.OK);
-	}
-    
+    @PostMapping("")
+    public ResponseEntity<?> postHhtUser(@Valid @RequestBody AddHhtUser newHhtUser, @RequestParam String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, ParseException {
+        HhtUser createdHhtUser = hhtuserService.createHhtUser(newHhtUser, loginUserID);
+        return new ResponseEntity<>(createdHhtUser, HttpStatus.OK);
+    }
+
     @ApiOperation(response = HhtUser.class, value = "Update HhtUser") // label for swagger
     @PatchMapping("/{userId}")
-	public ResponseEntity<?> patchHhtUser(@PathVariable String userId, @RequestParam String warehouseId,
-										  @RequestParam String companyCodeId,@RequestParam String plantId,
-										  @RequestParam String languageId, @Valid @RequestBody UpdateHhtUser updateHhtUser,
-										  @RequestParam String loginUserID,@RequestParam Long levelId)
-			throws IllegalAccessException, InvocationTargetException {
-		HhtUser createdHhtUser = 
-				hhtuserService.updateHhtUser(warehouseId, userId,companyCodeId,languageId,
-						levelId,plantId,updateHhtUser, loginUserID);
-		return new ResponseEntity<>(createdHhtUser , HttpStatus.OK);
-	}
-    
+    public ResponseEntity<?> patchHhtUser(@PathVariable String userId, @RequestParam String warehouseId,
+                                          @RequestParam String companyCodeId, @RequestParam String plantId,
+                                          @RequestParam String languageId, @Valid @RequestBody UpdateHhtUser updateHhtUser,
+                                          @RequestParam String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, ParseException {
+        HhtUser createdHhtUser =
+                hhtuserService.updateHhtUser(warehouseId, userId, companyCodeId, languageId,
+                         plantId, updateHhtUser, loginUserID);
+        return new ResponseEntity<>(createdHhtUser, HttpStatus.OK);
+    }
+
     @ApiOperation(response = HhtUser.class, value = "Delete HhtUser") // label for swagger
-	@DeleteMapping("/{userId}")
-	public ResponseEntity<?> deleteHhtUser(@PathVariable String userId,@RequestParam String companyCodeId,
-										   @RequestParam String languageId,@RequestParam String plantId,@RequestParam Long levelId,
-										   @RequestParam String warehouseId, @RequestParam String loginUserID) {
-    	hhtuserService.deleteHhtUser(warehouseId, userId,companyCodeId,levelId,plantId,languageId,loginUserID);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
-	//Search
-	@ApiOperation(response = HhtUserOutput.class, value = "Find HhtUser") // label for swagger
-	@PostMapping("/findHhtUser")
-	public ResponseEntity<?> findHhtUser(@Valid @RequestBody FindHhtUser findHhtUser) throws Exception {
-		List<HhtUserOutput> createdHhtUser = hhtuserService.findHhtUser(findHhtUser);
-		return new ResponseEntity<>(createdHhtUser, HttpStatus.OK);
-	}
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteHhtUser(@PathVariable String userId, @RequestParam String companyCodeId,
+                                           @RequestParam String languageId, @RequestParam String plantId,
+                                           @RequestParam String warehouseId, @RequestParam String loginUserID) throws ParseException {
+        hhtuserService.deleteHhtUser(warehouseId, userId, companyCodeId, plantId, languageId, loginUserID);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //Search
+    @ApiOperation(response = HhtUserOutput.class, value = "Find HhtUser") // label for swagger
+    @PostMapping("/findHhtUser")
+    public ResponseEntity<?> findHhtUser(@Valid @RequestBody FindHhtUser findHhtUser) throws Exception {
+        List<HhtUserOutput> createdHhtUser = hhtuserService.findHhtUser(findHhtUser);
+        return new ResponseEntity<>(createdHhtUser, HttpStatus.OK);
+    }
 }

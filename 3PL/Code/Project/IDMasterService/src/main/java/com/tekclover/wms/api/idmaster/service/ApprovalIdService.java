@@ -9,6 +9,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ApprovalIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,7 @@ public class ApprovalIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ApprovalId createApprovalId (AddApprovalId newApprovalId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalId dbApprovalId = new ApprovalId();
 		Optional<ApprovalId> duplicateApprovalId = approvalIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndApprovalIdAndApprovalLevelAndApprovalProcessIdAndLanguageIdAndDeletionIndicator(newApprovalId.getCompanyCodeId(), newApprovalId.getPlantId(), newApprovalId.getWarehouseId(), newApprovalId.getApprovalId(), newApprovalId.getApprovalLevel(), newApprovalId.getApprovalProcessId(), newApprovalId.getLanguageId(), 0L);
 		if (!duplicateApprovalId.isEmpty()) {
@@ -164,7 +165,7 @@ public class ApprovalIdService {
 	 */
 	public ApprovalId updateApprovalId (String warehouseId, String approvalId,String approvalLevel,String approvalProcessId,String companyCodeId,String languageId,String plantId,String loginUserID,
 										UpdateApprovalId updateApprovalId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalId dbApprovalId = getApprovalId(warehouseId, approvalId, approvalLevel,approvalProcessId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateApprovalId, dbApprovalId, CommonUtils.getNullPropertyNames(updateApprovalId));
 		dbApprovalId.setUpdatedBy(loginUserID);

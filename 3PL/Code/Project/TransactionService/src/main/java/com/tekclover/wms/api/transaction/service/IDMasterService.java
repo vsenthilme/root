@@ -132,7 +132,7 @@ public class IDMasterService {
 			
 			UriComponentsBuilder builder = 
 					UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + 
-							"numberRange/nextNumberRange/" + numberRangeCode)
+							"numberrange/nextNumberRange/" + numberRangeCode)
 					.queryParam("fiscalYear", fiscalYear)
 					.queryParam("warehouseId", warehouseId);
 
@@ -289,6 +289,26 @@ public class IDMasterService {
 	}
 
 	//----------------------------------------------------V2--------------------------------------------------------------
+
+	public StatusId getStatus(Long statusId, String warehouseId, String languageId, String authToken) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "Classic WMS's RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "statusid/" + statusId)
+					.queryParam("languageId", languageId)
+					.queryParam("warehouseId", warehouseId);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<StatusId> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, StatusId.class);
+			log.info("result : " + result.getBody());
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BadRequestException(e.getLocalizedMessage());
+		}
+	}
+
 	// GET
 	public String getNextNumberRange(Long numberRangeCode, String warehouseId,
 									 String companyCodeId, String plantId,

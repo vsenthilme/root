@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.model.itemgroupid.ItemGroupId;
 import com.tekclover.wms.api.idmaster.model.subitemgroupid.FindSubItemGroupId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.SubItemGroupIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -167,7 +168,7 @@ public class SubItemGroupIdService{
 	 * @throws InvocationTargetException
 	 */
 	public SubItemGroupId createSubItemGroupId (AddSubItemGroupId newSubItemGroupId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubItemGroupId dbSubItemGroupId = new SubItemGroupId();
 
 		Optional<SubItemGroupId> duplicateSubItemGroupId
@@ -218,7 +219,7 @@ public class SubItemGroupIdService{
 	public SubItemGroupId updateSubItemGroupId (String warehouseId, Long itemTypeId, Long itemGroupId, Long subItemGroupId,
 												String companyCodeId,String languageId,
 												String plantId,String loginUserID, UpdateSubItemGroupId updateSubItemGroupId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		SubItemGroupId dbSubItemGroupId =
 				getSubItemGroupId(warehouseId, itemTypeId, itemGroupId, subItemGroupId,companyCodeId,languageId,plantId);

@@ -16,6 +16,7 @@ import com.tekclover.wms.api.masters.repository.ImBatchSerialRepository;
 import com.tekclover.wms.api.masters.repository.specification.DockSpecification;
 import com.tekclover.wms.api.masters.repository.specification.ImBatchSerialSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.print.Doc;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -97,7 +99,7 @@ public class DockService {
      * @throws InvocationTargetException
      */
     public Dock createDock (AddDock newDock, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Dock dbDock = new Dock();
         Optional<Dock> duplicateDock = dockRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndDockTypeAndDockIdAndDeletionIndicator(
                 newDock.getCompanyCodeId(),
@@ -129,7 +131,7 @@ public class DockService {
      * @throws InvocationTargetException
      */
     public Dock updateDock (String companyCodeId, String plantId, String warehouseId, String languageId, String dockType, String dockId, UpdateDock updateDock, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Dock dbDock = getDock(dockId,companyCodeId,plantId,languageId,warehouseId,dockType);
         BeanUtils.copyProperties(updateDock, dbDock, CommonUtils.getNullPropertyNames(updateDock));
         dbDock.setUpdatedBy(loginUserID);
@@ -142,7 +144,7 @@ public class DockService {
      * @param dockId
      * @param dockType
      */
-    public void deleteDock (String companyCodeId,String languageId,String plantId,String warehouseId,String dockId,String dockType,String loginUserID) {
+    public void deleteDock (String companyCodeId,String languageId,String plantId,String warehouseId,String dockId,String dockType,String loginUserID) throws ParseException {
         Dock dock = getDock(dockId,companyCodeId,plantId,languageId,warehouseId,dockType);
         if ( dock != null) {
             dock.setDeletionIndicator (1L);

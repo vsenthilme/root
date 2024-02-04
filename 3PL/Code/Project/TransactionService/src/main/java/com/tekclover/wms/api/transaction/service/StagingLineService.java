@@ -1,48 +1,47 @@
 package com.tekclover.wms.api.transaction.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.tekclover.wms.api.transaction.model.IKeyValuePair;
-import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrHeaderV2;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
-import com.tekclover.wms.api.transaction.model.inbound.staging.v2.SearchStagingLineV2;
-import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
-import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
-import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.repository.*;
-import com.tekclover.wms.api.transaction.repository.specification.StagingLineV2Specification;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
-import org.springframework.stereotype.Service;
-
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StatusId;
 import com.tekclover.wms.api.transaction.model.dto.Warehouse;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.AddGrHeader;
 import com.tekclover.wms.api.transaction.model.inbound.gr.GrHeader;
+import com.tekclover.wms.api.transaction.model.inbound.gr.PackBarcode;
+import com.tekclover.wms.api.transaction.model.inbound.gr.v2.AddGrLineV2;
+import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLineEntity;
-import com.tekclover.wms.api.transaction.model.inbound.staging.AddStagingLine;
-import com.tekclover.wms.api.transaction.model.inbound.staging.AssignHHTUser;
-import com.tekclover.wms.api.transaction.model.inbound.staging.CaseConfirmation;
-import com.tekclover.wms.api.transaction.model.inbound.staging.SearchStagingLine;
-import com.tekclover.wms.api.transaction.model.inbound.staging.StagingHeader;
-import com.tekclover.wms.api.transaction.model.inbound.staging.StagingLine;
-import com.tekclover.wms.api.transaction.model.inbound.staging.StagingLineEntity;
-import com.tekclover.wms.api.transaction.model.inbound.staging.UpdateStagingHeader;
-import com.tekclover.wms.api.transaction.model.inbound.staging.UpdateStagingLine;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
+import com.tekclover.wms.api.transaction.model.inbound.staging.*;
+import com.tekclover.wms.api.transaction.model.inbound.staging.v2.SearchStagingLineV2;
+import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
+import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.StagingLineSpecification;
+import com.tekclover.wms.api.transaction.repository.specification.StagingLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-
+import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ParseException;
+import org.springframework.stereotype.Service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -81,6 +80,21 @@ public class StagingLineService extends BaseService {
 
     @Autowired
     private GrHeaderV2Repository grHeaderV2Repository;
+
+    @Autowired
+    private GrLineService grLineService;
+
+    @Autowired
+    private MastersService mastersService;
+
+    @Autowired
+    private PutAwayHeaderService putAwayHeaderService;
+
+    @Autowired
+    private PutAwayLineService putAwayLineService;
+
+    @Autowired
+    private InboundHeaderService inboundHeaderService;
 
     String statusDescription = null;
     //----------------------------------------------------------------------------------------
@@ -650,6 +664,28 @@ public class StagingLineService extends BaseService {
         return stagingLineV2.get();
     }
 
+    public StagingLineEntityV2 getStagingLineForPutAwayLineV2(String companyCodeId, String plantId, String languageId,
+                                                              String warehouseId, String preInboundNo,
+                                                              String refDocNumber, Long lineNo, String itemCode, String manufacturerName) {
+        Optional<StagingLineEntityV2> stagingLineV2 = stagingLineV2Repository
+                .findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        languageId,
+                        companyCodeId,
+                        plantId,
+                        warehouseId,
+                        preInboundNo,
+                        refDocNumber,
+                        lineNo,
+                        itemCode,
+                        manufacturerName,
+                        0L);
+        if (stagingLineV2 == null || stagingLineV2.isEmpty()) {
+            return null;
+        }
+        log.info("dbStagingLine: " + stagingLineV2.get());
+        return stagingLineV2.get();
+    }
+
     /**
      * getStagingLineEntity
      *
@@ -681,6 +717,128 @@ public class StagingLineService extends BaseService {
                     ",lineNo: " + lineNo +
                     ",itemCode: " + itemCode +
                     " doesn't exist.");
+        }
+
+        return StagingLineEntity;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param preInboundNo
+     * @return
+     */
+    public List<StagingLineEntityV2> getStagingLineForGrConfirmV2(String companyCode, String plantId, String languageId,
+                                                                  String warehouseId, String refDocNumber, String preInboundNo) {
+        List<StagingLineEntityV2> StagingLineEntity =
+                stagingLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        preInboundNo,
+                        0L);
+        if (StagingLineEntity.isEmpty()) {
+             return null;
+        }
+
+        return StagingLineEntity;
+    }
+
+    /**
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param preInboundNo
+     * @return
+     */
+    public StagingLineEntityV2 getStagingLineForReversalV2(String companyCode, String plantId, String languageId,
+                                                           String warehouseId, String refDocNumber, String preInboundNo,
+                                                           String itemCode, String manufacturerName, Long lineNo) {
+        StagingLineEntityV2 StagingLineEntity =
+                stagingLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        preInboundNo,
+                        lineNo,
+                        itemCode,
+                        manufacturerName,
+                        0L);
+        if (StagingLineEntity == null) {
+            return null;
+        }
+
+        return StagingLineEntity;
+    }
+
+    /**
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param preInboundNo
+     * @param itemCode
+     * @param manufacturerName
+     * @param caseCode
+     * @param palletCode
+     * @return
+     */
+    public StagingLineEntityV2 getStagingLineForReversalV2(String companyCode, String plantId, String languageId,
+                                                           String warehouseId, String refDocNumber, String preInboundNo,
+                                                           String itemCode, String manufacturerName, String caseCode, String palletCode) {
+        StagingLineEntityV2 StagingLineEntity =
+                stagingLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndItemCodeAndManufacturerNameAndCaseCodeAndPalletCodeAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        preInboundNo,
+                        itemCode,
+                        manufacturerName,
+                        caseCode,
+                        palletCode,
+                        0L);
+        if (StagingLineEntity == null) {
+            return null;
+        }
+
+        return StagingLineEntity;
+    }
+
+    /**
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param stagingNo
+     * @param caseCode
+     * @return
+     */
+    public List<StagingLineEntityV2> getStagingLineForGrLine(String companyCode, String plantId, String languageId,
+                                                             String warehouseId, String stagingNo, String caseCode) {
+        List<StagingLineEntityV2> StagingLineEntity =
+                stagingLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndStagingNoAndCaseCodeAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        stagingNo,
+                        caseCode,
+                        0L);
+        if (StagingLineEntity.isEmpty()) {
+            return null;
         }
 
         return StagingLineEntity;
@@ -739,10 +897,10 @@ public class StagingLineService extends BaseService {
      * @return
      * @throws ParseException
      */
-    public List<StagingLineEntityV2> findStagingLineV2(SearchStagingLineV2 searchStagingLine)
+    public Stream<StagingLineEntityV2> findStagingLineV2(SearchStagingLineV2 searchStagingLine)
             throws ParseException {
         StagingLineV2Specification spec = new StagingLineV2Specification(searchStagingLine);
-        List<StagingLineEntityV2> searchResults = stagingLineV2Repository.findAll(spec);
+        Stream<StagingLineEntityV2> searchResults = stagingLineV2Repository.stream(spec, StagingLineEntityV2.class);
 //		log.info("searchResults: " + searchResults);
 
         return searchResults;
@@ -764,11 +922,11 @@ public class StagingLineService extends BaseService {
                                                          String stagingNo, String warehouseId,
                                                          String companyCodeId, String plantId, String languageId,
                                                          String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         List<StagingLineEntityV2> stagingLineEntityList = new ArrayList<>();
         String preInboundNo = null;
 
-        // Casecode needs to be created automatically by calling /{numberOfCases}/barcode") from StagingHeader
+        // Casecode needs to be created automatically by calling /({numberOfCases}/barcode) from StagingHeader
         Long numberOfCases = 1L;
         List<String> caseCodeList = stagingHeaderService.generateNumberRanges(numberOfCases, warehouseId, companyCodeId, plantId, languageId);
         if (caseCodeList == null || caseCodeList.isEmpty()) {
@@ -821,11 +979,11 @@ public class StagingLineService extends BaseService {
                                 companyCodeId));
 
                 //Pass ITM_CODE/SUPPLIER_CODE received in integration API into IMPARTNER table and fetch PARTNER_ITEM_BARCODE values. Values can be multiple
-                String barcode = stagingLineV2Repository.getPartnerItemBarcode(newStagingLine.getItemCode(),
+                List<String> barcode = stagingLineV2Repository.getPartnerItemBarcode(newStagingLine.getItemCode(),
                         newStagingLine.getCompanyCode(),
                         newStagingLine.getPlantId(),
                         newStagingLine.getWarehouseId(),
-                        newStagingLine.getManufacturerCode(),
+                        newStagingLine.getManufacturerName(),
                         newStagingLine.getLanguageId());
                 log.info("Barcode : " + barcode);
                 //for interim only the following condition is used
@@ -833,7 +991,10 @@ public class StagingLineService extends BaseService {
 //                    barcode = stagingLineV2Repository.getPartnerItemBarcode(newStagingLine.getItemCode(),
 //                            newStagingLine.getManufacturerCode());
 //                }
-                dbStagingLineEntity.setPartner_item_barcode(barcode);
+                if (barcode != null && !barcode.isEmpty()) {
+//                    dbStagingLineEntity.setPartner_item_barcode(barcode.replaceAll("\\s", "").trim());      //to remove white space
+                    dbStagingLineEntity.setPartner_item_barcode(barcode.get(0));
+                }
 
                 IKeyValuePair description = stagingLineV2Repository.getDescription(companyCodeId,
                         languageId,
@@ -847,10 +1008,22 @@ public class StagingLineService extends BaseService {
                 dbStagingLineEntity.setPlantDescription(description.getPlantDesc());
                 dbStagingLineEntity.setWarehouseDescription(description.getWarehouseDesc());
                 dbStagingLineEntity.setStagingNo(stagingNo);
-                dbStagingLineEntity.setBusinessPartnerCode(newStagingLine.getBusinessPartnerCode());
+
+                dbStagingLineEntity.setContainerNo(newStagingLine.getContainerNo());
+
+                dbStagingLineEntity.setManufacturerCode(newStagingLine.getManufacturerCode());
+                dbStagingLineEntity.setManufacturerName(newStagingLine.getManufacturerName());
+                dbStagingLineEntity.setManufacturerPartNo(newStagingLine.getManufacturerPartNo());
+
+//                dbStagingLineEntity.setBranchCode(newStagingLine.getBranchCode());
+//                dbStagingLineEntity.setTransferOrderNo(newStagingLine.getTransferOrderNo());
+//                dbStagingLineEntity.setIsCompleted(newStagingLine.getIsCompleted());
+
                 dbStagingLineEntity.setDeletionIndicator(0L);
                 dbStagingLineEntity.setCreatedBy(loginUserID);
                 dbStagingLineEntity.setUpdatedBy(loginUserID);
+//                dbStagingLineEntity.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//                dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 dbStagingLineEntity.setCreatedOn(new Date());
                 dbStagingLineEntity.setUpdatedOn(new Date());
                 stagingLineEntityList.add(dbStagingLineEntity);
@@ -899,6 +1072,7 @@ public class StagingLineService extends BaseService {
             List<StagingLineEntityV2> responseStagingLineEntityList =
                     caseConfirmationV2(caseConfirmationList, caseCodeForCaseConfirmation,
                             companyCodeId, plantId, languageId, loginUserID);
+
             return responseStagingLineEntityList;
         }
         return null;
@@ -922,11 +1096,12 @@ public class StagingLineService extends BaseService {
     public StagingLineEntityV2 updateStagingLineV2(String companyCode, String plantId, String languageId, String warehouseId,
                                                    String preInboundNo, String refDocNumber, String stagingNo, String palletCode, String caseCode, Long lineNo,
                                                    String itemCode, String loginUserID, StagingLineEntityV2 updateStagingLine)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         StagingLineEntityV2 dbStagingLineEntity = getStagingLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo, palletCode,
                 caseCode, lineNo, itemCode);
         BeanUtils.copyProperties(updateStagingLine, dbStagingLineEntity, CommonUtils.getNullPropertyNames(updateStagingLine));
         dbStagingLineEntity.setUpdatedBy(loginUserID);
+//        dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingLineEntity.setUpdatedOn(new Date());
         return stagingLineV2Repository.save(dbStagingLineEntity);
     }
@@ -941,11 +1116,13 @@ public class StagingLineService extends BaseService {
      */
     public List<StagingLineEntityV2> assignHHTUserV2(List<AssignHHTUser> assignHHTUsers, String companyCodeId, String plantId,
                                                      String languageId, String assignedUserId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
 
         List<StagingLineEntityV2> updatedStagingLineEntityList = new ArrayList<>();
 
         for (AssignHHTUser assignHHTUser : assignHHTUsers) {
+
+            log.info("Assign HHt User: " + assignedUserId);
 
             StagingLineEntityV2 dbStagingLineEntity = getStagingLineV2(
                     companyCodeId,
@@ -961,9 +1138,15 @@ public class StagingLineService extends BaseService {
                     assignHHTUser.getItemCode());
             dbStagingLineEntity.setAssignedUserId(assignedUserId);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
+//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
+            log.info("StagingLine: " + dbStagingLineEntity);
 
             StagingLineEntityV2 updatedStagingLineEntity = stagingLineV2Repository.save(dbStagingLineEntity);
+            log.info("StagingLine Updated: " + updatedStagingLineEntity);
+            if(updatedStagingLineEntity != null) {
+                log.info("Updated StagingLine --> statusId, assignedUserId: " + updatedStagingLineEntity.getStatusId() + ", " + updatedStagingLineEntity.getAssignedUserId());
+            }
 
             updatedStagingLineEntityList.add(updatedStagingLineEntity);
         }
@@ -990,7 +1173,7 @@ public class StagingLineService extends BaseService {
     public List<StagingLineEntityV2> caseConfirmationV2(List<CaseConfirmation> caseConfirmations,
                                                         String caseCode, String companyCodeId, String plantId,
                                                         String languageId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
 
         log.info("caseConfirmation--called----> : " + caseConfirmations);
 
@@ -1015,6 +1198,7 @@ public class StagingLineService extends BaseService {
             dbStagingLineEntity.setStatusDescription(statusDescription);
             dbStagingLineEntity.setCaseCode(caseCode);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
+//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
             StagingLineEntityV2 updatedStagingLineEntity = stagingLineV2Repository.save(dbStagingLineEntity);
 
@@ -1108,6 +1292,23 @@ public class StagingLineService extends BaseService {
                     authTokenForIDMasterService.getAccess_token());
             addGrHeader.setGoodsReceiptNo(nextGRHeaderNumber);
 
+//            addGrHeader.setMiddlewareId(updatedStagingLineEntity.getMiddlewareId());
+//            addGrHeader.setMiddlewareTable(updatedStagingLineEntity.getMiddlewareTable());
+//            addGrHeader.setReferenceDocumentType(updatedStagingLineEntity.getReferenceDocumentType());
+//            addGrHeader.setManufacturerFullName(updatedStagingLineEntity.getManufacturerFullName());
+            addGrHeader.setManufacturerName(updatedStagingLineEntity.getManufacturerName());
+
+            List<StagingHeaderV2> stagingHeaderList = stagingHeaderService.getStagingHeaderV2(
+                    addGrHeader.getCompanyCode(), addGrHeader.getPlantId(), addGrHeader.getLanguageId(),
+                    addGrHeader.getWarehouseId(), addGrHeader.getPreInboundNo(), addGrHeader.getRefDocNumber());
+
+//            for (StagingHeaderV2 stagingHeaderV2 : stagingHeaderList) {
+//                addGrHeader.setTransferOrderDate(stagingHeaderV2.getTransferOrderDate());
+//                addGrHeader.setIsCompleted(stagingHeaderV2.getIsCompleted());
+//                addGrHeader.setIsCancelled(stagingHeaderV2.getIsCancelled());
+//                addGrHeader.setMUpdatedOn(stagingHeaderV2.getMUpdatedOn());
+//            }
+
             // STATUS_ID
             addGrHeader.setStatusId(16L);
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
@@ -1115,10 +1316,179 @@ public class StagingLineService extends BaseService {
 
             GrHeaderV2 createdGrHeader = grHeaderService.createGrHeaderV2(addGrHeader, loginUserID);
             log.info("createdGrHeader : " + createdGrHeader);
+
+            if (createdGrHeader != null && createdGrHeader.getInboundOrderTypeId() == 5) {  //Direct Stock Receipt Condition
+                createGrLine(createdGrHeader);
+            }
         }
 
         return updatedStagingLineEntityList;
     }
+
+    /**
+     * @param grHeader
+     */
+    public void createGrLine(GrHeaderV2 grHeader) throws InvocationTargetException, IllegalAccessException, java.text.ParseException {
+
+        List<StagingLineEntityV2> stagingLineEntityList = getStagingLineForGrLine(grHeader.getCompanyCode(),
+                grHeader.getPlantId(), grHeader.getLanguageId(), grHeader.getWarehouseId(),
+                grHeader.getStagingNo(), grHeader.getCaseCode());
+
+        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+
+        Double itemLength = 0D;
+        Double itemWidth = 0D;
+        Double itemHeight = 0D;
+        Double orderQty = 0D;
+        Double cbm = 0D;
+        Double cbmPerQty = 0D;
+
+        String hhtUser = "DirecStockReceipt";
+
+        List<AddGrLineV2> newGrLineList = new ArrayList<>();
+
+        for (StagingLineEntityV2 dbStagingLine : stagingLineEntityList) {
+            List<PackBarcode> packBarcodeList = new ArrayList<>();
+            AddGrLineV2 newGrLine = new AddGrLineV2();
+            PackBarcode newPackBarcode = new PackBarcode();
+
+            BeanUtils.copyProperties(dbStagingLine, newGrLine, CommonUtils.getNullPropertyNames(dbStagingLine));
+
+            AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
+            long NUM_RAN_ID = 6;
+            String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
+                    dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
+
+            boolean capacityCheck = false;
+            boolean storageBinCapacityCheck = false;
+
+            ImBasicData imBasicData = new ImBasicData();
+            imBasicData.setCompanyCodeId(dbStagingLine.getCompanyCode());
+            imBasicData.setPlantId(dbStagingLine.getPlantId());
+            imBasicData.setLanguageId(dbStagingLine.getLanguageId());
+            imBasicData.setWarehouseId(dbStagingLine.getWarehouseId());
+            imBasicData.setItemCode(dbStagingLine.getItemCode());
+            imBasicData.setManufacturerName(dbStagingLine.getManufacturerName());
+            ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+            log.info("ImbasicData1 : " + itemCodeCapacityCheck);
+            if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                log.info("capacity Check: " + capacityCheck);
+            }
+
+            newPackBarcode.setQuantityType("A");
+            newPackBarcode.setBarcode(nextRangeNumber);
+
+            if (capacityCheck) {
+
+                if (dbStagingLine.getOrderQty() != null) {
+                    orderQty = dbStagingLine.getOrderQty();
+                }
+                if (itemCodeCapacityCheck.getLength() != null) {
+                    itemLength = itemCodeCapacityCheck.getLength();
+                }
+                if (itemCodeCapacityCheck.getWidth() != null) {
+                    itemWidth = itemCodeCapacityCheck.getWidth();
+                }
+                if (itemCodeCapacityCheck.getHeight() != null) {
+                    itemHeight = itemCodeCapacityCheck.getHeight();
+                }
+
+                cbmPerQty = itemLength * itemWidth * itemHeight;
+                cbm = orderQty * cbmPerQty;
+
+                newPackBarcode.setCbmQuantity(cbmPerQty);
+                newPackBarcode.setCbm(cbm);
+
+                log.info("item Length, Width, Height, Volume[CbmPerQty], CBM: " + itemLength + ", " + itemWidth + "," + itemHeight + ", " + cbmPerQty + ", " + cbm);
+            }
+            if (!capacityCheck) {
+
+                newPackBarcode.setCbmQuantity(0D);
+                newPackBarcode.setCbm(0D);
+            }
+
+            packBarcodeList.add(newPackBarcode);
+
+            newGrLine.setGoodReceiptQty(dbStagingLine.getOrderQty());
+            newGrLine.setAcceptedQty(dbStagingLine.getOrderQty());
+            newGrLine.setGoodsReceiptNo(grHeader.getGoodsReceiptNo());
+            if (dbStagingLine.getPartner_item_barcode() != null) {
+                newGrLine.setBarcodeId(dbStagingLine.getPartner_item_barcode());
+            }
+            if (dbStagingLine.getPartner_item_barcode() == null) {
+                newGrLine.setBarcodeId(dbStagingLine.getManufacturerName() + dbStagingLine.getItemCode());
+            }
+
+            List<String> hhtUserOutputList = stagingLineV2Repository.getHhtUserByOrderType(
+                    grHeader.getCompanyCode(), grHeader.getLanguageId(), grHeader.getPlantId(), grHeader.getWarehouseId(),
+                    grHeader.getInboundOrderTypeId());
+            if (hhtUserOutputList != null && !hhtUserOutputList.isEmpty()) {
+                hhtUser = hhtUserOutputList.get(0);
+            }
+            if (hhtUserOutputList == null || hhtUserOutputList.isEmpty() || hhtUserOutputList.size() == 0) {
+                List<String> hhtUserList = stagingLineV2Repository.getHhtUser(
+                        grHeader.getCompanyCode(), grHeader.getLanguageId(), grHeader.getPlantId(), grHeader.getWarehouseId());
+                if (hhtUserList != null && !hhtUserList.isEmpty()) {
+                    hhtUser = hhtUserList.get(0);
+                }
+            }
+            newGrLine.setAssignedUserId(hhtUser);
+
+            newGrLine.setPackBarcodes(packBarcodeList);
+
+            newGrLineList.add(newGrLine);
+        }
+        List<GrLineV2> createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+        log.info("GrLine Created Successfully: " + createGrLine);
+
+        List<PutAwayLineV2> createdPutawayLine = null;
+        //putaway Confirm
+        if (createGrLine != null && !createGrLine.isEmpty()) {
+            log.info("Putaway line Confirm Initiated");
+            List<PutAwayLineV2> createPutawayLine = new ArrayList<>();
+//            for (GrLineV2 grLine : createGrLine) {
+
+                List<PutAwayHeaderV2> dbPutawayHeaderList = putAwayHeaderService.getPutAwayHeaderV2(
+                        createGrLine.get(0).getCompanyCode(),
+                        createGrLine.get(0).getPlantId(),
+                        createGrLine.get(0).getLanguageId(),
+                        createGrLine.get(0).getWarehouseId(),
+                        createGrLine.get(0).getRefDocNumber());
+                log.info("Putaway header: " + dbPutawayHeaderList);
+
+                if (dbPutawayHeaderList != null && !dbPutawayHeaderList.isEmpty()) {
+                    for (PutAwayHeaderV2 dbPutawayHeader : dbPutawayHeaderList) {
+                        PutAwayLineV2 putAwayLine = new PutAwayLineV2();
+
+                        List<GrLineV2> grLine = createGrLine.stream().filter(n->n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
+
+                        BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
+                        putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());
+                        putAwayLine.setConfirmedStorageBin(dbPutawayHeader.getProposedStorageBin());
+                        putAwayLine.setPutawayConfirmedQty(dbPutawayHeader.getPutAwayQuantity());
+                        putAwayLine.setPutAwayNumber(dbPutawayHeader.getPutAwayNumber());
+                        createPutawayLine.add(putAwayLine);
+                    }
+                }
+//            }
+            createdPutawayLine = putAwayLineService.putAwayLineConfirmV2(createPutawayLine, grHeader.getCreatedBy());
+            log.info("PutawayLine Confirmed: " + createdPutawayLine);
+        }
+        if (createdPutawayLine != null && !createdPutawayLine.isEmpty()) {
+            log.info("Direct StockReceipt - Inbound Confirmation Process Initiated");
+            inboundHeaderService.updateInboundHeaderConfirmV2(
+                    grHeader.getCompanyCode(),
+                    grHeader.getPlantId(),
+                    grHeader.getLanguageId(),
+                    grHeader.getWarehouseId(),
+                    grHeader.getPreInboundNo(),
+                    grHeader.getRefDocNumber(),
+                    grHeader.getCreatedBy());
+            log.info("Direct Stock Receipt - Inbound Order Confirmed Successfully");
+        }
+    }
+
 
     /**
      * deleteStagingLineEntity
@@ -1128,12 +1498,14 @@ public class StagingLineService extends BaseService {
      */
     public void deleteStagingLineV2(String companyCode, String plantId, String languageId,
                                     String warehouseId, String preInboundNo, String refDocNumber, String stagingNo,
-                                    String palletCode, String caseCode, Long lineNo, String itemCode, String loginUserID) {
+                                    String palletCode, String caseCode, Long lineNo, String itemCode, String loginUserID) throws java.text.ParseException {
         StagingLineEntityV2 StagingLineEntity = getStagingLineV2(companyCode, plantId, languageId, warehouseId,
                 preInboundNo, refDocNumber, stagingNo, palletCode, caseCode, lineNo, itemCode);
         if (StagingLineEntity != null) {
             StagingLineEntity.setDeletionIndicator(1L);
             StagingLineEntity.setUpdatedBy(loginUserID);
+//            StagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            StagingLineEntity.setUpdatedOn(new Date());
             stagingLineV2Repository.save(StagingLineEntity);
         } else {
             throw new BadRequestException("Error in deleting Id:  warehouseId:" + warehouseId +
@@ -1197,5 +1569,33 @@ public class StagingLineService extends BaseService {
         StagingLine stagingLine = new StagingLine();
         BeanUtils.copyProperties(stagingLineEntity, stagingLine, CommonUtils.getNullPropertyNames(stagingLineEntity));
         return stagingLine;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     */
+    public List<StagingLineEntityV2> deleteStagingLineV2(String companyCode, String plantId, String languageId,
+                                                         String warehouseId, String refDocNumber, String loginUserID) throws java.text.ParseException {
+       List<StagingLineEntityV2> stagingLineEntityV2s = new ArrayList<>();
+       List<StagingLineEntityV2> dbStagingLineList =
+                stagingLineV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("StagingLineList - cancellation : " + dbStagingLineList);
+        if (dbStagingLineList != null && !dbStagingLineList.isEmpty()) {
+            for (StagingLineEntityV2 stagingLineEntityV2 : dbStagingLineList) {
+                stagingLineEntityV2.setDeletionIndicator(1L);
+                stagingLineEntityV2.setUpdatedBy(loginUserID);
+                stagingLineEntityV2.setUpdatedOn(new Date());
+                StagingLineEntityV2 stagingLineEntityV21 = stagingLineV2Repository.save(stagingLineEntityV2);
+                stagingLineEntityV2s.add(stagingLineEntityV21);
+            }
+        }
+        return stagingLineEntityV2s;
     }
 }

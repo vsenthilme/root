@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -55,7 +56,7 @@ public class NumberRangeStorageBinController {
     @ApiOperation(response = NumberRangeStorageBin.class, value = "Create NumberRangeStorageBin") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postNumberRangeStorageBin(@Valid @RequestBody AddNumberRangeStorageBin newNumberRangeStorageBin,
-                                            @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                            @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeStorageBin createdNumberRangeStorageBin = numberRangeStorageBinService.createNumberRangeStorageBin(newNumberRangeStorageBin, loginUserID);
         return new ResponseEntity<>(createdNumberRangeStorageBin, HttpStatus.OK);
     }
@@ -66,7 +67,7 @@ public class NumberRangeStorageBinController {
                                              @RequestParam String rowId, @RequestParam String aisleNumber, @RequestParam String companyCodeId,
                                              @RequestParam String languageId, @RequestParam String plantId,
                                              @Valid @RequestBody UpdateNumberRangeStorageBin updateNumberRangeStorageBin, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         NumberRangeStorageBin createdNumberRangeStorageBin =
                 numberRangeStorageBinService.updateNumberRangeItem(companyCodeId,plantId,warehouseId,languageId,floorId,
@@ -79,7 +80,7 @@ public class NumberRangeStorageBinController {
     public ResponseEntity<?> deleteNumberRangeStorageBin(@RequestParam String warehouseId,@PathVariable String storageSectionId,
                                                          @RequestParam Long floorId,@RequestParam String rowId,@RequestParam String aisleNumber,
                                                          @RequestParam String companyCodeId,@RequestParam String languageId,
-                                                         @RequestParam String plantId,@RequestParam String loginUserID) {
+                                                         @RequestParam String plantId,@RequestParam String loginUserID) throws ParseException {
 
         numberRangeStorageBinService.deleteNumberRangeStorageBin(companyCodeId,languageId,
                 plantId,warehouseId,floorId,storageSectionId,rowId,aisleNumber,loginUserID);

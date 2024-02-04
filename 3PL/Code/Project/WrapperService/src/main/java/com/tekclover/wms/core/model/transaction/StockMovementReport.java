@@ -7,6 +7,10 @@ import java.util.Date;
 @Data
 public class StockMovementReport {
 
+	private String companyCodeId;
+	private String plantId;
+	private String languageId;
+
 	private String warehouseId;			// WH_ID
 	private String itemCode;			// ITM_CODE
 	private String manufacturerSKU; 	// MFR_SKU
@@ -19,6 +23,11 @@ public class StockMovementReport {
 	private String createdTime;			// IM_CTD_ON Time
 	private Double balanceOHQty;		// Document Number
 	private Double openingStock;		// Opening Stock
+
+	private String warehouseDescription;
+	private String companyDescription;
+	private String plantDescription;
+	private String statusDescription;
 
 	private Date confirmedOn;
 }

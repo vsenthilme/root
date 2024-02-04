@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.CurrencySpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class CurrencyService {
 	 * 		dbVertical.setUpdatedBy(loginUserID);
 	 */
 	public Currency createCurrency (AddCurrency newCurrency,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Currency dbCurrency = new Currency();
 		Optional<Currency> duplicateCurrency = currencyRepository.findByCurrencyIdAndLanguageId(newCurrency.getCurrencyId(), newCurrency.getLanguageId());
 		if (!duplicateCurrency.isEmpty()) {
@@ -99,7 +100,7 @@ public class CurrencyService {
 	 * @throws InvocationTargetException
 	 */
 	public Currency updateCurrency (Long currencyId,String languageId,String loginUserID,UpdateCurrency updateCurrency)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Currency dbCurrency = getCurrency(currencyId,languageId);
 		BeanUtils.copyProperties(updateCurrency, dbCurrency, CommonUtils.getNullPropertyNames(updateCurrency));
 		dbCurrency.setDeletionIndicator(0L);

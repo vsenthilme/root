@@ -94,8 +94,8 @@ public class BarcodeService extends BaseService {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public Barcode createBarcode (AddBarcode newBarcode, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public Barcode createBarcode (AddBarcode newBarcode, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<Barcode> optBarcode = 
 				barcodeRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndMethodAndBarcodeTypeIdAndBarcodeSubTypeIdAndLevelIdAndLevelReferenceAndProcessIdAndDeletionIndicator(
 						getLanguageId(), 

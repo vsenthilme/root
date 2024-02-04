@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -59,8 +60,8 @@ public class EmployeeController {
     
     @ApiOperation(response = Employee.class, value = "Create Employee") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postEmployee(@Valid @RequestBody AddEmployee newEmployee, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postEmployee(@Valid @RequestBody AddEmployee newEmployee, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Employee createdEmployee = employeeService.createEmployee(newEmployee, loginUserID);
 		return new ResponseEntity<>(createdEmployee , HttpStatus.OK);
 	}
@@ -68,8 +69,8 @@ public class EmployeeController {
     @ApiOperation(response = Employee.class, value = "Update Employee") // label for swagger
     @PatchMapping("/{employeeId}")
 	public ResponseEntity<?> patchEmployee(@PathVariable String employeeId, @RequestParam String warehouseId, 
-			@RequestParam Long processId, @Valid @RequestBody UpdateEmployee updateEmployee, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@RequestParam Long processId, @Valid @RequestBody UpdateEmployee updateEmployee, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Employee createdEmployee = employeeService.updateEmployee(warehouseId, employeeId, processId, updateEmployee, loginUserID);
 		return new ResponseEntity<>(createdEmployee , HttpStatus.OK);
 	}
@@ -77,7 +78,7 @@ public class EmployeeController {
     @ApiOperation(response = Employee.class, value = "Delete Employee") // label for swagger
 	@DeleteMapping("/{employeeId}")
 	public ResponseEntity<?> deleteEmployee(@PathVariable String employeeId, @RequestParam String warehouseId, 
-			@RequestParam Long processId, @RequestParam String loginUserID) {
+			@RequestParam Long processId, @RequestParam String loginUserID) throws ParseException {
     	employeeService.deleteEmployee(warehouseId, employeeId, processId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

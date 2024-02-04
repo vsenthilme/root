@@ -40,5 +40,6 @@ public interface IKeyValuePair {
     String getItemTypeId();
     String getItemGroupId();
     String getMovementTypeId();
+    String getLanguageId();
 
 }

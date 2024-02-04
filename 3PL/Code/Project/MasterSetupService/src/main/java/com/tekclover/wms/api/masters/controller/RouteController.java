@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -62,7 +63,7 @@ public class RouteController {
     @ApiOperation(response = Route.class, value = "Create Route") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postRoute(@Valid @RequestBody AddRoute newRoute,@RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Route createdRoute= routeService.createRoute(newRoute, loginUserID);
         return new ResponseEntity<>(createdRoute , HttpStatus.OK);
     }
@@ -73,7 +74,7 @@ public class RouteController {
                                         @RequestParam String languageId, @RequestParam String plantId,
                                         @RequestParam String warehouseId,@Valid @RequestBody UpdateRoute updateRoute,
                                         @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         Route createRoute =
                 routeService.updateRoute(companyCodeId,plantId,warehouseId,languageId,routeId,updateRoute,loginUserID);
@@ -84,7 +85,7 @@ public class RouteController {
     @DeleteMapping("/{routeId}")
     public ResponseEntity<?> deleteRoute(@PathVariable Long routeId, @RequestParam String companyCodeId,
                                          @RequestParam String languageId, @RequestParam String plantId,
-                                         @RequestParam String warehouseId,@RequestParam String loginUserID) {
+                                         @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
         routeService.deleteRoute(companyCodeId,languageId,plantId,warehouseId,routeId,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

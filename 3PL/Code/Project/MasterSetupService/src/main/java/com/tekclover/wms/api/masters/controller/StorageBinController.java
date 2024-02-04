@@ -1,41 +1,25 @@
 package com.tekclover.wms.api.masters.controller;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.stream.Stream;
-
-import javax.validation.Valid;
-
-import com.tekclover.wms.api.masters.model.imbasicdata1.ImBasicData1;
-import com.tekclover.wms.api.masters.model.impl.ItemListImpl;
 import com.tekclover.wms.api.masters.model.impl.StorageBinListImpl;
+import com.tekclover.wms.api.masters.model.storagebin.*;
 import com.tekclover.wms.api.masters.model.storagebin.v2.StorageBinV2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.tekclover.wms.api.masters.model.storagebin.AddStorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.SearchStorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.StorageBin;
-import com.tekclover.wms.api.masters.model.storagebin.StorageBinPutAway;
-import com.tekclover.wms.api.masters.model.storagebin.UpdateStorageBin;
 import com.tekclover.wms.api.masters.service.StorageBinService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Validated
@@ -95,6 +79,18 @@ public class StorageBinController {
         return storagebinService.findStorageBinLikeSearch(likeSearchByStorageBinNDesc);
     }
 
+    //Like Search filter ItemCode, Description, Company Code, Plant, Language and warehouse
+    @ApiOperation(response = StorageBin.class, value = "Like Search StorageBin New") // label for swagger
+    @GetMapping("/findStorageBinByLikeNew")
+    public List<StorageBinListImpl> getStorageBinLikeSearchNew(@RequestParam String likeSearchByStorageBinNDesc,
+                                                               @RequestParam String companyCodeId,
+                                                               @RequestParam String plantId,
+                                                               @RequestParam String languageId,
+                                                               @RequestParam String warehouseId)
+            throws Exception {
+        return storagebinService.findStorageBinLikeSearchNew(likeSearchByStorageBinNDesc, companyCodeId, plantId, languageId, warehouseId);
+    }
+
     @ApiOperation(response = StorageBin.class, value = "Get a StorageBin") // label for swagger 
     @PostMapping("/putaway")
     public ResponseEntity<?> getStorageBin(@RequestBody StorageBinPutAway storageBinPutAway) {
@@ -137,7 +133,7 @@ public class StorageBinController {
     @ApiOperation(response = StorageBin.class, value = "Create StorageBin") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postStorageBin(@Valid @RequestBody AddStorageBin newStorageBin, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBin createdStorageBin = storagebinService.createStorageBin(newStorageBin, loginUserID);
         return new ResponseEntity<>(createdStorageBin, HttpStatus.OK);
     }
@@ -146,7 +142,7 @@ public class StorageBinController {
     @PatchMapping("/{storageBin}")
     public ResponseEntity<?> patchStorageBin(@PathVariable String storageBin, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,
                                              @Valid @RequestBody UpdateStorageBin updateStorageBin, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBin createdStorageBin = storagebinService.updateStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId, updateStorageBin, loginUserID);
         return new ResponseEntity<>(createdStorageBin, HttpStatus.OK);
     }
@@ -170,10 +166,13 @@ public class StorageBinController {
         return new ResponseEntity<>(storagebin, HttpStatus.OK);
     }
 
+
     @ApiOperation(response = StorageBinV2.class, value = "Get a StorageBin V2") // label for swagger
     @GetMapping("/{warehouseId}/status/v2")
-    public ResponseEntity<?> getStorageBinByStatusV2(@PathVariable String warehouseId, @RequestParam Long statusId) {
-        List<StorageBinV2> storagebin = storagebinService.getStorageBinByStatusV2(warehouseId, statusId);
+    public ResponseEntity<?> getStorageBinByStatusV2(@PathVariable String warehouseId, @RequestParam Long statusId,
+                                                     @RequestParam String companyCode, @RequestParam String plantId,
+                                                     @RequestParam String languageId) {
+        List<StorageBinV2> storagebin = storagebinService.getStorageBinByStatusV2(companyCode, plantId, languageId, warehouseId, statusId);
         log.info("StorageBin : " + storagebin);
         return new ResponseEntity<>(storagebin, HttpStatus.OK);
     }
@@ -196,10 +195,82 @@ public class StorageBinController {
         return new ResponseEntity<>(storagebin, HttpStatus.OK);
     }
 
+    @ApiOperation(response = StorageBinV2.class, value = "Get a StorageBin V2") // label for swagger
+    @PostMapping("/bin/v2")
+    public ResponseEntity<?> getaStorageBinV2(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getaStorageBinV2(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a CBM StorageBin V2") // label for swagger
+    @PostMapping("/putaway/cbm/v2")
+    public ResponseEntity<?> getStorageBinCBMV2(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinCBM(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a CBM Per Qty StorageBin V2") // label for swagger
+    @PostMapping("/putaway/cbmPerQty/v2")
+    public ResponseEntity<?> getStorageBinCbmPerQtyV2(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinCbmPerQty(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a NON - CBM StorageBin V2") // label for swagger
+    @PostMapping("/putaway/nonCbm/v2")
+    public ResponseEntity<?> getStorageBinNonCbm(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinNonCBM(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a NON - CBM StorageBin V2") // label for swagger
+    @PostMapping("/putaway/nonCbm/existing/v2")
+    public ResponseEntity<?> getExistingStorageBinNonCbm(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getExistingProposedStorageBinNonCBM(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a NON - CBM Last Picked StorageBin V2")    // label for swagger
+    @PostMapping("/putaway/nonCbm/lastPicked/v2")
+    public ResponseEntity<?> getStorageBinNonCbmLastPicked(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinNonCBMLastPicked(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a CBM Last Picked StorageBin V2")    // label for swagger
+    @PostMapping("/putaway/cbm/lastPicked/v2")
+    public ResponseEntity<?> getProposedStorageBinCBMLastPicked(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinCBMLastPicked(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a CBMPerQty Last Picked StorageBin V2")    // label for swagger
+    @PostMapping("/putaway/cbmPerQty/lastPicked/v2")
+    public ResponseEntity<?> getProposedStorageBinCBMPerQtyLastPicked(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getProposedStorageBinCBMPerQtyLastPicked(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a BinClass 7 StorageBin V2") // label for swagger
+    @PostMapping("/putaway/binClass/v2")
+    public ResponseEntity<?> getStorageBinBinClassId7(@RequestBody StorageBinPutAway storageBinPutAway) {
+        StorageBinV2 storagebin = storagebinService.getStorageBinBinClassId7(storageBinPutAway);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
     @ApiOperation(response = StorageBinV2.class, value = "Create StorageBin V2") // label for swagger
     @PostMapping("/v2")
     public ResponseEntity<?> postStorageBinV2(@Valid @RequestBody StorageBinV2 newStorageBin, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBinV2 createdStorageBin = storagebinService.createStorageBinV2(newStorageBin, loginUserID);
         return new ResponseEntity<>(createdStorageBin, HttpStatus.OK);
     }
@@ -208,7 +279,7 @@ public class StorageBinController {
     @PatchMapping("/v2/{storageBin}")
     public ResponseEntity<?> patchStorageBinV2(@PathVariable String storageBin, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,
                                                @Valid @RequestBody StorageBinV2 updateStorageBin, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         StorageBinV2 createdStorageBin = storagebinService.updateStorageBinV2(storageBin, companyCodeId,
                 plantId, warehouseId, languageId, updateStorageBin, loginUserID);
         return new ResponseEntity<>(createdStorageBin, HttpStatus.OK);
@@ -216,8 +287,40 @@ public class StorageBinController {
 
     @ApiOperation(response = StorageBin.class, value = "Delete StorageBin") // label for swagger
     @DeleteMapping("/{storageBin}")
-    public ResponseEntity<?> deleteStorageBin(@PathVariable String storageBin, @RequestParam String loginUserID, @RequestParam String warehouseId, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String languageId) {
+    public ResponseEntity<?> deleteStorageBin(@PathVariable String storageBin, @RequestParam String loginUserID, @RequestParam String warehouseId, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String languageId) throws ParseException {
         storagebinService.deleteStorageBin(storageBin, companyCodeId, plantId, warehouseId, languageId, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // GET STORAGE BIN V2
+    @ApiOperation(response = StorageBinV2.class, value = "Get a StorageBin V2") // label for swagger
+    @GetMapping("/v2/{storageBin}")
+    public ResponseEntity<?> getStoreBinV2(@PathVariable String storageBin, @RequestParam String warehouseId,
+                                           @RequestParam String companyCodeId, @RequestParam String plantId,
+                                           @RequestParam String languageId) {
+        StorageBinV2 storagebin = storagebinService.getStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId);
+        log.info("StorageBin : " + storagebin);
+        return new ResponseEntity<>(storagebin, HttpStatus.OK);
+    }
+
+    // UPDATE STORAGE BIN V2
+    @ApiOperation(response = StorageBinV2.class, value = "Update StorageBin V2") // label for swagger
+    @PatchMapping("/storageBinV2/{storageBin}")
+    public ResponseEntity<?> patchStoreBin(@PathVariable String storageBin, @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String languageId,
+                                           @Valid @RequestBody StorageBinV2 storageBinV2, @RequestParam String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, ParseException {
+        StorageBinV2 createdStorageBin = storagebinService.updateStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId, storageBinV2, loginUserID);
+        return new ResponseEntity<>(createdStorageBin, HttpStatus.OK);
+    }
+
+    // DELETE STORAGE BIN V2
+    @ApiOperation(response = StorageBinV2.class, value = "Delete StorageBinV2") // label for swagger
+    @DeleteMapping("/v2/{storageBin}")
+    public ResponseEntity<?> deleteStoreBin(@PathVariable String storageBin, @RequestParam String loginUserID,
+                                            @RequestParam String warehouseId, @RequestParam String companyCodeId,
+                                            @RequestParam String plantId, @RequestParam String languageId) throws ParseException {
+        storagebinService.deleteStoreBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId, loginUserID);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

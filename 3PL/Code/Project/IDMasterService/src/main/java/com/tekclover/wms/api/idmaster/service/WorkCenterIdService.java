@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.workcenterid.*;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.WorkCenterIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.BeanUtils;
@@ -116,7 +117,7 @@ public class WorkCenterIdService  {
 	 * @throws InvocationTargetException
 	 */
 	public WorkCenterId createWorkCenterId (AddWorkCenterId newWorkCenterId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		WorkCenterId dbWorkCenterId = new WorkCenterId();
 		Optional<WorkCenterId> duplicateWorkCenterId = workCenterIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndWorkCenterIdAndLanguageIdAndDeletionIndicator(newWorkCenterId.getCompanyCodeId(), newWorkCenterId.getPlantId(), newWorkCenterId.getWarehouseId(), newWorkCenterId.getWorkCenterId(), newWorkCenterId.getLanguageId(), 0L);
 		if (!duplicateWorkCenterId.isEmpty()) {

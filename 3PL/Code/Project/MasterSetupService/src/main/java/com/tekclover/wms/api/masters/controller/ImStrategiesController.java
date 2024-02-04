@@ -70,8 +70,8 @@ public class ImStrategiesController {
 	
     @ApiOperation(response = ImStrategies.class, value = "Create ImStrategies") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postImStrategies(@Valid @RequestBody AddImStrategies newImStrategies, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postImStrategies(@Valid @RequestBody AddImStrategies newImStrategies, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ImStrategies createdImStrategies = imstrategiesService.createImStrategies(newImStrategies, loginUserID);
 		return new ResponseEntity<>(createdImStrategies , HttpStatus.OK);
 	}
@@ -82,7 +82,7 @@ public class ImStrategiesController {
 											   @RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String itemCode,
 											   @RequestParam Long sequenceIndicator,@RequestParam String languageId,
 												@Valid @RequestBody UpdateImStrategies updateImStrategies, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		ImStrategies createdImStrategies =
 				imstrategiesService.updateImStrategies(strategyTypeId,companyCodeId,plantId,warehouseId,itemCode,
@@ -94,7 +94,7 @@ public class ImStrategiesController {
 	@DeleteMapping("/{strategyTypeId}")
 	public ResponseEntity<?> deleteImStrategies(@PathVariable Long strategyTypeId,@RequestParam String companyCodeId,
 												@RequestParam String plantId,@RequestParam String warehouseId,@RequestParam String itemCode,
-												@RequestParam Long sequenceIndicator,@RequestParam String languageId,@RequestParam String loginUserID) {
+												@RequestParam Long sequenceIndicator,@RequestParam String languageId,@RequestParam String loginUserID) throws ParseException {
 
     	imstrategiesService.deleteImStrategies(strategyTypeId,companyCodeId,plantId,warehouseId,itemCode,sequenceIndicator,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

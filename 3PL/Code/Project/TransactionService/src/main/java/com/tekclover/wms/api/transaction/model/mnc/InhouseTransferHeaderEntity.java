@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.model.mnc;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -60,7 +61,10 @@ public class InhouseTransferHeaderEntity {
 
     private String updatedBy;
 
-	private Date updatedOn = new Date();	
+	private Date updatedOn = new Date();
+
+	//Almailem Code
+	private String manufacturerName;
 	
 	private List<InhouseTransferLineEntity> inhouseTransferLine;
 }

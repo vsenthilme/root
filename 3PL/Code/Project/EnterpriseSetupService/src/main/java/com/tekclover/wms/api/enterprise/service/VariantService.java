@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -281,7 +282,7 @@ private VariantRepository variantRepository;
 	 * @throws InvocationTargetException
 	 */
 	public List<Variant> createVariant(List<AddVariant> newVariant, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Variant> variantList = new ArrayList<>();
 
@@ -361,6 +362,7 @@ private VariantRepository variantRepository;
 //					dblevelReferenceVariant.setDeletionIndicator(0L);
 //					dblevelReferenceVariant.setCreatedBy(loginUserID);
 //					dblevelReferenceVariant.setUpdatedBy(loginUserID);
+
 //					dblevelReferenceVariant.setCreatedOn(new Date());
 //					dblevelReferenceVariant.setUpdatedOn(new Date());
 //					dblevelReferenceVariant.setVariantId(savedVariant.getVariantId());
@@ -396,7 +398,8 @@ private VariantRepository variantRepository;
 //			dbVariant.setCreatedBy(loginUserID);
 //			dbVariant.setUpdatedBy(loginUserID);
 //			dbVariant.setCreatedOn(new Date());
-//			dbVariant.setUpdatedOn(new Date());
+//			dbVariant.setUpdatedOn(new Date()
+//			);
 //			return variantRepository.save(dbVariant);
 //		}
 //	}
@@ -418,7 +421,7 @@ private VariantRepository variantRepository;
 	 */
 	public List<Variant> updateVariant(String variantId,String companyId,String languageId,String plantId,String variantSubId,
 									   String warehouseId,Long levelId,List<UpdateVariant> updateVariant, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<Variant>variantList=new ArrayList<>();
 
@@ -492,7 +495,7 @@ private VariantRepository variantRepository;
 	 * @param loginUserID
 	 */
 	public void deleteVariant(String variantId,String companyId,String languageId,String plantId,String variantSubId,
-							  String warehouseId,Long levelId,String loginUserID) {
+							  String warehouseId,Long levelId,String loginUserID) throws ParseException {
 		List<Variant> variant = getVariantOutput(variantId,companyId,languageId,plantId,warehouseId,levelId,variantSubId);
 		if (variant != null) {
 			for (Variant dbVariant:variant){

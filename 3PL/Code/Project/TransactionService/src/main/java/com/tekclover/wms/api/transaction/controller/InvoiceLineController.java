@@ -1,8 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
-import com.tekclover.wms.api.transaction.model.threepl.invoiceline.AddInvoiceLine;
-import com.tekclover.wms.api.transaction.model.threepl.invoiceline.InvoiceLine;
-import com.tekclover.wms.api.transaction.model.threepl.invoiceline.UpdateInvoiceLine;
+import com.tekclover.wms.api.transaction.model.threepl.invoiceline.*;
 import com.tekclover.wms.api.transaction.service.InvoiceLineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

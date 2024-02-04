@@ -8,6 +8,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.ControlProcessIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +115,7 @@ public class ControlProcessIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ControlProcessId createControlProcessId (AddControlProcessId newControlProcessId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlProcessId dbControlProcessId = new ControlProcessId();
 		Optional<ControlProcessId> duplicateControlProcessId = controlProcessIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndControlProcessIdAndLanguageIdAndDeletionIndicator(newControlProcessId.getCompanyCodeId(), newControlProcessId.getPlantId(), newControlProcessId.getWarehouseId(), newControlProcessId.getControlProcessId(), newControlProcessId.getLanguageId(), 0L);
 		if (!duplicateControlProcessId.isEmpty()) {
@@ -146,7 +147,7 @@ public class ControlProcessIdService {
 	 */
 	public ControlProcessId updateControlProcessId (String warehouseId, String controlProcessId,String companyCodeId,String languageId,String plantId,String loginUserID,
 													UpdateControlProcessId updateControlProcessId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ControlProcessId dbControlProcessId = getControlProcessId( warehouseId, controlProcessId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateControlProcessId, dbControlProcessId, CommonUtils.getNullPropertyNames(updateControlProcessId));
 		dbControlProcessId.setUpdatedBy(loginUserID);

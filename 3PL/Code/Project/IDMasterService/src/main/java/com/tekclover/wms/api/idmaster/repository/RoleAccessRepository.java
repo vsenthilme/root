@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,4 +49,16 @@ public interface RoleAccessRepository extends JpaRepository<RoleAccess,Long>,
 
 	List<RoleAccess> findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndDeletionIndicator(
 			String languageId, String companyCodeId, String plantId, String warehouseId, Long deletionIndicator);
+
+
+	@Query(value ="select top 1 tl.role_id AS roleId,tl.usr_role_nm AS roleDescription \n"+
+			" from tblroleaccess tl \n" +
+			"WHERE \n"+
+			"tl.wh_id IN (:warehouseId) and tl.lang_id IN (:languageId) and tl.c_id IN (:companyCodeId) and tl.plant_id IN (:plantId) and tl.role_id IN (:userRoleId) and \n"+
+			"tl.is_deleted=0 ",nativeQuery = true)
+	public IKeyValuePair getRoleIdIdandDescription(@Param(value="warehouseId") String warehouseId,
+													 @Param(value="languageId")String languageId,
+													 @Param(value = "companyCodeId")String companyCodeId,
+													 @Param(value = "plantId")String plantId,
+													 @Param(value = "userRoleId")Long userRoleId);
 }

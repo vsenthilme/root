@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -75,7 +76,7 @@ public class ItemTypeIdController {
     @ApiOperation(response = ItemTypeId.class, value = "Create ItemTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postItemTypeId(@Valid @RequestBody AddItemTypeId newItemTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemTypeId createdItemTypeId = itemtypeidService.createItemTypeId(newItemTypeId, loginUserID);
 		return new ResponseEntity<>(createdItemTypeId , HttpStatus.OK);
 	}
@@ -84,8 +85,8 @@ public class ItemTypeIdController {
     @PatchMapping("/{itemTypeId}")
 	public ResponseEntity<?> patchItemTypeId(@PathVariable Long itemTypeId, 
 			@RequestParam String warehouseId,@RequestParam String companyCodeId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateItemTypeId updateItemTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateItemTypeId updateItemTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemTypeId createdItemTypeId = 
 				itemtypeidService.updateItemTypeId(warehouseId, itemTypeId,companyCodeId,plantId,languageId,loginUserID, updateItemTypeId);
 		return new ResponseEntity<>(createdItemTypeId , HttpStatus.OK);

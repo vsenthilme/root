@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -73,7 +74,7 @@ public class UomIdController {
     @ApiOperation(response = UomId.class, value = "Create UomId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postUomId(@Valid @RequestBody AddUomId newUomId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		UomId createdUomId = uomidService.createUomId(newUomId, loginUserID);
 		return new ResponseEntity<>(createdUomId , HttpStatus.OK);
 	}
@@ -81,7 +82,7 @@ public class UomIdController {
     @ApiOperation(response = UomId.class, value = "Update UomId") // label for swagger
     @PatchMapping("/{uomId}")
 	public ResponseEntity<?> patchUomId(@PathVariable String uomId,@RequestParam String companyCodeId,@RequestParam String warehouseId,@RequestParam String plantId,@RequestParam String languageId,@RequestParam String loginUserID,@Valid @RequestBody UpdateUomId updateUomId
-			) throws IllegalAccessException, InvocationTargetException {
+			) throws IllegalAccessException, InvocationTargetException, ParseException {
 		UomId createdUomId = uomidService.updateUomId(uomId,companyCodeId,warehouseId,plantId,languageId,loginUserID, updateUomId);
 		return new ResponseEntity<>(createdUomId , HttpStatus.OK);
 	}

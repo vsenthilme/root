@@ -2,6 +2,7 @@ package com.tekclover.wms.core.service;
 
 import java.util.Arrays;
 
+import com.tekclover.wms.core.exception.BadRequestException;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -79,7 +80,9 @@ public class CommonService {
 			accessTokenUrl = propertiesConfig.getTransactionAccessTokenUrl();
 		} else if (apiUrl.equalsIgnoreCase("wms-masters-service")) {
 			accessTokenUrl = propertiesConfig.getMastersAccessTokenUrl();
-			log.info("------------###########------------> " + accessTokenUrl);
+		}else  {
+			log.info("The given URL is not available. Quiting.");
+			throw new BadRequestException("The given URL is not available. Quiting");
 		}
 		
 		log.info("Access token url: " + accessTokenUrl);

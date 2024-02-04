@@ -72,12 +72,23 @@ public interface GrHeaderRepository extends JpaRepository<GrHeader, Long>, JpaSp
                               @Param("refDocNumber") String refDocNumber, @Param("statusId") Long statusId);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE GrHeader ib SET ib.statusId = :statusId \n" +
+    @Query("UPDATE GrHeader ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
             "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
     void updateGrHeaderStatus(@Param("warehouseId") String warehouseId,
                               @Param("companyCode") String companyCode,
                               @Param("plantId") String plantId,
                               @Param("languageId") String languageId,
                               @Param("refDocNumber") String refDocNumber,
-                              @Param("statusId") Long statusId);
+                              @Param("statusId") Long statusId,
+                              @Param("statusDescription") String statusDescription);
+
+
+    List<GrHeader> findByWarehouseIdAndStatusIdAndDeletionIndicator(String warehouseId, Long statusId,Long deletionIndicator);
+
+    List<GrHeader> findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndStatusIdInAndDeletionIndicator(
+            String companyCode, String languageId, String plantId, String warehouseId,
+            List<Long> statusId, Long deletionIndicator);
+
+    GrHeader findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndGoodsReceiptNoAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, String goodsReceiptNo, Long deletionIndicator);
 }

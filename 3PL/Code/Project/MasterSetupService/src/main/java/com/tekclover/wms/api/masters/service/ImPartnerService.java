@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.masters.model.impartner.SearchImPartner;
 import com.tekclover.wms.api.masters.repository.specification.ImPartnerSpecification;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -172,7 +173,7 @@ public class ImPartnerService {
 	 * @throws InvocationTargetException
 	 */
 	public List<ImPartner> createImPartner (List<AddImPartner> newImPartner, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImPartner>imPartnerList=new ArrayList<>();
 
@@ -227,7 +228,7 @@ public class ImPartnerService {
 	public List<ImPartner> updateImPartner (String companyCodeId,String plantId,
 											String languageId,String warehouseId,String itemCode,List<AddImPartner> updateImPartner,
 											String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImPartner> dbImPartner =
 				impartnerRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndLanguageIdAndItemCodeAndDeletionIndicator(
@@ -236,7 +237,7 @@ public class ImPartnerService {
 		if(dbImPartner!=null) {
 			for (ImPartner newImPartner : dbImPartner) {
 				newImPartner.setUpdatedBy(loginUserID);
-				newImPartner.setUpdatedOn(new Date());
+				newImPartner.setUpdatedOn((new Date()));
 				newImPartner.setDeletionIndicator(1L);
 				impartnerRepository.save(newImPartner);
 			}
@@ -264,7 +265,7 @@ public class ImPartnerService {
 	 * @param loginUserID
 	 */
 		public void deleteImPartner (String companyCodeId,String plantId,String languageId,
-				String warehouseId,String itemCode,String loginUserID) {
+				String warehouseId,String itemCode,String loginUserID) throws ParseException {
 
 			List<ImPartner> impartner = getImPartner(companyCodeId,plantId,languageId,warehouseId,itemCode);
 

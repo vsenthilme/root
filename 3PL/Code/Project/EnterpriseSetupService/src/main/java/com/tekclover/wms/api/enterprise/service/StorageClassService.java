@@ -166,7 +166,7 @@ public class StorageClassService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageClass createStorageClass (AddStorageClass newStorageClass, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<StorageClass> optStorageClass =
 				storageclassRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndStorageClassIdAndDeletionIndicator(
 						newStorageClass.getLanguageId(),
@@ -217,7 +217,7 @@ public class StorageClassService {
 		 * @throws InvocationTargetException
 		 */
 		public StorageClass updateStorageClass (String warehouseId, Long storageClassId,String companyId,String languageId,String plantId,UpdateStorageClass updateStorageClass, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+				throws IllegalAccessException, InvocationTargetException, ParseException {
 			StorageClass dbStorageClass = getStorageClass(warehouseId,storageClassId,companyId,languageId,plantId);
 			BeanUtils.copyProperties(updateStorageClass, dbStorageClass, CommonUtils.getNullPropertyNames(updateStorageClass));
 			dbStorageClass.setUpdatedBy(loginUserID);
@@ -229,7 +229,7 @@ public class StorageClassService {
 		 * deleteStorageClass
 		 * @param storageClassId
 		 */
-		public void deleteStorageClass (String warehouseId, Long storageClassId,String companyId,String languageId,String plantId,String loginUserID) {
+		public void deleteStorageClass (String warehouseId, Long storageClassId,String companyId,String languageId,String plantId,String loginUserID) throws ParseException {
 			StorageClass storageclass = getStorageClass(warehouseId, storageClassId,companyId,languageId,plantId);
 			if ( storageclass != null) {
 				storageclass.setDeletionIndicator (1L);

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -90,7 +91,7 @@ public class NumberRangeController {
 	@ApiOperation(response = NumberRange.class, value = "Create NumberRange") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postNumberRange(@Valid @RequestBody AddNumberRange addNumberRange,
-											   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+											   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		NumberRange createdNumberRange = numberRangeService.createNumberRange(addNumberRange, loginUserID);
 		return new ResponseEntity<>(createdNumberRange , HttpStatus.OK);
 	}
@@ -100,7 +101,7 @@ public class NumberRangeController {
 	public ResponseEntity<?> patchNumberRange(@RequestParam String warehouseId, @PathVariable Long numberRangeCode, @RequestParam Long fiscalYear,
 											  @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,
 											  @Valid @RequestBody UpdateNumberRange updateNumberRange, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		NumberRange createdNumberRange =
 				numberRangeService.updateNumberRange(warehouseId,companyCodeId,languageId,plantId,numberRangeCode,fiscalYear,loginUserID,updateNumberRange);
 		return new ResponseEntity<>(createdNumberRange , HttpStatus.OK);

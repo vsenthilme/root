@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class StrategyIdController {
     @ApiOperation(response = StrategyId.class, value = "Create StrategyId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStrategyId(@Valid @RequestBody AddStrategyId newStrategyId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StrategyId createdStrategyId = strategyidService.createStrategyId(newStrategyId, loginUserID);
 		return new ResponseEntity<>(createdStrategyId , HttpStatus.OK);
 	}
@@ -80,7 +81,7 @@ public class StrategyIdController {
 	public ResponseEntity<?> patchStrategyId(@RequestParam String warehouseId, @RequestParam Long strategyTypeId,@PathVariable String strategyNo,
 											 @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 											 @Valid @RequestBody UpdateStrategyId updateStrategyId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StrategyId createdStrategyId = 
 				strategyidService.updateStrategyId(warehouseId, strategyTypeId,strategyNo,companyCodeId,languageId,plantId,loginUserID, updateStrategyId);
 		return new ResponseEntity<>(createdStrategyId , HttpStatus.OK);

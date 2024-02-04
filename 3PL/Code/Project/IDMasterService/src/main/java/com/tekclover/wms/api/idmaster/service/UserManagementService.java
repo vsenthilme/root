@@ -11,10 +11,9 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.idmaster.model.IKeyValuePair;
 import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
-import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
-import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
+import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.UserManagementSpecification;
-import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import com.tekclover.wms.api.idmaster.model.enterprise.WarehouseEnterprise;
 import com.tekclover.wms.api.idmaster.model.user.*;
 import com.tekclover.wms.api.idmaster.model.user.UpdateUserManagement;
 import com.tekclover.wms.api.idmaster.model.user.UserManagement;
-import com.tekclover.wms.api.idmaster.repository.UserManagementRepository;
 import com.tekclover.wms.api.idmaster.repository.enterprise.WarehouseEnterpriseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
 import com.tekclover.wms.api.idmaster.util.PasswordEncoder;
@@ -49,7 +47,13 @@ public class UserManagementService {
 	private WarehouseRepository warehouseRepository1;
 	@Autowired
 	private WarehouseEnterpriseRepository warehouseRepository;
-;
+
+	@Autowired
+	private UserTypeIdRepository userTypeIdRepository;
+
+	@Autowired
+	private RoleAccessRepository roleAccessRepository;
+
 	private PasswordEncoder passwordEncoder = new PasswordEncoder();
 
 	/**
@@ -67,6 +71,9 @@ public class UserManagementService {
 				IKeyValuePair iKeyValuePair = companyIdRepository.getCompanyIdAndDescription(dbUserManagement.getCompanyCode(), dbUserManagement.getLanguageId());
 				IKeyValuePair iKeyValuePair1 = plantIdRepository.getPlantIdAndDescription(dbUserManagement.getPlantId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode());
 				IKeyValuePair iKeyValuePair2 = warehouseRepository1.getWarehouseIdAndDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId());
+				IKeyValuePair iKeyValuePair3 = userTypeIdRepository.getUserTypeIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserTypeId());
+				IKeyValuePair iKeyValuePair4 = roleAccessRepository.getRoleIdIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserRoleId());
+
 				if (iKeyValuePair != null) {
 					dbUserManagement.setCompanyIdAndDescription(iKeyValuePair.getCompanyCodeId() + "-" + iKeyValuePair.getDescription());
 				}
@@ -75,6 +82,12 @@ public class UserManagementService {
 				}
 				if (iKeyValuePair2 != null) {
 					dbUserManagement.setWarehouseIdAndDescription(iKeyValuePair2.getWarehouseId() + "-" + iKeyValuePair2.getDescription());
+				}
+				if (iKeyValuePair3 != null) {
+					dbUserManagement.setUserTypeIdAndDescription(iKeyValuePair3.getUserTypeId() + "-" + iKeyValuePair3.getUserTypeDescription());
+				}
+				if (iKeyValuePair4 != null) {
+					dbUserManagement.setUserRoleIdAndDescription(iKeyValuePair4.getRoleId() + "-" + iKeyValuePair4.getRoleDescription());
 				}
 			}
 			newUserManagement.add(dbUserManagement);
@@ -120,6 +133,11 @@ public class UserManagementService {
 		IKeyValuePair iKeyValuePair = companyIdRepository.getCompanyIdAndDescription(companyCode, languageId);
 		IKeyValuePair iKeyValuePair1 = plantIdRepository.getPlantIdAndDescription(plantId, languageId, companyCode);
 		IKeyValuePair iKeyValuePair2 = warehouseRepository1.getWarehouseIdAndDescription(warehouseId, languageId, companyCode, plantId);
+		IKeyValuePair iKeyValuePair3 = userTypeIdRepository.getUserTypeIdandDescription(dbUserManagement.getWarehouseId(),
+				dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserTypeId());
+
+		IKeyValuePair iKeyValuePair4 = roleAccessRepository.getRoleIdIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(),
+				dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserRoleId());
 		if(iKeyValuePair!=null) {
 			dbUserManagement.setCompanyIdAndDescription(iKeyValuePair.getCompanyCodeId() + "-" + iKeyValuePair.getDescription());
 		}
@@ -128,6 +146,12 @@ public class UserManagementService {
 		}
 		if(iKeyValuePair2!=null) {
 			dbUserManagement.setWarehouseIdAndDescription(iKeyValuePair2.getWarehouseId() + "-" + iKeyValuePair2.getDescription());
+		}
+		if (iKeyValuePair3 != null) {
+			dbUserManagement.setUserTypeIdAndDescription(iKeyValuePair3.getUserTypeId() + "-" + iKeyValuePair3.getUserTypeDescription());
+		}
+		if (iKeyValuePair4 != null) {
+			dbUserManagement.setUserRoleIdAndDescription(iKeyValuePair4.getRoleId() + "-" + iKeyValuePair4.getRoleDescription());
 		}
 		return dbUserManagement;
 	}
@@ -191,7 +215,7 @@ public class UserManagementService {
 	 * @throws InvocationTargetException
 	 */
 	public UserManagement createUserManagement (AddUserManagement newUserManagement, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UserManagement dbUserManagement = new UserManagement();
 		UserManagement duplicateCheck = userManagementRepository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndUserIdAndUserRoleIdAndDeletionIndicator(newUserManagement.getLanguageId(),
 				newUserManagement.getCompanyCode(),
@@ -209,6 +233,19 @@ public class UserManagementService {
 			dbUserManagement.setCompanyIdAndDescription(dbWarehouse.getCompanyIdAndDescription());
 			dbUserManagement.setPlantIdAndDescription(dbWarehouse.getPlantIdAndDescription());
 			dbUserManagement.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId()+"-"+dbWarehouse.getWarehouseDesc());
+
+
+			IKeyValuePair iKeyValuePair3 = userTypeIdRepository.getUserTypeIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserTypeId());
+
+			if (iKeyValuePair3 != null) {
+				dbUserManagement.setUserTypeIdAndDescription(iKeyValuePair3.getUserTypeId() + "-" + iKeyValuePair3.getUserTypeDescription());
+			}
+
+			IKeyValuePair iKeyValuePair4 = roleAccessRepository.getRoleIdIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserRoleId());
+			if (iKeyValuePair4 != null) {
+				dbUserManagement.setUserRoleIdAndDescription(iKeyValuePair4.getRoleId() + "-" + iKeyValuePair4.getRoleDescription());
+			}
+
 			// Password encryption
 			try {
 				String encodedPwd = passwordEncoder.encodePassword(newUserManagement.getPassword());
@@ -237,7 +274,7 @@ public class UserManagementService {
 	 * @throws InvocationTargetException
 	 */
 	public UserManagement updateUserManagement (String userId, String warehouseId,String companyCode,String languageId,String plantId,Long userRoleId,UpdateUserManagement updateUserManagement, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UserManagement dbUserManagement = userManagementRepository.
 				findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndUserIdAndUserRoleIdAndDeletionIndicator(
 						languageId,
@@ -268,7 +305,7 @@ public class UserManagementService {
 									  String companyCode,
 									  String plantId,
 									  Long userRoleId,
-									  String loginUserID) {
+									  String loginUserID) throws ParseException {
 		UserManagement dbUserManagement = getUserManagement(languageId, companyCode, plantId, warehouseId, userId, userRoleId);
 		if ( dbUserManagement != null) {
 			dbUserManagement.setUpdatedBy(loginUserID);
@@ -286,8 +323,48 @@ public class UserManagementService {
 		UserManagementSpecification spec = new UserManagementSpecification(findUserManagement);
 		List<UserManagement> results = userManagementRepository.findAll(spec);
 		results = results.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
-		log.info("results: " + results);
-		return results;
+
+		List<UserManagement>newUserManagement=new ArrayList<>();
+		for(UserManagement dbUserManagement:results) {
+
+			IKeyValuePair iKeyValuePair =
+					companyIdRepository.getCompanyIdAndDescription(dbUserManagement.getCompanyCode(), dbUserManagement.getLanguageId());
+
+			IKeyValuePair iKeyValuePair1 =
+					plantIdRepository.getPlantIdAndDescription(dbUserManagement.getPlantId(),
+							dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode());
+
+			IKeyValuePair iKeyValuePair2 =
+					warehouseRepository1.getWarehouseIdAndDescription(dbUserManagement.getWarehouseId(),
+							dbUserManagement.getLanguageId(), dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId());
+
+			IKeyValuePair iKeyValuePair3 = userTypeIdRepository.getUserTypeIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(),
+					dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserTypeId());
+
+			IKeyValuePair iKeyValuePair4 = roleAccessRepository.getRoleIdIdandDescription(dbUserManagement.getWarehouseId(), dbUserManagement.getLanguageId(),
+					dbUserManagement.getCompanyCode(), dbUserManagement.getPlantId(), dbUserManagement.getUserRoleId());
+
+			if (iKeyValuePair3 != null) {
+				dbUserManagement.setUserTypeIdAndDescription(iKeyValuePair3.getUserTypeId() + "-" + iKeyValuePair3.getUserTypeDescription());
+			}
+
+			if (iKeyValuePair4 != null) {
+				dbUserManagement.setUserRoleIdAndDescription(iKeyValuePair4.getRoleId() + "-" + iKeyValuePair4.getRoleDescription());
+			}
+			if (iKeyValuePair != null) {
+				dbUserManagement.setCompanyIdAndDescription(iKeyValuePair.getCompanyCodeId() + "-" + iKeyValuePair.getDescription());
+			}
+			if (iKeyValuePair1 != null) {
+				dbUserManagement.setPlantIdAndDescription(iKeyValuePair1.getPlantId() + "-" + iKeyValuePair1.getDescription());
+			}
+			if (iKeyValuePair2 != null) {
+				dbUserManagement.setWarehouseIdAndDescription(iKeyValuePair2.getWarehouseId() + "-" + iKeyValuePair2.getDescription());
+			}
+			newUserManagement.add(dbUserManagement);
+		}
+
+		log.info("results: " + newUserManagement);
+		return newUserManagement;
 
 	}
 

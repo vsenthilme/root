@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -54,7 +55,7 @@ public class SubLevelIdController {
     @ApiOperation(response = SubLevelId.class, value = "Create SubLevelId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postSubLevelId(@Valid @RequestBody AddSubLevelId newSubLevelId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubLevelId createdSubLevelId = sublevelidService.createSubLevelId(newSubLevelId, loginUserID);
 		return new ResponseEntity<>(createdSubLevelId , HttpStatus.OK);
 	}
@@ -63,8 +64,8 @@ public class SubLevelIdController {
     @PatchMapping("/{subLevelId}")
 	public ResponseEntity<?> patchSubLevelId(@PathVariable String subLevelId,
 			@RequestParam String warehouseId,@RequestParam Long levelId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateSubLevelId updateSubLevelId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateSubLevelId updateSubLevelId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SubLevelId createdSubLevelId = 
 				sublevelidService.updateSubLevelId(warehouseId, subLevelId,levelId,companyCodeId,languageId,plantId,loginUserID, updateSubLevelId);
 		return new ResponseEntity<>(createdSubLevelId , HttpStatus.OK);

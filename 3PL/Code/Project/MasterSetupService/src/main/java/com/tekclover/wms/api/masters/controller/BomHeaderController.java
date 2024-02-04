@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class BomHeaderController {
     
     @ApiOperation(response = BomHeader.class, value = "Create BomHeader") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postBomHeader(@Valid @RequestBody AddBomHeader newBomHeader, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postBomHeader(@Valid @RequestBody AddBomHeader newBomHeader, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AddBomHeader createdBomHeader = bomheaderService.createBomHeader(newBomHeader, loginUserID);
 		return new ResponseEntity<>(createdBomHeader , HttpStatus.OK);
 	}
@@ -75,8 +76,8 @@ public class BomHeaderController {
     @ApiOperation(response = BomHeader.class, value = "Update BomHeader") // label for swagger
     @PatchMapping("/{parentItemCode}")
 	public ResponseEntity<?> patchBomHeader(@PathVariable String parentItemCode, @RequestParam String warehouseId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String companyCode,
-			@Valid @RequestBody UpdateBomHeader updateBomHeader, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateBomHeader updateBomHeader, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UpdateBomHeader createdBomHeader = 
 				bomheaderService.updateBomHeader(warehouseId, parentItemCode,languageId,companyCode,plantId,loginUserID, updateBomHeader);
 		return new ResponseEntity<>(createdBomHeader , HttpStatus.OK);

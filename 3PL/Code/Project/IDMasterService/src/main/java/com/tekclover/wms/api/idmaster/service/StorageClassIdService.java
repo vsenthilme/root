@@ -18,6 +18,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.StorageClassIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,7 +138,7 @@ public class StorageClassIdService {
 	 * @throws InvocationTargetException
 	 */
 	public StorageClassId createStorageClassId (AddStorageClassId newStorageClassId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageClassId dbStorageClassId = new StorageClassId();
 		Optional<StorageClassId> duplicateStorageClassId = storageClassIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStorageClassIdAndLanguageIdAndDeletionIndicator(newStorageClassId.getCompanyCodeId(), newStorageClassId.getPlantId(), newStorageClassId.getWarehouseId(), newStorageClassId.getStorageClassId(), newStorageClassId.getLanguageId(), 0L);
 		if (!duplicateStorageClassId.isEmpty()) {
@@ -169,7 +170,7 @@ public class StorageClassIdService {
 	 */
 	public StorageClassId updateStorageClassId (String warehouseId, Long storageClassId,String companyCodeId,String languageId,String plantId, String loginUserID,
 												UpdateStorageClassId updateStorageClassId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StorageClassId dbStorageClassId = getStorageClassId(warehouseId,storageClassId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateStorageClassId, dbStorageClassId, CommonUtils.getNullPropertyNames(updateStorageClassId));
 		dbStorageClassId.setUpdatedBy(loginUserID);

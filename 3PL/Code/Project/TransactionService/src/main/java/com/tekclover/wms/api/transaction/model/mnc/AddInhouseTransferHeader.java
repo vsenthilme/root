@@ -54,7 +54,10 @@ public class AddInhouseTransferHeader {
 
     private String updatedBy;
 
-	private Date updatedOn = new Date();	
-	
+	private Date updatedOn = new Date();
+
+	//Almailem Code
+	private String manufacturerName;
+
 	private List<AddInhouseTransferLine> inhouseTransferLine;
 }

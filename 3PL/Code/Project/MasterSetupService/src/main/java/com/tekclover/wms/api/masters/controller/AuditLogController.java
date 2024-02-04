@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class AuditLogController {
 	
     @ApiOperation(response = AuditLog.class, value = "Create AuditLog") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postAuditLog(@Valid @RequestBody AddAuditLog newAuditLog, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postAuditLog(@Valid @RequestBody AddAuditLog newAuditLog, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AuditLog createdAuditLog = auditlogService.createAuditLog(newAuditLog, loginUserID);
 		return new ResponseEntity<>(createdAuditLog , HttpStatus.OK);
 	}
@@ -77,7 +78,7 @@ public class AuditLogController {
 	public ResponseEntity<?> patchAuditLog(@PathVariable String auditFileNumber, 
 											@Valid @RequestBody UpdateAuditLog updateAuditLog,
 										   	@RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AuditLog createdAuditLog = auditlogService.updateAuditLog(auditFileNumber, updateAuditLog, loginUserID);
 		return new ResponseEntity<>(createdAuditLog , HttpStatus.OK);
 	}

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -59,8 +60,8 @@ public class BinClassIdController {
     
     @ApiOperation(response = BinClassId.class, value = "Create BinClassId") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postBinClassId(@Valid @RequestBody AddBinClassId newBinClassId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postBinClassId(@Valid @RequestBody AddBinClassId newBinClassId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinClassId createdBinClassId = binClassIdService.createBinClassId(newBinClassId, loginUserID);
 		return new ResponseEntity<>(createdBinClassId , HttpStatus.OK);
 	}
@@ -68,8 +69,8 @@ public class BinClassIdController {
     @ApiOperation(response = BinClassId.class, value = "Update BinClassId") // label for swagger
     @PatchMapping("/{binClassId}")
 	public ResponseEntity<?> patchBinClassId(@RequestParam String warehouseId,@PathVariable Long binClassId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateBinClassId updateBinClassId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateBinClassId updateBinClassId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinClassId createdBinClassId = 
 				binClassIdService.updateBinClassId(warehouseId, binClassId,companyCodeId,languageId,plantId,loginUserID, updateBinClassId);
 		return new ResponseEntity<>(createdBinClassId , HttpStatus.OK);

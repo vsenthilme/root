@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class PaymentModeIdController {
     @ApiOperation(response = PaymentModeId.class, value = "Create PaymentModeId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postPaymentModeId(@Valid @RequestBody AddPaymentModeId newPaymentModeId,
-                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentModeId createdPaymentModeId = paymentModeIdService.createPaymentModeId(newPaymentModeId, loginUserID);
         return new ResponseEntity<>(createdPaymentModeId , HttpStatus.OK);
     }
@@ -57,7 +58,7 @@ public class PaymentModeIdController {
     @PatchMapping("/{paymentModeId}")
     public ResponseEntity<?> patchPaymentModeId(@RequestParam String warehouseId, @PathVariable Long paymentModeId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String  plantId,
                                                 @Valid @RequestBody UpdatePaymentModeId updatePaymentModeId, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PaymentModeId createdPaymentModeId =
                 paymentModeIdService.updatePaymentModeId(warehouseId, paymentModeId,companyCodeId,languageId,plantId,loginUserID, updatePaymentModeId);
         return new ResponseEntity<>(createdPaymentModeId , HttpStatus.OK);

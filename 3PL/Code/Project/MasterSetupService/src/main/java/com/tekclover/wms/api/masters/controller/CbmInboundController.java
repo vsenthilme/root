@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -50,7 +51,7 @@ public class CbmInboundController {
     @ApiOperation(response = CbmInbound.class, value = "Create CbmInbound") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postCbmInbound(@Valid @RequestBody AddCbmInbound newCbmInbound,
-                                         @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                         @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         CbmInbound createdCbmInbound = cbmInboundService.createCbmInbound(newCbmInbound, loginUserID);
         return new ResponseEntity<>(createdCbmInbound, HttpStatus.OK);
     }
@@ -60,7 +61,7 @@ public class CbmInboundController {
     public ResponseEntity<?> patchCbmInbound(@RequestParam String warehouseId, @PathVariable String itemCode,@RequestParam String companyCodeId,
                                              @RequestParam String languageId,@RequestParam String plantId,
                                           @Valid @RequestBody UpdateCbmInbound updateCbmInbound, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CbmInbound createdCbmInbound =
                 cbmInboundService.updateCbmInbound(warehouseId, itemCode,companyCodeId,languageId,plantId,loginUserID, updateCbmInbound);
         return new ResponseEntity<>(createdCbmInbound, HttpStatus.OK);

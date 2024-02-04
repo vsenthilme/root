@@ -2,11 +2,13 @@ package com.tekclover.wms.api.enterprise.service;
 
 import com.tekclover.wms.api.enterprise.model.batchserial.LevelReference;
 import com.tekclover.wms.api.enterprise.repository.LevelReferenceRepository;
+import com.tekclover.wms.api.enterprise.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +41,7 @@ private LevelReferenceRepository levelReferenceRepository;
     /**
      * deleteLevelReferences
      */
-    public void deleteLevelReferences (String storageMethod, String loginUserID) {
+    public void deleteLevelReferences (String storageMethod, String loginUserID) throws ParseException {
         List<LevelReference> levelReferences= getLevelReferences(storageMethod);
         if (levelReferences != null) {
             for(LevelReference newLevelReference: levelReferences){

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class StockTypeIdController {
     @ApiOperation(response = StockTypeId.class, value = "Create StockTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStockTypeId(@Valid @RequestBody AddStockTypeId newStockTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StockTypeId createdStockTypeId = stocktypeidService.createStockTypeId(newStockTypeId, loginUserID);
 		return new ResponseEntity<>(createdStockTypeId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class StockTypeIdController {
     @PatchMapping("/{stockTypeId}")
 	public ResponseEntity<?> patchStockTypeId(@RequestParam String warehouseId,@PathVariable String stockTypeId,
 											  @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateStockTypeId updateStockTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateStockTypeId updateStockTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StockTypeId createdStockTypeId = 
 				stocktypeidService.updateStockTypeId(warehouseId, stockTypeId,companyCodeId,languageId,plantId,loginUserID, updateStockTypeId);
 		return new ResponseEntity<>(createdStockTypeId , HttpStatus.OK);

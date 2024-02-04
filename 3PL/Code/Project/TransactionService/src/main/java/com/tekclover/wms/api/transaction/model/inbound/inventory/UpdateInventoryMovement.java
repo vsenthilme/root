@@ -1,8 +1,8 @@
 package com.tekclover.wms.api.transaction.model.inbound.inventory;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class UpdateInventoryMovement {
@@ -30,6 +30,7 @@ public class UpdateInventoryMovement {
 	private Double movementQty;
 	private String inventoryUom;
 	private String refDocNumber;
+	private String barcodeId;
 	private String referenceField1;
 	private String referenceField2;
 	private String referenceField3;
@@ -43,4 +44,5 @@ public class UpdateInventoryMovement {
 	private Long deletionIndicator;
 	private String createdBy;
 	private Date createdOn = new Date();
+
 }

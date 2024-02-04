@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.model.warehousetypeid.FindWarehouseTypeId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.WarehouseTypeIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,7 +136,7 @@ public class WarehouseTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public WarehouseTypeId createWarehouseTypeId (AddWarehouseTypeId newWarehouseTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		WarehouseTypeId dbWarehouseTypeId = new WarehouseTypeId();
 		Optional<WarehouseTypeId> duplicateWarehouseTypeId = warehouseTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndWarehouseTypeIdAndLanguageIdAndDeletionIndicator(newWarehouseTypeId.getCompanyCodeId(), newWarehouseTypeId.getPlantId(), newWarehouseTypeId.getWarehouseId(), newWarehouseTypeId.getWarehouseTypeId(), newWarehouseTypeId.getLanguageId(), 0L);
 		if (!duplicateWarehouseTypeId.isEmpty()) {
@@ -167,7 +168,7 @@ public class WarehouseTypeIdService {
 	 */
 	public WarehouseTypeId updateWarehouseTypeId (String warehouseId, Long warehouseTypeId,String companyCodeId,String languageId,String plantId,String loginUserID,
 												  UpdateWarehouseTypeId updateWarehouseTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		WarehouseTypeId dbWarehouseTypeId = getWarehouseTypeId(warehouseId,warehouseTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateWarehouseTypeId, dbWarehouseTypeId, CommonUtils.getNullPropertyNames(updateWarehouseTypeId));
 		dbWarehouseTypeId.setUpdatedBy(loginUserID);

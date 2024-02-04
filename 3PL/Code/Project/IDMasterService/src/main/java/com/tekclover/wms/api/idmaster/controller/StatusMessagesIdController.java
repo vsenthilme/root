@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +53,7 @@ public class StatusMessagesIdController {
     @ApiOperation(response = StatusMessagesId.class, value = "Create StatusMessagesId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postStatusMessagesId(@Valid @RequestBody AddStatusMessagesId newStatusMessagesId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusMessagesId createdStatusMessagesId = statusmessagesidService.createStatusMessagesId(newStatusMessagesId, loginUserID);
 		return new ResponseEntity<>(createdStatusMessagesId , HttpStatus.OK);
 	}
@@ -62,8 +63,8 @@ public class StatusMessagesIdController {
 	public ResponseEntity<?> patchStatusMessagesId(@PathVariable String messagesId,
 												   @RequestParam String languageId,
 												   @RequestParam String messageType,
-			@Valid @RequestBody UpdateStatusMessagesId updateStatusMessagesId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateStatusMessagesId updateStatusMessagesId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		StatusMessagesId createdStatusMessagesId = 
 				statusmessagesidService.updateStatusMessagesId(messagesId, languageId, messageType, loginUserID, updateStatusMessagesId);
 		return new ResponseEntity<>(createdStatusMessagesId , HttpStatus.OK);

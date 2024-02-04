@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.state.State;
 import com.tekclover.wms.api.idmaster.repository.CountryRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.CitySpecification;
 import com.tekclover.wms.api.idmaster.repository.StateRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,7 +109,7 @@ public class CityService {
 	 * @throws InvocationTargetException
 	 */
 	public City createCity (AddCity newCity,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		City dbCity = new City();
 		Optional<City> duplicateCity = cityRepository.findByCityIdAndStateIdAndCountryIdAndLanguageId(newCity.getCityId(),
 				newCity.getStateId(), newCity.getCountryId(), newCity.getLanguageId());
@@ -145,7 +146,7 @@ public class CityService {
 	 */
 	public City updateCity (String cityId,String stateId,String countryId,String languageId,
 							String loginUserID,UpdateCity updateCity)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		City dbCity = getCity(cityId,stateId,countryId,languageId);
 		BeanUtils.copyProperties(updateCity, dbCity, CommonUtils.getNullPropertyNames(updateCity));
 		dbCity.setDeletionIndicator(0L);

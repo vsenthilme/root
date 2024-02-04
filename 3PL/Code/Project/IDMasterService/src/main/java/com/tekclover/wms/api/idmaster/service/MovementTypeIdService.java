@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.MovementTypeIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class MovementTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public MovementTypeId createMovementTypeId (AddMovementTypeId newMovementTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		MovementTypeId dbMovementTypeId = new MovementTypeId();
 		Optional<MovementTypeId> duplicateMovementTypeId = movementTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndMovementTypeIdAndLanguageIdAndDeletionIndicator(newMovementTypeId.getCompanyCodeId(), newMovementTypeId.getPlantId(), newMovementTypeId.getWarehouseId(), newMovementTypeId.getMovementTypeId(), newMovementTypeId.getLanguageId(), 0L);
 		if (!duplicateMovementTypeId.isEmpty()) {
@@ -152,7 +153,7 @@ public class MovementTypeIdService {
 	 */
 	public MovementTypeId updateMovementTypeId (String warehouseId, String movementTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 												UpdateMovementTypeId updateMovementTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		MovementTypeId dbMovementTypeId = getMovementTypeId( warehouseId,movementTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateMovementTypeId, dbMovementTypeId, CommonUtils.getNullPropertyNames(updateMovementTypeId));
 		dbMovementTypeId.setUpdatedBy(loginUserID);

@@ -166,7 +166,7 @@ public class ItemTypeService{
 	 * @throws InvocationTargetException
 	 */
 	public ItemType createItemType (AddItemType newItemType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<ItemType> optItemType =
 				itemtypeRepository.findByLanguageIdAndCompanyIdAndPlantIdAndWarehouseIdAndItemTypeIdAndDeletionIndicator(
 						newItemType.getLanguageId(),
@@ -217,7 +217,7 @@ public class ItemTypeService{
 	 * @throws InvocationTargetException
 	 */
 	public ItemType updateItemType (String warehouseId, Long itemTypeId,String companyId,String languageId,String plantId,UpdateItemType updateItemType, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ItemType dbItemType = getItemType(warehouseId, itemTypeId,companyId,languageId,plantId);
 		BeanUtils.copyProperties(updateItemType, dbItemType, CommonUtils.getNullPropertyNames(updateItemType));
 		dbItemType.setUpdatedBy(loginUserID);
@@ -229,7 +229,7 @@ public class ItemTypeService{
 	 * deleteItemType
 	 * @param itemTypeId
 	 */
-	public void deleteItemType (String warehouseId, Long itemTypeId,String companyId,String languageId,String plantId, String loginUserID) {
+	public void deleteItemType (String warehouseId, Long itemTypeId,String companyId,String languageId,String plantId, String loginUserID) throws ParseException {
 		ItemType itemtype = getItemType(warehouseId, itemTypeId,companyId,languageId,plantId);
 		if ( itemtype != null) {
 			itemtype.setDeletionIndicator (1L);

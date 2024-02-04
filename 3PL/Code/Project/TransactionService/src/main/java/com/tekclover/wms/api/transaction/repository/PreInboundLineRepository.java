@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +16,8 @@ import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLine
 
 @Repository
 @Transactional
-public interface PreInboundLineRepository extends JpaRepository<PreInboundLineEntity, Long>, JpaSpecificationExecutor<PreInboundLineEntity> {
+public interface PreInboundLineRepository extends JpaRepository<PreInboundLineEntity, Long>,
+        JpaSpecificationExecutor<PreInboundLineEntity>, StreamableJpaSpecificationRepository<PreInboundLineEntity> {
 
     public List<PreInboundLineEntity> findAll();
 
@@ -34,8 +36,10 @@ public interface PreInboundLineRepository extends JpaRepository<PreInboundLineEn
             String warehouseId, String preInboundNo, Long deletionIndicator);
 
     /**
-     * @param rssFeedEntryId
-     * @param isRead
+     *
+     * @param warehouseId
+     * @param refDocNumber
+     * @param statusId
      */
     @Modifying(clearAutomatically = true)
     @Query("UPDATE PreInboundLineEntity ib SET ib.statusId = :statusId WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")
@@ -43,12 +47,18 @@ public interface PreInboundLineRepository extends JpaRepository<PreInboundLineEn
                                     @Param("refDocNumber") String refDocNumber, @Param("statusId") Long statusId);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE PreInboundLineEntity ib SET ib.statusId = :statusId \n" +
+    @Query("UPDATE PreInboundLineEntity ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
             "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
     void updatePreInboundLineStatus(@Param("warehouseId") String warehouseId,
                                     @Param("companyCode") String companyCode,
                                     @Param("plantId") String plantId,
                                     @Param("languageId") String languageId,
                                     @Param("refDocNumber") String refDocNumber,
-                                    @Param("statusId") Long statusId);
+                                    @Param("statusId") Long statusId,
+                                    @Param("statusDescription") String statusDescription);
+
+
+    public List<PreInboundLineEntity> findByRefDocNumberAndDeletionIndicator(String refDocNumber, Long deletionIndicator);
+
+
 }

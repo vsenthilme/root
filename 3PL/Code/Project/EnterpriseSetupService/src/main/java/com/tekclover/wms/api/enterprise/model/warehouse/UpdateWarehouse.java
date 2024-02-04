@@ -19,6 +19,7 @@ public class UpdateWarehouse {
 	private String country;	
 	private Long zipCode;	
 	private String phoneNumber;
+    private String modeOfImplementation;
 	
     @Email
     private String eMail;    

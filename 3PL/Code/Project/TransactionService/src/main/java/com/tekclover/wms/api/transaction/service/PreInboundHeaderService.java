@@ -11,53 +11,55 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.IKeyValuePair;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.*;
-import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
-import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
-import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
-import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
-import com.tekclover.wms.api.transaction.repository.*;
-import com.tekclover.wms.api.transaction.repository.specification.PreInboundHeaderV2Specification;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
-import com.tekclover.wms.api.transaction.model.dto.BomHeader;
-import com.tekclover.wms.api.transaction.model.dto.BomLine;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
-import com.tekclover.wms.api.transaction.model.dto.UserManagement;
-import com.tekclover.wms.api.transaction.model.dto.Warehouse;
+import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.InboundHeader;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.AddPreInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.AddPreInboundLine;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegrationHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegrationLine;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegrationLog;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLine;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLineEntity;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.SearchPreInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.UpdatePreInboundHeader;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.UpdatePreInboundLine;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.*;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.SearchPreInboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.StagingHeader;
-//import com.tekclover.wms.api.transaction.repository.MongoInboundRepository;
+import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
+import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PreInboundHeaderSpecification;
+import com.tekclover.wms.api.transaction.repository.specification.PreInboundHeaderV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
 public class PreInboundHeaderService extends BaseService {
+    @Autowired
+    private ImBasicData1V2Repository imBasicData1V2Repository;
 
     private static String WAREHOUSEID_NUMBERRANGE = "110";
 
@@ -790,8 +792,8 @@ public class PreInboundHeaderService extends BaseService {
             InboundLine inboundLine = new InboundLine();
             BeanUtils.copyProperties(createdPreInboundLine, inboundLine, CommonUtils.getNullPropertyNames(createdPreInboundLine));
 
-            inboundLine.setOrderedQuantity(createdPreInboundLine.getOrderQty());
-            inboundLine.setOrderedUnitOfMeasure(createdPreInboundLine.getOrderUom());
+            inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
+            inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
             inboundLine.setDescription(createdPreInboundLine.getItemDescription());
             inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setReferenceField4(createdPreInboundLine.getReferenceField4());
@@ -1079,6 +1081,51 @@ public class PreInboundHeaderService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preInboundNo
+     * @param refDocNumber
+     * @return
+     */
+    public PreInboundHeaderV2 getPreInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId, String preInboundNo, String refDocNumber) {
+        Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
+                preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
+                        companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, 0L);
+
+        if (preInboundHeaderEntity.isEmpty()) {
+            throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
+                    ", warehouseId: " + warehouseId + " doesn't exist.");
+        }
+        PreInboundHeaderV2 preInboundHeader = getPreInboundLineItemsV2(preInboundHeaderEntity.get());
+        return preInboundHeader;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preInboundNo
+     * @param refDocNumber
+     * @return
+     */
+    public PreInboundHeaderEntityV2 getPreInboundHeaderForReversalV2(String companyCode, String plantId, String languageId, String warehouseId, String preInboundNo, String refDocNumber) {
+        Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
+                preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
+                        companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, 0L);
+
+        if (preInboundHeaderEntity.isEmpty()) {
+            return null;
+        }
+
+        return preInboundHeaderEntity.get();
+    }
+
+    /**
      * @param preInboundNo
      * @param warehouseId
      * @return
@@ -1246,7 +1293,7 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      */
     public PreInboundHeaderEntityV2 createPreInboundHeaderV2(PreInboundHeaderV2 newPreInboundHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         PreInboundHeaderEntityV2 dbPreInboundHeader = new PreInboundHeaderEntityV2();
         BeanUtils.copyProperties(newPreInboundHeader, dbPreInboundHeader, CommonUtils.getNullPropertyNames(newPreInboundHeader));
@@ -1267,6 +1314,8 @@ public class PreInboundHeaderService extends BaseService {
         dbPreInboundHeader.setDeletionIndicator(0L);
         dbPreInboundHeader.setCreatedBy(loginUserID);
         dbPreInboundHeader.setUpdatedBy(loginUserID);
+//        dbPreInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+//        dbPreInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundHeader.setCreatedOn(new Date());
         dbPreInboundHeader.setUpdatedOn(new Date());
         return preInboundHeaderV2Repository.save(dbPreInboundHeader);
@@ -1284,14 +1333,16 @@ public class PreInboundHeaderService extends BaseService {
     public PreInboundHeaderV2 updatePreInboundHeaderV2(String companyCode, String plantId, String languageId,
                                                        String preInboundNo, String warehouseId,
                                                        PreInboundHeaderV2 updatePreInboundHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
-                preInboundHeaderV2Repository.findByPreInboundNoAndWarehouseIdAndDeletionIndicator(preInboundNo, warehouseId, 0L);
+                preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndPreInboundNoAndWarehouseIdAndDeletionIndicator(
+                        companyCode, plantId, languageId, preInboundNo, warehouseId, 0L);
         PreInboundHeaderEntityV2 dbEntity = preInboundHeaderEntity.get();
         if (updatePreInboundHeader.getStatusId() == null) {
             dbEntity.setStatusId(7L); // Hardcoded as 7 during update
         }
         dbEntity.setUpdatedBy(loginUserID);
+//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
 
@@ -1332,13 +1383,14 @@ public class PreInboundHeaderService extends BaseService {
      */
     public PreInboundHeaderV2 updatePreInboundHeaderV2(String companyCode, String plantId, String languageId,
                                                        String preInboundNo, String warehousId, String refDocNumner, Long statusId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
-        PreInboundHeaderV2 dbPreInboundHeader = getPreInboundHeaderV2(warehousId, preInboundNo, refDocNumner);
+            throws IllegalAccessException, InvocationTargetException, ParseException {
+        PreInboundHeaderV2 dbPreInboundHeader = getPreInboundHeaderV2(companyCode, plantId, languageId, warehousId, preInboundNo, refDocNumner);
         PreInboundHeaderEntityV2 dbEntity = copyBeanToHeaderEntity(dbPreInboundHeader);
         dbEntity.setStatusId(statusId);
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbEntity.setStatusDescription(statusDescription);
         dbEntity.setUpdatedBy(loginUserID);
+//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         dbPreInboundHeader = copyHeaderEntityToBean(dbEntity);
@@ -1354,12 +1406,14 @@ public class PreInboundHeaderService extends BaseService {
      * @param loginUserID
      */
     public void deletePreInboundHeaderV2(String companyCode, String plantId, String languageId,
-                                         String preInboundNo, String warehousId, String loginUserID) {
-        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehousId);
+                                         String preInboundNo, String warehousId, String loginUserID) throws ParseException {
+        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehousId, companyCode, plantId, languageId);
         PreInboundHeaderEntityV2 dbEntity = copyBeanToHeaderEntity(preInboundHeader);
         if (dbEntity != null) {
             dbEntity.setDeletionIndicator(1L);
             dbEntity.setUpdatedBy(loginUserID);
+//            dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbEntity.setUpdatedOn(new Date());
             preInboundHeaderV2Repository.save(dbEntity);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + preInboundNo);
@@ -1394,20 +1448,29 @@ public class PreInboundHeaderService extends BaseService {
         log.info("authTokenForMastersService : " + authTokenForMastersService);
         InboundOrderV2 inboundOrder = inboundOrderV2Repository.findByRefDocumentNo(refDocNumber);
         log.info("inboundOrder : " + inboundOrder);
-        Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> optWarehouse =
-                warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
-                        inboundOrder.getCompanyCode(),
-                        inboundOrder.getBranchCode(),
-                        "EN",
-                        0L
-                );
-        log.info("dbWarehouse : " + optWarehouse);
-        if (optWarehouse != null && optWarehouse.isEmpty()) {
-            log.info("warehouse not found.");
-            throw new BadRequestException("Warehouse cannot be null.");
-        }
 
-        com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse = optWarehouse.get();
+        com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse = null;
+        try {
+            Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> optWarehouse =
+                    warehouseRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndDeletionIndicator(
+                            inboundOrder.getCompanyCode(),
+                            inboundOrder.getBranchCode(),
+                            "EN",
+                            0L
+                    );
+            log.info("dbWarehouse : " + optWarehouse);
+
+            if (optWarehouse != null && optWarehouse.isEmpty()) {
+                log.info("warehouse not found.");
+                throw new BadRequestException("Warehouse cannot be null.");
+            }
+
+            warehouse = optWarehouse.get();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
         // Getting PreInboundNo from NumberRangeTable
         String preInboundNo = getPreInboundNo(warehouseId, warehouse.getCompanyCodeId(), warehouse.getPlantId(), warehouse.getLanguageId());
@@ -1415,20 +1478,20 @@ public class PreInboundHeaderService extends BaseService {
         List<PreInboundLineEntityV2> overallCreatedPreInboundLineList = new ArrayList<>();
         for (InboundIntegrationLine inboundIntegrationLine : inboundIntegrationHeader.getInboundIntegrationLine()) {
             log.info("inboundIntegrationLine : " + inboundIntegrationLine);
-            ImBasicData1 imBasicData1 =
-                    imBasicData1Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndUomIdAndDeletionIndicator(
+            ImBasicData1V2 imBasicData1 =
+                    imBasicData1V2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerPartNoAndDeletionIndicator(
                             warehouse.getLanguageId(),
                             warehouse.getCompanyCodeId(),
                             warehouse.getPlantId(),
                             warehouse.getWarehouseId(),
                             inboundIntegrationLine.getItemCode(),
-                            inboundIntegrationLine.getUom(),
+                            inboundIntegrationLine.getManufacturerName(),
                             0L);
             log.info("imBasicData1 exists: " + imBasicData1);
 
             // If ITM_CODE value is Null, then insert a record in IMBASICDATA1 table as below
             if (imBasicData1 == null) {
-                imBasicData1 = new ImBasicData1();
+                imBasicData1 = new ImBasicData1V2();
                 imBasicData1.setLanguageId("EN");                                            // LANG_ID
                 imBasicData1.setWarehouseId(warehouseId);                                    // WH_ID
                 imBasicData1.setCompanyCodeId(warehouse.getCompanyCodeId());                    // C_ID
@@ -1437,14 +1500,21 @@ public class PreInboundHeaderService extends BaseService {
                 imBasicData1.setUomId(inboundIntegrationLine.getUom());                    // UOM_ID
                 imBasicData1.setDescription(inboundIntegrationLine.getItemText());            // ITEM_TEXT
 //                imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());        // MFR_PART
-                if (inboundIntegrationLine.getManufacturerPartNo() == null) {
-                    imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerCode());
-                } else {
-                    imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());        // MFR_PART
-                }
+//                if (inboundIntegrationLine.getManufacturerPartNo() == null && inboundIntegrationLine.getManufacturerCode() != null) {
+//                    imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerCode());
+//                }
+//                if (inboundIntegrationLine.getManufacturerPartNo() == null && inboundIntegrationLine.getManufacturerCode() == null && inboundIntegrationLine.getManufacturerName() != null) {
+                    imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerName());
+                    imBasicData1.setManufacturerName(inboundIntegrationLine.getManufacturerName());
+                    imBasicData1.setCapacityCheck(false);
+                    imBasicData1.setDeletionIndicator(0L);
+
+//                } else {
+//                    imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerName());        // MFR_PART
+//                }
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1V2(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -1501,8 +1571,8 @@ public class PreInboundHeaderService extends BaseService {
         log.info("preInboundHeader Created : " + createdPreInboundHeader);
 
         /*------------------Insert into Inbound Header And Line----------------------------*/
-        InboundHeaderV2 createdInboundHeader = createInbounHeaderAndLineV2(createdPreInboundHeader, overallCreatedPreInboundLineList);
-
+        InboundHeaderV2 createdInboundHeader = createInboundHeaderAndLineV2(createdPreInboundHeader, overallCreatedPreInboundLineList);
+        
         // Inserting into InboundLog Table.
         InboundIntegrationLog createdInboundIntegrationLog = createInboundIntegrationLogV2(createdPreInboundHeader);
 
@@ -1526,7 +1596,6 @@ public class PreInboundHeaderService extends BaseService {
     }
 
     /**
-     *
      * @param warehouse
      * @param preInboundNo
      * @param inboundIntegrationHeader
@@ -1600,13 +1669,14 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setPlantDescription(description.getPlantDesc());
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
 
-        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());
         preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
+        preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
+        preInboundLine.setSupplierName(inboundIntegrationLine.getSupplierName());
+
 
         // REF_FIELD_1
         preInboundLine.setReferenceField1("CHILD ITEM");
@@ -1619,12 +1689,11 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy("MSD_INT");
+//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
-
     /**
-     *
      * @param warehouse
      * @param preInboundNo
      * @param inboundIntegrationHeader
@@ -1657,13 +1726,13 @@ public class PreInboundHeaderService extends BaseService {
         // ITEM_TEXT - Pass CHL_ITM_CODE as ITM_CODE in IMBASICDATA1 table and fetch ITEM_TEXT and insert
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
         ImBasicData1 imBasicData1 =
-                imBasicData1Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndUomIdAndDeletionIndicator(
+                imBasicData1Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerPartNoAndDeletionIndicator(
                         warehouse.getLanguageId(),
                         warehouse.getCompanyCodeId(),
                         warehouse.getPlantId(),
                         warehouse.getWarehouseId(),
                         inboundIntegrationLine.getItemCode(),
-                        inboundIntegrationLine.getUom(),
+                        inboundIntegrationLine.getManufacturerName(),
                         0L);
         preInboundLine.setItemDescription(imBasicData1.getDescription());
 
@@ -1710,13 +1779,15 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());
         preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
+        preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
+        preInboundLine.setSupplierName(inboundIntegrationLine.getSupplierName());
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy("MSD_INT");
+//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -1724,14 +1795,13 @@ public class PreInboundHeaderService extends BaseService {
     }
 
     /**
-     *
      * @param warehouse
      * @param preInboundNo
      * @param inboundIntegrationHeader
      * @return
      */
     private PreInboundHeaderEntityV2 createPreInboundHeaderV2(com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse,
-                                                              String preInboundNo, InboundIntegrationHeader inboundIntegrationHeader) {
+                                                              String preInboundNo, InboundIntegrationHeader inboundIntegrationHeader) throws ParseException {
         PreInboundHeaderEntityV2 preInboundHeader = new PreInboundHeaderEntityV2();
 
         preInboundHeader.setLanguageId(warehouse.getLanguageId());                                    // LANG_ID
@@ -1756,8 +1826,12 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setPlantDescription(description.getPlantDesc());
         preInboundHeader.setWarehouseDescription(description.getWarehouseDesc());
 
+//        preInboundHeader.setManufacturerFullName(inboundIntegrationHeader.getManufacturerFullName());
+        preInboundHeader.setContainerNo(inboundIntegrationHeader.getContainerNo());
+
         preInboundHeader.setDeletionIndicator(0L);
         preInboundHeader.setCreatedBy("MSD_INT");
+//        preInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntityV2 createdPreInboundHeader = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1769,7 +1843,7 @@ public class PreInboundHeaderService extends BaseService {
      * @param preInboundLine
      * @return
      */
-    private InboundHeaderV2 createInbounHeaderAndLineV2(PreInboundHeaderEntityV2 preInboundHeader, List<PreInboundLineEntityV2> preInboundLine) {
+    private InboundHeaderV2 createInboundHeaderAndLineV2(PreInboundHeaderEntityV2 preInboundHeader, List<PreInboundLineEntityV2> preInboundLine) {
         InboundHeaderV2 inboundHeader = new InboundHeaderV2();
         BeanUtils.copyProperties(preInboundHeader, inboundHeader, CommonUtils.getNullPropertyNames(preInboundHeader));
 
@@ -1787,6 +1861,9 @@ public class PreInboundHeaderService extends BaseService {
         inboundHeader.setPlantDescription(description.getPlantDesc());
         inboundHeader.setWarehouseDescription(description.getWarehouseDesc());
 
+        inboundHeader.setReferenceDocumentType(preInboundHeader.getReferenceDocumentType());
+        inboundHeader.setContainerNo(preInboundHeader.getContainerNo());
+
         inboundHeader.setDeletionIndicator(0L);
         inboundHeader.setCreatedBy(preInboundHeader.getCreatedBy());
         inboundHeader.setCreatedOn(preInboundHeader.getCreatedOn());
@@ -1801,8 +1878,8 @@ public class PreInboundHeaderService extends BaseService {
             InboundLineV2 inboundLine = new InboundLineV2();
             BeanUtils.copyProperties(createdPreInboundLine, inboundLine, CommonUtils.getNullPropertyNames(createdPreInboundLine));
 
-            inboundLine.setOrderedQuantity(createdPreInboundLine.getOrderQty());
-            inboundLine.setOrderedUnitOfMeasure(createdPreInboundLine.getOrderUom());
+            inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
+            inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
             inboundLine.setDescription(createdPreInboundLine.getItemDescription());
             inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setReferenceField4(createdPreInboundLine.getReferenceField4());
@@ -1811,16 +1888,19 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setPlantDescription(description.getPlantDesc());
             inboundLine.setWarehouseDescription(description.getWarehouseDesc());
             inboundLine.setStatusDescription(statusDescription);
+            inboundLine.setContainerNo(createdPreInboundLine.getContainerNo());
+//            inboundLine.setSupplierName(createdPreInboundLine.getSupplierName());
+
+//            inboundLine.setReferenceDocumentType(createdInboundHeader.getReferenceDocumentType());
 
             inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerCode());
             inboundLine.setManufacturerName(createdPreInboundLine.getManufacturerName());
             inboundLine.setExpectedArrivalDate(createdPreInboundLine.getExpectedArrivalDate());
-            inboundLine.setOrderedQuantity(createdPreInboundLine.getOrderQty());
-            inboundLine.setOrderedUnitOfMeasure(createdPreInboundLine.getOrderUom());
+            inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
+            inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
             inboundLine.setVendorCode(createdPreInboundLine.getPartnerItemNo());
             inboundLine.setManufacturerPartNo(createdPreInboundLine.getManufacturerPartNo());
-
             inboundLine.setDeletionIndicator(0L);
             inboundLine.setCreatedBy(preInboundHeader.getCreatedBy());
             inboundLine.setCreatedOn(preInboundHeader.getCreatedOn());
@@ -1832,6 +1912,8 @@ public class PreInboundHeaderService extends BaseService {
 
         return createdInboundHeader;
     }
+
+
 
     /**
      * @param inputPreInboundLines
@@ -1850,6 +1932,9 @@ public class PreInboundHeaderService extends BaseService {
         String preInboundNo = null;
         String containerNo = null;
         String warehouseId = null;
+        String companyCode = null;
+        String plantId = null;
+        String languageId = null;
         for (PreInboundLineEntityV2 objUpdatePreInboundLine : inputPreInboundLines) {
             objUpdatePreInboundLine.setStatusId(5L);
             statusDescription = stagingLineV2Repository.getStatusDescription(5L, objUpdatePreInboundLine.getLanguageId());
@@ -1863,11 +1948,15 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundNo = updatedPreInboundLine.getPreInboundNo();
                 containerNo = updatedPreInboundLine.getContainerNo();
                 warehouseId = updatedPreInboundLine.getWarehouseId();
+                companyCode = updatedPreInboundLine.getCompanyCode();
+                plantId = updatedPreInboundLine.getPlantId();
+                languageId = updatedPreInboundLine.getLanguageId();
             }
         }
 
         // PREINBOUNDHEADER Update
-        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+        // PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+           PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId, languageId);
         log.info("preInboundHeader---found-------> : " + preInboundHeader);
 
         PreInboundHeaderEntityV2 preInboundHeaderEntity = copyBeanToHeaderEntity(preInboundHeader);
@@ -1951,6 +2040,9 @@ public class PreInboundHeaderService extends BaseService {
         stagingHeader.setCompanyDescription(description.getCompanyDesc());
         stagingHeader.setPlantDescription(description.getPlantDesc());
         stagingHeader.setWarehouseDescription(description.getWarehouseDesc());
+
+        stagingHeader.setContainerNo(preInboundHeader.getContainerNo());
+
         stagingHeader.setCreatedBy(preInboundHeader.getCreatedBy());
         stagingHeader.setCreatedOn(preInboundHeader.getCreatedOn());
         return stagingHeaderV2Repository.save(stagingHeader);
@@ -1991,7 +2083,7 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      */
     public InboundIntegrationLog createInboundIntegrationLogV2(PreInboundHeaderEntityV2 createdPreInboundHeader)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         InboundIntegrationLog dbInboundIntegrationLog = new InboundIntegrationLog();
         dbInboundIntegrationLog.setLanguageId("EN");
         dbInboundIntegrationLog.setCompanyCodeId(createdPreInboundHeader.getCompanyCode());
@@ -2004,6 +2096,7 @@ public class PreInboundHeaderService extends BaseService {
         dbInboundIntegrationLog.setOrderReceiptDate(createdPreInboundHeader.getCreatedOn());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy(createdPreInboundHeader.getCreatedBy());
+//        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
@@ -2045,5 +2138,30 @@ public class PreInboundHeaderService extends BaseService {
         }
 
         return optWarehouse.get();
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserId
+     * @return
+     */
+    // Delete PreInboundHeader
+    public PreInboundHeaderEntityV2 deletePreInboundHeader(String companyCode, String plantId, String languageId,
+                                                           String warehouseId, String refDocNumber, String loginUserId) {
+        PreInboundHeaderEntityV2 preInboundHeaderEntity =
+                preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("preInboundHeaderEntity - Cancellation: " + preInboundHeaderEntity);
+        if(preInboundHeaderEntity != null){
+            preInboundHeaderEntity.setDeletionIndicator(1L);
+            preInboundHeaderEntity.setUpdatedBy(loginUserId);
+            preInboundHeaderV2Repository.save(preInboundHeaderEntity);
+            }
+        return preInboundHeaderEntity;
     }
 }

@@ -13,6 +13,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.HandlingEquipmentIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class HandlingEquipmentIdService{
 	 * @throws InvocationTargetException
 	 */
 	public HandlingEquipmentId createHandlingEquipmentId (AddHandlingEquipmentId newHandlingEquipmentId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingEquipmentId dbHandlingEquipmentId = new HandlingEquipmentId();
 
 		Optional<HandlingEquipmentId> duplicateHandlingEquipmentId =
@@ -157,7 +158,7 @@ public class HandlingEquipmentIdService{
 	public HandlingEquipmentId updateHandlingEquipmentId (String warehouseId,Long handlingEquipmentNumber,
 														  String companyCodeId,String languageId,String plantId,String loginUserID,
 														  UpdateHandlingEquipmentId updateHandlingEquipmentId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		HandlingEquipmentId dbHandlingEquipmentId = getHandlingEquipmentId( warehouseId,handlingEquipmentNumber,
 				companyCodeId,languageId,plantId);

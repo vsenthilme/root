@@ -8,7 +8,7 @@ import lombok.Data;
 public class ImBasicData1CompositeKey implements Serializable {
 
 	private static final long serialVersionUID = -7617672247680004647L;
-	
+
 	/*
 	 * `LANG_ID`, `C_ID`, `PLANT_ID`, `WH_ID`, `ITM_CODE`, `UOM_ID`
 	 */
@@ -18,4 +18,5 @@ public class ImBasicData1CompositeKey implements Serializable {
 	private String warehouseId;
 	private String itemCode;
 	private String uomId;
+	private String manufacturerPartNo;
 }

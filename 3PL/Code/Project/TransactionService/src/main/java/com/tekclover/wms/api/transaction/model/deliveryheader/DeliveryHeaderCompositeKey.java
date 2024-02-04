@@ -16,5 +16,5 @@ public class DeliveryHeaderCompositeKey implements Serializable {
     private String companyCodeId;
     private String plantId;
     private String warehouseId;
-    private String deliveryNo;
+    private Long deliveryNo;
 }

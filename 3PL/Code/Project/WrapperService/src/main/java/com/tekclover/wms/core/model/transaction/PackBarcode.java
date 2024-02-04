@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class PackBarcode {
+	
+	private String quantityType;
+	private String barcode;
 
-    private String quantityType;
-    private String barcode;
-
-    //	V2
-    private Double cbm;
-    private Double cbmQuantity;
+	//v2
+	private Double cbm;
+	private Double cbmQuantity;
 }

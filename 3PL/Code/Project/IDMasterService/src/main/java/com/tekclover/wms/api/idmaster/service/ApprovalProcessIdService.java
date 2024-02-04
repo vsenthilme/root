@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.ApprovalProcessIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class ApprovalProcessIdService {
 	 * @throws InvocationTargetException
 	 */
 	public ApprovalProcessId createApprovalProcessId (AddApprovalProcessId newApprovalProcessId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalProcessId dbApprovalProcessId = new ApprovalProcessId();
 		Optional<ApprovalProcessId>duplicateApprovalProcessId=approvalProcessIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndApprovalProcessIdAndLanguageIdAndDeletionIndicator(newApprovalProcessId.getCompanyCodeId(), newApprovalProcessId.getPlantId(), newApprovalProcessId.getWarehouseId(), newApprovalProcessId.getApprovalProcessId(), newApprovalProcessId.getLanguageId(),0L);
 		if(!duplicateApprovalProcessId.isEmpty()){
@@ -151,7 +152,7 @@ public class ApprovalProcessIdService {
 	 */
 	public ApprovalProcessId updateApprovalProcessId (String warehouseId, String approvalProcessId,String companyCodeId,String languageId,String plantId, String loginUserID,
 													  UpdateApprovalProcessId updateApprovalProcessId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalProcessId dbApprovalProcessId = getApprovalProcessId( warehouseId,approvalProcessId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateApprovalProcessId, dbApprovalProcessId, CommonUtils.getNullPropertyNames(updateApprovalProcessId));
 		dbApprovalProcessId.setUpdatedBy(loginUserID);

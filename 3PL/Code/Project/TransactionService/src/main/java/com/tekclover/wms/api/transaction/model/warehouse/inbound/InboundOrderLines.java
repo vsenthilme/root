@@ -35,4 +35,5 @@ public class InboundOrderLines {
 	private Double itemCaseQty;								// ITM_CASE_QTY
 	private String salesOrderReference;						// REF_FIELD_4
 	private String orderId;
+
 }

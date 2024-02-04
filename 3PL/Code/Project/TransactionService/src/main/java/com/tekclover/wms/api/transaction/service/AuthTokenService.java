@@ -75,17 +75,16 @@ public class AuthTokenService {
 			accessTokenUrl = propertiesConfig.getMastersAccessTokenUrl();
 		} else if (apiUrl.equalsIgnoreCase("wms-idmaster-service")) {
 			accessTokenUrl = propertiesConfig.getIdmasterAccessTokenUrl();
-		} else {
-			log.info("The givem URL is not available. Quiting.");
-			throw new BadRequestException("The givem URL is not available. Quiting");
+		} else  {
+			log.info("The given URL is not available. Quiting.");
+			throw new BadRequestException("The given URL is not available. Quiting");
 		}
 
 		log.info("Access token url: " + accessTokenUrl);
 		accessTokenUrl += "?grant_type=" + grantType + "&username=" + oauthUserName + "&password=" + oauthPassword;
 		log.info("accessTokenUrl : " + accessTokenUrl);
 
-		ResponseEntity<AuthToken> response = restTemplate.exchange(accessTokenUrl, HttpMethod.POST, request,
-				AuthToken.class);
+		ResponseEntity<AuthToken> response = restTemplate.exchange(accessTokenUrl, HttpMethod.POST, request, AuthToken.class);
 		log.info("Access Token Response ---------" + response.getBody());
 		return response.getBody();
 	}
@@ -127,6 +126,18 @@ public class AuthTokenService {
 		// Generate AuthToken for MastersService
 		AuthTokenRequest authTokenRequest = new AuthTokenRequest();
 		authTokenRequest.setApiName("wms-masters-service");
+		authTokenRequest.setClientId(propertiesConfig.getClientId());
+		authTokenRequest.setClientSecretKey(propertiesConfig.getClientSecretKey());
+		authTokenRequest.setGrantType(propertiesConfig.getGrantType());
+		authTokenRequest.setOauthUserName(propertiesConfig.getUsername());
+		authTokenRequest.setOauthPassword(propertiesConfig.getPassword());
+		return getAuthToken(authTokenRequest);
+	}
+
+	// Generate AuthToken for ConnectorService
+	public AuthToken getConnectorServiceAuthToken() {
+		AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+		authTokenRequest.setApiName("wms-connector-service");
 		authTokenRequest.setClientId(propertiesConfig.getClientId());
 		authTokenRequest.setClientSecretKey(propertiesConfig.getClientSecretKey());
 		authTokenRequest.setGrantType(propertiesConfig.getGrantType());

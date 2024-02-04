@@ -15,4 +15,7 @@ public class ASNHeaderV2  {
 
 	@NotBlank(message = "ASN number is mandatory")
 	private String asnNumber;
+
+	//almailem fields
+	private String purchaseOrderNumber;
 }

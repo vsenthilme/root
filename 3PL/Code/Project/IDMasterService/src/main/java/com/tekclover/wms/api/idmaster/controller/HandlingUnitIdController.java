@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +53,7 @@ public class HandlingUnitIdController {
     @ApiOperation(response = HandlingUnitId.class, value = "Create HandlingUnitId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postHandlingUnitId(@Valid @RequestBody AddHandlingUnitId newHandlingUnitId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnitId createdHandlingUnitId = handlingunitidService.createHandlingUnitId(newHandlingUnitId, loginUserID);
 		return new ResponseEntity<>(createdHandlingUnitId , HttpStatus.OK);
 	}
@@ -62,7 +63,7 @@ public class HandlingUnitIdController {
 	public ResponseEntity<?> patchHandlingUnitId(@PathVariable String handlingUnitNumber,@RequestParam String warehouseId,
 												 @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
 												 @Valid @RequestBody UpdateHandlingUnitId updateHandlingUnitId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		HandlingUnitId createdHandlingUnitId =
 				handlingunitidService.updateHandlingUnitId(warehouseId,handlingUnitNumber,companyCodeId,languageId,

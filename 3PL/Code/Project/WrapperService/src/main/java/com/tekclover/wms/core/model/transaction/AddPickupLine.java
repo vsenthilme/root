@@ -35,7 +35,7 @@ public class AddPickupLine {
 	private String pickPalletCode;
 	private String pickCaseCode;
 	private Long statusId;
-	private String cbm;
+//	private Double cbm;
 	private String cbmUnit;
 	private String referenceField1;
 	private String referenceField2;
@@ -49,11 +49,20 @@ public class AddPickupLine {
 	private String referenceField10;
 	private Long deletionIndicator;
 	private String pickupCreatedBy;
-	private Date pickupCreatedOn = new Date();
+	private Date pickupCreatedOn;
 	private String pickupConfirmedBy;
-	private Date pickupConfirmedOn = new Date();
+	private Date pickupConfirmedOn;
 	private String pickupUpdatedBy;
-	private Date pickupupdatedOn = new Date();
+	private Date pickupupdatedOn;
 	private String pickupReversedBy;
-	private Date pickupReversedOn = new Date();
+	private Date pickupReversedOn;
+
+	private Double inventoryQuantity;
+	private Double pickedCbm;
+	private String manufacturerCode;
+	private String manufacturerName;
+	private String origin;
+	private String brand;
+	private String barcodeId;
+	private String levelId;
 }

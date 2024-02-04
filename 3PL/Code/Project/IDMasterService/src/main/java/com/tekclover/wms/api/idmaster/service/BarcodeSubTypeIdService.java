@@ -15,6 +15,7 @@ import com.tekclover.wms.api.idmaster.model.barcodesubtypeid.FindBarcodeSubTypeI
 import com.tekclover.wms.api.idmaster.model.barcodetypeid.BarcodeTypeId;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.BarcodeSubTypeIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -143,7 +144,7 @@ public class BarcodeSubTypeIdService {
 	 * @throws InvocationTargetException
 	 */
 	public BarcodeSubTypeId createBarcodeSubTypeId (AddBarcodeSubTypeId newBarcodeSubTypeId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeSubTypeId dbBarcodeSubTypeId = new BarcodeSubTypeId();
 		Optional<BarcodeSubTypeId> duplicateBarcodeSubTypeId = barcodeSubTypeIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBarcodeTypeIdAndBarcodeSubTypeIdAndLanguageIdAndDeletionIndicator(newBarcodeSubTypeId.getCompanyCodeId(), newBarcodeSubTypeId.getPlantId(), newBarcodeSubTypeId.getWarehouseId(), newBarcodeSubTypeId.getBarcodeTypeId(), newBarcodeSubTypeId.getBarcodeSubTypeId(), newBarcodeSubTypeId.getLanguageId(), 0L);
 		if (!duplicateBarcodeSubTypeId.isEmpty()) {
@@ -176,7 +177,7 @@ public class BarcodeSubTypeIdService {
 	 */
 	public BarcodeSubTypeId updateBarcodeSubTypeId (String warehouseId, Long barcodeTypeId, Long barcodeSubTypeId,String companyCodeId,String languageId,String plantId, String loginUserID,
 													UpdateBarcodeSubTypeId updateBarcodeSubTypeId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		BarcodeSubTypeId dbBarcodeSubTypeId = getBarcodeSubTypeId(warehouseId, barcodeTypeId, barcodeSubTypeId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBarcodeSubTypeId, dbBarcodeSubTypeId, CommonUtils.getNullPropertyNames(updateBarcodeSubTypeId));
 		dbBarcodeSubTypeId.setUpdatedBy(loginUserID);

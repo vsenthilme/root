@@ -11,6 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import com.tekclover.wms.api.idmaster.model.country.FindCountry;
 import com.tekclover.wms.api.idmaster.model.languageid.LanguageId;
 import com.tekclover.wms.api.idmaster.repository.Specification.CountrySpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class CountryService {
 	 * @throws InvocationTargetException
 	 */
 	public Country createCountry (AddCountry newCountry,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Country dbCountry = new Country();
 		Optional<Country> duplicateCountry = countryRepository.findByCountryIdAndLanguageId(newCountry.getCountryId(), newCountry.getLanguageId());
 		if (!duplicateCountry.isEmpty()) {
@@ -90,7 +91,7 @@ public class CountryService {
 	 * @throws InvocationTargetException
 	 */
 	public Country updateCountry (String countryId,String languageId,String loginUserID,UpdateCountry updateCountry)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Country dbCountry = getCountry(countryId,languageId);
 		BeanUtils.copyProperties(updateCountry, dbCountry, CommonUtils.getNullPropertyNames(updateCountry));
 		dbCountry.setUpdatedBy(loginUserID);

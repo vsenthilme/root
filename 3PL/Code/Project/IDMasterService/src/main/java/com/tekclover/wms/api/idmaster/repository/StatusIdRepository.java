@@ -18,4 +18,7 @@ public interface StatusIdRepository extends JpaRepository<StatusId,Long>, JpaSpe
 	public Optional<StatusId> 
 		findByLanguageIdAndStatusIdAndDeletionIndicator(
 				String languageId, Long statusId, Long deletionIndicator);
+
+//    Optional<StatusId> findByLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+//			String languageId, String warehouseId, Long statusId, Long deletionIndicator);
 }

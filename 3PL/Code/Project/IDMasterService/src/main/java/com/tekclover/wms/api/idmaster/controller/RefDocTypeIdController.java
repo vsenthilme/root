@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -50,7 +51,7 @@ public class RefDocTypeIdController {
     @ApiOperation(response = RefDocTypeId.class, value = "Create ReferenceDocumentTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postRefDocTypeId(@Valid @RequestBody AddRefDocTypeId newRefDocTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		RefDocTypeId createdRefDocTypeId = refdoctypeidService.createRefDocTypeId(newRefDocTypeId, loginUserID);
 		return new ResponseEntity<>(createdRefDocTypeId , HttpStatus.OK);
 	}
@@ -59,8 +60,8 @@ public class RefDocTypeIdController {
     @PatchMapping("/{referenceDocumentTypeId}")
 	public ResponseEntity<?> patchRefDocTypeId(@PathVariable String referenceDocumentTypeId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateRefDocTypeId updateRefDocTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateRefDocTypeId updateRefDocTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		RefDocTypeId createdRefDocTypeId = 
 				refdoctypeidService.updateRefDocTypeId(warehouseId, referenceDocumentTypeId,companyCodeId,languageId,plantId,loginUserID, updateRefDocTypeId);
 		return new ResponseEntity<>(createdRefDocTypeId , HttpStatus.OK);

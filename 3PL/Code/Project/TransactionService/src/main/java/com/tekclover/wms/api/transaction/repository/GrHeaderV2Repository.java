@@ -4,6 +4,7 @@ import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrHeaderV2;
 import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,26 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
     List<GrHeaderV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
             String languageId, String companyCode, String plantId,
             String warehouseId, String goodsReceiptNo, String caseCode, String refDocNumber, Long deletionIndicator);
+
+//    @Query(value = "select \n" +
+//            "* \n" +
+//            "from \n" +
+//            "tblgrheader \n" +
+//            "where \n" +
+//            "c_id IN (:companyCode) and \n" +
+//            "lang_id IN (:languageId) and \n" +
+//            "plant_id IN(:plantId) and \n" +
+//            "wh_id IN (:warehouseId) and \n" +
+//            "ref_doc_no IN (:refDocNumber) and \n" +
+//            "is_deleted = 0", nativeQuery = true)
+//    List<GrHeaderV2> getGrHeaderV2(
+//            @Param(value = "warehouseId") String warehouseId,
+//            @Param(value = "companyCode") String companyCode,
+//            @Param(value = "plantId") String plantId,
+//            @Param(value = "languageId") String languageId,
+//            @Param(value = "refDocNumber") String refDocNumber
+//    );
+
 
     @Query(value = "select \n" +
             "* \n" +
@@ -55,4 +76,21 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
 
     List<GrHeaderV2> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndWarehouseIdAndPreInboundNoAndCaseCodeAndDeletionIndicator(
             String languageId, String companyCode, String plantId, String refDocNumber, String warehouseId, String preInboundNo, String caseCode, Long deletionIndicator);
+
+    GrHeaderV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber, Long deletionIndicator);
+
+    GrHeaderV2 findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE GrHeaderV2 ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
+            "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
+    void updateGrHeaderStatus(@Param("warehouseId") String warehouseId,
+                              @Param("companyCode") String companyCode,
+                              @Param("plantId") String plantId,
+                              @Param("languageId") String languageId,
+                              @Param("refDocNumber") String refDocNumber,
+                              @Param("statusId") Long statusId,
+                              @Param("statusDescription") String statusDescription);
 }

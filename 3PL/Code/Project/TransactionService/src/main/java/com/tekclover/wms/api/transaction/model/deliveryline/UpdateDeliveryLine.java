@@ -1,12 +1,39 @@
 package com.tekclover.wms.api.transaction.model.deliveryline;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
 public class UpdateDeliveryLine {
 
+    private String languageId;
+
+    private String companyCodeId;
+
+    private String plantId;
+
+    private String warehouseId;
+
+    private Long deliveryNo;
+
+    private String itemCode;
+
+    private Long lineNumber;
+
+    private String invoiceNumber;
+
+    private String refDocNumber;
+
     private String partnerCode;
+
+    private String vehicleNo;
+
+    private String driverId;
+
+    private String driverName;
+
+    private String routeId;
 
     private Long outboundOrderTypeId;
 
@@ -19,6 +46,14 @@ public class UpdateDeliveryLine {
     private String country;
 
     private String state;
+
+    private String companyDescription;
+
+    private String plantDescription;
+
+    private String warehouseDescription;
+
+    private String statusDescription;
 
     private String phoneNumber;
 
@@ -41,6 +76,8 @@ public class UpdateDeliveryLine {
     private String deliveryFailiureReason;
 
     private String paymentMode;
+
+    private Boolean reDelivery;
 
     private Long statusId;
 

@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.DateFormatIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class DateFormatIdService{
 	 * @throws InvocationTargetException
 	 */
 	public DateFormatId createDateFormatId (AddDateFormatId newDateFormatId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DateFormatId dbDateFormatId = new DateFormatId();
 		Optional<DateFormatId> duplicateDateFormatId = dateFormatIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndDateFormatIdAndLanguageIdAndDeletionIndicator(newDateFormatId.getCompanyCodeId(), newDateFormatId.getPlantId(), newDateFormatId.getWarehouseId(), newDateFormatId.getDateFormatId(), newDateFormatId.getLanguageId(), 0L);
 		if (!duplicateDateFormatId.isEmpty()) {
@@ -152,7 +153,7 @@ public class DateFormatIdService{
 	 */
 	public DateFormatId updateDateFormatId (String warehouseId, String dateFormatId,String companyCodeId,String languageId,String plantId,String loginUserID,
 											UpdateDateFormatId updateDateFormatId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		DateFormatId dbDateFormatId = getDateFormatId( warehouseId,dateFormatId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateDateFormatId, dbDateFormatId, CommonUtils.getNullPropertyNames(updateDateFormatId));
 		dbDateFormatId.setUpdatedBy(loginUserID);

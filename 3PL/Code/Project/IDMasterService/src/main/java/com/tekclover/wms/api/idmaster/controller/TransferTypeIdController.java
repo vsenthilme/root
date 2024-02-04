@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class TransferTypeIdController {
     @ApiOperation(response = TransferTypeId.class, value = "Create TransferTypeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postTransferTypeId(@Valid @RequestBody AddTransferTypeId newTransferTypeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		TransferTypeId createdTransferTypeId = transfertypeidService.createTransferTypeId(newTransferTypeId, loginUserID);
 		return new ResponseEntity<>(createdTransferTypeId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class TransferTypeIdController {
     @PatchMapping("/{transferTypeId}")
 	public ResponseEntity<?> patchTransferTypeId(@RequestParam String warehouseId,@PathVariable String transferTypeId,
 			 @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateTransferTypeId updateTransferTypeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateTransferTypeId updateTransferTypeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		TransferTypeId createdTransferTypeId = 
 				transfertypeidService.updateTransferTypeId(warehouseId, transferTypeId,companyCodeId,languageId,plantId,loginUserID, updateTransferTypeId);
 		return new ResponseEntity<>(createdTransferTypeId , HttpStatus.OK);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -48,7 +49,7 @@ public class AdhocModuleIdController {
     @ApiOperation(response = AdhocModuleId.class, value = "Create AdhocModuleId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postAdhocModuleId(@Valid @RequestBody AddAdhocModuleId newAdhocModuleId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		AdhocModuleId createdAdhocModuleId = adhocmoduleidService.createAdhocModuleId(newAdhocModuleId, loginUserID);
 		return new ResponseEntity<>(createdAdhocModuleId , HttpStatus.OK);
 	}
@@ -57,8 +58,8 @@ public class AdhocModuleIdController {
     @PatchMapping("/{adhocModuleId}")
 	public ResponseEntity<?> patchAdhocModuleId( @RequestParam String warehouseId, @PathVariable String adhocModuleId, @RequestParam String moduleId,@RequestParam String companyCodeId,
 												 @RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateAdhocModuleId updateAdhocModuleId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateAdhocModuleId updateAdhocModuleId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		AdhocModuleId createdAdhocModuleId = 
 				adhocmoduleidService.updateAdhocModuleId(warehouseId, moduleId, adhocModuleId,companyCodeId,languageId,plantId,loginUserID, updateAdhocModuleId);
 		return new ResponseEntity<>(createdAdhocModuleId , HttpStatus.OK);

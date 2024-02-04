@@ -17,7 +17,10 @@ public class SearchInventoryMovement {
 	 * MVT_DOC_NO
 	 * CTD_ON
 	 */
-	 
+
+	private List<String> languageId;
+	private List<String> companyCodeId;
+	private List<String> plantId;
 	private List<String> warehouseId;
 	private List<Long> movementType;
 	private List<Long> submovementType;

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -48,7 +49,7 @@ public class EmployeeIdController {
     @ApiOperation(response = EmployeeId.class, value = "Create EmployeeId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postEmployeeId(@Valid @RequestBody AddEmployeeId newEmployeeId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		EmployeeId createdEmployeeId = employeeidService.createEmployeeId(newEmployeeId, loginUserID);
 		return new ResponseEntity<>(createdEmployeeId , HttpStatus.OK);
 	}
@@ -57,8 +58,8 @@ public class EmployeeIdController {
     @PatchMapping("/{employeeId}")
 	public ResponseEntity<?> patchEmployeeId(@RequestParam String warehouseId, @PathVariable String employeeId,
 			@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateEmployeeId updateEmployeeId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateEmployeeId updateEmployeeId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		EmployeeId createdEmployeeId = 
 				employeeidService.updateEmployeeId(warehouseId, employeeId,companyCodeId,languageId,plantId,loginUserID,updateEmployeeId);
 		return new ResponseEntity<>(createdEmployeeId , HttpStatus.OK);

@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -87,7 +88,7 @@ public class RoleAccessController {
     @ApiOperation(response = RoleAccess.class, value = "Create RoleAccess") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postRoleAccess(@Valid @RequestBody List<AddRoleAccess> newRoleAccess, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<RoleAccess> createdRoleAccess = roleaccessService.createRoleAccess(newRoleAccess, loginUserID);
 		return new ResponseEntity<>(createdRoleAccess , HttpStatus.OK);
@@ -99,7 +100,7 @@ public class RoleAccessController {
 											 @RequestParam String companyCodeId, @RequestParam String languageId,
 											 @RequestParam String plantId, @RequestParam String loginUserID,
 											 @Valid @RequestBody List<AddRoleAccess> updateRoleAccess )
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<RoleAccess> updatedRoleAccess =
 				roleaccessService.updateRoleAccess(warehouseId, roleId, companyCodeId, languageId,

@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.SpecialStockIndicatorIdSpecification;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +130,7 @@ public class SpecialStockIndicatorIdService {
 	 * @throws InvocationTargetException
 	 */
 	public SpecialStockIndicatorId createSpecialStockIndicatorId (AddSpecialStockIndicatorId newSpecialStockIndicatorId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpecialStockIndicatorId dbSpecialStockIndicatorId = new SpecialStockIndicatorId();
 		Optional<SpecialStockIndicatorId> duplicateSpecialStockIndicatorId = specialStockIndicatorIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndStockTypeIdAndSpecialStockIndicatorIdAndLanguageIdAndDeletionIndicator(newSpecialStockIndicatorId.getCompanyCodeId(), newSpecialStockIndicatorId.getPlantId(), newSpecialStockIndicatorId.getWarehouseId(), newSpecialStockIndicatorId.getStockTypeId(), newSpecialStockIndicatorId.getSpecialStockIndicatorId(), newSpecialStockIndicatorId.getLanguageId(), 0L);
 		if (!duplicateSpecialStockIndicatorId.isEmpty()) {
@@ -162,7 +163,7 @@ public class SpecialStockIndicatorIdService {
 	 */
 	public SpecialStockIndicatorId updateSpecialStockIndicatorId (String warehouseId, String stockTypeId, String specialStockIndicatorId,String companyCodeId,String languageId,String plantId,String loginUserID,
 																  UpdateSpecialStockIndicatorId updateSpecialStockIndicatorId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		SpecialStockIndicatorId dbSpecialStockIndicatorId = getSpecialStockIndicatorId( warehouseId,stockTypeId,specialStockIndicatorId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateSpecialStockIndicatorId, dbSpecialStockIndicatorId, CommonUtils.getNullPropertyNames(updateSpecialStockIndicatorId));
 		dbSpecialStockIndicatorId.setUpdatedBy(loginUserID);

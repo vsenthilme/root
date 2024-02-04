@@ -47,6 +47,11 @@ public class ContainerReceiptSpecificationV2 implements Specification<ContainerR
         	 final Path<Group> group = root.<Group> get("containerReceiptNo");
         	 predicates.add(group.in(searchContainerReceipt.getContainerReceiptNo()));
          }
+
+		 if (searchContainerReceipt.getRefDocNumber() != null && !searchContainerReceipt.getRefDocNumber().isEmpty()) {
+        	 final Path<Group> group = root.<Group> get("refDocNumber");
+        	 predicates.add(group.in(searchContainerReceipt.getRefDocNumber()));
+         }
          
 		 if (searchContainerReceipt.getContainerNo() != null && !searchContainerReceipt.getContainerNo().isEmpty()) {
         	 final Path<Group> group = root.<Group> get("containerNo");

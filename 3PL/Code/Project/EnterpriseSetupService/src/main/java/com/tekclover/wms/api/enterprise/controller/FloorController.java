@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -66,8 +67,8 @@ public class FloorController {
     
     @ApiOperation(response = Floor.class, value = "Create Floor") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postFloor(@Valid @RequestBody AddFloor newFloor, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postFloor(@Valid @RequestBody AddFloor newFloor, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Floor createdFloor = floorService.createFloor(newFloor, loginUserID);
 		return new ResponseEntity<>(createdFloor , HttpStatus.OK);
 	}
@@ -75,8 +76,8 @@ public class FloorController {
     @ApiOperation(response = Floor.class, value = "Update Floor") // label for swagger
     @PatchMapping("/{floorId}")
 	public ResponseEntity<?> patchFloor(@PathVariable Long floorId, @RequestParam String warehouseId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,
-			@Valid @RequestBody UpdateFloor updateFloor, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateFloor updateFloor, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Floor createdFloor = floorService.updateFloor(warehouseId,companyId,plantId,languageId, floorId, updateFloor, loginUserID);
 		return new ResponseEntity<>(createdFloor , HttpStatus.OK);
 	}
@@ -84,7 +85,7 @@ public class FloorController {
     @ApiOperation(response = Floor.class, value = "Delete Floor") // label for swagger
 	@DeleteMapping("/{floorId}")
 	public ResponseEntity<?> deleteFloor(@PathVariable Long floorId,@RequestParam String companyId,@RequestParam String plantId,@RequestParam String languageId,@RequestParam String warehouseId,
-		@RequestParam String loginUserID) {
+		@RequestParam String loginUserID) throws ParseException {
     	floorService.deleteFloor(warehouseId,companyId,plantId,languageId,floorId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

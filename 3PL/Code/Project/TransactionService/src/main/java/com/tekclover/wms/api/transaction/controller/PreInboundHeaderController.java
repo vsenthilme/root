@@ -1,6 +1,7 @@
 	package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -158,7 +159,7 @@ public class PreInboundHeaderController {
 		return new ResponseEntity<>(createdStagingHeader, HttpStatus.OK);
 	}
 
-	@ApiOperation(response = PreInboundHeaderEntityV2.class, value = "Get a PreInboundHeader V2") // label for swagger
+	@ApiOperation(response = PreInboundHeaderV2.class, value = "Get a PreInboundHeader V2") // label for swagger
 	@GetMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> getPreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 												   @RequestParam String companyCode, @RequestParam String plantId,
@@ -187,7 +188,7 @@ public class PreInboundHeaderController {
 	@ApiOperation(response = PreInboundHeaderEntityV2.class, value = "Create PreInboundHeader V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postPreInboundHeaderV2(@Valid @RequestBody PreInboundHeaderV2 newPreInboundHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PreInboundHeaderEntityV2 createdPreInboundHeader =
 				preinboundheaderService.createPreInboundHeaderV2(newPreInboundHeader, loginUserID);
 		return new ResponseEntity<>(createdPreInboundHeader, HttpStatus.OK);
@@ -198,10 +199,10 @@ public class PreInboundHeaderController {
 	public ResponseEntity<?> patchPreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 													 @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
 													 @Valid @RequestBody PreInboundHeaderV2 updatePreInboundHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PreInboundHeaderV2 createdPreInboundHeader =
-				preinboundheaderService.updatePreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId,
-						languageId, updatePreInboundHeader, loginUserID);
+				preinboundheaderService.updatePreInboundHeaderV2(companyCode, plantId,
+						languageId, preInboundNo, warehouseId, updatePreInboundHeader, loginUserID);
 		return new ResponseEntity<>(createdPreInboundHeader, HttpStatus.OK);
 	}
 
@@ -209,7 +210,7 @@ public class PreInboundHeaderController {
 	@DeleteMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> deletePreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 													  @RequestParam String companyCode, @RequestParam String plantId,
-													  @RequestParam String languageId, @RequestParam String loginUserID) {
+													  @RequestParam String languageId, @RequestParam String loginUserID) throws ParseException {
 		preinboundheaderService.deletePreInboundHeaderV2(companyCode, plantId, languageId, preInboundNo, warehouseId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

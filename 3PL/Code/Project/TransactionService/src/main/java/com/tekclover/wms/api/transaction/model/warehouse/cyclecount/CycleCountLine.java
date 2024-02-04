@@ -1,9 +1,7 @@
 package com.tekclover.wms.api.transaction.model.warehouse.cyclecount;
 
-
 import lombok.Data;
 import javax.persistence.*;
-
 
 @Entity
 @Data
@@ -21,5 +19,16 @@ public class CycleCountLine {
     private String Uom;
     private String manufacturerCode;
     private String manufacturerName;
-    private String orderId;
+    private String orderId;                 //header reference Id(parent Id)
+    private Double countedQty;
+    private Double frozenQty;
+    private String stockCountType;
+
+    //MiddleWare Fields
+    private Long middlewareId;
+    private Long middlewareHeaderId;
+    private String middlewareTable;
+
+    private String isCompleted;
+    private String isCancelled;
 }

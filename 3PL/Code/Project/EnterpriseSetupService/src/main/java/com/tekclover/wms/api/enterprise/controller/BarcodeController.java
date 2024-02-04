@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.enterprise.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -69,8 +70,8 @@ public class BarcodeController {
     
     @ApiOperation(response = Barcode.class, value = "Create Barcode") // label for swagger
 	@PostMapping("")
-	public ResponseEntity<?> postBarcode(@Valid @RequestBody AddBarcode newBarcode, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public ResponseEntity<?> postBarcode(@Valid @RequestBody AddBarcode newBarcode, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Barcode createdBarcode = barcodeService.createBarcode(newBarcode, loginUserID);
 		return new ResponseEntity<>(createdBarcode , HttpStatus.OK);
 	}

@@ -28,4 +28,10 @@ public class PerpetualLineV1 {
 
     @NotBlank(message = "Manufacturer Name is mandatory")
     private String manufacturerName;
+
+    private Double frozenQty;
+    private Double countedQty;
+
+    private String isCompleted;
+    private String isCancelled;
 }

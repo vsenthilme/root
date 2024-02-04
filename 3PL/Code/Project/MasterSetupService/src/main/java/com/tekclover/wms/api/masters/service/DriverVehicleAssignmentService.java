@@ -9,6 +9,7 @@ import com.tekclover.wms.api.masters.model.drivervehicleassignment.UpdateDriverV
 import com.tekclover.wms.api.masters.repository.DriverVehicleAssignmentRepository;
 import com.tekclover.wms.api.masters.repository.specification.DriverVehicleAssignmentSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +105,7 @@ public class DriverVehicleAssignmentService {
      * @throws InvocationTargetException
      */
     public DriverVehicleAssignment createDriverVehicleAssignment (AddDriverVehicleAssignment newDriverVehicleAssignment, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         DriverVehicleAssignment dbDriverVehicleAssignment = new DriverVehicleAssignment();
         Optional<DriverVehicleAssignment> duplicateDriverVehicleAssignment=
                 driverVehicleAssignmentRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndDriverIdAndVehicleNumberAndRouteIdAndDeletionIndicator(
@@ -147,7 +149,7 @@ public class DriverVehicleAssignmentService {
                                                                   String languageId, Long driverId,Long routeId,
                                                                   String vehicleNumber, String loginUserID,
                                                                   UpdateDriverVehicleAssignment updateDriverVehicleAssignment)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         DriverVehicleAssignment dbDriverVehicleAssignment =
                 getDriverVehicleAssignment(driverId,vehicleNumber,routeId,companyCodeId,plantId,languageId,warehouseId);
 
@@ -170,7 +172,7 @@ public class DriverVehicleAssignmentService {
      * @param loginUserID
      */
     public void deleteDriverVehicleAssignment (String companyCodeId,String languageId,String plantId,String warehouseId,
-                                               Long driverId,String vehicleNumber,Long routeId,String loginUserID) {
+                                               Long driverId,String vehicleNumber,Long routeId,String loginUserID) throws ParseException {
         DriverVehicleAssignment driverVehicleAssignment =
                 getDriverVehicleAssignment(driverId,vehicleNumber,routeId,companyCodeId,plantId,languageId,warehouseId);
         if ( driverVehicleAssignment != null) {

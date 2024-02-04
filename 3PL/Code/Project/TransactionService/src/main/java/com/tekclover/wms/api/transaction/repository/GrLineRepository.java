@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,8 @@ import com.tekclover.wms.api.transaction.model.inbound.gr.GrLine;
 
 @Repository
 @Transactional
-public interface GrLineRepository extends JpaRepository<GrLine,Long>, JpaSpecificationExecutor<GrLine> {
+public interface GrLineRepository extends JpaRepository<GrLine,Long>,
+		JpaSpecificationExecutor<GrLine>, StreamableJpaSpecificationRepository<GrLine> {
 	
 	public List<GrLine> findAll();
 	public Optional<GrLine> 

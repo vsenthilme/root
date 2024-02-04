@@ -14,6 +14,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.HandlingUnitIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,7 @@ public class HandlingUnitIdService {
 	 * @throws InvocationTargetException
 	 */
 	public HandlingUnitId createHandlingUnitId (AddHandlingUnitId newHandlingUnitId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		HandlingUnitId dbHandlingUnitId = new HandlingUnitId();
 
 		Optional<HandlingUnitId> duplicateHandlingUnitId =
@@ -178,7 +179,7 @@ public class HandlingUnitIdService {
 	public HandlingUnitId updateHandlingUnitId (String warehouseId,String handlingUnitNumber,String companyCodeId,
 												String languageId,String plantId,String loginUserID,
 												UpdateHandlingUnitId updateHandlingUnitId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		HandlingUnitId dbHandlingUnitId = getHandlingUnitId( warehouseId,handlingUnitNumber,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateHandlingUnitId, dbHandlingUnitId, CommonUtils.getNullPropertyNames(updateHandlingUnitId));

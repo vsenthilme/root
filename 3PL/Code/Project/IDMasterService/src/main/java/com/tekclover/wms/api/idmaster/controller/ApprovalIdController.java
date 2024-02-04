@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class ApprovalIdController {
     @ApiOperation(response = ApprovalId.class, value = "Create ApprovalId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postApprovalId(@Valid @RequestBody AddApprovalId newApprovalId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalId createdApprovalId = approvalidService.createApprovalId(newApprovalId, loginUserID);
 		return new ResponseEntity<>(createdApprovalId , HttpStatus.OK);
 	}
@@ -59,8 +60,8 @@ public class ApprovalIdController {
 	public ResponseEntity<?> patchApprovalId(@PathVariable String approvalId,@RequestParam String approvalProcessId,
 			@RequestParam String warehouseId,@RequestParam String approvalLevel,@RequestParam String companyCodeId,
 											 @RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateApprovalId updateApprovalId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateApprovalId updateApprovalId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalId createdApprovalId = 
 				approvalidService.updateApprovalId(warehouseId, approvalId,approvalLevel,approvalProcessId,companyCodeId,languageId,plantId,loginUserID, updateApprovalId);
 		return new ResponseEntity<>(createdApprovalId , HttpStatus.OK);

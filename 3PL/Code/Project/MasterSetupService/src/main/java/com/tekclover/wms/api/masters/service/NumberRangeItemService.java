@@ -8,6 +8,7 @@ import com.tekclover.wms.api.masters.model.numberrangeitem.UpdateNumberRangeItem
 import com.tekclover.wms.api.masters.repository.NumberRangeItemRepository;
 import com.tekclover.wms.api.masters.repository.specification.NumberRangeItemSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -92,7 +94,7 @@ public class NumberRangeItemService {
      * @throws InvocationTargetException
      */
     public NumberRangeItem createNumberRangeItem (AddNumberRangeItem newNumberRangeItem, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
          NumberRangeItem dbNUmberRangeItem = new NumberRangeItem();
         Optional<NumberRangeItem> duplicateNumberRange = numberRangeItemRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemTypeIdAndSequenceNoAndDeletionIndicator(
                 newNumberRangeItem.getCompanyCodeId(),
@@ -124,7 +126,7 @@ public class NumberRangeItemService {
      * @throws InvocationTargetException
      */
     public NumberRangeItem updateNumberRangeItem (String companyCodeId, String plantId, String warehouseId, String languageId, Long itemTypeId, Long sequenceNo, UpdateNumberRangeItem updateNumberRangeItem, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeItem dbNumberRangeItem = getNumberRangeItem(warehouseId,companyCodeId,languageId,plantId,itemTypeId,sequenceNo);
         BeanUtils.copyProperties(updateNumberRangeItem, dbNumberRangeItem, CommonUtils.getNullPropertyNames(updateNumberRangeItem));
         dbNumberRangeItem.setUpdatedBy(loginUserID);
@@ -137,7 +139,7 @@ public class NumberRangeItemService {
      * @param sequenceNo
      * @param itemTypeId
      */
-    public void deleteNumberRangeItem (String companyCodeId,String languageId,String plantId,String warehouseId,Long sequenceNo,Long itemTypeId,String loginUserID) {
+    public void deleteNumberRangeItem (String companyCodeId,String languageId,String plantId,String warehouseId,Long sequenceNo,Long itemTypeId,String loginUserID) throws ParseException {
         NumberRangeItem numberRangeItem = getNumberRangeItem(warehouseId,companyCodeId,languageId,plantId,itemTypeId,sequenceNo);
         if ( numberRangeItem != null) {
             numberRangeItem.setDeletionIndicator (1L);

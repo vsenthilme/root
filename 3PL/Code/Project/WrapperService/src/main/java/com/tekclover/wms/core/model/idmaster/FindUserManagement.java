@@ -12,4 +12,6 @@ public class FindUserManagement {
     private List<String> warehouseId;
     private List<Long> userRoleId;
     private List<Long> userTypeId;
+    private Boolean portalLoggedIn;
+    private Boolean hhtLoggedIn;
 }

@@ -33,4 +33,6 @@ public interface PlantIdRepository extends JpaRepository<PlantId,Long>, JpaSpeci
 	public IKeyValuePair getPlantIdAndDescription(@Param(value="plantId") String plantId,
 												  @Param(value="languageId") String languageId,
 												  @Param(value = "companyCodeId")String companyCodeId);
-	}
+
+    List<PlantId> findByCompanyCodeIdAndLanguageIdAndDeletionIndicator(String companyCodeId, String languageId, Long deletionIndicator);
+}

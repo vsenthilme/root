@@ -8,6 +8,7 @@ import com.tekclover.wms.api.masters.model.threepl.pricelist.*;
 import com.tekclover.wms.api.masters.repository.PriceListRepository;
 import com.tekclover.wms.api.masters.repository.specification.PriceListSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +130,7 @@ public class PriceListService {
      * @throws InvocationTargetException
      */
     public PriceList createPriceList (AddPriceList newPriceListId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceList dbPriceList = new PriceList();
         Optional<PriceList> duplicatePriceListId = priceListRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndModuleIdAndPriceListIdAndServiceTypeIdAndChargeRangeIdAndLanguageIdAndDeletionIndicator(newPriceListId.getCompanyCodeId(), newPriceListId.getPlantId(),
                 newPriceListId.getWarehouseId(), newPriceListId.getModuleId(), newPriceListId.getPriceListId(), newPriceListId.getServiceTypeId(), newPriceListId.getChargeRangeId(), newPriceListId.getLanguageId(), 0L);
@@ -174,7 +175,7 @@ public class PriceListService {
      */
     public PriceList updatePriceList (String warehouseId, String moduleId, Long priceListId, Long serviceTypeId,Long chargeRangeId,String companyCodeId,String languageId,String plantId,String loginUserID,
                                         UpdatePriceList updatePriceList)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceList dbPriceList = getPriceList(warehouseId, moduleId,priceListId,serviceTypeId,chargeRangeId,companyCodeId,languageId,plantId);
         BeanUtils.copyProperties(updatePriceList, dbPriceList, CommonUtils.getNullPropertyNames(updatePriceList));
         dbPriceList.setUpdatedBy(loginUserID);

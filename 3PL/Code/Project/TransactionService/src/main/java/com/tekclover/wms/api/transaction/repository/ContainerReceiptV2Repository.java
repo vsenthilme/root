@@ -5,10 +5,12 @@ import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpeci
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface ContainerReceiptV2Repository extends JpaRepository<ContainerReceiptV2,Long>,
 		JpaSpecificationExecutor<ContainerReceiptV2>, StreamableJpaSpecificationRepository<ContainerReceiptV2> {
 

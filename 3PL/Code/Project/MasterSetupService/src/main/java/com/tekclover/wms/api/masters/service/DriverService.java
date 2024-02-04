@@ -8,6 +8,7 @@ import com.tekclover.wms.api.masters.model.driver.UpdateDriver;
 import com.tekclover.wms.api.masters.repository.DriverRepository;
 import com.tekclover.wms.api.masters.repository.specification.DriverSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class DriverService {
     private DriverRepository driverRepository;
 
     /**
+     *
      * getAllDriver
      * @return
      */
@@ -88,7 +91,7 @@ public class DriverService {
      * @throws InvocationTargetException
      */
     public Driver createDriver (AddDriver newDriver, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Driver dbDriver = new Driver();
         Optional<Driver> duplicateDriver = driverRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndDriverIdAndDeletionIndicator(
                 newDriver.getCompanyCodeId(),
@@ -120,7 +123,7 @@ public class DriverService {
      */
     public Driver updateDriver (String companyCodeId, String plantId, String warehouseId, String languageId,
                                 Long driverId, UpdateDriver updateDriver, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Driver dbDriver = getDriver(driverId,companyCodeId,plantId,languageId,warehouseId);
         BeanUtils.copyProperties(updateDriver, dbDriver, CommonUtils.getNullPropertyNames(updateDriver));
         dbDriver.setUpdatedBy(loginUserID);
@@ -134,7 +137,7 @@ public class DriverService {
      * @param companyCodeId
      */
     public void deleteDriver (String companyCodeId,String languageId,String plantId,String warehouseId,
-                              Long driverId,String loginUserID) {
+                              Long driverId,String loginUserID) throws ParseException {
         Driver driver = getDriver(driverId,companyCodeId,plantId,languageId,warehouseId);
         if ( driver != null) {
             driver.setDeletionIndicator (1L);

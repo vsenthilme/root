@@ -21,5 +21,9 @@ public interface HandlingEquipmentRepository extends JpaRepository<HandlingEquip
 	public Optional<HandlingEquipment> findByHandlingEquipmentIdAndWarehouseIdAndDeletionIndicator(String handlingEquipmentId,
 			String warehouseId, long l);
 
-    Optional<HandlingEquipment> findByCompanyCodeIdAndPlantIdAndWarehouseIdAndHandlingEquipmentIdAndLanguageIdAndDeletionIndicator(String companyCodeId, String plantId, String warehouseId, String handlingEquipmentId, String languageId, Long deletionIndicator);
+    Optional<HandlingEquipment> findByCompanyCodeIdAndPlantIdAndWarehouseIdAndHandlingEquipmentIdAndLanguageIdAndDeletionIndicator(
+			String companyCodeId, String plantId, String warehouseId, String handlingEquipmentId, String languageId, Long deletionIndicator);
+
+	Optional<HandlingEquipment> findByHeBarcodeAndCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndDeletionIndicator(
+			String heBarcode, String companyCodeId, String plantId, String languageId, String warehouseId, Long deletionIndicator);
 }

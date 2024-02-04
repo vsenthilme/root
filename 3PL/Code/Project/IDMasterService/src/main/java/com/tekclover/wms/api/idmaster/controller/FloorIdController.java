@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -68,7 +69,7 @@ public class FloorIdController {
 	@ApiOperation(response = FloorId.class, value = "Create FloorId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postFloorId(@Valid @RequestBody AddFloorId newFloorId,
-										 @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+										 @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		FloorId createdFloorId = flooridService.createFloorId(newFloorId, loginUserID);
 		return new ResponseEntity<>(createdFloorId , HttpStatus.OK);
 	}
@@ -78,7 +79,7 @@ public class FloorIdController {
 	public ResponseEntity<?> patchFloorId(@RequestParam String warehouseId,@PathVariable Long floorId,@RequestParam String companyCodeId,
 										  @RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
 										  @Valid @RequestBody UpdateFloorId updateFloorId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		FloorId createdFloorId =
 				flooridService.updateFloorId(warehouseId,floorId,companyCodeId,languageId,plantId,loginUserID, updateFloorId);
 		return new ResponseEntity<>(createdFloorId , HttpStatus.OK);

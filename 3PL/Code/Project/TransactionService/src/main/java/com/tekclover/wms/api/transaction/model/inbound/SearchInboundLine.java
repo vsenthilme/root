@@ -12,10 +12,14 @@ public class SearchInboundLine {
 	* REF_DOC_NO
 	* IB_CNF_ON
 	*/
-	private String warehouseId;	
+	private List<String> warehouseId;
+//	private String warehouseId;
 	private String referenceField1;	
 	private Date startConfirmedOn;
 	private Date endConfirmedOn;
 
 	private List<Long> statusId;
+	private List<String> itemCode;
+	private List<String> manufacturerPartNo;
+	private List<String> refDocNumber;
 }

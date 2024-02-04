@@ -9,6 +9,7 @@ import com.tekclover.wms.api.masters.model.numberrangestoragebin.UpdateNumberRan
 import com.tekclover.wms.api.masters.repository.NumberRangeStorageBinRepository;
 import com.tekclover.wms.api.masters.repository.specification.NumberRangeStorageBinSpecification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
+import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -99,7 +101,7 @@ public class NumberRangeStorageBinService {
      * @throws InvocationTargetException
      */
     public NumberRangeStorageBin createNumberRangeStorageBin (AddNumberRangeStorageBin newNumberRangeStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeStorageBin dbNumberRangeStorageBin = new NumberRangeStorageBin();
         Optional<NumberRangeStorageBin> duplicateNumberRangeStorageBin =
                 numberRangeStorageBinRepository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndFloorIdAndStorageSectionIdAndRowIdAndAisleNumberAndDeletionIndicator(
@@ -136,7 +138,7 @@ public class NumberRangeStorageBinService {
     public NumberRangeStorageBin updateNumberRangeItem (String companyCodeId, String plantId, String warehouseId,
                                                         String languageId, Long floorId, String storageSectionId, String rowId, String aisleNumber,
                                                         UpdateNumberRangeStorageBin updateNumberRangeStorageBin, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         NumberRangeStorageBin dbNumberRangeStorageBin =
                 getNumberRangeStorageBin(warehouseId,companyCodeId,languageId,plantId,floorId,rowId,storageSectionId,aisleNumber);
 
@@ -154,7 +156,7 @@ public class NumberRangeStorageBinService {
      * @param rowId
      */
     public void deleteNumberRangeStorageBin (String companyCodeId,String languageId,String plantId,String warehouseId,
-                                             Long floorId,String storageSectionId,String rowId,String aisleNumber,String loginUserID) {
+                                             Long floorId,String storageSectionId,String rowId,String aisleNumber,String loginUserID) throws ParseException {
         NumberRangeStorageBin numberRangeStorageBin =
                 getNumberRangeStorageBin(warehouseId,companyCodeId,languageId,plantId,
                         floorId,rowId,storageSectionId,aisleNumber);

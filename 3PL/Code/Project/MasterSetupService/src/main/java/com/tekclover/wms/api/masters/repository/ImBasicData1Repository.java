@@ -24,8 +24,8 @@ public interface ImBasicData1Repository extends PagingAndSortingRepository<ImBas
 	public Optional<ImBasicData1> findByItemCodeAndWarehouseIdAndDeletionIndicator(String itemCode, String warehouseId, Long deletionIndicator);
 	public List<ImBasicData1> findByItemCodeLikeAndDescriptionLike(String itemCode, String itemDesc);
 
-   public Optional<ImBasicData1>  findByCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndUomIdAndManufacturerPartNoAndLanguageIdAndDeletionIndicator(String companyCodeId,String plantId,String warehouseId,
-																																					   String itemCode,String uomId,String manufacturerPartNo,String languageId,Long deletionIndicator);
+   public Optional<ImBasicData1>  findByCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndUomIdAndManufacturerPartNoAndLanguageIdAndDeletionIndicator(
+		   String companyCodeId,String plantId,String warehouseId, String itemCode,String uomId,String manufacturerPartNo,String languageId,Long deletionIndicator);
 
 	@Query(value ="select  tl.itm_code AS itemCode,tl.text AS description\n"+
 			" from tblimbasicdata1 tl \n" +
@@ -68,4 +68,7 @@ public interface ImBasicData1Repository extends PagingAndSortingRepository<ImBas
 												@Param("plantId") String plantId,
 												@Param("languageId") String languageId,
 												@Param("warehouseId") String warehouseId  );
+
+    Optional<ImBasicData1> findByCompanyCodeIdAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerPartNoAndLanguageIdAndDeletionIndicator(
+			String companyCodeId, String plantId, String warehouseId, String itemCode, String manufacturerPartNo, String languageId, Long deletionIndicator);
 }

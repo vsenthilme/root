@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -56,7 +57,7 @@ public class ModuleIdController {
 	@ApiOperation(response = ModuleId.class, value = "Create ModuleId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postModuleId(@Valid @RequestBody List<AddModuleId> newModuleId,
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ModuleId> createdModuleId = moduleidService.createModuleId(newModuleId, loginUserID);
 		return new ResponseEntity<>(createdModuleId , HttpStatus.OK);
 	}
@@ -77,7 +78,7 @@ public class ModuleIdController {
 	public ResponseEntity<?> patchModuleId(@PathVariable String moduleId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
 			@Valid @RequestBody List<UpdateModuleId> updateModuleId, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ModuleId> createdModuleId =
 				moduleidService.updateModuleId(warehouseId, moduleId,companyCodeId,languageId,plantId,loginUserID, updateModuleId);
 		return new ResponseEntity<>(createdModuleId , HttpStatus.OK);

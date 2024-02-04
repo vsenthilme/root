@@ -178,7 +178,7 @@ public class GrLine {
 	private Double storageQty;
 	
 	@Column(name = "REMARK")
-	private String remarks;
+	private String remark;
 	
 	@Column(name = "REF_FIELD_1")
 	private String referenceField1;

@@ -20,4 +20,5 @@ public class ImPartnerCompositeKey implements Serializable {
 	private String businessPartnerType;
 	private String businessPartnerCode;
 	private String partnerItemBarcode;
+	private String manufacturerName;
 }

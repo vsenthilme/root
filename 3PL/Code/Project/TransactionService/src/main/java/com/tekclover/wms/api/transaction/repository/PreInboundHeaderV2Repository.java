@@ -8,32 +8,34 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface PreInboundHeaderV2Repository extends JpaRepository<PreInboundHeaderEntityV2, Long>,
         JpaSpecificationExecutor<PreInboundHeaderEntityV2>, StreamableJpaSpecificationRepository<PreInboundHeaderEntityV2> {
 
     public List<PreInboundHeaderEntityV2> findAll();
 
     public Optional<PreInboundHeaderEntityV2> findByPreInboundNoAndWarehouseIdAndDeletionIndicator(
-			String preInboundNo, String warehouseId, Long deletionIndicator);
+            String preInboundNo, String warehouseId, Long deletionIndicator);
 
     public PreInboundHeaderEntityV2 findByWarehouseId(String warehouseId);
 
     public Optional<PreInboundHeaderEntityV2>
     findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
-            String languageId, String companyCode, String plantId, String warehouseId, 
-			String preInboundNo, String refDocNumber, Long deletionIndicator);
+            String languageId, String companyCode, String plantId, String warehouseId,
+            String preInboundNo, String refDocNumber, Long deletionIndicator);
 
     // Pass WH_ID in PREINBOUNDHEADER table and fetch the Count of values where STATUS_ID=06,07 and Autopopulate
     public long countByWarehouseIdAndStatusIdIn(String warehouseId, List<Long> statusId);
 
 
     public List<PreInboundHeaderEntityV2> findByWarehouseIdAndStatusIdAndDeletionIndicator(
-			String warehouseId, Long statusId, Long deletionIndicator);
+            String warehouseId, Long statusId, Long deletionIndicator);
 
     public Optional<PreInboundHeaderEntityV2> findByWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
             String warehouseId, String preInboundNo, String refDocNumner, Long deletionIndicator);
@@ -62,9 +64,29 @@ public interface PreInboundHeaderV2Repository extends JpaRepository<PreInboundHe
 
     Optional<PreInboundHeaderEntityV2> findByPreInboundNoAndWarehouseIdAndCompanyCodeAndPlantIdAndLanguageIdAndDeletionIndicator(
             String preInboundNo, String warehouseId, String companyCode,
-			String plantId, String languageId, Long deletionIndicator);
+            String plantId, String languageId, Long deletionIndicator);
 
     List<PreInboundHeaderEntityV2> findByWarehouseIdAndCompanyCodeAndPlantIdAndLanguageIdAndStatusIdAndDeletionIndicator(
             String warehouseId, String companyCode, String plantId, String languageId,
-			Long statusId, long deletionIndicator);
+            Long statusId, long deletionIndicator);
+
+    Optional<PreInboundHeaderEntityV2> findByCompanyCodeAndPlantIdAndLanguageIdAndPreInboundNoAndWarehouseIdAndDeletionIndicator(
+            String companyCode, String plantId, String languageId, String preInboundNo, String warehouseId, Long deletionIndicator);
+
+    Optional<PreInboundHeaderEntityV2> findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
+            String companyCode, String plantId, String languageId, String warehouseId, String preInboundNo, String refDocNumner, Long deletionIndicator);
+
+    PreInboundHeaderEntityV2 findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE PreInboundHeaderEntityV2 ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription " +
+            "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
+    void updatePreInboundHeaderEntityStatus(@Param("warehouseId") String warehouseId,
+                                            @Param("companyCode") String companyCode,
+                                            @Param("plantId") String plantId,
+                                            @Param("languageId") String languageId,
+                                            @Param("refDocNumber") String refDocNumber,
+                                            @Param("statusId") Long statusId,
+                                            @Param("statusDescription") String statusDescription);
 }

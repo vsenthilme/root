@@ -1,36 +1,27 @@
 package com.tekclover.wms.core.controller;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
-import java.util.List;
-
-import javax.validation.Valid;
-
 import com.tekclover.wms.core.model.masters.*;
 import com.tekclover.wms.core.model.threepl.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.tekclover.wms.core.model.transaction.PaginatedResponse;
+import com.tekclover.wms.core.model.warehouse.inbound.WarehouseApiResponse;
+import com.tekclover.wms.core.model.warehouse.mastersorder.Customer;
+import com.tekclover.wms.core.model.warehouse.mastersorder.Item;
 import com.tekclover.wms.core.service.MastersService;
 import com.tekclover.wms.core.service.RegisterService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @CrossOrigin(origins = "*")
@@ -211,7 +202,7 @@ public class MastersServiceController {
                                                 @RequestParam String warehouseId, @RequestParam String languageId, @RequestParam Long businessPartnerType,
                                                 @RequestParam String authToken) {
 
-        BusinessPartner businesspartner = mastersService.getBusinessPartner(partnerCode, companyCodeId, plantId, warehouseId, languageId, businessPartnerType, authToken);
+        BusinessPartnerV2 businesspartner = mastersService.getBusinessPartner(partnerCode, companyCodeId, plantId, warehouseId, languageId, businessPartnerType, authToken);
         log.info("BusinessPartner : " + businesspartner);
         return new ResponseEntity<>(businesspartner, HttpStatus.OK);
     }
@@ -241,6 +232,18 @@ public class MastersServiceController {
                                                    @RequestParam String loginUserID, @RequestParam String authToken) {
 
         BusinessPartner modifiedBusinessPartner = mastersService.updateBusinessPartner(partnerCode, companyCodeId, plantId,
+                warehouseId, languageId, businessPartnerType, updatedBusinessPartner, loginUserID, authToken);
+        return new ResponseEntity<>(modifiedBusinessPartner, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = Optional.class, value = "Update BusinessPartner V2") // label for swagger
+    @RequestMapping(value = "/businesspartner/v2/{partnerCode}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateBusinessPartnerV2(@PathVariable String partnerCode,
+                                                     @RequestBody BusinessPartnerV2 updatedBusinessPartner, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                                     @RequestParam String warehouseId, @RequestParam String languageId, @RequestParam Long businessPartnerType,
+                                                     @RequestParam String loginUserID, @RequestParam String authToken) {
+
+        BusinessPartnerV2 modifiedBusinessPartner = mastersService.updateBusinessPartnerV2(partnerCode, companyCodeId, plantId,
                 warehouseId, languageId, businessPartnerType, updatedBusinessPartner, loginUserID, authToken);
         return new ResponseEntity<>(modifiedBusinessPartner, HttpStatus.OK);
     }
@@ -277,10 +280,21 @@ public class MastersServiceController {
         return new ResponseEntity<>(handlingequipment, HttpStatus.OK);
     }
 
+    @ApiOperation(response = HandlingEquipment.class, value = "Get HandlingEquipment by Barcode V2") // label for swagger
+    @GetMapping("/handlingequipment/{heBarcode}/v2/barCode")
+    public ResponseEntity<?> getHandlingEquipmentV2(@PathVariable String heBarcode, @RequestParam String companyCodeId,
+                                                    @RequestParam String languageId, @RequestParam String plantId, @RequestParam String warehouseId,
+                                                    @RequestParam String authToken) {
+
+        HandlingEquipment handlingequipment = mastersService.getHandlingEquipmentV2(warehouseId, heBarcode, companyCodeId, languageId, plantId, authToken);
+        log.info("HandlingEquipment : " + handlingequipment);
+        return new ResponseEntity<>(handlingequipment, HttpStatus.OK);
+    }
+
     @ApiOperation(response = HandlingEquipment.class, value = "Get HandlingEquipment by Barcode") // label for swagger
     @GetMapping("/handlingequipment/{heBarcode}/barCode")
     public ResponseEntity<?> getHandlingEquipment(@PathVariable String heBarcode, @RequestParam String warehouseId,
-                                                  @RequestParam String authToken) {
+                                                    @RequestParam String authToken) {
 
         HandlingEquipment handlingequipment = mastersService.getHandlingEquipment(warehouseId, heBarcode, authToken);
         log.info("HandlingEquipment : " + handlingequipment);
@@ -986,6 +1000,20 @@ public class MastersServiceController {
         return mastersService.findStorageBinLikeSearch(likeSearchByStorageBinNDesc, authToken);
     }
 
+    //Input Parameters added
+    @ApiOperation(response = StorageBin.class, value = "Like Search StorageBin New") // label for swagger
+    @GetMapping("/storagebin/findStorageBinByLikeNew")
+    public StorageBinDesc[] getStorageBinLikeSearchNew(@RequestParam String likeSearchByStorageBinNDesc,
+                                                       @RequestParam String companyCodeId,
+                                                       @RequestParam String plantId,
+                                                       @RequestParam String languageId,
+                                                       @RequestParam String warehouseId,
+                                                       @RequestParam String authToken) throws Exception {
+
+        return mastersService.findStorageBinLikeSearchNew(likeSearchByStorageBinNDesc, companyCodeId, plantId,
+                languageId, warehouseId, authToken);
+    }
+
     @ApiOperation(response = Optional.class, value = "Create StorageBin") // label for swagger
     @RequestMapping(value = "/storagebin", method = RequestMethod.POST)
     public ResponseEntity<?> createStorageBin(@RequestBody StorageBin newStorageBin, @RequestParam String loginUserID,
@@ -1023,6 +1051,39 @@ public class MastersServiceController {
                                               @RequestParam String companyCodeId, @RequestParam String plantId, @RequestParam String languageId,
                                               @RequestParam String loginUserID, @RequestParam String authToken) {
         mastersService.deleteStorageBin(storageBin, warehouseId, companyCodeId, languageId, plantId, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Get a StorageBinV2") // label for swagger
+    @RequestMapping(value = "/storagebin/v2/{storageBin}", method = RequestMethod.GET)
+    public ResponseEntity<?> getStorageBinV2(@PathVariable String storageBin, @RequestParam String companyCodeId,
+                                             @RequestParam String plantId, @RequestParam String warehouseId,
+                                             @RequestParam String languageId, @RequestParam String authToken) {
+
+        StorageBinV2 storageBinV2 = mastersService.getStorageBinV2(storageBin, companyCodeId, plantId, warehouseId, languageId, authToken);
+        log.info("StorageBinV2 : " + storageBinV2);
+        return new ResponseEntity<>(storageBinV2, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Update StorageBinV2") // label for swagger
+    @RequestMapping(value = "/storagebin/v2/{storageBin}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateStorageBinV2(@PathVariable String storageBin,
+                                                @RequestBody StorageBinV2 updatedStorageBinV2, @RequestParam String loginUserID, @RequestParam String companyCodeId,
+                                                @RequestParam String languageId, @RequestParam String plantId,
+                                                @RequestParam String warehouseId, @RequestParam String authToken) {
+
+        StorageBinV2 modifiedStorageBin = mastersService.updateStorageBinV2(storageBin, companyCodeId, plantId, languageId,
+                warehouseId, updatedStorageBinV2, loginUserID, authToken);
+        return new ResponseEntity<>(modifiedStorageBin, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StorageBinV2.class, value = "Delete StorageBinV2") // label for swagger
+    @DeleteMapping(value = "/storagebin/v2/{storageBin}")
+    public ResponseEntity<?> deleteStoreBin(@PathVariable String storageBin, @RequestParam String warehouseId,
+                                            @RequestParam String companyCodeId, @RequestParam String plantId,
+                                            @RequestParam String languageId, @RequestParam String loginUserID,
+                                            @RequestParam String authToken) {
+        mastersService.deleteStorageBinV2(storageBin, warehouseId, companyCodeId, languageId, plantId, loginUserID, authToken);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -2273,4 +2334,29 @@ public class MastersServiceController {
 
         return mastersService.findDriverVehicleAssignment(searchDriverVehicleAssignment, authToken);
     }
+
+    //-----------------------------------------Master-OrderAPI------------------------------------------------
+
+
+    // Item - Master
+    @ApiOperation(response = Item.class, value = "Create Item Master Order") //label for swagger
+    @PostMapping("/warehouse/master/item")
+    public ResponseEntity<?> postItem(@Valid @RequestBody Item item, @RequestParam String authToken)
+            throws IllegalAccessException, InvocationTargetException {
+        WarehouseApiResponse createdItem = mastersService.postItem(item, authToken);
+        return new ResponseEntity<>(createdItem, HttpStatus.OK);
+    }
+
+    //Customer-Master
+
+    @ApiOperation(response = Customer.class, value = "Create Customer Master Order") // label for swagger
+    @PostMapping("/warehouse/master/customer")
+    public ResponseEntity<?> postCustomer(@Valid @RequestBody Customer customer, @RequestParam String authToken)
+            throws IllegalAccessException, InvocationTargetException {
+
+        WarehouseApiResponse createdCustomer = mastersService.postCustomer(customer, authToken);
+        return new ResponseEntity<>(createdCustomer, HttpStatus.OK);
+    }
+
+
 }

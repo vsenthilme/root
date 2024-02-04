@@ -11,6 +11,7 @@ import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.PalletizationLevelIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
 import com.tekclover.wms.api.idmaster.util.CommonUtils;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,7 +120,7 @@ public class PalletizationLevelIdService {
 	 * @throws InvocationTargetException
 	 */
 	public PalletizationLevelId createPalletizationLevelId (AddPalletizationLevelId newPalletizationLevelId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PalletizationLevelId dbPalletizationLevelId = new PalletizationLevelId();
 		Optional<PalletizationLevelId> duplicatePalletizationLevelId = palletizationLevelIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndPalletizationLevelIdAndPalletizationLevelAndLanguageIdAndDeletionIndicator(newPalletizationLevelId.getCompanyCodeId(), newPalletizationLevelId.getPlantId(), newPalletizationLevelId.getWarehouseId(), newPalletizationLevelId.getPalletizationLevelId(), newPalletizationLevelId.getPalletizationLevel(), newPalletizationLevelId.getLanguageId(), 0L);
 		if (!duplicatePalletizationLevelId.isEmpty()) {
@@ -152,7 +153,7 @@ public class PalletizationLevelIdService {
 	public PalletizationLevelId updatePalletizationLevelId (String warehouseId, String palletizationLevelId, String palletizationLevel,
 															String companyCodeId,String languageId,String plantId, String loginUserID,
 															UpdatePalletizationLevelId updatePalletizationLevelId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PalletizationLevelId dbPalletizationLevelId = getPalletizationLevelId( warehouseId, palletizationLevelId, palletizationLevel,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updatePalletizationLevelId, dbPalletizationLevelId, CommonUtils.getNullPropertyNames(updatePalletizationLevelId));
 		dbPalletizationLevelId.setUpdatedBy(loginUserID);

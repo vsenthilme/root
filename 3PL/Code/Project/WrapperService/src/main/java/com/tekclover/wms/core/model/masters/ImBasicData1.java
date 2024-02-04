@@ -2,17 +2,8 @@ package com.tekclover.wms.core.model.masters;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Data
-
 public class ImBasicData1 { 
 	
 	private String languageId;
@@ -60,11 +51,19 @@ public class ImBasicData1 {
 	private Double maximumStock;
 	
 	private Double reorderLevel;
-	
+
 	private Double replenishmentQty;
-	
+
 	private Double safetyStock;
-	
+
+	private String capacityUnit;
+
+	private String capacityUom;
+
+	private String quantity;
+
+	private Double weight;
+
 	private Long statusId;
 	
 	private String referenceField1;
@@ -98,8 +97,12 @@ public class ImBasicData1 {
 	private Date updatedOn;
 
 	private Double length;
+
 	private Double width;
+
 	private Double height;
+
 	private String dimensionUom;
+
 	private Double volume;
 }

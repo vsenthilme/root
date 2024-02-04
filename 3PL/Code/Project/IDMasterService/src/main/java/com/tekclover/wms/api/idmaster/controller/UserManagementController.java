@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -76,8 +77,8 @@ public class UserManagementController {
     @ApiOperation(response = UserManagement.class, value = "Update UserManagement") // label for swagger
     @PatchMapping("/{userId}")
 	public ResponseEntity<?> patchUserManagement(@PathVariable String userId, @RequestParam String warehouseId,@RequestParam String companyCode,@RequestParam String plantId,@RequestParam String languageId,@RequestParam Long userRoleId,
-			@RequestBody UpdateUserManagement updateUserManagement, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@RequestBody UpdateUserManagement updateUserManagement, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		UserManagement updatedUserManagement = 
 				userManagementService.updateUserManagement(userId, warehouseId,companyCode,languageId,plantId,userRoleId,updateUserManagement, loginUserID);
 		return new ResponseEntity<>(updatedUserManagement , HttpStatus.OK);
@@ -90,7 +91,7 @@ public class UserManagementController {
 												  @RequestParam String companyCode,
 												  @RequestParam String plantId,
 												  @RequestParam Long userRoleId,
-												  @RequestParam String loginUserID) {
+												  @RequestParam String loginUserID) throws ParseException {
     	userManagementService.deleteUserManagement(userId, warehouseId, languageId,	companyCode, plantId, userRoleId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

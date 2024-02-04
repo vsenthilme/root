@@ -1,12 +1,14 @@
 package com.tekclover.wms.api.enterprise.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.enterprise.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,8 +63,8 @@ public class DoorsService extends BaseService {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public Doors createDoors (AddDoors newDoors, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public Doors createDoors (AddDoors newDoors, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Doors dbDoors = new Doors();
 		BeanUtils.copyProperties(newDoors, dbDoors, CommonUtils.getNullPropertyNames(newDoors));
 		dbDoors.setDeletionIndicator(0L);
@@ -82,8 +84,8 @@ public class DoorsService extends BaseService {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public Doors updateDoors (String doorNumber, UpdateDoors updateDoors, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public Doors updateDoors (String doorNumber, UpdateDoors updateDoors, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Doors dbDoors = getDoors(doorNumber);
 		BeanUtils.copyProperties(updateDoors, dbDoors, CommonUtils.getNullPropertyNames(updateDoors));
 		dbDoors.setUpdatedBy(loginUserID);
@@ -95,7 +97,7 @@ public class DoorsService extends BaseService {
 	 * deleteDoors
 	 * @param doorsCode
 	 */
-	public void deleteDoors (String doorNumber, String loginUserID) {
+	public void deleteDoors (String doorNumber, String loginUserID) throws ParseException {
 		Doors doors = getDoors(doorNumber);
 		if ( doors != null) {
 			doors.setDeletionIndicator (1L);

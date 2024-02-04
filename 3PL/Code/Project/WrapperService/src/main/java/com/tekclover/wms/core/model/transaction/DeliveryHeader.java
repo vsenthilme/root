@@ -14,11 +14,17 @@ public class DeliveryHeader {
 
     private String warehouseId;
 
-    private String deliveryNo;
+    private Long deliveryNo;
 
     private String vehicleNo;
 
     private String driverId;
+
+    private String noOfAttend;
+
+    private String refDocNumber;
+
+    private String remarks;
 
     private String driverName;
 
@@ -26,7 +32,15 @@ public class DeliveryHeader {
 
     private String deliveryFailureReason;
 
-    private String statusId;
+    private Long statusId;
+
+    private String companyDescription;
+
+    private String plantDescription;
+
+    private String warehouseDescription;
+
+    private String statusDescription;
 
     private Long deletionIndicator;
 

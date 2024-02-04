@@ -33,7 +33,7 @@ public class SOReturnLineV2  {
 	private String salesOrderReference;
 	private Double packQty;
 
-
+	private String manufacturerFullName;
 
 
 }

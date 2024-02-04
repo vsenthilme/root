@@ -18,6 +18,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.MenuIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -215,7 +216,7 @@ public class MenuIdService {
 	 * @throws InvocationTargetException
 	 */
 	public MenuId createMenuId (AddMenuId newMenuId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		MenuId dbMenuId = new MenuId();
 		Optional<MenuId> duplicateMenuId = menuIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndMenuIdAndSubMenuIdAndAuthorizationObjectIdAndLanguageIdAndDeletionIndicator(newMenuId.getCompanyCodeId(), newMenuId.getPlantId(), newMenuId.getWarehouseId(), newMenuId.getMenuId(), newMenuId.getSubMenuId(), newMenuId.getAuthorizationObjectId(), newMenuId.getLanguageId(), 0L);
 		if (!duplicateMenuId.isEmpty()) {
@@ -272,7 +273,7 @@ public class MenuIdService {
 	 */
 	public MenuId updateMenuId (String warehouseId, Long menuId, Long subMenuId, Long authorizationObjectId,
 								String companyCodeId,String languageId,String plantId,String loginUserID, UpdateMenuId updateMenuId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		MenuId dbMenuId = getMenuId(warehouseId, menuId, subMenuId, authorizationObjectId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateMenuId, dbMenuId, CommonUtils.getNullPropertyNames(updateMenuId));
 		dbMenuId.setUpdatedBy(loginUserID);

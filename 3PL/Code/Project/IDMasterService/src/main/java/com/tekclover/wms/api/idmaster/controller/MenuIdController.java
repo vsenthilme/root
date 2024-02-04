@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -68,7 +69,7 @@ public class MenuIdController {
     @ApiOperation(response = MenuId.class, value = "Create MenuId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postMenuId(@Valid @RequestBody AddMenuId newMenuId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		MenuId createdMenuId = menuidService.createMenuId(newMenuId, loginUserID);
 		return new ResponseEntity<>(createdMenuId , HttpStatus.OK);
 	}
@@ -87,7 +88,7 @@ public class MenuIdController {
 	public ResponseEntity<?> patchMenuId(@PathVariable Long menuId, @RequestParam String warehouseId, 
 			@RequestParam Long subMenuId, @RequestParam Long authorizationObjectId, 
 			@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@Valid @RequestBody UpdateMenuId updateMenuId,
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		MenuId createdMenuId = 
 				menuidService.updateMenuId(warehouseId, menuId,subMenuId, authorizationObjectId,companyCodeId,languageId,plantId,loginUserID, updateMenuId);
 		return new ResponseEntity<>(createdMenuId , HttpStatus.OK);

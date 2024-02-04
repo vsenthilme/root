@@ -47,6 +47,14 @@ public class HhtUserSpecification implements Specification<HhtUser> {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("languageId");
             predicates.add(group.in(findHhtUser.getLanguageId()));
         }
+        if (findHhtUser.getUserPresent() != null && !findHhtUser.getUserPresent().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("userPresent");
+            predicates.add(group.in(findHhtUser.getUserPresent()));
+        }
+        if (findHhtUser.getNoOfDaysLeave() != null && !findHhtUser.getNoOfDaysLeave().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("noOfDaysLeave");
+            predicates.add(group.in(findHhtUser.getNoOfDaysLeave()));
+        }
         if (findHhtUser.getLevelId() != null && !findHhtUser.getLevelId().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("levelId");
             predicates.add(group.in(findHhtUser.getLevelId()));

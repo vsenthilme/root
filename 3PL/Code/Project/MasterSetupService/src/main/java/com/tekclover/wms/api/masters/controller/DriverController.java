@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -53,7 +54,7 @@ public class DriverController {
     @ApiOperation(response = Driver.class, value = "Create Driver") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postDriver(@Valid @RequestBody AddDriver newDriver, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         Driver createdDriver= driverService.createDriver(newDriver, loginUserID);
         return new ResponseEntity<>(createdDriver , HttpStatus.OK);
     }
@@ -64,7 +65,7 @@ public class DriverController {
                                        @RequestParam String languageId, @RequestParam String plantId,
                                        @RequestParam String warehouseId,@Valid @RequestBody UpdateDriver updateDriver,
                                        @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
 
         Driver createDriver = driverService.updateDriver(companyCodeId,plantId,warehouseId,
                 languageId,driverId,updateDriver,loginUserID);
@@ -75,7 +76,7 @@ public class DriverController {
     @DeleteMapping("/{driverId}")
     public ResponseEntity<?> deleteDriver(@PathVariable Long driverId, @RequestParam String companyCodeId,
                                           @RequestParam String languageId, @RequestParam String plantId,
-                                          @RequestParam String warehouseId,@RequestParam String loginUserID) {
+                                          @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
         driverService.deleteDriver(companyCodeId,languageId,plantId,warehouseId,driverId,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

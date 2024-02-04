@@ -16,6 +16,7 @@ import com.tekclover.wms.api.idmaster.model.moduleid.ModuleId;
 import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.*;
 import com.tekclover.wms.api.idmaster.repository.Specification.BinClassIdSpecification;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,7 +119,7 @@ public class BinClassIdService {
 	 * @throws InvocationTargetException
 	 */
 	public BinClassId createBinClassId (AddBinClassId newBinClassId,String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<BinClassId> duplicateBinClassId =
 				binClassIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndBinClassIdAndLanguageIdAndDeletionIndicator(
 						newBinClassId.getCompanyCodeId(),
@@ -156,7 +157,7 @@ public class BinClassIdService {
 	 * @throws InvocationTargetException
 	 */
 	public BinClassId updateBinClassId (String warehouseId, Long binClassId,String companyCodeId,String languageId,String plantId,String loginUserID,
-										UpdateBinClassId updateBinClassId) throws IllegalAccessException, InvocationTargetException {
+										UpdateBinClassId updateBinClassId) throws IllegalAccessException, InvocationTargetException, ParseException {
 		BinClassId dbBinClassId = getBinClassId(warehouseId, binClassId,companyCodeId,languageId,plantId);
 		BeanUtils.copyProperties(updateBinClassId, dbBinClassId, CommonUtils.getNullPropertyNames(updateBinClassId));
 		dbBinClassId.setUpdatedBy(loginUserID);

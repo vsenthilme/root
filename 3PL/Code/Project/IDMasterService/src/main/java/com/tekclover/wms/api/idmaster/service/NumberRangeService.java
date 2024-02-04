@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -126,7 +127,7 @@ public class NumberRangeService {
 //		return numberRangeList.stream().filter(n -> n.getDeletionIndicator() == 0).collect(Collectors.toList());
 //	}
 	public NumberRange createNumberRange(AddNumberRange newNumberRange, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		NumberRange dbNumberRange = new NumberRange();
 		Optional<NumberRange> duplicateNumberRange = numberRangeRepository
 				.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndNumberRangeCodeAndFiscalYearAndLanguageIdAndDeletionIndicator(
@@ -166,7 +167,7 @@ public class NumberRangeService {
 	 */
 	public NumberRange updateNumberRange(String warehouseId, String companyCodeId, String languageId, String plantId,
 			Long numberRangeCode, Long fiscalYear, String loginUserID, UpdateNumberRange updateNumberRange)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		NumberRange dbNumberRange = getNumberRange(warehouseId, companyCodeId, languageId, plantId, numberRangeCode,
 				fiscalYear);
 		BeanUtils.copyProperties(updateNumberRange, dbNumberRange, CommonUtils.getNullPropertyNames(updateNumberRange));

@@ -48,4 +48,9 @@ public class HhtUserOutput {
 	private Date createdOn;
 	private String updatedBy;
 	private Date updatedOn;
+
+	private Date startDate;
+	private Date endDate;
+	private String userPresent;
+	private String noOfDaysLeave;
 }

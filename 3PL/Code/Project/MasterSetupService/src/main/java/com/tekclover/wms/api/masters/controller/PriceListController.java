@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class PriceListController {
     @ApiOperation(response = PriceList.class, value = "Create PriceListId") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postPriceListId(@Valid @RequestBody AddPriceList newPriceListId,
-                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                               @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceList createdPriceList = priceListService.createPriceList(newPriceListId, loginUserID);
         return new ResponseEntity<>(createdPriceList, HttpStatus.OK);
     }
@@ -61,7 +62,7 @@ public class PriceListController {
     public ResponseEntity<?> patchPriceListId(@RequestParam String warehouseId, @PathVariable Long priceListId, @RequestParam Long serviceTypeId,
                                               @RequestParam String moduleId,@RequestParam Long chargeRangeId,@RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
                                               @Valid @RequestBody UpdatePriceList updatePriceList, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PriceList createdPriceList =
                 priceListService.updatePriceList(warehouseId, moduleId, priceListId,serviceTypeId,chargeRangeId,companyCodeId,languageId,plantId,loginUserID, updatePriceList);
         return new ResponseEntity<>(createdPriceList, HttpStatus.OK);

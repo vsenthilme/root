@@ -1,12 +1,15 @@
 package com.tekclover.wms.api.transaction.model.report;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class OrderStatusReport {
 
+	private String languageId;          // LANG_ID
+	private String companyCodeId;       // C_ID
+	private String plantId;             // PLANT_ID
 	private String warehouseId;			// WH_ID
 	private Date deliveryConfirmedOn;	// DLV_CNF_ON
 	private String soNumber;			// REF_DOC_NO
@@ -22,5 +25,11 @@ public class OrderStatusReport {
 	private Double percentageOfDelivered;	// (DLV_QTY/ORD_QTY)*100
 	private String statusId;				// STATUS_ID
 	private String orderType;				// ORDER_TYPE
+	private String companyDescription;
+	private String plantDescription;
+	private String warehouseDescription;
+
+	private String itemCode;
+	private String refDocNumber;
 }
 

@@ -15,7 +15,21 @@ public class UpdateDeliveryHeader {
 
     private String deliveryFailureReason;
 
-    private String statusId;
+    private Long statusId;
+
+    private String noOfAttend;
+
+    private String refDocNumber;
+
+    private String remarks;
+
+    private String companyDescription;
+
+    private String plantDescription;
+
+    private String warehouseDescription;
+
+    private String statusDescription;
 
     private Long deletionIndicator;
 

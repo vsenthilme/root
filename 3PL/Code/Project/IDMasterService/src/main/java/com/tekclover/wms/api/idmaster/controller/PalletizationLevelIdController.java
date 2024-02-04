@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class PalletizationLevelIdController {
     @ApiOperation(response = PalletizationLevelId.class, value = "Create PalletizationLevelId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postPalletizationLevelId(@Valid @RequestBody AddPalletizationLevelId newPalletizationLevelId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		PalletizationLevelId createdPalletizationLevelId = palletizationlevelidService.createPalletizationLevelId(newPalletizationLevelId, loginUserID);
 		return new ResponseEntity<>(createdPalletizationLevelId , HttpStatus.OK);
 	}
@@ -59,7 +60,7 @@ public class PalletizationLevelIdController {
 	public ResponseEntity<?> patchPalletizationLevelId(@PathVariable String palletizationLevelId, @RequestParam String palletizationLevel,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId, @RequestParam String loginUserID,
 			@Valid @RequestBody UpdatePalletizationLevelId updatePalletizationLevelId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		PalletizationLevelId createdPalletizationLevelId = 
 				palletizationlevelidService.updatePalletizationLevelId(warehouseId,palletizationLevelId, palletizationLevel,companyCodeId,languageId,plantId,loginUserID, updatePalletizationLevelId);
 		return new ResponseEntity<>(createdPalletizationLevelId , HttpStatus.OK);

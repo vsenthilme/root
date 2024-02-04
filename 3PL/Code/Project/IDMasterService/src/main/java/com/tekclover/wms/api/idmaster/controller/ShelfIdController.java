@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class ShelfIdController {
     @ApiOperation(response = ShelfId.class, value = "Create ShelfId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postShelfId(@Valid @RequestBody AddShelfId newShelfId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ShelfId createdShelfId = shelfidService.createShelfId(newShelfId, loginUserID);
 		return new ResponseEntity<>(createdShelfId , HttpStatus.OK);
 	}
@@ -60,7 +61,7 @@ public class ShelfIdController {
 										  @RequestParam String spanId,@RequestParam Long floorId,@RequestParam String storageSectionId,
 										  @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,@RequestParam String loginUserID,
 										  @Valid @RequestBody UpdateShelfId updateShelfId )
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ShelfId createdShelfId = 
 				shelfidService.updateShelfId(warehouseId, aisleId, shelfId,spanId, floorId, storageSectionId,companyCodeId,languageId,plantId, loginUserID, updateShelfId);
 		return new ResponseEntity<>(createdShelfId , HttpStatus.OK);

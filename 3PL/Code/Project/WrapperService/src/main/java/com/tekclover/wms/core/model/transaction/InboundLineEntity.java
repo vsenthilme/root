@@ -52,4 +52,6 @@ public class InboundLineEntity {
 	private Date createdOn = new Date();
 	private String updatedBy;
 	private Date updatedOn = new Date();
+	private String middlewareId;
+	private String middlewareTable;
 }

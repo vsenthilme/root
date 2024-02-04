@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.masters.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -64,7 +65,7 @@ public class ImAlternateUomController {
     @ApiOperation(response = ImAlternateUom.class, value = "Create ImAlternateUom") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postImAlternateUom(@Valid @RequestBody List<AddImAlternateUom> newImAlternateUom, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<ImAlternateUom> createdImAlternateUom = imalternateuomService.createImAlternateUom(newImAlternateUom, loginUserID);
 		return new ResponseEntity<>(createdImAlternateUom , HttpStatus.OK);
 	}
@@ -76,7 +77,7 @@ public class ImAlternateUomController {
 												 @RequestParam String itemCode,@RequestParam String alternateUom,
 												 @RequestParam String languageId, @RequestParam String loginUserID,
 												 @Valid @RequestBody List<UpdateImAlternateUom> updateImAlternateUom )
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 
 		List<ImAlternateUom> createdImAlternateUom = imalternateuomService.updateImAlternateUom(alternateUom,companyCodeId,plantId,
 				warehouseId,itemCode,uomId,languageId,updateImAlternateUom, loginUserID);
@@ -88,7 +89,7 @@ public class ImAlternateUomController {
 	public ResponseEntity<?> deleteImAlternateUom(@PathVariable String uomId,@RequestParam String companyCodeId,
 												  @RequestParam String plantId,@RequestParam String warehouseId,
 												  @RequestParam String itemCode,@RequestParam String alternateUom,
-												  @RequestParam String languageId, @RequestParam String loginUserID) {
+												  @RequestParam String languageId, @RequestParam String loginUserID) throws ParseException {
     	imalternateuomService.deleteImAlternateUom(alternateUom,companyCodeId,plantId,warehouseId,itemCode,uomId,languageId,loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

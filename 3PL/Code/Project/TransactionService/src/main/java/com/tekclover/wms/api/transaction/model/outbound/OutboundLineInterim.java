@@ -165,6 +165,10 @@ public class OutboundLineInterim {
 	@Column(name = "DLV_REV_ON") 
 	private Date reversedOn;
 
+	//Almailem Code
+	@Column(name = "MFR_NAME")
+	private String manufacturerName;
+
 	@Transient
 	private String itemText;
 

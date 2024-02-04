@@ -1,11 +1,13 @@
 package com.tekclover.wms.api.transaction.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,14 +62,16 @@ public class InhouseTransferLineService extends BaseService {
 		} 
 		return InhouseTransferLine.get();
 	}
-	
+
 	/**
-	 * 
-	 * @param searchInHouseTransferLine
+	 * Find InhouseTransferLine
+	 *
+	 *
+	 * @param searchInhouseTransferLine
 	 * @return
 	 * @throws Exception
 	 */
-	public List<InhouseTransferLine> findInhouseTransferLine(SearchInhouseTransferLine searchInhouseTransferLine) 
+	public List<InhouseTransferLine> findInhouseTransferLine(SearchInhouseTransferLine searchInhouseTransferLine)
 			throws Exception {
 		if (searchInhouseTransferLine.getStartCreatedOn() != null && searchInhouseTransferLine.getStartCreatedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInhouseTransferLine.getStartCreatedOn(), searchInhouseTransferLine.getEndCreatedOn());
@@ -81,9 +85,27 @@ public class InhouseTransferLineService extends BaseService {
 		}
 		InhouseTransferLineSpecification spec = new InhouseTransferLineSpecification(searchInhouseTransferLine);
 		List<InhouseTransferLine> results = inhouseTransferLineRepository.findAll(spec);
-		return results;
+		log.info("results: " + results);
+
+		List<InhouseTransferLine> inhouseTransferLineList = new ArrayList<>();
+		for (InhouseTransferLine dbInhouseTransferLine : results) {
+			IKeyValuePair iKeyValuePair = inhouseTransferLineRepository.getDescription(
+					dbInhouseTransferLine.getLanguageId(), dbInhouseTransferLine.getCompanyCodeId(),
+					dbInhouseTransferLine.getPlantId(), dbInhouseTransferLine.getWarehouseId());
+
+			if (iKeyValuePair != null) {
+				dbInhouseTransferLine.setCompanyDescription(iKeyValuePair.getCompanyDesc());
+				dbInhouseTransferLine.setPlantDescription(iKeyValuePair.getPlantDesc());
+				dbInhouseTransferLine.setWarehouseDescription(iKeyValuePair.getWarehouseDesc());
+			}
+			inhouseTransferLineList.add(dbInhouseTransferLine);
+		}
+		log.info("inhouseTransferLineList: " + inhouseTransferLineList);
+		return inhouseTransferLineList;
 	}
-	
+
+
+
 	/**
 	 * createInhouseTransferLine
 	 * @param newInhouseTransferLine

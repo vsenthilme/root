@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -51,7 +52,7 @@ public class ApprovalProcessIdController {
     @ApiOperation(response = ApprovalProcessId.class, value = "Create ApprovalProcessId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postApprovalProcessId(@Valid @RequestBody AddApprovalProcessId newApprovalProcessId, 
-			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalProcessId createdApprovalProcessId = approvalprocessidService.createApprovalProcessId(newApprovalProcessId, loginUserID);
 		return new ResponseEntity<>(createdApprovalProcessId , HttpStatus.OK);
 	}
@@ -60,8 +61,8 @@ public class ApprovalProcessIdController {
     @PatchMapping("/{approvalProcessId}")
 	public ResponseEntity<?> patchApprovalProcessId(@PathVariable String approvalProcessId,
 			@RequestParam String warehouseId, @RequestParam String companyCodeId,@RequestParam String languageId,@RequestParam String plantId,
-			@Valid @RequestBody UpdateApprovalProcessId updateApprovalProcessId, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			@Valid @RequestBody UpdateApprovalProcessId updateApprovalProcessId, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		ApprovalProcessId createdApprovalProcessId = 
 				approvalprocessidService.updateApprovalProcessId(warehouseId, approvalProcessId, companyCodeId,languageId,plantId,loginUserID, updateApprovalProcessId);
 		return new ResponseEntity<>(createdApprovalProcessId , HttpStatus.OK);

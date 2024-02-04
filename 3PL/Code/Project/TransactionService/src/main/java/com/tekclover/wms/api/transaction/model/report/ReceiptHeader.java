@@ -6,6 +6,7 @@ import lombok.Data;
 public class ReceiptHeader {
 
 	private String supplier;
+	private String supplierName;
 	private String orderNumber;
 	private String containerNo;
 	private String orderType;

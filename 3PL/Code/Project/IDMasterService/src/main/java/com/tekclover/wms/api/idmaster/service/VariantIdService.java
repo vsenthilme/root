@@ -19,6 +19,7 @@ import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.Specification.VariantIdSpecification;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
+import com.tekclover.wms.api.idmaster.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,7 +141,7 @@ public class VariantIdService{
 	 * @throws InvocationTargetException
 	 */
 	public VariantId createVariantId (AddVariantId newVariantId, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		VariantId dbVariantId = new VariantId();
 		Optional<VariantId> duplicateVariantId = variantIdRepository.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndVariantCodeAndVariantTypeAndVariantSubCodeAndLanguageIdAndDeletionIndicator(newVariantId.getCompanyCodeId(), newVariantId.getPlantId(), newVariantId.getWarehouseId(), newVariantId.getVariantCode(),
 				newVariantId.getVariantType(), newVariantId.getVariantSubCode(), newVariantId.getLanguageId(), 0L);
@@ -173,7 +174,7 @@ public class VariantIdService{
 	 */
 	public VariantId updateVariantId (String warehouseId, String variantCode, String variantType, String variantSubCode,String companyCodeId,String plantId,String languageId, String loginUserID,
 									  UpdateVariantId updateVariantId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		VariantId dbVariantId = getVariantId(warehouseId, variantCode, variantType, variantSubCode,companyCodeId,plantId,languageId);
 		BeanUtils.copyProperties(updateVariantId, dbVariantId, CommonUtils.getNullPropertyNames(updateVariantId));
 		dbVariantId.setUpdatedBy(loginUserID);

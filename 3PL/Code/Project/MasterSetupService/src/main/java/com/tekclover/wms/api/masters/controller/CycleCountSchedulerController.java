@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 
 @Slf4j
@@ -52,7 +53,7 @@ public class CycleCountSchedulerController {
     @ApiOperation(response = CycleCountScheduler.class, value = "Create CycleCountScheduler") // label for swagger
     @PostMapping("")
     public ResponseEntity<?> postCycleCountScheduler(@Valid @RequestBody AddCycleCountScheduler addCycleCountScheduler, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CycleCountScheduler createdCycleCountScheduler= cycleCountSchedulerService.createCycleCountScheduler(addCycleCountScheduler, loginUserID);
         return new ResponseEntity<>(createdCycleCountScheduler , HttpStatus.OK);
     }
@@ -61,14 +62,14 @@ public class CycleCountSchedulerController {
     @PatchMapping("/{cycleCountTypeId}")
     public ResponseEntity<?> patchCycleCountScheduler(@PathVariable Long cycleCountTypeId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId, @RequestParam Long levelId, @RequestParam String warehouseId,@RequestParam String schedulerNumber,
                                                       @Valid @RequestBody UpdateCycleCountScheduler updateCycleCountScheduler, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         CycleCountScheduler createdCycleCountScheduler = cycleCountSchedulerService.updateCycleCountScheduler(companyCodeId,languageId,plantId,warehouseId,levelId,cycleCountTypeId,schedulerNumber, updateCycleCountScheduler, loginUserID);
         return new ResponseEntity<>(createdCycleCountScheduler , HttpStatus.OK);
     }
 
     @ApiOperation(response = CycleCountScheduler.class, value = "Delete CycleCountScheduler") // label for swagger
     @DeleteMapping("/{cycleCountTypeId}")
-    public ResponseEntity<?> deleteCycleCountScheduler(@PathVariable Long cycleCountTypeId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,@RequestParam String schedulerNumber,@RequestParam Long levelId, @RequestParam String warehouseId,@RequestParam String loginUserID) {
+    public ResponseEntity<?> deleteCycleCountScheduler(@PathVariable Long cycleCountTypeId, @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,@RequestParam String schedulerNumber,@RequestParam Long levelId, @RequestParam String warehouseId,@RequestParam String loginUserID) throws ParseException {
         cycleCountSchedulerService.deleteCycleCountScheduler(companyCodeId,languageId,plantId,warehouseId,levelId,cycleCountTypeId,schedulerNumber,loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -131,7 +131,7 @@ public class CompanyService {
 	 * @throws InvocationTargetException
 	 */
 	public Company createCompany (AddCompany newCompany, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Optional<Company> optCompany =
 				companyRepository.findByLanguageIdAndCompanyIdAndDeletionIndicator(
 						newCompany.getLanguageId(),
@@ -174,7 +174,7 @@ public class CompanyService {
 	 * @throws InvocationTargetException
 	 */
 	public Company updateCompany (String companyId,String languageId, UpdateCompany updateCompany, String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Company dbCompany = getCompany(companyId,languageId);
 		log.info("updateCompany : " + updateCompany);
 		log.info("dbCompany : " + dbCompany);
@@ -188,7 +188,7 @@ public class CompanyService {
 	 * deleteCompany
 	 * @param companyId
 	 */
-	public void deleteCompany (String companyId,String languageId,String loginUserID) {
+	public void deleteCompany (String companyId,String languageId,String loginUserID) throws ParseException {
 		Company company = getCompany(companyId,languageId);
 		if ( company != null) {
 			company.setDeletionIndicator (1L);

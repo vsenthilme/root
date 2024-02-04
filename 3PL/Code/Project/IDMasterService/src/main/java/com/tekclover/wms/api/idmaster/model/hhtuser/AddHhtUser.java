@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.idmaster.model.hhtuser;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,4 +38,9 @@ public class AddHhtUser {
 	private String referenceField10;
 	private Long deletionIndicator;
 	private List<String> orderType;
+
+	private Date startDate;
+	private Date endDate;
+	private String userPresent;
+	private String noOfDaysLeave;
 }

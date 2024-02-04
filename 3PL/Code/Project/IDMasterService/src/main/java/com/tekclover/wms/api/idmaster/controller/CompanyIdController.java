@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.idmaster.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ public class CompanyIdController {
 	@ApiOperation(response = CompanyId.class, value = "Create CompanyId") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postCompanyId(@Valid @RequestBody AddCompanyId newCompanyId,
-										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		CompanyId createdCompanyId = companyidService.createCompanyId(newCompanyId, loginUserID);
 		return new ResponseEntity<>(createdCompanyId , HttpStatus.OK);
 	}
@@ -70,7 +71,7 @@ public class CompanyIdController {
 	@PatchMapping("/{companyCodeId}")
 	public ResponseEntity<?> patchCompanyId(@PathVariable String companyCodeId,@RequestParam String languageId, @RequestParam String loginUserID,
 											@Valid @RequestBody UpdateCompanyId updateCompanyId)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		CompanyId createdCompanyId =
 				companyidService.updateCompanyId(companyCodeId,languageId,loginUserID,updateCompanyId);
 		return new ResponseEntity<>(createdCompanyId , HttpStatus.OK);

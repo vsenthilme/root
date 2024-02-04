@@ -1,6 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -134,7 +135,7 @@ public class GrLineController {
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										 @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
 										 @RequestParam String itemCode) {
-		GrLineV2 grline = grlineService.getGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+		GrLineV2 grline = grlineService.getGrLineV2(companyCode, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
 				goodsReceiptNo, palletCode, caseCode, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
@@ -163,7 +164,7 @@ public class GrLineController {
 	@PostMapping("/v2")
 	public ResponseEntity<?> postGrLineV2(@Valid @RequestBody List<AddGrLineV2> newGrLine,
 										  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
 		return new ResponseEntity<>(createdGrLine, HttpStatus.OK);
 	}
@@ -176,9 +177,9 @@ public class GrLineController {
 										   @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										   @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
 										   @RequestParam String itemCode, @Valid @RequestBody GrLineV2 updateGrLine,
-										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		GrLineV2 createdGrLine =
-				grlineService.updateGrLine(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+				grlineService.updateGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
 						goodsReceiptNo, palletCode, caseCode,
 						packBarcodes, lineNo, itemCode, loginUserID, updateGrLine);
 		return new ResponseEntity<>(createdGrLine, HttpStatus.OK);
@@ -190,8 +191,8 @@ public class GrLineController {
 											@RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String preInboundNo,
 											@RequestParam String refDocNumber, @RequestParam String goodsReceiptNo, @RequestParam String palletCode,
 											@RequestParam String caseCode, @RequestParam String packBarcodes, @RequestParam String itemCode,
-											@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
-		grlineService.deleteGrLine(companyCode, plantId, languageId, warehouseId,
+											@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+		grlineService.deleteGrLineV2(companyCode, plantId, languageId, warehouseId,
 				preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
 				caseCode, packBarcodes, lineNo, itemCode, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

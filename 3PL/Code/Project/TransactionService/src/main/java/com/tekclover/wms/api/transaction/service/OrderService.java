@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountHeader;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.OutboundOrderV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class OrderService {
-	@Autowired
-	private InboundOrderV2Repository inboundOrderV2Repository;
 
 	@Autowired
 	InboundOrderRepository inboundOrderRepository;
@@ -55,6 +54,14 @@ public class OrderService {
 	
 	@Autowired
 	WarehouseService warehouseService;
+
+	//------------------------------------------------------------------------------------------------
+	@Autowired
+	private OutboundOrderV2Repository outboundOrderV2Repository;
+
+	@Autowired
+	private InboundOrderV2Repository inboundOrderV2Repository;
+	//------------------------------------------------------------------------------------------------
 	
 	/**
 	 * 
@@ -129,7 +136,14 @@ public class OrderService {
 	 * @return
 	 */
 	public InboundOrderV2 getOrderByIdV2(String orderId) {
-		return inboundOrderV2Repository.findByRefDocumentNo (orderId);
+
+		InboundOrderV2 dbInboundOrder = inboundOrderV2Repository.findByRefDocumentNo (orderId);
+
+		if (dbInboundOrder != null) {
+			return dbInboundOrder;
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -137,13 +151,13 @@ public class OrderService {
 	 * @param orderId
 	 * @return
 	 */
-	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId) {
+	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId) throws ParseException {
 		InboundOrderV2 dbInboundOrder = getOrderByIdV2 (orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbInboundOrder : " + dbInboundOrder);
 		if (dbInboundOrder != null) {
 			dbInboundOrder.setProcessedStatusId(10L);
-			dbInboundOrder.setOrderProcessedOn(new Date());
+			dbInboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
 			InboundOrderV2 inboundOrder = inboundOrderV2Repository.save(dbInboundOrder);
 			return inboundOrder;
 		}
@@ -156,6 +170,11 @@ public class OrderService {
 	 * @return
 	 */
 	public InboundOrderV2 createInboundOrdersV2(InboundOrderV2 newInboundOrderV2) {
+//		InboundOrderV2 dbInboundOrder = inboundOrderV2Repository.findByRefDocumentNoAndProcessedStatusIdOrderByOrderReceivedOn(newInboundOrderV2.getOrderId(),0L);
+		InboundOrderV2 dbInboundOrder = getOrderByIdV2(newInboundOrderV2.getOrderId());
+		if(dbInboundOrder != null) {
+			throw new BadRequestException("Order is getting Duplicated");
+		}
 		InboundOrderV2 inboundOrderV2 = inboundOrderV2Repository.save(newInboundOrderV2);
 		return inboundOrderV2;
 	}
@@ -216,13 +235,13 @@ public class OrderService {
 	 * @param orderId
 	 * @return
 	 */
-	public OutboundOrder updateProcessedOrder(String orderId) {
+	public OutboundOrder updateProcessedOrder(String orderId) throws ParseException {
 		OutboundOrder dbOutboundOrder = getOBOrderById(orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbOutboundOrder : " + dbOutboundOrder);
 		if (dbOutboundOrder != null) {
 			dbOutboundOrder.setProcessedStatusId(10L);
-			dbOutboundOrder.setOrderProcessedOn(new Date());
+			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
 			OutboundOrder outboundOrder = outboundOrderRepository.save(dbOutboundOrder);
 			return outboundOrder;
 		}
@@ -320,5 +339,50 @@ public class OrderService {
 	public CycleCountHeader createCycleCountOrder(CycleCountHeader cycleCountHeader) {
 		CycleCountHeader dbCycleCountHeader = cycleCountHeaderRepository.save(cycleCountHeader);
 		return dbCycleCountHeader;
+	}
+
+	//===================================================================V2========================================================================
+
+	public OutboundOrderV2 updateProcessedOrderV2(String orderId) throws ParseException {
+		OutboundOrderV2 dbOutboundOrder = getOBOrderByIdV2(orderId);
+		log.info("orderId : " + orderId);
+		log.info("dbOutboundOrder : " + dbOutboundOrder);
+		if (dbOutboundOrder != null) {
+			dbOutboundOrder.setProcessedStatusId(10L);
+			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(dbOutboundOrder);
+			return outboundOrder;
+		}
+		return dbOutboundOrder;
+	}
+
+	/**
+	 *
+	 * @param orderId
+	 * @return
+	 */
+	public OutboundOrderV2 getOBOrderByIdV2(String orderId) {
+//		return outboundOrderRepository.findByOrderId(orderId);
+		OutboundOrderV2 dbOutboundOrder = outboundOrderV2Repository.findByRefDocumentNo (orderId);
+
+		if(dbOutboundOrder!= null) {
+			return dbOutboundOrder;
+		} else {
+			return null;
+		}
+		}
+
+	public OutboundOrderV2 createOutboundOrdersV2(OutboundOrderV2 newOutboundOrder) throws ParseException {
+//		OutboundOrderV2 dbOutboundOrder = outboundOrderV2Repository.findByRefDocumentNoAndProcessedStatusIdOrderByOrderReceivedOn(newOutboundOrder.getOrderId(), 0L);
+		OutboundOrderV2 dbOutboundOrder = getOBOrderByIdV2(newOutboundOrder.getOrderId());
+		if(dbOutboundOrder != null) {
+			throw new BadRequestException("Order is getting Duplicated");
+		}
+
+		Date date = DateUtils.getCurrentKWTDateTime();
+		log.info("Kuwait Date: " + date);
+		newOutboundOrder.setUpdatedOn(date);
+		OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(newOutboundOrder);
+		return outboundOrder;
 	}
 }

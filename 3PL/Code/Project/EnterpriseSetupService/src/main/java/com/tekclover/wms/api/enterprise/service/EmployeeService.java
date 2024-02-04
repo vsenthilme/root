@@ -1,12 +1,14 @@
 package com.tekclover.wms.api.enterprise.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.enterprise.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,8 +64,8 @@ public class EmployeeService extends BaseService {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public Employee createEmployee (AddEmployee newEmployee, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+	public Employee createEmployee (AddEmployee newEmployee, String loginUserID)
+			throws IllegalAccessException, InvocationTargetException, ParseException {
 		Employee optEmployee = 
 				employeeRepository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIDAndEmployeeIdAndProcessIdAndDeletionIndicator(
 						getLanguageId(), getCompanyCode(), getPlantId(), 
@@ -95,7 +97,7 @@ public class EmployeeService extends BaseService {
 	 * @throws InvocationTargetException
 	 */
 	public Employee updateEmployee (String warehouseId, String employeeId, Long processId, 
-			UpdateEmployee updateEmployee, String loginUserID) throws IllegalAccessException, InvocationTargetException {
+			UpdateEmployee updateEmployee, String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
 		Employee dbEmployee = getEmployee(warehouseId, employeeId, processId);
 		BeanUtils.copyProperties(updateEmployee, dbEmployee, CommonUtils.getNullPropertyNames(updateEmployee));
 		dbEmployee.setUpdatedBy(loginUserID);
@@ -107,7 +109,7 @@ public class EmployeeService extends BaseService {
 	 * deleteEmployee
 	 * @param employeeCode
 	 */
-	public void deleteEmployee (String warehouseId, String employeeId, Long processId, String loginUserID) {
+	public void deleteEmployee (String warehouseId, String employeeId, Long processId, String loginUserID) throws ParseException {
 		Employee employee = getEmployee(warehouseId, employeeId, processId);
 		if ( employee != null) {
 			employee.setDeletionIndicator (1L);

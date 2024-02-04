@@ -80,7 +80,7 @@ public interface InboundHeaderRepository extends JpaRepository<InboundHeader,Lon
 			@Param ("confirmedOn") Date confirmedOn
 			);
 	@Modifying(clearAutomatically = true)
-	@Query("UPDATE InboundHeader ib SET ib.statusId = :statusId, ib.confirmedBy = :confirmedBy, ib.confirmedOn = :confirmedOn \n" +
+	@Query("UPDATE InboundHeader ib SET ib.statusId = :statusId, ib.confirmedBy = :confirmedBy, ib.confirmedOn = :confirmedOn, ib.statusDescription = :statusDescription \n" +
 			"WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId")
 	void updateInboundHeaderStatus(@Param("warehouseId") String warehouseId,
 								   @Param("companyCode") String companyCode,
@@ -88,6 +88,11 @@ public interface InboundHeaderRepository extends JpaRepository<InboundHeader,Lon
 								   @Param("languageId") String languageId,
 								   @Param("refDocNumber") String refDocNumber,
 								   @Param("statusId") Long statusId,
+								   @Param("statusDescription") String statusDescription,
 								   @Param("confirmedBy") String confirmedBy,
 								   @Param("confirmedOn") Date confirmedOn);
+
+	Optional<InboundHeader> findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndStatusIdAndDeletionIndicator(
+			String companyCode, String plantId, String languageId, String warehouseId, String oldInvoiceNo, Long refDocNumber, Long statusId);
+
 }

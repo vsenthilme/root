@@ -26,12 +26,12 @@ public class SparkQualityLineService {
     public SparkQualityLineService() throws ParseException {
         connProp.setProperty("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connProp.put("user", "sa");
-        connProp.put("password", "30NcyBuK");
+        connProp.put("password", "Do1cavIFK4^$pQ^zZYsX");
         sparkSession = SparkSession.builder().master("local[*]").appName("QualityLineExample.com").config("spark.executor.memory", "4g")
                 .config("spark.executor.cores", "4").getOrCreate();
 
         //Read from Sql Table
-        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_ALMDEV", "tblqualityline", connProp)
+        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://3.109.20.248;databaseName=WMS_ALMDEV", "tblqualityline", connProp)
                 .repartition(16);
         df2.createOrReplaceTempView("tblqualitylinev2");
 

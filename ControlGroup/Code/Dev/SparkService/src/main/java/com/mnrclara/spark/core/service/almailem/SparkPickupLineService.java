@@ -31,13 +31,13 @@ public class SparkPickupLineService {
         // Connection properties
         conProp.setProperty("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conProp.put("user", "sa");
-        conProp.put("password", "30NcyBuK");
+        conProp.put("password", "Do1cavIFK4^$pQ^zZYsX");
 
         // Initialize Spark session and read data from SQL table
         sparkSession = SparkSession.builder().master("local[*]").appName("SparkByExample.com").config("spark.executor.memory", "4g")
                 .config("spark.executor.cores", "4").getOrCreate();
 
-        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_ALMDEV", "tblpickupline", conProp)
+        val df2 = sparkSession.read().jdbc("jdbc:sqlserver://3.109.20.248;databaseName=WMS_ALMDEV", "tblpickupline", conProp)
                 .repartition(16);
         df2.createOrReplaceTempView("tblpickuplinev2");
     }

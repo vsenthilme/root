@@ -31,12 +31,12 @@ public class SparkOrderManagementLineService {
         //connection properties
         conProp.setProperty("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         conProp.put("user", "sa");
-        conProp.put("password", "30NcyBuK");
+        conProp.put("password", "Do1cavIFK4^$pQ^zZYsX");
         sparkSession = SparkSession.builder().master("local[*]").appName("OrderManagementLine.com") .config("spark.executor.memory", "4g")
                 .config("spark.executor.cores", "4").getOrCreate();
 
         //Read from Sql Table
-        val df2 = sparkSession.read().option("fetchSize", "10000").jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_ALMDEV", "tblordermangementline", conProp)
+        val df2 = sparkSession.read().option("fetchSize", "10000").jdbc("jdbc:sqlserver://3.109.20.248;databaseName=WMS_ALMDEV", "tblordermangementline", conProp)
                 .repartition(16);
         df2.createOrReplaceTempView("tblordermangementlinev2");
     }

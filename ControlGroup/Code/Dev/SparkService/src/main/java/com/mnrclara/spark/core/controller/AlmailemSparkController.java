@@ -2,6 +2,7 @@ package com.mnrclara.spark.core.controller;
 
 
 import com.mnrclara.spark.core.model.Almailem.*;
+import com.mnrclara.spark.core.model.FindImBasicData1;
 import com.mnrclara.spark.core.service.almailem.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -115,6 +116,12 @@ public class AlmailemSparkController {
 
     @Autowired
     SparkQualityLineService sparkQualityLineService;
+
+    @Autowired
+    SparkImBasicData1V3Service sparkImBasicData1V3Service;
+
+    @Autowired
+    SparkImBasicData1V5Service sparkImBasicData1V5Service;
 
     //=======================================================================================================================
 
@@ -361,4 +368,23 @@ public class AlmailemSparkController {
         List<QualityLineV2> qualityLineV2 = sparkQualityLineService.findQualityLineV2(findQualityLineV2);
         return new ResponseEntity<>(qualityLineV2, HttpStatus.OK);
     }
+
+
+    //Find ImBasicData1
+    @ApiOperation(response = ImBasicData1V3.class, value = "Spark ImBasicData1V3")
+    @PostMapping("/imbasicdata1v3")
+    public ResponseEntity<?> imbasicData1(@RequestBody SearchImBasicData1 searchImBasicData1) throws Exception {
+        List<ImBasicData1V3> imBasicData1V3s = sparkImBasicData1V3Service.searchImBasicData1(searchImBasicData1);
+        return new ResponseEntity<>(imBasicData1V3s, HttpStatus.OK);
+    }
+
+    //Find ImBasicData1 -V5
+    @ApiOperation(response = ImBasicData1V3.class, value = "Spark ImBasicData1V3")
+    @PostMapping("/imbasicdata1v5")
+    public ResponseEntity<?> imbasicData1Find(@RequestBody SearchImBasicData1 searchImBasicData1) throws Exception {
+        List<ImBasicData1V3> imBasicData1V3s = sparkImBasicData1V5Service.searchImBasicData1(searchImBasicData1);
+        return new ResponseEntity<>(imBasicData1V3s, HttpStatus.OK);
+    }
+
+
 }

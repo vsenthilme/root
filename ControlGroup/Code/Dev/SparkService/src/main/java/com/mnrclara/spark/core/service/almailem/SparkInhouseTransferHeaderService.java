@@ -25,14 +25,14 @@ public class SparkInhouseTransferHeaderService {
         //connection properties
         connProp.setProperty("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
         connProp.put("user", "sa");
-        connProp.put("password", "30NcyBuK");
+        connProp.put("password", "Do1cavIFK4^$pQ^zZYsX");
         sparkSession = SparkSession.builder().master("local[*]").appName("InhouseTransferHeader.com").config("spark.executor.memory", "4g")
                 .config("spark.executor.cores", "4").getOrCreate();
 
         //Read from Sql Table
         val df2 = sparkSession.read()
                 .option("fetchSize", "10000")
-                .jdbc("jdbc:sqlserver://35.154.84.178;databaseName=WMS_ALMDEV", "tblinhousetransferheader", connProp)
+                .jdbc("jdbc:sqlserver://3.109.20.248;databaseName=WMS_ALMDEV", "tblinhousetransferheader", connProp)
                 .repartition(16);
         df2.createOrReplaceTempView("tblinhousetransferheader");
     }

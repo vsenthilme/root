@@ -222,7 +222,8 @@ public interface OutboundLineRepository extends JpaRepository<OutboundLine, Long
             + "AND OL.WH_ID = :warehouseId AND \n"
 //          + "OL.ITM_CODE = :itemCode AND \n"
             + "(COALESCE(:itemCode, null) IS NULL OR (OL.ITM_CODE IN (:itemCode))) and\n"
-            + "(OL.DLV_CTD_ON BETWEEN :fromDeliveryDate AND :toDeliveryDate) \n"
+            + "(COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) IS NULL OR (OL.DLV_CTD_ON between COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) and COALESCE(CONVERT(VARCHAR(255), :toDeliveryDate), null))) \n"
+//            + "(OL.DLV_CTD_ON BETWEEN :fromDeliveryDate AND :toDeliveryDate) \n"
             + "AND ol.is_deleted = 0 and OL.REF_FIELD_2 is null ", nativeQuery = true)
     List<OrderStatusReportImpl> getOrderStatusReportFromOutboundLines(
             @Param("languageId") String languageId,

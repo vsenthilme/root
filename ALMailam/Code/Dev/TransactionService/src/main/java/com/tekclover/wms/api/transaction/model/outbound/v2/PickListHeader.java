@@ -57,7 +57,10 @@ public class PickListHeader {
 	private Long outboundOrderTypeId;
 	
 	@Column(name = "STATUS_ID")
-	private Long statusId;
+	private Long oldStatusId;
+
+	@Column(name = "NEW_STATUS_ID")
+	private Long newStatusId;
 	
 	@Column(name = "REF_DOC_DATE")
 	private Date refDocDate;
@@ -141,7 +144,9 @@ public class PickListHeader {
 	private String warehouseDescription;
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
-	private String statusDescription;
+	private String oldStatusDescription;
+	@Column(name = "NEW_STATUS_TEXT", columnDefinition = "nvarchar(150)")
+	private String newStatusDescription;
 
 	@Column(name = "MIDDLEWARE_ID")
 	private Long middlewareId;

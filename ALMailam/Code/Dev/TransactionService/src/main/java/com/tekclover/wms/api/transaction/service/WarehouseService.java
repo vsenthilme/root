@@ -2709,7 +2709,7 @@ public class WarehouseService extends BaseService {
 					log.info("SalesInvoice: " + apiHeader);
 					OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 					log.info("SalesInvoice Order Failed: " + createdOrder);
-					throw new RuntimeException(e);
+					throw e;
 				}
 			}
 //			else if (salesInvoice == null) {
@@ -2783,7 +2783,7 @@ public class WarehouseService extends BaseService {
 					log.info("StockAdjustment: " + dbStockAdjustment);
 					StockAdjustment createdOrder = stockAdjustmentService.createStockAdjustment(dbStockAdjustment);
 					log.info("StockAdjustment Order Failed: " + createdOrder);
-					throw new RuntimeException(e);
+					throw e;
 				}
 			}
 		} catch (Exception e) {

@@ -20,7 +20,7 @@ public class PickListHeader {
 	private String deliveryOrderNo;
 	private String referenceDocumentType;
 	private Long outboundOrderTypeId;
-	private Long statusId;
+//	private Long statusId;
 	private Date refDocDate;
 	private Date requiredDeliveryDate;
 	private String referenceField1;
@@ -48,7 +48,8 @@ public class PickListHeader {
 	private String companyDescription;
 	private String plantDescription;
 	private String warehouseDescription;
-	private String statusDescription;
+	private String oldStatusDescription;
+	private String newStatusDescription;
 	private Long middlewareId;
 	private String middlewareTable;
 	private String oldSalesOrderNumber;
@@ -83,5 +84,7 @@ public class PickListHeader {
 	private Long newCountOfPickedLine;
 	private Long sumOfPickedQty;
 	private String customerType;
+	private Long oldStatusId;
+	private Long newStatusId;
 	private List<PickListLine> line;
 }

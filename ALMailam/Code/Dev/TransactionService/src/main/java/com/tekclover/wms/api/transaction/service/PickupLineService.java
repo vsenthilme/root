@@ -1657,7 +1657,11 @@ public class PickupLineService extends BaseService {
                     dbPickupLine.getPreOutboundNo(), dbPickupLine.getRefDocNumber(), dbPickupLine.getPartnerCode(), dbPickupLine.getPickupNumber());
             if (dbPickupHeader != null) {
                 dbPickupLine.setPickupCreatedOn(dbPickupHeader.getPickupCreatedOn());
-                dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickupCreatedBy());
+                if(dbPickupHeader.getPickupCreatedBy() != null) {
+                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickupCreatedBy());
+                } else {
+                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickUpdatedBy());
+                }
             }
 
             Double VAR_QTY = (dbPickupLine.getAllocatedQty() != null ? dbPickupLine.getAllocatedQty() : 0) - (dbPickupLine.getPickConfirmQty() != null ? dbPickupLine.getPickConfirmQty() : 0);
@@ -1667,10 +1671,12 @@ public class PickupLineService extends BaseService {
             dbPickupLine.setBarcodeId(newPickupLine.getBarcodeId());
             dbPickupLine.setDeletionIndicator(0L);
             dbPickupLine.setPickupUpdatedBy(loginUserID);
+            dbPickupLine.setPickupConfirmedBy(loginUserID);
             dbPickupLine.setPickupUpdatedOn(new Date());
+            dbPickupLine.setPickupConfirmedOn(new Date());
 
             // Checking for Duplicates
-            PickupLineV2 existingPickupLine = pickupLineV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndPickupNumberAndItemCodeAndActualHeNoAndPickedStorageBinAndPickedPackCodeAndDeletionIndicator(
+            List<PickupLineV2> existingPickupLine = pickupLineV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndPickupNumberAndItemCodeAndPickedStorageBinAndPickedPackCodeAndDeletionIndicator(
                     dbPickupLine.getLanguageId(),
                     dbPickupLine.getCompanyCodeId(),
                     dbPickupLine.getPlantId(),
@@ -1681,14 +1687,12 @@ public class PickupLineService extends BaseService {
                     dbPickupLine.getLineNumber(),
                     dbPickupLine.getPickupNumber(),
                     dbPickupLine.getItemCode(),
-                    dbPickupLine.getActualHeNo(),
                     dbPickupLine.getPickedStorageBin(),
                     dbPickupLine.getPickedPackCode(),
                     0L);
 
             log.info("existingPickupLine : " + existingPickupLine);
-            if (existingPickupLine == null) {
-
+            if (existingPickupLine == null || existingPickupLine.isEmpty()) {
                 try {
                     pickupNumber = dbPickupLine.getPickupNumber();
                     companyCodeId = dbPickupLine.getCompanyCodeId();

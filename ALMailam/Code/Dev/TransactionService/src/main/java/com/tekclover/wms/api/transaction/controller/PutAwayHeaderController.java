@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.SearchPutAwayHeaderV2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -208,9 +209,16 @@ public class PutAwayHeaderController {
     @PatchMapping("/{refDocNumber}/reverse/v2")
     public ResponseEntity<?> patchPutAwayHeaderV2(@PathVariable String refDocNumber, @RequestParam String packBarcodes, @RequestParam String warehouseId,
                                                   @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
-                                                  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+                                                  @RequestParam String loginUserID) throws ParseException {
         putawayheaderService.updatePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 refDocNumber, packBarcodes, loginUserID);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+	@ApiOperation(response = PutAwayHeaderV2.class, value = "Update PutAwayHeader Reversal V2") // label for swagger
+    @PatchMapping("/reverse/batch/v2")
+    public ResponseEntity<?> batchPutAwayHeaderReversalV2(@RequestBody List<InboundReversalInput> inboundReversalInputs, @RequestParam String loginUserID) throws ParseException {
+        putawayheaderService.batchPutAwayReversal(inboundReversalInputs, loginUserID);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

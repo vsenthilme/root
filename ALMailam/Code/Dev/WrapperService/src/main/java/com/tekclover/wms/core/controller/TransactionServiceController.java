@@ -2935,6 +2935,15 @@ public class TransactionServiceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //Update
+    @ApiOperation(response = PutAwayHeaderV2.class, value = "batch PutAwayHeaderV2 Reversal") // label for swagger
+    @PatchMapping("/putawayheader/reverse/batch/v2")
+    public ResponseEntity<?> batchPutAwayHeaderReversalV2(@RequestBody List<InboundReversalInput> inboundReversalInput,
+                                                          @RequestParam String loginUserID, @RequestParam String authToken) {
+        transactionService.batchPutAwayHeaderReversalV2(inboundReversalInput, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //Delete
     @ApiOperation(response = PutAwayHeaderV2.class, value = "Delete PutAwayHeader V2") // label for swagger
     @DeleteMapping("/putawayheader/{putAwayNumber}/v2")
@@ -4181,6 +4190,14 @@ public class TransactionServiceController {
     public PickListHeader[] findPickListHeader(@RequestBody SearchPickListHeader searchPickListHeader,
                                                @RequestParam String authToken) throws Exception {
         return transactionService.findPickListHeader(searchPickListHeader, authToken);
+    }
+
+    //findSupplierInvoiceHeader - Supplier invoice Cancellation
+    @ApiOperation(response = SupplierInvoiceHeader.class, value = "Search SupplierInvoiceHeader Cancellation") // label for swagger
+    @PostMapping("/supplierInvoiceCancellation/v2/findSupplierInvoiceHeader")
+    public SupplierInvoiceHeader[] findSupplierInvoiceHeader(@RequestBody SearchSupplierInvoiceHeader searchSupplierInvoiceHeader,
+                                                             @RequestParam String authToken) throws Exception {
+        return transactionService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader, authToken);
     }
 
 

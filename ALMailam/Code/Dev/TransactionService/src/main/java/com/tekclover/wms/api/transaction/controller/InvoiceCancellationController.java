@@ -2,6 +2,8 @@ package com.tekclover.wms.api.transaction.controller;
 
 
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.SearchSupplierInvoiceHeader;
+import com.tekclover.wms.api.transaction.model.inbound.v2.SupplierInvoiceHeader;
 import com.tekclover.wms.api.transaction.model.outbound.v2.PickListHeader;
 import com.tekclover.wms.api.transaction.model.outbound.v2.SearchPickListHeader;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
@@ -50,6 +52,13 @@ public class InvoiceCancellationController {
 	public Stream<PickListHeader> findPickListHeader(@RequestBody SearchPickListHeader searchPickListHeader)
 			throws Exception {
 		return pickListHeaderService.findPickListHeader(searchPickListHeader);
+	}
+
+    @ApiOperation(response = SupplierInvoiceHeader.class, value = "SearchSupplierInvoiceHeader") // label for swagger
+	@PostMapping("/findSupplierInvoiceHeader")
+	public Stream<SupplierInvoiceHeader> findSupplierInvoiceHeader(@RequestBody SearchSupplierInvoiceHeader searchSupplierInvoiceHeader)
+			throws Exception {
+		return invoiceCancellationService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader);
 	}
 
 }

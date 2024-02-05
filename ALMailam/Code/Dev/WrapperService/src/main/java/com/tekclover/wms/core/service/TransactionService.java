@@ -5071,27 +5071,28 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(requestDataForService, headers);
             ResponseEntity<OrderStatusReport[]> result = getRestTemplate().exchange(builder.toUriString(),
                     HttpMethod.POST, entity, OrderStatusReport[].class);
-
-            List<OrderStatusReport> orderStatusReportList = new ArrayList<>();
-            for (OrderStatusReport orderStatusReport : result.getBody()) {
-                if (orderStatusReport.getDeliveryConfirmedOn() != null) {
-                    orderStatusReport.setDeliveryConfirmedOn(
-                            DateUtils.addTimeToDate(orderStatusReport.getDeliveryConfirmedOn(), 3));
-                }
-
-                if (orderStatusReport.getOrderReceivedDate() != null) {
-                    orderStatusReport
-                            .setOrderReceivedDate(DateUtils.addTimeToDate(orderStatusReport.getOrderReceivedDate(), 3));
-                }
-
-                if (orderStatusReport.getExpectedDeliveryDate() != null) {
-                    orderStatusReport.setExpectedDeliveryDate(
-                            DateUtils.addTimeToDate(orderStatusReport.getExpectedDeliveryDate(), 3));
-                }
-                orderStatusReportList.add(orderStatusReport);
-            }
-            log.info("orderStatusReportList--------> : " + orderStatusReportList);
-            return orderStatusReportList.toArray(new OrderStatusReport[orderStatusReportList.size()]);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+//            List<OrderStatusReport> orderStatusReportList = new ArrayList<>();
+//            for (OrderStatusReport orderStatusReport : result.getBody()) {
+//                if (orderStatusReport.getDeliveryConfirmedOn() != null) {
+//                    orderStatusReport.setDeliveryConfirmedOn(
+//                            DateUtils.addTimeToDate(orderStatusReport.getDeliveryConfirmedOn(), 3));
+//                }
+//
+//                if (orderStatusReport.getOrderReceivedDate() != null) {
+//                    orderStatusReport
+//                            .setOrderReceivedDate(DateUtils.addTimeToDate(orderStatusReport.getOrderReceivedDate(), 3));
+//                }
+//
+//                if (orderStatusReport.getExpectedDeliveryDate() != null) {
+//                    orderStatusReport.setExpectedDeliveryDate(
+//                            DateUtils.addTimeToDate(orderStatusReport.getExpectedDeliveryDate(), 3));
+//                }
+//                orderStatusReportList.add(orderStatusReport);
+//            }
+//            log.info("orderStatusReportList--------> : " + orderStatusReportList);
+//            return orderStatusReportList.toArray(new OrderStatusReport[orderStatusReportList.size()]);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -5116,17 +5117,18 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<ShipmentDeliveryReport[]> result = getRestTemplate().exchange(builder.toUriString(),
                     HttpMethod.GET, entity, ShipmentDeliveryReport[].class);
-
-            List<ShipmentDeliveryReport> shipmentDeliveryReportList = new ArrayList<>();
-            for (ShipmentDeliveryReport shipmentDeliveryReport : result.getBody()) {
-                if (shipmentDeliveryReport.getDeliveryDate() != null) {
-                    shipmentDeliveryReport
-                            .setDeliveryDate(DateUtils.addTimeToDate(shipmentDeliveryReport.getDeliveryDate(), 3));
-                    shipmentDeliveryReportList.add(shipmentDeliveryReport);
-                }
-            }
-
-            return shipmentDeliveryReportList.toArray(new ShipmentDeliveryReport[shipmentDeliveryReportList.size()]);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+//            List<ShipmentDeliveryReport> shipmentDeliveryReportList = new ArrayList<>();
+//            for (ShipmentDeliveryReport shipmentDeliveryReport : result.getBody()) {
+//                if (shipmentDeliveryReport.getDeliveryDate() != null) {
+//                    shipmentDeliveryReport
+//                            .setDeliveryDate(DateUtils.addTimeToDate(shipmentDeliveryReport.getDeliveryDate(), 3));
+//                    shipmentDeliveryReportList.add(shipmentDeliveryReport);
+//                }
+//            }
+//
+//            return shipmentDeliveryReportList.toArray(new ShipmentDeliveryReport[shipmentDeliveryReportList.size()]);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -9676,6 +9678,33 @@ public class TransactionService {
         }
     }
 
+    // PATCH - /inbound reversal - Batch
+    public PutAwayHeaderV2[] batchPutAwayHeaderReversalV2(List<InboundReversalInput> inboundReversalInputList, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(inboundReversalInputList, headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "putawayheader/reverse/batch/v2")
+                            .queryParam("loginUserID", loginUserID);
+
+            ResponseEntity<PutAwayHeaderV2[]> result =
+                    restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, PutAwayHeaderV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // DELETE
     public boolean deletePutAwayHeaderV2(String companyCode, String plantId, String languageId,
                                          String warehouseId, String preInboundNo, String refDocNumber,
@@ -13062,6 +13091,28 @@ public class TransactionService {
                     getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, OutboundOrderLineV2[].class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // POST - findSupplierInvoiceHeader
+    public SupplierInvoiceHeader[] findSupplierInvoiceHeader(SearchSupplierInvoiceHeader searchSupplierInvoiceHeader, String authToken) throws ParseException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "/invoice/findSupplierInvoiceHeader");
+            HttpEntity<?> entity = new HttpEntity<>(searchSupplierInvoiceHeader, headers);
+            ResponseEntity<SupplierInvoiceHeader[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
+                    entity, SupplierInvoiceHeader[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

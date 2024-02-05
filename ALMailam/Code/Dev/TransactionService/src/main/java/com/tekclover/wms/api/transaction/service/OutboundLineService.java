@@ -722,7 +722,7 @@ public class OutboundLineService extends BaseService {
                 searchOrderStatusReport.getItemCode(),
                 searchOrderStatusReport.getFromDeliveryDate(),
                 searchOrderStatusReport.getToDeliveryDate());
-        log.info("OrderStatusReportImpl: " + results);
+        log.info("OrderStatusReportImpl: " + results.size());
         return results;
     }
 
@@ -2115,7 +2115,7 @@ public class OutboundLineService extends BaseService {
         long outboundLineCount =
                 outboundLineV2Repository.getOutboudLineByWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndStatusIdInAndDeletionIndicatorV2(
                         companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusIds, 0);
-        log.info("OuboundLine status Id 57L :----------->" + outboundLineCount);
+        log.info("OuboundLine status Id 47L,51L,57L :----------->" + outboundLineCount);
         return outboundLineCount;
     }
 
@@ -3706,22 +3706,22 @@ public class OutboundLineService extends BaseService {
         return null;
     }
 
-    public List<OutboundLineV2> getOutBoundLine(String companyCodeId, String plantId, String languageId,
-                                                   String warehouseId, String refDocNumber, String loginUserID) throws Exception {
-
-        List<OutboundLineV2> outboundLineV2List = new ArrayList<>();
-        List<OutboundLineV2> dbOutBoundLine = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
-                companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-        log.info("PickList Cancellation - OutboundLine : " + dbOutBoundLine);
-        if (dbOutBoundLine != null && !dbOutBoundLine.isEmpty()) {
-            for (OutboundLineV2 outboundLineV2 : dbOutBoundLine) {
-                outboundLineV2.setDeletionIndicator(1L);
-                outboundLineV2.setUpdatedBy(loginUserID);
-                outboundLineV2.setUpdatedOn(new Date());
-                OutboundLineV2 outboundLine = outboundLineV2Repository.save(outboundLineV2);
-                outboundLineV2List.add(outboundLine);
-            }
-        }
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public List<OutboundLineV2> getOutBoundLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                         String warehouseId, String refDocNumber, String itemCode, String manufacturerName) {
+        List<OutboundLineV2> outboundLineV2List = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, refDocNumber, itemCode, manufacturerName, 0L);
+        log.info("PickList Cancellation - OutboundLine : " + outboundLineV2List);
         return outboundLineV2List;
     }
 

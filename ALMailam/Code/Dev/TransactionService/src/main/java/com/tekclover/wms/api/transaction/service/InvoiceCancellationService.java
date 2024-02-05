@@ -429,53 +429,51 @@ public class InvoiceCancellationService extends BaseService{
         List<SupplierInvoiceLine> toBeCreatedSupplierInvoiceLineList = new ArrayList<>();
         if(newPutAwayLineList != null && !newPutAwayLineList.isEmpty()) {
             for (PutAwayLineV2 putAwayLine : oldPutAwayLineList) {
-                SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
-                BeanUtils.copyProperties(putAwayLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(putAwayLine));
+                for (PutAwayLineV2 newPutAwayLine : newPutAwayLineList) {
 
-                if(oldInboundLineList != null && !oldInboundLineList.isEmpty()){
-                    oldInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(putAwayLine.getItemCode()) &&
-                            a.getManufacturerName().equalsIgnoreCase(putAwayLine.getManufacturerName())).collect(Collectors.toList());
-                    if(oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
-                        supplierInvoiceLine.setOldInvoiceNo(oldInboundLineList.get(0).getInvoiceNo());
+                    SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
+                    BeanUtils.copyProperties(putAwayLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(putAwayLine));
+
+                    if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                        oldInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(putAwayLine.getItemCode()) &&
+                                a.getManufacturerName().equalsIgnoreCase(putAwayLine.getManufacturerName())).collect(Collectors.toList());
+                        if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            supplierInvoiceLine.setOldInvoiceNo(oldInboundLineList.get(0).getInvoiceNo());
+                        }
                     }
+
+                    supplierInvoiceLine.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
+                    supplierInvoiceLine.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
+                    supplierInvoiceLine.setOldReferenceOrderNo(oldInboundHeader.getRefDocNumber());
+                    supplierInvoiceLine.setOldContainerNo(oldInboundHeader.getContainerNo());
+                    supplierInvoiceLine.setOldLineNo(putAwayLine.getLineNo());
+                    supplierInvoiceLine.setOldOrderQty(putAwayLine.getOrderQty());
+                    supplierInvoiceLine.setOldConfirmedStorageBin(putAwayLine.getConfirmedStorageBin());
+                    supplierInvoiceLine.setOldProposedStorageBin(putAwayLine.getProposedStorageBin());
+                    supplierInvoiceLine.setOldPutAwayQuantity(putAwayLine.getPutAwayQuantity());
+                    supplierInvoiceLine.setOldPutawayConfirmedQty(putAwayLine.getPutawayConfirmedQty());
+                    supplierInvoiceLine.setOldPutAwayHandlingEquipment(putAwayLine.getPutAwayHandlingEquipment());
+
+                    supplierInvoiceLine.setNewRefDocNumber(newGrHeader.getRefDocNumber());
+                    supplierInvoiceLine.setNewPreInboundNo(newGrHeader.getPreInboundNo());
+                    supplierInvoiceLine.setNewReferenceOrderNo(newGrHeader.getRefDocNumber());
+                    supplierInvoiceLine.setNewContainerNo(newGrHeader.getContainerNo());
+                    supplierInvoiceLine.setNewLineNo(newPutAwayLine.getLineNo());
+                    supplierInvoiceLine.setNewOrderQty(newPutAwayLine.getOrderQty());
+                    supplierInvoiceLine.setNewConfirmedStorageBin(newPutAwayLine.getConfirmedStorageBin());
+                    supplierInvoiceLine.setNewProposedStorageBin(newPutAwayLine.getProposedStorageBin());
+                    supplierInvoiceLine.setNewPutAwayQuantity(newPutAwayLine.getPutAwayQuantity());
+                    supplierInvoiceLine.setNewPutawayConfirmedQty(newPutAwayLine.getPutawayConfirmedQty());
+                    supplierInvoiceLine.setNewPutAwayHandlingEquipment(newPutAwayLine.getPutAwayHandlingEquipment());
+
+                    supplierInvoiceLine.setDeletionIndicator(0L);
+                    supplierInvoiceLine.setCreatedBy(loginUserId);
+                    supplierInvoiceLine.setCreatedOn(new Date());
+                    supplierInvoiceLine.setSupplierInvoiceCancelHeaderId(creatednewSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId());
+                    supplierInvoiceLine.setSupplierInvoiceCancelLineId(System.currentTimeMillis());
+                    supplierInvoiceLineRepository.save(supplierInvoiceLine);
+                    toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
                 }
-
-                supplierInvoiceLine.setOldRefDocNumber(oldInboundHeader.getRefDocNumber());
-                supplierInvoiceLine.setOldPreInboundNo(oldInboundHeader.getPreInboundNo());
-                supplierInvoiceLine.setOldReferenceOrderNo(oldInboundHeader.getRefDocNumber());
-                supplierInvoiceLine.setOldContainerNo(oldInboundHeader.getContainerNo());
-                supplierInvoiceLine.setOldLineNo(putAwayLine.getLineNo());
-                supplierInvoiceLine.setOldOrderQty(putAwayLine.getOrderQty());
-                supplierInvoiceLine.setOldConfirmedStorageBin(putAwayLine.getConfirmedStorageBin());
-                supplierInvoiceLine.setOldProposedStorageBin(putAwayLine.getProposedStorageBin());
-                supplierInvoiceLine.setOldPutAwayQuantity(putAwayLine.getPutAwayQuantity());
-                supplierInvoiceLine.setOldPutawayConfirmedQty(putAwayLine.getPutawayConfirmedQty());
-                supplierInvoiceLine.setOldPutAwayHandlingEquipment(putAwayLine.getPutAwayHandlingEquipment());
-
-                supplierInvoiceLine.setNewRefDocNumber(newGrHeader.getRefDocNumber());
-                supplierInvoiceLine.setNewPreInboundNo(newGrHeader.getPreInboundNo());
-                supplierInvoiceLine.setNewReferenceOrderNo(newGrHeader.getRefDocNumber());
-                supplierInvoiceLine.setNewContainerNo(newGrHeader.getContainerNo());
-                List<PutAwayLineV2> filterList = newPutAwayLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(putAwayLine.getItemCode()) &&
-                        a.getManufacturerName().equalsIgnoreCase(putAwayLine.getManufacturerName())).collect(Collectors.toList());
-                log.info("Filtered Putaway List: " + filterList);
-                if(filterList != null && !filterList.isEmpty()){
-                    supplierInvoiceLine.setNewLineNo(filterList.get(0).getLineNo());
-                    supplierInvoiceLine.setNewOrderQty(filterList.get(0).getOrderQty());
-                    supplierInvoiceLine.setNewConfirmedStorageBin(filterList.get(0).getConfirmedStorageBin());
-                    supplierInvoiceLine.setNewProposedStorageBin(filterList.get(0).getProposedStorageBin());
-                    supplierInvoiceLine.setNewPutAwayQuantity(filterList.get(0).getPutAwayQuantity());
-                    supplierInvoiceLine.setNewPutawayConfirmedQty(filterList.get(0).getPutawayConfirmedQty());
-                    supplierInvoiceLine.setNewPutAwayHandlingEquipment(filterList.get(0).getPutAwayHandlingEquipment());
-                }
-
-                supplierInvoiceLine.setDeletionIndicator(0L);
-                supplierInvoiceLine.setCreatedBy(loginUserId);
-                supplierInvoiceLine.setCreatedOn(new Date());
-                supplierInvoiceLine.setSupplierInvoiceCancelHeaderId(creatednewSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId());
-                supplierInvoiceLine.setSupplierInvoiceCancelLineId(System.currentTimeMillis());
-                supplierInvoiceLineRepository.save(supplierInvoiceLine);
-                toBeCreatedSupplierInvoiceLineList.add(supplierInvoiceLine);
             }
         }
 

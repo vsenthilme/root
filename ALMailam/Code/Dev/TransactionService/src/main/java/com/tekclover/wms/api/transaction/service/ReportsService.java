@@ -976,9 +976,9 @@ public class ReportsService extends BaseService {
         }
 
         // DeliveryDate
-        if (request.getFromDeliveryDate() == null || request.getToDeliveryDate() == null) {
-            throw new BadRequestException("DeliveryDate can't be blank");
-        }
+//        if (request.getFromDeliveryDate() == null || request.getToDeliveryDate() == null) {
+//            throw new BadRequestException("DeliveryDate can't be blank");
+//        }
 
         SearchOrderStatusReport searchOutboundLine = new SearchOrderStatusReport();
         searchOutboundLine.setWarehouseId(request.getWarehouseId());

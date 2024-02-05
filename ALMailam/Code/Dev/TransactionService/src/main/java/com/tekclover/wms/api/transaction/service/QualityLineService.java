@@ -1880,6 +1880,7 @@ public class QualityLineService extends BaseService {
 
                 long count_57 = 0;
                 if (outboundLineV2List != null) {
+                    List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L);
                     count_57 = outboundLineService.getOutboundLineV2(dbQualityLines.get(0).getCompanyCodeId(),
                             dbQualityLines.get(0).getPlantId(),
                             dbQualityLines.get(0).getLanguageId(),
@@ -1887,7 +1888,7 @@ public class QualityLineService extends BaseService {
                             dbQualityLines.get(0).getPreOutboundNo(),
                             dbQualityLines.get(0).getRefDocNumber(),
                             dbQualityLines.get(0).getPartnerCode(),
-                            Collections.singletonList(57L));
+                            statusIdsToBeChecked);
                 }
                 log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
 

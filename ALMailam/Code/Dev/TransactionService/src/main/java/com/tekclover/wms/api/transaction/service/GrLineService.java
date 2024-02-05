@@ -1435,6 +1435,10 @@ public class GrLineService extends BaseService {
                         dbGrLine.setStatusDescription(statusDescription);
                     }
 
+                    if (variance < 0D) {
+                        throw new BadRequestException("Variance Qty cannot be Less than 0");
+                    }
+
                     dbGrLine.setCbm(cbm);
                     dbGrLine.setCbmQuantity(cbmPerQty);
 
@@ -2200,9 +2204,9 @@ public class GrLineService extends BaseService {
                                             log.info("Existing NON-CBM ProposedBin: " + proposedExistingBin);
 
                                         putAwayHeader.setProposedStorageBin(proposedStorageBin);
-                                    }
-                                    putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
-                                    putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
+                                        putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
+                                        }
+                                        putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
                                     log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
                                     cbm = 0D;   //break the loop
                                 }

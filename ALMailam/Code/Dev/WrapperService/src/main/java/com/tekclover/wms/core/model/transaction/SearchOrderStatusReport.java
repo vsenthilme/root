@@ -14,12 +14,12 @@ public class SearchOrderStatusReport {
     private String plantId;             // PLANT_ID
     private String warehouseId;         // WH_ID
 
-    @NotNull
-    @NotEmpty
+//    @NotNull
+//    @NotEmpty
     private String fromDeliveryDate;
 
-    @NotNull
-    @NotEmpty
+//    @NotNull
+//    @NotEmpty
     private String toDeliveryDate;
 
     private List<String> customerCode;

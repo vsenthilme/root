@@ -150,8 +150,14 @@ public class TransactionService {
                     log.error("Error on inbound processing : " + e.toString());
                     // Updating the Processed Status
                     orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo(), 100L);
-                    preinboundheaderService.createInboundIntegrationLogV2(inbound, e.toString());
-                    inboundList.remove(inbound);
+                    try {
+                        preinboundheaderService.createInboundIntegrationLogV2(inbound, e.toString());
+                        inboundList.remove(inbound);
+                    } catch (Exception ex) {
+                        inboundList.remove(inbound);
+                        throw new RuntimeException(ex);
+                    }
+
                     warehouseApiResponse.setStatusCode("1400");
                     warehouseApiResponse.setMessage("Failure");
                 }
@@ -248,8 +254,13 @@ public class TransactionService {
                     log.error("Error on outbound processing : " + e.toString());
                     // Updating the Processed Status
                     orderService.updateProcessedOrderV2(outbound.getRefDocumentNo(), 100L);
-                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound, e.toString());
-                    outboundList.remove(outbound);
+                    try {
+                        preOutboundHeaderService.createOutboundIntegrationLogV2(outbound, e.toString());
+                        outboundList.remove(outbound);
+                    } catch (Exception ex) {
+                        outboundList.remove(outbound);
+                        throw new RuntimeException(ex);
+                    }
                     warehouseApiResponse.setStatusCode("1400");
                     warehouseApiResponse.setMessage("Failure");
                 }

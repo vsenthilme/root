@@ -23,7 +23,7 @@ public class PickListLine {
 	private String deliveryOrderNo;
 	private String batchSerialNumber;
 	private Long outboundOrderTypeId;
-	private Long statusId;
+//	private Long statusId;
 	private Long stockTypeId;
 	private Long specialStockIndicatorId;
 	private String description;
@@ -58,7 +58,8 @@ public class PickListLine {
 	private String companyDescription;
 	private String plantDescription;
 	private String warehouseDescription;
-	private String statusDescription;
+	private String oldStatusDescription;
+	private String newStatusDescription;
 	private String manufacturerName;
 	private Long middlewareId;
 	private Long middlewareHeaderId;
@@ -86,4 +87,6 @@ public class PickListLine {
 	private String barcodeId;
 	private String customerType;
 	private String handlingEquipment;
+	private Long oldStatusId;
+	private Long newStatusId;
 }

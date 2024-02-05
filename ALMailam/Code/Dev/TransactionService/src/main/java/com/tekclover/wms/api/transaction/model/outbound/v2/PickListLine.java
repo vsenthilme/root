@@ -67,7 +67,10 @@ public class PickListLine {
 	private Long outboundOrderTypeId;
 	
 	@Column(name = "STATUS_ID") 
-	private Long statusId;
+	private Long oldStatusId;
+
+	@Column(name = "NEW_STATUS_ID")
+	private Long newStatusId;
 	
 	@Column(name = "STCK_TYP_ID")
 	private Long stockTypeId;
@@ -172,7 +175,9 @@ public class PickListLine {
 	private String warehouseDescription;
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
-	private String statusDescription;
+	private String oldStatusDescription;
+	@Column(name = "NEW_STATUS_TEXT", columnDefinition = "nvarchar(150)")
+	private String newStatusDescription;
 
 	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
 	private String manufacturerName;

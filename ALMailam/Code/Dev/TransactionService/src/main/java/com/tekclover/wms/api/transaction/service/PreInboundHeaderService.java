@@ -1437,7 +1437,7 @@ public class PreInboundHeaderService extends BaseService {
          */
         Optional<PreInboundHeaderEntityV2> orderProcessedStatus = preInboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(refDocNumber, 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedInboundOrderV2(refDocNumber, 100L);
+//            orderService.updateProcessedInboundOrderV2(refDocNumber, 100L);
             throw new BadRequestException("Order :" + refDocNumber + " already processed. Reprocessing can't be allowed.");
         }
 
@@ -1471,11 +1471,11 @@ public class PreInboundHeaderService extends BaseService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw e;
         }
 
         // Getting PreInboundNo from NumberRangeTable
-        String preInboundNo = getPreInboundNo(warehouseId, warehouse.getCompanyCodeId(), warehouse.getPlantId(), warehouse.getLanguageId());
+        String preInboundNo = getPreInboundNo(warehouseId, inboundOrder.getCompanyCode(), inboundOrder.getBranchCode(), warehouse.getLanguageId());
 
         List<PreInboundLineEntityV2> overallCreatedPreInboundLineList = new ArrayList<>();
         for (InboundIntegrationLine inboundIntegrationLine : inboundIntegrationHeader.getInboundIntegrationLine()) {
@@ -2227,12 +2227,6 @@ public class PreInboundHeaderService extends BaseService {
         dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy("MSD_API");
-
-        try {
-            dbInboundIntegrationLog.setReferenceField1(errorDesc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
         dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);

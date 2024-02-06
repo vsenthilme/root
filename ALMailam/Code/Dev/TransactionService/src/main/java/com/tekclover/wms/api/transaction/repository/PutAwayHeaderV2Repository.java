@@ -100,4 +100,7 @@ public interface PutAwayHeaderV2Repository extends JpaRepository<PutAwayHeaderV2
                                    @Param("refDocNumber") String refDocNumber,
                                    @Param("statusId") Long statusId,
                                    @Param("statusDescription") String statusDescription);
+
+    List<PutAwayHeaderV2> findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber, String putawayNumber, Long deletionIndicator);
 }

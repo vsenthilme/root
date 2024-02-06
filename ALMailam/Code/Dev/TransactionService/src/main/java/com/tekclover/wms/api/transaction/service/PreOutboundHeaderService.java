@@ -3709,30 +3709,32 @@ public class PreOutboundHeaderService extends BaseService {
                                                List<PickupLineV2> newPickupLineList, List<OrderManagementLineV2> orderManagementLineList,
                                                String companyCodeId, String plantId, String languageId, String warehouseId,
                                                String oldPickListNumber, String newPickListNumber){
+        String loginUserID = null;
         Long oldObLineCount = 0L;
         Long newObLineCount = 0L;
         Long oldPickLineCount = 0L;
         Long newPickLineCount = 0L;
-        if(outboundLineV2List != null && !outboundLineV2List.isEmpty()){
+        if(outboundLineV2List != null && !outboundLineV2List.isEmpty()){            //old OrderLines Count
             oldObLineCount = outboundLineV2List.stream().count();
         }
-        if(oldPickupLineList != null && !oldPickupLineList.isEmpty()) {
+        if(oldPickupLineList != null && !oldPickupLineList.isEmpty()) {             //old PickedLines Count
             oldPickLineCount = oldPickupLineList.stream().count();
         }
-        List<OutboundLineV2> newOutboundLineList = outboundLineService.getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
-//        List<PickupLineV2> newPickupLineList = pickupLineService.getPickupLineForPickListCancellationV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
-        if(newOutboundLineList != null && !newOutboundLineList.isEmpty()) {
+        List<OutboundLineV2> newOutboundLineList = outboundLineService.getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);               //Fetch New OrderLines
+        if(newOutboundLineList != null && !newOutboundLineList.isEmpty()) {         //new OrderLines Count
             newObLineCount = newOutboundLineList.stream().count();
         }
-        if(newPickupLineList != null && !newPickupLineList.isEmpty()) {
+        if(newPickupLineList != null && !newPickupLineList.isEmpty()) {             //new PickedLines Count
             newPickLineCount = newOutboundLineList.stream().count();
         }
 
         if(outboundHeaderV2 != null) {
+            loginUserID = outboundHeaderV2.getCreatedBy();
             PickListHeader pickListHeader = new PickListHeader();
             BeanUtils.copyProperties(outboundHeaderV2, pickListHeader, CommonUtils.getNullPropertyNames(outboundHeaderV2));
-            OutboundHeaderV2 newOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, newPickListNumber, warehouseId);
+            OutboundHeaderV2 newOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, newPickListNumber, warehouseId);         //Fetch New Order Details - Header
             if(newOutboundHeader != null) {
+                loginUserID = newOutboundHeader.getCreatedBy();
                 pickListHeader.setOldPreOutboundNo(outboundHeaderV2.getPreOutboundNo());
                 pickListHeader.setOldRefDocNumber(outboundHeaderV2.getRefDocNumber());
                 pickListHeader.setOldPickListNumber(oldPickListNumber);
@@ -3799,8 +3801,15 @@ public class PreOutboundHeaderService extends BaseService {
                                 dbPickListLine.setNewOrderQty(newPickupLineV2.getPickConfirmQty());
                                 dbPickListLine.setNewStatusId(newPickupLineV2.getStatusId());
                                 dbPickListLine.setNewStatusDescription(newPickupLineV2.getStatusDescription());
+
+                                dbPickListLine.setDeletionIndicator(0L);
+                                dbPickListLine.setCreatedBy(loginUserID);
+                                dbPickListLine.setUpdatedBy(loginUserID);
+                                dbPickListLine.setCreatedOn(new Date());
+                                dbPickListLine.setUpdatedOn(new Date());
                                 dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
                                 dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
+
                                 createPickListLineList.add(dbPickListLine);
                                 createdItmMfrNameList.add(newPickupLineV2.getItemCode()+newPickupLineV2.getManufacturerName());
                             }
@@ -3830,6 +3839,12 @@ public class PreOutboundHeaderService extends BaseService {
                                 dbPickListLine.setNewOrderQty(newPickupLineV2.getPickConfirmQty());
                                 dbPickListLine.setNewStatusId(newPickupLineV2.getStatusId());
                                 dbPickListLine.setNewStatusDescription(newPickupLineV2.getStatusDescription());
+
+                                dbPickListLine.setDeletionIndicator(0L);
+                                dbPickListLine.setCreatedBy(loginUserID);
+                                dbPickListLine.setUpdatedBy(loginUserID);
+                                dbPickListLine.setCreatedOn(new Date());
+                                dbPickListLine.setUpdatedOn(new Date());
                                 dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
                                 dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                                 createPickListLineList.add(dbPickListLine);
@@ -3840,7 +3855,7 @@ public class PreOutboundHeaderService extends BaseService {
                 if(oldItmMfrNameList != null && !oldItmMfrNameList.isEmpty()){
                     for (PickupLineV2 oldPickupLineV2 : oldPickupLineList) {
                         String itmMfrName = oldPickupLineV2.getItemCode() + oldPickupLineV2.getManufacturerName();
-                        boolean itmPresent = newItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                        boolean itmPresent = oldItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
                         if(itmPresent){
                             PickListLine dbPickListLine = new PickListLine();
                             BeanUtils.copyProperties(oldPickupLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(oldPickupLineV2));
@@ -3852,6 +3867,12 @@ public class PreOutboundHeaderService extends BaseService {
                             dbPickListLine.setOldOrderQty(oldPickupLineV2.getPickConfirmQty());
                             dbPickListLine.setOldStatusId(oldPickupLineV2.getStatusId());
                             dbPickListLine.setOldStatusDescription(oldPickupLineV2.getStatusDescription());
+
+                            dbPickListLine.setDeletionIndicator(0L);
+                            dbPickListLine.setCreatedBy(loginUserID);
+                            dbPickListLine.setUpdatedBy(loginUserID);
+                            dbPickListLine.setCreatedOn(new Date());
+                            dbPickListLine.setUpdatedOn(new Date());
                             dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
                             dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                             createPickListLineList.add(dbPickListLine);
@@ -3859,86 +3880,154 @@ public class PreOutboundHeaderService extends BaseService {
                     }
                 }
             }
-            //If PickupLine is Empty fill the details from outboundLine and bin from OrderManagementLine
+            //If PickupLine is Empty fill the line details from outboundLine and bin from OrderManagementLine
             if(oldPickupLineList == null || oldPickupLineList.isEmpty()) {
+
+                List<OrderManagementLineV2> newOrderManagementLineList = orderManagementLineService
+                        .getOrderManagementLineForPickListCancellationV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
+                List<OrderManagementLineV2> oldOrderManagementLineFilteredList = null;
+                List<OrderManagementLineV2> newOrderManagementLineFilteredList = null;
+
                 if (outboundLineV2List != null && outboundLineV2List.isEmpty()) {
-                    for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
-                        List<OutboundLineV2> newOutboundLineV2List = outboundLineService
-                                .getOutBoundLineForPickListCancellationV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber,
-                                        outboundLineV2.getItemCode(), outboundLineV2.getManufacturerName());
-                        List<OrderManagementLineV2> newOrderManagementLineList = orderManagementLineService
-                                .getOrderManagementLineForPickListCancellationV2(companyCodeId, plantId, languageId, warehouseId, newPickListNumber);
-                        if (newOutboundLineV2List != null && !newOutboundLineV2List.isEmpty()) {
-                            for (OutboundLineV2 newOutboundLineV2 : newOutboundLineV2List) {
+                    if (newOutboundLineList != null && !newOutboundLineList.isEmpty()) {
+                        for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
+                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName());
+                            for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
+                                newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+                                if (outboundLineV2.getItemCode().equalsIgnoreCase(newOutboundLineV2.getItemCode()) &&
+                                        outboundLineV2.getManufacturerName().equalsIgnoreCase(newOutboundLineV2.getManufacturerName())) {
+
+                                    //Filter ItemCode, MFR Name and LineNumber - OldPickList
+                                    oldOrderManagementLineFilteredList = orderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(outboundLineV2.getItemCode()) &&
+                                            a.getManufacturerName().equalsIgnoreCase(outboundLineV2.getManufacturerName()) &&
+                                            a.getLineNumber().equals(outboundLineV2.getLineNumber())).collect(Collectors.toList());
+                                    //Filter ItemCode, MFR Name and LineNumber - NewPickList
+                                    newOrderManagementLineFilteredList = newOrderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(newOutboundLineV2.getItemCode()) &&
+                                            a.getManufacturerName().equalsIgnoreCase(newOutboundLineV2.getManufacturerName()) &&
+                                            a.getLineNumber().equals(newOutboundLineV2.getLineNumber())).collect(Collectors.toList());
+
+                                    PickListLine dbPickListLine = new PickListLine();
+                                    BeanUtils.copyProperties(outboundLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(outboundLineV2));
+
+                                    dbPickListLine.setOldPreOutboundNo(outboundLineV2.getPreOutboundNo());
+                                    dbPickListLine.setOldRefDocNumber(outboundLineV2.getRefDocNumber());
+                                    dbPickListLine.setOldLineNo(outboundLineV2.getLineNumber());
+                                    dbPickListLine.setOldPickConfirmQty(outboundLineV2.getDeliveryQty());
+                                    if(oldOrderManagementLineFilteredList != null && !oldOrderManagementLineFilteredList.isEmpty()) {
+                                        dbPickListLine.setOldPickedStorageBin(oldOrderManagementLineFilteredList.get(0).getProposedStorageBin());
+                                    }
+                                    dbPickListLine.setOldOrderQty(outboundLineV2.getOrderQty());
+                                    dbPickListLine.setOldStatusId(outboundLineV2.getStatusId());
+                                    dbPickListLine.setOldStatusDescription(outboundLineV2.getStatusDescription());
+
+                                    dbPickListLine.setNewPreOutboundNo(newOutboundLineV2.getPreOutboundNo());
+                                    dbPickListLine.setNewRefDocNumber(newOutboundLineV2.getRefDocNumber());
+                                    dbPickListLine.setNewLineNo(newOutboundLineV2.getLineNumber());
+                                    dbPickListLine.setNewPickConfirmQty(newOutboundLineV2.getDeliveryQty());
+                                    if(newOrderManagementLineFilteredList != null && !newOrderManagementLineFilteredList.isEmpty()) {
+                                        dbPickListLine.setNewPickedStorageBin(newOrderManagementLineFilteredList.get(0).getProposedStorageBin());
+                                    }
+                                    dbPickListLine.setNewOrderQty(newOutboundLineV2.getOrderQty());
+                                    dbPickListLine.setNewStatusId(newOutboundLineV2.getStatusId());
+                                    dbPickListLine.setNewStatusDescription(newOutboundLineV2.getStatusDescription());
+
+                                    dbPickListLine.setDeletionIndicator(0L);
+                                    dbPickListLine.setCreatedBy(loginUserID);
+                                    dbPickListLine.setUpdatedBy(loginUserID);
+                                    dbPickListLine.setCreatedOn(new Date());
+                                    dbPickListLine.setUpdatedOn(new Date());
+                                    dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                                    dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
+
+                                    createPickListLineList.add(dbPickListLine);
+                                    createdItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+                                }
+                            }
+                        }
+                        log.info("OldPickList : " + oldItmMfrNameList);
+                        log.info("NewPickList : " + newItmMfrNameList);
+                        log.info("CreatedPickList : " + createdItmMfrNameList);
+                        for (PickListLine pickListLine : createPickListLineList) {
+                            oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode() + pickListLine.getManufacturerName())).collect(Collectors.toList());
+                            newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode() + pickListLine.getManufacturerName())).collect(Collectors.toList());
+                        }
+                        log.info("Filtered OldPickList : " + oldItmMfrNameList);
+                        log.info("Filtered NewPickList : " + newItmMfrNameList);
+                        if (newItmMfrNameList != null && !newItmMfrNameList.isEmpty()) {
+                            for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
+                                String itmMfrName = newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName();
+                                boolean itmPresent = newItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                                if (itmPresent) {
+
+                                    //Filter ItemCode, MFR Name and LineNumber - NewPickList
+                                    newOrderManagementLineFilteredList = newOrderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(newOutboundLineV2.getItemCode()) &&
+                                            a.getManufacturerName().equalsIgnoreCase(newOutboundLineV2.getManufacturerName()) &&
+                                            a.getLineNumber().equals(newOutboundLineV2.getLineNumber())).collect(Collectors.toList());
+
+                                    PickListLine dbPickListLine = new PickListLine();
+                                    BeanUtils.copyProperties(newOutboundLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(newOutboundLineV2));
+                                    dbPickListLine.setNewPreOutboundNo(newOutboundLineV2.getPreOutboundNo());
+                                    dbPickListLine.setNewRefDocNumber(newOutboundLineV2.getRefDocNumber());
+                                    dbPickListLine.setNewLineNo(newOutboundLineV2.getLineNumber());
+                                    dbPickListLine.setNewPickConfirmQty(newOutboundLineV2.getDeliveryQty());
+                                    if(newOrderManagementLineFilteredList != null && !newOrderManagementLineFilteredList.isEmpty()) {
+                                        dbPickListLine.setNewPickedStorageBin(newOrderManagementLineFilteredList.get(0).getProposedStorageBin());
+                                    }
+                                    dbPickListLine.setNewOrderQty(newOutboundLineV2.getOrderQty());
+                                    dbPickListLine.setNewStatusId(newOutboundLineV2.getStatusId());
+                                    dbPickListLine.setNewStatusDescription(newOutboundLineV2.getStatusDescription());
+
+                                    dbPickListLine.setDeletionIndicator(0L);
+                                    dbPickListLine.setCreatedBy(loginUserID);
+                                    dbPickListLine.setUpdatedBy(loginUserID);
+                                    dbPickListLine.setCreatedOn(new Date());
+                                    dbPickListLine.setUpdatedOn(new Date());
+                                    dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                                    dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
+                                    createPickListLineList.add(dbPickListLine);
+                                }
+                            }
+                        }
+                    }
+                    if (oldItmMfrNameList != null && !oldItmMfrNameList.isEmpty()) {
+                        for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
+                            String itmMfrName = outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName();
+                            boolean itmPresent = oldItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                            if (itmPresent) {
                                 //Filter ItemCode, MFR Name and LineNumber - OldPickList
-                                orderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(outboundLineV2.getItemCode()) &&
+                                oldOrderManagementLineFilteredList = orderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(outboundLineV2.getItemCode()) &&
                                         a.getManufacturerName().equalsIgnoreCase(outboundLineV2.getManufacturerName()) &&
                                         a.getLineNumber().equals(outboundLineV2.getLineNumber())).collect(Collectors.toList());
-                                //Filter ItemCode, MFR Name and LineNumber - NewPickList
-                                newOrderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(newOutboundLineV2.getItemCode()) &&
-                                        a.getManufacturerName().equalsIgnoreCase(newOutboundLineV2.getManufacturerName()) &&
-                                        a.getLineNumber().equals(newOutboundLineV2.getLineNumber())).collect(Collectors.toList());
 
                                 PickListLine dbPickListLine = new PickListLine();
-                                BeanUtils.copyProperties(newOutboundLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(newOutboundLineV2));
-
+                                BeanUtils.copyProperties(outboundLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(outboundLineV2));
                                 dbPickListLine.setOldPreOutboundNo(outboundLineV2.getPreOutboundNo());
                                 dbPickListLine.setOldRefDocNumber(outboundLineV2.getRefDocNumber());
                                 dbPickListLine.setOldLineNo(outboundLineV2.getLineNumber());
                                 dbPickListLine.setOldPickConfirmQty(outboundLineV2.getDeliveryQty());
-                                if(orderManagementLineList != null && !orderManagementLineList.isEmpty()) {
-                                    dbPickListLine.setOldPickedStorageBin(orderManagementLineList.get(0).getProposedStorageBin());
+                                if(oldOrderManagementLineFilteredList != null && !oldOrderManagementLineFilteredList.isEmpty()) {
+                                    dbPickListLine.setOldPickedStorageBin(oldOrderManagementLineFilteredList.get(0).getProposedStorageBin());
                                 }
                                 dbPickListLine.setOldOrderQty(outboundLineV2.getOrderQty());
                                 dbPickListLine.setOldStatusId(outboundLineV2.getStatusId());
                                 dbPickListLine.setOldStatusDescription(outboundLineV2.getStatusDescription());
 
-                                dbPickListLine.setNewPreOutboundNo(newOutboundLineV2.getPreOutboundNo());
-                                dbPickListLine.setNewRefDocNumber(newOutboundLineV2.getRefDocNumber());
-                                dbPickListLine.setNewLineNo(newOutboundLineV2.getLineNumber());
-                                dbPickListLine.setNewPickConfirmQty(newOutboundLineV2.getDeliveryQty());
-                                if(newOrderManagementLineList != null && !newOrderManagementLineList.isEmpty()) {
-                                    dbPickListLine.setNewPickedStorageBin(newOrderManagementLineList.get(0).getProposedStorageBin());
-                                }
-                                dbPickListLine.setNewOrderQty(newOutboundLineV2.getOrderQty());
-                                dbPickListLine.setNewStatusId(newOutboundLineV2.getStatusId());
-                                dbPickListLine.setNewStatusDescription(newOutboundLineV2.getStatusDescription());
+                                dbPickListLine.setDeletionIndicator(0L);
+                                dbPickListLine.setCreatedBy(loginUserID);
+                                dbPickListLine.setUpdatedBy(loginUserID);
+                                dbPickListLine.setCreatedOn(new Date());
+                                dbPickListLine.setUpdatedOn(new Date());
                                 dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
                                 dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                                 createPickListLineList.add(dbPickListLine);
                             }
-                        }
-                        if (newOutboundLineV2List == null || newOutboundLineV2List.isEmpty()) {
-
-                            //Filter ItemCode, MFR Name and LineNumber - OldPickList
-                            orderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(outboundLineV2.getItemCode()) &&
-                                    a.getManufacturerName().equalsIgnoreCase(outboundLineV2.getManufacturerName()) &&
-                                    a.getLineNumber().equals(outboundLineV2.getLineNumber())).collect(Collectors.toList());
-
-                            PickListLine dbPickListLine = new PickListLine();
-                            BeanUtils.copyProperties(outboundLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(outboundLineV2));
-
-                            dbPickListLine.setOldPreOutboundNo(outboundLineV2.getPreOutboundNo());
-                            dbPickListLine.setOldRefDocNumber(outboundLineV2.getRefDocNumber());
-                            dbPickListLine.setOldLineNo(outboundLineV2.getLineNumber());
-                            dbPickListLine.setOldPickConfirmQty(outboundLineV2.getDeliveryQty());
-                            if(orderManagementLineList != null && !orderManagementLineList.isEmpty()) {
-                                dbPickListLine.setOldPickedStorageBin(orderManagementLineList.get(0).getProposedStorageBin());
-                            }
-                            dbPickListLine.setOldOrderQty(outboundLineV2.getOrderQty());
-                            dbPickListLine.setOldStatusId(outboundLineV2.getStatusId());
-                            dbPickListLine.setOldStatusDescription(outboundLineV2.getStatusDescription());
-                            dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
-                            dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
-
-                            createPickListLineList.add(dbPickListLine);
                         }
                     }
                 }
             }
             log.info("PickList Line: " + createPickListLineList);
             pickListHeader.setLine(createPickListLineList);
-            PickListHeader createdPickListHeader = pickListHeaderService.createPickListHeader(pickListHeader, newOutboundHeader.getCreatedBy());
+            PickListHeader createdPickListHeader = pickListHeaderService.createPickListHeader(pickListHeader, loginUserID);
             log.info("Created PicklistHeader : " + createdPickListHeader);
         }
     }

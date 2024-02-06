@@ -14,7 +14,8 @@ public class SearchSupplierInvoiceHeader {
 
 	private List<String> warehouseId;
 	private List<Long> inboundOrderTypeId;
-	private List<Long> statusId;
+	private List<Long> oldStatusId;
+	private List<Long> newStatusId;
 
 	private List<Long> supplierInvoiceCancelHeaderId;;
 	private List<String> oldRefDocNumber;

@@ -66,15 +66,15 @@ public class PickListHeaderService {
 
     /**
      *
-     * @param pickListHeader
+     * @param dbPickListHeader
      * @param loginUserID
      * @return
      */
-    public PickListHeader createPickListHeader(PickListHeader pickListHeader, String loginUserID) {
+    public PickListHeader createPickListHeader(PickListHeader dbPickListHeader, String loginUserID) {
 
-        PickListHeader dbPickListHeader = new PickListHeader();
-        log.info("newPickListHeader : " + pickListHeader);
-        BeanUtils.copyProperties(pickListHeader, dbPickListHeader, CommonUtils.getNullPropertyNames(pickListHeader));
+//        PickListHeader dbPickListHeader = new PickListHeader();
+        log.info("newPickListHeader : " + dbPickListHeader);
+//        BeanUtils.copyProperties(pickListHeader, dbPickListHeader, CommonUtils.getNullPropertyNames(pickListHeader));
 
         dbPickListHeader.setDeletionIndicator(0L);
         dbPickListHeader.setCreatedBy(loginUserID);
@@ -92,7 +92,7 @@ public class PickListHeaderService {
 //        }
 //        dbPickListHeader.setLine(createdPickListLineList);
         PickListHeader createdPickListHeader = pickListHeaderRepository.save(dbPickListHeader);
-        log.info("CreatedPickListCancel : " + createdPickListHeader);
+//        log.info("CreatedPickListCancel Record : " + createdPickListHeader);
         return createdPickListHeader;
     }
 

@@ -90,4 +90,24 @@ public interface GrLineV2Repository extends JpaRepository<GrLineV2, Long>, JpaSp
     List<GrLineV2> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndWarehouseIdAndPreInboundNoAndItemCodeAndManufacturerNameAndLineNoAndDeletionIndicator(
             String languageId, String companyCode, String plantId, String refDocNumber, String warehouseId,
             String preInboundNo, String itemCode, String manufacturerName, Long lineNumber, Long deletionIndicator);
+
+    @Query(value = "select sum(gr_qty) \n" +
+            "from tblgrline where c_id = :companyCode and plant_id = :plantId and lang_id = :languageId and \n" +
+            "wh_id = :warehouseId and REF_DOC_NO = :refDocNumber and PRE_IB_NO = :preInboundNo and \n" +
+            "gr_no = :goodsReceiptNo and pal_code = :palletCode and case_code = :caseCode and \n" +
+            "itm_code = :itemCode and mfr_name = :manufacturerName and \n" +
+            "is_deleted = 0 and ib_line_no = :lineNo \n"+
+            "group by itm_code,mfr_name,pre_ib_no,ref_doc_no,gr_no,pal_code,case_code,ib_line_no,lang_id,wh_id,plant_id,c_id ",nativeQuery = true)
+    public Long getGrLineQuantity(@Param("companyCode") String companyCode,
+                                  @Param("plantId") String plantId,
+                                  @Param("languageId") String languageId,
+                                  @Param("warehouseId") String warehouseId,
+                                  @Param("refDocNumber") String refDocNumber,
+                                  @Param("preInboundNo") String preInboundNo,
+                                  @Param("goodsReceiptNo") String goodsReceiptNo,
+                                  @Param("palletCode") String palletCode,
+                                  @Param("caseCode") String caseCode,
+                                  @Param("itemCode") String itemCode,
+                                  @Param("manufacturerName") String manufacturerName,
+                                  @Param("lineNo") Long lineNo);
 }

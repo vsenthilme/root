@@ -2140,6 +2140,25 @@ public class InboundHeaderService extends BaseService {
      * @param languageId
      * @param warehouseId
      * @param refDocNumber
+     * @return
+     */
+    //Get InboundHeader
+    public InboundHeaderV2 getInboundHeaderForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                    String warehouseId, String refDocNumber) {
+
+        InboundHeaderV2 inboundHeader = inboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("InboundHeaderV2 - cancellation : " + inboundHeader);
+        return inboundHeader;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
      * @param loginUserID
      * @return
      * @throws ParseException

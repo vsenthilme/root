@@ -83,9 +83,13 @@ public class SupplierInvoiceHeaderSpecification implements Specification<Supplie
             predicates.add(group.in(searchSupplierInvoiceHeader.getOldRefDocNumber()));
         }
 
-        if (searchSupplierInvoiceHeader.getStatusId() != null && !searchSupplierInvoiceHeader.getStatusId().isEmpty()) {
-            final Path<Group> group = root.<Group>get("statusId");
-            predicates.add(group.in(searchSupplierInvoiceHeader.getStatusId()));
+        if (searchSupplierInvoiceHeader.getOldStatusId() != null && !searchSupplierInvoiceHeader.getOldStatusId().isEmpty()) {
+            final Path<Group> group = root.<Group>get("oldStatusId");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getOldStatusId()));
+        }
+        if (searchSupplierInvoiceHeader.getNewStatusId() != null && !searchSupplierInvoiceHeader.getNewStatusId().isEmpty()) {
+            final Path<Group> group = root.<Group>get("newStatusId");
+            predicates.add(group.in(searchSupplierInvoiceHeader.getNewStatusId()));
         }
         if (searchSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId() != null && !searchSupplierInvoiceHeader.getSupplierInvoiceCancelHeaderId().isEmpty()) {
             final Path<Group> group = root.<Group>get("supplierInvoiceCancelHeaderId");

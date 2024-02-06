@@ -32,7 +32,7 @@ public class SupplierInvoiceLine {
 	private Long specialStockIndicatorId;
 	private String oldReferenceOrderNo;
 	private String newReferenceOrderNo;
-	private Long statusId;
+//	private Long statusId;
 	private String oldContainerNo;
 	private String newContainerNo;
 	private String oldInvoiceNo;
@@ -62,7 +62,10 @@ public class SupplierInvoiceLine {
 	private String companyDescription;
 	private String plantDescription;
 	private String warehouseDescription;
-	private String statusDescription;
+	private Long oldStatusId;
+	private Long newStatusId;
+	private String oldStatusDescription;
+	private String newStatusDescription;
 	private String manufacturerCode;
 	private String manufacturerName;
 	private String middlewareId;

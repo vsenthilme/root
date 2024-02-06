@@ -3732,6 +3732,23 @@ public class OutboundLineService extends BaseService {
      * @param languageId
      * @param warehouseId
      * @param refDocNumber
+     * @return
+     */
+    public List<OutboundLineV2> getOutBoundLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                         String warehouseId, String refDocNumber) {
+        List<OutboundLineV2> outboundLineV2List = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundLine : " + outboundLineV2List);
+        return outboundLineV2List;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
      * @param loginUserID
      * @return
      * @throws Exception

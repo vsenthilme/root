@@ -44,8 +44,10 @@ public class SupplierInvoiceHeader {
 	private String newPreInboundNo;
 	
 	@Column(name = "STATUS_ID") 
-	private Long statusId;
-	
+	private Long oldStatusId;
+	@Column(name = "NEW_STATUS_ID")
+	private Long newStatusId;
+
 	@Column(name = "IB_ORD_TYP_ID") 
 	private Long inboundOrderTypeId;
 
@@ -125,7 +127,10 @@ public class SupplierInvoiceHeader {
 	private String warehouseDescription;
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
-	private String statusDescription;
+	private String oldStatusDescription;
+
+	@Column(name = "NEW_STATUS_TEXT", columnDefinition = "nvarchar(150)")
+	private String newStatusDescription;
 
 	@Column(name = "PURCHASE_ORDER_NUMBER", columnDefinition = "nvarchar(150)")
 	private String purchaseOrderNumber;

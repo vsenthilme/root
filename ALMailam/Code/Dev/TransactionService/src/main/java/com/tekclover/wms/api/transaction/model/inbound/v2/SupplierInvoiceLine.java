@@ -92,9 +92,11 @@ public class SupplierInvoiceLine {
 
 	@Column(name = "NEW_REF_ORD_NO")
 	private String newReferenceOrderNo;
-	
-	@Column(name = "STATUS_ID") 
-	private Long statusId;
+
+	@Column(name = "STATUS_ID")
+	private Long oldStatusId;
+	@Column(name = "NEW_STATUS_ID")
+	private Long newStatusId;
 	
 	@Column(name = "OLD_CONT_NO")
 	private String oldContainerNo;
@@ -184,7 +186,10 @@ public class SupplierInvoiceLine {
 	private String warehouseDescription;
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
-	private String statusDescription;
+	private String oldStatusDescription;
+
+	@Column(name = "NEW_STATUS_TEXT", columnDefinition = "nvarchar(150)")
+	private String newStatusDescription;
 
 	@Column(name = "MFR_CODE", columnDefinition = "nvarchar(255)")
 	private String manufacturerCode;

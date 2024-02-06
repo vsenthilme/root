@@ -16,7 +16,7 @@ public class SupplierInvoiceHeader {
 	private String newRefDocNumber;
 	private String oldPreInboundNo;
 	private String newPreInboundNo;
-	private Long statusId;
+//	private Long statusId;
 	private Long inboundOrderTypeId;
 	private String oldContainerNo;
 	private String newContainerNo;
@@ -43,7 +43,10 @@ public class SupplierInvoiceHeader {
 	private String companyDescription;
 	private String plantDescription;
 	private String warehouseDescription;
-	private String statusDescription;
+	private Long oldStatusId;
+	private Long newStatusId;
+	private String oldStatusDescription;
+	private String newStatusDescription;
 	private String purchaseOrderNumber;
 	private String middlewareId;
 	private String middlewareTable;

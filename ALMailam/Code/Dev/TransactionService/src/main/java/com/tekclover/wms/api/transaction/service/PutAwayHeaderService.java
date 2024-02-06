@@ -881,6 +881,36 @@ public class PutAwayHeaderService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param putawayNumber
+     * @return
+     */
+    public List<PutAwayHeaderV2> getPutAwayHeaderForReversalV2(String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, String putawayNumber) {
+        List<PutAwayHeaderV2> putAwayHeader =
+                putAwayHeaderV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        putawayNumber,
+                        0L
+                );
+        if (putAwayHeader.isEmpty()) {
+            throw new BadRequestException("The given values: " +
+                    ",refDocNumber: " + refDocNumber + "," +
+                    ",putawayNumber: " + putawayNumber + "," +
+                    " doesn't exist.");
+        }
+        return putAwayHeader;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -1166,7 +1196,7 @@ public class PutAwayHeaderService extends BaseService {
          * Pass WH_ID/REF_DOC_NO/PACK_BARCODE values in PUTAWAYHEADER table and fetch STATUS_ID value and PA_NO
          * 1. If STATUS_ID=20, then
          */
-        List<PutAwayHeaderV2> putAwayHeaderList = getPutAwayHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber, putAwayNumber);
+        List<PutAwayHeaderV2> putAwayHeaderList = getPutAwayHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber, putAwayNumber);
         List<GrLineV2> grLineList = grLineService.getGrLineV2(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
         List<IInventoryImpl> createInventoryMovement = null;
 

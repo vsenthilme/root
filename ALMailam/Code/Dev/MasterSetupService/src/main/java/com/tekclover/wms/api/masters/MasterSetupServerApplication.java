@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.TimeZone;
+
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @EnableResourceServer
 @EnableAuthorizationServer
@@ -19,6 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class MasterSetupServerApplication {
 
 	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+3"));
 		SpringApplication.run(MasterSetupServerApplication.class, args);
 	}
 }

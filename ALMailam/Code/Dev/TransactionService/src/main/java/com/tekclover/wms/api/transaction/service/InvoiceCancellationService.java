@@ -18,8 +18,6 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.*;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
-import com.tekclover.wms.api.transaction.model.outbound.v2.PickListLine;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.repository.InboundHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;

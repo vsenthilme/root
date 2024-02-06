@@ -19,4 +19,5 @@ public class SearchPutAwayHeaderV2 extends SearchPutAwayHeader {
 	private List<String> origin;
 	private List<String> brand;
 	private List<String> approvalStatus;
+	private List<String> itemCode;				//Ref_field_5
 }

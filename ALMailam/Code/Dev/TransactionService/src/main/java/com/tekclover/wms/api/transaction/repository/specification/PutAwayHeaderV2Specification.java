@@ -43,9 +43,13 @@ public class PutAwayHeaderV2Specification implements Specification<PutAwayHeader
 				 predicates.add(group.in(searchPutAwayHeader.getWarehouseId()));
 		 }
 
-		  if (searchPutAwayHeader.getRefDocNumber() != null && !searchPutAwayHeader.getRefDocNumber().isEmpty()) {
+		 if (searchPutAwayHeader.getRefDocNumber() != null && !searchPutAwayHeader.getRefDocNumber().isEmpty()) {
         	 final Path<Group> group = root.<Group> get("refDocNumber");
         	 predicates.add(group.in(searchPutAwayHeader.getRefDocNumber()));
+         }
+		 if (searchPutAwayHeader.getItemCode() != null && !searchPutAwayHeader.getItemCode().isEmpty()) {
+        	 final Path<Group> group = root.<Group> get("referenceField5");
+        	 predicates.add(group.in(searchPutAwayHeader.getItemCode()));
          }
 
 		 if (searchPutAwayHeader.getPackBarcodes() != null && !searchPutAwayHeader.getPackBarcodes().isEmpty()) {

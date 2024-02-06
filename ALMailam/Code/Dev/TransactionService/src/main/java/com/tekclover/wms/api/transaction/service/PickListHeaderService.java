@@ -81,17 +81,17 @@ public class PickListHeaderService {
         dbPickListHeader.setUpdatedBy(loginUserID);
         dbPickListHeader.setCreatedOn(new Date());
         dbPickListHeader.setUpdatedOn(new Date());
-        dbPickListHeader.setPickListCancelHeaderId(System.currentTimeMillis());
+//        dbPickListHeader.setPickListCancelHeaderId(System.currentTimeMillis());
+//        List<PickListLine> createdPickListLineList = new ArrayList<>();
+//        if(pickListHeader.getLine() != null){
+//            for (PickListLine pickListLine : pickListHeader.getLine()) {
+//                pickListLine.setPickListCancelHeaderId(dbPickListHeader.getPickListCancelHeaderId());
+//                PickListLine createdPickListLine = pickListLineService.createPickListLine(pickListLine, loginUserID);
+//                createdPickListLineList.add(createdPickListLine);
+//            }
+//        }
+//        dbPickListHeader.setLine(createdPickListLineList);
         PickListHeader createdPickListHeader = pickListHeaderRepository.save(dbPickListHeader);
-        List<PickListLine> createdPickListLineList = new ArrayList<>();
-        if(pickListHeader.getLine() != null){
-            for (PickListLine pickListLine : pickListHeader.getLine()) {
-                pickListLine.setPickListCancelHeaderId(createdPickListHeader.getPickListCancelHeaderId());
-                PickListLine createdPickListLine = pickListLineService.createPickListLine(pickListLine, loginUserID);
-                createdPickListLineList.add(createdPickListLine);
-            }
-        }
-        createdPickListHeader.setLine(createdPickListLineList);
         log.info("CreatedPickListCancel : " + createdPickListHeader);
         return createdPickListHeader;
     }

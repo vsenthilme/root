@@ -3764,6 +3764,7 @@ public class PreOutboundHeaderService extends BaseService {
                 pickListHeader.setNewCountOfPickedLine(newPickLineCount);
                 pickListHeader.setNewStatusId(newOutboundHeader.getStatusId());
                 pickListHeader.setNewStatusDescription(newOutboundHeader.getStatusDescription());
+                pickListHeader.setPickListCancelHeaderId(System.currentTimeMillis());
             }
             List<PickListLine> createPickListLineList = new ArrayList<>();
             List<String> createdItmMfrNameList = new ArrayList<>();
@@ -3798,6 +3799,8 @@ public class PreOutboundHeaderService extends BaseService {
                                 dbPickListLine.setNewOrderQty(newPickupLineV2.getPickConfirmQty());
                                 dbPickListLine.setNewStatusId(newPickupLineV2.getStatusId());
                                 dbPickListLine.setNewStatusDescription(newPickupLineV2.getStatusDescription());
+                                dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                                dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                                 createPickListLineList.add(dbPickListLine);
                                 createdItmMfrNameList.add(newPickupLineV2.getItemCode()+newPickupLineV2.getManufacturerName());
                             }
@@ -3827,6 +3830,8 @@ public class PreOutboundHeaderService extends BaseService {
                                 dbPickListLine.setNewOrderQty(newPickupLineV2.getPickConfirmQty());
                                 dbPickListLine.setNewStatusId(newPickupLineV2.getStatusId());
                                 dbPickListLine.setNewStatusDescription(newPickupLineV2.getStatusDescription());
+                                dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                                dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                                 createPickListLineList.add(dbPickListLine);
                             }
                         }
@@ -3847,6 +3852,8 @@ public class PreOutboundHeaderService extends BaseService {
                             dbPickListLine.setOldOrderQty(oldPickupLineV2.getPickConfirmQty());
                             dbPickListLine.setOldStatusId(oldPickupLineV2.getStatusId());
                             dbPickListLine.setOldStatusDescription(oldPickupLineV2.getStatusDescription());
+                            dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                            dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                             createPickListLineList.add(dbPickListLine);
                         }
                     }
@@ -3896,6 +3903,8 @@ public class PreOutboundHeaderService extends BaseService {
                                 dbPickListLine.setNewOrderQty(newOutboundLineV2.getOrderQty());
                                 dbPickListLine.setNewStatusId(newOutboundLineV2.getStatusId());
                                 dbPickListLine.setNewStatusDescription(newOutboundLineV2.getStatusDescription());
+                                dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                                dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
                                 createPickListLineList.add(dbPickListLine);
                             }
                         }
@@ -3919,6 +3928,8 @@ public class PreOutboundHeaderService extends BaseService {
                             dbPickListLine.setOldOrderQty(outboundLineV2.getOrderQty());
                             dbPickListLine.setOldStatusId(outboundLineV2.getStatusId());
                             dbPickListLine.setOldStatusDescription(outboundLineV2.getStatusDescription());
+                            dbPickListLine.setPickListCancelHeaderId(pickListHeader.getPickListCancelHeaderId());
+                            dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
 
                             createPickListLineList.add(dbPickListLine);
                         }

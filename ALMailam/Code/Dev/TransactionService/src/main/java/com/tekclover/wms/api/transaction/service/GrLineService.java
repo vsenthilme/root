@@ -1332,6 +1332,28 @@ public class GrLineService extends BaseService {
                     dbGrLine.setPackBarcodes(packBarcode.getBarcode());
                     dbGrLine.setStatusId(14L);
 
+                    //GoodReceipt Qty should be less than or equal to ordered qty---> if GrQty > OrdQty throw Exception
+                    Long dbGrQty = grLineV2Repository.getGrLineQuantity(
+                            newGrLine.getCompanyCode(),
+                            newGrLine.getPlantId(),
+                            newGrLine.getLanguageId(),
+                            newGrLine.getWarehouseId(),
+                            newGrLine.getRefDocNumber(),
+                            newGrLine.getPreInboundNo(),
+                            newGrLine.getGoodsReceiptNo(),
+                            newGrLine.getPalletCode(),
+                            newGrLine.getCaseCode(),
+                            newGrLine.getItemCode(),
+                            newGrLine.getManufacturerName(),
+                            newGrLine.getLineNo()
+                    );
+                    log.info("dbGrQty, newGrQty, OrdQty: " + dbGrQty + ", " + dbGrLine.getGoodReceiptQty() + ", " + newGrLine.getOrderQty());
+                    if(dbGrQty != null) {
+                        if (newGrLine.getOrderQty() < (dbGrLine.getGoodReceiptQty() + dbGrQty)){
+                            throw new BadRequestException("Gr Qty is greater than Order Qty ");
+                        }
+                    }
+
                     //V2 Code
                     IKeyValuePair description = stagingLineV2Repository.getDescription(newGrLine.getCompanyCode(),
                             newGrLine.getLanguageId(),
@@ -1446,27 +1468,6 @@ public class GrLineService extends BaseService {
                         throw new BadRequestException("Variance Qty cannot be Less than 0");
                     }
 
-                    Long dbGrQty = grLineV2Repository.getGrLineQuantity(
-                            newGrLine.getCompanyCode(),
-                            newGrLine.getPlantId(),
-                            newGrLine.getLanguageId(),
-                            newGrLine.getWarehouseId(),
-                            newGrLine.getRefDocNumber(),
-                            newGrLine.getPreInboundNo(),
-                            newGrLine.getGoodsReceiptNo(),
-                            newGrLine.getPalletCode(),
-                            newGrLine.getCaseCode(),
-                            newGrLine.getItemCode(),
-                            newGrLine.getManufacturerName(),
-                            newGrLine.getLineNo()
-                            );
-                    log.info("dbGrQty, newGrQty, OrdQty: " + dbGrQty + ", " + newGrLine.getGoodReceiptQty() + ", " + newGrLine.getOrderQty());
-                    if(dbGrQty != null) {
-                        if (newGrLine.getOrderQty() < (newGrLine.getGoodReceiptQty() + dbGrQty)){
-                            throw new BadRequestException("Gr Qty is greater than Order Qty ");
-                        }
-                    }
-
                     dbGrLine.setCbm(cbm);
                     dbGrLine.setCbmQuantity(cbmPerQty);
 
@@ -1478,8 +1479,10 @@ public class GrLineService extends BaseService {
                     dbGrLine.setDeletionIndicator(0L);
                     dbGrLine.setCreatedBy(loginUserID);
                     dbGrLine.setUpdatedBy(loginUserID);
+                    dbGrLine.setConfirmedBy(loginUserID);
                     dbGrLine.setCreatedOn(new Date());
                     dbGrLine.setUpdatedOn(new Date());
+                    dbGrLine.setConfirmedOn(new Date());
 
                     List<GrLineV2> oldGrLine = grLineV2Repository.findByGoodsReceiptNoAndItemCodeAndLineNoAndLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndCreatedOnAndDeletionIndicator(
                             dbGrLine.getGoodsReceiptNo(), dbGrLine.getItemCode(), dbGrLine.getLineNo(),

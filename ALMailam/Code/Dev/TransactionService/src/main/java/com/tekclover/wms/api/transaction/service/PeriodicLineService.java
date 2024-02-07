@@ -871,7 +871,7 @@ public class PeriodicLineService extends BaseService {
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);
                 }
 
-                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - ((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - (((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY);
                 log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
                 dbPeriodicLine.setAmsVarianceQty(AMS_VAR_QTY);
 
@@ -984,7 +984,7 @@ public class PeriodicLineService extends BaseService {
                     dbPeriodicLine.setOutboundQuantity(OB_QTY);
                 }
 
-                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - ((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                Double AMS_VAR_QTY = (dbPeriodicLine.getFrozenQty() != null ? dbPeriodicLine.getFrozenQty() : 0) - (((dbPeriodicLine.getCountedQty() != null ? dbPeriodicLine.getCountedQty() : 0) + IB_QTY) - OB_QTY);
                 log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
                 dbPeriodicLine.setAmsVarianceQty(AMS_VAR_QTY);
                 /*

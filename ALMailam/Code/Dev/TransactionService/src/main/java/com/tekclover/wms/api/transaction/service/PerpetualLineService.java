@@ -890,7 +890,7 @@ public class PerpetualLineService extends BaseService {
                     dbPerpetualLine.setOutboundQuantity(OB_QTY);
                 }
 
-                Double AMS_VAR_QTY = (dbPerpetualLine.getFrozenQty() != null ? dbPerpetualLine.getFrozenQty() : 0) - ((dbPerpetualLine.getCountedQty() != null ? dbPerpetualLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                Double AMS_VAR_QTY = (dbPerpetualLine.getFrozenQty() != null ? dbPerpetualLine.getFrozenQty() : 0) - (((dbPerpetualLine.getCountedQty() != null ? dbPerpetualLine.getCountedQty() : 0) + IB_QTY) - OB_QTY);
                 log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
                 dbPerpetualLine.setAmsVarianceQty(AMS_VAR_QTY);
 
@@ -1007,7 +1007,7 @@ public class PerpetualLineService extends BaseService {
                     dbPerpetualLine.setOutboundQuantity(OB_QTY);
                 }
 
-                Double AMS_VAR_QTY = (dbPerpetualLine.getFrozenQty() != null ? dbPerpetualLine.getFrozenQty() : 0) - ((dbPerpetualLine.getCountedQty() != null ? dbPerpetualLine.getCountedQty() : 0) + IB_QTY) - OB_QTY;
+                Double AMS_VAR_QTY = (dbPerpetualLine.getFrozenQty() != null ? dbPerpetualLine.getFrozenQty() : 0) - (((dbPerpetualLine.getCountedQty() != null ? dbPerpetualLine.getCountedQty() : 0) + IB_QTY) - OB_QTY);
                 log.info("AMS_VAR_QTY: " + AMS_VAR_QTY);
                 dbPerpetualLine.setAmsVarianceQty(AMS_VAR_QTY);
 

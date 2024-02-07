@@ -351,7 +351,7 @@ private VariantRepository variantRepository;
 				dbVariant.setCreatedBy(loginUserID);
 				dbVariant.setUpdatedBy(loginUserID);
 				dbVariant.setCreatedOn(new Date());
-				dbVariant.setUpdatedOn(new Date();
+				dbVariant.setUpdatedOn(new Date());
 				Variant savedVariant = variantRepository.save(dbVariant);
 
 //			savedVariant.setLevelReferenceVariants(new HashSet<>());

@@ -172,6 +172,8 @@ public interface StorageBinV2Repository extends JpaRepository<StorageBinV2, Long
 
     StorageBinV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String storageBin, Long deletionIndicator);
+    StorageBinV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndBinClassIdAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String storageBin, Long binClassId, Long deletionIndicator);
 }
 
 

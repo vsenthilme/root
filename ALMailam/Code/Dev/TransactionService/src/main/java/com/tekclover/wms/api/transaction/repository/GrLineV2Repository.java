@@ -98,7 +98,7 @@ public interface GrLineV2Repository extends JpaRepository<GrLineV2, Long>, JpaSp
             "itm_code = :itemCode and mfr_name = :manufacturerName and \n" +
             "is_deleted = 0 and ib_line_no = :lineNo \n"+
             "group by itm_code,mfr_name,pre_ib_no,ref_doc_no,gr_no,pal_code,case_code,ib_line_no,lang_id,wh_id,plant_id,c_id ",nativeQuery = true)
-    public Long getGrLineQuantity(@Param("companyCode") String companyCode,
+    public Double getGrLineQuantity(@Param("companyCode") String companyCode,
                                   @Param("plantId") String plantId,
                                   @Param("languageId") String languageId,
                                   @Param("warehouseId") String warehouseId,

@@ -274,7 +274,8 @@ public class InvoiceCancellationService extends BaseService{
 
             try {
                 if (newGrLineList != null && !newGrLineList.isEmpty()) {
-                    createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+//                    createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+                    createGrLine = grLineService.createGrLineNonCBMV2(newGrLineList, grHeader.getCreatedBy());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

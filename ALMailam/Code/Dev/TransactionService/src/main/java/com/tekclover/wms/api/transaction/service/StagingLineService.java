@@ -1551,7 +1551,8 @@ public class StagingLineService extends BaseService {
 
             newGrLineList.add(newGrLine);
         }
-        List<GrLineV2> createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+//        List<GrLineV2> createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+        List<GrLineV2> createGrLine = grLineService.createGrLineNonCBMV2(newGrLineList, grHeader.getCreatedBy());
         log.info("GrLine Created Successfully: " + createGrLine);
 
         List<PutAwayLineV2> createdPutawayLine = null;

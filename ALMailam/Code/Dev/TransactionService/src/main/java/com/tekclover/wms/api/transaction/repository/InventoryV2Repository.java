@@ -1423,25 +1423,10 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
             "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
             "is_deleted = 0 \n" +
-            "group by itm_code,mfr_name,pack_barcode,st_bin \n" +
-
-            "select max(inv_id) inventoryId into #invgrp from tblinventory \n" +
-            "WHERE \n" +
-            "(COALESCE(:itemCode, null) IS NULL OR (ITM_CODE IN (:itemCode))) and \n" +
-            "(COALESCE(:binClassId, null) IS NULL OR (BIN_CL_ID IN (:binClassId))) and\n" +
-            "(COALESCE(:manufacturerCode, null) IS NULL OR (MFR_NAME IN (:manufacturerCode))) and \n" +
-            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
-            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
-            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
-            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
-            "is_deleted = 0 \n" +
-            "group by itm_code,mfr_name,st_bin \n" +
-
-            "select sum(inv_qty) sumInvQty, sum(alloc_qty) sumAllocQty,itm_code,mfr_name,st_bin \n" +
-            "into #sumInv from tblinventory where inv_id in (select inventoryId from #inv) \n" +
             "group by itm_code,mfr_name,st_bin \n" +
 
             "SELECT \n" +
+            "iv.INV_ID inventoryId, \n" +
             "iv.LANG_ID languageId, \n" +
             "iv.C_ID companyCodeId,\n" +
             "iv.PLANT_ID plantId,\n" +
@@ -1460,8 +1445,8 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "iv.STR_MTD storageMethod,\n" +
             "iv.BIN_CL_ID binClassId,\n" +
             "iv.TEXT description,\n" +
-            "si.sumInvQty inventoryQuantity,\n" +
-            "si.sumAllocQty allocatedQuantity,\n" +
+            "iv.INV_QTY inventoryQuantity,\n" +
+            "iv.ALLOC_QTY allocatedQuantity,\n" +
             "iv.INV_UOM inventoryUom,\n" +
             "iv.MFR_DATE manufacturer,\n" +
             "iv.EXP_DATE expiry,\n" +
@@ -1478,6 +1463,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "iv.REF_FIELD_10 referenceField10,\n" +
             "iv.IU_CTD_BY createdBy,\n" +
             "iv.IU_CTD_ON createdOn,\n" +
+            "FORMAT(iv.IU_CTD_ON,'dd-MM-yyyy hh:mm:ss') sCreatedOn,\n" +
             "iv.UTD_BY updatedBy,\n" +
             "iv.UTD_ON updatedOn,\n" +
             "iv.MFR_CODE manufacturerCode,\n" +
@@ -1496,30 +1482,24 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "iv.STCK_TYP_TEXT stockTypeDescription,\n" +
             "iv.STATUS_TEXT statusDescription\n" +
             "from tblinventory iv\n" +
-            "left join #sumInv si on si.itm_code = iv.itm_code and si.mfr_name = iv.mfr_name and si.st_bin = iv.st_bin\n" +
             "where \n" +
-            "iv.inv_id in (select inventoryId from #invgrp) and \n" +
+            "iv.inv_id in (select inventoryId from #inv) and \n" +
             "(COALESCE(:companyCodeId, null) IS NULL OR (iv.c_id IN (:companyCodeId))) and \n" +
             "(COALESCE(:languageId, null) IS NULL OR (iv.lang_id IN (:languageId))) and \n" +
             "(COALESCE(:plantId, null) IS NULL OR (iv.plant_id IN (:plantId))) and \n" +
             "(COALESCE(:warehouseId, null) IS NULL OR (iv.wh_id IN (:warehouseId))) and \n" +
-            "(COALESCE(:manufacturerCode, null) IS NULL OR (iv.MFR_NAME IN (:manufacturerCode))) and \n" +
-            "(COALESCE(:stockTypeId, null) IS NULL OR (iv.STCK_TYP_ID IN (:stockTypeId))) and \n" +
-            "(COALESCE(:storageBin, null) IS NULL OR (iv.st_bin IN (:storageBin))) and \n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (iv.MFR_NAME IN (:manufacturerName))) and \n" +
             "(COALESCE(:itemCode, null) IS NULL OR (iv.ITM_CODE IN (:itemCode))) and \n" +
             "(COALESCE(:binClassId, null) IS NULL OR (iv.BIN_CL_ID IN (:binClassId))) and\n" +
-            "iv.is_deleted = 0 \n"
+            "iv.is_deleted = 0 and (iv.REF_FIELD_4 > 0)\n"
             , nativeQuery = true)
-    public IInventoryImpl getInventoryforCreateInvInboundConfirm(@Param("companyCodeId") String companyCodeId,
-                                                                 @Param("languageId") String languageId,
-                                                                 @Param("plantId") String plantId,
-                                                                 @Param("warehouseId") String warehouseId,
-                                                                 @Param("manufacturerCode") String manufacturerCode,
-                                                                 @Param("storageBin") String storageBin,
-                                                                 @Param("itemCode") String itemCode,
-                                                                 @Param("binClassId") Long binClassId,
-                                                                 @Param("stockTypeId") Long stockTypeId
-    );
+    public List<IInventoryImpl> inventoryForPutAway(@Param("companyCodeId") String companyCodeId,
+                                                    @Param("plantId") String plantId,
+                                                    @Param("languageId") String languageId,
+                                                    @Param("warehouseId") String warehouseId,
+                                                    @Param("itemCode") String itemCode,
+                                                    @Param("manufacturerName") String manufacturerName,
+                                                    @Param("binClassId") Long binClassId);
 
     @Query(value = "select LANG_ID languageId,\n" +
             "C_ID companyCodeId,\n" +

@@ -165,7 +165,8 @@ public class GrLineController {
 	public ResponseEntity<?> postGrLineV2(@Valid @RequestBody List<AddGrLineV2> newGrLine,
 										  @RequestParam String loginUserID)
 			throws IllegalAccessException, InvocationTargetException, ParseException {
-		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+//		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+		List<GrLineV2> createdGrLine = grlineService.createGrLineNonCBMV2(newGrLine, loginUserID);
 		return new ResponseEntity<>(createdGrLine, HttpStatus.OK);
 	}
 

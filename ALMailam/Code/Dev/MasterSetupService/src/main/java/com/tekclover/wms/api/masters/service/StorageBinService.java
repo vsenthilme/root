@@ -212,14 +212,28 @@ public class StorageBinService {
      * @return
      */
     public StorageBinV2 getaStorageBinV2(StorageBinPutAway storageBinPutAway) {
-        StorageBinV2 storagebin =
-                storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndDeletionIndicator(
-                        storageBinPutAway.getCompanyCodeId(),
-                        storageBinPutAway.getPlantId(),
-                        storageBinPutAway.getLanguageId(),
-                        storageBinPutAway.getWarehouseId(),
-                        storageBinPutAway.getBin(),
-                        0L);
+
+        StorageBinV2 storagebin = null;
+
+        if(storageBinPutAway.getBinClassId() != null) {
+            storagebin = storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndBinClassIdAndDeletionIndicator(
+                            storageBinPutAway.getCompanyCodeId(),
+                            storageBinPutAway.getPlantId(),
+                            storageBinPutAway.getLanguageId(),
+                            storageBinPutAway.getWarehouseId(),
+                            storageBinPutAway.getBin(),
+                            storageBinPutAway.getBinClassId(),
+                            0L);
+        }
+        if(storageBinPutAway.getBinClassId() == null) {
+            storagebin = storageBinV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStorageBinAndDeletionIndicator(
+                            storageBinPutAway.getCompanyCodeId(),
+                            storageBinPutAway.getPlantId(),
+                            storageBinPutAway.getLanguageId(),
+                            storageBinPutAway.getWarehouseId(),
+                            storageBinPutAway.getBin(),
+                            0L);
+        }
         if (storagebin != null) {
             return storagebin;
         }

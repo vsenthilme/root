@@ -1133,22 +1133,21 @@ public class InventoryService extends BaseService {
     }
 
     /**
+     *
      * @param companyCodeId
      * @param plantId
      * @param languageId
      * @param warehouseId
      * @param itemCode
+     * @param manufacturerName
      * @param binClassId
-     * @param stockTypeId
-     * @param manufacturerCode
-     * @param storageBin
      * @return
      */
-    public IInventoryImpl getInventoryForCreateInvInboundConfirm(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                                 String itemCode, Long binClassId, Long stockTypeId, String manufacturerCode, String storageBin) {
+    public List<IInventoryImpl> getInventoryForPutAwayCreate(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                             String itemCode, String manufacturerName, Long binClassId) {
 
-        IInventoryImpl inventory = inventoryV2Repository.
-                getInventoryforCreateInvInboundConfirm(companyCodeId, languageId, plantId, warehouseId, manufacturerCode, storageBin, itemCode, binClassId, stockTypeId);
+        List<IInventoryImpl> inventory = inventoryV2Repository.
+                inventoryForPutAway(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, binClassId);
         return inventory;
     }
 

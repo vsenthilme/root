@@ -121,7 +121,7 @@ public class StockAdjustmentService extends BaseService {
 //
 //                dbStockAdjustment.setDeletionIndicator(0L);
 //                dbStockAdjustment.setCreatedOn(new Date());
-//                dbStockAdjustment.setCreatedBy("MSD_INT");
+//                dbStockAdjustment.setCreatedBy("MW_AMS");
 //
 //                createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
 //                stockAdjustmentList.add(dbStockAdjustment);
@@ -311,7 +311,7 @@ public class StockAdjustmentService extends BaseService {
                     dbStockAdjustment.setDeletionIndicator(0L);
                     dbStockAdjustment.setCreatedOn(new Date());
                     dbStockAdjustment.setIsCompleted("Y");
-                    dbStockAdjustment.setCreatedBy("MSD_INT");
+                    dbStockAdjustment.setCreatedBy("MW_AMS");
 
                     StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
                     log.info("createdStockAdjustment: " + createStockAdjustment);
@@ -495,7 +495,7 @@ public class StockAdjustmentService extends BaseService {
             dbStockAdjustment.setDeletionIndicator(0L);
             dbStockAdjustment.setIsCompleted("Y");
             dbStockAdjustment.setCreatedOn(new Date());
-            dbStockAdjustment.setCreatedBy("MSD_INT");
+            dbStockAdjustment.setCreatedBy("MW_AMS");
 
             StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
             log.info("createdStockAdjustment: " + createStockAdjustment);

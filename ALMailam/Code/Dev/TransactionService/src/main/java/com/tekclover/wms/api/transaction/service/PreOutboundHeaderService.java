@@ -582,7 +582,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundHeader.setReferenceField10(idStatus.getStatus());
 
         preOutboundHeader.setDeletionIndicator(0L);
-        preOutboundHeader.setCreatedBy("MSD_INT");
+        preOutboundHeader.setCreatedBy("MW_AMS");
         preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeader createdPreOutboundHeader = preOutboundHeaderRepository.save(preOutboundHeader);
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
@@ -668,7 +668,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setReferenceField2("BOM");
 
         preOutboundLine.setDeletionIndicator(0L);
-        preOutboundLine.setCreatedBy("MSD_INT");
+        preOutboundLine.setCreatedBy("MW_AMS");
         preOutboundLine.setCreatedOn(new Date());
         return preOutboundLine;
     }
@@ -745,7 +745,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setReferenceField1(outboundIntegrationLine.getRefField1ForOrderType());
 
         preOutboundLine.setDeletionIndicator(0L);
-        preOutboundLine.setCreatedBy("MSD_INT");
+        preOutboundLine.setCreatedBy("MW_AMS");
         preOutboundLine.setCreatedOn(new Date());
 
         log.info("preOutboundLine : " + preOutboundLine);
@@ -1003,7 +1003,7 @@ public class PreOutboundHeaderService extends BaseService {
 //	}
 //	
 //	orderManagementLine.setStatusId(STATUS_ID);
-//	orderManagementLine.setPickupCreatedBy("MSD_INT");
+//	orderManagementLine.setPickupCreatedBy("MW_AMS");
 //	orderManagementLine.setPickupCreatedOn(new Date());
 //	orderManagementLine.setProposedStorageBin(maxQtyHoldsInventory.getStorageBin());
 //	orderManagementLine.setProposedPackBarCode(maxQtyHoldsInventory.getPackBarcodes());
@@ -1100,7 +1100,7 @@ public class PreOutboundHeaderService extends BaseService {
 //		}
 //		
 //		newOrderManagementLine.setStatusId(STATUS_ID);
-//		newOrderManagementLine.setPickupCreatedBy("MSD_INT");
+//		newOrderManagementLine.setPickupCreatedBy("MW_AMS");
 //		newOrderManagementLine.setPickupCreatedOn(new Date());
 //		if (stBinInventory.getStorageBin() == null) {
 //			newOrderManagementLine.setProposedStorageBin(null);
@@ -1479,7 +1479,7 @@ public class PreOutboundHeaderService extends BaseService {
             plantId = outboundIntegrationHeader.getBranchCode();
             warehouseId = outboundIntegrationHeader.getWarehouseID();
             languageId = outboundIntegrationHeader.getLanguageId();
-            String loginUserID = "MSD_INT";                                     //Hard Coded
+            String loginUserID = "MW_AMS";                                     //Hard Coded
 
             //Check WMS order table
             List<OutboundHeaderV2> outbound = outboundHeaderV2Repository.findBySalesOrderNumber(salesOrderNumber);
@@ -3075,7 +3075,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundHeader.setStatusDescription(statusDescription);
 
         preOutboundHeader.setDeletionIndicator(0L);
-        preOutboundHeader.setCreatedBy("MSD_INT");
+        preOutboundHeader.setCreatedBy("MW_AMS");
         preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeaderV2 createdPreOutboundHeader = preOutboundHeaderV2Repository.save(preOutboundHeader);
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
@@ -3200,7 +3200,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setReferenceField2("BOM");
 
         preOutboundLine.setDeletionIndicator(0L);
-        preOutboundLine.setCreatedBy("MSD_INT");
+        preOutboundLine.setCreatedBy("MW_AMS");
         preOutboundLine.setCreatedOn(new Date());
         return preOutboundLine;
     }
@@ -3314,7 +3314,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setReferenceField1(outboundIntegrationLine.getRefField1ForOrderType());
 
         preOutboundLine.setDeletionIndicator(0L);
-        preOutboundLine.setCreatedBy("MSD_INT");
+        preOutboundLine.setCreatedBy("MW_AMS");
         preOutboundLine.setCreatedOn(new Date());
 
         log.info("preOutboundLine : " + preOutboundLine);

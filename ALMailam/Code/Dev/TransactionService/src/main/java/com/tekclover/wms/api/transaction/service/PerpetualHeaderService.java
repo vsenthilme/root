@@ -1518,8 +1518,8 @@ public class PerpetualHeaderService extends BaseService {
         newPerpetualHeader.setWarehouseDescription(description.getWarehouseDesc());
 
         newPerpetualHeader.setDeletionIndicator(0L);
-        newPerpetualHeader.setCreatedBy("MSD_INT");
-        newPerpetualHeader.setCountedBy("MSD_INT");
+        newPerpetualHeader.setCreatedBy("MW_AMS");
+        newPerpetualHeader.setCountedBy("MW_AMS");
         newPerpetualHeader.setCreatedOn(new Date());
         newPerpetualHeader.setCountedOn(new Date());
         PerpetualHeaderV2 createdPerpetualHeader = perpetualHeaderV2Repository.save(newPerpetualHeader);
@@ -1602,7 +1602,7 @@ public class PerpetualHeaderService extends BaseService {
                     }
 
                     dbPerpetualLine.setDeletionIndicator(0L);
-                    dbPerpetualLine.setCreatedBy("MSD_INT");
+                    dbPerpetualLine.setCreatedBy("MW_AMS");
                     dbPerpetualLine.setCreatedOn(new Date());
                     perpetualLines.add(dbPerpetualLine);
                 }
@@ -1661,7 +1661,7 @@ public class PerpetualHeaderService extends BaseService {
 
 
                 dbPerpetualLine.setDeletionIndicator(0L);
-                dbPerpetualLine.setCreatedBy("MSD_INT");
+                dbPerpetualLine.setCreatedBy("MW_AMS");
                 dbPerpetualLine.setCreatedOn(new Date());
                 perpetualLines.add(dbPerpetualLine);
             }

@@ -1405,8 +1405,8 @@ public class PeriodicHeaderService extends BaseService {
         newPeriodicHeaderV2.setWarehouseDescription(description.getWarehouseDesc());
 
         newPeriodicHeaderV2.setDeletionIndicator(0L);
-        newPeriodicHeaderV2.setCreatedBy("MSD_INT");
-        newPeriodicHeaderV2.setCountedBy("MSD_INT");
+        newPeriodicHeaderV2.setCreatedBy("MW_AMS");
+        newPeriodicHeaderV2.setCountedBy("MW_AMS");
         newPeriodicHeaderV2.setCreatedOn(new Date());
         newPeriodicHeaderV2.setCountedOn(new Date());
         PeriodicHeaderV2 createdPeriodicHeaderV2 = periodicHeaderV2Repository.save(newPeriodicHeaderV2);
@@ -1489,7 +1489,7 @@ public class PeriodicHeaderService extends BaseService {
                     }
 
                     periodicLineV2.setDeletionIndicator(0L);
-                    periodicLineV2.setCreatedBy("MSD_INT");
+                    periodicLineV2.setCreatedBy("MW_AMS");
                     periodicLineV2.setCreatedOn(new Date());
                     periodicLineV2s.add(periodicLineV2);
                 }
@@ -1548,7 +1548,7 @@ public class PeriodicHeaderService extends BaseService {
 
 
                 dbPeriodicLine.setDeletionIndicator(0L);
-                dbPeriodicLine.setCreatedBy("MSD_INT");
+                dbPeriodicLine.setCreatedBy("MW_AMS");
                 dbPeriodicLine.setCreatedOn(new Date());
                 periodicLineV2s.add(dbPeriodicLine);
             }

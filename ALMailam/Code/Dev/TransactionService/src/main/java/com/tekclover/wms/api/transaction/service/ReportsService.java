@@ -2386,18 +2386,18 @@ public class ReportsService extends BaseService {
         MobileDashboard.OutboundCount outboundCount = mobileDashboard.new OutboundCount();
 
         //Get LevelId from User HHtUser
-        String levelId = pickupLineRepository.getLevelIdForUserId(companyCode, plantId, languageId, warehouseId, userId);
+//        String levelId = pickupLineRepository.getLevelIdForUserId(companyCode, plantId, languageId, warehouseId, userId);
 
         // --------------Picking---------------------------------------------------------------------------
         orderTypeId = Arrays.asList(0L, 1L, 3L);
 //        List<PickupHeaderV2> pickupHeaderList =
 //                pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, levelId, orderTypeId);
-        Long pickupHeaderList = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, levelId, 48L,  orderTypeId);
+        Long pickupHeaderList = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, userId, 48L,  orderTypeId);
         outboundCount.setPicking(pickupHeaderList);
 
         // -------------Reversals-------------------------------------------------------------------------
-        orderTypeId = Arrays.asList(2L);
-        Long pickupHeaderListReversal = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, levelId, 48L, orderTypeId);
+        orderTypeId = Arrays.asList(2L);                //Returns
+        Long pickupHeaderListReversal = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, userId, 48L, orderTypeId);
         outboundCount.setReversals(pickupHeaderListReversal);
 
         // -----------Quality-----------------------------------------------------------------------------

@@ -519,7 +519,7 @@ public class PreInboundHeaderService extends BaseService {
                 imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());        // MFR_PART
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -659,7 +659,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -734,7 +734,7 @@ public class PreInboundHeaderService extends BaseService {
         // STATUS_ID
         preInboundLine.setStatusId(6L);
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -764,7 +764,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setRefDocDate(inboundIntegrationHeader.getOrderReceivedOn());                // REF_DOC_DATE
         preInboundHeader.setStatusId(6L);
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntity createdPreInboundHeader = preInboundHeaderRepository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1516,7 +1516,7 @@ public class PreInboundHeaderService extends BaseService {
 //                }
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1V2(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1V2(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -1701,7 +1701,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -1809,7 +1809,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -1861,7 +1861,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setMUpdatedOn(inboundIntegrationHeader.getUpdatedOn());
 
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntityV2 createdPreInboundHeader = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);

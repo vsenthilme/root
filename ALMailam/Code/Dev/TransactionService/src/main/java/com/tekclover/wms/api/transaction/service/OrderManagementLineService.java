@@ -1883,7 +1883,7 @@ public class OrderManagementLineService extends BaseService {
                 inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
                         orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                         warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
-        log.info("---updateAllocation---stockType1InventoryList-------> : " + stockType1InventoryList);
+        log.info("---updateAllocation---stockType1InventoryList-------> : " + stockType1InventoryList.size());
         if (stockType1InventoryList.isEmpty()) {
             return updateOrderManagementLineV2(orderManagementLine);
         }
@@ -1898,7 +1898,7 @@ public class OrderManagementLineService extends BaseService {
                         orderManagementLine.getPlantId(),
                         orderManagementLine.getLanguageId(),
                         warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
-        log.info("finalInventoryList Inventory ---->: " + finalInventoryList + "\n");
+        log.info("finalInventoryList Inventory ---->: " + finalInventoryList.size() + "\n");
 
         ImBasicData1 dbImBasicData1 = null;
         boolean shelfLifeIndicator = false;

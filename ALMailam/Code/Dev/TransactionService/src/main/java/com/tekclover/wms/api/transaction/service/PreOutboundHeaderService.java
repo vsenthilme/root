@@ -3434,7 +3434,7 @@ public class PreOutboundHeaderService extends BaseService {
                                                           String warehouseId, String itemCode, Double ORD_QTY) throws ParseException {
         List<IInventoryImpl> stockType1InventoryList = inventoryService.
                 getInventoryForOrderManagementV2(companyCodeId, plantId, languageId, warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
-        log.info("---Global---stockType1InventoryList-------> : " + stockType1InventoryList);
+        log.info("---Global---stockType1InventoryList-------> : " + stockType1InventoryList.size());
         if (stockType1InventoryList.isEmpty()) {
             return createEMPTYOrderManagementLineV2(orderManagementLine);
         }

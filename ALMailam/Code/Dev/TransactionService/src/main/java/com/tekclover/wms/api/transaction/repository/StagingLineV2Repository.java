@@ -6,10 +6,12 @@ import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpeci
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -272,4 +274,21 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
     List<StagingLineEntityV2> findAllByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
             String languageId, String companyCode, String plantId, String warehouseId,
             String itemCode, String manufacturerName, Long deletionIndicator);
+
+    @Transactional
+    @Procedure(procedureName = "staging_line_update_proc")
+    public void updateStagingLineUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("itmCode") String itmCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("lineNumber") Long lineNumber,
+            @Param("updatedOn") Date updatedOn,
+            @Param("recAcceptQty") Double recAcceptQty,
+            @Param("recDamageQty") Double recDamageQty
+    );
 }

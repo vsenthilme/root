@@ -24,29 +24,9 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
             String warehouseId, String preInboundNo, String refDocNumber,
             String stagingNo, String goodsReceiptNo, String palletCode, String caseCode, Long deletionIndicator);
 
-    List<GrHeaderV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
-            String languageId, String companyCode, String plantId,
-            String warehouseId, String goodsReceiptNo, String caseCode, String refDocNumber, Long deletionIndicator);
-
-//    @Query(value = "select \n" +
-//            "* \n" +
-//            "from \n" +
-//            "tblgrheader \n" +
-//            "where \n" +
-//            "c_id IN (:companyCode) and \n" +
-//            "lang_id IN (:languageId) and \n" +
-//            "plant_id IN(:plantId) and \n" +
-//            "wh_id IN (:warehouseId) and \n" +
-//            "ref_doc_no IN (:refDocNumber) and \n" +
-//            "is_deleted = 0", nativeQuery = true)
-//    List<GrHeaderV2> getGrHeaderV2(
-//            @Param(value = "warehouseId") String warehouseId,
-//            @Param(value = "companyCode") String companyCode,
-//            @Param(value = "plantId") String plantId,
-//            @Param(value = "languageId") String languageId,
-//            @Param(value = "refDocNumber") String refDocNumber
-//    );
-
+    GrHeaderV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId,
+            String goodsReceiptNo, String caseCode, String refDocNumber, Long deletionIndicator);
 
     @Query(value = "select \n" +
             "* \n" +

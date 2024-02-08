@@ -476,10 +476,9 @@ public class GrHeaderService extends BaseService {
      * @param refDocNumber
      * @return
      */
-    public List<GrHeaderV2> getGrHeaderV2(String warehouseId, String goodsReceiptNo, String caseCode,
-                                          String companyCode, String languageId, String plantId,
-                                          String refDocNumber) {
-        List<GrHeaderV2> grHeader =
+    public GrHeaderV2 getGrHeaderV2(String warehouseId, String goodsReceiptNo, String caseCode, String companyCode,
+                                    String languageId, String plantId, String refDocNumber) {
+        GrHeaderV2 grHeader =
                 grHeaderV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
                         languageId,
                         companyCode,
@@ -489,7 +488,7 @@ public class GrHeaderService extends BaseService {
                         caseCode,
                         refDocNumber,
                         0L);
-        if (grHeader.isEmpty()) {
+        if (grHeader == null) {
             // Exception Log
             createGrHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, goodsReceiptNo,
                     caseCode, "The given values of GrheaderV2 with goodsReceiptNo - " + goodsReceiptNo + " doesn't exists.");

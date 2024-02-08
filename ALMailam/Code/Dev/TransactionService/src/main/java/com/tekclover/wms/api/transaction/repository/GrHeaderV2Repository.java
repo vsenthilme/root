@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,4 +75,19 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
                               @Param("refDocNumber") String refDocNumber,
                               @Param("statusId") Long statusId,
                               @Param("statusDescription") String statusDescription);
+
+    @Transactional
+    @Procedure(procedureName = "grheader_status_update_proc")
+    public void updateGrheaderStatusUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("goodsReceiptNo") String goodsReceiptNo,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedOn") Date updatedOn
+    );
 }

@@ -1468,7 +1468,8 @@ public class PreOutboundHeaderService extends BaseService {
         if ((warehouseId.equalsIgnoreCase("200") && outboundIntegrationHeader.getOutboundOrderTypeID() == 3L) ||
                 (warehouseId.equalsIgnoreCase("100") && (outboundIntegrationHeader.getOutboundOrderTypeID() == 0L || outboundIntegrationHeader.getOutboundOrderTypeID() == 1L || outboundIntegrationHeader.getOutboundOrderTypeID() == 3L))) {
 //            updateStatusAs48ForPickupHeaderCreateSuccess(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
-            updateStatusAs48ForPickupHeader(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
+//            updateStatusAs48ForPickupHeader(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
+            createPickUpHeaderAssignPicker(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
         }
 
         //PickList Cancellation
@@ -1534,37 +1535,15 @@ public class PreOutboundHeaderService extends BaseService {
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
 
         //pickup header create
-        Long assignPickerIdLineCount = 0L;
         Long assignPickerListCount = 0L;
-//        String assignPickerId = null;
         Long hhtUserCount = 0L;
-        Long hhtUserCountInPickupHeader = 0L;
         Long lineCount = 0L;
-        Integer pickerPosition = 0;
-        Integer picker0Position = 0;
-        Integer picker1Position = 0;
-        Integer picker2Position = 0;
-        Integer picker3Position = 0;
-        Integer picker4Position = 0;
 
         lineCount = orderManagementLineV2List.stream().count();
         log.info("total Order Lines Count: " + lineCount);
 
         List<String> assignPickerList = new ArrayList<>();
-        List<String> pickUpheaderUserList = new ArrayList<>();
 
-        List<String> assignedPickerIdList = new ArrayList<>();
-        List<String> linePickerIdAssignedList = new ArrayList<>();
-        List<Long> levelId0List = new ArrayList<>();
-        List<Long> levelId1List = new ArrayList<>();
-        List<Long> levelId2List = new ArrayList<>();
-        List<Long> levelId3List = new ArrayList<>();
-        List<Long> levelId4List = new ArrayList<>();
-
-        List<Long> obType0List = new ArrayList<>();
-        List<Long> obType1List = new ArrayList<>();
-        List<Long> obType2List = new ArrayList<>();
-        List<Long> obType3List = new ArrayList<>();
         for (OrderManagementLineV2 orderManagementLine : orderManagementLineV2List) {
             String assignPickerId = null;
 
@@ -1916,7 +1895,6 @@ public class PreOutboundHeaderService extends BaseService {
                 outboundLine = outboundLineV2Repository.save(outboundLine);
                 log.info("outboundLine updated : " + outboundLine);
             }
-
         }
         // OutboundHeader Update
         OutboundHeaderV2 outboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo,

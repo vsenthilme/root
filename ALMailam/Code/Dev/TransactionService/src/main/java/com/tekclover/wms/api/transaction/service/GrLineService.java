@@ -1457,66 +1457,78 @@ public class GrLineService extends BaseService {
              * Pass WH_ID/PRE_IB_NO/REF_DOC_NO/GR_NO/IB_LINE_NO/ITM_CODE in GRLINE table and
              * validate STATUS_ID of the all the filtered line items = 17 , if yes
              */
-            List<StagingLineEntityV2> stagingLineList =
-                    stagingLineService.getStagingLineForGrConfirmV2(
-                            createdGRLines.get(0).getCompanyCode(),
-                            createdGRLines.get(0).getPlantId(),
-                            createdGRLines.get(0).getLanguageId(),
-                            createdGRLines.get(0).getWarehouseId(),
-                            createdGRLines.get(0).getRefDocNumber(),
-                            createdGRLines.get(0).getPreInboundNo());
+//            List<StagingLineEntityV2> stagingLineList =
+//                    stagingLineService.getStagingLineForGrConfirmV2(
+//                            createdGRLines.get(0).getCompanyCode(),
+//                            createdGRLines.get(0).getPlantId(),
+//                            createdGRLines.get(0).getLanguageId(),
+//                            createdGRLines.get(0).getWarehouseId(),
+//                            createdGRLines.get(0).getRefDocNumber(),
+//                            createdGRLines.get(0).getPreInboundNo());
+//
+//            Long createdStagingLinesCount = 0L;
+//            Long createdGRLinesStatusId17Count = 0L;
+//
+//            if (stagingLineList != null) {
+//                createdStagingLinesCount = stagingLineList.stream().count();
+//            }
+//            createdGRLinesStatusId17Count = grLineV2Repository.getGrLineStatus17Count(createdGRLines.get(0).getCompanyCode(),
+//                    createdGRLines.get(0).getPlantId(),
+//                    createdGRLines.get(0).getLanguageId(),
+//                    createdGRLines.get(0).getWarehouseId(),
+//                    createdGRLines.get(0).getRefDocNumber(),
+//                    createdGRLines.get(0).getPreInboundNo(), 17L);
+//            log.info("createdGRLinesStatusId17Count: " + createdGRLinesStatusId17Count);
 
-            Long createdStagingLinesCount = 0L;
-            Long createdGRLinesStatusId17Count = 0L;
-
-            if (stagingLineList != null) {
-                createdStagingLinesCount = stagingLineList.stream().count();
-            }
-            createdGRLinesStatusId17Count = grLineV2Repository.getGrLineStatus17Count(createdGRLines.get(0).getCompanyCode(),
+//            log.info("createdStagingLinesCount, createdGRLinesStatusId17Count: " + createdStagingLinesCount + ", " + createdGRLinesStatusId17Count);
+            statusDescription = stagingLineV2Repository.getStatusDescription(17L, createdGRLines.get(0).getLanguageId());
+            grHeaderV2Repository.updateGrheaderStatusUpdateProc(
+                    createdGRLines.get(0).getCompanyCode(),
                     createdGRLines.get(0).getPlantId(),
                     createdGRLines.get(0).getLanguageId(),
                     createdGRLines.get(0).getWarehouseId(),
                     createdGRLines.get(0).getRefDocNumber(),
-                    createdGRLines.get(0).getPreInboundNo(), 17L);
-            log.info("createdGRLinesStatusId17Count: " + createdGRLinesStatusId17Count);
-
-            log.info("createdStagingLinesCount, createdGRLinesStatusId17Count: " + createdStagingLinesCount + ", " + createdGRLinesStatusId17Count);
-
+                    createdGRLines.get(0).getPreInboundNo(),
+                    createdGRLines.get(0).getGoodsReceiptNo(),
+                    17L,
+                    statusDescription,
+                    new Date());
             for (GrLineV2 grLine : createdGRLines) {
                 /*
                  * 1. Update GRHEADER table with STATUS_ID=17 by Passing WH_ID/GR_NO/CASE_CODE/REF_DOC_NO and
                  * GR_CNF_BY with USR_ID and GR_CNF_ON with Server time
                  */
-                if (createdStagingLinesCount.equals(createdGRLinesStatusId17Count)) {
-                    log.info("Updating GrHeader with StatusId 17 Initiated");
-                    GrHeaderV2 grHeader = grHeaderService.getGrHeaderV2(
-                            grLine.getWarehouseId(),
-                            grLine.getGoodsReceiptNo(),
-                            grLine.getCaseCode(),
-                            grLine.getCompanyCode(),
-                            grLine.getLanguageId(),
-                            grLine.getPlantId(),
-                            grLine.getRefDocNumber());
-                    if(grHeader != null) {
-                        if (grHeader.getCompanyCode() == null) {
-                            grHeader.setCompanyCode(grLine.getCompanyCode());
-                        }
-                        grHeader.setStatusId(17L);
-                        statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
-                        grHeader.setStatusDescription(statusDescription);
-                        grHeader.setCreatedBy(loginUserID);
-                        grHeader.setUpdatedOn(new Date());
-                        grHeader.setConfirmedOn(new Date());
-                        grHeader = grHeaderV2Repository.save(grHeader);
-                        log.info("grHeader updated: " + grHeader);
-                    }
-                }
+//                if (createdStagingLinesCount.equals(createdGRLinesStatusId17Count)) {
+//                    log.info("Updating GrHeader with StatusId 17 Initiated");
+//                    GrHeaderV2 grHeader = grHeaderService.getGrHeaderV2(
+//                            grLine.getWarehouseId(),
+//                            grLine.getGoodsReceiptNo(),
+//                            grLine.getCaseCode(),
+//                            grLine.getCompanyCode(),
+//                            grLine.getLanguageId(),
+//                            grLine.getPlantId(),
+//                            grLine.getRefDocNumber());
+//                    if(grHeader != null) {
+//                        if (grHeader.getCompanyCode() == null) {
+//                            grHeader.setCompanyCode(grLine.getCompanyCode());
+//                        }
+//                        grHeader.setStatusId(17L);
+//                        statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
+//                        grHeader.setStatusDescription(statusDescription);
+//                        grHeader.setCreatedBy(loginUserID);
+//                        grHeader.setUpdatedOn(new Date());
+//                        grHeader.setConfirmedOn(new Date());
+//                        grHeader = grHeaderV2Repository.save(grHeader);
+//                        log.info("grHeader updated: " + grHeader);
+//                    }
+//                }
                 /*
                  * '2. 'Pass WH_ID/PRE_IB_NO/REF_DOC_NO/IB_LINE_NO/ITM_CODE/CASECODE in STAGINIGLINE table and
                  * update STATUS_ID as 17
                  */
 
                 log.info("Updating StagingLine and InboundLine with StatusId 17 Initiated");
+
                 List<StagingLineEntityV2> stagingLineEntityList =
                         stagingLineService.getStagingLineV2(
                                 grLine.getCompanyCode(),

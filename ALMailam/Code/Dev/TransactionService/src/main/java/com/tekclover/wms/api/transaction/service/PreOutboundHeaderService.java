@@ -1621,25 +1621,28 @@ public class PreOutboundHeaderService extends BaseService {
                                     }
                                 }
                                 outerLoop1:
-                                for (String hhtUser : hhtUserList) {
-                                    List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                    log.info("pickUpHeader: " + pickupHeaderList.size());
-                                    if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
-                                        assignPickerList.add(hhtUser);
-                                        if (assignPickerList.size() > 0) {
-                                            break outerLoop1;
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    for (String hhtUser : hhtUserList) {
+                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                        log.info("pickUpHeader: " + pickupHeaderList.size());
+                                        if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+                                            assignPickerList.add(hhtUser);
+                                            if (assignPickerList.size() > 0) {
+                                                break outerLoop1;
+                                            }
                                         }
                                     }
                                 }
-
                                 outerLoop3:
-                                for (String hhtUser : hhtUserList) {
-                                    List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                                    log.info("pickUpHeader: " + pickupHeaderList.size());
-                                    if (pickupHeaderList != null && !pickupHeaderList.isEmpty()) {
-                                        assignPickerList.add(hhtUser);
-                                        if (assignPickerList.size() > 0) {
-                                            break outerLoop3;
+                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                                    for (String hhtUser : hhtUserList) {
+                                        List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                        log.info("pickUpHeader: " + pickupHeaderList.size());
+                                        if (pickupHeaderList != null && !pickupHeaderList.isEmpty()) {
+                                            assignPickerList.add(hhtUser);
+                                            if (assignPickerList.size() > 0) {
+                                                break outerLoop3;
+                                            }
                                         }
                                     }
                                 }
@@ -1762,25 +1765,28 @@ public class PreOutboundHeaderService extends BaseService {
                             }
                         }
                         outerLoop1:
-                        for (String hhtUser : hhtUserList) {
-                            List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                            log.info("pickUpHeader: " + pickupHeaderList.size());
-                            if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
-                                assignPickerList.add(hhtUser);
-                                if (assignPickerList.size() > 0) {
-                                    break outerLoop1;
+                        if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                            for (String hhtUser : hhtUserList) {
+                                List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                log.info("pickUpHeader: " + pickupHeaderList.size());
+                                if (pickupHeaderList == null || pickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUser);
+                                    if (assignPickerList.size() > 0) {
+                                        break outerLoop1;
+                                    }
                                 }
                             }
                         }
-
                         outerLoop3:
-                        for (String hhtUser : hhtUserList) {
-                            List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
-                            log.info("pickUpHeader: " + pickupHeaderList.size());
-                            if (pickupHeaderList != null && !pickupHeaderList.isEmpty()) {
-                                assignPickerList.add(hhtUser);
-                                if (assignPickerList.size() > 0) {
-                                    break outerLoop3;
+                        if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                            for (String hhtUser : hhtUserList) {
+                                List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
+                                log.info("pickUpHeader: " + pickupHeaderList.size());
+                                if (pickupHeaderList != null && !pickupHeaderList.isEmpty()) {
+                                    assignPickerList.add(hhtUser);
+                                    if (assignPickerList.size() > 0) {
+                                        break outerLoop3;
+                                    }
                                 }
                             }
                         }

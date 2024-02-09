@@ -126,6 +126,36 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
                                          @Param("levelId") Long levelId,
                                          @Param("startDate") Date startDate,
                                          @Param("endDate") Date endDate);
+    @Query(value = "select top 1 count(ref_doc_no) cnt,ass_picker_id \n" +
+            " from tblpickupheader ob where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
+            " ob.ass_picker_id in (:assignedPickerId) and ob.status_id = :statusId and level_id = :levelId and \r\n" +
+            " ob.pick_ctd_on between :startDate and :endDate and ob.ass_picker_id is not null and ob.is_deleted = 0 \n" +
+            " group by ass_picker_id order by cnt ", nativeQuery = true)
+    public IKeyValuePair getAssignPickerNew(@Param("companyCodeId") String companyCodeId,
+                                             @Param("plantId") String plantId,
+                                             @Param("languageId") String languageId,
+                                             @Param("warehouseId") String warehouseId,
+                                             @Param("assignedPickerId") List<String> assignedPickerId,
+                                             @Param("statusId") Long statusId,
+                                             @Param("levelId") Long levelId,
+                                             @Param("startDate") Date startDate,
+                                             @Param("endDate") Date endDate);
+    @Query(value = "select top 1 count(ref_doc_no) cnt,ass_picker_id  \n" +
+            " from tblpickupheader ob \n" +
+            " join tblordertypeid ot on ot.usr_id = ob.ass_picker_id \n" +
+            " where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
+            " ob.ass_picker_id in (:assignedPickerId) and ob.status_id = :statusId and ot.ob_ord_typ_id in (:outboundOrderTypeId) and \r\n" +
+            " ob.pick_ctd_on between :startDate and :endDate and ob.ass_picker_id is not null and ob.is_deleted = 0 \n" +
+            " group by ass_picker_id order by cnt" ,nativeQuery = true)
+    public IKeyValuePair getAssignPickerWh100New(@Param("companyCodeId") String companyCodeId,
+                                                 @Param("plantId") String plantId,
+                                                 @Param("languageId") String languageId,
+                                                 @Param("warehouseId") String warehouseId,
+                                                 @Param("assignedPickerId") List<String> assignedPickerId,
+                                                 @Param("statusId") Long statusId,
+                                                 @Param("outboundOrderTypeId") Long outboundOrderTypeId,
+                                                 @Param("startDate") Date startDate,
+                                                 @Param("endDate") Date endDate);
     @Query(value = "Select top 1 min(cnt) minCountPicker, ass_picker_id assignPicker from (select count(ass_picker_id) cnt, ass_picker_id, ref_doc_no  \n" +
             " from tblpickupheader ob \n" +
             " join tblordertypeid ot on ot.usr_id = ob.ass_picker_id \n" +
@@ -134,13 +164,13 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
             " ob.pick_ctd_on between :startDate and :endDate and ob.is_deleted = 0 \n" +
             " group by ass_picker_id, ref_doc_no, level_id, plant_id ) X group by ass_picker_id, ref_doc_no " ,nativeQuery = true)
     public IKeyValuePair getAssignPickerWh100(@Param("companyCodeId") String companyCodeId,
-                                         @Param("plantId") String plantId,
-                                         @Param("languageId") String languageId,
-                                         @Param("warehouseId") String warehouseId,
-                                         @Param("assignedPickerId") List<String> assignedPickerId,
-                                         @Param("statusId") Long statusId,
-                                         @Param("outboundOrderTypeId") Long outboundOrderTypeId,
-                                         @Param("startDate") Date startDate,
-                                         @Param("endDate") Date endDate);
+                                              @Param("plantId") String plantId,
+                                              @Param("languageId") String languageId,
+                                              @Param("warehouseId") String warehouseId,
+                                              @Param("assignedPickerId") List<String> assignedPickerId,
+                                              @Param("statusId") Long statusId,
+                                              @Param("outboundOrderTypeId") Long outboundOrderTypeId,
+                                              @Param("startDate") Date startDate,
+                                              @Param("endDate") Date endDate);
 }
 

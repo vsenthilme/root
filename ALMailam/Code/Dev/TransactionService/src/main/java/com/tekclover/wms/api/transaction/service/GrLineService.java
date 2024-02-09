@@ -1295,6 +1295,9 @@ public class GrLineService extends BaseService {
 
             // Inserting multiple records
             for (AddGrLineV2 newGrLine : newGrLines) {
+                if(newGrLine.getPackBarcodes() == null || newGrLine.getPackBarcodes().isEmpty()) {
+                    throw new BadRequestException("Enter either Accept Qty or Damage Qty");
+                }
                 /*------------Inserting based on the PackBarcodes -----------*/
                 for (PackBarcode packBarcode : newGrLine.getPackBarcodes()) {
                     GrLineV2 dbGrLine = new GrLineV2();
@@ -1493,7 +1496,7 @@ public class GrLineService extends BaseService {
                     17L,
                     statusDescription,
                     new Date());
-            log.info("GrHeader Status 17 Updated Using Stored Procedure");
+            log.info("GrHeader Status 17 Updating Using Stored Procedure when condition met");
             for (GrLineV2 grLine : createdGRLines) {
                 /*
                  * 1. Update GRHEADER table with STATUS_ID=17 by Passing WH_ID/GR_NO/CASE_CODE/REF_DOC_NO and

@@ -404,4 +404,23 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
     List<OutboundLineV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId,
             String refDocNumber, String itemCode, String manufacturerName, Long DeletionIndicator);
+
+    @Transactional
+    @Procedure(procedureName = "outboundline_status_update_proc")
+    public void updateOutboundlineStatusUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preOutboundNo") String preOutboundNo,
+            @Param("itmCode") String itmCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("partnerCode") String partnerCode,
+            @Param("handlingEquipment") String handlingEquipment,
+            @Param("lineNumber") Long lineNumber,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedOn") Date updatedOn
+    );
 }

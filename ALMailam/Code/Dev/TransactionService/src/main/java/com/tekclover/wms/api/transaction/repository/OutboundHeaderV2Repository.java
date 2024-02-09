@@ -4,6 +4,7 @@ import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2Stream;
 import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -278,4 +279,22 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
 
     List<OutboundHeaderV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndOutboundOrderTypeIdAndDeliveryConfirmedOnBetween(
             String companyCode, String plantId, String languageId, String warehouseId, Long statusId, Long partnerCode, Date fromDeliveryDateD, Date toDeliveryDateD);
+
+    @Transactional
+    @Procedure(procedureName = "obheader_preobheader_update_proc")
+    public void updateObheaderPreobheaderUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preOutboundNo") String preOutboundNo,
+            @Param("updatedOn") Date updatedOn,
+            @Param("updatedBy") String updatedBy,
+            @Param("statusId47") Long statusId47,
+            @Param("statusId50") Long statusId50,
+            @Param("statusId51") Long statusId51,
+            @Param("statusDescription50") String statusDescription50,
+            @Param("statusDescription51") String statusDescription51
+    );
 }

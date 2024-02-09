@@ -171,4 +171,8 @@ public interface PickupLineV2Repository extends JpaRepository<PickupLineV2, Long
     List<PickupLineV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber,
             String itemCode, String manufacturerName, Long deletionIndicator);
+
+    PickupLineV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndAssignedPickerIdInAndDeletionIndicatorAndPickupConfirmedOnBetweenOrderByPickupConfirmedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, Long StatusId,
+            List<String> assignedPickerId, Long deletionIndicator, Date startTime, Date endTime);
 }

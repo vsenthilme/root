@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.repository;
 
+import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
 import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.*;
@@ -98,5 +99,48 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
             @Param("updatedBy") String updatedBy,
             @Param("updatedOn") Date updatedOn
     );
+
+    PickupHeaderV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId,
+            Long statusId, Date startDate, Date endDate, Long deletionIndicator);
+
+    PickupHeaderV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndRefDocNumberAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId, String refDocNumber,
+            Long statusId, Date startDate, Date endDate, Long deletionIndicator);
+
+    PickupHeaderV2 findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdInAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+            String companyCodeId, String plantId, String languageId, String warehouseId, List<String> assignedPickerId,
+            Long statusId, Date startDate, Date endDate, Long deletionIndicator);
+
+    @Query(value = "Select top 1 min(cnt) minCountPicker, ass_picker_id assignPicker from (select count(ass_picker_id) cnt, ass_picker_id, ref_doc_no  \n" +
+            " from tblpickupheader ob where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
+            " ob.ass_picker_id = :assignedPickerId and ob.status_id = :statusId and level_id = :levelId and \r\n" +
+            " ob.pick_ctd_on between :startDate and :endDate and ob.is_deleted = 0 \n" +
+            " group by ass_picker_id, ref_doc_no, level_id, plant_id ) X group by ass_picker_id, ref_doc_no " ,nativeQuery = true)
+    public IKeyValuePair getAssignPicker(@Param("companyCodeId") String companyCodeId,
+                                         @Param("plantId") String plantId,
+                                         @Param("languageId") String languageId,
+                                         @Param("warehouseId") String warehouseId,
+                                         @Param("assignedPickerId") List<String> assignedPickerId,
+                                         @Param("statusId") Long statusId,
+                                         @Param("levelId") Long levelId,
+                                         @Param("startDate") Date startDate,
+                                         @Param("endDate") Date endDate);
+    @Query(value = "Select top 1 min(cnt) minCountPicker, ass_picker_id assignPicker from (select count(ass_picker_id) cnt, ass_picker_id, ref_doc_no  \n" +
+            " from tblpickupheader ob \n" +
+            " join tblordertypeid ot on ot.usr_id = ob.ass_picker_id \n" +
+            " where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
+            " ob.ass_picker_id = :assignedPickerId and ob.status_id = :statusId and ot.ob_ord_typ_id in (:outboundOrderTypeId) and \r\n" +
+            " ob.pick_ctd_on between :startDate and :endDate and ob.is_deleted = 0 \n" +
+            " group by ass_picker_id, ref_doc_no, level_id, plant_id ) X group by ass_picker_id, ref_doc_no " ,nativeQuery = true)
+    public IKeyValuePair getAssignPickerWh100(@Param("companyCodeId") String companyCodeId,
+                                         @Param("plantId") String plantId,
+                                         @Param("languageId") String languageId,
+                                         @Param("warehouseId") String warehouseId,
+                                         @Param("assignedPickerId") List<String> assignedPickerId,
+                                         @Param("statusId") Long statusId,
+                                         @Param("outboundOrderTypeId") Long outboundOrderTypeId,
+                                         @Param("startDate") Date startDate,
+                                         @Param("endDate") Date endDate);
 }
 

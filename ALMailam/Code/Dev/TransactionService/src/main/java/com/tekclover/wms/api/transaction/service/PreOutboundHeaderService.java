@@ -1469,9 +1469,9 @@ public class PreOutboundHeaderService extends BaseService {
                 (warehouseId.equalsIgnoreCase("100") && (outboundIntegrationHeader.getOutboundOrderTypeID() == 0L || outboundIntegrationHeader.getOutboundOrderTypeID() == 1L || outboundIntegrationHeader.getOutboundOrderTypeID() == 3L))) {
 //            updateStatusAs48ForPickupHeaderCreateSuccess(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
 //            updateStatusAs48ForPickupHeader(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
-//            createPickUpHeaderAssignPicker(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
+            createPickUpHeaderAssignPicker(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
 //            createPickUpHeaderAssignPickerNew(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
-            createPickUpHeaderAssignPickerModified(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
+//            createPickUpHeaderAssignPickerModified(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader, preOutboundNo, outboundHeader.getRefDocNumber(), outboundHeader.getPartnerCode());
         }
 
         //PickList Cancellation
@@ -1621,7 +1621,7 @@ public class PreOutboundHeaderService extends BaseService {
                                     }
                                 }
                                 outerLoop1:
-                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                              //  if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                                     for (String hhtUser : hhtUserList) {
                                         List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
                                         log.info("pickUpHeader: " + pickupHeaderList.size());
@@ -1632,9 +1632,9 @@ public class PreOutboundHeaderService extends BaseService {
                                             }
                                         }
                                     }
-                                }
+                              //  }
                                 outerLoop3:
-                                if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                               // if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                                     for (String hhtUser : hhtUserList) {
                                         List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
                                         log.info("pickUpHeader: " + pickupHeaderList.size());
@@ -1645,7 +1645,7 @@ public class PreOutboundHeaderService extends BaseService {
                                             }
                                         }
                                     }
-                                }
+                                //}
                                 if (assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                                     outerLoop:
                                     while(true) {
@@ -1765,7 +1765,7 @@ public class PreOutboundHeaderService extends BaseService {
                             }
                         }
                         outerLoop1:
-                        if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                        //if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                             for (String hhtUser : hhtUserList) {
                                 List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomationWithOutStatusIdV2(companyCodeId, plantId, languageId, warehouseId, hhtUser);
                                 log.info("pickUpHeader: " + pickupHeaderList.size());
@@ -1776,9 +1776,9 @@ public class PreOutboundHeaderService extends BaseService {
                                     }
                                 }
                             }
-                        }
+                       // }
                         outerLoop3:
-                        if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
+                       // if(assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                             for (String hhtUser : hhtUserList) {
                                 List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId, hhtUser);
                                 log.info("pickUpHeader: " + pickupHeaderList.size());
@@ -1789,7 +1789,7 @@ public class PreOutboundHeaderService extends BaseService {
                                     }
                                 }
                             }
-                        }
+                      //  }
                         if (assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                             outerLoop:
                                 while(true) {

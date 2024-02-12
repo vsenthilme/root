@@ -778,7 +778,7 @@ public class PickupHeaderService {
 
         IKeyValuePair header =
                 pickupHeaderV2Repository.getAssignPickerNew(
-                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L,levelId, dates[0], dates[1]);
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, levelId, 48L, dates[0], dates[1]);
         if(header != null) {
             return header.getAssignPicker();
         }

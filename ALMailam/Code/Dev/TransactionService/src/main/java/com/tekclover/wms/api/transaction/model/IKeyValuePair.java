@@ -19,5 +19,6 @@ public interface IKeyValuePair {
 
     String getRefDocNumber();
     String getAssignPicker();
+    Long getPickerCount();
 
 }

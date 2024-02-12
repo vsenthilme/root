@@ -703,11 +703,11 @@ public class PickupHeaderService {
      * @param assignedPickerId
      * @return
      */
-    public List<PickupHeaderV2> getPickupHeaderAutomation(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId) throws java.text.ParseException {
+    public List<PickupHeaderV2> getPickupHeaderAutomation(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId, Long statusId) throws java.text.ParseException {
         Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
         List<PickupHeaderV2> header =
                 pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
-                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 50L, dates[0], dates[1], 0L);
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, statusId, dates[0], dates[1], 0L);
         return header;
     }
 
@@ -778,7 +778,7 @@ public class PickupHeaderService {
 
         IKeyValuePair header =
                 pickupHeaderV2Repository.getAssignPickerNew(
-                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, levelId, 48L, dates[0], dates[1]);
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L,levelId, dates[0], dates[1]);
         if(header != null) {
             return header.getAssignPicker();
         }

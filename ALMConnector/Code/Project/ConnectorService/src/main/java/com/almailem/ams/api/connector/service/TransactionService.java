@@ -1667,12 +1667,14 @@ public class TransactionService {
                 stockAdjustment.setBranchName(dbSA.getBranchName());
                 stockAdjustment.setDateOfAdjustment(dbSA.getDateOfAdjustment());
                 stockAdjustment.setIsDamage(dbSA.getIsDamage());
-                if(dbSA.getIsDamage().equalsIgnoreCase("Y")) {
-                    stockAdjustment.setIsCycleCount("N");
-                }
-                if(dbSA.getIsDamage().equalsIgnoreCase("N")) {
-                    stockAdjustment.setIsCycleCount("Y");
-                }
+                if(dbSA.getIsDamage() != null) {
+	                if(dbSA.getIsDamage().equalsIgnoreCase("Y")) {
+	                    stockAdjustment.setIsCycleCount("N");
+	                }
+	                if(dbSA.getIsDamage().equalsIgnoreCase("N")) {
+	                    stockAdjustment.setIsCycleCount("Y");
+	                }
+            	}
                 stockAdjustment.setItemCode(dbSA.getItemCode());
                 stockAdjustment.setItemDescription(dbSA.getItemDescription());
                 stockAdjustment.setAdjustmentQty(dbSA.getAdjustmentQty());

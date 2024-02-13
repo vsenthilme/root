@@ -1648,47 +1648,80 @@ public class PreOutboundHeaderService extends BaseService {
                                         }
                                     }
                                 }
+
+                                outerLoop:
                                 if (assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
-                                    outerLoop:
-                                    while(true) {
-                                        PickupLineV2 pickerPickupLine = pickupLineService.getPickupLineAutomateCurrentDateNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList);
-                                        log.info("Pickupline for Current Date: " + pickerPickupLine);
-                                        if (pickerPickupLine != null) {
-                                            PickupHeaderV2 pickerPickupHeader = pickupHeaderService.getPickupHeaderAutomateCurrentDateNew(companyCodeId, plantId, languageId, warehouseId, pickerPickupLine.getAssignedPickerId());
-                                            log.info("PickupHeader for Current Date: " + pickerPickupHeader);
-                                            PickupHeaderV2 pickerPickupHeaderSameList = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrderNew(companyCodeId, plantId, languageId, warehouseId, pickerPickupLine.getAssignedPickerId(), refDocNumber);
-                                            log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderSameList);
-                                            if (pickerPickupHeaderSameList != null) {
-                                                assignPickerList.add(pickerPickupLine.getAssignedPickerId());
-                                                if (assignPickerList.size() > 0) {
-                                                    break outerLoop;
-                                                }
+                                    PickupLineV2 pickerPickupLine = pickupLineService.getPickupLineAutomateCurrentDateNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList);
+                                    log.info("Pickupline for Current Date: " + pickerPickupLine);
+                                    if (pickerPickupLine != null) {
+                                        PickupHeaderV2 pickerPickupHeader = pickupHeaderService.getPickupHeaderAutomateCurrentDateNew(companyCodeId, plantId, languageId, warehouseId, pickerPickupLine.getAssignedPickerId());
+                                        log.info("PickupHeader for Current Date: " + pickerPickupHeader);
+                                        PickupHeaderV2 pickerPickupHeaderSameList = pickupHeaderService.getPickupHeaderAutomateCurrentDateSameOrderNew(companyCodeId, plantId, languageId, warehouseId, pickerPickupLine.getAssignedPickerId(), refDocNumber);
+                                        log.info("PickupHeader for Current Date same Order: " + pickerPickupHeaderSameList);
+                                        if (pickerPickupHeaderSameList != null) {
+                                            assignPickerList.add(pickerPickupLine.getAssignedPickerId());
+                                            if (assignPickerList.size() > 0) {
+                                                break outerLoop;
                                             }
-                                            if (pickerPickupHeaderSameList == null && pickerPickupHeader == null) {
-                                                assignPickerList.add(pickerPickupLine.getAssignedPickerId());
-                                                if (assignPickerList.size() > 0) {
-                                                    break outerLoop;
+                                        }
+                                        if (pickerPickupHeaderSameList == null && pickerPickupHeader == null) {
+                                            assignPickerList.add(pickerPickupLine.getAssignedPickerId());
+                                            if (assignPickerList.size() > 0) {
+                                                break outerLoop;
+                                            }
+                                        }
+                                    }
+                                    if (pickerPickupLine == null) {
+                                        String assignPickerPickupHeader = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCountNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList, OB_ORD_TYP_ID, 48L);
+                                        String assignPickerPickupHeader50 = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCountNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList, OB_ORD_TYP_ID, 50L);
+
+                                        if(assignPickerPickupHeader50 != null) {
+                                            assignPickerList.add(assignPickerPickupHeader50);
+                                            if (assignPickerList.size() > 0) {
+                                                break outerLoop;
+                                            }
+                                        }
+
+                                        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+                                        List<IKeyValuePair> pickerCountList = pickupHeaderV2Repository
+                                                .getAssignPickerWh100(companyCodeId, plantId, languageId, warehouseId, hhtUserList, 48L, OB_ORD_TYP_ID, dates[0], dates[1]);
+                                        if(pickerCountList != null && !pickerCountList.isEmpty()) {
+                                            for(IKeyValuePair iKeyValuePair : pickerCountList){             //for log purpose only will comment later
+                                                log.info("Picker Count - Picker : " + iKeyValuePair.getPickerCount() + " - " + iKeyValuePair.getAssignPicker());
+                                            }
+                                            List<String> hhtUser48List = pickerCountList.stream().map(IKeyValuePair::getAssignPicker).collect(Collectors.toList());
+                                            log.info("Filter Picker List based on Count : " + hhtUser48List);
+                                            List<IKeyValuePair> pickerCountListCreatedOn = pickupHeaderV2Repository
+                                                    .getAssignPickerW100List(companyCodeId, plantId, languageId, warehouseId, hhtUser48List, 48L, OB_ORD_TYP_ID, dates[0], dates[1]);
+                                            if(pickerCountListCreatedOn != null && !pickerCountListCreatedOn.isEmpty()) {
+                                                for(IKeyValuePair pickerCheck : pickerCountList ){
+                                                    for(IKeyValuePair pickerCheckByCreatedOn : pickerCountListCreatedOn) {
+                                                        log.info("Picker_Count, Picker Sortby Created On : "
+                                                                + pickerCheck.getAssignPicker() + ", "
+                                                                + pickerCheck.getPickerCount() + ", " + pickerCheckByCreatedOn.getAssignPicker());
+                                                        if(pickerCheck.getAssignPicker().equalsIgnoreCase(pickerCheckByCreatedOn.getAssignPicker())) {
+                                                            log.info("picker, count, ctdOn Picker : " + pickerCheck.getAssignPicker()
+                                                                    + "," + pickerCheck.getPickerCount() + ", " +pickerCheckByCreatedOn.getAssignPicker());
+                                                            assignPickerList.add(pickerCheck.getAssignPicker());
+                                                            log.info("assigned Picker: " + assignPickerList.get(0));
+                                                            if (assignPickerList.size() > 0) {
+                                                                break outerLoop;
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
-                                        if (pickerPickupLine == null) {
-                                            String assignPickerPickupHeader = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCountNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList, OB_ORD_TYP_ID, 48L);
-                                            String assignPickerPickupHeader2 = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCountNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList, OB_ORD_TYP_ID, 50L);
-                                            if(assignPickerPickupHeader != null) {
-                                                assignPickerList.add(assignPickerPickupHeader);
-                                                if (assignPickerList.size() > 0) {
-                                                    break outerLoop;
-                                                }
-                                            }
-                                            if(assignPickerPickupHeader2 != null) {
-                                                assignPickerList.add(assignPickerPickupHeader2);
-                                                if (assignPickerList.size() > 0) {
-                                                    break outerLoop;
-                                                }
-                                            }
-                                            if(assignPickerPickupHeader == null || assignPickerPickupHeader2 == null) {
-                                                break outerLoop;
-                                            }
+
+//                                    if(assignPickerPickupHeader != null) {
+//                                        assignPickerList.add(assignPickerPickupHeader);
+//                                        if (assignPickerList.size() > 0) {
+//                                            break outerLoop;
+//                                        }
+//                                    }
+                                        if(assignPickerPickupHeader == null || assignPickerPickupHeader50 == null) {
+                                            break outerLoop;
                                         }
                                     }
                                 }
@@ -1794,9 +1827,9 @@ public class PreOutboundHeaderService extends BaseService {
                                 }
                             }
                         }
+                        outerLoop:
                         if (assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
-                            outerLoop:
-                                while(true) {
+
                                 PickupLineV2 pickerPickupLine = pickupLineService.getPickupLineAutomateCurrentDateNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList);
                                 log.info("Pickupline for Current Date: " + pickerPickupLine);
                                 if (pickerPickupLine != null) {
@@ -1860,13 +1893,6 @@ public class PreOutboundHeaderService extends BaseService {
                                         }
                                     }
 
-
-//                                    if(assignPickerPickupHeader50 != null) {
-//                                        assignPickerList.add(assignPickerPickupHeader50);
-//                                        if (assignPickerList.size() > 0) {
-//                                            break outerLoop;
-//                                        }
-//                                    }
 //                                    if(assignPickerPickupHeader != null) {
 //                                        assignPickerList.add(assignPickerPickupHeader);
 //                                        if (assignPickerList.size() > 0) {
@@ -1877,7 +1903,6 @@ public class PreOutboundHeaderService extends BaseService {
                                         break outerLoop;
                                     }
                                 }
-                            }
                         }
                         if (assignPickerList == null || assignPickerList.isEmpty() || assignPickerList.size() == 0) {
                             assignPickerList.add(hhtUserList.get(0));

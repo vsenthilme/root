@@ -25,10 +25,11 @@ public class SalesReturnHeader {
     @Column(name = "Companycode", columnDefinition = "nvarchar(25)", nullable = false)
     private String companyCode;
 
-    @NotBlank(message = "Branch Code of Receiving Warehouse is mandatory")
+//    @NotBlank(message = "Branch Code of Receiving Warehouse is mandatory")
     @Column(name = "Branchcodeofreceivingwarehouse", columnDefinition = "nvarchar(25)", nullable = false)
     private String branchCodeOfReceivingWarehouse;
 
+    @NotBlank(message = "Branch Code is mandatory")
     @Column(name = "Branchcode", columnDefinition = "nvarchar(25)")
     private String branchCode;
 

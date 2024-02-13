@@ -41,4 +41,7 @@ public class OutboundLineV2 extends OutboundLine {
     private String barcodeId;
     private String handlingEquipment;
     private String customerType;
+
+    private String assignedPickerId;
+    private String tracking;
 }

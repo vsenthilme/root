@@ -15,6 +15,7 @@ import java.util.Date;
 public class PickListLine {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PL_CANCEL_LINE_ID")
 	private Long pickListCancelLineId;
 

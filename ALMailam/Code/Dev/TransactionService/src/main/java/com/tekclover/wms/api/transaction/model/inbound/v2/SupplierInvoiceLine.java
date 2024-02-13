@@ -15,6 +15,7 @@ import java.util.Date;
 public class SupplierInvoiceLine {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SI_CANCEL_LINE_ID")
 	private Long supplierInvoiceCancelLineId;
 

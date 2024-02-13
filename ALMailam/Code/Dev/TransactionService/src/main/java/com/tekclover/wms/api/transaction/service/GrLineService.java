@@ -1667,7 +1667,7 @@ public class GrLineService extends BaseService {
             log.info("cbm, createdGrLine.getCbm: " + cbm + ", " + createdGRLine.getCbm());
         }
         outerloop:
-        while (true) {
+//        while (true) {
             //  ASS_HE_NO
             if (createdGRLine != null) {
                 // Insert record into PutAwayHeader
@@ -1981,10 +1981,10 @@ public class GrLineService extends BaseService {
                 /*----------------INVENTORYMOVEMENT table Update---------------------------------------------*/
                 createInventoryMovementV2(createdGRLine, createdinventory.getStorageBin());
             }
-            if (cbm == 0D) {
-                break outerloop;
-            }
-        }
+//            if (cbm == 0D) {
+//                break outerloop;
+//            }
+//        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.tekclover.wms.api.transaction.model.outbound.v2;
 import com.tekclover.wms.api.transaction.model.outbound.OutboundLine;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -108,4 +109,9 @@ public class OutboundLineV2 extends OutboundLine {
     @Column(name = "HE_NO", columnDefinition = "nvarchar(255)")
     private String handlingEquipment;
 
+    @Column(name = "ASS_PICKER_ID")
+    private String assignedPickerId;
+
+    @Transient
+    private String tracking;
 }

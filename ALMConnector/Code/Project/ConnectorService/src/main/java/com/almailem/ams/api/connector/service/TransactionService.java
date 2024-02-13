@@ -357,7 +357,8 @@ public class TransactionService {
                 SOReturnHeader salesReturnHeader = new SOReturnHeader();
 
                 salesReturnHeader.setCompanyCode(dbIBOrder.getCompanyCode());
-                salesReturnHeader.setBranchCode(dbIBOrder.getBranchCodeOfReceivingWarehouse());
+//                salesReturnHeader.setBranchCode(dbIBOrder.getBranchCodeOfReceivingWarehouse());
+                salesReturnHeader.setBranchCode(dbIBOrder.getBranchCode());
                 salesReturnHeader.setTransferOrderNumber(dbIBOrder.getReturnOrderNo());
                 salesReturnHeader.setUpdatedOn(dbIBOrder.getUpdatedOn());
                 salesReturnHeader.setIsCompleted(dbIBOrder.getIsCompleted());
@@ -1666,7 +1667,12 @@ public class TransactionService {
                 stockAdjustment.setBranchName(dbSA.getBranchName());
                 stockAdjustment.setDateOfAdjustment(dbSA.getDateOfAdjustment());
                 stockAdjustment.setIsDamage(dbSA.getIsDamage());
-                stockAdjustment.setIsCycleCount(dbSA.getIsCycleCount());
+                if(dbSA.getIsDamage().equalsIgnoreCase("Y")) {
+                    stockAdjustment.setIsCycleCount("N");
+                }
+                if(dbSA.getIsDamage().equalsIgnoreCase("N")) {
+                    stockAdjustment.setIsCycleCount("Y");
+                }
                 stockAdjustment.setItemCode(dbSA.getItemCode());
                 stockAdjustment.setItemDescription(dbSA.getItemDescription());
                 stockAdjustment.setAdjustmentQty(dbSA.getAdjustmentQty());

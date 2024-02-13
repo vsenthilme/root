@@ -4754,9 +4754,9 @@ public class PreOutboundHeaderService extends BaseService {
                 if (outboundLineV2List != null && outboundLineV2List.isEmpty()) {
                     if (newOutboundLineList != null && !newOutboundLineList.isEmpty()) {
                         for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
-                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName());
+//                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName());
                             for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
-                                newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+//                                newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
                                 if (outboundLineV2.getItemCode().equalsIgnoreCase(newOutboundLineV2.getItemCode()) &&
                                         outboundLineV2.getManufacturerName().equalsIgnoreCase(newOutboundLineV2.getManufacturerName())) {
 
@@ -4807,12 +4807,19 @@ public class PreOutboundHeaderService extends BaseService {
                                 }
                             }
                         }
+                        for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
+                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName());
+                        }
+                        for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
+                            newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+                        }
                         log.info("OldPickList : " + oldItmMfrNameList);
                         log.info("NewPickList : " + newItmMfrNameList);
                         log.info("CreatedPickList : " + createdItmMfrNameList);
                         for (PickListLine pickListLine : createPickListLineList) {
-                            oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode() + pickListLine.getManufacturerName())).collect(Collectors.toList());
-                            newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode() + pickListLine.getManufacturerName())).collect(Collectors.toList());
+                            String itmMfrName = pickListLine.getItemCode() + pickListLine.getManufacturerName();
+                            oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
+                            newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
                         }
                         log.info("Filtered OldPickList : " + oldItmMfrNameList);
                         log.info("Filtered NewPickList : " + newItmMfrNameList);

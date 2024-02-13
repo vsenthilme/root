@@ -73,4 +73,6 @@ public interface OutboundLineOutput {
 	public String getTargetBranchCode();
 	public String getBarcodeId();
 	public String getSalesInvoiceNumber();
+	public String getAssignedPickerId();
+	public String getTracking();
 }

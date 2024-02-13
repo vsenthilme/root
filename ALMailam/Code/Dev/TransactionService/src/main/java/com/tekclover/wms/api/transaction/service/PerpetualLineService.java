@@ -730,7 +730,7 @@ public class PerpetualLineService extends BaseService {
 
         PerpetualLineV2Specification spec = new PerpetualLineV2Specification(searchPerpetualLine);
         Stream<PerpetualLineV2> perpetualLineResults = perpetualLineV2Repository.stream(spec, PerpetualLineV2.class);
-        ;
+
         return perpetualLineResults;
     }
 

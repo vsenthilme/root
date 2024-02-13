@@ -317,7 +317,11 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.manufacturer_full_name manufacturerFullName,\n" +
             "ob.PARTNER_ITEM_BARCODE barcodeId,\n" +
             "ob.HE_NO handlingEquipment,\n" +
+            "ob.ASS_PICKER_ID assignedPickerId,\n" +
             "ob.CUSTOMER_TYPE customerType,\n" +
+            "(select count(ref_doc_no) from tbloutboundline ob2 where \n" +
+            "ob2.wh_id = ob.wh_id and ob2.c_id = ob2.c_id and ob2.plant_id=ob.plant_id and ob2.lang_id = ob.lang_id and \n" +
+            "ob2.ref_doc_no = ob.ref_doc_no and ob2.status_id in (48,50,57) and ob2.is_deleted = 0) tracking, \n" +
             "(select pcQty from #tpl p \n" +
             "where \n" +
             "p.wh_id = ob.wh_id and p.c_id = ob.c_id and p.plant_id=ob.plant_id and p.lang_id = ob.lang_id and \n" +
@@ -328,6 +332,7 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "q.PRE_OB_NO = ob.PRE_OB_NO and q.OB_LINE_NO = ob.OB_LINE_NO and q.itm_code = ob.itm_code and q.ref_doc_no = ob.ref_doc_no) as referenceField10 \n" +
             "from tbloutboundline ob\n" +
             "where \n" +
+            "ob.is_deleted = 0 and \n"+
             "(COALESCE(:companyCodeId, null) IS NULL OR (ob.c_id IN (:companyCodeId))) and \n" +
             "(COALESCE(:languageId, null) IS NULL OR (ob.lang_id IN (:languageId))) and \n" +
             "(COALESCE(:plantId, null) IS NULL OR (ob.plant_id IN (:plantId))) and \n" +

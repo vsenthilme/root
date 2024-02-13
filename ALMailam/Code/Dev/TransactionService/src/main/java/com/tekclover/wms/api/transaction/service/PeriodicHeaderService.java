@@ -41,6 +41,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class PeriodicHeaderService extends BaseService {
+    @Autowired
+    private PeriodicZeroStkLineRepository periodicZeroStkLineRepository;
 
     @Autowired
     private WarehouseRepository warehouseRepository;
@@ -1356,6 +1358,7 @@ public class PeriodicHeaderService extends BaseService {
         PeriodicHeaderEntityV2 periodicHeaderEntityV2 = new PeriodicHeaderEntityV2();
         PeriodicHeaderV2 newPeriodicHeaderV2 = new PeriodicHeaderV2();
         List<PeriodicLineV2> periodicLineV2s = new ArrayList<>();
+        List<PeriodicZeroStockLine> periodicZeroStockLines = new ArrayList<>();
 
         // Get Warehouse
         Optional<Warehouse> dbWarehouse =
@@ -1497,7 +1500,7 @@ public class PeriodicHeaderService extends BaseService {
 
             //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
             if(dbInventoryList == null){
-                PeriodicLineV2 dbPeriodicLine = new PeriodicLineV2();
+                PeriodicZeroStockLine dbPeriodicLine = new PeriodicZeroStockLine();
                 dbPeriodicLine.setCompanyCode(newPeriodicHeaderV2.getCompanyCode());
                 dbPeriodicLine.setPlantId(newPeriodicHeaderV2.getPlantId());
                 dbPeriodicLine.setWarehouseId(newPeriodicHeaderV2.getWarehouseId());
@@ -1550,12 +1553,14 @@ public class PeriodicHeaderService extends BaseService {
                 dbPeriodicLine.setDeletionIndicator(0L);
                 dbPeriodicLine.setCreatedBy("MW_AMS");
                 dbPeriodicLine.setCreatedOn(new Date());
-                periodicLineV2s.add(dbPeriodicLine);
+                periodicZeroStockLines.add(dbPeriodicLine);
             }
         }
 
         List<PeriodicLineV2> createdPeriodicLine = periodicLineV2Repository.saveAll(periodicLineV2s);
         log.info("createdPeriodicLine: " + createdPeriodicLine);
+        List<PeriodicZeroStockLine> createdPeriodicZeroStockLine = periodicZeroStkLineRepository.saveAll(periodicZeroStockLines);
+        log.info("createdPeriodicZeroStockLine: " + createdPeriodicZeroStockLine);
 
         BeanUtils.copyProperties(createdPeriodicHeaderV2, periodicHeaderEntityV2, CommonUtils.getNullPropertyNames(createdPeriodicHeaderV2));
         periodicHeaderEntityV2.setPeriodicLine(periodicLineV2s);

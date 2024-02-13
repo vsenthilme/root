@@ -43,6 +43,8 @@ import java.util.stream.Stream;
 @Service
 public class PerpetualHeaderService extends BaseService {
     @Autowired
+    private PerpetualZeroStkLineRepository perpetualZeroStkLineRepository;
+    @Autowired
     private WarehouseRepository warehouseRepository;
     @Autowired
     private PerpetualLineV2Repository perpetualLineV2Repository;
@@ -1466,6 +1468,7 @@ public class PerpetualHeaderService extends BaseService {
         PerpetualHeaderEntityV2 perpetualHeaderEntity = new PerpetualHeaderEntityV2();
         PerpetualHeaderV2 newPerpetualHeader = new PerpetualHeaderV2();
         List<PerpetualLineV2> perpetualLines = new ArrayList<>();
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = new ArrayList<>();
 
         // Get Warehouse
         Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> dbWarehouse =
@@ -1609,7 +1612,7 @@ public class PerpetualHeaderService extends BaseService {
             }
             //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
             if(dbInventoryList == null){
-                PerpetualLineV2 dbPerpetualLine = new PerpetualLineV2();
+                PerpetualZeroStockLine dbPerpetualLine = new PerpetualZeroStockLine();
 
                 dbPerpetualLine.setCompanyCodeId(newPerpetualHeader.getCompanyCodeId());
                 dbPerpetualLine.setPlantId(newPerpetualHeader.getPlantId());
@@ -1663,12 +1666,14 @@ public class PerpetualHeaderService extends BaseService {
                 dbPerpetualLine.setDeletionIndicator(0L);
                 dbPerpetualLine.setCreatedBy("MW_AMS");
                 dbPerpetualLine.setCreatedOn(new Date());
-                perpetualLines.add(dbPerpetualLine);
+                perpetualZeroStockLineList.add(dbPerpetualLine);
             }
         }
 
         List<PerpetualLineV2> createdPerpetualLines = perpetualLineV2Repository.saveAll(perpetualLines);
         log.info("createdPerpetualLine : " + createdPerpetualLines);
+        List<PerpetualZeroStockLine> createdPerpetualZeroStkLines = perpetualZeroStkLineRepository.saveAll(perpetualZeroStockLineList);
+        log.info("createdPerpetualZeroStkLines : " + createdPerpetualZeroStkLines);
 
         BeanUtils.copyProperties(createdPerpetualHeader, perpetualHeaderEntity, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
         perpetualHeaderEntity.setPerpetualLine(perpetualLines);

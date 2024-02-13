@@ -604,9 +604,9 @@ public class InvoiceCancellationService extends BaseService{
             if(oldGrLineList != null && !oldGrLineList.isEmpty()) {
             if(newGrLineList != null && !newGrLineList.isEmpty()) {
                 for (GrLineV2 oldGrLine : oldGrLineList) {
-                    oldItmMfrNameList.add(oldGrLine.getItemCode() + oldGrLine.getManufacturerName());
+//                    oldItmMfrNameList.add(oldGrLine.getItemCode() + oldGrLine.getManufacturerName());
                     for (GrLineV2 newGrLine : newGrLineList) {
-                        newItmMfrNameList.add(newGrLine.getItemCode() + newGrLine.getManufacturerName());
+//                        newItmMfrNameList.add(newGrLine.getItemCode() + newGrLine.getManufacturerName());
                         if (oldGrLine.getItemCode().equalsIgnoreCase(newGrLine.getItemCode()) &&
                                 oldGrLine.getManufacturerName().equalsIgnoreCase(newGrLine.getManufacturerName())) {
 
@@ -662,12 +662,19 @@ public class InvoiceCancellationService extends BaseService{
                         }
                     }
                 }
+                for (GrLineV2 oldGrLine : oldGrLineList) {
+                    oldItmMfrNameList.add(oldGrLine.getItemCode() + oldGrLine.getManufacturerName());
+                }
+                for (GrLineV2 newGrLine : newGrLineList) {
+                    newItmMfrNameList.add(newGrLine.getItemCode() + newGrLine.getManufacturerName());
+                }
                 log.info("OldSupplierInvoiceLineList : " + oldItmMfrNameList);
                 log.info("NewSupplierInvoiceLineList : " + newItmMfrNameList);
                 log.info("CreatedSupplierInvoiceLineList : " + createdItmMfrNameList);
                 for (SupplierInvoiceLine supplierInvoiceLine : toBeCreatedSupplierInvoiceLineList) {
-                    oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(supplierInvoiceLine.getItemCode() + supplierInvoiceLine.getManufacturerName())).collect(Collectors.toList());
-                    newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(supplierInvoiceLine.getItemCode() + supplierInvoiceLine.getManufacturerName())).collect(Collectors.toList());
+                    String itmMfrName = supplierInvoiceLine.getItemCode() + supplierInvoiceLine.getManufacturerName();
+                    oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
+                    newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
                 }
                 log.info("Filtered OldSupplierInvoiceLineList : " + oldItmMfrNameList);
                 log.info("Filtered NewSupplierInvoiceLineList : " + newItmMfrNameList);

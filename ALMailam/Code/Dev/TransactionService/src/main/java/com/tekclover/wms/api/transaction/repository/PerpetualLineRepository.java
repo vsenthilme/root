@@ -59,14 +59,16 @@ public interface PerpetualLineRepository extends JpaRepository<PerpetualLine, Lo
 
 
     // Count for MobileDashBoard
-    @Query(value = "SELECT COUNT(cc_no) AS count FROM tblperpetualline WHERE "
-            + "(:languageId IS NULL OR LANG_ID = :languageId) AND "
-            + "(:companyCode IS NULL OR C_ID = :companyCode) AND "
-            + "(:plantId IS NULL OR PLANT_ID = :plantId) AND "
-            + "(:warehouseId IS NULL OR WH_ID = :warehouseId) AND "
-            + "(STATUS_ID IN (:statusId)) AND "
-            + "(COUNTER_ID IN (:counterId)) AND "
-            + "IS_DELETED = 0 group by cc_no", nativeQuery = true)
+    @Query(value = "SELECT COUNT(cc_no) AS count FROM (\n"
+            + "select distinct cc_no from \n"
+            + "tblperpetualline WHERE \n"
+            + "(:languageId IS NULL OR LANG_ID = :languageId) AND \n"
+            + "(:companyCode IS NULL OR C_ID = :companyCode) AND \n"
+            + "(:plantId IS NULL OR PLANT_ID = :plantId) AND \n"
+            + "(:warehouseId IS NULL OR WH_ID = :warehouseId) AND \n"
+            + "(STATUS_ID IN (:statusId)) AND \n"
+            + "(COUNTER_ID IN (:counterId)) AND \n"
+            + "IS_DELETED = 0 ) x", nativeQuery = true)
     public Long getPerpetualLineCount(@Param("companyCode") List<String> companyCode,
                                            @Param("plantId") List<String> plantId,
                                            @Param("warehouseId") List<String> warehouseId,

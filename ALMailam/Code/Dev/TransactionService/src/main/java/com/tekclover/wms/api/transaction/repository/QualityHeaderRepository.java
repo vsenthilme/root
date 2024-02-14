@@ -78,7 +78,7 @@ public interface QualityHeaderRepository extends JpaRepository<QualityHeader, Lo
             + "(:warehouseId IS NULL OR qh.wh_id IN (:warehouseId)) AND \n"
             + "(qh.status_id IN (:statusId)) AND \n"
             + "qh.is_deleted = 0) x ", nativeQuery = true)
-    public List<Long> getQualityCount(
+    public Long getQualityCount(
             @Param("companyCode") List<String> companyCode,
             @Param("plantId") List<String> plantId,
             @Param("languageId") List<String> languageId,

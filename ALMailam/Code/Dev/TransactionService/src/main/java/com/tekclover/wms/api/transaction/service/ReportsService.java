@@ -2401,9 +2401,9 @@ public class ReportsService extends BaseService {
         outboundCount.setReversals(pickupHeaderListReversal);
 
         // -----------Quality-----------------------------------------------------------------------------
-        List<Long> qualityHeaderCount = qualityHeaderRepository.getQualityCount(companyCode, plantId, languageId, warehouseId,54L);
-        Long quality = qualityHeaderCount.stream().count();
-        outboundCount.setQuality(quality);
+        Long qualityHeaderCount = qualityHeaderRepository.getQualityCount(companyCode, plantId, languageId, warehouseId,54L);
+//        Long quality = qualityHeaderCount.stream().count();
+        outboundCount.setQuality(qualityHeaderCount);
 
         /*--------------StockCount--------------------------------*/
         MobileDashboard.StockCount stockCount = mobileDashboard.new StockCount();

@@ -1569,8 +1569,13 @@ public class PreOutboundHeaderService extends BaseService {
                 log.info("OrderManagementLine sameItem Present : " + orderManagementLineFilterList.size());
                 log.info("OrderManagementLine No sameItem Present : " + orderManagementLineRemainingList.size());
             }
-        orderManagementLineOrderedList.addAll(orderManagementLineFilterList);
-        orderManagementLineOrderedList.addAll(orderManagementLineRemainingList);
+            if((orderManagementLineFilterList != null && !orderManagementLineFilterList.isEmpty()) ||
+                    (orderManagementLineRemainingList != null && !orderManagementLineRemainingList.isEmpty())) {
+                orderManagementLineOrderedList.addAll(orderManagementLineFilterList);
+                orderManagementLineOrderedList.addAll(orderManagementLineRemainingList);
+            } else {
+                orderManagementLineOrderedList = orderManagementLineV2List;
+            }
 
         for (OrderManagementLineV2 orderManagementLine : orderManagementLineOrderedList) {
             String assignPickerId = null;

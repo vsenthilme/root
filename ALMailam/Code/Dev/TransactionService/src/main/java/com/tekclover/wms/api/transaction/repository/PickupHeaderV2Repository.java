@@ -209,8 +209,7 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
 //            " ob.ass_picker_id in (:assignedPickerId) and \n" +
             " ob.status_id = :statusId and \n" +
 //            " level_id = :levelId and \r\n" +
-            " ob.pick_ctd_on between :startDate and :endDate and ob.ass_picker_id is not null and ob.is_deleted = 0 \n" +
-            " order by pick_ctd_on ", nativeQuery = true)
+            " ob.pick_ctd_on between :startDate and :endDate and ob.ass_picker_id is not null and ob.is_deleted = 0 ", nativeQuery = true)
     public List<String> getPickupHeaderAssignPickerList(@Param("companyCodeId") String companyCodeId,
                                                         @Param("plantId") String plantId,
                                                         @Param("languageId") String languageId,

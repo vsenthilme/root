@@ -1531,7 +1531,8 @@ public class PeriodicHeaderService extends BaseService {
                 dbPeriodicLine.setInventoryUom(cycleCountLine.getUom());
                 dbPeriodicLine.setFrozenQty(cycleCountLine.getFrozenQty());
 
-                dbPeriodicLine.setStatusId(70L);
+                dbPeriodicLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, newPeriodicHeaderV2.getLanguageId());
                 dbPeriodicLine.setStatusDescription(statusDescription);
 
                 dbPeriodicLine.setCompanyDescription(description.getCompanyDesc());

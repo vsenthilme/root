@@ -1898,12 +1898,18 @@ public class PickupLineService extends BaseService {
 //                OutboundLineV2 updateOutboundLine = new OutboundLineV2();
 //                updateOutboundLine.setStatusId(STATUS_ID);
 
+                //spring boot to Stored procedure null unable to pass so assigned picker is set as 0 and it is handled inside stored procedure
+                if(dbPickupLine.getAssignedPickerId() == null) {
+                    dbPickupLine.setAssignedPickerId("0");
+                }
+
                 statusDescription = stagingLineV2Repository.getStatusDescription(STATUS_ID, dbPickupLine.getLanguageId());
                 outboundLineV2Repository.updateOutboundlineStatusUpdateProc(
                         dbPickupLine.getCompanyCodeId(), dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(),
                         dbPickupLine.getWarehouseId(), dbPickupLine.getRefDocNumber(), dbPickupLine.getPreOutboundNo(),
                         dbPickupLine.getItemCode(), dbPickupLine.getManufacturerName(), dbPickupLine.getPartnerCode(),
-                        dbPickupLine.getActualHeNo(), dbPickupLine.getLineNumber(), STATUS_ID, statusDescription, new Date());
+                        dbPickupLine.getActualHeNo(), dbPickupLine.getAssignedPickerId(),
+                        dbPickupLine.getLineNumber(), STATUS_ID, statusDescription, new Date());
                 log.info("outboundLine updated using Stored Procedure: ");
 //                updateOutboundLine.setStatusDescription(statusDescription);
 //                updateOutboundLine.setHandlingEquipment(dbPickupLine.getActualHeNo());

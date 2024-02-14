@@ -11923,6 +11923,28 @@ public class TransactionService {
         }
     }
 
+    // GET
+    public OutboundReversalV2[] doReversalBatchV2(List<InboundReversalInput> outboundReversalInput, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "outboundline/v2/reversal/batch")
+                    .queryParam("loginUserID", loginUserID);
+            HttpEntity<?> entity = new HttpEntity<>(outboundReversalInput, headers);
+            ResponseEntity<OutboundReversalV2[]> result = getRestTemplate().exchange(builder.toUriString(),
+                    HttpMethod.POST, entity, OutboundReversalV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     //=========================================================================================================
 
     //=============================================== Outbound-Order ==========================================================

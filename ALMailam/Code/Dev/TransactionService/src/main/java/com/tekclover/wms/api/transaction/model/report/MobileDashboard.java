@@ -20,6 +20,7 @@ public class MobileDashboard {
 		private Long picking;
 		private Long quality;
 		private Long reversals;
+		private Long tracking;
 	}
 	
 	@Data

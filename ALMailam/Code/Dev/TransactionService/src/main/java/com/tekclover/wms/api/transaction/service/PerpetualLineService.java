@@ -17,6 +17,7 @@ import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiRes
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PerpetualLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.PerpetualLineV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.PerpetualZeroStkLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class PerpetualLineService extends BaseService {
+    @Autowired
+    private PerpetualZeroStkLineRepository perpetualZeroStkLineRepository;
     @Autowired
     private CycleCountLineRepository cycleCountLineRepository;
     @Autowired
@@ -466,7 +469,9 @@ public class PerpetualLineService extends BaseService {
                 log.info("newPerpetualLines : " + newPerpetualLines);
                 // Create new PerpetualHeader and Lines
                 PerpetualHeaderEntity createdPerpetualHeader = createNewHeaderNLines(cycleCountNo, newPerpetualLines, loginUserID);
-                BeanUtils.copyProperties(createdPerpetualHeader, newlyCreatedPerpetualHeader, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
+                if(createdPerpetualHeader != null) {
+                    BeanUtils.copyProperties(createdPerpetualHeader, newlyCreatedPerpetualHeader, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
+                }
             }
 
             // Update new PerpetualHeader
@@ -720,7 +725,7 @@ public class PerpetualLineService extends BaseService {
      * @throws ParseException
      * @throws java.text.ParseException
      */
-    public Stream<PerpetualLineV2> findPerpetualLineV2(SearchPerpetualLineV2 searchPerpetualLine) throws java.text.ParseException {
+    public List<PerpetualLineV2> findPerpetualLineV2(SearchPerpetualLineV2 searchPerpetualLine) throws java.text.ParseException {
         if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getStartCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualLine.getStartCreatedOn(),
                     searchPerpetualLine.getEndCreatedOn());
@@ -729,7 +734,17 @@ public class PerpetualLineService extends BaseService {
         }
 
         PerpetualLineV2Specification spec = new PerpetualLineV2Specification(searchPerpetualLine);
-        Stream<PerpetualLineV2> perpetualLineResults = perpetualLineV2Repository.stream(spec, PerpetualLineV2.class);
+        PerpetualZeroStkLineV2Specification specification = new PerpetualZeroStkLineV2Specification(searchPerpetualLine);
+        List<PerpetualLineV2> perpetualLineResults = perpetualLineV2Repository.stream(spec, PerpetualLineV2.class).collect(Collectors.toList());
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = perpetualZeroStkLineRepository.stream(specification, PerpetualZeroStockLine.class).collect(Collectors.toList());
+        if(perpetualZeroStockLineList != null && !perpetualZeroStockLineList.isEmpty()) {
+            for(PerpetualZeroStockLine perpetualZeroStockLine : perpetualZeroStockLineList) {
+                PerpetualLineV2 dbPerpetualLine = new PerpetualLineV2();
+                BeanUtils.copyProperties(perpetualZeroStockLine, dbPerpetualLine, CommonUtils.getNullPropertyNames(perpetualZeroStockLine));
+                perpetualLineResults.add(dbPerpetualLine);
+            }
+            log.info("Perpetual Line with Zero Stock: " + perpetualZeroStockLineList);
+        }
 
         return perpetualLineResults;
     }
@@ -849,7 +864,8 @@ public class PerpetualLineService extends BaseService {
 
         List<PerpetualLineV2> createBatchPerpetualLines = new ArrayList<>();
         List<PerpetualLineV2> updateBatchPerpetualLines = new ArrayList<>();
-        for (PerpetualLineV2 updatePerpetualLine : updatePerpetualLines) {
+        List<PerpetualLineV2> filteredPerpetualLines = updatePerpetualLines.stream().filter(a -> a.getStatusId() != 47L).collect(Collectors.toList());
+        for (PerpetualLineV2 updatePerpetualLine : filteredPerpetualLines) {
             PerpetualLineV2 dbPerpetualLine = getPerpetualLineV2(
                     updatePerpetualLine.getCompanyCodeId(), updatePerpetualLine.getPlantId(), updatePerpetualLine.getLanguageId(),
                     updatePerpetualLine.getWarehouseId(), updatePerpetualLine.getCycleCountNo(),
@@ -959,7 +975,7 @@ public class PerpetualLineService extends BaseService {
         List<PerpetualLineV2> newPerpetualLines = new ArrayList<>();
         try {
             for (PerpetualLineV2 updatePerpetualLine : updatePerpetualLines) {
-
+            if(updatePerpetualLine.getStatusId() != 47L) {
                 PerpetualLineV2 dbPerpetualLine = getPerpetualLineV2(
                         updatePerpetualLine.getCompanyCodeId(),
                         updatePerpetualLine.getPlantId(),
@@ -1050,7 +1066,7 @@ public class PerpetualLineService extends BaseService {
                         double VAR_QTY = (INV_QTY + IB_QTY) - (OB_QTY + CTD_QTY);
                         dbPerpetualLine.setVarianceQty(VAR_QTY);
                     }
-                    if(updatePerpetualLine.getFirstCountedQty() == null) {
+                    if (updatePerpetualLine.getFirstCountedQty() == null) {
                         dbPerpetualLine.setFirstCountedQty(updatePerpetualLine.getCountedQty());
                     }
 
@@ -1148,8 +1164,8 @@ public class PerpetualLineService extends BaseService {
 
 //                    newPerpetualLines.add(newPerpetualLine);
                 }
-
             }
+        }
 
 //            PerpetualHeaderV2 newlyCreatedPerpetualHeader = new PerpetualHeaderV2();
 //            if (!newPerpetualLines.isEmpty()) {
@@ -1355,7 +1371,7 @@ public class PerpetualLineService extends BaseService {
             Long perpetualLineCount = updatePerpetualLines.stream().count();
             Long statusIdCount = statusId78.stream().filter(a -> a.equalsIgnoreCase("True")).count();
 
-            if (perpetualLineCount != statusIdCount) {
+            if (!perpetualLineCount.equals(statusIdCount)) {
                 throw new BadRequestException("Perpetual Lines are not completely Processed");
             }
 
@@ -1366,7 +1382,7 @@ public class PerpetualLineService extends BaseService {
 //                PerpetualHeaderEntityV2 createdPerpetualHeader = createNewHeaderNLinesV2(cycleCountNo, newPerpetualLines, loginUserID);
 //                BeanUtils.copyProperties(createdPerpetualHeader, newlyCreatedPerpetualHeader, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
 //            }
-            if (perpetualLineCount == statusIdCount) {
+            if (perpetualLineCount.equals(statusIdCount)) {
                 // Update new PerpetualHeader
                 PerpetualHeaderV2 dbPerpetualHeader = perpetualHeaderService.getPerpetualHeaderV2(
                         updatePerpetualLines.get(0).getCompanyCodeId(),

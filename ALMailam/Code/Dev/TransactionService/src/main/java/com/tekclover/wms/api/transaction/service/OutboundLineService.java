@@ -13,6 +13,7 @@ import com.tekclover.wms.api.transaction.model.impl.StockMovementReportImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.integration.IntegrationApiResponse;
 import com.tekclover.wms.api.transaction.model.outbound.*;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.OrderManagementLine;
@@ -2791,6 +2792,376 @@ public class OutboundLineService extends BaseService {
         return dbOutboundLineList;
     }
 
+    /**
+     *
+     * @param outboundReversalInputList
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     * @throws java.text.ParseException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    public List<OutboundReversalV2> batchOutboundReversal(List<InboundReversalInput> outboundReversalInputList, String loginUserID) throws ParseException, java.text.ParseException, InvocationTargetException, IllegalAccessException {
+            log.info("OutboundReversal Input: " + outboundReversalInputList);
+            if(outboundReversalInputList != null && !outboundReversalInputList.isEmpty()) {
+                for (InboundReversalInput outboundReversalInput : outboundReversalInputList){
+                    doReversalBatchV2(
+                            outboundReversalInput.getCompanyCodeId(),
+                            outboundReversalInput.getPlantId(),
+                            outboundReversalInput.getLanguageId(),
+                            outboundReversalInput.getWarehouseId(),
+                            outboundReversalInput.getRefDocNumber(),
+                            outboundReversalInput.getItemCode(),
+                            outboundReversalInput.getManufacturerName(),
+                            loginUserID);
+                }
+            }
+            return null;
+        }
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public List<OutboundReversalV2> doReversalBatchV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                      String refDocNumber, String itemCode, String manufacturerName, String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
+        List<OutboundLineV2> outboundLineList =
+                outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, itemCode, manufacturerName, 0L);
+        log.info("outboundLineList---------> : " + outboundLineList);
+
+        List<OutboundReversalV2> outboundReversalList = new ArrayList<>();
+        for (OutboundLineV2 outboundLine : outboundLineList) {
+            Warehouse warehouse = getWarehouse(warehouseId, companyCodeId, plantId, languageId);
+            /*--------------STEP 1-------------------------------------*/
+            // If STATUS_ID = 57 - Reversal of QC/Picking confirmation
+            if (outboundLine.getStatusId() == 57L) {
+                //Get current status id for inventory update
+                Long outboundLineStatusIdBeforeUpdate = outboundLine.getStatusId();
+
+                outboundLine.setDeliveryQty(0D);
+                outboundLine.setReversedBy(loginUserID);
+                outboundLine.setReversedOn(new Date());
+                outboundLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, outboundLine.getLanguageId());
+                outboundLine.setStatusDescription(statusDescription);
+                outboundLine = outboundLineV2Repository.save(outboundLine);
+                log.info("outboundLine updated : " + outboundLine);
+
+                /*--------------STEP 2-------------------------------------
+                 * Pass WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values fetched
+                 * from OUTBOUNDHEADER and OUTBOUNDLINE table into QCLINE table  and update STATUS_ID = 56
+                 */
+                List<QualityLineV2> qualityLine = qualityLineService.deleteQualityLineForReversalV2(outboundLine.getCompanyCodeId(),
+                        outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(),
+                        outboundLine.getPreOutboundNo(), outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                        outboundLine.getLineNumber(), outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("QualityLine----------Deleted-------> : " + qualityLine);
+
+                List<OutboundLineInterim> outboundLineInterim = qualityLineService.deleteOutboundLineInterimForReversalV2(
+                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("OutboundLineInterim----------Deleted-------> : " + outboundLineInterim);
+
+                if (qualityLine != null && qualityLine.size() > 0) {
+                    for (QualityLine qualityLineData : qualityLine) {
+                        List<QualityHeaderV2> qualityHeader = qualityHeaderService.deleteQualityHeaderForReversalV2(outboundLine.getCompanyCodeId(),
+                                outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), refDocNumber,
+                                qualityLineData.getQualityInspectionNo(), qualityLineData.getActualHeNo(), loginUserID);
+                        log.info("QualityHeader----------Deleted-------> : " + qualityHeader);
+                    }
+                }
+
+                /*---------------STEP 3------------------------------------
+                 * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from QCLINE table and
+                 * pass the keys in PICKUPLINE table  and update STATUS_ID = 53
+                 */
+                // HAREESH 06/09/2022 change from single line delete to multiple line delete since there maybe be multiple records for same parameter
+                List<PickupLineV2> pickupLineList = pickupLineService.deletePickupLineForReversalV2(outboundLine.getCompanyCodeId(),
+                        outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("PickupLine----------Deleted-------> : ");
+
+                /*---------------STEP 3.1-----Inventory update-------------------------------
+                 * Pass WH_ID/_ITM_CODE/ST_BIN of BIN_CLASS_ID=5/PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE
+                 * in INVENTORY table and update INV_QTY as (INV_QTY - DLV_QTY ) and
+                 * delete the record if INV_QTY = 0 (Update 1)
+                 */
+                if (pickupLineList != null && !pickupLineList.isEmpty()) {
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+//                        InventoryV2 inventory = updateInventory1V2(pickupLine, outboundLineStatusIdBeforeUpdate);
+
+                        //Get pickupheader for inventory update
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.getPickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode());
+                        log.info("get pickupHeader : " + pickupHeader);
+
+                        /*---------------STEP 5-----OrderManagement update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPHEADER table
+                         * and pass the keys in ORDERMANAGEMENTLINE table and update STATUS_ID as 47
+                         */
+                        // HAREESH 07/09/2022 change from single line get to multiple line get since there maybe be multiple records for same parameter
+                        if (pickupHeader != null) {
+                            for (PickupHeaderV2 pickupHeaderData : pickupHeader) {
+                                List<OrderManagementLineV2> orderManagementLine = updateOrderManagementLineForReversalV2(pickupHeaderData, loginUserID);
+                                log.info("orderManagementLine updated : " + orderManagementLine);
+                            }
+
+                        }
+
+                        /*---------------STEP 3.2-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN from PICK_ST_BIN /PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE
+                         * in INVENTORY table and update INV_QTY as (INV_QTY + DLV_QTY ) - (Update 2)
+                         */
+//                        if (inventory != null) {
+                        InventoryV2 inventory = inventoryService.getInventoryV2(
+                                pickupLine.getCompanyCodeId(), pickupLine.getPlantId(), pickupLine.getLanguageId(),
+                                pickupLine.getWarehouseId(), pickupLine.getPickedPackCode(),
+                                pickupLine.getItemCode(), pickupLine.getPickedStorageBin(), pickupLine.getManufacturerName());
+
+                        // HAREESH -28-08-2022 change to update allocated qty
+                        if (inventory != null && pickupHeader != null) {
+//								for (PickupHeader pickupHeaderData : pickupHeader) {
+//									Double ALLOC_QTY = (inventory.getAllocatedQuantity() != null ? inventory.getAllocatedQuantity() : 0) + (pickupHeaderData.getPickToQty() != null ? pickupHeaderData.getPickToQty() : 0);
+//									inventory.setAllocatedQuantity(ALLOC_QTY);
+//                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
+                            inventory.setInventoryQuantity(INV_QTY);
+                            Double ALLOC_QTY = 0D;
+                            if(inventory.getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventory.getAllocatedQuantity();
+                            }
+                            inventory.setReferenceField4(INV_QTY + ALLOC_QTY);
+//                                inventory = inventoryV2Repository.save(inventory);
+//                                log.info("inventory updated : " + inventory);
+                            InventoryV2 newInventoryV2 = new InventoryV2();
+                            BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
+                            newInventoryV2.setInventoryId(System.currentTimeMillis());
+                            InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
+                            log.info("InventoryV2 created : " + createdInventoryV2);
+//								}
+                        }
+//                        }
+
+
+                        /*------------------------Record insertion in Outbound Reversal table----------------------------*/
+                        /////////RECORD-1/////////////////////////////////////////////////////////////////////////////////
+                        for (QualityLineV2 qualityLineData : qualityLine) {
+                            String reversalType = "QUALITY";
+                            Double reversedQty = qualityLineData.getQualityQty();
+                            OutboundReversalV2 createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber,
+                                    qualityLineData.getManufacturerName(), outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode,
+                                    qualityLineData.getPickPackBarCode(), reversedQty, 60L, loginUserID,
+                                    outboundLine.getSalesOrderNumber(), qualityLineData.getBarcodeId());
+                            outboundReversalList.add(createdOutboundReversal);
+
+                            /////////RECORD-2/////////////////////////////////////////////////////////////////////////////////
+                            reversalType = "PICKING";
+                            reversedQty = pickupLine.getPickConfirmQty();
+                            createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber, outboundLine.getManufacturerName(),
+                                    outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode, qualityLineData.getPickPackBarCode(), reversedQty,
+                                    outboundLine.getStatusId(), loginUserID, outboundLine.getSalesOrderNumber(), qualityLineData.getBarcodeId());
+                            outboundReversalList.add(createdOutboundReversal);
+                        }
+
+                        /*-----------------------InventoryMovement----------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 1-----------------------
+                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+                        Long BIN_CLASS_ID = 5L;
+                        StorageBinV2 storageBin = mastersService.getStorageBin(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
+                        String stBin = storageBin.getStorageBin();
+                        String movementQtyValue = "N";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+
+                        /*----------------------UPDATE-2------------------------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 2-----------------------
+                        movementDocumentNo = pickupLine.getPickupNumber();
+                        stBin = pickupLine.getPickedStorageBin();
+                        movementQtyValue = "P";
+                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
+                    }
+
+
+                    //Delete pickupheader after inventory update
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        /*---------------STEP 4-----PickupHeader update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPLINE table
+                         * and pass the keys in PICKUPHEADER table and Delete PickUpHeader
+                         */
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.deletePickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode(), loginUserID);
+                        log.info("pickupHeader deleted : " + pickupHeader);
+                    }
+                }
+            }
+
+            /*-----------------------------Next Process----------------------------------------------------------*/
+            // If STATUS_ID = 50 - Reversal of Picking Confirmation
+            // HAREESH 27-08-2022 added status id 51
+            if (outboundLine.getStatusId() == 50L || outboundLine.getStatusId() == 51L) {
+                /*----------------------STEP 1------------------------------------------------
+                 * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from OUTBOUNDLINE table and
+                 * pass the keys in PICKUPLINE table and update STATUS_ID=53 and Delete the record
+                 */
+                // HAREESH 25/11/2022 update outboundline
+                //Get current status id for inventory update
+                Long outboundLineStatusIdBeforeUpdate = outboundLine.getStatusId();
+                outboundLine.setStatusId(47L);
+                outboundLine = outboundLineV2Repository.save(outboundLine);
+                log.info("outboundLine updated : " + outboundLine);
+
+                // HAREESH 07/09/2022 change from single line delete to multiple line delete since there maybe be multiple records for same parameter
+                List<PickupLineV2> pickupLineList = pickupLineService.deletePickupLineForReversalV2(
+                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                if (pickupLineList != null && !pickupLineList.isEmpty()) {
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        //get pickup header
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.getPickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode());
+                        log.info("get pickupHeader : " + pickupHeader);
+
+                        List<QualityLineV2> qualityLine = qualityLineService.deleteQualityLineForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                                outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                        log.info("QualityLine----------Deleted-------> : " + qualityLine);
+
+                        // DELETE QUALITY_HEADER
+                        List<QualityHeaderV2> dbQualityHeader = qualityHeaderService.getInitialQualityHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), outboundLine.getRefDocNumber(),
+                                pickupLine.getPickupNumber(), outboundLine.getPartnerCode());
+                        if (dbQualityHeader != null && dbQualityHeader.size() > 0) {
+                            for (QualityHeaderV2 qualityHeaderData : dbQualityHeader) {
+                                QualityHeaderV2 qualityHeader = qualityHeaderService.deleteQualityHeaderV2(
+                                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), refDocNumber,
+                                        qualityHeaderData.getQualityInspectionNo(), qualityHeaderData.getActualHeNo(), loginUserID);
+                                log.info("QualityHeader----------Deleted-------> : " + qualityHeader);
+                            }
+                        }
+
+                        /*---------------STEP 3-----OrderManagementLine update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPHEADER table and
+                         * pass the keys in ORDERMANAGEMENTLINE table  and update STATUS_ID as 47
+                         */
+                        // HAREESH 07/09/2022 change from single line get to multiple line get since there maybe be multiple records for same parameter
+                        if (pickupHeader != null) {
+                            for (PickupHeaderV2 pickupHeaderData : pickupHeader) {
+                                List<OrderManagementLineV2> orderManagementLine = updateOrderManagementLineForReversalV2(pickupHeaderData, loginUserID);
+                                log.info("orderManagementLine updated : " + orderManagementLine);
+                            }
+                        }
+
+                        /*---------------STEP 3.1-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN of BIN_CLASS_ID=4/PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE in
+                         * INVENTORY table and update INV_QTY as (INV_QTY - PICK_CNF_QTY ) and
+                         * delete the record If INV_QTY = 0 - (Update 1)
+                         */
+//                        updateInventory1V2(pickupLine, outboundLineStatusIdBeforeUpdate);
+
+                        /*---------------STEP 3.2-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN from PICK_ST_BIN/PACK_BARCODE from PICK_PACK_BARCODE of PICKUPLINE in
+                         * INVENTORY table and update INV_QTY as (INV_QTY + PICK_CNF_QTY )- (Update 2)
+                         */
+                        InventoryV2 inventory = inventoryService.getInventoryV2(pickupLine.getCompanyCodeId(), pickupLine.getPlantId(), pickupLine.getLanguageId(),
+                                pickupLine.getWarehouseId(), pickupLine.getPickedPackCode(), pickupLine.getItemCode(), pickupLine.getPickedStorageBin(), pickupLine.getManufacturerName());
+
+                        if (inventory != null) {
+                            // HAREESH -28-08-2022 change to update allocated qty
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
+                            if (INV_QTY < 0) {
+                                log.info("inventory qty calculated is less than 0: " + INV_QTY);
+                                INV_QTY = Double.valueOf(0);
+                            }
+                            inventory.setInventoryQuantity(INV_QTY);
+                            Double ALLOC_QTY = 0D;
+                            if(inventory.getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventory.getAllocatedQuantity();
+                            }
+                            inventory.setReferenceField4(INV_QTY + ALLOC_QTY);
+//                            inventory = inventoryV2Repository.save(inventory);
+//                            log.info("inventory updated : " + inventory);
+                            InventoryV2 newInventoryV2 = new InventoryV2();
+                            BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
+                            newInventoryV2.setInventoryId(System.currentTimeMillis());
+                            InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
+                            log.info("InventoryV2 created : " + createdInventoryV2);
+                        }
+
+                        /*------------------------Record insertion in Outbound Reversal table----------------------------*/
+                        /////////RECORD-1/////////////////////////////////////////////////////////////////////////////////
+                        String reversalType = "PICKING";
+                        Double reversedQty = pickupLine.getPickConfirmQty();
+                        OutboundReversalV2 createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber,
+                                outboundLine.getManufacturerName(), outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode,
+                                pickupLine.getPickedPackCode(), reversedQty, outboundLine.getStatusId(), loginUserID,
+                                outboundLine.getSalesOrderNumber(), pickupLine.getBarcodeId());
+                        outboundReversalList.add(createdOutboundReversal);
+                        /****************************************************************************/
+
+                        /*-----------------------InventoryMovement----------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 1-----------------------
+                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+                        Long BIN_CLASS_ID = 4L;
+                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+
+                        String movementDocumentNo = pickupLine.getRefDocNumber();
+                        String stBin = storageBin.getStorageBin();
+                        String movementQtyValue = "N";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+
+                        /*----------------------UPDATE-2------------------------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 2-----------------------
+                        movementDocumentNo = pickupLine.getPickupNumber();
+                        stBin = pickupLine.getPickedStorageBin();
+                        movementQtyValue = "P";
+                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
+                    }
+
+                    //Delete pickupheader after inventory update
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.deletePickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode(), loginUserID);
+                        log.info("pickupHeader deleted : " + pickupHeader);
+                    }
+                }
+            }
+        }
+
+        return outboundReversalList;
+    }
     /**
      * @param refDocNumber
      * @param itemCode

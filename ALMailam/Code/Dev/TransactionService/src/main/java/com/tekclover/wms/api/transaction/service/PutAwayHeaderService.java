@@ -903,8 +903,12 @@ public class PutAwayHeaderService extends BaseService {
                 );
         if (putAwayHeader.isEmpty()) {
             throw new BadRequestException("The given values: " +
-                    ",refDocNumber: " + refDocNumber + "," +
-                    ",putawayNumber: " + putawayNumber + "," +
+                    "companyCode: " + companyCode + "," +
+                    "plantId: " + plantId + "," +
+                    "languageId: " + languageId + "," +
+                    "warehouseId: " + warehouseId + "," +
+                    "refDocNumber: " + refDocNumber + "," +
+                    "putawayNumber: " + putawayNumber + "," +
                     " doesn't exist.");
         }
         return putAwayHeader;
@@ -1255,9 +1259,11 @@ public class PutAwayHeaderService extends BaseService {
                     imBasicData.setManufacturerName(dbPutAwayLine.getManufacturerName());
                     ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
                     log.info("ImbasicData1 : " + itemCodeCapacityCheck);
-                    if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                        capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
-                        log.info("capacity Check: " + capacityCheck);
+                    if(itemCodeCapacityCheck != null) {
+                        if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                            capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                            log.info("capacity Check: " + capacityCheck);
+                        }
                     }
 
                     InventoryV2 updateStorageBin =
@@ -1439,9 +1445,11 @@ public class PutAwayHeaderService extends BaseService {
                 imBasicData.setManufacturerName(manufactureName);
                 ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
                 log.info("ImbasicData1 : " + itemCodeCapacityCheck);
-                if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                    capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
-                    log.info("capacity Check: " + capacityCheck);
+                if(itemCodeCapacityCheck != null) {
+                    if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                        capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                        log.info("capacity Check: " + capacityCheck);
+                    }
                 }
 
                 log.info("---#---deleteInventory: " + warehouseId + "," + packBarcodes + "," + itemCode);

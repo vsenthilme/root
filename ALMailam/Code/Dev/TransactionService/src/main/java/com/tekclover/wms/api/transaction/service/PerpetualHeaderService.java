@@ -1644,7 +1644,8 @@ public class PerpetualHeaderService extends BaseService {
                 dbPerpetualLine.setInventoryUom(cycleCountLine.getUom());
                 dbPerpetualLine.setFrozenQty(cycleCountLine.getFrozenQty());
 
-                dbPerpetualLine.setStatusId(70L);
+                dbPerpetualLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, newPerpetualHeader.getLanguageId());
                 dbPerpetualLine.setStatusDescription(statusDescription);
 
                 dbPerpetualLine.setCompanyDescription(description.getCompanyDesc());

@@ -8,6 +8,7 @@ import com.tekclover.wms.api.transaction.model.cyclecount.periodic.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.AssignHHTUserCC;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualHeaderV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
@@ -19,6 +20,7 @@ import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiRes
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PeriodicLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.PeriodicLineV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.PeriodicZeroStkLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class PeriodicLineService extends BaseService {
+    @Autowired
+    private PeriodicZeroStkLineRepository periodicZeroStkLineRepository;
     @Autowired
     private CycleCountLineRepository cycleCountLineRepository;
     @Autowired
@@ -682,7 +686,7 @@ public class PeriodicLineService extends BaseService {
      * @return
      * @throws Exception
      */
-    public Stream<PeriodicLineV2> findPeriodicLineStreamV2(SearchPeriodicLineV2 searchPeriodicLine) throws Exception {
+    public List<PeriodicLineV2> findPeriodicLineStreamV2(SearchPeriodicLineV2 searchPeriodicLine) throws Exception {
         if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getStartCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicLine.getStartCreatedOn(),
                     searchPeriodicLine.getEndCreatedOn());
@@ -691,8 +695,18 @@ public class PeriodicLineService extends BaseService {
         }
 
         PeriodicLineV2Specification spec = new PeriodicLineV2Specification(searchPeriodicLine);
-        Stream<PeriodicLineV2> PeriodicLineResults = periodicLineV2Repository.stream(spec, PeriodicLineV2.class);
-        return PeriodicLineResults;
+        PeriodicZeroStkLineV2Specification specification = new PeriodicZeroStkLineV2Specification(searchPeriodicLine);
+        List<PeriodicLineV2> periodicLineResults = periodicLineV2Repository.stream(spec, PeriodicLineV2.class).collect(Collectors.toList());
+        List<PeriodicZeroStockLine> periodicZeroStockLines = periodicZeroStkLineRepository.stream(specification, PeriodicZeroStockLine.class).collect(Collectors.toList());
+        if(periodicZeroStockLines != null && !periodicZeroStockLines.isEmpty()) {
+            for(PeriodicZeroStockLine periodicZeroStockLine : periodicZeroStockLines) {
+                PeriodicLineV2 dbPeriodicLine = new PeriodicLineV2();
+                BeanUtils.copyProperties(periodicZeroStockLine, dbPeriodicLine, CommonUtils.getNullPropertyNames(periodicZeroStockLine));
+                periodicLineResults.add(dbPeriodicLine);
+            }
+            log.info("Periodic Line with Zero Stock : " + periodicZeroStockLines);
+        }
+        return periodicLineResults;
     }
 
     /**
@@ -830,7 +844,8 @@ public class PeriodicLineService extends BaseService {
         List<PeriodicLineV2> responsePeriodicLines = new ArrayList<>();
         List<PeriodicLineV2> createPeriodicLine = new ArrayList<>();
         List<PeriodicLineV2> updateBatchPeriodicLine = new ArrayList<>();
-        for (PeriodicLineV2 updatePeriodicLine : updatePeriodicLines) {
+        List<PeriodicLineV2> filteredPerpetualLines = updatePeriodicLines.stream().filter(a -> a.getStatusId() != 47L).collect(Collectors.toList());
+        for (PeriodicLineV2 updatePeriodicLine : filteredPerpetualLines) {
             PeriodicLineV2 dbPeriodicLine = getPeriodicLineV2(
                     updatePeriodicLine.getCompanyCode(), updatePeriodicLine.getPlantId(),
                     updatePeriodicLine.getLanguageId(), updatePeriodicLine.getWarehouseId(), updatePeriodicLine.getCycleCountNo(),
@@ -938,6 +953,7 @@ public class PeriodicLineService extends BaseService {
         try {
             List<PeriodicLineV2> newPeriodicLines = new ArrayList<>();
             for (PeriodicLineV2 updatePeriodicLine : updatePeriodicLines) {
+                if(updatePeriodicLine.getStatusId() != 47L) {
                 PeriodicLineV2 dbPeriodicLine = getPeriodicLineV2(
                         updatePeriodicLine.getCompanyCode(),
                         updatePeriodicLine.getPlantId(),
@@ -1122,7 +1138,7 @@ public class PeriodicLineService extends BaseService {
 //                    newPeriodicLines.add(newPeriodicLine);
                 }
             }
-
+        }
 //            PeriodicHeaderV2 newlyCreatedPeriodicHeader = new PeriodicHeaderV2();
 //            if (!newPeriodicLines.isEmpty()) {
 //                log.info("newPeriodicLines : " + newPeriodicLines);

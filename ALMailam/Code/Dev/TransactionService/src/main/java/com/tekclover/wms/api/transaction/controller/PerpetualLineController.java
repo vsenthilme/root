@@ -71,7 +71,7 @@ public class PerpetualLineController {
 
     @ApiOperation(response = PerpetualLineV2.class, value = "SearchPerpetualLine") // label for swagger
     @PostMapping("/v2/findPerpetualLine")
-    public Stream<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
+    public List<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
             throws Exception {
         return perpetualLineService.findPerpetualLineV2(searchPerpetualLine);
     }

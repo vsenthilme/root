@@ -83,7 +83,7 @@ public class PeriodicLineController {
 
 	@ApiOperation(response = PeriodicLineV2.class, value = "SearchPeriodicLineV2") // label for swagger
 	@PostMapping("/v2/findPeriodicLine")
-	public Stream<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
+	public List<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
 			throws Exception {
 		return periodicLineService.findPeriodicLineStreamV2(searchPeriodicLineV2);
 	}

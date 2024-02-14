@@ -54,6 +54,8 @@ import java.util.stream.Stream;
 @Service
 public class ReportsService extends BaseService {
     @Autowired
+    private OutboundLineV2Repository outboundLineV2Repository;
+    @Autowired
     private PeriodicLineRepository periodicLineRepository;
     @Autowired
     private PerpetualLineRepository perpetualLineRepository;
@@ -2405,6 +2407,10 @@ public class ReportsService extends BaseService {
 //        Long quality = qualityHeaderCount.stream().count();
         outboundCount.setQuality(qualityHeaderCount);
 
+        // -----------Tracking-----------------------------------------------------------------------------
+        List<Long> statusId = Arrays.asList(48L, 50L, 57L);
+        Long tracking = outboundLineV2Repository.gettrackingCount(companyCode, plantId, languageId, warehouseId, statusId);
+        outboundCount.setTracking(tracking);
         /*--------------StockCount--------------------------------*/
         MobileDashboard.StockCount stockCount = mobileDashboard.new StockCount();
 

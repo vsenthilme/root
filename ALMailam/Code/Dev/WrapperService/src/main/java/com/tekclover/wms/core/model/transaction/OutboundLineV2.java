@@ -43,5 +43,5 @@ public class OutboundLineV2 extends OutboundLine {
     private String customerType;
 
     private String assignedPickerId;
-    private String tracking;
+//    private String tracking;
 }

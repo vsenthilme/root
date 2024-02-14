@@ -203,5 +203,19 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
                                                        @Param("outboundOrderTypeId") Long outboundOrderTypeId,
                                                        @Param("startDate") Date startDate,
                                                        @Param("endDate") Date endDate);
-}
 
+    @Query(value = "select distinct concat(ob_line_no,itm_code,mfr_name) \n" +
+            " from tblpickupheader ob where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
+//            " ob.ass_picker_id in (:assignedPickerId) and \n" +
+            " ob.status_id = :statusId and \n" +
+//            " level_id = :levelId and \r\n" +
+            " ob.pick_ctd_on between :startDate and :endDate and ob.ass_picker_id is not null and ob.is_deleted = 0 \n" +
+            " order by pick_ctd_on ", nativeQuery = true)
+    public List<String> getPickupHeaderAssignPickerList(@Param("companyCodeId") String companyCodeId,
+                                                        @Param("plantId") String plantId,
+                                                        @Param("languageId") String languageId,
+                                                        @Param("warehouseId") String warehouseId,
+                                                        @Param("statusId") Long statusId,
+                                                        @Param("startDate") Date startDate,
+                                                        @Param("endDate") Date endDate);
+}

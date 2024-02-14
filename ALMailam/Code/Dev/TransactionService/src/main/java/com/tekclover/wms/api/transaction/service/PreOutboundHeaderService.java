@@ -33,6 +33,7 @@ import com.tekclover.wms.api.transaction.repository.specification.PreOutboundHea
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1546,8 +1547,32 @@ public class PreOutboundHeaderService extends BaseService {
         log.info("total Order Lines Count: " + lineCount);
 
         List<String> assignPickerList = new ArrayList<>();
+        List<OrderManagementLineV2> orderManagementLineOrderedList = new ArrayList<>();
+        List<OrderManagementLineV2> orderManagementLineRemainingList = new ArrayList<>();
+        List<OrderManagementLineV2> orderManagementLineFilterList = new ArrayList<>();
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
 
-        for (OrderManagementLineV2 orderManagementLine : orderManagementLineV2List) {
+            List<String> assignPickerPickUpHeaderList = pickupHeaderV2Repository.getPickupHeaderAssignPickerList(
+                    companyCodeId, plantId, languageId, warehouseId, 48L, dates[0], dates[1]);
+            log.info("assignPickerPickUpHeaderList : " + assignPickerPickUpHeaderList.size());
+            if (assignPickerPickUpHeaderList != null && !assignPickerPickUpHeaderList.isEmpty()) {
+                for(OrderManagementLineV2 dbOrderManagementLine : orderManagementLineV2List){
+                    String itmMfrName = dbOrderManagementLine.getLineNumber()+dbOrderManagementLine.getItemCode()+dbOrderManagementLine.getManufacturerName();
+                    boolean itemPresent = assignPickerPickUpHeaderList.stream().allMatch(a -> a.equalsIgnoreCase(itmMfrName));
+                    if(itemPresent) {
+                        orderManagementLineFilterList.add(dbOrderManagementLine);
+                    }
+                    if(!itemPresent) {
+                        orderManagementLineRemainingList.add(dbOrderManagementLine);
+                    }
+                }
+                log.info("OrderManagementLine sameItem Present : " + orderManagementLineFilterList.size());
+                log.info("OrderManagementLine No sameItem Present : " + orderManagementLineRemainingList.size());
+            }
+        orderManagementLineOrderedList.addAll(orderManagementLineFilterList);
+        orderManagementLineOrderedList.addAll(orderManagementLineRemainingList);
+
+        for (OrderManagementLineV2 orderManagementLine : orderManagementLineOrderedList) {
             String assignPickerId = null;
 
             if (orderManagementLine != null && orderManagementLine.getStatusId() != 47L) {
@@ -1681,8 +1706,6 @@ public class PreOutboundHeaderService extends BaseService {
                                                 break outerLoop;
                                             }
                                         }
-
-                                        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
 
                                         List<IKeyValuePair> pickerCountList = pickupHeaderV2Repository
                                                 .getAssignPickerWh100(companyCodeId, plantId, languageId, warehouseId, hhtUserList, 48L, OB_ORD_TYP_ID, dates[0], dates[1]);
@@ -1849,6 +1872,44 @@ public class PreOutboundHeaderService extends BaseService {
                                             break outerLoop;
                                         }
                                     }
+                                    String assignPickerPickupHeader50 = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCount(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 50L);
+
+                                    if(assignPickerPickupHeader50 != null) {
+                                        assignPickerList.add(assignPickerPickupHeader50);
+                                        if (assignPickerList.size() > 0) {
+                                            break outerLoop;
+                                        }
+                                    }
+
+                                    List<IKeyValuePair> pickerCountList = pickupHeaderV2Repository
+                                            .getAssignPicker(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 48L, dates[0], dates[1]);
+                                    if(pickerCountList != null && !pickerCountList.isEmpty()) {
+                                        for(IKeyValuePair iKeyValuePair : pickerCountList){             //for log purpose only will comment later
+                                            log.info("Picker Count - Picker : " + iKeyValuePair.getPickerCount() + " - " + iKeyValuePair.getAssignPicker());
+                                        }
+                                        List<String> hhtUser48List = pickerCountList.stream().map(IKeyValuePair::getAssignPicker).collect(Collectors.toList());
+                                        log.info("Filter Picker List based on Count : " + hhtUser48List);
+                                        List<IKeyValuePair> pickerCountListCreatedOn = pickupHeaderV2Repository
+                                                .getAssignPickerList(companyCodeId, plantId, languageId, warehouseId, hhtUser48List, LEVEL_ID, 48L, dates[0], dates[1]);
+                                        if(pickerCountListCreatedOn != null && !pickerCountListCreatedOn.isEmpty()) {
+                                            for(IKeyValuePair pickerCheck : pickerCountList ){
+                                                for(IKeyValuePair pickerCheckByCreatedOn : pickerCountListCreatedOn) {
+                                                    log.info("Picker_Count, Picker Sortby Created On : "
+                                                            + pickerCheck.getAssignPicker() + ", "
+                                                            + pickerCheck.getPickerCount() + ", " + pickerCheckByCreatedOn.getAssignPicker());
+                                                    if(pickerCheck.getAssignPicker().equalsIgnoreCase(pickerCheckByCreatedOn.getAssignPicker())) {
+                                                        log.info("picker, count, ctdOn Picker : " + pickerCheck.getAssignPicker()
+                                                                + "," + pickerCheck.getPickerCount() + ", " +pickerCheckByCreatedOn.getAssignPicker());
+                                                        assignPickerList.add(pickerCheck.getAssignPicker());
+                                                        log.info("assigned Picker: " + assignPickerList.get(0));
+                                                        if (assignPickerList.size() > 0) {
+                                                            break outerLoop;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 if (pickerPickupLine == null) {
                                     String assignPickerPickupHeader = pickupHeaderService.getPickupHeaderAutomateCurrentDateHhtListCount(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 48L);
@@ -1860,8 +1921,6 @@ public class PreOutboundHeaderService extends BaseService {
                                             break outerLoop;
                                         }
                                     }
-
-                                    Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
 
                                     List<IKeyValuePair> pickerCountList = pickupHeaderV2Repository
                                             .getAssignPicker(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 48L, dates[0], dates[1]);
@@ -3262,7 +3321,7 @@ public class PreOutboundHeaderService extends BaseService {
                             assignPickerListCount = assignPickerList.stream().count();
 
                             outerLoop:
-                            if (lineCount != assignPickerListCount) {
+                            if (!lineCount.equals(assignPickerListCount)) {
                                 log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
                                 for (int i = 1; i <= lineCount; ) {
                                     log.info("i, lineCount: " + i + ", " + lineCount);
@@ -3432,7 +3491,7 @@ public class PreOutboundHeaderService extends BaseService {
                             assignPickerListCount = assignPickerList.stream().count();
 
                             outerLoop:
-                            if (lineCount != assignPickerListCount) {
+                            if (!lineCount.equals(assignPickerListCount)) {
                                 log.info("lineCount != assignPickerListCount :" + lineCount + ", " + assignPickerListCount);
                                 for (int i = 1; i <= lineCount; ) {
                                     log.info("i, lineCount: " + i + ", " + lineCount);
@@ -4635,12 +4694,14 @@ public class PreOutboundHeaderService extends BaseService {
             List<String> createdItmMfrNameList = new ArrayList<>();
             List<String> oldItmMfrNameList = new ArrayList<>();
             List<String> newItmMfrNameList = new ArrayList<>();
+            List<String> filterOldList = new ArrayList<>();
+            List<String> filterNewList = new ArrayList<>();
             if(oldPickupLineList != null && !oldPickupLineList.isEmpty()) {
                 if (newPickupLineList != null && !newPickupLineList.isEmpty()) {
                     for (PickupLineV2 pickupLineV2 : oldPickupLineList) {
-                        oldItmMfrNameList.add(pickupLineV2.getItemCode()+pickupLineV2.getManufacturerName());
+//                        oldItmMfrNameList.add(pickupLineV2.getItemCode()+pickupLineV2.getManufacturerName());
                         for (PickupLineV2 newPickupLineV2 : newPickupLineList) {
-                            newItmMfrNameList.add(newPickupLineV2.getItemCode()+newPickupLineV2.getManufacturerName());
+//                            newItmMfrNameList.add(newPickupLineV2.getItemCode()+newPickupLineV2.getManufacturerName());
                             if (pickupLineV2.getItemCode().equalsIgnoreCase(newPickupLineV2.getItemCode()) &&
                                     pickupLineV2.getManufacturerName().equalsIgnoreCase(newPickupLineV2.getManufacturerName())) {
 
@@ -4678,19 +4739,23 @@ public class PreOutboundHeaderService extends BaseService {
                             }
                         }
                     }
+                    for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
+                        oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName() + outboundLineV2.getLineNumber());
+                    }
+                    for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
+                        newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName() + newOutboundLineV2.getLineNumber());
+                    }
                     log.info("OldPickList : " + oldItmMfrNameList);
                     log.info("NewPickList : " + newItmMfrNameList);
                     log.info("CreatedPickList : " + createdItmMfrNameList);
-                    for(PickListLine pickListLine : createPickListLineList) {
-                        oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode()+pickListLine.getManufacturerName())).collect(Collectors.toList());
-                        newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(pickListLine.getItemCode()+pickListLine.getManufacturerName())).collect(Collectors.toList());
-                    }
-                    log.info("Filtered OldPickList : " + oldItmMfrNameList);
-                    log.info("Filtered NewPickList : " + newItmMfrNameList);
-                    if(newItmMfrNameList != null && !newItmMfrNameList.isEmpty()){
+                    filterOldList = oldItmMfrNameList.stream().filter(a -> !createdItmMfrNameList.contains(a)).collect(Collectors.toList());
+                    filterNewList = newItmMfrNameList.stream().filter(a -> !createdItmMfrNameList.contains(a)).collect(Collectors.toList());
+                    log.info("Filtered OldPickList : " + filterOldList);
+                    log.info("Filtered NewPickList : " + filterNewList);
+                    if (filterNewList != null && !filterNewList.isEmpty()) {
                         for (PickupLineV2 newPickupLineV2 : newPickupLineList) {
-                            String itmMfrName = newPickupLineV2.getItemCode()+newPickupLineV2.getManufacturerName();
-                            boolean itmPresent = newItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                            String itmMfrName = newPickupLineV2.getItemCode() + newPickupLineV2.getManufacturerName() + newPickupLineV2.getLineNumber();
+                            boolean itmPresent = filterNewList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
                             if(itmPresent){
                                 PickListLine dbPickListLine = new PickListLine();
                                 BeanUtils.copyProperties(newPickupLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(newPickupLineV2));
@@ -4715,10 +4780,10 @@ public class PreOutboundHeaderService extends BaseService {
                         }
                     }
                 }
-                if(oldItmMfrNameList != null && !oldItmMfrNameList.isEmpty()){
+                if(filterOldList != null && !filterOldList.isEmpty()){
                     for (PickupLineV2 oldPickupLineV2 : oldPickupLineList) {
-                        String itmMfrName = oldPickupLineV2.getItemCode() + oldPickupLineV2.getManufacturerName();
-                        boolean itmPresent = oldItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                        String itmMfrName = oldPickupLineV2.getItemCode() + oldPickupLineV2.getManufacturerName() + oldPickupLineV2.getLineNumber();
+                        boolean itmPresent = filterOldList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
                         if(itmPresent){
                             PickListLine dbPickListLine = new PickListLine();
                             BeanUtils.copyProperties(oldPickupLineV2, dbPickListLine, CommonUtils.getNullPropertyNames(oldPickupLineV2));
@@ -4803,30 +4868,32 @@ public class PreOutboundHeaderService extends BaseService {
                                     dbPickListLine.setPickListCancelLineId(System.currentTimeMillis());
 
                                     createPickListLineList.add(dbPickListLine);
-                                    createdItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+                                    createdItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName() + newOutboundLineV2.getLineNumber());
                                 }
                             }
                         }
                         for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
-                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName());
+                            oldItmMfrNameList.add(outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName() + outboundLineV2.getLineNumber());
                         }
                         for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
-                            newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName());
+                            newItmMfrNameList.add(newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName() + newOutboundLineV2.getLineNumber());
                         }
                         log.info("OldPickList : " + oldItmMfrNameList);
                         log.info("NewPickList : " + newItmMfrNameList);
                         log.info("CreatedPickList : " + createdItmMfrNameList);
-                        for (PickListLine pickListLine : createPickListLineList) {
-                            String itmMfrName = pickListLine.getItemCode() + pickListLine.getManufacturerName();
-                            oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
-                            newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
-                        }
-                        log.info("Filtered OldPickList : " + oldItmMfrNameList);
-                        log.info("Filtered NewPickList : " + newItmMfrNameList);
-                        if (newItmMfrNameList != null && !newItmMfrNameList.isEmpty()) {
+//                        for (PickListLine pickListLine : createPickListLineList) {
+//                            String itmMfrName = pickListLine.getItemCode() + pickListLine.getManufacturerName();
+//                            oldItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
+//                            newItmMfrNameList.stream().filter(a -> !a.equalsIgnoreCase(itmMfrName)).collect(Collectors.toList());
+                            filterOldList = oldItmMfrNameList.stream().filter(a -> !createdItmMfrNameList.contains(a)).collect(Collectors.toList());
+                            filterNewList = newItmMfrNameList.stream().filter(a -> !createdItmMfrNameList.contains(a)).collect(Collectors.toList());
+//                        }
+                        log.info("Filtered OldPickList : " + filterOldList);
+                        log.info("Filtered NewPickList : " + filterNewList);
+                        if (filterNewList != null && !filterNewList.isEmpty()) {
                             for (OutboundLineV2 newOutboundLineV2 : newOutboundLineList) {
-                                String itmMfrName = newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName();
-                                boolean itmPresent = newItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                                String itmMfrName = newOutboundLineV2.getItemCode() + newOutboundLineV2.getManufacturerName() + newOutboundLineV2.getLineNumber();
+                                boolean itmPresent = filterNewList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
                                 if (itmPresent) {
 
                                     //Filter ItemCode, MFR Name and LineNumber - NewPickList
@@ -4861,8 +4928,8 @@ public class PreOutboundHeaderService extends BaseService {
                     }
                     if (oldItmMfrNameList != null && !oldItmMfrNameList.isEmpty()) {
                         for (OutboundLineV2 outboundLineV2 : outboundLineV2List) {
-                            String itmMfrName = outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName();
-                            boolean itmPresent = oldItmMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                            String itmMfrName = outboundLineV2.getItemCode() + outboundLineV2.getManufacturerName() + outboundLineV2.getLineNumber() + outboundLineV2.getLineNumber();
+                            boolean itmPresent = filterOldList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
                             if (itmPresent) {
                                 //Filter ItemCode, MFR Name and LineNumber - OldPickList
                                 oldOrderManagementLineFilteredList = orderManagementLineList.stream().filter(a->a.getItemCode().equalsIgnoreCase(outboundLineV2.getItemCode()) &&

@@ -3772,6 +3772,17 @@ public class TransactionServiceController {
         return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
     }
 
+    /*--------------------Shipping Reversal Batch-----------------------------------------------------------*/
+    @ApiOperation(response = OutboundLineV2.class, value = "Batch Reversal Delivery Lines V2") // label for swagger
+    @PostMapping("/outboundreversal/v2/reversal/batch")
+    public ResponseEntity<?> doReversalBatchV2(@RequestBody List<InboundReversalInput> outboundReversalInput,
+                                               @RequestParam String loginUserID, @RequestParam String authToken)
+            throws IllegalAccessException, InvocationTargetException {
+        OutboundReversalV2[] deliveryLines = transactionService.doReversalBatchV2(outboundReversalInput, loginUserID, authToken);
+        log.info("deliveryLines : " + deliveryLines);
+        return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
+    }
+
     //----------------------Orders-V2-----------------------------------------------------------------
 
     //ShipmentOrder V2

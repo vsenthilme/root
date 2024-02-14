@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.outbound.outboundreversal.v2.OutboundReversalV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineOutput;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
@@ -256,4 +257,13 @@ public class OutboundLineController {
        	log.info("deliveryLines : " + deliveryLines);
    		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
    	}
+
+	@ApiOperation(response = OutboundLineV2.class, value = "Reversal Batch") // label for swagger
+	@PostMapping("/v2/reversal/batch")
+	public ResponseEntity<?> doReversalBatchV2(@RequestBody List<InboundReversalInput> outboundReversalInput,
+											   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+		List<OutboundReversalV2> deliveryLines = outboundlineService.batchOutboundReversal(outboundReversalInput, loginUserID);
+		log.info("deliveryLines : " + deliveryLines);
+		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
+	}
 }

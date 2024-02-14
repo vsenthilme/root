@@ -319,9 +319,9 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.HE_NO handlingEquipment,\n" +
             "ob.ASS_PICKER_ID assignedPickerId,\n" +
             "ob.CUSTOMER_TYPE customerType,\n" +
-            "(select count(ref_doc_no) from tbloutboundline ob2 where \n" +
-            "ob2.wh_id = ob.wh_id and ob2.c_id = ob2.c_id and ob2.plant_id=ob.plant_id and ob2.lang_id = ob.lang_id and \n" +
-            "ob2.ref_doc_no = ob.ref_doc_no and ob2.status_id in (48,50,57) and ob2.is_deleted = 0) tracking, \n" +
+//            "(select count(ref_doc_no) from tbloutboundline ob2 where \n" +
+//            "ob2.wh_id = ob.wh_id and ob2.c_id = ob2.c_id and ob2.plant_id=ob.plant_id and ob2.lang_id = ob.lang_id and \n" +
+//            "ob2.status_id in (48,50,57) and ob2.is_deleted = 0) tracking, \n" +
             "(select pcQty from #tpl p \n" +
             "where \n" +
             "p.wh_id = ob.wh_id and p.c_id = ob.c_id and p.plant_id=ob.plant_id and p.lang_id = ob.lang_id and \n" +
@@ -423,9 +423,25 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             @Param("manufacturerName") String manufacturerName,
             @Param("partnerCode") String partnerCode,
             @Param("handlingEquipment") String handlingEquipment,
+            @Param("assignedPickerId") String assignedPickerId,
             @Param("lineNumber") Long lineNumber,
             @Param("statusId") Long statusId,
             @Param("statusDescription") String statusDescription,
             @Param("updatedOn") Date updatedOn
     );
+
+    @Query(value = "SELECT COUNT(ref_doc_no) as count FROM \n"
+            + "tbloutboundline qh WHERE \n"
+            + "(:companyCode IS NULL OR qh.c_id IN (:companyCode)) AND \n"
+            + "(:plantId IS NULL OR qh.plant_id IN (:plantId)) AND \n"
+            + "(:languageId IS NULL OR qh.lang_id IN (:languageId)) AND \n"
+            + "(:warehouseId IS NULL OR qh.wh_id IN (:warehouseId)) AND \n"
+            + "(qh.status_id IN (:statusId)) AND \n"
+            + "qh.is_deleted = 0 ", nativeQuery = true)
+    public Long gettrackingCount(
+            @Param("companyCode") List<String> companyCode,
+            @Param("plantId") List<String> plantId,
+            @Param("languageId") List<String> languageId,
+            @Param("warehouseId") List<String> warehouseId,
+            @Param("statusId") List<Long> statusId);
 }

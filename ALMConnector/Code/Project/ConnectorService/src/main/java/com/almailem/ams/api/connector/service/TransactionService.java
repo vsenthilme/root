@@ -1687,7 +1687,7 @@ public class TransactionService {
                     stockAdjustment.setManufacturerName(dbSA.getManufacturerCode());
                 }
                 stockAdjustment.setRemarks(dbSA.getRemarks());
-//                stockAdjustment.setAmsReferenceNo(dbSA.getAmsReferenceNo());
+                stockAdjustment.setAmsReferenceNo(dbSA.getAmsReferenceNo());
                 stockAdjustment.setIsCompleted(dbSA.getIsCompleted());
                 stockAdjustment.setUpdatedOn(dbSA.getUpdatedOn());
                 stockAdjustment.setStockAdjustmentId(dbSA.getStockAdjustmentId());

@@ -444,4 +444,8 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             @Param("languageId") List<String> languageId,
             @Param("warehouseId") List<String> warehouseId,
             @Param("statusId") List<Long> statusId);
+
+    OutboundLineV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
+            String refDocNumber, String partnerCode, Long lineNumber, String itemCode, String manufacturerName, Long deletionIndicator);
 }

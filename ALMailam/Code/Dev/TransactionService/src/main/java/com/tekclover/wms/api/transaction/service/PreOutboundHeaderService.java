@@ -2048,6 +2048,7 @@ public class PreOutboundHeaderService extends BaseService {
                         preOutboundNo, refDocNumber, partnerCode,
                         orderManagementLine.getLineNumber(),
                         orderManagementLine.getItemCode());
+                outboundLine.setAssignedPickerId(assignPickerId);
                 outboundLine.setStatusId(48L);
                 outboundLine.setStatusDescription(statusDescription);
                 outboundLine = outboundLineV2Repository.save(outboundLine);

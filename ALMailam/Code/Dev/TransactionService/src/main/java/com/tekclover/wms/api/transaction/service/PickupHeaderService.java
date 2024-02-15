@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.*;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PickHeaderV2Specification;
 import com.tekclover.wms.api.transaction.repository.specification.PickupHeaderV2Specification;
@@ -42,6 +43,9 @@ public class PickupHeaderService {
 
     @Autowired
     private PickupHeaderV2Repository pickupHeaderV2Repository;
+
+    @Autowired
+    private OutboundLineService outboundLineService;
 
     String statusDescription = null;
     //------------------------------------------------------------------------------------------------------
@@ -916,7 +920,7 @@ public class PickupHeaderService {
      * @throws InvocationTargetException
      */
     public PickupHeaderV2 createPickupHeaderV2(PickupHeaderV2 newPickupHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         PickupHeaderV2 dbPickupHeader = new PickupHeaderV2();
         log.info("newPickupHeader : " + newPickupHeader);
         BeanUtils.copyProperties(newPickupHeader, dbPickupHeader, CommonUtils.getNullPropertyNames(newPickupHeader));
@@ -935,9 +939,20 @@ public class PickupHeaderService {
         dbPickupHeader.setPlantDescription(description.getPlantDesc());
         dbPickupHeader.setWarehouseDescription(description.getWarehouseDesc());
 
-//        if(newPickupHeader.getLevelId() == null) {
-//
-//        }
+        OutboundLineV2 updateOutboundLine = new OutboundLineV2();
+        updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+        outboundLineService.updateOutboundLineV2(
+                            dbPickupHeader.getCompanyCodeId(),
+                            dbPickupHeader.getPlantId(),
+                            dbPickupHeader.getLanguageId(),
+                            dbPickupHeader.getWarehouseId(),
+                            dbPickupHeader.getPreOutboundNo(),
+                            dbPickupHeader.getRefDocNumber(),
+                            dbPickupHeader.getPartnerCode(),
+                            dbPickupHeader.getLineNumber(),
+                            dbPickupHeader.getItemCode(),
+                            loginUserID,
+                            updateOutboundLine);
 
         dbPickupHeader.setDeletionIndicator(0L);
         dbPickupHeader.setPickupCreatedBy(loginUserID);
@@ -966,11 +981,27 @@ public class PickupHeaderService {
      */
     public PickupHeaderV2 updatePickupHeaderV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
                                                String partnerCode, String pickupNumber, Long lineNumber, String itemCode, String loginUserID,
-                                               PickupHeaderV2 updatePickupHeader) throws IllegalAccessException, InvocationTargetException {
+                                               PickupHeaderV2 updatePickupHeader) throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         PickupHeaderV2 dbPickupHeader = getPickupHeaderForUpdateV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode,
                 pickupNumber, lineNumber, itemCode);
         if (dbPickupHeader != null) {
             BeanUtils.copyProperties(updatePickupHeader, dbPickupHeader, CommonUtils.getNullPropertyNames(updatePickupHeader));
+
+            OutboundLineV2 updateOutboundLine = new OutboundLineV2();
+            updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+            outboundLineService.updateOutboundLineV2(
+                                dbPickupHeader.getCompanyCodeId(),
+                                dbPickupHeader.getPlantId(),
+                                dbPickupHeader.getLanguageId(),
+                                dbPickupHeader.getWarehouseId(),
+                                dbPickupHeader.getPreOutboundNo(),
+                                dbPickupHeader.getRefDocNumber(),
+                                dbPickupHeader.getPartnerCode(),
+                                dbPickupHeader.getLineNumber(),
+                                dbPickupHeader.getItemCode(),
+                                loginUserID,
+                                updateOutboundLine);
+
             dbPickupHeader.setPickUpdatedBy(loginUserID);
             dbPickupHeader.setPickUpdatedOn(new Date());
             return pickupHeaderV2Repository.save(dbPickupHeader);

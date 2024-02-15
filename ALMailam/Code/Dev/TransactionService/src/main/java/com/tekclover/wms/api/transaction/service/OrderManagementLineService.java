@@ -1789,6 +1789,7 @@ public class OrderManagementLineService extends BaseService {
                         partnerCode, lineNumber, itemCode);
                 outboundLine.setStatusId(48L);
                 outboundLine.setStatusDescription(statusDescription);
+                outboundLine.setAssignedPickerId(assignedPickerId);
                 outboundLine = outboundLineV2Repository.save(outboundLine);
                 log.info("outboundLine updated : " + outboundLine);
 

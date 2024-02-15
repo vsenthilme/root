@@ -2384,6 +2384,41 @@ public class OutboundLineService extends BaseService {
 
     /**
      *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preOutboundNo
+     * @param refDocNumber
+     * @param partnerCode
+     * @param lineNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public OutboundLineV2 getOutboundLineV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
+                                            String refDocNumber, String partnerCode, Long lineNumber, String itemCode, String manufacturerName) {
+        OutboundLineV2 outboundLine = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode, manufacturerName,  0L);
+        if (outboundLine != null) {
+            return outboundLine;
+        }
+        throw new BadRequestException("The given OutboundLine ID : " +
+                "companyCodeId:" + companyCodeId +
+                "plantId:" + plantId +
+                "languageId:" + languageId +
+                "warehouseId:" + warehouseId +
+                ",preOutboundNo:" + preOutboundNo +
+                ",refDocNumber:" + refDocNumber +
+                ",partnerCode:" + partnerCode +
+                ",lineNumber:" + lineNumber +
+                ",itemCode:" + itemCode +
+                ",manufacturerName:" + manufacturerName +
+                " doesn't exist.");
+    }
+
+    /**
+     *
      * @param searchOutboundLineReport
      * @return
      * @throws ParseException
@@ -2631,7 +2666,7 @@ public class OutboundLineService extends BaseService {
     public OutboundLineV2 updateOutboundLineV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
                                                String partnerCode, Long lineNumber, String itemCode, String loginUserID, OutboundLineV2 updateOutboundLine)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
-        OutboundLineV2 outboundLine = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode);
+        OutboundLineV2 outboundLine = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode, updateOutboundLine.getManufacturerName());
         BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
         outboundLine.setUpdatedBy(loginUserID);
         outboundLine.setUpdatedOn(new Date());

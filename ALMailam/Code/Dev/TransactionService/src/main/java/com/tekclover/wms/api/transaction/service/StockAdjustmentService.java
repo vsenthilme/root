@@ -318,6 +318,9 @@ public class StockAdjustmentService extends BaseService {
                     return createStockAdjustment;
                 }
             }
+            if(perpetualLine == null) {
+                throw new BadRequestException("No PerPetual Line Found for given ItemCode, ManufacturerName : " + stockAdjustment.getItemCode() + ", " + stockAdjustment.getManufacturerName());
+            }
         }
 
         //Stock Adjustment Damage Code
@@ -502,7 +505,7 @@ public class StockAdjustmentService extends BaseService {
 
             return createStockAdjustment;
         }
-        return null;
+        throw new BadRequestException("Either IS_DAMAGE should be 'Y' or IS_CYCLE_COUNT should be 'Y'");
     }
 
     /**

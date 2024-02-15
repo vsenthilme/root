@@ -777,8 +777,7 @@ public class PerpetualLineService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public List<PerpetualLineV2> createPerpetualLineV2(List<PerpetualLineV2> newPerpetualLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
+    public List<PerpetualLineV2> createPerpetualLineV2(List<PerpetualLineV2> newPerpetualLines, String loginUserID) {
         List<PerpetualLineV2> newPerpetualLineList = new ArrayList<>();
         for (PerpetualLineV2 newPerpetualLine : newPerpetualLines) {
             PerpetualLineV2 dbPerpetualLine = new PerpetualLineV2();

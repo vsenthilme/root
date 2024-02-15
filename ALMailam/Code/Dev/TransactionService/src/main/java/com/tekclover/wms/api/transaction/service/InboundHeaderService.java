@@ -1711,6 +1711,7 @@ public class InboundHeaderService extends BaseService {
 
             inventory.setReferenceDocumentNo(putAwayLine.getRefDocNumber());
             inventory.setReferenceOrderNo(putAwayLine.getRefDocNumber());
+            inventory.setDeletionIndicator(0L);
 
             if(existingInventory != null) {
                 inventory.setCreatedOn(existingInventory.getCreatedOn());
@@ -1725,7 +1726,7 @@ public class InboundHeaderService extends BaseService {
             return createdinventory;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new BadRequestException("Error While Creating Inventory");
         }
     }
 

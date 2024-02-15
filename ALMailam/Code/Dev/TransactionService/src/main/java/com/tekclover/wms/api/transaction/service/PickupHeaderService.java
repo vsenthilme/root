@@ -941,6 +941,7 @@ public class PickupHeaderService {
 
         OutboundLineV2 updateOutboundLine = new OutboundLineV2();
         updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+        updateOutboundLine.setManufacturerName(dbPickupHeader.getManufacturerName());
         outboundLineService.updateOutboundLineV2(
                             dbPickupHeader.getCompanyCodeId(),
                             dbPickupHeader.getPlantId(),
@@ -989,6 +990,7 @@ public class PickupHeaderService {
 
             OutboundLineV2 updateOutboundLine = new OutboundLineV2();
             updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+            updateOutboundLine.setManufacturerName(dbPickupHeader.getManufacturerName());
             outboundLineService.updateOutboundLineV2(
                                 dbPickupHeader.getCompanyCodeId(),
                                 dbPickupHeader.getPlantId(),

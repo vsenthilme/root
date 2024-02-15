@@ -600,7 +600,7 @@ public class InvoiceCancellationService extends BaseService{
             }
         }
         //If PutawayLine is Empty fill the line details from GrLine
-        if(newPutAwayLineList == null || newPutAwayLineList.isEmpty()) {
+        if(newPutAwayLineList == null || !newPutAwayLineList.isEmpty()) {
             if(oldGrLineList != null && !oldGrLineList.isEmpty()) {
             if(newGrLineList != null && !newGrLineList.isEmpty()) {
                 for (GrLineV2 oldGrLine : oldGrLineList) {

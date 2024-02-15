@@ -1557,7 +1557,7 @@ public class PreOutboundHeaderService extends BaseService {
             log.info("assignPickerPickUpHeaderList : " + assignPickerPickUpHeaderList.size());
             if (assignPickerPickUpHeaderList != null && !assignPickerPickUpHeaderList.isEmpty()) {
                 for(OrderManagementLineV2 dbOrderManagementLine : orderManagementLineV2List){
-                    String itmMfrName = dbOrderManagementLine.getLineNumber()+dbOrderManagementLine.getItemCode()+dbOrderManagementLine.getManufacturerName();
+                    String itmMfrName = dbOrderManagementLine.getItemCode()+dbOrderManagementLine.getManufacturerName();
                     boolean itemPresent = assignPickerPickUpHeaderList.stream().allMatch(a -> a.equalsIgnoreCase(itmMfrName));
                     if(itemPresent) {
                         orderManagementLineFilterList.add(dbOrderManagementLine);

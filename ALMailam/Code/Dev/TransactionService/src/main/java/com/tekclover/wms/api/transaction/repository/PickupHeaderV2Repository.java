@@ -204,7 +204,7 @@ public interface PickupHeaderV2Repository extends JpaRepository<PickupHeaderV2, 
                                                        @Param("startDate") Date startDate,
                                                        @Param("endDate") Date endDate);
 
-    @Query(value = "select distinct concat(ob_line_no,itm_code,mfr_name) \n" +
+    @Query(value = "select distinct concat(itm_code,mfr_name) \n" +
             " from tblpickupheader ob where ob.c_id=:companyCodeId and ob.plant_id=:plantId and ob.lang_Id=:languageId and ob.wh_id=:warehouseId and \n" +
 //            " ob.ass_picker_id in (:assignedPickerId) and \n" +
             " ob.status_id = :statusId and \n" +

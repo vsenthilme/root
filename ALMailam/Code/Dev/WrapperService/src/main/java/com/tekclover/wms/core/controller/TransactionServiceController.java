@@ -3968,6 +3968,15 @@ public class TransactionServiceController {
         return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
     }
 
+    @ApiOperation(response = PerpetualLineV2.class, value = "Create PerpetualLine confirm V2") // label for swagger
+    @PostMapping("/perpetualline/v2/createPerpetualFromZeroStk")
+    public ResponseEntity<?> createPerpetualFromZeroStk(@RequestBody List<PerpetualZeroStockLine> updatePerpetualLine, @RequestParam String loginUserID,
+                                                         @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
+        PerpetualLineV2[] createdPerpetualLine =
+                transactionService.updatePerpetualZeroStkLine(updatePerpetualLine, loginUserID, authToken);
+        return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
+    }
+
     /*
      * -----------------------------Periodic Count----------------------------------------------------
      */

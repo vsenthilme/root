@@ -12405,6 +12405,33 @@ public class TransactionService {
         }
     }
 
+    // PATCH
+    public PerpetualLineV2[] updatePerpetualZeroStkLine(List<PerpetualZeroStockLine> updatePerpetualLine,
+                                                             String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(updatePerpetualLine, headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "perpetualline/v2/createPerpetualFromZeroStk")
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<PerpetualLineV2[]> result = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.PATCH, entity, PerpetualLineV2[].class);
+            log.info("result : " + result.getBody());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // ---------------------------------PeriodicHeader----------------------------------------------------
     // GET ALL
     public PeriodicHeaderEntity[] getPeriodicHeadersV2(String authToken) throws ParseException {

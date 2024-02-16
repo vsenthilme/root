@@ -171,6 +171,9 @@ public class ImPartnerService {
 
 			for(AddImPartner addImPartner:newImPartner) {
 
+				if(addImPartner.getPartnerItemBarcode().equalsIgnoreCase("")){
+					throw new BadRequestException("Barcode is Empty");
+				}
 				//Duplicate Barcode Validation
 				List<ImPartner> duplicateBarcodeCheck = impartnerRepository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPartnerItemBarcodeAndDeletionIndicator(
 						addImPartner.getCompanyCodeId(), addImPartner.getPlantId(), addImPartner.getLanguageId(), addImPartner.getWarehouseId(),

@@ -19,38 +19,46 @@ import java.util.Date;
 		uniqueConstraints = {
 				@UniqueConstraint (
 						name = "unique_key_periodiczerostkline",
-						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ITM_CODE"})
+						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ITM_CODE", "MFR_NAME", "SC_LINE_NO"})
 				}
 		)
 @IdClass(PeriodicZeroStockLineCompositeKey.class)
 public class PeriodicZeroStockLine {
 
 	@Id
-	@Column(name = "LANG_ID")
+	@Column(name = "LANG_ID", columnDefinition = "nvarchar(25)")
 	private String languageId;
 
 	@Id
-	@Column(name = "C_ID")
+	@Column(name = "C_ID", columnDefinition = "nvarchar(25)")
 	private String companyCode;
 
 	@Id
-	@Column(name = "PLANT_ID")
+	@Column(name = "PLANT_ID", columnDefinition = "nvarchar(25)")
 	private String plantId;
 
 	@Id
-	@Column(name = "WH_ID")
+	@Column(name = "WH_ID", columnDefinition = "nvarchar(25)")
 	private String warehouseId;
 
 	@Id
-	@Column(name = "CC_NO")
+	@Column(name = "CC_NO", columnDefinition = "nvarchar(50)")
 	private String cycleCountNo;
+
+	@Id
+	@Column(name = "ITM_CODE", columnDefinition = "nvarchar(100)")
+	private String itemCode;
+
+	@Id
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(25)")
+	private String manufacturerName;
 
 	@Column(name = "ST_BIN")
 	private String storageBin;
 
 	@Id
-	@Column(name = "ITM_CODE")
-	private String itemCode;
+	@Column(name = "SC_LINE_NO")
+	private Long lineNo;
 
 	@Column(name = "PACK_BARCODE")
 	private String packBarcodes;
@@ -183,9 +191,6 @@ public class PeriodicZeroStockLine {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
-
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
 
 	@Column(name = "MFR_CODE", columnDefinition = "nvarchar(255)")
 	private String manufacturerCode;

@@ -1305,10 +1305,13 @@ public class PerpetualHeaderService extends BaseService {
             List<PerpetualLineV2> perpetualLines = perpetualLineService.getPerpetualLineV2(companyCodeId, plantId, languageId, warehouseId, cycleCountNo);
             long count_78 = perpetualLines.stream().filter(a -> a.getStatusId() == 78L).count();
             long count_74 = perpetualLines.stream().filter(a -> a.getStatusId() == 74L).count();
+            long count_47 = perpetualLines.stream().filter(a -> a.getStatusId() == 47L).count();
+            long totalCount78 = count_78 + count_47;
+            long totalCount74 = count_74 + count_47;
 
-            if (perpetualLines.size() == count_78) {
+            if (perpetualLines.size() == totalCount78) {
                 dbPerpetualHeader.setStatusId(78L);
-            } else if (perpetualLines.size() == count_74) {
+            } else if (perpetualLines.size() == totalCount74) {
                 dbPerpetualHeader.setStatusId(74L);
             } else {
                 dbPerpetualHeader.setStatusId(73L);
@@ -1345,10 +1348,13 @@ public class PerpetualHeaderService extends BaseService {
         List<PerpetualLineV2> perpetualLines = perpetualLineService.getPerpetualLineV2(companyCodeId, plantId, languageId, warehouseId, cycleCountNo);
         long count_78 = perpetualLines.stream().filter(a -> a.getStatusId() == 78L).count();
         long count_74 = perpetualLines.stream().filter(a -> a.getStatusId() == 74L).count();
+        long count_47 = perpetualLines.stream().filter(a -> a.getStatusId() == 47L).count();
+        long totalCount78 = count_78 + count_47;
+        long totalCount74 = count_74 + count_47;
 
-        if (perpetualLines.size() == count_78) {
+        if (perpetualLines.size() == totalCount78) {
             dbPerpetualHeader.setStatusId(78L);
-        } else if (perpetualLines.size() == count_74) {
+        } else if (perpetualLines.size() == totalCount74) {
             dbPerpetualHeader.setStatusId(74L);
         } else {
             dbPerpetualHeader.setStatusId(73L);
@@ -1566,6 +1572,7 @@ public class PerpetualHeaderService extends BaseService {
                     dbPerpetualLine.setManufacturerPartNo(dbInventory.getManufacturerCode());
                     dbPerpetualLine.setManufacturerName(dbInventory.getManufacturerName());
                     dbPerpetualLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                    dbPerpetualLine.setLineNo(cycleCountLine.getLineOfEachItemCode());
 
                     dbPerpetualLine.setCycleCountNo(nextRangeNumber);
                     dbPerpetualLine.setReferenceNo(cycleCountLine.getCycleCountNo());
@@ -1622,6 +1629,7 @@ public class PerpetualHeaderService extends BaseService {
                 dbPerpetualLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
                 dbPerpetualLine.setManufacturerName(cycleCountLine.getManufacturerName());
                 dbPerpetualLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                dbPerpetualLine.setLineNo(cycleCountLine.getLineOfEachItemCode());
 
                 dbPerpetualLine.setCycleCountNo(nextRangeNumber);
                 dbPerpetualLine.setReferenceNo(cycleCountLine.getCycleCountNo());

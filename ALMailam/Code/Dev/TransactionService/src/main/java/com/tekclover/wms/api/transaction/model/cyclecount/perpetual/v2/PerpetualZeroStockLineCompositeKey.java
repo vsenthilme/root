@@ -18,4 +18,6 @@ public class PerpetualZeroStockLineCompositeKey implements Serializable {
 	private String warehouseId;
 	private String cycleCountNo;
 	private String itemCode;
+	private String manufacturerName;
+	private Long lineNo;
 }

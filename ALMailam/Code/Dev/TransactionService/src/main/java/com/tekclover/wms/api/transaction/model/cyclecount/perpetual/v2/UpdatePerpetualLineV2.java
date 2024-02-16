@@ -9,5 +9,5 @@ public class UpdatePerpetualLineV2 {
 	private String cycleCountNo;
 	private String manufacturerName;
 	private Double InventoryQty;
-
+	private Long lineNo;
 }

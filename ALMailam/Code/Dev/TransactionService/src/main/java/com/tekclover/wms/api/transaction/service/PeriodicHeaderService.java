@@ -1121,10 +1121,13 @@ public class PeriodicHeaderService extends BaseService {
             List<PeriodicLineV2> PeriodicLines = periodicLineService.getPeriodicLineV2(companyCode, plantId, languageId, warehouseId, cycleCountNo);
             long count_78 = PeriodicLines.stream().filter(a -> a.getStatusId() == 78L).count();
             long count_74 = PeriodicLines.stream().filter(a -> a.getStatusId() == 74L).count();
+            long count_47 = PeriodicLines.stream().filter(a -> a.getStatusId() == 47L).count();
+            long totalCount78 = count_78 + count_47;
+            long totalCount74 = count_74 + count_47;
 
-            if (PeriodicLines.size() == count_78) {
+            if (PeriodicLines.size() == totalCount78) {
                 dbPeriodicHeader.setStatusId(78L);
-            } else if (PeriodicLines.size() == count_74) {
+            } else if (PeriodicLines.size() == totalCount74) {
                 dbPeriodicHeader.setStatusId(74L);
             } else {
                 dbPeriodicHeader.setStatusId(73L);
@@ -1160,10 +1163,13 @@ public class PeriodicHeaderService extends BaseService {
         List<PeriodicLineV2> PeriodicLines = periodicLineService.getPeriodicLineV2(companyCodeId, plantId, languageId, warehouseId, cycleCountNo);
         long count_78 = PeriodicLines.stream().filter(a -> a.getStatusId() == 78L).count();
         long count_74 = PeriodicLines.stream().filter(a -> a.getStatusId() == 74L).count();
+        long count_47 = PeriodicLines.stream().filter(a -> a.getStatusId() == 47L).count();
+        long totalCount78 = count_78 + count_47;
+        long totalCount74 = count_74 + count_47;
 
-        if (PeriodicLines.size() == count_78) {
+        if (PeriodicLines.size() == totalCount78) {
             dbPeriodicHeader.setStatusId(78L);
-        } else if (PeriodicLines.size() == count_74) {
+        } else if (PeriodicLines.size() == totalCount74) {
             dbPeriodicHeader.setStatusId(74L);
         } else {
             dbPeriodicHeader.setStatusId(73L);
@@ -1453,6 +1459,7 @@ public class PeriodicHeaderService extends BaseService {
                     periodicLineV2.setManufacturerPartNo(dbInventory.getManufacturerCode());
                     periodicLineV2.setManufacturerName(dbInventory.getManufacturerName());
                     periodicLineV2.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                    periodicLineV2.setLineNo(cycleCountLine.getLineOfEachItemCode());
 
                     periodicLineV2.setCycleCountNo(nextRangeNumber);
                     periodicLineV2.setReferenceNo(cycleCountLine.getCycleCountNo());
@@ -1509,6 +1516,7 @@ public class PeriodicHeaderService extends BaseService {
                 dbPeriodicLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
                 dbPeriodicLine.setManufacturerName(cycleCountLine.getManufacturerName());
                 dbPeriodicLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                dbPeriodicLine.setLineNo(cycleCountLine.getLineOfEachItemCode());
 
                 dbPeriodicLine.setCycleCountNo(nextRangeNumber);
                 dbPeriodicLine.setReferenceNo(cycleCountLine.getCycleCountNo());

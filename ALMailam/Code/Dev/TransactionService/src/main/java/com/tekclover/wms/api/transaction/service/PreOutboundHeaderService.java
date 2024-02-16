@@ -4493,6 +4493,38 @@ public class PreOutboundHeaderService extends BaseService {
         List<OrderManagementLineV2> orderManagementLine = orderManagementLineService.deleteOrderManagementLineV2(companyCodeId, plantId, languageId, warehouseId, oldPickListNumber, loginUserID);
         log.info("OrderManagementLine Deleted SuccessFully" + orderManagementLine);
 
+        if(orderManagementLine != null && !orderManagementLine.isEmpty()){
+            for(OrderManagementLineV2 dbOrderManagementLine : orderManagementLine) {
+                if(dbOrderManagementLine.getStatusId() != 47L) {
+                    if(dbOrderManagementLine.getProposedStorageBin() == null || dbOrderManagementLine.getProposedStorageBin().equalsIgnoreCase("")){
+                        throw new BadRequestException("OrderManagementLine ProposedStorageBin is Empty, hence inventory cannot be reversed - PickList Cancellation Aborting");
+                    }
+                    InventoryV2 inventory = inventoryService.getInventoryV2(dbOrderManagementLine.getCompanyCodeId(), dbOrderManagementLine.getPlantId(), dbOrderManagementLine.getLanguageId(),
+                            dbOrderManagementLine.getWarehouseId(), dbOrderManagementLine.getProposedPackBarCode(), dbOrderManagementLine.getItemCode(),
+                            dbOrderManagementLine.getProposedStorageBin(), dbOrderManagementLine.getManufacturerName());
+
+                    if (inventory != null) {
+                        Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (dbOrderManagementLine.getAllocatedQty() != null ? dbOrderManagementLine.getAllocatedQty() : 0);
+                        if (INV_QTY < 0) {
+                            log.info("inventory qty calculated is less than 0: " + INV_QTY);
+                            INV_QTY = 0D;
+                        }
+                        inventory.setInventoryQuantity(INV_QTY);
+                        Double ALLOC_QTY = 0D;
+                        Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                        inventory.setReferenceField4(TOT_QTY);              //Total Qty
+
+                        InventoryV2 newInventoryV2 = new InventoryV2();
+                        BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                        newInventoryV2.setUpdatedOn(new Date());
+                        newInventoryV2.setInventoryId(System.currentTimeMillis());
+                        InventoryV2 updateInventoryV2 = inventoryV2Repository.save(newInventoryV2);
+                        log.info("InventoryV2 created : " + updateInventoryV2);
+                    }
+                }
+            }
+        }
+
         //Delete PickupHeader
         List<PickupHeaderV2> pickupHeader = pickupHeaderService.deletePickUpHeaderV2(companyCodeId, plantId, languageId, warehouseId, oldPickListNumber, loginUserID);
         log.info("PickupHeader Deleted SuccessFully" + pickupHeader);
@@ -4510,14 +4542,15 @@ public class PreOutboundHeaderService extends BaseService {
                     Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
                     if (INV_QTY < 0) {
                         log.info("inventory qty calculated is less than 0: " + INV_QTY);
-                        INV_QTY = Double.valueOf(0);
+                        INV_QTY = 0D;
                     }
                     inventory.setInventoryQuantity(INV_QTY);
                     Double ALLOC_QTY = 0D;
                     if (inventory.getAllocatedQuantity() != null) {
                         ALLOC_QTY = inventory.getAllocatedQuantity();
                     }
-                    inventory.setReferenceField4(INV_QTY + ALLOC_QTY);              //Total Qty
+                    Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                    inventory.setReferenceField4(TOT_QTY);              //Total Qty
 
                     InventoryV2 newInventoryV2 = new InventoryV2();
                     BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));

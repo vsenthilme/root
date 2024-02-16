@@ -23,5 +23,5 @@ public interface CycleCountLineRepository extends JpaRepository<CycleCountLine,S
             @Param(value = "manufacturerName") String manufacturerName);
 
     CycleCountLine findByCycleCountNoAndItemCodeAndManufacturerCode(String cycleCountNo, String itemCode, String manufacturerName);
-    CycleCountLine findByCycleCountNoAndItemCodeAndManufacturerCodeAndLineOfEachItemCode(String cycleCountNo, String itemCode, String manufacturerName, Long lineOfEachItemCode);
+    CycleCountLine findByCycleCountNoAndItemCodeAndManufacturerNameAndLineOfEachItemCode(String cycleCountNo, String itemCode, String manufacturerName, Long lineOfEachItemCode);
 }

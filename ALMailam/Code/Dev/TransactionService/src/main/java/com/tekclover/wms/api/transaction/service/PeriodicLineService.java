@@ -1403,6 +1403,7 @@ public class PeriodicLineService extends BaseService {
         List<PeriodicLineV2> responsePeriodicLines = new ArrayList<>();
         List<PeriodicLineV2> newPeriodicLine = new ArrayList<>();
         List<String> statusId78 = new ArrayList<>();
+        List<String> statusId47 = new ArrayList<>();
         try {
             for (PeriodicLineV2 updatePeriodicLine : periodicLineV2s) {
                 PeriodicLineV2 dbPeriodicLine = getPeriodicLineV2(
@@ -1419,16 +1420,23 @@ public class PeriodicLineService extends BaseService {
                     statusId78.add("True");
                     responsePeriodicLines.add(dbPeriodicLine);
                 }
+                if (dbPeriodicLine.getStatusId() == 47L) {
+                    statusId47.add("True");
+                    responsePeriodicLines.add(dbPeriodicLine);
+                }
             }
 
             Long periodicLineCount = periodicLineV2s.stream().count();
             Long statusIdCount = statusId78.stream().filter(a -> a.equalsIgnoreCase("True")).count();
+            Long statusId47Count = statusId47.stream().filter(a -> a.equalsIgnoreCase("True")).count();
+            Long statusIdTotalCount = statusIdCount + statusId47Count;
+            log.info("Count of Periodic Line, statusId78, statusId47, total : " + periodicLineCount + ", " + statusIdCount + "," + statusId47Count + "," + statusIdTotalCount);
 
-            if (periodicLineCount != statusIdCount) {
+            if (periodicLineCount != statusIdTotalCount) {
                 throw new BadRequestException("Perpetual Lines are not completely Processed");
             }
 
-            if (periodicLineCount == statusIdCount) {
+            if (periodicLineCount.equals(statusIdTotalCount)) {
                 // Update new PerpetualHeader
                 PeriodicHeaderV2 dbPeriodicHeaderV2 = periodicHeaderService.getPeriodicHeaderV2(
                         periodicLineV2s.get(0).getCompanyCode(),
@@ -1448,6 +1456,10 @@ public class PeriodicLineService extends BaseService {
                 for (PeriodicLineV2 dbPeriodicLine : responsePeriodicLines) {
                     PeriodicLineTempV2 periodicLineTempV2 = new PeriodicLineTempV2();
                     BeanUtils.copyProperties(dbPeriodicLine, periodicLineTempV2, CommonUtils.getNullPropertyNames(dbPeriodicLine));
+                    if(dbPeriodicLine.getStatusId() == 47L){
+                        dbPeriodicLine.setPackBarcodes("99999");       //HardCode
+                        dbPeriodicLine.setStorageBin("Z1-Y1-X1-W1");   //HardCode
+                    }
                     periodicLineTempV2Repository.save(periodicLineTempV2);
                 }
                 List<IKeyValuePair> updatePeriodicLine = periodicLineTempV2Repository.getPeriodicHeader(
@@ -1463,6 +1475,7 @@ public class PeriodicLineService extends BaseService {
                     updatePeriodicLineV2.setItemCode(iKeyValuePair.getItemCode());
                     updatePeriodicLineV2.setManufacturerName(iKeyValuePair.getManufacturerName());
                     updatePeriodicLineV2.setInventoryQty(iKeyValuePair.getInventoryQty());
+                    updatePeriodicLineV2.setLineNo(iKeyValuePair.getLineNo());
                     updatePeriodicLineV2s.add(updatePeriodicLineV2);
                 }
                 //update cyclecount order Table
@@ -1499,10 +1512,11 @@ public class PeriodicLineService extends BaseService {
         if (updateStockCountLines != null) {
             log.info("Perpertual Lines to be Updated:" + updateStockCountLines);
             for (UpdatePeriodicLineV2 dbPeriodicLine : updateStockCountLines) {
-                CycleCountLine updatePplCountedQty = cycleCountLineRepository.findByCycleCountNoAndItemCodeAndManufacturerCode(
+                CycleCountLine updatePplCountedQty = cycleCountLineRepository.findByCycleCountNoAndItemCodeAndManufacturerNameAndLineOfEachItemCode(
                         dbPeriodicLine.getCycleCountNo(),
                         dbPeriodicLine.getItemCode(),
-                        dbPeriodicLine.getManufacturerName());
+                        dbPeriodicLine.getManufacturerName(),
+                        dbPeriodicLine.getLineNo());
                 if (updatePplCountedQty != null) {
                     log.info("Periodic Line to be Updated:" + updatePplCountedQty);
 

@@ -23,9 +23,6 @@ public class PeriodicLineV2 extends PeriodicLine {
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
 
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
-
 	@Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
 	private String barcodeId;
 

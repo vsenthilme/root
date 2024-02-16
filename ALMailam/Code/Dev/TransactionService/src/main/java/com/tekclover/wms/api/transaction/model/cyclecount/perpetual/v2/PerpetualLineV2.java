@@ -23,9 +23,6 @@ public class PerpetualLineV2 extends PerpetualLine {
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
 
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
-
 	@Column(name = "MFR_CODE", columnDefinition = "nvarchar(255)")
 	private String manufacturerCode;
 

@@ -1349,6 +1349,7 @@ public class PerpetualLineService extends BaseService {
                                                              String loginUserID) throws IllegalAccessException, InvocationTargetException {
         List<PerpetualLineV2> responsePerpetualLines = new ArrayList<>();
         List<String> statusId78 = new ArrayList<>();
+        List<String> statusId47 = new ArrayList<>();
         try {
             for (PerpetualLineV2 updatePerpetualLine : updatePerpetualLines) {
                 PerpetualLineV2 dbPerpetualLine = getPerpetualLineV2(
@@ -1365,12 +1366,19 @@ public class PerpetualLineService extends BaseService {
                     statusId78.add("True");
                     responsePerpetualLines.add(dbPerpetualLine);
                 }
+                if (dbPerpetualLine.getStatusId() == 47L) {
+                    statusId47.add("True");
+                    responsePerpetualLines.add(dbPerpetualLine);
+                }
             }
 
             Long perpetualLineCount = updatePerpetualLines.stream().count();
             Long statusIdCount = statusId78.stream().filter(a -> a.equalsIgnoreCase("True")).count();
+            Long statusId47Count = statusId47.stream().filter(a -> a.equalsIgnoreCase("True")).count();
+            Long statusIdTotalCount = statusIdCount + statusId47Count;
+            log.info("Count of Perpetual Line, statusId78, statusId47, total : " + perpetualLineCount + ", " + statusIdCount + "," + statusId47Count + "," + statusIdTotalCount);
 
-            if (!perpetualLineCount.equals(statusIdCount)) {
+            if (!perpetualLineCount.equals(statusIdTotalCount)) {
                 throw new BadRequestException("Perpetual Lines are not completely Processed");
             }
 
@@ -1381,7 +1389,7 @@ public class PerpetualLineService extends BaseService {
 //                PerpetualHeaderEntityV2 createdPerpetualHeader = createNewHeaderNLinesV2(cycleCountNo, newPerpetualLines, loginUserID);
 //                BeanUtils.copyProperties(createdPerpetualHeader, newlyCreatedPerpetualHeader, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
 //            }
-            if (perpetualLineCount.equals(statusIdCount)) {
+            if (perpetualLineCount.equals(statusIdTotalCount)) {
                 // Update new PerpetualHeader
                 PerpetualHeaderV2 dbPerpetualHeader = perpetualHeaderService.getPerpetualHeaderV2(
                         updatePerpetualLines.get(0).getCompanyCodeId(),
@@ -1413,6 +1421,10 @@ public class PerpetualLineService extends BaseService {
                 for (PerpetualLineV2 dbPerpetualLine : responsePerpetualLines) {
                     PerpetualLineTempV2 perpetualLineTempV2 = new PerpetualLineTempV2();
                     BeanUtils.copyProperties(dbPerpetualLine, perpetualLineTempV2, CommonUtils.getNullPropertyNames(dbPerpetualLine));
+                    if(dbPerpetualLine.getStatusId() == 47L){
+                        dbPerpetualLine.setPackBarcodes("99999");       //HardCode
+                        dbPerpetualLine.setStorageBin("Z1-Y1-X1-W1");   //HardCode
+                    }
                     perpetualLineTempV2Repository.save(perpetualLineTempV2);
                 }
                 List<IKeyValuePair> updatePerpetualLine = perpetualLineTempV2Repository.getPickupLineCount(
@@ -1428,6 +1440,7 @@ public class PerpetualLineService extends BaseService {
                     updatePerpetualLineV2.setItemCode(iKeyValuePair.getItemCode());
                     updatePerpetualLineV2.setManufacturerName(iKeyValuePair.getManufacturerName());
                     updatePerpetualLineV2.setInventoryQty(iKeyValuePair.getInventoryQty());
+                    updatePerpetualLineV2.setLineNo(iKeyValuePair.getLineNo());
                     updatePerpetualLineV2List.add(updatePerpetualLineV2);
                 }
                 //update cyclecount order Table
@@ -1535,10 +1548,11 @@ public class PerpetualLineService extends BaseService {
         if (updateStockCountLines != null) {
             log.info("Perpertual Lines to be Updated:" + updateStockCountLines);
             for (UpdatePerpetualLineV2 dbPerpetualLine : updateStockCountLines) {
-                CycleCountLine updatePplCountedQty = cycleCountLineRepository.findByCycleCountNoAndItemCodeAndManufacturerCode(
+                CycleCountLine updatePplCountedQty = cycleCountLineRepository.findByCycleCountNoAndItemCodeAndManufacturerNameAndLineOfEachItemCode(
                         dbPerpetualLine.getCycleCountNo(),
                         dbPerpetualLine.getItemCode(),
-                        dbPerpetualLine.getManufacturerName());
+                        dbPerpetualLine.getManufacturerName(),
+                        dbPerpetualLine.getLineNo());
                 if (updatePplCountedQty != null) {
                     log.info("Perpertual Line to be Updated:" + updatePplCountedQty);
 

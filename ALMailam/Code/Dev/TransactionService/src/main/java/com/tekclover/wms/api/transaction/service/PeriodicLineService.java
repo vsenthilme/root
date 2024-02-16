@@ -716,8 +716,7 @@ public class PeriodicLineService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public List<PeriodicLineV2> createPeriodicLineV2(List<PeriodicLineV2> newPeriodicLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+    public List<PeriodicLineV2> createPeriodicLineV2(List<PeriodicLineV2> newPeriodicLines, String loginUserID) {
         List<PeriodicLineV2> newPeriodicLineList = new ArrayList<>();
         for (PeriodicLineV2 newPeriodicLine : newPeriodicLines) {
             PeriodicLineV2 dbPeriodicLine = new PeriodicLineV2();

@@ -1,13 +1,8 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
-import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualZeroStockLine;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
-import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
-import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
@@ -16,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,5 +120,20 @@ public class PerpetualZeroStkLineService extends BaseService{
         perpetualLineService.createPerpetualLineV2(newPerpetualLineList, loginUserID);
         log.info("New Inventory Created, PerpetualZeroStockLine deleted, New Perpetual Line Created");
         return newPerpetualLineList;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param cycleCountNo
+     * @return
+     */
+    public List<PerpetualZeroStockLine> getPerpetualZeroStockLine(String companyCodeId, String plantId, String languageId, String warehouseId, String cycleCountNo) {
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = perpetualZeroStkLineRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, cycleCountNo, 0L);
+        return perpetualZeroStockLineList;
     }
 }

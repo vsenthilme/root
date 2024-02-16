@@ -79,6 +79,9 @@ public class PerpetualHeaderService extends BaseService {
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
 
+    @Autowired
+    private PerpetualZeroStkLineService perpetualZeroStkLineService;
+
     String statusDescription = null;
     //=======================================================================================================================
 
@@ -1458,7 +1461,20 @@ public class PerpetualHeaderService extends BaseService {
                 perpetualHeader.getLanguageId(),
                 perpetualHeader.getWarehouseId(),
                 perpetualHeader.getCycleCountNo());
-
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = perpetualZeroStkLineService.getPerpetualZeroStockLine(
+                perpetualHeader.getCompanyCodeId(),
+                perpetualHeader.getPlantId(),
+                perpetualHeader.getLanguageId(),
+                perpetualHeader.getWarehouseId(),
+                perpetualHeader.getCycleCountNo());
+        if(perpetualZeroStockLineList != null && !perpetualZeroStockLineList.isEmpty()){
+            log.info("perpetualZeroStockLineList : " + perpetualZeroStockLineList.size());
+            for(PerpetualZeroStockLine perpetualZeroStockLine : perpetualZeroStockLineList){
+                PerpetualLineV2 dbPerpetualLineV2 = new PerpetualLineV2();
+                BeanUtils.copyProperties(perpetualZeroStockLine, dbPerpetualLineV2, CommonUtils.getNullPropertyNames(perpetualZeroStockLine));
+                perpetualLineList.add(dbPerpetualLineV2);
+            }
+        }
         PerpetualHeaderEntityV2 perpetualHeaderEntityV2 = new PerpetualHeaderEntityV2();
         BeanUtils.copyProperties(perpetualHeader, perpetualHeaderEntityV2, CommonUtils.getNullPropertyNames(perpetualHeader));
         perpetualHeaderEntityV2.setPerpetualLine(perpetualLineList);

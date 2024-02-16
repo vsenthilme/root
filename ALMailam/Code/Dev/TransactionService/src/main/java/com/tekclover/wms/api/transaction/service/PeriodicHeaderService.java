@@ -5,7 +5,6 @@ import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.*;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -85,6 +84,9 @@ public class PeriodicHeaderService extends BaseService {
 
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+
+    @Autowired
+    private PeriodicZeroStkLineService periodicZeroStkLineService;
 
     String statusDescription = null;
 
@@ -863,7 +865,20 @@ public class PeriodicHeaderService extends BaseService {
                 periodicheader.getLanguageId(),
                 periodicheader.getWarehouseId(),
                 periodicheader.getCycleCountNo());
-
+        List<PeriodicZeroStockLine> periodicZeroStockLineList = periodicZeroStkLineService.getPeriodicZeroStockLine(
+                periodicheader.getCompanyCode(),
+                periodicheader.getPlantId(),
+                periodicheader.getLanguageId(),
+                periodicheader.getWarehouseId(),
+                periodicheader.getCycleCountNo());
+        if(periodicZeroStockLineList != null && !periodicZeroStockLineList.isEmpty()){
+            log.info("periodicZeroStockLineList : " + periodicZeroStockLineList.size());
+            for(PeriodicZeroStockLine periodicZeroStockLine : periodicZeroStockLineList){
+                PeriodicLineV2 dbPeriodicLineV2 = new PeriodicLineV2();
+                BeanUtils.copyProperties(periodicZeroStockLine, dbPeriodicLineV2, CommonUtils.getNullPropertyNames(periodicZeroStockLine));
+                perpetualLineList.add(dbPeriodicLineV2);
+            }
+        }
 
         PeriodicHeaderEntityV2 periodicHeaderEntityV2 = new PeriodicHeaderEntityV2();
         BeanUtils.copyProperties(periodicheader, periodicHeaderEntityV2, CommonUtils.getNullPropertyNames(periodicheader));

@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -10008,5 +10009,51 @@ public class IDMasterService {
 		log.info("results: " + results);
 		return results;
 	}
+	public HhtNotification createHhtNotification (HhtNotification newHhtNotification, String loginUserID, String authToken) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtnotification")
+					.queryParam("loginUserID", loginUserID);
+			HttpEntity<?> entity = new HttpEntity<>(newHhtNotification, headers);
+			ResponseEntity<HhtNotification> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, HhtNotification.class);
+//			log.info("result : " + result.getStatusCode());
+			return result.getBody();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public HhtNotification getHhtNotification (String warehouseId, String companyCodeId,  String languageId,
+											   String plantId ,  String deviceId,  String userId,  String tokenId, String authToken) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "hhtnotification")
+					.queryParam("warehouseId", warehouseId)
+					.queryParam("companyCodeId", companyCodeId)
+					.queryParam("languageId", languageId)
+					.queryParam("plantId", plantId)
+					.queryParam("deviceId", deviceId)
+					.queryParam("userId", userId)
+					.queryParam("tokenId", tokenId);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<HhtNotification> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, HhtNotification.class);
+//			log.info("result : " + result.getStatusCode());
+			return result.getBody();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+
 
 }

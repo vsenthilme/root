@@ -1391,6 +1391,7 @@ public class PerpetualLineService extends BaseService {
                         }
                         updatePerpetualLine.setPackBarcodes("99999");       //HardCode
                         updatePerpetualLine.setStorageBin("Z1-Y1-X1-W1");   //HardCode
+                        updatePerpetualLine.setCountedQty(0D);
                         updatePerpetualLine.setDeletionIndicator(0L);
                         responsePerpetualLines.add(updatePerpetualLine);
                     }

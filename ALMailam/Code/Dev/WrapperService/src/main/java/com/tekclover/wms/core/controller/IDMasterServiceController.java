@@ -4173,4 +4173,20 @@ public class IDMasterServiceController {
 		List<com.tekclover.wms.core.model.dto.Country> createdCountry = idmasterService.findCountry(findCountry);
 		return new ResponseEntity<>(createdCountry, HttpStatus.OK);
 	}
+	@ApiOperation(response = HhtNotification.class, value = "Create HhtNotification") // label for swagger
+	@PostMapping("/hhtnotification/createnotification")
+	public ResponseEntity<?> createHhtNotification(@Valid @RequestBody HhtNotification newHhtNotification, @RequestParam String loginUserID,
+										   @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
+		HhtNotification createHhtNotification = idmasterService.createHhtNotification(newHhtNotification, loginUserID, authToken);
+		return new ResponseEntity<>(createHhtNotification, HttpStatus.OK);
+	}
+	@ApiOperation(response = HhtNotification.class, value = "Get a HhtNotification") // label for swagger
+	@GetMapping("/hhtnotification/getnotification")
+	public ResponseEntity<?> getHhtNotification(@RequestParam String warehouseId,@RequestParam String companyId, @RequestParam String languageId, @RequestParam String plantId, @RequestParam String deviceId,
+												@RequestParam String userId, @RequestParam String tokenId, @RequestParam String authToken) {
+		HhtNotification dbHhtNotification = idmasterService.getHhtNotification(warehouseId, companyId,  languageId,plantId ,  deviceId,userId, tokenId, authToken);
+
+		log.info("HhtNotification : " + dbHhtNotification);
+		return new ResponseEntity<>(dbHhtNotification, HttpStatus.OK);
+	}
 }

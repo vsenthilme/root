@@ -123,10 +123,11 @@ public class PeriodicService {
             log.info("Perpertual Lines to be Updated:" + updateStockCountLines);
             List<String> statusList = new ArrayList<>();
             for (UpdateStockCountLine dbPeriodicLine : updateStockCountLines) {
-                PeriodicLine updatePdlCountedQty = periodicLineRepository.findByCycleCountNoAndItemCodeAndManufacturerCode(
+                PeriodicLine updatePdlCountedQty = periodicLineRepository.findByCycleCountNoAndItemCodeAndManufacturerCodeAndLineNoOfEachItemCode(
                         dbPeriodicLine.getCycleCountNo(),
                         dbPeriodicLine.getItemCode(),
-                        dbPeriodicLine.getManufacturerName());
+                        dbPeriodicLine.getManufacturerName(),
+                        dbPeriodicLine.getLineNo());
                 if (updatePdlCountedQty != null) {
                     log.info("Periodic Line to be Updated:" + updatePdlCountedQty);
 
@@ -138,7 +139,8 @@ public class PeriodicService {
                                 1L,
                                 dbPeriodicLine.getCycleCountNo(),
                                 dbPeriodicLine.getItemCode(),
-                                dbPeriodicLine.getManufacturerName());
+                                dbPeriodicLine.getManufacturerName(),
+                                dbPeriodicLine.getLineNo());
                         log.info("Periodic Line CountedQty Updated, CountedQty: " + dbPeriodicLine + ", " + dbPeriodicLine.getInventoryQty());
                         statusList.add("true");
                     } catch (Exception e) {

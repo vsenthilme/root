@@ -481,7 +481,7 @@ public class BatchJobScheduler {
 
     //-------------------------------------------------------------------------------------------
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 2000)
     public void scheduleJob() throws InterruptedException, InvocationTargetException, IllegalAccessException, ParseException {
 
         CompletableFuture<WarehouseApiResponse> inboundOrder = scheduleAsyncService.processInboundOrder();

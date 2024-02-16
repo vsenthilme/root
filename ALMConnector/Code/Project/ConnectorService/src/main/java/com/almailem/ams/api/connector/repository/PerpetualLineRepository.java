@@ -21,14 +21,17 @@ public interface PerpetualLineRepository extends JpaRepository<PerpetualLine, St
             String cycleCountNo, String itemCode, String manufacturerName);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE PERPETUALLINE set CountedQty = :countedQty, IS_COMPLETED = :isCompleted  \r\n"
-            + " WHERE CycleCountNo = :cycleCountNo and Itemcode = :itemCode and ManufacturerName = :manufacturerName", nativeQuery = true)
+    @Query(value = "UPDATE PERPETUALLINE set countedQty = :countedQty, isCompleted = :isCompleted  \r\n"
+            + " WHERE cycleCountNo = :cycleCountNo and itemCode = :itemCode and \n"
+            + "manufacturerName = :manufacturerName and lineNoOfEachItemCode = :lineNo ", nativeQuery = true)
     public void updatePplLine (
             @Param(value = "countedQty") Double countedQty,
             @Param(value = "isCompleted") Long isCompleted,
             @Param(value = "cycleCountNo") String cycleCountNo,
             @Param(value = "itemCode") String itemCode,
-            @Param(value = "manufacturerName") String manufacturerName);
+            @Param(value = "manufacturerName") String manufacturerName,
+            @Param(value = "lineNo") Long lineNo);
 
     PerpetualLine findByCycleCountNoAndItemCodeAndManufacturerName(String cycleCountNo, String itemCode, String manufacturerName);
+    PerpetualLine findByCycleCountNoAndItemCodeAndManufacturerNameAndLineNoOfEachItemCode(String cycleCountNo, String itemCode, String manufacturerName, Long lineNo);
 }

@@ -845,6 +845,7 @@ public class PeriodicLineService extends BaseService {
         List<PeriodicLineV2> updateBatchPeriodicLine = new ArrayList<>();
         List<PeriodicLineV2> filteredPerpetualLines = updatePeriodicLines.stream().filter(a -> a.getStatusId() != 47L).collect(Collectors.toList());
         for (PeriodicLineV2 updatePeriodicLine : filteredPerpetualLines) {
+            if(updatePeriodicLine.getStatusId() != 47L){
             PeriodicLineV2 dbPeriodicLine = getPeriodicLineV2(
                     updatePeriodicLine.getCompanyCode(), updatePeriodicLine.getPlantId(),
                     updatePeriodicLine.getLanguageId(), updatePeriodicLine.getWarehouseId(), updatePeriodicLine.getCycleCountNo(),
@@ -906,7 +907,7 @@ public class PeriodicLineService extends BaseService {
 //                    if (VAR_QTY == 0) {
 //                        dbPeriodicLine.setStatusId(78L);
 //                    } else if (VAR_QTY > 0 || VAR_QTY < 0) {
-                        dbPeriodicLine.setStatusId(74L);
+                    dbPeriodicLine.setStatusId(74L);
 //                    }
                 }
 
@@ -933,6 +934,7 @@ public class PeriodicLineService extends BaseService {
                 createPeriodicLine.add(newPeriodicLineV2);
             }
         }
+    }
         responsePeriodicLines.addAll(createPeriodicLineV2(createPeriodicLine, loginUserID));
         responsePeriodicLines.addAll(periodicLineV2Repository.saveAll(updateBatchPeriodicLine));
         return responsePeriodicLines;
@@ -1474,7 +1476,7 @@ public class PeriodicLineService extends BaseService {
                     updatePeriodicLineV2.setItemCode(iKeyValuePair.getItemCode());
                     updatePeriodicLineV2.setManufacturerName(iKeyValuePair.getManufacturerName());
                     updatePeriodicLineV2.setInventoryQty(iKeyValuePair.getInventoryQty());
-                    updatePeriodicLineV2.setLineNo(iKeyValuePair.getLineNo());
+                    updatePeriodicLineV2.setLineNo(iKeyValuePair.getLineNumber());
                     updatePeriodicLineV2s.add(updatePeriodicLineV2);
                 }
                 //update cyclecount order Table

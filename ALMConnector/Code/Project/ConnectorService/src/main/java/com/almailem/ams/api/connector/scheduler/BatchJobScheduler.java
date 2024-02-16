@@ -19,7 +19,7 @@ public class BatchJobScheduler {
 
     //-------------------------------------------------------------------------------------------
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 50000)
     public void scheduleJob() throws InterruptedException, InvocationTargetException, IllegalAccessException {
 
         CompletableFuture<WarehouseApiResponse> supplierInvoice = scheduleAsyncService.scheduleSupplierInvoice();

@@ -109,11 +109,10 @@ public class PerpetualService {
             log.info("Perpertual Lines to be Updated:" + updateStockCountLines);
             List<String> statusList = new ArrayList<>();
             for (UpdateStockCountLine dbPerpetualLine : updateStockCountLines) {
-                PerpetualLine updatePplCountedQty = perpetualLineRepository.findByCycleCountNoAndItemCodeAndManufacturerNameAndLineNoOfEachItemCode(
+                PerpetualLine updatePplCountedQty = perpetualLineRepository.findByCycleCountNoAndItemCodeAndManufacturerName(
                         dbPerpetualLine.getCycleCountNo(),
                         dbPerpetualLine.getItemCode(),
-                        dbPerpetualLine.getManufacturerName(),
-                        dbPerpetualLine.getLineNo());
+                        dbPerpetualLine.getManufacturerName());
                 if (updatePplCountedQty != null) {
                     log.info("Perpertual Line to be Updated:" + updatePplCountedQty);
 
@@ -125,8 +124,7 @@ public class PerpetualService {
                                 1L,
                                 dbPerpetualLine.getCycleCountNo(),
                                 dbPerpetualLine.getItemCode(),
-                                dbPerpetualLine.getManufacturerName(),
-                                dbPerpetualLine.getLineNo());
+                                dbPerpetualLine.getManufacturerName());
                         log.info("Perpertual Line CountedQty Updated, CountedQty: " + dbPerpetualLine + ", " + dbPerpetualLine.getInventoryQty());
                         statusList.add("true");
                     } catch (Exception e) {

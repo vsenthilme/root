@@ -15,18 +15,16 @@ public interface PeriodicLineRepository extends JpaRepository<PeriodicLine, Stri
         JpaSpecificationExecutor<PeriodicLine> {
 
 
-    PeriodicLine findByCycleCountNoAndItemCodeAndManufacturerCode(String cycleCountNo, String itemCode, String manufacturerName);
-    PeriodicLine findByCycleCountNoAndItemCodeAndManufacturerCodeAndLineNoOfEachItemCode(String cycleCountNo, String itemCode, String manufacturerName, Long lineNo);
+    PeriodicLine findByCycleCountNoAndItemCodeAndManufacturerCode(
+            String cycleCountNo, String itemCode, String manufacturerName);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE PERIODICLINE set countedQty = :countedQty, isCompleted = :isCompleted  \r\n"
-            + " WHERE cycleCountNo = :cycleCountNo and itemCode = :itemCode and \n"
-            + "manufacturerName = :manufacturerName and lineNoOfEachItemCode = :lineNo ", nativeQuery = true)
+    @Query(value = "UPDATE PERIODICLINE set CountedQty = :countedQty, IS_COMPLETED = :isCompleted  \r\n"
+            + " WHERE CycleCountNo = :cycleCountNo and Itemcode = :itemCode and ManufacturerName = :manufacturerName", nativeQuery = true)
     public void updatePdlLine (
             @Param(value = "countedQty") Double countedQty,
             @Param(value = "isCompleted") Long isCompleted,
             @Param(value = "cycleCountNo") String cycleCountNo,
             @Param(value = "itemCode") String itemCode,
-            @Param(value = "manufacturerName") String manufacturerName,
-            @Param(value = "lineNo") Long lineNo);
+            @Param(value = "manufacturerName") String manufacturerName);
 }

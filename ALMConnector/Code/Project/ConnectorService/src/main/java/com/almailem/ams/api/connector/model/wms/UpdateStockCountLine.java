@@ -9,6 +9,5 @@ public class UpdateStockCountLine {
 	private String cycleCountNo;
 	private String manufacturerName;
 	private Double InventoryQty;
-	private Long lineNo;
 
 }

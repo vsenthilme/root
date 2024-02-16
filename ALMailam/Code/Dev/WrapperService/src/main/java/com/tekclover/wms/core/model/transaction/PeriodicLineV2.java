@@ -51,4 +51,5 @@ public class PeriodicLineV2 extends PeriodicLine {
 	private Double secondCountedQty;
 	private String levelId;
 	private Double amsVarianceQty;
+	private Long lineNo;
 }

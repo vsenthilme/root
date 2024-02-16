@@ -17,4 +17,8 @@ public interface PerpetualZeroStkLineRepository extends JpaRepository<PerpetualZ
 
     List<PerpetualZeroStockLine> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String cycleCountNo, Long deletionIndicator);
+
+    PerpetualZeroStockLine findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId,
+            String cycleCountNo, String itemCode, String manufacturerName, Long deletionIndicator);
 }

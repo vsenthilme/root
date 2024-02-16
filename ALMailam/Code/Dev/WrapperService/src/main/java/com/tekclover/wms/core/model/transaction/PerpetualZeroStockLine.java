@@ -72,4 +72,5 @@ public class PerpetualZeroStockLine {
 	private Double secondCountedQty;
 	private String levelId;
 	private Double amsVarianceQty;
+	private Long lineNo;
 }

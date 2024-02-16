@@ -29,5 +29,5 @@ public class PerpetualLineV2 extends PerpetualLine {
 	private Double secondCountedQty;
 	private String levelId;
 	private Double amsVarianceQty;
-
+	private Long lineNo;
 }

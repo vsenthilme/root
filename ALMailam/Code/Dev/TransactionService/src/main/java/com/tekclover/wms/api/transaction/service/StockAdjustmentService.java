@@ -9,6 +9,8 @@ import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
@@ -51,6 +53,7 @@ public class StockAdjustmentService extends BaseService {
     MastersService mastersService;
 
     String statusDescription = null;
+    String LANG_ID = "EN";
 
 
     /**
@@ -256,13 +259,13 @@ public class StockAdjustmentService extends BaseService {
                 if (dbInventory != null) {
                     InventoryV2 newInventory = new InventoryV2();
                     BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
-                    newInventory.setInventoryId(System.currentTimeMillis());
                     newInventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + stockAdjustment.getAdjustmentQty());
                     Double ALLOC_QTY = 0D;
                     if(dbInventory.getAllocatedQuantity() != null) {
                         ALLOC_QTY = dbInventory.getAllocatedQuantity();
                     }
                     newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                    newInventory.setInventoryId(System.currentTimeMillis());
                     inventoryV2Repository.save(newInventory);
 
                     //StockAdjustment Record Insert
@@ -351,12 +354,48 @@ public class StockAdjustmentService extends BaseService {
                 newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
             }
             if (dbInventory == null) {
+                List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
+                        stockAdjustment.getCompanyCode(),
+                        stockAdjustment.getBranchCode(),
+                        LANG_ID,
+                        stockAdjustment.getWarehouseId(),
+                        stockAdjustment.getItemCode(),
+                        stockAdjustment.getManufacturerName(),
+                        1L);
+                log.info("Inventory-----> BinclassId 7 for this item is empty; ----> BinClassId 1 ---> " + inventoryList);
 
-                log.info("New Inventory-----> BinclassId 7 for this item is empty");
+                if(inventoryList != null && !inventoryList.isEmpty()){
+                    //Stock Adjustment - Positive Qty - Have to add Stock Adjustment Qty with Inventory
+                    if(stockAdjustment.getAdjustmentQty() > 0){
+                        InventoryV2 stkInventory = new InventoryV2();
+                        BeanUtils.copyProperties(inventoryList.get(0), stkInventory, CommonUtils.getNullPropertyNames(inventoryList.get(0)));
+                        Double INV_QTY = 0D;
+                        if(inventoryList.get(0).getInventoryQuantity() != null) {
+                            INV_QTY = inventoryList.get(0).getInventoryQuantity();
+                            INV_QTY = INV_QTY + stockAdjustment.getAdjustmentQty();
+                        }
+                        Double ALLOC_QTY = 0D;
+                        if(inventoryList.get(0).getAllocatedQuantity() != null) {
+                            ALLOC_QTY = inventoryList.get(0).getAllocatedQuantity();
+                        }
+                        Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                        stkInventory.setInventoryQuantity(INV_QTY);
+                        stkInventory.setAllocatedQuantity(ALLOC_QTY);
+                        stkInventory.setReferenceField4(TOT_QTY);
+                        stkInventory.setDeletionIndicator(0L);
+                        stkInventory.setInventoryId(System.currentTimeMillis());
+                        inventoryV2Repository.save(stkInventory);
+                    }
+                    //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
+                    if(stockAdjustment.getAdjustmentQty() < 0){
+
+                    }
+                }
+
                 newInventory.setCompanyCodeId(stockAdjustment.getCompanyCode());
                 newInventory.setPlantId(stockAdjustment.getBranchCode());
                 newInventory.setWarehouseId(stockAdjustment.getWarehouseId());
-                newInventory.setLanguageId("EN");
+                newInventory.setLanguageId(LANG_ID);
                 newInventory.setVariantCode(1L);                // VAR_ID
                 newInventory.setVariantSubCode("1");            // VAR_SUB_ID
                 newInventory.setStorageMethod("1");            // STR_MTD
@@ -636,7 +675,7 @@ public class StockAdjustmentService extends BaseService {
                 newInventory.setCompanyCodeId(stockAdjustment.getCompanyCode());
                 newInventory.setPlantId(stockAdjustment.getBranchCode());
                 newInventory.setWarehouseId(stockAdjustment.getWarehouseId());
-                newInventory.setLanguageId("EN");
+                newInventory.setLanguageId(LANG_ID);
                 newInventory.setVariantCode(1L);                // VAR_ID
                 newInventory.setVariantSubCode("1");            // VAR_SUB_ID
                 newInventory.setStorageMethod("1");            // STR_MTD

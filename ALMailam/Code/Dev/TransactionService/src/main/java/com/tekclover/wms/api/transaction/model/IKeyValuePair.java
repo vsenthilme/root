@@ -20,6 +20,6 @@ public interface IKeyValuePair {
     String getRefDocNumber();
     String getAssignPicker();
     Long getPickerCount();
-    Long getLineNo();
+    Long getLineNumber();
 
 }

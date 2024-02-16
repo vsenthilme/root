@@ -136,4 +136,31 @@ public class PerpetualZeroStkLineService extends BaseService{
                 companyCodeId, plantId, languageId, warehouseId, cycleCountNo, 0L);
         return perpetualZeroStockLineList;
     }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param cycleCountNo
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public PerpetualZeroStockLine getaPerpetualZeroStockLine(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                            String cycleCountNo, String itemCode, String manufacturerName) {
+        PerpetualZeroStockLine perpetualZeroStockLine =
+                perpetualZeroStkLineRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, cycleCountNo, itemCode, manufacturerName, 0L);
+        if (perpetualZeroStockLine == null) {
+            throw new BadRequestException("The given PerpetualZeroLine ID - "
+                    + " warehouseId: " + warehouseId + ","
+                    + "cycleCountNo: " + cycleCountNo + ","
+                    + "itemCode: " + itemCode + ","
+                    + "manufacturerName: " + manufacturerName + ","
+                    + " doesn't exist.");
+        }
+        return perpetualZeroStockLine;
+    }
 }

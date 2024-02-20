@@ -33,7 +33,7 @@ public class HhtNotification {
 	private String tokenId;
 
 
-	private List<HhtNotificationToken> hhtNotificationTokens;
+//	private List<HhtNotificationToken> hhtNotificationTokens;
 
 	private Long deletionIndicator;
 

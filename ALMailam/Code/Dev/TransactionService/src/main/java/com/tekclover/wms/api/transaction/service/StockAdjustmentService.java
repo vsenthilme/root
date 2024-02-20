@@ -262,12 +262,16 @@ public class StockAdjustmentService extends BaseService {
                 if (dbInventory != null) {
                     InventoryV2 newInventory = new InventoryV2();
                     BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
-                    newInventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + stockAdjustment.getAdjustmentQty());
+                    Double INV_QTY = dbInventory.getInventoryQuantity();
+                    Double ADJ_QTY = stockAdjustment.getAdjustmentQty();
+                    INV_QTY = INV_QTY + ADJ_QTY;
+                    newInventory.setInventoryQuantity(INV_QTY);
                     Double ALLOC_QTY = 0D;
                     if(dbInventory.getAllocatedQuantity() != null) {
                         ALLOC_QTY = dbInventory.getAllocatedQuantity();
                     }
-                    newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                    Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                    newInventory.setReferenceField4(TOT_QTY);
                     newInventory.setInventoryId(System.currentTimeMillis());
                     inventoryV2Repository.save(newInventory);
 
@@ -349,12 +353,16 @@ public class StockAdjustmentService extends BaseService {
                     InventoryV2 newInventory = new InventoryV2();
                     log.info("Inventory : " + dbInventory);
                     BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
-                    newInventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + stockAdjustment.getAdjustmentQty());
+                    Double INV_QTY = dbInventory.getInventoryQuantity();
+                    Double ADJ_QTY = stockAdjustment.getAdjustmentQty();
+                    INV_QTY = INV_QTY + ADJ_QTY;
+                    newInventory.setInventoryQuantity(INV_QTY);
                     Double ALLOC_QTY = 0D;
                     if (dbInventory.getAllocatedQuantity() != null) {
                         ALLOC_QTY = dbInventory.getAllocatedQuantity();
                     }
-                    newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                    Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                    newInventory.setReferenceField4(TOT_QTY);
 
                     newInventory.setUpdatedOn(new Date());
                     newInventory.setInventoryId(System.currentTimeMillis());

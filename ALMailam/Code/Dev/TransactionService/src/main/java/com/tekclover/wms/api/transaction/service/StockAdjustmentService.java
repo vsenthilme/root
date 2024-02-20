@@ -345,23 +345,121 @@ public class StockAdjustmentService extends BaseService {
             log.info("Inventory: " + dbInventory);
 
             if (dbInventory != null) {
-                InventoryV2 newInventory = new InventoryV2();
-                log.info("Inventory : " + dbInventory);
-                BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
-                newInventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + stockAdjustment.getAdjustmentQty());
-                Double ALLOC_QTY = 0D;
-                if(dbInventory.getAllocatedQuantity() != null) {
-                    ALLOC_QTY = dbInventory.getAllocatedQuantity();
-                }
-                newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                if (dbInventory.getInventoryQuantity() > 0) {
+                    InventoryV2 newInventory = new InventoryV2();
+                    log.info("Inventory : " + dbInventory);
+                    BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
+                    newInventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + stockAdjustment.getAdjustmentQty());
+                    Double ALLOC_QTY = 0D;
+                    if (dbInventory.getAllocatedQuantity() != null) {
+                        ALLOC_QTY = dbInventory.getAllocatedQuantity();
+                    }
+                    newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
 
-                newInventory.setUpdatedOn(new Date());
-                newInventory.setInventoryId(System.currentTimeMillis());
-                inventoryV2Repository.save(newInventory);
-                //Insert New Record in StockAdjustment
-                StockAdjustment createStockAdjustment = createStockAdjustment(newInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
-                log.info("createdStockAdjustment: " + createStockAdjustment);
-                return createStockAdjustment;
+                    newInventory.setUpdatedOn(new Date());
+                    newInventory.setInventoryId(System.currentTimeMillis());
+                    inventoryV2Repository.save(newInventory);
+                    //Insert New Record in StockAdjustment
+                    StockAdjustment createStockAdjustment = createStockAdjustment(newInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
+                    log.info("createdStockAdjustment: " + createStockAdjustment);
+                    return createStockAdjustment;
+                }
+                if (dbInventory.getInventoryQuantity() <= 0) {
+                    List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
+                            stockAdjustment.getCompanyCode(),
+                            stockAdjustment.getBranchCode(),
+                            LANG_ID,
+                            stockAdjustment.getWarehouseId(),
+                            stockAdjustment.getItemCode(),
+                            stockAdjustment.getManufacturerName(),
+                            1L);
+                    log.info("Inventory-----> BinclassId 7 for this item is empty; ----> BinClassId 1 ---> " + inventoryList);
+
+                    if(inventoryList != null && !inventoryList.isEmpty()){
+                        //Stock Adjustment - Positive Qty - Have to add Stock Adjustment Qty with Inventory
+                        if(stockAdjustment.getAdjustmentQty() > 0){
+                            InventoryV2 stkInventory = new InventoryV2();
+                            BeanUtils.copyProperties(inventoryList.get(0), stkInventory, CommonUtils.getNullPropertyNames(inventoryList.get(0)));
+                            Double INV_QTY = 0D;
+                            if(inventoryList.get(0).getInventoryQuantity() != null) {
+                                INV_QTY = inventoryList.get(0).getInventoryQuantity();
+                                INV_QTY = INV_QTY + stockAdjustment.getAdjustmentQty();
+                            }
+                            Double ALLOC_QTY = 0D;
+                            if(inventoryList.get(0).getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventoryList.get(0).getAllocatedQuantity();
+                            }
+                            Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                            stkInventory.setInventoryQuantity(INV_QTY);
+                            stkInventory.setAllocatedQuantity(ALLOC_QTY);
+                            stkInventory.setReferenceField4(TOT_QTY);
+                            stkInventory.setDeletionIndicator(0L);
+                            stkInventory.setUpdatedOn(new Date());
+                            stkInventory.setInventoryId(System.currentTimeMillis());
+                            inventoryV2Repository.save(stkInventory);
+
+                            //Insert New Record in StockAdjustment
+                            StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventoryList.get(0).getReferenceField4(), inventoryList.get(0).getReferenceField8(), stockAdjustment);
+                            log.info("createdStockAdjustment: " + createStockAdjustment);
+                            return createStockAdjustment;
+                        }
+                        //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
+                        if(stockAdjustment.getAdjustmentQty() < 0){
+                            Double STK_ADJ_QTY = 0D;
+                            Double INV_QTY = 0D;
+                            Double STK_QTY = 0D;
+                            Double ALLOC_QTY = 0D;
+                            List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
+                            if(stockAdjustment.getAdjustmentQty() != null) {
+                                STK_ADJ_QTY = abs(stockAdjustment.getAdjustmentQty());
+                            }
+                            outerloop:
+                            for(IInventoryImpl inventory : inventoryList) {
+                                if(inventory.getInventoryQuantity() != null){
+                                    INV_QTY = inventory.getInventoryQuantity();
+                                }
+                                if(inventory.getAllocatedQuantity() != null) {
+                                    ALLOC_QTY = inventory.getAllocatedQuantity();
+                                }
+                                if (STK_ADJ_QTY <= INV_QTY) {
+                                    STK_QTY = STK_ADJ_QTY;
+                                } else if (STK_ADJ_QTY > INV_QTY) {
+                                    STK_QTY = INV_QTY;
+                                } else if (INV_QTY == 0) {
+                                    STK_QTY = 0D;
+                                }
+                                log.info("STK_QTY -----1--->: " + STK_QTY);
+
+                                InventoryV2 stkInventory = new InventoryV2();
+                                BeanUtils.copyProperties(inventory, stkInventory, CommonUtils.getNullPropertyNames(inventory));
+                                INV_QTY = INV_QTY - STK_QTY;
+                                Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                                stkInventory.setInventoryQuantity(INV_QTY);
+                                stkInventory.setReferenceField4(TOT_QTY);
+                                stkInventory.setDeletionIndicator(0L);
+                                stkInventory.setInventoryId(System.currentTimeMillis());
+                                inventoryV2Repository.save(stkInventory);
+
+                                //Insert New Record in StockAdjustment
+                                StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                                stockAdjustmentList.add(createStockAdjustment);
+
+//                            if (STK_ADJ_QTY > STK_QTY) {
+                                STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                                log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
+//                            }
+                                if(STK_ADJ_QTY < 0) {
+                                    STK_ADJ_QTY = 0D;
+                                }
+                                if(STK_ADJ_QTY == 0D) {
+                                    log.info("STK_ADJ_QTY fully adjusted: ");
+                                    break outerloop;
+                                }
+                            }
+                            return stockAdjustmentList.get(0);
+                        }
+                    }
+                }
             }
             if (dbInventory == null) {
                 List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(

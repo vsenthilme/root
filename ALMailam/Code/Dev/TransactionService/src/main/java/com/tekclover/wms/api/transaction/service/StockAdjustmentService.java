@@ -68,7 +68,8 @@ public class StockAdjustmentService extends BaseService {
         WarehouseApiResponse warehouseApiResponse = new WarehouseApiResponse();
 
         //Code Changed to do stock Adjustment Automatically
-        StockAdjustment createStockAdjustment = autoUpdateStockAdjustment(stockAdjustment);
+//        StockAdjustment createStockAdjustment = autoUpdateStockAdjustment(stockAdjustment);
+        StockAdjustment createStockAdjustment = autoUpdateStockAdjustmentNew(stockAdjustment);
 
 //        StockAdjustment createStockAdjustment = null;
 //        List<StockAdjustment> stockAdjustmentList = new ArrayList<>();

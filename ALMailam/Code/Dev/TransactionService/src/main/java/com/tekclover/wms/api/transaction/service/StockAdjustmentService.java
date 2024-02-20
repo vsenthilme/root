@@ -459,6 +459,9 @@ public class StockAdjustmentService extends BaseService {
                             return stockAdjustmentList.get(0);
                         }
                     }
+                    if(inventoryList == null || inventoryList.isEmpty()){
+                        throw new BadRequestException("No Stock found in the Bin Locations");
+                    }
                 }
             }
             if (dbInventory == null) {
@@ -555,6 +558,9 @@ public class StockAdjustmentService extends BaseService {
                         }
                         return stockAdjustmentList.get(0);
                     }
+                }
+                if(inventoryList == null || inventoryList.isEmpty()){
+                    throw new BadRequestException("No Stock found in the Bin Locations");
                 }
             }
         }

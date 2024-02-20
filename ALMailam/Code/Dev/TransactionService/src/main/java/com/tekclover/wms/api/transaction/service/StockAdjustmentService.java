@@ -452,7 +452,7 @@ public class StockAdjustmentService extends BaseService {
                 }
             }
         }
-        throw new BadRequestException("Either IS_DAMAGE should be 'Y' or IS_CYCLE_COUNT should be 'Y'");
+        return null;
     }
 
     /**

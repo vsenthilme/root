@@ -1187,13 +1187,16 @@ public class PerpetualLineService extends BaseService {
                     updatePerpetualLines.get(0).getLanguageId(),
                     updatePerpetualLines.get(0).getWarehouseId(),
                     cycleCountNo);
+            log.info("Perpetual Header: " + dbPerpetualHeader);
 //            PerpetualHeaderV2 updatePerpetualHeader = new PerpetualHeaderV2();
 //            BeanUtils.copyProperties(dbPerpetualHeader, updatePerpetualHeader, CommonUtils.getNullPropertyNames(dbPerpetualHeader));
-            PerpetualHeaderV2 updatedPerpetualHeader = perpetualHeaderService.updatePerpetualHeaderV2(
-                    dbPerpetualHeader.getCompanyCodeId(), dbPerpetualHeader.getPlantId(),
-                    dbPerpetualHeader.getLanguageId(), dbPerpetualHeader.getWarehouseId(), dbPerpetualHeader.getCycleCountTypeId(),
-                    dbPerpetualHeader.getCycleCountNo(), dbPerpetualHeader.getMovementTypeId(), dbPerpetualHeader.getSubMovementTypeId(), loginUserID);
-            log.info("updatedPerpetualHeader : " + updatedPerpetualHeader);
+            if(dbPerpetualHeader != null) {
+                PerpetualHeaderV2 updatedPerpetualHeader = perpetualHeaderService.updatePerpetualHeaderV2(
+                        dbPerpetualHeader.getCompanyCodeId(), dbPerpetualHeader.getPlantId(),
+                        dbPerpetualHeader.getLanguageId(), dbPerpetualHeader.getWarehouseId(), dbPerpetualHeader.getCycleCountTypeId(),
+                        dbPerpetualHeader.getCycleCountNo(), dbPerpetualHeader.getMovementTypeId(), dbPerpetualHeader.getSubMovementTypeId(), loginUserID);
+                log.info("updatedPerpetualHeader : " + updatedPerpetualHeader);
+            }
 
             PerpetualUpdateResponseV2 response = new PerpetualUpdateResponseV2();
             response.setPerpetualHeader(dbPerpetualHeader);

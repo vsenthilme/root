@@ -1157,16 +1157,19 @@ public class PeriodicLineService extends BaseService {
                     updatePeriodicLines.get(0).getLanguageId(),
                     updatePeriodicLines.get(0).getWarehouseId(),
                     cycleCountNo);
+            log.info("Periodic Header : " + dbPeriodicHeader);
 //            PeriodicHeaderV2 updatePeriodicHeader = new PeriodicHeaderV2();
 //            BeanUtils.copyProperties(dbPeriodicHeader, updatePeriodicHeader, CommonUtils.getNullPropertyNames(dbPeriodicHeader));
-            PeriodicHeaderV2 updatedPeriodicHeader = periodicHeaderService.updatePeriodicHeaderFromPeriodicLineV2(
-                    dbPeriodicHeader.getCompanyCode(),
-                    dbPeriodicHeader.getPlantId(),
-                    dbPeriodicHeader.getLanguageId(),
-                    dbPeriodicHeader.getWarehouseId(),
-                    dbPeriodicHeader.getCycleCountTypeId(),
-                    dbPeriodicHeader.getCycleCountNo(), loginUserID);
-            log.info("updatedPeriodicHeader : " + updatedPeriodicHeader);
+            if(dbPeriodicHeader != null) {
+                PeriodicHeaderV2 updatedPeriodicHeader = periodicHeaderService.updatePeriodicHeaderFromPeriodicLineV2(
+                        dbPeriodicHeader.getCompanyCode(),
+                        dbPeriodicHeader.getPlantId(),
+                        dbPeriodicHeader.getLanguageId(),
+                        dbPeriodicHeader.getWarehouseId(),
+                        dbPeriodicHeader.getCycleCountTypeId(),
+                        dbPeriodicHeader.getCycleCountNo(), loginUserID);
+                log.info("updatedPeriodicHeader : " + updatedPeriodicHeader);
+            }
 
             PeriodicUpdateResponseV2 response = new PeriodicUpdateResponseV2();
             response.setPeriodicHeader(dbPeriodicHeader);

@@ -4494,6 +4494,7 @@ public class PreOutboundHeaderService extends BaseService {
         log.info("OrderManagementLine Deleted SuccessFully" + orderManagementLine);
 
         if(orderManagementLine != null && !orderManagementLine.isEmpty()){
+            log.info("Inventory update for OrderManagementLine");
             for(OrderManagementLineV2 dbOrderManagementLine : orderManagementLine) {
                 if(dbOrderManagementLine.getStatusId() != 47L) {
                     if(dbOrderManagementLine.getProposedStorageBin() == null || dbOrderManagementLine.getProposedStorageBin().equalsIgnoreCase("")){

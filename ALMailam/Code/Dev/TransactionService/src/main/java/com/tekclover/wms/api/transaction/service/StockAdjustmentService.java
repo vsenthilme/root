@@ -359,7 +359,9 @@ public class StockAdjustmentService extends BaseService {
                 newInventory.setInventoryId(System.currentTimeMillis());
                 inventoryV2Repository.save(newInventory);
                 //Insert New Record in StockAdjustment
-                createStockAdjustment(newInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
+                StockAdjustment createStockAdjustment = createStockAdjustment(newInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
+                log.info("createdStockAdjustment: " + createStockAdjustment);
+                return createStockAdjustment;
             }
             if (dbInventory == null) {
                 List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
@@ -396,7 +398,9 @@ public class StockAdjustmentService extends BaseService {
                         inventoryV2Repository.save(stkInventory);
 
                         //Insert New Record in StockAdjustment
-                        createStockAdjustment(stkInventory, inventoryList.get(0).getReferenceField4(), inventoryList.get(0).getReferenceField8(), stockAdjustment);
+                        StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventoryList.get(0).getReferenceField4(), inventoryList.get(0).getReferenceField8(), stockAdjustment);
+                        log.info("createdStockAdjustment: " + createStockAdjustment);
+                        return createStockAdjustment;
                     }
                     //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
                     if(stockAdjustment.getAdjustmentQty() < 0){
@@ -404,6 +408,7 @@ public class StockAdjustmentService extends BaseService {
                         Double INV_QTY = 0D;
                         Double STK_QTY = 0D;
                         Double ALLOC_QTY = 0D;
+                        List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
                         if(stockAdjustment.getAdjustmentQty() != null) {
                             STK_ADJ_QTY = abs(stockAdjustment.getAdjustmentQty());
                         }
@@ -435,10 +440,12 @@ public class StockAdjustmentService extends BaseService {
                             inventoryV2Repository.save(stkInventory);
 
                             //Insert New Record in StockAdjustment
-                            createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                            StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                            stockAdjustmentList.add(createStockAdjustment);
 
 //                            if (STK_ADJ_QTY > STK_QTY) {
                                 STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                                log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
 //                            }
                             if(STK_ADJ_QTY < 0) {
                                 STK_ADJ_QTY = 0D;
@@ -448,6 +455,7 @@ public class StockAdjustmentService extends BaseService {
                                 break outerloop;
                             }
                         }
+                        return stockAdjustmentList.get(0);
                     }
                 }
             }

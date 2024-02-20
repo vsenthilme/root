@@ -34,5 +34,5 @@ public interface SalesReturnHeaderRepository extends JpaRepository<SalesReturnHe
             @Param(value = "processedStatusId") Long processedStatusId );
 
 
-
+    List<SalesReturnHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

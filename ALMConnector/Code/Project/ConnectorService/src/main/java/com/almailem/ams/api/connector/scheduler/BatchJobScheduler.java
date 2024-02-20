@@ -1,14 +1,16 @@
 package com.almailem.ams.api.connector.scheduler;
 
-import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
-import com.almailem.ams.api.connector.service.ScheduleAsyncService;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.CompletableFuture;
+import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
+import com.almailem.ams.api.connector.service.ScheduleAsyncService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -19,7 +21,7 @@ public class BatchJobScheduler {
 
     //-------------------------------------------------------------------------------------------
 
-    @Scheduled(fixedDelay = 50000)
+    @Scheduled(fixedDelay = 20000)
     public void scheduleJob() throws InterruptedException, InvocationTargetException, IllegalAccessException {
 
         CompletableFuture<WarehouseApiResponse> supplierInvoice = scheduleAsyncService.scheduleSupplierInvoice();

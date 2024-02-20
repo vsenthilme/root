@@ -1,6 +1,7 @@
 package com.almailem.ams.api.connector.repository;
 
-import com.almailem.ams.api.connector.model.supplierinvoice.SupplierInvoiceHeader;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,14 +10,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.almailem.ams.api.connector.model.supplierinvoice.SupplierInvoiceHeader;
 
 @Repository
 @Transactional
 public interface SupplierInvoiceHeaderRepository extends JpaRepository<SupplierInvoiceHeader, String>, JpaSpecificationExecutor<SupplierInvoiceHeader> {
 
     List<SupplierInvoiceHeader> findTopByProcessedStatusIdOrderByOrderReceivedOn(long l);
-
+    List<SupplierInvoiceHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
+    
     SupplierInvoiceHeader findBySupplierInvoiceNo(String asnNumber);
 
     SupplierInvoiceHeader findTopBySupplierInvoiceHeaderIdAndCompanyCodeAndBranchCodeAndSupplierInvoiceNoOrderByOrderReceivedOnDesc(

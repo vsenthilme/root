@@ -35,6 +35,7 @@ public class PerpetualZeroStkLineService extends BaseService{
             PerpetualLineV2 dbPerpetualLine = new PerpetualLineV2();
             BeanUtils.copyProperties(newPerpetualLine, dbPerpetualLine, CommonUtils.getNullPropertyNames(newPerpetualLine));
             dbPerpetualLine.setStatusId(78L);
+            dbPerpetualLine.setPackBarcodes("99999");
             newPerpetualLineList.add(dbPerpetualLine);
 
             try {

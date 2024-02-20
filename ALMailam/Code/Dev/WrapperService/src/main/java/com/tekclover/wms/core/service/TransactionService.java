@@ -12423,7 +12423,7 @@ public class TransactionService {
                     .fromHttpUrl(getTransactionServiceApiUrl() + "perpetualline/v2/createPerpetualFromZeroStk")
                     .queryParam("loginUserID", loginUserID);
             ResponseEntity<PerpetualLineV2[]> result = restTemplate.exchange(builder.toUriString(),
-                    HttpMethod.PATCH, entity, PerpetualLineV2[].class);
+                    HttpMethod.POST, entity, PerpetualLineV2[].class);
             log.info("result : " + result.getBody());
             return result.getBody();
         } catch (Exception e) {
@@ -12450,7 +12450,7 @@ public class TransactionService {
                     .fromHttpUrl(getTransactionServiceApiUrl() + "periodicline/v2/createPeriodicFromZeroStk")
                     .queryParam("loginUserID", loginUserID);
             ResponseEntity<PeriodicLineV2[]> result = restTemplate.exchange(builder.toUriString(),
-                    HttpMethod.PATCH, entity, PeriodicLineV2[].class);
+                    HttpMethod.POST, entity, PeriodicLineV2[].class);
             log.info("result : " + result.getBody());
             return result.getBody();
         } catch (Exception e) {

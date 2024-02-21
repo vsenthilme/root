@@ -657,7 +657,8 @@ public class InhouseTransferHeaderService extends BaseService {
         inventoryMovement.setSpecialStockIndicator(createdInhouseTransferLine.getSpecialStockIndicatorId());
 
         // MVT_QTY
-        inventoryMovement.setMovementQty(createdInhouseTransferLine.getTransferConfirmedQty());
+//        inventoryMovement.setMovementQty(createdInhouseTransferLine.getTransferConfirmedQty());
+        inventoryMovement.setMovementQty(0D);                       //Instructed to set '0' since inventory remains unchanged, Qty only moved from one bin to another bin
 
         // MVT_QTY_VAL
         inventoryMovement.setMovementQtyValue(movementQtyValue);
@@ -671,7 +672,20 @@ public class InhouseTransferHeaderService extends BaseService {
          * During Inhouse transfer for transfer type ID -3 and insertion of record Inventorymovement table,
          *  append BAL_OH_QTY field Zero
          */
-        inventoryMovement.setBalanceOHQty(0D);
+//        inventoryMovement.setBalanceOHQty(0D);
+        // BAL_OH_QTY
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
+                createdInhouseTransferLine.getCompanyCodeId(),
+                createdInhouseTransferLine.getPlantId(),
+                createdInhouseTransferLine.getLanguageId(),
+                createdInhouseTransferLine.getWarehouseId(),
+                manufacturerName,
+                itemCode);
+        inventoryMovement.setBalanceOHQty(sumOfInvQty);
+        if(sumOfInvQty != null) {
+            Double openQty = sumOfInvQty;                                           //Inv Qty unchanged
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+        }
 
         // IM_CTD_BY
         inventoryMovement.setCreatedBy(loginUserID);

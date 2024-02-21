@@ -499,6 +499,22 @@ public class InventoryService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param manufacturerName
+     * @param itemCode
+     * @return
+     */
+    public Double getInventoryQtyCountForInvMmt(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                String manufacturerName, String itemCode) {
+        Double inventoryQty = inventoryV2Repository.getInventoryQtyCountForInvMmt(companyCodeId, plantId, languageId, warehouseId, manufacturerName, itemCode);
+        return inventoryQty;
+    }
+
+    /**
      * @param warehouseId
      * @param stBins
      * @return

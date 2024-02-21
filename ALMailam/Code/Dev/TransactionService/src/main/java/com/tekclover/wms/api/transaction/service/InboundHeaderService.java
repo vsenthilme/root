@@ -10,6 +10,7 @@ import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
@@ -44,6 +45,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class InboundHeaderService extends BaseService {
+    @Autowired
+    private InventoryMovementRepository inventoryMovementRepository;
     @Autowired
     private PutAwayHeaderV2Repository putAwayHeaderV2Repository;
     @Autowired
@@ -1438,7 +1441,8 @@ public class InboundHeaderService extends BaseService {
                                     grLine.getPackBarcodes());
                     if (putAwayLineList != null) {
                         for(PutAwayLineV2 putAwayLine : putAwayLineList) {
-                            createInventoryV2(putAwayLine, grLine.getQuantityType());
+                            InventoryV2 createdInventory = createInventoryV2(putAwayLine, grLine.getQuantityType());
+                            createInventoryMovementV2(putAwayLine);
                             log.info("All Inbound Line --> Inventory Created Successfully");
                         }
                     }
@@ -1728,6 +1732,78 @@ public class InboundHeaderService extends BaseService {
             e.printStackTrace();
             throw new BadRequestException("Error While Creating Inventory");
         }
+    }
+
+    /**
+     *
+     * @param putAwayLineV2
+     */
+    private void createInventoryMovementV2(PutAwayLineV2 putAwayLineV2) {
+        InventoryMovement inventoryMovement = new InventoryMovement();
+        BeanUtils.copyProperties(putAwayLineV2, inventoryMovement, CommonUtils.getNullPropertyNames(putAwayLineV2));
+        inventoryMovement.setCompanyCodeId(putAwayLineV2.getCompanyCode());
+
+        // MVT_TYP_ID
+        inventoryMovement.setMovementType(1L);
+
+        // SUB_MVT_TYP_ID
+        inventoryMovement.setSubmovementType(3L);    //3 - Inbound/Gr Confirm
+
+        // STR_MTD
+        inventoryMovement.setStorageMethod("1");
+
+        // STR_NO
+        inventoryMovement.setBatchSerialNumber("1");
+
+        inventoryMovement.setManufacturerName(putAwayLineV2.getManufacturerName());
+        inventoryMovement.setRefDocNumber(putAwayLineV2.getRefDocNumber());
+        inventoryMovement.setCompanyDescription(putAwayLineV2.getCompanyDescription());
+        inventoryMovement.setPlantDescription(putAwayLineV2.getPlantDescription());
+        inventoryMovement.setWarehouseDescription(putAwayLineV2.getWarehouseDescription());
+        inventoryMovement.setBarcodeId(putAwayLineV2.getBarcodeId());
+        inventoryMovement.setDescription(putAwayLineV2.getDescription());
+
+        // MVT_DOC_NO
+        inventoryMovement.setMovementDocumentNo(putAwayLineV2.getPutAwayNumber());
+
+        // ST_BIN
+        inventoryMovement.setStorageBin(putAwayLineV2.getConfirmedStorageBin());
+
+        // MVT_QTY
+        inventoryMovement.setMovementQty(putAwayLineV2.getPutawayConfirmedQty());
+
+        // MVT_QTY_VAL
+        inventoryMovement.setMovementQtyValue("P");
+
+        // MVT_UOM
+        inventoryMovement.setInventoryUom(putAwayLineV2.getPutAwayUom());
+
+        // BAL_OH_QTY
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
+                putAwayLineV2.getCompanyCode(),
+                putAwayLineV2.getPlantId(),
+                putAwayLineV2.getLanguageId(),
+                putAwayLineV2.getWarehouseId(),
+                putAwayLineV2.getManufacturerName(),
+                putAwayLineV2.getItemCode());
+        inventoryMovement.setBalanceOHQty(sumOfInvQty);
+        if(sumOfInvQty != null) {
+            Double openQty = sumOfInvQty - putAwayLineV2.getPutawayConfirmedQty();
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+        }
+
+        inventoryMovement.setVariantCode(1L);
+        inventoryMovement.setVariantSubCode("1");
+
+        inventoryMovement.setPackBarcodes(putAwayLineV2.getPackBarcodes());
+
+        // IM_CTD_BY
+        inventoryMovement.setCreatedBy(putAwayLineV2.getCreatedBy());
+
+        // IM_CTD_ON
+        inventoryMovement.setCreatedOn(new Date());
+        inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
+        log.info("inventoryMovement : " + inventoryMovement);
     }
 
     /**

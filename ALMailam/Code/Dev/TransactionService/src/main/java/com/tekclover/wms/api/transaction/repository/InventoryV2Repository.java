@@ -1488,6 +1488,22 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             @Param(value = "manufacturerName") String manufacturerName,
             @Param(value = "itemCode") String itemCode);
 
+    @Query(value ="select max(inv_id) inventoryId into #inv from tblinventory \n" +
+            "WHERE is_deleted = 0 \n" +
+            "group by itm_code,mfr_name,st_bin \n" +
+
+            "SELECT SUM(INV_QTY) FROM tblinventory \r\n"
+            + " WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND MFR_NAME = :manufacturerName AND ITM_CODE = :itemCode AND \r\n"
+            + " BIN_CL_ID in (1,7) and inv_id in (select inventoryId from #inv) and IS_DELETED = 0 \r\n"
+            + " GROUP BY ITM_CODE", nativeQuery = true)
+    public Double getInventoryQtyCountForInvMmt(
+            @Param(value = "companyCodeId") String companyCodeId,
+            @Param(value = "plantId") String plantId,
+            @Param(value = "languageId") String languageId,
+            @Param(value = "warehouseId") String warehouseId,
+            @Param(value = "manufacturerName") String manufacturerName,
+            @Param(value = "itemCode") String itemCode);
+
     InventoryV2 findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndPackBarcodesAndItemCodeAndStorageBinAndStockTypeIdAndSpecialStockIndicatorIdAndDeletionIndicator(
             String languageId, String companyCodeId, String plantId, String warehouseId, String packBarcodes,
             String itemCode, String storageBin, Long stockTypeId, Long specialStockIndicatorId, long l);

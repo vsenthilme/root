@@ -1054,8 +1054,8 @@ public class PerpetualLineService extends BaseService {
                      * Fetch CNT_QTY of the selected ITM_CODE and Pass WH_ID/ITM_CODE/ST_BIN/PACK_BARCODE values in INVENTORY table
                      * and replace INV_QTY as CNT_QTY
                      */
-                    updateInventoryV2(updatedPerpetualLine);
-                    createInventoryMovementV2(updatedPerpetualLine);
+//                    updateInventoryV2(updatedPerpetualLine);
+//                    createInventoryMovementV2(updatedPerpetualLine);
                 }
 
 

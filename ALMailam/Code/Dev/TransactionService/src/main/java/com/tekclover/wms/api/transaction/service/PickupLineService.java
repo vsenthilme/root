@@ -1986,21 +1986,21 @@ public class PickupLineService extends BaseService {
 
                 /*-----------------------InventoryMovement----------------------------------*/
                 // Inserting record in InventoryMovement
-                try {
-                    Long BIN_CLASS_ID = 4L;
-                    StorageBinV2 storageBin = mastersService.getStorageBin(dbPickupLine.getCompanyCodeId(),
-                            dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(), dbPickupLine.getWarehouseId(), BIN_CLASS_ID,
-                            authTokenForMastersService.getAccess_token());
-                    subMvtTypeId = 2L;
-                    movementDocumentNo = QC_NO;
-                    stBin = storageBin.getStorageBin();
-                    movementQtyValue = "P";
-                    inventoryMovement = createInventoryMovementV2(dbPickupLine, subMvtTypeId, movementDocumentNo, stBin, movementQtyValue, loginUserID);
-                    log.info("InventoryMovement created for update2: " + inventoryMovement);
-                } catch (Exception e) {
-                    log.error("InventoryMovement create Error for update2 :" + e.toString());
-                    e.printStackTrace();
-                }
+//                try {
+//                    Long BIN_CLASS_ID = 4L;
+//                    StorageBinV2 storageBin = mastersService.getStorageBin(dbPickupLine.getCompanyCodeId(),
+//                            dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(), dbPickupLine.getWarehouseId(), BIN_CLASS_ID,
+//                            authTokenForMastersService.getAccess_token());
+//                    subMvtTypeId = 2L;
+//                    movementDocumentNo = QC_NO;
+//                    stBin = storageBin.getStorageBin();
+//                    movementQtyValue = "P";
+//                    inventoryMovement = createInventoryMovementV2(dbPickupLine, subMvtTypeId, movementDocumentNo, stBin, movementQtyValue, loginUserID);
+//                    log.info("InventoryMovement created for update2: " + inventoryMovement);
+//                } catch (Exception e) {
+//                    log.error("InventoryMovement create Error for update2 :" + e.toString());
+//                    e.printStackTrace();
+//                }
             }
 
             // Properties needed for updating PickupHeader
@@ -2961,11 +2961,32 @@ public class PickupLineService extends BaseService {
         // MVT_QTY_VAL
         inventoryMovement.setMovementQtyValue(movementQtyValue);
 
+
         // BAR_CODE
         inventoryMovement.setPackBarcodes(dbPickupLine.getPickedPackCode());
 
         // MVT_QTY
         inventoryMovement.setMovementQty(dbPickupLine.getPickConfirmQty());
+
+        // BAL_OH_QTY
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
+                dbPickupLine.getCompanyCodeId(),
+                dbPickupLine.getPlantId(),
+                dbPickupLine.getLanguageId(),
+                dbPickupLine.getWarehouseId(),
+                dbPickupLine.getManufacturerName(),
+                dbPickupLine.getItemCode());
+        inventoryMovement.setBalanceOHQty(sumOfInvQty);
+        if(sumOfInvQty != null) {
+            Double openQty = 0D;
+            if(movementQtyValue.equalsIgnoreCase("P")) {
+                openQty = sumOfInvQty - dbPickupLine.getPickConfirmQty();
+            }
+            if(movementQtyValue.equalsIgnoreCase("N")) {
+                openQty = sumOfInvQty + dbPickupLine.getPickConfirmQty();
+            }
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+        }
 
         // MVT_UOM
         inventoryMovement.setInventoryUom(dbPickupLine.getPickUom());

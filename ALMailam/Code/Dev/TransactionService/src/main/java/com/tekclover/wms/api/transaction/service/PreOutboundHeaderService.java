@@ -4307,24 +4307,20 @@ public class PreOutboundHeaderService extends BaseService {
             orderManagementLine.setBarcodeId(barcode.get(0));
             orderManagementLine.setItemBarcode(barcode.get(0));
         }
-        if (barcode != null && !barcode.isEmpty()) {
-            orderManagementLine.setBarcodeId(orderManagementLine.getItemCode());
-            orderManagementLine.setItemBarcode(orderManagementLine.getItemCode());
-        }
 
         orderManagementLine.setTransferOrderNo(preOutboundLine.getTransferOrderNo());
         orderManagementLine.setReturnOrderNo(preOutboundLine.getReturnOrderNo());
         orderManagementLine.setIsCompleted(preOutboundLine.getIsCompleted());
         orderManagementLine.setIsCancelled(preOutboundLine.getIsCancelled());
 
-        List<InventoryV2> inventoryV2 = inventoryService.getInventoryForInhouseTransferV2(companyCodeId, plantId, languageId, preOutboundLine.getWarehouseId(),
-                preOutboundLine.getItemCode(), preOutboundLine.getManufacturerName());
-
-        if (inventoryV2 != null && !inventoryV2.isEmpty()) {
-            orderManagementLine.setBarcodeId(inventoryV2.get(0).getBarcodeId());
-            orderManagementLine.setLevelId(inventoryV2.get(0).getLevelId());
-            log.info("PartnerItemBarCode: " + inventoryV2.get(0).getBarcodeId());
-        }
+//        List<InventoryV2> inventoryV2 = inventoryService.getInventoryForInhouseTransferV2(companyCodeId, plantId, languageId, preOutboundLine.getWarehouseId(),
+//                preOutboundLine.getItemCode(), preOutboundLine.getManufacturerName());
+//
+//        if (inventoryV2 != null && !inventoryV2.isEmpty()) {
+//            orderManagementLine.setBarcodeId(inventoryV2.get(0).getBarcodeId());
+//            orderManagementLine.setLevelId(inventoryV2.get(0).getLevelId());
+//            log.info("PartnerItemBarCode: " + inventoryV2.get(0).getBarcodeId());
+//        }
 
         // INV_QTY
         /*

@@ -1936,12 +1936,13 @@ public class OrderManagementLineService extends BaseService {
         outerloop:
         for (IInventoryImpl stBinWiseInventory : finalInventoryList) {
             // Getting PackBarCode by passing ST_BIN to Inventory
-            List<InventoryV2> listInventoryForAlloc =
-                    inventoryService.getInventoryForOrderMgmtV2(orderManagementLine.getCompanyCodeId(),
+            List<IInventoryImpl> listInventoryForAlloc =
+                    inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
                             orderManagementLine.getPlantId(),
-                            orderManagementLine.getLanguageId(), warehouseId, itemCode, binClassId,
+                            orderManagementLine.getLanguageId(), warehouseId, itemCode,
+                            orderManagementLine.getManufacturerName(), binClassId,
                             stBinWiseInventory.getStorageBin(), 1L);
-            log.info("\nlistInventoryForAlloc Inventory ---->: " + listInventoryForAlloc + "\n");
+            log.info("\nlistInventoryForAlloc Inventory ---->: " + listInventoryForAlloc.size() + "\n");
 
             // Prod Fix: If the queried Inventory is empty then EMPTY orderManagementLine is
             // created.
@@ -1951,14 +1952,14 @@ public class OrderManagementLineService extends BaseService {
 
             //ascending sort - expiryDate
             if (shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(InventoryV2::getExpiryDate)).collect(Collectors.toList());
+                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
             }
             //ascending sort - created on
             if (!shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(InventoryV2::getCreatedOn)).collect(Collectors.toList());
+                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
             }
 
-            for (InventoryV2 stBinInventory : listInventoryForAlloc) {
+            for (IInventoryImpl stBinInventory : listInventoryForAlloc) {
                 log.info("\nBin-wise Inventory : " + stBinInventory + "\n");
 
                 Long STATUS_ID = 0L;
@@ -2043,8 +2044,7 @@ public class OrderManagementLineService extends BaseService {
                     newOrderManagementLine.setLevelId(stBinInventory.getLevelId());
                 }
                 newOrderManagementLine.setProposedPackBarCode(stBinInventory.getPackBarcodes());
-                OrderManagementLineV2 createdOrderManagementLine = orderManagementLineV2Repository
-                        .save(newOrderManagementLine);
+                OrderManagementLineV2 createdOrderManagementLine = orderManagementLineV2Repository.save(newOrderManagementLine);
                 log.info("--else---createdOrderManagementLine newly created------: " + createdOrderManagementLine);
                 allocatedQtyFromOrderMgmt = createdOrderManagementLine.getAllocatedQty();
 

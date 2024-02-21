@@ -1547,6 +1547,35 @@ public class InventoryService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param binClassId
+     * @param storageBin
+     * @param stockTypeId
+     * @return
+     */
+    public List<IInventoryImpl> getInventoryForOrderManagementV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                 String itemCode, String manufacturerName, Long binClassId, String storageBin, Long stockTypeId) {
+        List<IInventoryImpl> inventory =
+                inventoryV2Repository.findInventoryOml(
+                        companyCodeId,
+                        languageId,
+                        plantId,
+                        warehouseId,
+                        manufacturerName,
+                        itemCode,
+                        storageBin,
+                        stockTypeId,
+                        binClassId);
+        return inventory;
+    }
+
+    /**
      * @param companyCodeId
      * @param plantId
      * @param languageId

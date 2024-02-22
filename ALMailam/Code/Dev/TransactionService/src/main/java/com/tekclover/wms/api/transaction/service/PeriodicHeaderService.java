@@ -125,7 +125,7 @@ public class PeriodicHeaderService extends BaseService {
      */
     public List<PeriodicHeaderEntity> findPeriodicHeader(SearchPeriodicHeader searchPeriodicHeader)
             throws Exception {
-        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getStartCreatedOn() != null) {
+        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicHeader.getStartCreatedOn(),
                     searchPeriodicHeader.getEndCreatedOn());
             searchPeriodicHeader.setStartCreatedOn(dates[0]);
@@ -145,7 +145,7 @@ public class PeriodicHeaderService extends BaseService {
      */
     public Stream<PeriodicHeader> findPeriodicHeaderStream(SearchPeriodicHeader searchPeriodicHeader)
             throws Exception {
-        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getStartCreatedOn() != null) {
+        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicHeader.getStartCreatedOn(),
                     searchPeriodicHeader.getEndCreatedOn());
             searchPeriodicHeader.setStartCreatedOn(dates[0]);
@@ -717,7 +717,7 @@ public class PeriodicHeaderService extends BaseService {
      */
     public Stream<PeriodicHeaderV2> findPeriodicHeaderStreamV2(SearchPeriodicHeaderV2 searchPeriodicHeader)
             throws Exception {
-        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getStartCreatedOn() != null) {
+        if (searchPeriodicHeader.getStartCreatedOn() != null && searchPeriodicHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicHeader.getStartCreatedOn(),
                     searchPeriodicHeader.getEndCreatedOn());
             searchPeriodicHeader.setStartCreatedOn(dates[0]);
@@ -737,7 +737,7 @@ public class PeriodicHeaderService extends BaseService {
      */
     public Stream<PeriodicHeaderV2> findPeriodicHeaderV2(SearchPeriodicHeaderV2 searchPeriodicHeaderV2)
             throws ParseException, java.text.ParseException {
-        if (searchPeriodicHeaderV2.getStartCreatedOn() != null && searchPeriodicHeaderV2.getStartCreatedOn() != null) {
+        if (searchPeriodicHeaderV2.getStartCreatedOn() != null && searchPeriodicHeaderV2.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicHeaderV2.getStartCreatedOn(),
                     searchPeriodicHeaderV2.getEndCreatedOn());
             searchPeriodicHeaderV2.setStartCreatedOn(dates[0]);
@@ -751,7 +751,7 @@ public class PeriodicHeaderService extends BaseService {
 
     public List<PeriodicHeaderEntityV2> findPeriodicHeaderEntityV2(SearchPeriodicHeaderV2 searchPeriodicHeaderV2)
             throws ParseException, java.text.ParseException {
-        if (searchPeriodicHeaderV2.getStartCreatedOn() != null && searchPeriodicHeaderV2.getStartCreatedOn() != null) {
+        if (searchPeriodicHeaderV2.getStartCreatedOn() != null && searchPeriodicHeaderV2.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicHeaderV2.getStartCreatedOn(),
                     searchPeriodicHeaderV2.getEndCreatedOn());
             searchPeriodicHeaderV2.setStartCreatedOn(dates[0]);

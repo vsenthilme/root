@@ -318,7 +318,7 @@ public class PutAwayHeaderService extends BaseService {
      */
     public List<PutAwayHeader> findPutAwayHeader(SearchPutAwayHeader searchPutAwayHeader)
             throws Exception {
-        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getStartCreatedOn() != null) {
+        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPutAwayHeader.getStartCreatedOn(),
                     searchPutAwayHeader.getEndCreatedOn());
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
@@ -338,7 +338,7 @@ public class PutAwayHeaderService extends BaseService {
     //Stream
     public Stream<PutAwayHeader> findPutAwayHeaderNew(SearchPutAwayHeader searchPutAwayHeader)
             throws Exception {
-        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getStartCreatedOn() != null) {
+        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPutAwayHeader.getStartCreatedOn(),
                     searchPutAwayHeader.getEndCreatedOn());
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
@@ -551,8 +551,10 @@ public class PutAwayHeaderService extends BaseService {
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
-        for (GrLine grLine : grLineList) {
-            createInventoryMovement(grLine, caseCode, palletCode, storageBin);
+        if(grLineList != null && !grLineList.isEmpty()) {
+            for (GrLine grLine : grLineList) {
+                createInventoryMovement(grLine, caseCode, palletCode, storageBin);
+            }
         }
 
         return putAwayHeaderList;
@@ -1564,8 +1566,10 @@ public class PutAwayHeaderService extends BaseService {
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
-        for (GrLineV2 grLine : grLineList) {
-            createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+        if(grLineList != null && !grLineList.isEmpty()) {
+            for (GrLineV2 grLine : grLineList) {
+                createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+            }
         }
 
         //update the statusId to complete reversal process
@@ -2005,8 +2009,10 @@ public class PutAwayHeaderService extends BaseService {
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
-        for (GrLineV2 grLine : grLineList) {
-            createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+        if(grLineList != null && !grLineList.isEmpty()) {
+            for (GrLineV2 grLine : grLineList) {
+                createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+            }
         }
 
         //update the statusId to complete reversal process

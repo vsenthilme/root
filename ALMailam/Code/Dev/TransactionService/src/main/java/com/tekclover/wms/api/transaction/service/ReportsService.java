@@ -5,7 +5,6 @@ import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLine;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLine;
 import com.tekclover.wms.api.transaction.model.dto.BusinessPartner;
-import com.tekclover.wms.api.transaction.model.dto.BusinessPartnerV2;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBin;
 import com.tekclover.wms.api.transaction.model.impl.OrderStatusReportImpl;
@@ -2944,7 +2943,7 @@ public class ReportsService extends BaseService {
      */
     public Stream<TransactionHistoryReport> getTransactionHistoryReport(FindImBasicData1 searchImBasicData1) {
         try {
-            if (searchImBasicData1.getFromCreatedOn() != null && searchImBasicData1.getFromCreatedOn() != null) {
+            if (searchImBasicData1.getFromCreatedOn() != null && searchImBasicData1.getToCreatedOn() != null) {
                 Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getFromCreatedOn(),
                         searchImBasicData1.getToCreatedOn());
                 searchImBasicData1.setFromCreatedOn(dates[0]);

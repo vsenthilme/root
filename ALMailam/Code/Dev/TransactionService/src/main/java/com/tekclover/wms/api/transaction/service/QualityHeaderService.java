@@ -16,7 +16,6 @@ import com.tekclover.wms.api.transaction.model.outbound.quality.v2.QualityHeader
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.SearchQualityHeaderV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.QualityHeaderV2Specification;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -64,7 +63,6 @@ public class QualityHeaderService {
      * getQualityHeader
      *
      * @param actualHeNo
-     * @param qualityInspectionNo2
      * @param refDocNumber
      * @param preOutboundNo
      * @return
@@ -146,8 +144,6 @@ public class QualityHeaderService {
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param pickupNumber
-     * @param partnerCode
      * @return
      */
     public List<QualityHeader> getQualityHeaderForReversal(String warehouseId, String preOutboundNo, String refDocNumber,
@@ -230,7 +226,6 @@ public class QualityHeaderService {
     /**
      * updateQualityHeader
      *
-     * @param loginUserId
      * @param qualityInspectionNo
      * @param updateQualityHeader
      * @return

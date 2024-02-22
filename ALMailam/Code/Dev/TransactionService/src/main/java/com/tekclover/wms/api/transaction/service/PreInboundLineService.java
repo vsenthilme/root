@@ -679,13 +679,13 @@ public class PreInboundLineService extends BaseService {
      * @throws ParseException
      */
     public List<PreInboundLineOutputV2> findPreInboundLineV2(SearchPreInboundLineV2 searchPreInboundLine) throws ParseException {
-        if (searchPreInboundLine.getStartCreatedOn() != null && searchPreInboundLine.getStartCreatedOn() != null) {
+        if (searchPreInboundLine.getStartCreatedOn() != null && searchPreInboundLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartCreatedOn(), searchPreInboundLine.getEndCreatedOn());
             searchPreInboundLine.setStartCreatedOn(dates[0]);
             searchPreInboundLine.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundLine.getStartRefDocDate() != null && searchPreInboundLine.getStartRefDocDate() != null) {
+        if (searchPreInboundLine.getStartRefDocDate() != null && searchPreInboundLine.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartRefDocDate(), searchPreInboundLine.getEndRefDocDate());
             searchPreInboundLine.setStartRefDocDate(dates[0]);
             searchPreInboundLine.setEndRefDocDate(dates[1]);

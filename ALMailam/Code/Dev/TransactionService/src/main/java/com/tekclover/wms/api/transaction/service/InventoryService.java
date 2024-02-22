@@ -851,7 +851,7 @@ public class InventoryService extends BaseService {
         Double newTotalQuantity = updateInventory.getInventoryQuantity() + updateInventory.getAllocatedQuantity();
         Double dbTotalQuantity = dbInventory.getInventoryQuantity() + dbInventory.getAllocatedQuantity();
         log.info("newTotalQuantity: " + newTotalQuantity + "dbTotalQuantity: " + dbTotalQuantity);
-        if (newTotalQuantity != dbTotalQuantity && dbInventory.getBinClassId() == 1) {
+        if (!newTotalQuantity.equals(dbTotalQuantity) && dbInventory.getBinClassId() == 1) {
 
             InventoryMovement dbInventoryMovement = new InventoryMovement();
 
@@ -1485,7 +1485,7 @@ public class InventoryService extends BaseService {
                         0L);
         log.info("Inventory - stock type id to be updated: " + inventoryList);
         if (inventoryList == null || inventoryList.isEmpty() || inventoryList.size() == 0) {
-            log.info("inventory null ---> c_id, plant_id, lang_id, wh_id, ref_doc_no, stockTypeId: ", companyCode + ", " + plantId + ", " + languageId + ", " + warehouseId + "," + referenceDocumentNo + ", " + stockTypeId);
+            log.info("inventory null ---> c_id, plant_id, lang_id, wh_id, ref_doc_no, stockTypeId: "+ companyCode + ", " + plantId + ", " + languageId + ", " + warehouseId + "," + referenceDocumentNo + ", " + stockTypeId);
             return null;
         }
 //        if (inventoryList != null) {

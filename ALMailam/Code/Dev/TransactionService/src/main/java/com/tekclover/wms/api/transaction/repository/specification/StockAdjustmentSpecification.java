@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.transaction.repository.specification;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.stockadjustment.SearchStockAdjustment;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.stockadjustment.StockAdjustment;
 import org.springframework.context.annotation.DeferredImportSelector.Group;
 import org.springframework.data.jpa.domain.Specification;

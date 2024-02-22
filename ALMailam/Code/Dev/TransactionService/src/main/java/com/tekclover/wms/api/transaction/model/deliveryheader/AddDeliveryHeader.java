@@ -2,8 +2,6 @@ package com.tekclover.wms.api.transaction.model.deliveryheader;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
 @Data
 public class AddDeliveryHeader {
 

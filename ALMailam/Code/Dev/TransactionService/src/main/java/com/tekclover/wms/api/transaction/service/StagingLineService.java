@@ -26,7 +26,6 @@ import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.StagingLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.StagingLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1574,7 +1573,7 @@ public class StagingLineService extends BaseService {
                     for (PutAwayHeaderV2 dbPutawayHeader : dbPutawayHeaderList) {
                         PutAwayLineV2 putAwayLine = new PutAwayLineV2();
 
-                        List<GrLineV2> grLine = createGrLine.stream().filter(n->n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
+                        List<GrLineV2> grLine = createGrLine.stream().filter(n->n.getPackBarcodes().equalsIgnoreCase(dbPutawayHeader.getPackBarcodes())).collect(Collectors.toList());
 
                         BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
                         putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());

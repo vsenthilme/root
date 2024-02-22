@@ -1,14 +1,11 @@
 package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.model.outbound.v2.PickListHeader;
-import com.tekclover.wms.api.transaction.model.outbound.v2.PickListLine;
 import com.tekclover.wms.api.transaction.model.outbound.v2.SearchPickListHeader;
 import com.tekclover.wms.api.transaction.repository.PickListHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.specification.PickListHeaderSpecification;
-import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;

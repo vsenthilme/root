@@ -1,21 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.persistence.EntityNotFoundException;
-
 import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
@@ -299,13 +284,13 @@ public class PreInboundHeaderService extends BaseService {
      * @throws ParseException
      */
     public List<PreInboundHeaderEntity> findPreInboundHeader(SearchPreInboundHeader searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -324,13 +309,13 @@ public class PreInboundHeaderService extends BaseService {
      */
     //Streaming
     public Stream<PreInboundHeaderEntity> findPreInboundHeaderNew(SearchPreInboundHeader searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -1272,13 +1257,13 @@ public class PreInboundHeaderService extends BaseService {
      */
     //Streaming
     public Stream<PreInboundHeaderEntityV2> findPreInboundHeaderV2(SearchPreInboundHeaderV2 searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -1342,14 +1327,16 @@ public class PreInboundHeaderService extends BaseService {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndPreInboundNoAndWarehouseIdAndDeletionIndicator(
                         companyCode, plantId, languageId, preInboundNo, warehouseId, 0L);
-        PreInboundHeaderEntityV2 dbEntity = preInboundHeaderEntity.get();
-        if (updatePreInboundHeader.getStatusId() == null) {
-            dbEntity.setStatusId(7L); // Hardcoded as 7 during update
+        PreInboundHeaderEntityV2 dbEntity = null;
+        if(!preInboundHeaderEntity.isEmpty()) {
+            dbEntity = preInboundHeaderEntity.get();
+            if (updatePreInboundHeader.getStatusId() == null) {
+                dbEntity.setStatusId(7L); // Hardcoded as 7 during update
+            }
+            dbEntity.setUpdatedBy(loginUserID);
+            dbEntity.setUpdatedOn(new Date());
+            dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         }
-        dbEntity.setUpdatedBy(loginUserID);
-        dbEntity.setUpdatedOn(new Date());
-        dbEntity = preInboundHeaderV2Repository.save(dbEntity);
-
         List<PreInboundLineEntityV2> updatedPreInboundLineList = new ArrayList<>();
         for (PreInboundLineEntityV2 updatePreInboundLine : updatePreInboundHeader.getPreInboundLineV2()) {
             // Get Lines items from DB
@@ -2026,14 +2013,15 @@ public class PreInboundHeaderService extends BaseService {
             Optional<InboundHeaderV2> optInboundHeader =
                     inboundHeaderV2Repository.findByWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                             warehouseId, preInboundHeader.getRefDocNumber(), preInboundHeader.getPreInboundNo(), 0L);
-            log.info("optInboundHeader : " + optInboundHeader.get());
-            InboundHeaderV2 updateInboundHeader = optInboundHeader.get();
-            updateInboundHeader.setContainerNo(containerNo);
-            updateInboundHeader.setStatusId(5L);
-            statusDescription = stagingLineV2Repository.getStatusDescription(5L, updateInboundHeader.getLanguageId());
-            updateInboundHeader.setStatusDescription(statusDescription);
-            inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
-
+            if(optInboundHeader.isPresent()) {
+                log.info("optInboundHeader : " + optInboundHeader.get());
+                InboundHeaderV2 updateInboundHeader = optInboundHeader.get();
+                updateInboundHeader.setContainerNo(containerNo);
+                updateInboundHeader.setStatusId(5L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(5L, updateInboundHeader.getLanguageId());
+                updateInboundHeader.setStatusDescription(statusDescription);
+                inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
+            }
 //            InboundHeaderV2 updateInboundHeader = new InboundHeaderV2();
 //            updateInboundHeader.setContainerNo(containerNo);
 //            updateInboundHeader.setStatusId(5L);

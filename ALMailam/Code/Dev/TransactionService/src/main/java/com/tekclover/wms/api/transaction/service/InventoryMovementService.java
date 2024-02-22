@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -141,15 +140,10 @@ public class InventoryMovementService extends BaseService {
 	 * @param warehouseId
 	 * @param movementType
 	 * @param submovementType
-	 * @param palletCode
-	 * @param caseCode
 	 * @param packBarcodes
 	 * @param itemCode
-	 * @param variantCode
-	 * @param variantSubCode
 	 * @param batchSerialNumber
 	 * @param movementDocumentNo
-	 * @param loginUserID
 	 * @param updateInventoryMovement
 	 * @return
 	 * @throws IllegalAccessException

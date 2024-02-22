@@ -16,7 +16,6 @@ import com.tekclover.wms.api.transaction.model.outbound.ordermangement.OrderMana
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.AddPickupLine;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupLine;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.*;
@@ -31,7 +30,6 @@ import com.tekclover.wms.api.transaction.repository.specification.PreOutboundHea
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -218,13 +216,13 @@ public class PreOutboundHeaderService extends BaseService {
             searchPreOutboundHeader.setEndRequiredDeliveryDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getStartOrderDate() != null) {
+        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getEndOrderDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartOrderDate(), searchPreOutboundHeader.getEndOrderDate());
             searchPreOutboundHeader.setStartOrderDate(dates[0]);
             searchPreOutboundHeader.setEndOrderDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getStartCreatedOn() != null) {
+        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartCreatedOn(), searchPreOutboundHeader.getEndCreatedOn());
             searchPreOutboundHeader.setStartCreatedOn(dates[0]);
             searchPreOutboundHeader.setEndCreatedOn(dates[1]);
@@ -249,13 +247,13 @@ public class PreOutboundHeaderService extends BaseService {
             searchPreOutboundHeader.setEndRequiredDeliveryDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getStartOrderDate() != null) {
+        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getEndOrderDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartOrderDate(), searchPreOutboundHeader.getEndOrderDate());
             searchPreOutboundHeader.setStartOrderDate(dates[0]);
             searchPreOutboundHeader.setEndOrderDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getStartCreatedOn() != null) {
+        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartCreatedOn(), searchPreOutboundHeader.getEndCreatedOn());
             searchPreOutboundHeader.setStartCreatedOn(dates[0]);
             searchPreOutboundHeader.setEndCreatedOn(dates[1]);
@@ -635,6 +633,8 @@ public class PreOutboundHeaderService extends BaseService {
                         outboundIntegrationHeader.getWarehouseID(), authTokenForMastersService.getAccess_token());
         if (imBasicData1 != null) {
             preOutboundLine.setDescription(imBasicData1.getDescription());
+            // MFR
+            preOutboundLine.setManufacturerPartNo(imBasicData1.getManufacturerPartNo());
         }
 
         // PARTNER_CODE
@@ -649,9 +649,6 @@ public class PreOutboundHeaderService extends BaseService {
 
         // REQ_DEL_DATE
         preOutboundLine.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
-
-        // MFR
-        preOutboundLine.setManufacturerPartNo(imBasicData1.getManufacturerPartNo());
 
         // STCK_TYP_ID
         preOutboundLine.setStockTypeId(1L);
@@ -1233,13 +1230,13 @@ public class PreOutboundHeaderService extends BaseService {
             searchPreOutboundHeader.setEndRequiredDeliveryDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getStartOrderDate() != null) {
+        if (searchPreOutboundHeader.getStartOrderDate() != null && searchPreOutboundHeader.getEndOrderDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartOrderDate(), searchPreOutboundHeader.getEndOrderDate());
             searchPreOutboundHeader.setStartOrderDate(dates[0]);
             searchPreOutboundHeader.setEndOrderDate(dates[1]);
         }
 
-        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getStartCreatedOn() != null) {
+        if (searchPreOutboundHeader.getStartCreatedOn() != null && searchPreOutboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreOutboundHeader.getStartCreatedOn(), searchPreOutboundHeader.getEndCreatedOn());
             searchPreOutboundHeader.setStartCreatedOn(dates[0]);
             searchPreOutboundHeader.setEndCreatedOn(dates[1]);
@@ -4080,6 +4077,8 @@ public class PreOutboundHeaderService extends BaseService {
                         authTokenForMastersService.getAccess_token());
         if (imBasicData1 != null) {
             preOutboundLine.setDescription(imBasicData1.getDescription());
+            // MFR
+            preOutboundLine.setManufacturerPartNo(imBasicData1.getManufacturerPartNo());
         }
 
         // PARTNER_CODE
@@ -4094,9 +4093,6 @@ public class PreOutboundHeaderService extends BaseService {
 
         // REQ_DEL_DATE
         preOutboundLine.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
-
-        // MFR
-        preOutboundLine.setManufacturerPartNo(imBasicData1.getManufacturerPartNo());
 
         // STCK_TYP_ID
         preOutboundLine.setStockTypeId(1L);
@@ -4753,7 +4749,7 @@ public class PreOutboundHeaderService extends BaseService {
             newObLineCount = newOutboundLineList.stream().count();
         }
         if(newPickupLineList != null && !newPickupLineList.isEmpty()) {             //new PickedLines Count
-            newPickLineCount = newOutboundLineList.stream().count();
+            newPickLineCount = newPickupLineList.stream().count();
         }
 
         if(outboundHeaderV2 != null) {

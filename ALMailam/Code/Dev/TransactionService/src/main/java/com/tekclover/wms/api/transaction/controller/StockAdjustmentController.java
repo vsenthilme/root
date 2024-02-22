@@ -2,7 +2,6 @@ package com.tekclover.wms.api.transaction.controller;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.stockadjustment.SearchStockAdjustment;
 import com.tekclover.wms.api.transaction.model.cyclecount.stockadjustment.StockAdjustment;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
 import com.tekclover.wms.api.transaction.service.StockAdjustmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.model.outbound.pickup.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupHeader;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

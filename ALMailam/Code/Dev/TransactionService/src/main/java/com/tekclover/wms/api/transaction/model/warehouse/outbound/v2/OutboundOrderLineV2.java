@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.warehouse.outbound.v2;
 
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.OutboundOrderLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @ToString(callSuper = true)

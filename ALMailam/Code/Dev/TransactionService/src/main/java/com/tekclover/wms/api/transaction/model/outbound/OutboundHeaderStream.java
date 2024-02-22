@@ -1,7 +1,5 @@
 package com.tekclover.wms.api.transaction.model.outbound;
 
-import lombok.Data;
-
 import java.util.Date;
 
 //@Data

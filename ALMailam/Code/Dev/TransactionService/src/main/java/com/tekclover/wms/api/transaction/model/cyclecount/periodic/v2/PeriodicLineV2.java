@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

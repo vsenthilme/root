@@ -2,9 +2,7 @@ package com.tekclover.wms.api.transaction.repository.specification;
 
 
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderLineV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderLinesV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
 import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.data.jpa.domain.Specification;
 

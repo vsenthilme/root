@@ -201,7 +201,7 @@ public class GrHeaderService extends BaseService {
      */
     public List<GrHeader> findGrHeader(SearchGrHeader searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);
@@ -219,7 +219,7 @@ public class GrHeaderService extends BaseService {
      */
     public Stream<GrHeader> findGrHeaderNew(SearchGrHeader searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);
@@ -273,7 +273,6 @@ public class GrHeaderService extends BaseService {
     /**
      * updateGrHeader
      *
-     * @param loginUserId
      * @param goodsReceiptNo
      * @param updateGrHeader
      * @return
@@ -599,7 +598,7 @@ public class GrHeaderService extends BaseService {
      */
     public Stream<GrHeaderV2> findGrHeaderV2(SearchGrHeaderV2 searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);

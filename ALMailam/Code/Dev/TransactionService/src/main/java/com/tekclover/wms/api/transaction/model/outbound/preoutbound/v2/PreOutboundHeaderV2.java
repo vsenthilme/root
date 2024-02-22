@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.PreOutboundHeader;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

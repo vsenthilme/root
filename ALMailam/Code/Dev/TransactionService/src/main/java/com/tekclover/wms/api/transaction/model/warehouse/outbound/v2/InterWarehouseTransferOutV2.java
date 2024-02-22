@@ -1,7 +1,5 @@
 package com.tekclover.wms.api.transaction.model.warehouse.outbound.v2;
 
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.InterWarehouseTransferOutHeader;
-import com.tekclover.wms.api.transaction.model.warehouse.outbound.InterWarehouseTransferOutLine;
 import lombok.Data;
 
 import javax.validation.Valid;

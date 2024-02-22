@@ -20,7 +20,6 @@ import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.QualityLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.QualityLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1889,48 +1888,48 @@ public class QualityLineService extends BaseService {
                             dbQualityLines.get(0).getRefDocNumber(),
                             dbQualityLines.get(0).getPartnerCode(),
                             statusIdsToBeChecked);
-                }
-                log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
+                    log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
 
-                if (count_57 == outboundLineV2List.size()) {
-                    log.info("All Outbound Lines Confirmed - Automate/Calling the Delivery Confirm Procedure");
+                    if (count_57 == outboundLineV2List.size()) {
+                        log.info("All Outbound Lines Confirmed - Automate/Calling the Delivery Confirm Procedure");
 
-                    SearchOutboundHeaderV2 searchOutboundHeaderV2 = new SearchOutboundHeaderV2();
-                    searchOutboundHeaderV2.setCompanyCodeId(companyCodeId);
-                    searchOutboundHeaderV2.setPlantId(plantId);
-                    searchOutboundHeaderV2.setLanguageId(languageId);
-                    searchOutboundHeaderV2.setWarehouseId(warehouseId);
+                        SearchOutboundHeaderV2 searchOutboundHeaderV2 = new SearchOutboundHeaderV2();
+                        searchOutboundHeaderV2.setCompanyCodeId(companyCodeId);
+                        searchOutboundHeaderV2.setPlantId(plantId);
+                        searchOutboundHeaderV2.setLanguageId(languageId);
+                        searchOutboundHeaderV2.setWarehouseId(warehouseId);
 
-                    searchOutboundHeaderV2.setRefDocNumber(refDocNumber);
+                        searchOutboundHeaderV2.setRefDocNumber(refDocNumber);
 
-                    List<OutboundHeaderV2Stream> outboundHeaderV2List = outboundHeaderService.findOutboundHeadernewV2(searchOutboundHeaderV2);
-                    log.info("outboundHeaderV2List ----------->: " + outboundHeaderV2List.stream().count());
+                        List<OutboundHeaderV2Stream> outboundHeaderV2List = outboundHeaderService.findOutboundHeadernewV2(searchOutboundHeaderV2);
+                        log.info("outboundHeaderV2List ----------->: " + outboundHeaderV2List.stream().count());
 
-                    for (OutboundHeaderV2Stream dbOutboundHeader : outboundHeaderV2List) {
-                        SearchOutboundLineV2 searchOutboundLineV2 = new SearchOutboundLineV2();
-                        searchOutboundLineV2.setCompanyCodeId(List.of(dbOutboundHeader.getCompanyCodeId()));
-                        searchOutboundLineV2.setPlantId(List.of(dbOutboundHeader.getPlantId()));
-                        searchOutboundLineV2.setLanguageId(List.of(dbOutboundHeader.getLanguageId()));
-                        searchOutboundLineV2.setWarehouseId(List.of(dbOutboundHeader.getWarehouseId()));
+                        for (OutboundHeaderV2Stream dbOutboundHeader : outboundHeaderV2List) {
+                            SearchOutboundLineV2 searchOutboundLineV2 = new SearchOutboundLineV2();
+                            searchOutboundLineV2.setCompanyCodeId(List.of(dbOutboundHeader.getCompanyCodeId()));
+                            searchOutboundLineV2.setPlantId(List.of(dbOutboundHeader.getPlantId()));
+                            searchOutboundLineV2.setLanguageId(List.of(dbOutboundHeader.getLanguageId()));
+                            searchOutboundLineV2.setWarehouseId(List.of(dbOutboundHeader.getWarehouseId()));
 
-                        searchOutboundLineV2.setRefDocNumber(List.of(dbOutboundHeader.getRefDocNumber()));
-                        searchOutboundLineV2.setPreOutboundNo(List.of(dbOutboundHeader.getPreOutboundNo()));
-                        List<OutboundLineOutput> outboundLineV2s = outboundLineService.findOutboundLineNewV2(searchOutboundLineV2);
-                        log.info("outboundLineV2s ----------->: " + outboundLineV2s.stream().count());
+                            searchOutboundLineV2.setRefDocNumber(List.of(dbOutboundHeader.getRefDocNumber()));
+                            searchOutboundLineV2.setPreOutboundNo(List.of(dbOutboundHeader.getPreOutboundNo()));
+                            List<OutboundLineOutput> outboundLineV2s = outboundLineService.findOutboundLineNewV2(searchOutboundLineV2);
+                            log.info("outboundLineV2s ----------->: " + outboundLineV2s.stream().count());
 
-                        List<OutboundLineV2> updatedOutboundLinesV2 = outboundLineService.updateOutboundLinesV2(dbOutboundHeader.getCreatedBy(), outboundLineV2s);
-                        log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2.stream().count());
-                        log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2);
+                            List<OutboundLineV2> updatedOutboundLinesV2 = outboundLineService.updateOutboundLinesV2(dbOutboundHeader.getCreatedBy(), outboundLineV2s);
+                            log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2.stream().count());
+                            log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2);
 
-                        if (updatedOutboundLinesV2 != null) {
-                            log.info("Initiating deliveryConfirm ----------->: " + updatedOutboundLinesV2);
-                            List<OutboundLineV2> deliveryConfirm = outboundLineService.deliveryConfirmationV2(
-                                    updatedOutboundLinesV2.get(0).getCompanyCodeId(), updatedOutboundLinesV2.get(0).getPlantId(),
-                                    updatedOutboundLinesV2.get(0).getLanguageId(), updatedOutboundLinesV2.get(0).getWarehouseId(),
-                                    updatedOutboundLinesV2.get(0).getPreOutboundNo(), updatedOutboundLinesV2.get(0).getRefDocNumber(),
-                                    updatedOutboundLinesV2.get(0).getPartnerCode(), updatedOutboundLinesV2.get(0).getDeliveryConfirmedBy());
+                            if (updatedOutboundLinesV2 != null) {
+                                log.info("Initiating deliveryConfirm ----------->: " + updatedOutboundLinesV2);
+                                List<OutboundLineV2> deliveryConfirm = outboundLineService.deliveryConfirmationV2(
+                                        updatedOutboundLinesV2.get(0).getCompanyCodeId(), updatedOutboundLinesV2.get(0).getPlantId(),
+                                        updatedOutboundLinesV2.get(0).getLanguageId(), updatedOutboundLinesV2.get(0).getWarehouseId(),
+                                        updatedOutboundLinesV2.get(0).getPreOutboundNo(), updatedOutboundLinesV2.get(0).getRefDocNumber(),
+                                        updatedOutboundLinesV2.get(0).getPartnerCode(), updatedOutboundLinesV2.get(0).getDeliveryConfirmedBy());
+                            }
+                            log.info("<------------------Delivery Confirm Finished Processing------------------>");
                         }
-                        log.info("<------------------Delivery Confirm Finished Processing------------------>");
                     }
                 }
             }

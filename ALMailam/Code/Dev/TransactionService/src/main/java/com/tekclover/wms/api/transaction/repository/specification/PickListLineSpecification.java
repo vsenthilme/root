@@ -1,8 +1,6 @@
 package com.tekclover.wms.api.transaction.repository.specification;
 
-import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.PickListLine;
-import com.tekclover.wms.api.transaction.model.outbound.v2.SearchOutboundLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.SearchPickListLine;
 import org.springframework.context.annotation.DeferredImportSelector.Group;
 import org.springframework.data.jpa.domain.Specification;

@@ -5,8 +5,6 @@ import java.util.Date;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Column;
-
 @Slf4j
 @Data
 public class AddPickupLine {

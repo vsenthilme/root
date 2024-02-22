@@ -107,7 +107,6 @@ public interface PutAwayLineRepository extends JpaRepository<PutAwayLine, Long>,
      * @param companyCode
      * @param plantId
      * @param refDocNumber
-     * @param l
      * @return
      */
     public List<PutAwayLine> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndDeletionIndicator(
@@ -115,11 +114,9 @@ public interface PutAwayLineRepository extends JpaRepository<PutAwayLine, Long>,
 
     /**
      * @param languageId
-     * @param companyCode
      * @param plantId
      * @param refDocNumber
      * @param packBarcodes
-     * @param l
      * @return
      */
     public List<PutAwayLine> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndDeletionIndicator(

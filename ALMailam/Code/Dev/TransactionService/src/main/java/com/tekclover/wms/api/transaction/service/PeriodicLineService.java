@@ -7,8 +7,6 @@ import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.AssignHHTUserCC;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualHeaderV2;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
@@ -198,7 +196,7 @@ public class PeriodicLineService extends BaseService {
      * @throws Exception
      */
     public List<PeriodicLine> findPeriodicLine(SearchPeriodicLine searchPeriodicLine) throws Exception {
-        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getStartCreatedOn() != null) {
+        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicLine.getStartCreatedOn(),
                     searchPeriodicLine.getEndCreatedOn());
             searchPeriodicLine.setStartCreatedOn(dates[0]);
@@ -218,7 +216,7 @@ public class PeriodicLineService extends BaseService {
      * @throws Exception
      */
     public Stream<PeriodicLine> findPeriodicLineStream(SearchPeriodicLine searchPeriodicLine) throws Exception {
-        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getStartCreatedOn() != null) {
+        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicLine.getStartCreatedOn(),
                     searchPeriodicLine.getEndCreatedOn());
             searchPeriodicLine.setStartCreatedOn(dates[0]);
@@ -687,7 +685,7 @@ public class PeriodicLineService extends BaseService {
      * @throws Exception
      */
     public List<PeriodicLineV2> findPeriodicLineStreamV2(SearchPeriodicLineV2 searchPeriodicLine) throws Exception {
-        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getStartCreatedOn() != null) {
+        if (searchPeriodicLine.getStartCreatedOn() != null && searchPeriodicLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPeriodicLine.getStartCreatedOn(),
                     searchPeriodicLine.getEndCreatedOn());
             searchPeriodicLine.setStartCreatedOn(dates[0]);
@@ -1436,7 +1434,7 @@ public class PeriodicLineService extends BaseService {
             Long statusIdTotalCount = statusIdCount + statusId47Count;
             log.info("Count of Periodic Line, statusId78, statusId47, total : " + periodicLineCount + ", " + statusIdCount + "," + statusId47Count + "," + statusIdTotalCount);
 
-            if (periodicLineCount != statusIdTotalCount) {
+            if (!periodicLineCount.equals(statusIdTotalCount)) {
                 throw new BadRequestException("Perpetual Lines are not completely Processed");
             }
 

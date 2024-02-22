@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.model.outbound.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.OutboundLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.annotation.Transient;
 
@@ -9,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

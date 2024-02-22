@@ -84,9 +84,4 @@ public class ExceptionLog {
     @Column(name = "CTD_ON")
     private Date createdOn;
 
-//    @Column(name = "UTD_BY")
-//    private String updatedBy;
-//
-//    @Column(name = "UTD_ON")
-//    private Date updatedOn;
 }

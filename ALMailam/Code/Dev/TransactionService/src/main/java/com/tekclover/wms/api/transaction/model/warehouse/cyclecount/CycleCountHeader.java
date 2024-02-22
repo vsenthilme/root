@@ -1,8 +1,5 @@
 package com.tekclover.wms.api.transaction.model.warehouse.cyclecount;
 
-
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.InboundOrderLines;
-import lombok.Cleanup;
 import lombok.Data;
 
 import javax.persistence.*;

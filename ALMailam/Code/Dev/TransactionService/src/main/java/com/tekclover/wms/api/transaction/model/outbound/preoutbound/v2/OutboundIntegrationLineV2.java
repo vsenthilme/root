@@ -2,8 +2,10 @@ package com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.OutboundIntegrationLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class OutboundIntegrationLineV2 extends OutboundIntegrationLine {

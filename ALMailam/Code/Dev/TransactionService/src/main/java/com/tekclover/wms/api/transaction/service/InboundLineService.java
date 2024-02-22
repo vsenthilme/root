@@ -284,7 +284,7 @@ public class InboundLineService extends BaseService {
      * @throws Exception
      */
     public List<InboundLine> findInboundLine(SearchInboundLine searchInboundLine) throws Exception {
-        if (searchInboundLine.getStartConfirmedOn() != null && searchInboundLine.getStartConfirmedOn() != null) {
+        if (searchInboundLine.getStartConfirmedOn() != null && searchInboundLine.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundLine.getStartConfirmedOn(),
                     searchInboundLine.getEndConfirmedOn());
             searchInboundLine.setStartConfirmedOn(dates[0]);

@@ -6,7 +6,6 @@ import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicZe
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
 import com.tekclover.wms.api.transaction.repository.PeriodicZeroStkLineRepository;
-import com.tekclover.wms.api.transaction.repository.PerpetualZeroStkLineRepository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;

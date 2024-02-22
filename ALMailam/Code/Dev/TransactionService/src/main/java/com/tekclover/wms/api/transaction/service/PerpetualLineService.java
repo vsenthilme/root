@@ -214,7 +214,7 @@ public class PerpetualLineService extends BaseService {
      */
     public List<PerpetualLine> findPerpetualLine(SearchPerpetualLine searchPerpetualLine)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getStartCreatedOn() != null) {
+        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualLine.getStartCreatedOn(),
                     searchPerpetualLine.getEndCreatedOn());
             searchPerpetualLine.setStartCreatedOn(dates[0]);
@@ -236,7 +236,7 @@ public class PerpetualLineService extends BaseService {
      */
     public Stream<PerpetualLine> findPerpetualLineStream(SearchPerpetualLine searchPerpetualLine)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getStartCreatedOn() != null) {
+        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualLine.getStartCreatedOn(),
                     searchPerpetualLine.getEndCreatedOn());
             searchPerpetualLine.setStartCreatedOn(dates[0]);
@@ -730,7 +730,7 @@ public class PerpetualLineService extends BaseService {
      * @throws java.text.ParseException
      */
     public List<PerpetualLineV2> findPerpetualLineV2(SearchPerpetualLineV2 searchPerpetualLine) throws java.text.ParseException {
-        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getStartCreatedOn() != null) {
+        if (searchPerpetualLine.getStartCreatedOn() != null && searchPerpetualLine.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualLine.getStartCreatedOn(),
                     searchPerpetualLine.getEndCreatedOn());
             searchPerpetualLine.setStartCreatedOn(dates[0]);

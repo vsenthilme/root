@@ -166,7 +166,7 @@ public class StagingHeaderService extends BaseService {
      */
     public List<StagingHeader> findStagingHeader(SearchStagingHeader searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);
@@ -186,7 +186,7 @@ public class StagingHeaderService extends BaseService {
     //Streaming
     public Stream<StagingHeader> findStagingHeaderNew(SearchStagingHeader searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);
@@ -511,7 +511,7 @@ public class StagingHeaderService extends BaseService {
     //Streaming
     public Stream<StagingHeaderV2> findStagingHeaderV2(SearchStagingHeaderV2 searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);

@@ -73,7 +73,7 @@ public class OutboundReversalService {
 	 */
 	public List<OutboundReversal> findOutboundReversal(SearchOutboundReversal searchOutboundReversal) 
 			throws ParseException, java.text.ParseException {
-		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getStartReversedOn() != null) {
+		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getEndReversedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundReversal.getStartReversedOn(), searchOutboundReversal.getEndReversedOn());
 			searchOutboundReversal.setStartReversedOn(dates[0]);
 			searchOutboundReversal.setEndReversedOn(dates[1]);
@@ -87,7 +87,7 @@ public class OutboundReversalService {
 	//Stream
 	public Stream<OutboundReversal> findOutboundReversalNew(SearchOutboundReversal searchOutboundReversal)
 			throws ParseException, java.text.ParseException {
-		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getStartReversedOn() != null) {
+		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getEndReversedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundReversal.getStartReversedOn(), searchOutboundReversal.getEndReversedOn());
 			searchOutboundReversal.setStartReversedOn(dates[0]);
 			searchOutboundReversal.setEndReversedOn(dates[1]);
@@ -153,7 +153,7 @@ public class OutboundReversalService {
 	 */
 	public List<OutboundReversalV2> findOutboundReversalV2(SearchOutboundReversalV2 searchOutboundReversal)
 			throws ParseException, java.text.ParseException {
-		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getStartReversedOn() != null) {
+		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getEndReversedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundReversal.getStartReversedOn(), searchOutboundReversal.getEndReversedOn());
 			searchOutboundReversal.setStartReversedOn(dates[0]);
 			searchOutboundReversal.setEndReversedOn(dates[1]);
@@ -167,7 +167,7 @@ public class OutboundReversalService {
 	//Stream
 	public Stream<OutboundReversalV2> findOutboundReversalNewV2(SearchOutboundReversalV2 searchOutboundReversal)
 			throws ParseException, java.text.ParseException {
-		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getStartReversedOn() != null) {
+		if (searchOutboundReversal.getStartReversedOn() != null && searchOutboundReversal.getEndReversedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundReversal.getStartReversedOn(), searchOutboundReversal.getEndReversedOn());
 			searchOutboundReversal.setStartReversedOn(dates[0]);
 			searchOutboundReversal.setEndReversedOn(dates[1]);

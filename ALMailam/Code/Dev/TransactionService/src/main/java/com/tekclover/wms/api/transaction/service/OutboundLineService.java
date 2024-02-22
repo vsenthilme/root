@@ -685,7 +685,7 @@ public class OutboundLineService extends BaseService {
      */
     public List<OutboundLine> findOutboundLineReport(SearchOutboundLineReport searchOutboundLineReport)
             throws ParseException, java.text.ParseException {
-        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getStartConfirmedOn() != null) {
+        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundLineReport.getStartConfirmedOn(), searchOutboundLineReport.getEndConfirmedOn());
             searchOutboundLineReport.setStartConfirmedOn(dates[0]);
             searchOutboundLineReport.setEndConfirmedOn(dates[1]);
@@ -1288,7 +1288,6 @@ public class OutboundLineService extends BaseService {
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
-                    ;
 
                     //Delete pickupheader after inventory update
                     for (PickupLine pickupLine : pickupLineList) {
@@ -2426,7 +2425,7 @@ public class OutboundLineService extends BaseService {
      */
     public List<OutboundLineV2> findOutboundLineReportV2(SearchOutboundLineReportV2 searchOutboundLineReport)
             throws ParseException, java.text.ParseException {
-        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getStartConfirmedOn() != null) {
+        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundLineReport.getStartConfirmedOn(), searchOutboundLineReport.getEndConfirmedOn());
             searchOutboundLineReport.setStartConfirmedOn(dates[0]);
             searchOutboundLineReport.setEndConfirmedOn(dates[1]);
@@ -3006,24 +3005,24 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 5L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(
-                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
-                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 5L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(
+//                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+//                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3160,24 +3159,24 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 4L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
-                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-
-                        String movementDocumentNo = pickupLine.getRefDocNumber();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 4L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+//                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//
+//                        String movementDocumentNo = pickupLine.getRefDocNumber();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3355,24 +3354,24 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 5L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(
-                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
-                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 5L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(
+//                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+//                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3509,24 +3508,24 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 4L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
-                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-
-                        String movementDocumentNo = pickupLine.getRefDocNumber();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 4L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+//                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//
+//                        String movementDocumentNo = pickupLine.getRefDocNumber();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3602,7 +3601,7 @@ public class OutboundLineService extends BaseService {
         inventoryMovement.setInventoryUom(pickupLine.getPickUom());
 
         // BAL_OH_QTY
-        Double sumOfInvQty = inventoryService.getInventoryQtyCountV2(
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
                 pickupLine.getCompanyCodeId(),
                 pickupLine.getPlantId(),
                 pickupLine.getLanguageId(),
@@ -3610,6 +3609,10 @@ public class OutboundLineService extends BaseService {
                 pickupLine.getManufacturerName(),
                 pickupLine.getItemCode());
         inventoryMovement.setBalanceOHQty(sumOfInvQty);
+        if(sumOfInvQty != null) {
+            Double openQty = sumOfInvQty - pickupLine.getPickConfirmQty();
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));
+        }
 
         // IM_CTD_BY
         inventoryMovement.setCreatedBy(pickupLine.getPickupConfirmedBy());

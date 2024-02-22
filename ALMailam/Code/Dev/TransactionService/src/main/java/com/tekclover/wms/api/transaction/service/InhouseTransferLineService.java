@@ -73,12 +73,12 @@ public class InhouseTransferLineService extends BaseService {
 	 */
 	public List<InhouseTransferLine> findInhouseTransferLine(SearchInhouseTransferLine searchInhouseTransferLine)
 			throws Exception {
-		if (searchInhouseTransferLine.getStartCreatedOn() != null && searchInhouseTransferLine.getStartCreatedOn() != null) {
+		if (searchInhouseTransferLine.getStartCreatedOn() != null && searchInhouseTransferLine.getEndCreatedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInhouseTransferLine.getStartCreatedOn(), searchInhouseTransferLine.getEndCreatedOn());
 			searchInhouseTransferLine.setStartCreatedOn(dates[0]);
 			searchInhouseTransferLine.setEndCreatedOn(dates[1]);
 		}
-		if (searchInhouseTransferLine.getStartConfirmedOn() != null && searchInhouseTransferLine.getStartConfirmedOn() != null) {
+		if (searchInhouseTransferLine.getStartConfirmedOn() != null && searchInhouseTransferLine.getEndConfirmedOn() != null) {
 			Date[] dates = DateUtils.addTimeToDatesForSearch(searchInhouseTransferLine.getStartConfirmedOn(), searchInhouseTransferLine.getEndConfirmedOn());
 			searchInhouseTransferLine.setStartConfirmedOn(dates[0]);
 			searchInhouseTransferLine.setEndConfirmedOn(dates[1]);

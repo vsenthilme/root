@@ -9,11 +9,9 @@ import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
-import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.repository.InventoryMovementRepository;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
@@ -21,7 +19,6 @@ import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.StockAdjustmentRepository;
 import com.tekclover.wms.api.transaction.repository.specification.StockAdjustmentSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1000,17 +997,19 @@ public class StockAdjustmentService extends BaseService {
 
                 // SP_ST_IND_ID
                 newInventory.setSpecialStockIndicatorId(1L);
-
+                Double INV_QTY = 0D;
                 if (stockAdjustment.getAdjustmentQty() >= 0) {
                     newInventory.setInventoryQuantity(stockAdjustment.getAdjustmentQty());
+                    INV_QTY = stockAdjustment.getAdjustmentQty();
                 }
                 if (stockAdjustment.getAdjustmentQty() < 0) {
                     newInventory.setInventoryQuantity(0D);
+                    INV_QTY = 0D;
                 }
 
                 Double ALLOC_QTY = 0D;
                 newInventory.setAllocatedQuantity(ALLOC_QTY);
-                newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                newInventory.setReferenceField4(INV_QTY + ALLOC_QTY);
                 newInventory.setCompanyDescription(stockAdjustment.getCompanyDescription());
                 newInventory.setPlantDescription(stockAdjustment.getPlantDescription());
                 newInventory.setWarehouseDescription(stockAdjustment.getWarehouseDescription());

@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.model.warehouse.inbound.v2;
 
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.InboundOrder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @ToString(callSuper = true)

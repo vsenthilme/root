@@ -11,7 +11,6 @@ import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderEntityV2;
@@ -293,13 +292,13 @@ public class InboundHeaderService extends BaseService {
      * @throws Exception
      */
     public List<InboundHeader> findInboundHeader(SearchInboundHeader searchInboundHeader) throws Exception {
-        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getStartCreatedOn() != null) {
+        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartCreatedOn(), searchInboundHeader.getEndCreatedOn());
             searchInboundHeader.setStartCreatedOn(dates[0]);
             searchInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getStartConfirmedOn() != null) {
+        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartConfirmedOn(), searchInboundHeader.getEndConfirmedOn());
             searchInboundHeader.setStartConfirmedOn(dates[0]);
             searchInboundHeader.setEndConfirmedOn(dates[1]);
@@ -318,13 +317,13 @@ public class InboundHeaderService extends BaseService {
      */
     //Stream
     public Stream<InboundHeader> findInboundHeaderNew(SearchInboundHeader searchInboundHeader) throws Exception {
-        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getStartCreatedOn() != null) {
+        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartCreatedOn(), searchInboundHeader.getEndCreatedOn());
             searchInboundHeader.setStartCreatedOn(dates[0]);
             searchInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getStartConfirmedOn() != null) {
+        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartConfirmedOn(), searchInboundHeader.getEndConfirmedOn());
             searchInboundHeader.setStartConfirmedOn(dates[0]);
             searchInboundHeader.setEndConfirmedOn(dates[1]);
@@ -1682,10 +1681,11 @@ public class InboundHeaderService extends BaseService {
             Double cbm = 0D;
             Double cbmPerQty = 0D;
             Double invCbm = 0D;
-
-            if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                log.info("CBM Check");
-                capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+            if(itemCodeCapacityCheck != null) {
+                if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                    log.info("CBM Check");
+                    capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+                }
             }
             log.info("CapacityCheck -----------> : " + capacityCheck);
 

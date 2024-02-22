@@ -109,7 +109,7 @@ public class InhouseTransferHeaderService extends BaseService {
      */
     public List<InhouseTransferHeader> findInHouseTransferHeader(SearchInhouseTransferHeader searchInHouseTransferHeader) throws Exception {
         if (searchInHouseTransferHeader.getStartCreatedOn() != null &&
-                searchInHouseTransferHeader.getStartCreatedOn() != null) {
+                searchInHouseTransferHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInHouseTransferHeader.getStartCreatedOn(),
                     searchInHouseTransferHeader.getEndCreatedOn());
             searchInHouseTransferHeader.setStartCreatedOn(dates[0]);
@@ -130,7 +130,7 @@ public class InhouseTransferHeaderService extends BaseService {
      */
     public Stream<InhouseTransferHeader> findInHouseTransferHeaderNew(SearchInhouseTransferHeader searchInHouseTransferHeader) throws Exception {
         if (searchInHouseTransferHeader.getStartCreatedOn() != null &&
-                searchInHouseTransferHeader.getStartCreatedOn() != null) {
+                searchInHouseTransferHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInHouseTransferHeader.getStartCreatedOn(),
                     searchInHouseTransferHeader.getEndCreatedOn());
             searchInHouseTransferHeader.setStartCreatedOn(dates[0]);
@@ -1078,10 +1078,10 @@ public class InhouseTransferHeaderService extends BaseService {
                             mastersService.updateStorageBinV2(dbStorageBin.getStorageBin(), dbStorageBin, companyCode,
                                     plantId, languageId, warehouseId, loginUserID, authTokenForMastersService.getAccess_token());
 //                        storageBinRepository.save(dbStorageBin);
-                            log.info("---------storage bin updated-------", dbStorageBin);
+                            log.info("---------storage bin updated-------" + dbStorageBin);
                         }
                     } catch (Exception e) {
-                        log.error("---------storagebin-update-----", e);
+                        log.error("---------storagebin-update-----" + e);
                     }
 
                 }

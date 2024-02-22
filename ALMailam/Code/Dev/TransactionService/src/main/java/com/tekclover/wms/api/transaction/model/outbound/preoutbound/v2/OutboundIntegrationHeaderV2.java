@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.OutboundIntegrationHeader;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class OutboundIntegrationHeaderV2 extends OutboundIntegrationHeader {

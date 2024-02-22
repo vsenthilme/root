@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLineCompositeKey;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLineCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

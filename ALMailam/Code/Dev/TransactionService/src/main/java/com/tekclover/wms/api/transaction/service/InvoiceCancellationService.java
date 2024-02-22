@@ -185,7 +185,10 @@ public class InvoiceCancellationService extends BaseService{
 
             if (stagingLineEntityList != null && !stagingLineEntityList.isEmpty()) {
                 for (StagingLineEntityV2 dbStagingLine : stagingLineEntityList) {
-                    List<GrLineV2> grLinePresent = grLineList.stream().filter(n -> n.getItemCode().equalsIgnoreCase(dbStagingLine.getItemCode()) && n.getManufacturerName().equalsIgnoreCase(dbStagingLine.getManufacturerName())).collect(Collectors.toList());
+                    List<GrLineV2> grLinePresent = null;
+                    if (grLineList != null && !grLineList.isEmpty()) {
+                        grLinePresent = grLineList.stream().filter(n -> n.getItemCode().equalsIgnoreCase(dbStagingLine.getItemCode()) && n.getManufacturerName().equalsIgnoreCase(dbStagingLine.getManufacturerName())).collect(Collectors.toList());
+                    }
                     log.info("GrLine Present in cancelled SupplierInvoice : " + grLinePresent);
                     if (grLinePresent != null && !grLinePresent.isEmpty()) {
                         List<PackBarcode> packBarcodeList = new ArrayList<>();
@@ -305,7 +308,7 @@ public class InvoiceCancellationService extends BaseService{
 
                             PutAwayLineV2 putAwayLine = new PutAwayLineV2();
 
-                            List<GrLineV2> grLine = createGrLine.stream().filter(n -> n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
+                            List<GrLineV2> grLine = createGrLine.stream().filter(n -> n.getPackBarcodes().equalsIgnoreCase(dbPutawayHeader.getPackBarcodes())).collect(Collectors.toList());
 
                             BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
                             putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());
@@ -331,8 +334,10 @@ public class InvoiceCancellationService extends BaseService{
             warehouseApiResponse.setStatusCode("200");
             warehouseApiResponse.setMessage("SupplierInvoice Cancellation Success");
         }
-        //Insert Record in SupplierInvoiceCancellation Table
-        createSupplierInvoiceHeader(inboundHeaderV2, inboundLineV2, grHeader, grLineList, createGrLine, putAwayLineV2List, createdPutawayLine, loginUserId);
+        if(grHeader != null) {
+            //Insert Record in SupplierInvoiceCancellation Table
+            createSupplierInvoiceHeader(inboundHeaderV2, inboundLineV2, grHeader, grLineList, createGrLine, putAwayLineV2List, createdPutawayLine, loginUserId);
+        }
         return warehouseApiResponse;
     }
 
@@ -458,7 +463,7 @@ public class InvoiceCancellationService extends BaseService{
                                     supplierInvoiceLine.setOldInvoiceNo(filteredInboundList.get(0).getInvoiceNo());
                                 }
                             }
-                            if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            if (newInboundLineList != null && !newInboundLineList.isEmpty()) {
                                 filteredInboundList = newInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(newPutAwayLine.getItemCode()) &&
                                         a.getManufacturerName().equalsIgnoreCase(newPutAwayLine.getManufacturerName())).collect(Collectors.toList());
                                 if (filteredInboundList != null && !filteredInboundList.isEmpty()) {
@@ -523,7 +528,7 @@ public class InvoiceCancellationService extends BaseService{
                             SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
                             BeanUtils.copyProperties(newPutAwayLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(newPutAwayLine));
 
-                            if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            if (newInboundLineList != null && !newInboundLineList.isEmpty()) {
                                 filteredInboundList = newInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(newPutAwayLine.getItemCode()) &&
                                         a.getManufacturerName().equalsIgnoreCase(newPutAwayLine.getManufacturerName())).collect(Collectors.toList());
                                 if (filteredInboundList != null && !filteredInboundList.isEmpty()) {
@@ -620,7 +625,7 @@ public class InvoiceCancellationService extends BaseService{
                                     supplierInvoiceLine.setOldInvoiceNo(filteredInboundList.get(0).getInvoiceNo());
                                 }
                             }
-                            if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            if (newInboundLineList != null && !newInboundLineList.isEmpty()) {
                                 filteredInboundList = newInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(newGrLine.getItemCode()) &&
                                         a.getManufacturerName().equalsIgnoreCase(newGrLine.getManufacturerName())).collect(Collectors.toList());
                                 if (filteredInboundList != null && !filteredInboundList.isEmpty()) {
@@ -686,7 +691,7 @@ public class InvoiceCancellationService extends BaseService{
                             SupplierInvoiceLine supplierInvoiceLine = new SupplierInvoiceLine();
                             BeanUtils.copyProperties(newGrLine, supplierInvoiceLine, CommonUtils.getNullPropertyNames(newGrLine));
 
-                            if (oldInboundLineList != null && !oldInboundLineList.isEmpty()) {
+                            if (newInboundLineList != null && !newInboundLineList.isEmpty()) {
                                 filteredInboundList = newInboundLineList.stream().filter(a -> a.getItemCode().equalsIgnoreCase(newGrLine.getItemCode()) &&
                                         a.getManufacturerName().equalsIgnoreCase(newGrLine.getManufacturerName())).collect(Collectors.toList());
                                 if (filteredInboundList != null && !filteredInboundList.isEmpty()) {

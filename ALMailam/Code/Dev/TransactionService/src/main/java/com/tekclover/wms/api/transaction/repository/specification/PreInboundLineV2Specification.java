@@ -1,8 +1,6 @@
 package com.tekclover.wms.api.transaction.repository.specification;
 
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.SearchPreInboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.SearchPreInboundLineV2;
 import org.springframework.context.annotation.DeferredImportSelector.Group;
 import org.springframework.data.jpa.domain.Specification;

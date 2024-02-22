@@ -190,7 +190,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public List<PerpetualHeader> findPerpetualHeader(SearchPerpetualHeader searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -208,7 +208,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public List<PerpetualLineEntity> runPerpetualHeader(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -307,7 +307,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderNew(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -348,7 +348,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     @Transactional
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderStream(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -932,7 +932,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public Stream<PerpetualHeaderV2> findPerpetualHeaderV2(SearchPerpetualHeaderV2 searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -952,7 +952,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public List<PerpetualHeaderEntityV2> findPerpetualHeaderEntityV2(SearchPerpetualHeaderV2 searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -975,7 +975,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public List<PerpetualLineV2> runPerpetualHeaderV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -1078,7 +1078,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderNewV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -1123,7 +1123,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     @Transactional
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderStreamV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);

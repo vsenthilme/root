@@ -13,7 +13,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;

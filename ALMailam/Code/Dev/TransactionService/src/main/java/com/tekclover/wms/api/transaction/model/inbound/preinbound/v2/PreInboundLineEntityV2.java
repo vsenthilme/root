@@ -2,12 +2,13 @@ package com.tekclover.wms.api.transaction.model.inbound.preinbound.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundLineEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

@@ -69,8 +69,10 @@ public interface StagingHeaderRepository extends JpaRepository<StagingHeader, Lo
                                                                                 Long statusId, Long deletionIndicator);
 
     /**
-     * @param rssFeedEntryId
-     * @param isRead
+     *
+     * @param warehouseId
+     * @param refDocNumber
+     * @param statusId
      */
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StagingHeader ib SET ib.statusId = :statusId WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")

@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicHeaderV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.SearchPeriodicHeaderV2;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

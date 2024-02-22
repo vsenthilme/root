@@ -20,7 +20,7 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV
 import com.tekclover.wms.api.transaction.model.inbound.staging.StagingLineEntity;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.GrLineSpecification;
@@ -123,7 +123,7 @@ public class GrLineService extends BaseService {
     String statusDescription = null;
 
     @Autowired
-    private ExceptionLogRepository exceptionLogRepo;
+    private ErrorLogRepository exceptionLogRepo;
 
     //----------------------------------------------------------------------------------------------------
 
@@ -4376,199 +4376,199 @@ public class GrLineService extends BaseService {
                                  String preInboundNo, String goodsReceiptNo, String palletCode, String caseCode,
                                  String packBarcodes, Long lineNo, String itemCode, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(goodsReceiptNo);
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setWarehouseId(warehouseId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(preInboundNo);
-        exceptionLog.setReferenceField2(palletCode);
-        exceptionLog.setReferenceField3(caseCode);
-        exceptionLog.setReferenceField4(packBarcodes);
-        exceptionLog.setReferenceField5(itemCode);
-        exceptionLog.setReferenceField6(String.valueOf(lineNo));
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(goodsReceiptNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(palletCode);
+        errorLog.setReferenceField3(caseCode);
+        errorLog.setReferenceField4(packBarcodes);
+        errorLog.setReferenceField5(itemCode);
+        errorLog.setReferenceField6(String.valueOf(lineNo));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog1(String languageId, String companyCode, String plantId, String refDocNumber,
                                   String preInboundNo, String packBarcodes, Long lineNo, String itemCode, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(String.valueOf(lineNo));
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(preInboundNo);
-        exceptionLog.setReferenceField2(packBarcodes);
-        exceptionLog.setReferenceField3(itemCode);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(String.valueOf(lineNo));
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(packBarcodes);
+        errorLog.setReferenceField3(itemCode);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog2(String languageId, String companyCode, String plantId, String warehouseId,
                                   String refDocNumber, String preInboundNo, String packBarcodes, String caseCode, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(refDocNumber);
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setWarehouseId(warehouseId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(preInboundNo);
-        exceptionLog.setReferenceField4(caseCode);
-        exceptionLog.setReferenceField5(packBarcodes);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField4(caseCode);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog3(String languageId, String companyCode, String plantId,
                                   String refDocNumber, String packBarcodes, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(refDocNumber);
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField5(packBarcodes);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog4(String languageId, String companyCode, String plantId, String warehouseId,
                                   String refDocNumber, String preInboundNo, String packBarcodes, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(refDocNumber);
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setWarehouseId(warehouseId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(preInboundNo);
-        exceptionLog.setReferenceField5(packBarcodes);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog5(String languageId, String companyCode, String plantId, String warehouseId,
                                   String refDocNumber, String packBarcodes, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(refDocNumber);
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setWarehouseId(warehouseId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(packBarcodes);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog6(String languageId, String companyCode, String plantId, String refDocNumber,
                                   String preInboundNo, Long lineNo, String itemCode, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(String.valueOf(lineNo));
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(languageId);
-        exceptionLog.setCompanyCodeId(companyCode);
-        exceptionLog.setPlantId(plantId);
-        exceptionLog.setRefDocNumber(refDocNumber);
-        exceptionLog.setReferenceField1(preInboundNo);
-        exceptionLog.setReferenceField2(itemCode);
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(String.valueOf(lineNo));
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(itemCode);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog7(GrLineV2 grLineV2, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(grLineV2.getGoodsReceiptNo());
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(grLineV2.getLanguageId());
-        exceptionLog.setCompanyCodeId(grLineV2.getCompanyCode());
-        exceptionLog.setPlantId(grLineV2.getPlantId());
-        exceptionLog.setWarehouseId(grLineV2.getWarehouseId());
-        exceptionLog.setRefDocNumber(grLineV2.getRefDocNumber());
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(grLineV2.getGoodsReceiptNo());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(grLineV2.getLanguageId());
+        errorLog.setCompanyCodeId(grLineV2.getCompanyCode());
+        errorLog.setPlantId(grLineV2.getPlantId());
+        errorLog.setWarehouseId(grLineV2.getWarehouseId());
+        errorLog.setRefDocNumber(grLineV2.getRefDocNumber());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog8(ImBasicData1 imBasicData1, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(imBasicData1.getUomId());
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(imBasicData1.getLanguageId());
-        exceptionLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
-        exceptionLog.setPlantId(imBasicData1.getPlantId());
-        exceptionLog.setWarehouseId(imBasicData1.getWarehouseId());
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(imBasicData1.getUomId());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(imBasicData1.getLanguageId());
+        errorLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        errorLog.setPlantId(imBasicData1.getPlantId());
+        errorLog.setWarehouseId(imBasicData1.getWarehouseId());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog9(StorageBinV2 storageBinV2, String error) {
 
-        ExceptionLog exceptionLog = new ExceptionLog();
-        exceptionLog.setOrderTypeId(storageBinV2.getStorageBin());
-        exceptionLog.setOrderDate(new Date());
-        exceptionLog.setLanguageId(storageBinV2.getLanguageId());
-        exceptionLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
-        exceptionLog.setPlantId(storageBinV2.getPlantId());
-        exceptionLog.setWarehouseId(storageBinV2.getWarehouseId());
-        exceptionLog.setErrorMessage(error);
-        exceptionLog.setCreatedBy("MSD_API");
-        exceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(exceptionLog);
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(storageBinV2.getStorageBin());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(storageBinV2.getLanguageId());
+        errorLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
+        errorLog.setPlantId(storageBinV2.getPlantId());
+        errorLog.setWarehouseId(storageBinV2.getWarehouseId());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(errorLog);
     }
 
     private void createGrLineLog10(List<AddGrLineV2> grLineV2List, String error) {
 
         for (AddGrLineV2 addGrLineV2 : grLineV2List) {
-            ExceptionLog exceptionLog = new ExceptionLog();
+            ErrorLog errorLog = new ErrorLog();
 
-            exceptionLog.setOrderTypeId(addGrLineV2.getGoodsReceiptNo());
-            exceptionLog.setOrderDate(new Date());
-            exceptionLog.setLanguageId(addGrLineV2.getLanguageId());
-            exceptionLog.setCompanyCodeId(addGrLineV2.getCompanyCode());
-            exceptionLog.setPlantId(addGrLineV2.getPlantId());
-            exceptionLog.setWarehouseId(addGrLineV2.getWarehouseId());
-            exceptionLog.setRefDocNumber(addGrLineV2.getRefDocNumber());
-            exceptionLog.setErrorMessage(error);
-            exceptionLog.setCreatedBy("MSD_API");
-            exceptionLog.setCreatedOn(new Date());
-            exceptionLogRepo.save(exceptionLog);
+            errorLog.setOrderTypeId(addGrLineV2.getGoodsReceiptNo());
+            errorLog.setOrderDate(new Date());
+            errorLog.setLanguageId(addGrLineV2.getLanguageId());
+            errorLog.setCompanyCodeId(addGrLineV2.getCompanyCode());
+            errorLog.setPlantId(addGrLineV2.getPlantId());
+            errorLog.setWarehouseId(addGrLineV2.getWarehouseId());
+            errorLog.setRefDocNumber(addGrLineV2.getRefDocNumber());
+            errorLog.setErrorMessage(error);
+            errorLog.setCreatedBy("MSD_API");
+            errorLog.setCreatedOn(new Date());
+            exceptionLogRepo.save(errorLog);
         }
     }
 

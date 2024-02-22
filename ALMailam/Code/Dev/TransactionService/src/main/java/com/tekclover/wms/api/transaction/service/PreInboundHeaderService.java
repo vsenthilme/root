@@ -1,6 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
-import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
@@ -123,7 +123,7 @@ public class PreInboundHeaderService extends BaseService {
     private InboundLineV2Repository inboundLineV2Repository;
 
     @Autowired
-    private ExceptionLogRepository exceptionLogRepo;
+    private ErrorLogRepository exceptionLogRepo;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------------------------------------------
@@ -2251,19 +2251,19 @@ public class PreInboundHeaderService extends BaseService {
     private void createPreInboundHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
                                             String refDocNumber, String preInboundNo, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(refDocNumber);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setReferenceField1(preInboundNo);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
 }

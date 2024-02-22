@@ -1,7 +1,7 @@
 package com.tekclover.wms.api.transaction.controller;
 
-import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
-import com.tekclover.wms.api.transaction.service.ExceptionLogService;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
+import com.tekclover.wms.api.transaction.service.ErrorLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -26,14 +26,14 @@ import java.util.List;
 public class ExceptionLogController {
 
     @Autowired
-    ExceptionLogService exceptionLogService;
+    ErrorLogService errorLogService;
 
     // Get All Exception Log Details
-    @ApiOperation(response = ExceptionLog.class, value = "Get All Exception Log Details")
+    @ApiOperation(response = ErrorLog.class, value = "Get All Exception Log Details")
     @GetMapping("/all")
     public ResponseEntity<?> getAllExceptionLogDetails() {
-        List<ExceptionLog> exceptionLogList = exceptionLogService.getAllExceptionLogs();
-        return new ResponseEntity<>(exceptionLogList, HttpStatus.OK);
+        List<ErrorLog> errorLogList = errorLogService.getAllExceptionLogs();
+        return new ResponseEntity<>(errorLogList, HttpStatus.OK);
     }
 
 }

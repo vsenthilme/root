@@ -1,4 +1,4 @@
-package com.tekclover.wms.api.transaction.model.exceptionlog;
+package com.tekclover.wms.api.transaction.model.errorlog;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tblexceptionlog")
-public class ExceptionLog {
+public class ErrorLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

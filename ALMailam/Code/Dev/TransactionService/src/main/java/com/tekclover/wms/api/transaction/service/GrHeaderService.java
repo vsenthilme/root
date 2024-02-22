@@ -2,7 +2,7 @@ package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
-import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.gr.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
@@ -49,7 +49,7 @@ public class GrHeaderService extends BaseService {
     private StagingLineV2Repository stagingLineV2Repository;
 
     @Autowired
-    ExceptionLogRepository exceptionLogRepo;
+    ErrorLogRepository exceptionLogRepo;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------
@@ -829,97 +829,97 @@ public class GrHeaderService extends BaseService {
                                    String refDocNumber, String preInboundNo, String stagingNo,
                                    String goodsReceiptNo, String palletCode, String caseCode, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(goodsReceiptNo);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setReferenceField1(preInboundNo);
-        dbExceptionLog.setReferenceField2(stagingNo);
-        dbExceptionLog.setReferenceField3(palletCode);
-        dbExceptionLog.setReferenceField4(caseCode);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(goodsReceiptNo);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setReferenceField2(stagingNo);
+        dbErrorLog.setReferenceField3(palletCode);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
     private void createGrHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
                                     String refDocNumber, String goodsReceiptNo, String caseCode, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(refDocNumber);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setReferenceField1(goodsReceiptNo);
-        dbExceptionLog.setReferenceField4(caseCode);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(goodsReceiptNo);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
     private void createGrHeaderLog2(String languageId, String companyCode, String plantId, String warehouseId,
                                     String preInboundNo, String refDocNumber, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(refDocNumber);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setReferenceField1(preInboundNo);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
     private void createGrHeaderLog3(String languageId, String companyCode, String plantId,
                                     String warehouseId, String refDocNumber, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(refDocNumber);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
     private void createGrHeaderLog4(GrHeaderV2 grHeaderV2, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(grHeaderV2.getRefDocNumber());
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(grHeaderV2.getLanguageId());
-        dbExceptionLog.setCompanyCodeId(grHeaderV2.getCompanyCode());
-        dbExceptionLog.setPlantId(grHeaderV2.getPlantId());
-        dbExceptionLog.setWarehouseId(grHeaderV2.getWarehouseId());
-        dbExceptionLog.setRefDocNumber(grHeaderV2.getRefDocNumber());
-        dbExceptionLog.setReferenceField1(grHeaderV2.getPreInboundNo());
-        dbExceptionLog.setReferenceField2(grHeaderV2.getGoodsReceiptNo());
-        dbExceptionLog.setReferenceField3(grHeaderV2.getStagingNo());
-        dbExceptionLog.setReferenceField4(grHeaderV2.getPalletCode());
-        dbExceptionLog.setReferenceField5(grHeaderV2.getCaseCode());
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(grHeaderV2.getRefDocNumber());
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(grHeaderV2.getLanguageId());
+        dbErrorLog.setCompanyCodeId(grHeaderV2.getCompanyCode());
+        dbErrorLog.setPlantId(grHeaderV2.getPlantId());
+        dbErrorLog.setWarehouseId(grHeaderV2.getWarehouseId());
+        dbErrorLog.setRefDocNumber(grHeaderV2.getRefDocNumber());
+        dbErrorLog.setReferenceField1(grHeaderV2.getPreInboundNo());
+        dbErrorLog.setReferenceField2(grHeaderV2.getGoodsReceiptNo());
+        dbErrorLog.setReferenceField3(grHeaderV2.getStagingNo());
+        dbErrorLog.setReferenceField4(grHeaderV2.getPalletCode());
+        dbErrorLog.setReferenceField5(grHeaderV2.getCaseCode());
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
 }

@@ -4,7 +4,7 @@ import com.tekclover.wms.api.transaction.controller.exception.BadRequestExceptio
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.*;
-import com.tekclover.wms.api.transaction.model.exceptionlog.ExceptionLog;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.AddGrHeader;
@@ -99,7 +99,7 @@ public class StagingLineService extends BaseService {
     String statusDescription = null;
 
     @Autowired
-    private ExceptionLogRepository exceptionLogRepo;
+    private ErrorLogRepository exceptionLogRepo;
     //----------------------------------------------------------------------------------------
 
     /**
@@ -1714,22 +1714,22 @@ public class StagingLineService extends BaseService {
     private void createStagingLineLog3(String languageId, String companyCode, String plantId, String warehouseId, String preInboundNo,
                                        String refDocNumber, Long lineNo, String itemCode, String caseCode, String error) {
 
-        ExceptionLog dbExceptionLog = new ExceptionLog();
-        dbExceptionLog.setOrderTypeId(refDocNumber);
-        dbExceptionLog.setOrderDate(new Date());
-        dbExceptionLog.setLanguageId(languageId);
-        dbExceptionLog.setCompanyCodeId(companyCode);
-        dbExceptionLog.setPlantId(plantId);
-        dbExceptionLog.setWarehouseId(warehouseId);
-        dbExceptionLog.setRefDocNumber(refDocNumber);
-        dbExceptionLog.setReferenceField1(preInboundNo);
-        dbExceptionLog.setReferenceField2(String.valueOf(lineNo));
-        dbExceptionLog.setReferenceField3(itemCode);
-        dbExceptionLog.setReferenceField4(caseCode);
-        dbExceptionLog.setErrorMessage(error);
-        dbExceptionLog.setCreatedBy("MSD_API");
-        dbExceptionLog.setCreatedOn(new Date());
-        exceptionLogRepo.save(dbExceptionLog);
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setReferenceField2(String.valueOf(lineNo));
+        dbErrorLog.setReferenceField3(itemCode);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
     }
 
 }

@@ -1375,7 +1375,7 @@ public class PreOutboundHeaderService extends BaseService {
             String loginUserID = "MW_AMS";                                     //Hard Coded
 
             //Check WMS order table
-            List<OutboundHeaderV2> outbound = outboundHeaderV2Repository.findBySalesOrderNumber(salesOrderNumber);
+            List<OutboundHeaderV2> outbound = outboundHeaderV2Repository.findBySalesOrderNumberAndDeletionIndicator(salesOrderNumber, 0L);
             log.info("SalesOrderNumber already Exist: ---> PickList Cancellation to be executed " + salesOrderNumber);
             String newPickListNo = outboundIntegrationHeader.getPickListNumber();
             if (outbound != null && !outbound.isEmpty()) {
@@ -4540,13 +4540,16 @@ public class PreOutboundHeaderService extends BaseService {
 
         if (orderManagementLine != null && !orderManagementLine.isEmpty()) {
             log.info("Inventory update for OrderManagementLine");
+            log.info("Pickupline ItmCodeMfrName: " + pickuplineItemCodeMfrNameList);
             for (OrderManagementLineV2 dbOrderManagementLine : orderManagementLine) {
                 if (dbOrderManagementLine.getStatusId() != 47L) {
                     if (dbOrderManagementLine.getProposedStorageBin() == null || dbOrderManagementLine.getProposedStorageBin().equalsIgnoreCase("")) {
                         throw new BadRequestException("OrderManagementLine ProposedStorageBin is Empty, hence inventory cannot be reversed - PickList Cancellation Aborting");
                     }
                     String itmMfrName = dbOrderManagementLine.getItemCode() + dbOrderManagementLine.getManufacturerName();
+                    log.info("ItmMfrName: " + itmMfrName);
                     boolean itmPresent = pickuplineItemCodeMfrNameList.stream().anyMatch(a -> !a.equalsIgnoreCase(itmMfrName));
+                    log.info("itmPresent: " + itmPresent);
                     if(itmPresent){
                         InventoryV2 inventory = inventoryService.getInventoryV2(dbOrderManagementLine.getCompanyCodeId(), dbOrderManagementLine.getPlantId(), dbOrderManagementLine.getLanguageId(),
                                 dbOrderManagementLine.getWarehouseId(), dbOrderManagementLine.getProposedPackBarCode(), dbOrderManagementLine.getItemCode(),

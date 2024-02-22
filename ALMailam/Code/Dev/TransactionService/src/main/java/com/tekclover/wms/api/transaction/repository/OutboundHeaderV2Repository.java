@@ -297,4 +297,6 @@ public interface OutboundHeaderV2Repository extends JpaRepository<OutboundHeader
             @Param("statusDescription50") String statusDescription50,
             @Param("statusDescription51") String statusDescription51
     );
+
+    List<OutboundHeaderV2> findBySalesOrderNumberAndDeletionIndicator(String salesOrderNumber, Long deletionIndicator);
 }

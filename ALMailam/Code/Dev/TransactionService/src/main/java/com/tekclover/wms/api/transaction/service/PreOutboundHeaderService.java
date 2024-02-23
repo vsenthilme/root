@@ -4660,15 +4660,15 @@ public class PreOutboundHeaderService extends BaseService {
                     Double oldPickConfirmQty = pickupLinePresent.get(0).getPickConfirmQty();
                     Double newPickConfirmQty = pickupHeaderV2.getPickToQty();
                     if(oldPickConfirmQty < newPickConfirmQty){
-                        Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
-                        newPickupLine.setPickConfirmQty(pickConfirmQty);
-                        newPickupLine.setAllocatedQty(pickConfirmQty);
-                        newPickupLine.setPickQty(String.valueOf(pickConfirmQty));
+//                        Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
+                        newPickupLine.setPickConfirmQty(oldPickConfirmQty);
+                        newPickupLine.setAllocatedQty(oldPickConfirmQty);
+                        newPickupLine.setPickQty(String.valueOf(oldPickConfirmQty));
                     }
                     if(oldPickConfirmQty >= newPickConfirmQty){
-                        newPickupLine.setPickConfirmQty(pickupHeaderV2.getPickToQty());
-                        newPickupLine.setAllocatedQty(pickupHeaderV2.getPickToQty());
-                        newPickupLine.setPickQty(String.valueOf(pickupHeaderV2.getPickToQty()));
+                        newPickupLine.setPickConfirmQty(newPickConfirmQty);
+                        newPickupLine.setAllocatedQty(newPickConfirmQty);
+                        newPickupLine.setPickQty(String.valueOf(newPickConfirmQty));
                     }
                     newPickupLine.setCompanyCodeId(Long.valueOf(pickupHeaderV2.getCompanyCodeId()));
                     newPickupLine.setPickedStorageBin(pickupHeaderV2.getProposedStorageBin());
@@ -4708,13 +4708,13 @@ public class PreOutboundHeaderService extends BaseService {
                         Double oldPickConfirmQty = qualityLinePresent.get(0).getPickConfirmQty();
                         Double newPickConfirmQty = Double.valueOf(qualityHeader.getQcToQty());
                         if(oldPickConfirmQty < newPickConfirmQty){
-                            Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
-                            newQualityLine.setPickConfirmQty(pickConfirmQty);
-                            newQualityLine.setQualityQty(pickConfirmQty);
+//                            Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
+                            newQualityLine.setPickConfirmQty(oldPickConfirmQty);
+                            newQualityLine.setQualityQty(oldPickConfirmQty);
                         }
                         if(oldPickConfirmQty >= newPickConfirmQty){
-                            newQualityLine.setPickConfirmQty(Double.valueOf(qualityHeader.getQcToQty()));
-                            newQualityLine.setQualityQty(Double.valueOf(qualityHeader.getQcToQty()));
+                            newQualityLine.setPickConfirmQty(Double.valueOf(newPickConfirmQty));
+                            newQualityLine.setQualityQty(Double.valueOf(newPickConfirmQty));
                         }
 
                         newQualityLine.setDescription(qualityHeader.getReferenceField3());

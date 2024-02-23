@@ -202,59 +202,62 @@ public class InvoiceCancellationService extends BaseService{
                         String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
                                 dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
 
-                        boolean capacityCheck = false;
-                        boolean storageBinCapacityCheck = false;
+//                        boolean capacityCheck = false;
+//                        boolean storageBinCapacityCheck = false;
 
-                        ImBasicData imBasicData = new ImBasicData();
-                        imBasicData.setCompanyCodeId(dbStagingLine.getCompanyCode());
-                        imBasicData.setPlantId(dbStagingLine.getPlantId());
-                        imBasicData.setLanguageId(dbStagingLine.getLanguageId());
-                        imBasicData.setWarehouseId(dbStagingLine.getWarehouseId());
-                        imBasicData.setItemCode(dbStagingLine.getItemCode());
-                        imBasicData.setManufacturerName(dbStagingLine.getManufacturerName());
-                        ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
-                        log.info("ImbasicData1 : " + itemCodeCapacityCheck);
-                        if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                            capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
-                            log.info("capacity Check: " + capacityCheck);
-                        }
+//                        ImBasicData imBasicData = new ImBasicData();
+//                        imBasicData.setCompanyCodeId(dbStagingLine.getCompanyCode());
+//                        imBasicData.setPlantId(dbStagingLine.getPlantId());
+//                        imBasicData.setLanguageId(dbStagingLine.getLanguageId());
+//                        imBasicData.setWarehouseId(dbStagingLine.getWarehouseId());
+//                        imBasicData.setItemCode(dbStagingLine.getItemCode());
+//                        imBasicData.setManufacturerName(dbStagingLine.getManufacturerName());
+//                        ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+//                        log.info("ImbasicData1 : " + itemCodeCapacityCheck);
+//                        if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+//                            capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+//                            log.info("capacity Check: " + capacityCheck);
+//                        }
 
-                        newPackBarcode.setQuantityType("A");
+//                        newPackBarcode.setQuantityType("A");
+                        newPackBarcode.setQuantityType(grLinePresent.get(0).getQuantityType());
                         newPackBarcode.setBarcode(nextRangeNumber);
 
-                        if (capacityCheck) {
-
-                            if (dbStagingLine.getOrderQty() != null) {
-                                orderQty = dbStagingLine.getOrderQty();
-                            }
-                            if (itemCodeCapacityCheck.getLength() != null) {
-                                itemLength = itemCodeCapacityCheck.getLength();
-                            }
-                            if (itemCodeCapacityCheck.getWidth() != null) {
-                                itemWidth = itemCodeCapacityCheck.getWidth();
-                            }
-                            if (itemCodeCapacityCheck.getHeight() != null) {
-                                itemHeight = itemCodeCapacityCheck.getHeight();
-                            }
-
-                            cbmPerQty = itemLength * itemWidth * itemHeight;
-                            cbm = orderQty * cbmPerQty;
-
-                            newPackBarcode.setCbmQuantity(cbmPerQty);
-                            newPackBarcode.setCbm(cbm);
-
-                            log.info("item Length, Width, Height, Volume[CbmPerQty], CBM: " + itemLength + ", " + itemWidth + "," + itemHeight + ", " + cbmPerQty + ", " + cbm);
-                        }
-                        if (!capacityCheck) {
+//                        if (capacityCheck) {
+//
+//                            if (dbStagingLine.getOrderQty() != null) {
+//                                orderQty = dbStagingLine.getOrderQty();
+//                            }
+//                            if (itemCodeCapacityCheck.getLength() != null) {
+//                                itemLength = itemCodeCapacityCheck.getLength();
+//                            }
+//                            if (itemCodeCapacityCheck.getWidth() != null) {
+//                                itemWidth = itemCodeCapacityCheck.getWidth();
+//                            }
+//                            if (itemCodeCapacityCheck.getHeight() != null) {
+//                                itemHeight = itemCodeCapacityCheck.getHeight();
+//                            }
+//
+//                            cbmPerQty = itemLength * itemWidth * itemHeight;
+//                            cbm = orderQty * cbmPerQty;
+//
+//                            newPackBarcode.setCbmQuantity(cbmPerQty);
+//                            newPackBarcode.setCbm(cbm);
+//
+//                            log.info("item Length, Width, Height, Volume[CbmPerQty], CBM: " + itemLength + ", " + itemWidth + "," + itemHeight + ", " + cbmPerQty + ", " + cbm);
+//                        }
+//                        if (!capacityCheck) {
 
                             newPackBarcode.setCbmQuantity(0D);
                             newPackBarcode.setCbm(0D);
-                        }
+//                        }
 
                         packBarcodeList.add(newPackBarcode);
 
-                        newGrLine.setGoodReceiptQty(dbStagingLine.getOrderQty());
-                        newGrLine.setAcceptedQty(dbStagingLine.getOrderQty());
+                        newGrLine.setOrderQty(dbStagingLine.getOrderQty());
+                        newGrLine.setGoodReceiptQty(grLinePresent.get(0).getGoodReceiptQty());
+                        newGrLine.setAcceptedQty(grLinePresent.get(0).getAcceptedQty());
+                        newGrLine.setDamageQty(grLinePresent.get(0).getDamageQty());
                         newGrLine.setGoodsReceiptNo(grHeader.getGoodsReceiptNo());
                         newGrLine.setManufacturerFullName(dbStagingLine.getManufacturerFullName());
                         newGrLine.setReferenceDocumentType(dbStagingLine.getReferenceDocumentType());

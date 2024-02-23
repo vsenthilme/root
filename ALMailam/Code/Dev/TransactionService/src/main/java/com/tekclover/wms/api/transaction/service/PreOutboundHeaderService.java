@@ -4662,12 +4662,14 @@ public class PreOutboundHeaderService extends BaseService {
                         if (oldPickConfirmQty < newPickConfirmQty) {
 //                        Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
                             newPickupLine.setPickConfirmQty(oldPickConfirmQty);
+                            newPickupLine.setAllocatedQty(oldPickConfirmQty);
+                            newPickupLine.setPickQty(String.valueOf(oldPickConfirmQty));
                         }
                         if (oldPickConfirmQty >= newPickConfirmQty) {
                             newPickupLine.setPickConfirmQty(newPickConfirmQty);
+                            newPickupLine.setAllocatedQty(newPickConfirmQty);
+                            newPickupLine.setPickQty(String.valueOf(newPickConfirmQty));
                         }
-                        newPickupLine.setAllocatedQty(newPickConfirmQty);
-                        newPickupLine.setPickQty(String.valueOf(newPickConfirmQty));
                         newPickupLine.setCompanyCodeId(Long.valueOf(pickupHeaderV2.getCompanyCodeId()));
                         newPickupLine.setPickedStorageBin(pickupHeaderV2.getProposedStorageBin());
                         newPickupLine.setPickupNumber(pickupHeaderV2.getPickupNumber());
@@ -4708,12 +4710,13 @@ public class PreOutboundHeaderService extends BaseService {
                         if (oldPickConfirmQty < newPickConfirmQty) {
 //                            Double pickConfirmQty = newPickConfirmQty - oldPickConfirmQty;
                             newQualityLine.setPickConfirmQty(oldPickConfirmQty);
+                            newQualityLine.setQualityQty(Double.valueOf(oldPickConfirmQty));
                         }
                         if (oldPickConfirmQty >= newPickConfirmQty) {
                             newQualityLine.setPickConfirmQty(Double.valueOf(newPickConfirmQty));
+                            newQualityLine.setQualityQty(Double.valueOf(newPickConfirmQty));
                         }
 
-                        newQualityLine.setQualityQty(Double.valueOf(newPickConfirmQty));
                         newQualityLine.setDescription(qualityHeader.getReferenceField3());
                         newQualityLine.setItemCode(qualityHeader.getReferenceField4());
                         newQualityLine.setManufacturerName(qualityHeader.getManufacturerName());

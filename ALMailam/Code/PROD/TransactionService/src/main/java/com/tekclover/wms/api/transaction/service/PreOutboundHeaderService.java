@@ -4067,14 +4067,23 @@ public class PreOutboundHeaderService extends BaseService {
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
         //HAREESH 27-08-2022 - bom line creation get item description based on child item code change
 
-        ImBasicData1 imBasicData1 =
-                mastersService.getImBasicData1ByItemCodeV2(dbBomLine.getChildItemCode(),
-                        languageId,
-                        companyCodeId,
-                        plantId,
-                        outboundIntegrationHeader.getWarehouseID(),
-                        outboundIntegrationLine.getManufacturerName(),
-                        authTokenForMastersService.getAccess_token());
+        ImBasicData imBasicData = new ImBasicData();
+        imBasicData.setCompanyCodeId(companyCodeId);
+        imBasicData.setPlantId(plantId);
+        imBasicData.setLanguageId(languageId);
+        imBasicData.setWarehouseId(outboundIntegrationHeader.getWarehouseID());
+        imBasicData.setItemCode(dbBomLine.getChildItemCode());
+        imBasicData.setManufacturerName(outboundIntegrationLine.getManufacturerName());
+        ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+
+//        ImBasicData1 imBasicData1 =
+//                mastersService.getImBasicData1ByItemCodeV2(dbBomLine.getChildItemCode(),
+//                        languageId,
+//                        companyCodeId,
+//                        plantId,
+//                        outboundIntegrationHeader.getWarehouseID(),
+//                        outboundIntegrationLine.getManufacturerName(),
+//                        authTokenForMastersService.getAccess_token());
         if (imBasicData1 != null) {
             preOutboundLine.setDescription(imBasicData1.getDescription());
             // MFR
@@ -4227,14 +4236,22 @@ public class PreOutboundHeaderService extends BaseService {
 
         // ITEM_TEXT - Pass CHL_ITM_CODE as ITM_CODE in IMBASICDATA1 table and fetch ITEM_TEXT and insert
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-        ImBasicData1 imBasicData1 =
-                mastersService.getImBasicData1ByItemCodeV2(outboundIntegrationLine.getItemCode(),
-                        languageId,
-                        companyCodeId,
-                        plantId,
-                        outboundIntegrationHeader.getWarehouseID(),
-                        outboundIntegrationLine.getManufacturerName(),
-                        authTokenForMastersService.getAccess_token());
+        ImBasicData imBasicData = new ImBasicData();
+        imBasicData.setCompanyCodeId(companyCodeId);
+        imBasicData.setPlantId(plantId);
+        imBasicData.setLanguageId(languageId);
+        imBasicData.setWarehouseId(outboundIntegrationHeader.getWarehouseID());
+        imBasicData.setItemCode(outboundIntegrationLine.getItemCode());
+        imBasicData.setManufacturerName(outboundIntegrationLine.getManufacturerName());
+        ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+//        ImBasicData1 imBasicData1 =
+//                mastersService.getImBasicData1ByItemCodeV2(outboundIntegrationLine.getItemCode(),
+//                        languageId,
+//                        companyCodeId,
+//                        plantId,
+//                        outboundIntegrationHeader.getWarehouseID(),
+//                        outboundIntegrationLine.getManufacturerName(),
+//                        authTokenForMastersService.getAccess_token());
         log.info("imBasicData1 : " + imBasicData1);
         if (imBasicData1 != null && imBasicData1.getDescription() != null) {
             preOutboundLine.setDescription(imBasicData1.getDescription());

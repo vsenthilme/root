@@ -1174,8 +1174,17 @@ public class InhouseTransferHeaderService extends BaseService {
                     StorageBinV2 storageBin = mastersService.getStorageBinV2(createdInhouseTransferLine.getTargetStorageBin(),
                             createdInhouseTransferLine.getWarehouseId(), companyCode, plantId, languageId, authTokenForMastersService.getAccess_token());
 
-                    ImBasicData1 imbasicdata1 = mastersService.getImBasicData1ByItemCodeV2(itemCode, languageId, companyCode, plantId, warehouseId,
-                            createdInhouseTransferLine.getManufacturerName(), authTokenForMastersService.getAccess_token());
+                    ImBasicData imBasicData = new ImBasicData();
+                    imBasicData.setCompanyCodeId(companyCode);
+                    imBasicData.setPlantId(plantId);
+                    imBasicData.setLanguageId(languageId);
+                    imBasicData.setWarehouseId(warehouseId);
+                    imBasicData.setItemCode(itemCode);
+                    imBasicData.setManufacturerName(createdInhouseTransferLine.getManufacturerName());
+                    ImBasicData1 imbasicdata1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                    log.info("ImBasicData1 : " + imbasicdata1);
+//                    ImBasicData1 imbasicdata1 = mastersService.getImBasicData1ByItemCodeV2(itemCode, languageId, companyCode, plantId, warehouseId,
+//                            createdInhouseTransferLine.getManufacturerName(), authTokenForMastersService.getAccess_token());
 
                     if (imbasicdata1 != null) {
                         newInventory.setReferenceField8(imbasicdata1.getDescription());

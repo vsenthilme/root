@@ -4032,7 +4032,7 @@ public class OutboundLineService extends BaseService {
                 //----------------Outbound Header update----------------------------------------------------------------------------------------
                 log.info("c_id, plant_id, lang_id, wh_id, ref_doc_no, status_id, Status_desc, date:---->OBH Update----> "
                         + companyCodeId + "," + plantId + "," + languageId + "," + warehouseId + "," + refDocNumber + "," + STATUS_ID_59 + "," + statusDescription + "," + new Date());
-                outboundHeaderV2Repository.updateOutboundHeaderUpdateProc(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, new Date());
+                outboundHeaderV2Repository.updateOutboundHeaderStatusNewV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, new Date());
                 OutboundHeaderV2 isOrderConfirmedOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
                 log.info("OutboundHeader updated----1---> : " + isOrderConfirmedOutboundHeader.getRefDocNumber() + "---" + isOrderConfirmedOutboundHeader.getStatusId());
                 if (isOrderConfirmedOutboundHeader.getStatusId() != 59L) {
@@ -4052,7 +4052,7 @@ public class OutboundLineService extends BaseService {
                 log.info("PreOutbound Line updated");
 
                 //----------------Preoutbound Header--------------------------------------------------------------------------------------------
-                preOutboundHeaderV2Repository.updatePreOutboundHeaderUpdateProc(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
+                preOutboundHeaderV2Repository.updatePreOutboundHeaderStatusV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
                 log.info("PreOutbound Header updated");
 
                 //----------------OrderManagement Line--------------------------------------------------------------------------------------------

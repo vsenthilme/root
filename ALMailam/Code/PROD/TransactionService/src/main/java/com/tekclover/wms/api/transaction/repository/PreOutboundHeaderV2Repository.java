@@ -42,6 +42,18 @@ public interface PreOutboundHeaderV2Repository extends JpaRepository<PreOutbound
             "WHERE ib.languageId = :languageId AND ib.companyCodeId = :companyCodeId AND ib.plantId = :plantId AND ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")
     void updatePreOutboundHeaderStatus(@Param("companyCodeId") String companyCodeId, @Param("plantId") String plantId, @Param("languageId") String languageId,
                                        @Param("warehouseId") String warehouseId, @Param("refDocNumber") String refDocNumber, @Param("statusId") Long statusId, @Param("refField10") String refField10);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE tblpreoutboundheader SET STATUS_ID = :statusId, REF_FIELD_10 = :statusDescription, STATUS_TEXT = :statusDescription \n" +
+            "WHERE LANG_ID = :languageId AND C_ID = :companyCodeId AND \n" +
+            "PLANT_ID = :plantId AND WH_ID = :warehouseId AND REF_DOC_NO = :refDocNumber", nativeQuery = true)
+    void updatePreOutboundHeaderStatusV2(@Param("companyCodeId") String companyCodeId,
+                                         @Param("plantId") String plantId,
+                                         @Param("languageId") String languageId,
+                                         @Param("warehouseId") String warehouseId,
+                                         @Param("refDocNumber") String refDocNumber,
+                                         @Param("statusId") Long statusId,
+                                         @Param("statusDescription") String statusDescription);
     @Transactional
     @Procedure(procedureName = "preoutbound_header_update_proc")
     void updatePreOutboundHeaderUpdateProc(

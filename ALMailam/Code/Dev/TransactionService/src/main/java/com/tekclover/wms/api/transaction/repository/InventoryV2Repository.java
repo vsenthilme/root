@@ -459,7 +459,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "lang_id in (:languageId) and \n" +
             "mfr_name in (:manufacturerName) and \n" +
             "c_id in (:companyCodeId) and is_deleted = 0 \n" +
-            "group by itm_code,mfr_name,pack_barcode,st_bin \n"
+            "group by itm_code,mfr_name,st_bin \n"
 
             + "SELECT LANG_ID languageId, \n"
             + "C_ID companyCodeId, \n"
@@ -1082,16 +1082,16 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
                                               @Param("specialStockIndicatorId") List<Long> specialStockIndicatorId,
                                               @Param("binClassId") List<Long> binClassId);
 
-    @Query(value = "select max(inv_id) inventoryId into #inv from tblinventory \n"
-            + "WHERE \n" +
-            "(COALESCE(:itemCode, null) IS NULL OR (ITM_CODE IN (:itemCode))) and \n" +
-            "(COALESCE(:binClassId, null) IS NULL OR (BIN_CL_ID IN (:binClassId))) and\n" +
-            "(COALESCE(:manufacturerCode, null) IS NULL OR (MFR_NAME IN (:manufacturerCode))) and \n" +
-            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
-            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
-            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
-            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
-            "is_deleted = 0 \n" +
+    @Query(value = "select max(inv_id) inventoryId into #inv from tblinventory \n" +
+//            + "WHERE \n" +
+//            "(COALESCE(:itemCode, null) IS NULL OR (ITM_CODE IN (:itemCode))) and \n" +
+//            "(COALESCE(:binClassId, null) IS NULL OR (BIN_CL_ID IN (:binClassId))) and\n" +
+//            "(COALESCE(:manufacturerCode, null) IS NULL OR (MFR_NAME IN (:manufacturerCode))) and \n" +
+//            "(COALESCE(:companyCodeId, null) IS NULL OR (c_id IN (:companyCodeId))) and \n" +
+//            "(COALESCE(:languageId, null) IS NULL OR (lang_id IN (:languageId))) and \n" +
+//            "(COALESCE(:plantId, null) IS NULL OR (plant_id IN (:plantId))) and \n" +
+//            "(COALESCE(:warehouseId, null) IS NULL OR (wh_id IN (:warehouseId))) and \n" +
+//            "is_deleted = 0 \n" +
             "group by itm_code,mfr_name,st_bin \n" +
 
             "SELECT \n" +
@@ -1501,10 +1501,10 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "WHERE is_deleted = 0 \n" +
             "group by itm_code,mfr_name,st_bin \n" +
 
-            "SELECT SUM(INV_QTY) FROM tblinventory \r\n"
+            "SELECT SUM(REF_FIELD_4) FROM tblinventory \r\n"
             + " WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND MFR_NAME = :manufacturerName AND ITM_CODE = :itemCode AND \r\n"
             + " BIN_CL_ID in (1,7) and inv_id in (select inventoryId from #inv) and IS_DELETED = 0 \r\n"
-            + " GROUP BY ITM_CODE", nativeQuery = true)
+            + " GROUP BY ITM_CODE, MFR_NAME", nativeQuery = true)
     public Double getInventoryQtyCountForInvMmt(
             @Param(value = "companyCodeId") String companyCodeId,
             @Param(value = "plantId") String plantId,
@@ -1795,15 +1795,13 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
                     "(COALESCE(:itemText, null) IS NULL OR (text IN (:itemText))) \n" +
 
                     "select max(inv_id) inventoryId into #inv from tblinventory \n" +
-                    "WHERE \n" +
-                    "is_deleted = 0 \n" +
-                    "group by itm_code,mfr_name \n" +
+                    "group by itm_code,mfr_name,st_bin \n" +
 
                     // inv_qty from tblinventory to temp table
                     "UPDATE TH SET TH.INV_QTY = X.INV_QTY,TH.ALLOC_QTY = X.ALLOC_QTY,TH.TOT_QTY = X.REF_FIELD_4 FROM #stockreport TH INNER JOIN \n" +
                     "(select c_id, plant_id, lang_id, wh_id, itm_code, mfr_name, INV_QTY, ALLOC_QTY, REF_FIELD_4 \n"+
                     "from tblinventory \r\n"+
-                    "where  \r\n"+
+                    "where is_deleted = 0 and \r\n"+
                     "inv_id in (select inventoryId from #inv) \r\n"+
                     ") X ON \n" +
                     "X.C_ID = TH.C_ID AND X.PLANT_ID = TH.PLANT_ID AND X.WH_ID = TH.WH_ID AND X.LANG_ID = TH.LANG_ID AND \n" +

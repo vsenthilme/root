@@ -2,6 +2,8 @@ package com.tekclover.wms.core.batch.config;
 
 import javax.sql.DataSource;
 
+import com.tekclover.wms.core.batch.dto.*;
+import com.tekclover.wms.core.batch.mapper.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -19,22 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.tekclover.wms.core.batch.dto.BinLocation;
-import com.tekclover.wms.core.batch.dto.BomHeader;
-import com.tekclover.wms.core.batch.dto.BomLine;
-import com.tekclover.wms.core.batch.dto.BusinessPartner;
-import com.tekclover.wms.core.batch.dto.HandlingEquipment;
-import com.tekclover.wms.core.batch.dto.IMPartner;
-import com.tekclover.wms.core.batch.dto.ImBasicData1;
-import com.tekclover.wms.core.batch.dto.Inventory;
-import com.tekclover.wms.core.batch.mapper.BinLocationFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BomHeaderFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BomLineFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BusinessPartnerFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.HandlingEquipmentFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.IMPartnerFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.ImBasicData1FieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.InventoryFieldSetMapper;
 import com.tekclover.wms.core.config.PropertiesConfig;
 import com.tekclover.wms.core.model.transaction.InventoryStock;
 
@@ -907,7 +893,42 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 				.build();
 	}
 
+	//---------------------------ErrorLog--------------------------------------------------------------------//
 
+	@Bean
+	public FlatFileItemReader<ErrorLog> errorLogItemReader() {
+		FlatFileItemReader<ErrorLog> reader = new FlatFileItemReader<>();
+		reader.setLinesToSkip(1);
+		reader.setResource(new FileSystemResource(propertiesConfig.getErrorlogFolderName() + propertiesConfig.getErrorlogFileName()));
+
+		DefaultLineMapper<ErrorLog> customerLineMapper = new DefaultLineMapper<>();
+		DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+		tokenizer.setNames(new String[]{"orderId", "orderTypeId", "orderDate", "errorMessage", "languageId", "companyCode", "plantId", "warehouseId", "refDocNumber"});
+		customerLineMapper.setLineTokenizer(tokenizer);
+		customerLineMapper.setFieldSetMapper(new ErrorLogFieldSetMapper());
+		customerLineMapper.afterPropertiesSet();
+		reader.setLineMapper(customerLineMapper);
+		return reader;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Bean
+	public JdbcBatchItemWriter<ErrorLog> errorLogItemWriter() {
+		JdbcBatchItemWriter<ErrorLog> itemWriter = new JdbcBatchItemWriter<>();
+		itemWriter.setDataSource(this.dataSource);
+		itemWriter.setSql("INSERT INTO tblexceptionlog "
+				+ " (ORDER_TYPE_ID,ORDER_DATE,ERR_MSG,LANG_ID, C_ID, PLANT_ID, WH_ID,REF_DOC_NO) "
+				+ "VALUES (:orderTypeId, :orderDate, :errorMessage, :languageId, :companyCode, :plantId, :warehouseId, :refDocNumber)");
+		itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider());
+		itemWriter.afterPropertiesSet();
+		return itemWriter;
+	}
+
+	@Bean
+	public Step step16() {
+		return stepBuilderFactory.get("step16").<ErrorLog, ErrorLog>chunk(10).reader(errorLogItemReader())
+				.writer(errorLogItemWriter()).build();
+	}
 	/*-----------------------------------------------------------------------------------------*/
 	@Bean
 	public JobListener wmsListener() throws Exception {
@@ -1032,6 +1053,14 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 		return jobBuilderFactory.get("InventoryJob")
 				.listener(wmsListener())
 				.start(step15())
+				.build();
+	}
+
+	@Bean
+	public Job errorlogJob() throws Exception {
+		return jobBuilderFactory.get("jobErrorLog")
+				.listener(wmsListener())
+				.start(step16())
 				.build();
 	}
 }

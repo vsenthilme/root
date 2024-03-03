@@ -145,5 +145,10 @@ public class PropertiesConfig {
 
 	@Value("${email.from.address}")
 	private String emailFromAddress;
-	
+//--------------------------------------------------------------------------------------
+	@Value("${errorlog.folder.name}")
+	private String errorlogFolderName;
+
+	@Value("${file.errorlog}")
+	private String errorlogFileName;
 }

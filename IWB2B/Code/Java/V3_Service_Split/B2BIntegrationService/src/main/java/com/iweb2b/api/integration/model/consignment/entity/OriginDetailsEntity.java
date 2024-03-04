@@ -1,9 +1,6 @@
 package com.iweb2b.api.integration.model.consignment.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Entity (name = "OriginDetailsEntity")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tblorigindetail")
+@Table(name = "tblorigindetail1")
 public class OriginDetailsEntity {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ORIGIN_ID")
     private Long originId = 0L;
 	
@@ -55,5 +53,8 @@ public class OriginDetailsEntity {
 
 	@Column(name = "ADDRESS_LINE_4", columnDefinition = "nvarchar(500)")
 	private String address_line_4;
-	
+
+	@OneToOne(mappedBy = "originDetailsEntity")
+	private ConsignmentEntity consignmentEntity;
+
 }

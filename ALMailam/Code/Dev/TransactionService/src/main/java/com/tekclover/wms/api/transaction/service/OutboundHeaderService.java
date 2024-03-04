@@ -956,7 +956,8 @@ public class OutboundHeaderService {
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         OutboundHeaderV2 dbOutboundHeader = getOutboundHeaderForUpdateV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode);
         Date ctdOn = dbOutboundHeader.getCreatedOn();
-        log.info("dbOutboundHeader for updating status 57: " + dbOutboundHeader);
+        Date refDocDate = dbOutboundHeader.getRefDocDate();
+//        log.info("dbOutboundHeader for updating status 57: " + dbOutboundHeader);
         if (dbOutboundHeader != null) {
             BeanUtils.copyProperties(updateOutboundHeader, dbOutboundHeader, CommonUtils.getNullPropertyNames(updateOutboundHeader));
             dbOutboundHeader.setUpdatedBy(loginUserID);
@@ -965,8 +966,9 @@ public class OutboundHeaderService {
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbOutboundHeader.getStatusId(), dbOutboundHeader.getLanguageId());
                 dbOutboundHeader.setStatusDescription(statusDescription);
             }
-            log.info("dbOutboundHeader.getCreatedOn() :--->" +ctdOn);
+            log.info("dbOutboundHeader.getCreatedOn(), ref_doc_date :--->" + ctdOn + ", " + refDocDate);
             dbOutboundHeader.setCreatedOn(ctdOn);
+            dbOutboundHeader.setRefDocDate(refDocDate);
             return outboundHeaderV2Repository.save(dbOutboundHeader);
         }
         return null;

@@ -13215,4 +13215,45 @@ public class TransactionService {
         }
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @param authToken
+     * @return
+     * @throws ParseException
+     */
+    public PickListHeader orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                            String refDocNumber, String loginUserID, String authToken) throws ParseException {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "preoutboundheader/v2/orderCancellation")
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("refDocNumber", refDocNumber)
+                    .queryParam("loginUserID", loginUserID);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<PickListHeader> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
+                    entity, PickListHeader.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }

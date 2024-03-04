@@ -4963,7 +4963,7 @@ public class TransactionService {
         }
     }
 
-// Get All Stock Reports New
+    // Get All Stock Reports New
     public StockReport[] getAllStockReportsV2(SearchStockReport searchStockReport, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -4975,6 +4975,26 @@ public class TransactionService {
             HttpEntity<?> entity = new HttpEntity<>(searchStockReport, headers);
             ResponseEntity<StockReport[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
                     entity, StockReport[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // Get All Stock Reports New
+    public StockReportOutput[] getAllStockReportsV2SP(SearchStockReportInput searchStockReport, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "reports/v2/stockReportSP");
+            HttpEntity<?> entity = new HttpEntity<>(searchStockReport, headers);
+            ResponseEntity<StockReportOutput[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
+                    entity, StockReportOutput[].class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
         } catch (Exception e) {

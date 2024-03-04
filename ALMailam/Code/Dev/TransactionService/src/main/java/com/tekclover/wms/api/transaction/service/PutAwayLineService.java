@@ -855,6 +855,30 @@ public class PutAwayLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param putAwayNumber
+     * @return
+     */
+    public List<PutAwayLineV2> getPutAwayLineV2ForReversal(String companyCode, String plantId, String languageId,
+                                                           String warehouseId, String refDocNumber, String putAwayNumber) {
+        List<PutAwayLineV2> putAwayLine =
+                putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        putAwayNumber,
+                        0L);
+        return putAwayLine;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId

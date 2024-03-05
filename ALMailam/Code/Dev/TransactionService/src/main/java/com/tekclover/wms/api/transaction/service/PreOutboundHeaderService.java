@@ -1894,10 +1894,16 @@ public class PreOutboundHeaderService extends BaseService {
                                     List<String> pickerCountList_48 = pickupHeaderV2Repository
                                             .getPickUpheaderAssignPickerListNew(companyCodeId, plantId, languageId, warehouseId, dbAssignpickerId, LEVEL_ID, 48L, dates[0], dates[1]);
                                     if (pickerCountList_48 == null || pickerCountList_48.isEmpty()) {
-                                        assignPickerList.add(assignPickerId);
-                                        log.info("assigned Picker: " + assignPickerList.get(0));
-                                        if (assignPickerList.size() > 0) {
-                                            break outerLoop;
+                                        IKeyValuePair pickupHeaderPickerByCount = pickupHeaderV2Repository.getAssignPickerNew(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 50L, dates[0], dates[1]);
+                                        if (pickupHeaderPickerByCount != null) {
+                                            boolean isPickerSame = assignPickerId.equalsIgnoreCase(pickupHeaderPickerByCount.getAssignPicker());
+                                            if(isPickerSame) {
+                                                assignPickerList.add(assignPickerId);
+                                                log.info("assigned Picker: " + assignPickerList.get(0));
+                                                if (assignPickerList.size() > 0) {
+                                                    break outerLoop;
+                                                }
+                                            }
                                         }
                                     }
                                 }

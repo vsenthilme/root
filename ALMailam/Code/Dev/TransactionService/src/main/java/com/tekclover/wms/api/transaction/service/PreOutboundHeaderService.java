@@ -1885,16 +1885,20 @@ public class PreOutboundHeaderService extends BaseService {
 //                                    }
 
                             List<String> pickerCountList_50 = pickupHeaderV2Repository
-                                            .getPickUpheaderAssignPickerList(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 50L, dates[0], dates[1]);
+                                            .getPickUpheader50AssignPickerList(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 50L, dates[0], dates[1]);
+                            Set<String> pickerCountList_50_filtered = pickerCountList_50.stream().collect(Collectors.toSet());
                             log.info("assigned Picker status_50L: " + pickerCountList_50);
-                            if(pickerCountList_50 != null && !pickerCountList_50.isEmpty()){
-                                List<String> pickerCountList_48 = pickupHeaderV2Repository
-                                        .getPickUpheaderAssignPickerList(companyCodeId, plantId, languageId, warehouseId, pickerCountList_50, LEVEL_ID, 48L, dates[0], dates[1]);
-                                if(pickerCountList_48 == null || pickerCountList_48.isEmpty()) {
-                                    assignPickerList.add(pickerCountList_50.get(0));
-                                    log.info("assigned Picker: " + assignPickerList.get(0));
-                                    if (assignPickerList.size() > 0) {
-                                        break outerLoop;
+                            log.info("assigned Picker status_50L_filtered: " + pickerCountList_50_filtered);
+                            if(pickerCountList_50_filtered != null && !pickerCountList_50_filtered.isEmpty()){
+                                for(String dbAssignpickerId : pickerCountList_50_filtered) {
+                                    List<String> pickerCountList_48 = pickupHeaderV2Repository
+                                            .getPickUpheaderAssignPickerListNew(companyCodeId, plantId, languageId, warehouseId, dbAssignpickerId, LEVEL_ID, 48L, dates[0], dates[1]);
+                                    if (pickerCountList_48 == null || pickerCountList_48.isEmpty()) {
+                                        assignPickerList.add(assignPickerId);
+                                        log.info("assigned Picker: " + assignPickerList.get(0));
+                                        if (assignPickerList.size() > 0) {
+                                            break outerLoop;
+                                        }
                                     }
                                 }
                             }

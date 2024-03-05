@@ -1888,10 +1888,14 @@ public class PreOutboundHeaderService extends BaseService {
                                             .getPickUpheaderAssignPickerList(companyCodeId, plantId, languageId, warehouseId, hhtUserList, LEVEL_ID, 50L, dates[0], dates[1]);
                             log.info("assigned Picker status_50L: " + pickerCountList_50);
                             if(pickerCountList_50 != null && !pickerCountList_50.isEmpty()){
-                                assignPickerList.add(pickerCountList_50.get(0));
-                                log.info("assigned Picker: " + assignPickerList.get(0));
-                                if (assignPickerList.size() > 0) {
-                                    break outerLoop;
+                                List<String> pickerCountList_48 = pickupHeaderV2Repository
+                                        .getPickUpheaderAssignPickerList(companyCodeId, plantId, languageId, warehouseId, pickerCountList_50, LEVEL_ID, 48L, dates[0], dates[1]);
+                                if(pickerCountList_48 == null || pickerCountList_48.isEmpty()) {
+                                    assignPickerList.add(pickerCountList_50.get(0));
+                                    log.info("assigned Picker: " + assignPickerList.get(0));
+                                    if (assignPickerList.size() > 0) {
+                                        break outerLoop;
+                                    }
                                 }
                             }
 

@@ -1669,6 +1669,7 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setOutboundOrderTypeId(dbOrderManagementLine.getOutboundOrderTypeId());
                 dbPickupLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                 dbPickupLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
+                dbPickupLine.setLevelId(dbOrderManagementLine.getLevelId());
 //                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                 dbPickupLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
             }
@@ -2202,6 +2203,7 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setOutboundOrderTypeId(dbOrderManagementLine.getOutboundOrderTypeId());
                 dbPickupLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                 dbPickupLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
+                dbPickupLine.setLevelId(dbOrderManagementLine.getLevelId());
 //                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                 dbPickupLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
             }
@@ -2792,6 +2794,7 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setOutboundOrderTypeId(dbOrderManagementLine.getOutboundOrderTypeId());
                 dbPickupLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                 dbPickupLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
+                dbPickupLine.setLevelId(dbOrderManagementLine.getLevelId());
 //                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                 dbPickupLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
             }

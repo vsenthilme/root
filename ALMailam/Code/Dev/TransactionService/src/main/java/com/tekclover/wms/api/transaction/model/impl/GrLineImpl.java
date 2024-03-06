@@ -39,7 +39,7 @@ public interface GrLineImpl {
      String getPalletCode();
      String getCaseCode();
      String getPackBarcodes();
-     Long getLineNo();
+     Long getLineNumber();
      String getItemCode();
      Long getInboundOrderTypeId();
      Long getVariantCode();

@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.config.PropertiesConfig;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import org.springframework.beans.BeanUtils;
@@ -123,6 +124,9 @@ public class OrderManagementLineService extends BaseService {
 
     @Autowired
     private OrderManagementLineService orderManagementLineService;
+
+    @Autowired
+    PropertiesConfig propertiesConfig;
 
     String statusDescription = null;
     //------------------------------------------------------------------------------------------------------
@@ -1875,6 +1879,10 @@ public class OrderManagementLineService extends BaseService {
      */
     public OrderManagementLineV2 updateAllocationV2(OrderManagementLineV2 orderManagementLine, Long binClassId,
                                                     Double ORD_QTY, String warehouseId, String itemCode, String loginUserID) throws java.text.ParseException {
+        // Inventory Strategy Choices
+        String INV_STRATEGY = propertiesConfig.getOrderAllocationStrategyCoice();
+        log.info("Allocation Strategy: " + INV_STRATEGY);
+
         List<IInventoryImpl> stockType1InventoryList =
                 inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
                         orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
@@ -1889,11 +1897,17 @@ public class OrderManagementLineService extends BaseService {
         // -----------------------------------------------------------------------------------------------------------------------------------------
         // Getting Inventory GroupBy ST_BIN wise
 
-        List<IInventoryImpl> finalInventoryList =
-                inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
-                        orderManagementLine.getPlantId(),
-                        orderManagementLine.getLanguageId(),
-                        warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
+        List<IInventoryImpl> finalInventoryList = null;
+        if (INV_STRATEGY.equalsIgnoreCase("SB_CTD_ON")) { // SB_CTD_ON
+            finalInventoryList = inventoryService.getInventoryForOrderManagementOrderByCtdOnV2(orderManagementLine.getCompanyCodeId(),
+                    orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
+                    warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
+        }
+        if (INV_STRATEGY.equalsIgnoreCase("SB_LEVEL_ID")) { // SB_LEVEL_ID
+            finalInventoryList = inventoryService.getInventoryForOrderManagementOrderByLevelIdV2(orderManagementLine.getCompanyCodeId(),
+                    orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
+                    warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
+        }
         log.info("finalInventoryList Inventory ---->: " + finalInventoryList.size() + "\n");
 
         ImBasicData1 dbImBasicData1 = null;
@@ -1926,27 +1940,34 @@ public class OrderManagementLineService extends BaseService {
         if (finalInventoryList != null && finalInventoryList.isEmpty()) {
             return updateOrderManagementLineV2(orderManagementLine);
         }
-
-        //ascending sort - expiryDate
-        if (shelfLifeIndicator) {
-            finalInventoryList.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
+        if (INV_STRATEGY.equalsIgnoreCase("SB_CTD_ON")) { // SB_CTD_ON
+            //ascending sort - expiryDate
+            if (shelfLifeIndicator) {
+                finalInventoryList.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
+            }
+            //ascending sort - created on
+            if (!shelfLifeIndicator) {
+                finalInventoryList.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
+            }
         }
-        //ascending sort - created on
-        if (!shelfLifeIndicator) {
-            finalInventoryList.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
-        }
-
         OrderManagementLineV2 newOrderManagementLine = null;
 
         outerloop:
         for (IInventoryImpl stBinWiseInventory : finalInventoryList) {
             // Getting PackBarCode by passing ST_BIN to Inventory
-            List<IInventoryImpl> listInventoryForAlloc =
-                    inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
-                            orderManagementLine.getPlantId(),
-                            orderManagementLine.getLanguageId(), warehouseId, itemCode,
-                            orderManagementLine.getManufacturerName(), binClassId,
-                            stBinWiseInventory.getStorageBin(), 1L);
+            List<IInventoryImpl> listInventoryForAlloc = null;
+            if (INV_STRATEGY.equalsIgnoreCase("SB_CTD_ON")) { // SB_CTD_ON
+                listInventoryForAlloc = inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
+                        orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(), warehouseId, itemCode,
+                        orderManagementLine.getManufacturerName(), binClassId,
+                        stBinWiseInventory.getStorageBin(), 1L);
+            }
+            if (INV_STRATEGY.equalsIgnoreCase("SB_LEVEL_ID")) { // SB_LEVEL_ID
+                listInventoryForAlloc = inventoryService.getInventoryForOrderManagementV2OrderByLevelId(orderManagementLine.getCompanyCodeId(),
+                        orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(), warehouseId, itemCode,
+                        orderManagementLine.getManufacturerName(), binClassId,
+                        stBinWiseInventory.getStorageBin(), 1L);
+            }
             log.info("\nlistInventoryForAlloc Inventory ---->: " + listInventoryForAlloc.size() + "\n");
 
             // Prod Fix: If the queried Inventory is empty then EMPTY orderManagementLine is
@@ -1954,16 +1975,16 @@ public class OrderManagementLineService extends BaseService {
             if (listInventoryForAlloc != null && listInventoryForAlloc.isEmpty()) {
                 return updateOrderManagementLineV2(orderManagementLine);
             }
-
-            //ascending sort - expiryDate
-            if (shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
+            if (INV_STRATEGY.equalsIgnoreCase("SB_CTD_ON")) { // SB_CTD_ON
+                //ascending sort - expiryDate
+                if (shelfLifeIndicator) {
+                    listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
+                }
+                //ascending sort - created on
+                if (!shelfLifeIndicator) {
+                    listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
+                }
             }
-            //ascending sort - created on
-            if (!shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
-            }
-
             for (IInventoryImpl stBinInventory : listInventoryForAlloc) {
                 log.info("\nBin-wise Inventory : " + stBinInventory + "\n");
 

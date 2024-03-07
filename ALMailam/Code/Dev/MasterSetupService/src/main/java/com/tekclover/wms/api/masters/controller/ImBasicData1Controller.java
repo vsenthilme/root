@@ -160,7 +160,7 @@ public class ImBasicData1Controller {
         return new ResponseEntity<>(createdImBasicData1, HttpStatus.OK);
     }
     @ApiOperation(response = ImBasicData1.class, value = "Update ImBasicData1 v2") // label for swagger
-    @PatchMapping("/V2/{itemCode}")
+    @PatchMapping("/v2/{itemCode}")
     public ResponseEntity<?> patchImBasicData1V2(@PathVariable String itemCode, @RequestParam String warehouseId, @RequestParam String manufacturerPartNo,
                                                @RequestParam String companyCodeId, @RequestParam String languageId, @RequestParam String plantId,
                                                @RequestParam String uomId, @Valid @RequestBody ImBasicData1V2 updateImBasicData1, @RequestParam String loginUserID)

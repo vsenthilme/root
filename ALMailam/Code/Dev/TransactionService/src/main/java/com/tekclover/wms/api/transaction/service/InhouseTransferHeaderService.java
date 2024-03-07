@@ -645,7 +645,8 @@ public class InhouseTransferHeaderService extends BaseService {
         }
 
         // MVT_DOC_NO
-        inventoryMovement.setMovementDocumentNo(createdInhouseTransferLine.getTransferNumber());
+//        inventoryMovement.setMovementDocumentNo(createdInhouseTransferLine.getTransferNumber());
+        inventoryMovement.setReferenceField10(createdInhouseTransferLine.getTransferNumber());
 
         // ST_BIN
         inventoryMovement.setStorageBin(storageBin);
@@ -698,6 +699,7 @@ public class InhouseTransferHeaderService extends BaseService {
         // IM_CTD_ON
         inventoryMovement.setCreatedOn(createdInhouseTransferLine.getCreatedOn());
         inventoryMovement.setDeletionIndicator(0L);
+        inventoryMovement.setMovementDocumentNo(String.valueOf(System.currentTimeMillis()));
         inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
         log.info("inventoryMovement created: for transferTypeId : " + transferTypeId + "---" + inventoryMovement);
     }

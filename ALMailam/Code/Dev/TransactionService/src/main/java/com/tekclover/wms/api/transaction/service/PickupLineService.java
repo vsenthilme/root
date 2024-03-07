@@ -3539,7 +3539,8 @@ public class PickupLineService extends BaseService {
         inventoryMovement.setBatchSerialNumber("1");
 
         // MVT_DOC_NO
-        inventoryMovement.setMovementDocumentNo(movementDocumentNo);
+//        inventoryMovement.setMovementDocumentNo(movementDocumentNo);
+        inventoryMovement.setReferenceField10(movementDocumentNo);
         inventoryMovement.setManufacturerName(dbPickupLine.getManufacturerName());
         inventoryMovement.setDescription(dbPickupLine.getDescription());
         inventoryMovement.setBarcodeId(dbPickupLine.getBarcodeId());
@@ -3607,7 +3608,7 @@ public class PickupLineService extends BaseService {
 
         // IM_CTD_ON
         inventoryMovement.setCreatedOn(dbPickupLine.getPickupCreatedOn());
-
+        inventoryMovement.setMovementDocumentNo(String.valueOf(System.currentTimeMillis()));
         InventoryMovement createdInventoryMovement = inventoryMovementRepository.save(inventoryMovement);
         return createdInventoryMovement;
     }

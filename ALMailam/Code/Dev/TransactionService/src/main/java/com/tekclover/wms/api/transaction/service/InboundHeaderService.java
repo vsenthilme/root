@@ -1578,7 +1578,12 @@ public class InboundHeaderService extends BaseService {
             storageBinPutAway.setWarehouseId(putAwayLine.getWarehouseId());
             storageBinPutAway.setBin(putAwayLine.getConfirmedStorageBin());
 
-            StorageBinV2 storageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+            StorageBinV2 storageBin = null;
+            try {
+                storageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+            } catch (Exception e) {
+                throw new BadRequestException("Invalid StorageBin");
+            }
             log.info("storageBin: " + storageBin);
 
             ImBasicData imBasicData = new ImBasicData();

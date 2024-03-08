@@ -790,11 +790,16 @@ public class InhouseTransferHeaderService extends BaseService {
             storageBinPutAway.setLanguageId(newInhouseTransferLine.getLanguageId());
             storageBinPutAway.setWarehouseId(newInhouseTransferLine.getWarehouseId());
             storageBinPutAway.setBin(newInhouseTransferLine.getTargetStorageBin());
-            StorageBinV2 dbStorageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
-
-            if (dbStorageBin == null) {
+            StorageBinV2 dbStorageBin = null;
+            try {
+                dbStorageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+            } catch (Exception e) {
                 throw new BadRequestException("Invalid StorageBin");
             }
+
+//            if (dbStorageBin == null) {
+//                throw new BadRequestException("Invalid StorageBin");
+//            }
 
             InhouseTransferLine dbInhouseTransferLine = new InhouseTransferLine();
             BeanUtils.copyProperties(newInhouseTransferLine, dbInhouseTransferLine, CommonUtils.getNullPropertyNames(newInhouseTransferLine));

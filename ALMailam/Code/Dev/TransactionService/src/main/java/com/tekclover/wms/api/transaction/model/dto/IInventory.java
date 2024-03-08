@@ -10,4 +10,5 @@ public interface IInventory {
 	public Date getCreatedOn();
 	public String getItemCode();
 	public String getManufacturerName();
+	public Long getLevelId();
 }

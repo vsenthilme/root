@@ -1171,6 +1171,19 @@ public class InventoryService extends BaseService {
         List<IInventoryImpl> inventory = inventoryV2Repository.findInventoryOmlOrderByCtdOnId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, stockTypeId, binClassId);
         return inventory;
     }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param stockTypeId
+     * @param binClassId
+     * @param manufacturerName
+     * @return
+     */
     public List<IInventoryImpl> getInventoryForOrderManagementOrderByLevelIdV2(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                                                String itemCode, Long stockTypeId, Long binClassId, String manufacturerName) {
         if (companyCodeId == null || plantId == null || languageId == null || warehouseId == null ||
@@ -1180,6 +1193,55 @@ public class InventoryService extends BaseService {
         }
 
         List<IInventoryImpl> inventory = inventoryV2Repository.findInventoryOmlOrderByLevelId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, stockTypeId, binClassId);
+        return inventory;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param stockTypeId
+     * @param binClassId
+     * @param manufacturerName
+     * @return
+     */
+    public List<IInventory> getInventoryForOrderManagementGroupByLevelIdV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                               String itemCode, Long stockTypeId, Long binClassId, String manufacturerName) {
+        if (companyCodeId == null || plantId == null || languageId == null || warehouseId == null ||
+                itemCode == null || stockTypeId == null || binClassId == null || manufacturerName == null) {
+            throw new BadRequestException("Parameter cannot be null: C_ID, PlantId, Lang_Id, WhId, itm_code, stockTypeId, bin_cl_id, mfr_name---> "
+                    + companyCodeId + ", " + plantId + ", " + languageId + "," + warehouseId + "," + itemCode + "," + stockTypeId + "," + binClassId + "," + manufacturerName);
+        }
+
+        List<IInventory> inventory = inventoryV2Repository.findInventoryGroupByLevelId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, stockTypeId, binClassId);
+        return inventory;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param stockTypeId
+     * @param binClassId
+     * @param levelId
+     * @param manufacturerName
+     * @return
+     */
+    public List<IInventoryImpl> getInventoryForOrderManagementGroupByLevelIdV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                               String itemCode, Long stockTypeId, Long binClassId, Long levelId, String manufacturerName) {
+        if (companyCodeId == null || plantId == null || languageId == null || warehouseId == null ||
+                itemCode == null || stockTypeId == null || binClassId == null || manufacturerName == null) {
+            throw new BadRequestException("Parameter cannot be null: C_ID, PlantId, Lang_Id, WhId, itm_code, stockTypeId, bin_cl_id, mfr_name---> "
+                    + companyCodeId + ", " + plantId + ", " + languageId + "," + warehouseId + "," + itemCode + "," + stockTypeId + "," + binClassId + "," + manufacturerName);
+        }
+
+        List<IInventoryImpl> inventory = inventoryV2Repository.findInventoryOmlGroupByLevelId(companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, stockTypeId, binClassId, levelId);
         return inventory;
     }
 
@@ -1637,6 +1699,38 @@ public class InventoryService extends BaseService {
                         storageBin,
                         stockTypeId,
                         binClassId);
+        return inventory;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param binClassId
+     * @param levelId
+     * @param storageBin
+     * @param stockTypeId
+     * @return
+     */
+    public List<IInventoryImpl> getInventoryForOrderManagementV2GroupByLevelId(String companyCodeId, String plantId, String languageId,
+                                                                               String warehouseId, String itemCode, String manufacturerName,
+                                                                               Long binClassId, Long levelId, String storageBin, Long stockTypeId) {
+        List<IInventoryImpl> inventory =
+                inventoryV2Repository.findInventoryOmlGroupByLevelId(
+                        companyCodeId,
+                        languageId,
+                        plantId,
+                        warehouseId,
+                        manufacturerName,
+                        itemCode,
+                        storageBin,
+                        stockTypeId,
+                        binClassId,
+                        levelId);
         return inventory;
     }
 

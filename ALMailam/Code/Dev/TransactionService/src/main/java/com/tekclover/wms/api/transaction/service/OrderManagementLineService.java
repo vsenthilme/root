@@ -2167,22 +2167,27 @@ public class OrderManagementLineService extends BaseService {
                     warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
         }
         if (INV_STRATEGY.equalsIgnoreCase("SB_BEST_FIT")) { // SB_BEST_FIT
+            log.info("SB_BEST_FIT");
             List<IInventory> levelIdList = inventoryService.getInventoryForOrderManagementGroupByLevelIdV2(orderManagementLine.getCompanyCodeId(),
                     orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                     warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
+            log.info("Group By LeveId: " + levelIdList.size());
             List<String> invQtyByLevelIdList = new ArrayList<>();
             boolean toBeIncluded = true;
             for(IInventory iInventory : levelIdList){
+                log.info("ORD_QTY, INV_QTY : " + ORD_QTY + ", " + iInventory.getInventoryQty());
                 if(ORD_QTY <= iInventory.getInventoryQty()){
                     finalInventoryList = inventoryService.getInventoryForOrderManagementGroupByLevelIdV2(orderManagementLine.getCompanyCodeId(),
                             orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                             warehouseId, itemCode, 1L, binClassId, iInventory.getLevelId(), orderManagementLine.getManufacturerName());
+                    log.info("Group By LeveId Inventory: " + finalInventoryList.size());
                     outerloop1:
                     for (IInventoryImpl stBinWiseInventory : finalInventoryList) {
                         Long LEVEL_ID = 1L;                                     //Default level - Hard Code
                         if(stBinWiseInventory.getLevelId() != null) {
                             LEVEL_ID = Long.valueOf(stBinWiseInventory.getLevelId());
                         }
+                        log.info("LEVEL_ID: " + LEVEL_ID);
                         // Getting PackBarCode by passing ST_BIN to Inventory
                         List<IInventoryImpl> listInventoryForAlloc = inventoryService.getInventoryForOrderManagementV2GroupByLevelId(orderManagementLine.getCompanyCodeId(),
                                     orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(), warehouseId, itemCode,
@@ -2350,6 +2355,7 @@ public class OrderManagementLineService extends BaseService {
             }
             invQtyByLevelIdCount = levelIdList.size();
             invQtyGroupByLevelIdCount = invQtyByLevelIdList.size();
+            log.info("invQtyByLevelIdCount, invQtyGroupByLevelIdCount" + invQtyByLevelIdCount + ", " + invQtyGroupByLevelIdCount);
             if(invQtyByLevelIdCount != invQtyGroupByLevelIdCount){
                 log.info("newOrderManagementLine updated ---#--->" + newOrderManagementLine);
                 return newOrderManagementLine;
@@ -2413,7 +2419,7 @@ public class OrderManagementLineService extends BaseService {
                         orderManagementLine.getManufacturerName(), binClassId,
                         stBinWiseInventory.getStorageBin(), 1L);
             }
-            if (INV_STRATEGY.equalsIgnoreCase("SB_LEVEL_ID")) { // SB_LEVEL_ID
+            if (INV_STRATEGY.equalsIgnoreCase("SB_LEVEL_ID") || INV_STRATEGY.equalsIgnoreCase("SB_BEST_FIT")) { // SB_LEVEL_ID
                 listInventoryForAlloc = inventoryService.getInventoryForOrderManagementV2OrderByLevelId(orderManagementLine.getCompanyCodeId(),
                         orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(), warehouseId, itemCode,
                         orderManagementLine.getManufacturerName(), binClassId,

@@ -11078,7 +11078,7 @@ public class TransactionService {
             headers.add("Authorization", "Bearer " + authToken);
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(getTransactionServiceApiUrl() + "pickupheader/v2" + pickupNumber)
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "pickupheader/v2/" + pickupNumber)
                     .queryParam("companyCodeId", companyCodeId)
                     .queryParam("plantId", plantId)
                     .queryParam("languageId", languageId)

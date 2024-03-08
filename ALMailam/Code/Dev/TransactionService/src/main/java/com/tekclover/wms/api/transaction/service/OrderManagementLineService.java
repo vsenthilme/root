@@ -2157,11 +2157,13 @@ public class OrderManagementLineService extends BaseService {
 
         List<IInventoryImpl> finalInventoryList = null;
         if (INV_STRATEGY.equalsIgnoreCase("SB_CTD_ON")) { // SB_CTD_ON
+            log.info("SB_CTD_ON");
             finalInventoryList = inventoryService.getInventoryForOrderManagementOrderByCtdOnV2(orderManagementLine.getCompanyCodeId(),
                     orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                     warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
         }
         if (INV_STRATEGY.equalsIgnoreCase("SB_LEVEL_ID")) { // SB_LEVEL_ID
+            log.info("SB_LEVEL_ID");
             finalInventoryList = inventoryService.getInventoryForOrderManagementOrderByLevelIdV2(orderManagementLine.getCompanyCodeId(),
                     orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                     warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());

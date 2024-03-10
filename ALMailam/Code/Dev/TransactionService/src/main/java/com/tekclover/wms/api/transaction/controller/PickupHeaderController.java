@@ -184,16 +184,25 @@ public class PickupHeaderController {
         return new ResponseEntity<>(createdPickupHeader, HttpStatus.OK);
     }
 
+//    @ApiOperation(response = PickupHeaderV2.class, value = "Update Assigned PickerId in PickupHeader")    // label for swagger
+//    @PatchMapping("/v2/update-assigned-picker")
+//    public ResponseEntity<?> patchAssignedPickerIdInPickupHeaderV2(@RequestParam String companyCodeId, @RequestParam String warehouseId,
+//                                                                   @RequestParam String plantId, @RequestParam String languageId,
+//                                                                   @Valid @RequestBody List<PickupHeaderV2> updatePickupHeaderList,
+//                                                                   @RequestParam("loginUserID") String loginUserID)
+//            throws IllegalAccessException, InvocationTargetException {
+//        List<PickupHeaderV2> createdPickupHeader =
+//                pickupheaderService.patchAssignedPickerIdInPickupHeaderV2(companyCodeId, plantId, languageId, warehouseId, loginUserID, updatePickupHeaderList);
+//        return new ResponseEntity<>(createdPickupHeader, HttpStatus.OK);
+//    }
+
+    //API changed without parameters - only request body is required to update picker
     @ApiOperation(response = PickupHeaderV2.class, value = "Update Assigned PickerId in PickupHeader")    // label for swagger
     @PatchMapping("/v2/update-assigned-picker")
-    public ResponseEntity<?> patchAssignedPickerIdInPickupHeaderV2(@RequestParam String companyCodeId, @RequestParam String warehouseId,
-                                                                   @RequestParam String plantId, @RequestParam String languageId,
-                                                                   @Valid @RequestBody List<PickupHeaderV2> updatePickupHeaderList,
-                                                                   @RequestParam("loginUserID") String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
-        List<PickupHeaderV2> createdPickupHeader =
-                pickupheaderService.patchAssignedPickerIdInPickupHeaderV2(companyCodeId, plantId, languageId, warehouseId, loginUserID, updatePickupHeaderList);
-        return new ResponseEntity<>(createdPickupHeader, HttpStatus.OK);
+    public ResponseEntity<?> patchAssignedPickerIdInPickupHeaderV2(@Valid @RequestBody List<PickupHeaderV2> updatePickupHeaderList) {
+        List<PickupHeaderV2> updatedPickupHeader =
+                pickupheaderService.patchAssignedPickerIdInPickupHeaderV2(updatePickupHeaderList);
+        return new ResponseEntity<>(updatedPickupHeader, HttpStatus.OK);
     }
 
     @ApiOperation(response = PickupHeaderV2.class, value = "Delete PickupHeader") // label for swagger

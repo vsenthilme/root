@@ -809,9 +809,9 @@ public class InhouseTransferHeaderService extends BaseService {
                 throw new BadRequestException("Source Bin must be a physical Bin - Either BinClassId 1 or 7");
             }
 
-//            if (dbStorageBin == null) {
-//                throw new BadRequestException("Invalid StorageBin");
-//            }
+            if (dbStorageBin != null && dbStorageBin.getBinClassId() == 3L) {
+                throw new BadRequestException("Target Bin must be a physical Bin - Either BinClassId 1 or 7");
+            }
 
             InhouseTransferLine dbInhouseTransferLine = new InhouseTransferLine();
             BeanUtils.copyProperties(newInhouseTransferLine, dbInhouseTransferLine, CommonUtils.getNullPropertyNames(newInhouseTransferLine));

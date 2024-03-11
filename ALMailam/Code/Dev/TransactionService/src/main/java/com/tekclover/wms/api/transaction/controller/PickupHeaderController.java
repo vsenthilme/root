@@ -197,6 +197,7 @@ public class PickupHeaderController {
 //    }
 
     //API changed without parameters - only request body is required to update picker
+    //11-03-2024 Ticket No. ALM/2024/002
     @ApiOperation(response = PickupHeaderV2.class, value = "Update Assigned PickerId in PickupHeader")    // label for swagger
     @PatchMapping("/v2/update-assigned-picker")
     public ResponseEntity<?> patchAssignedPickerIdInPickupHeaderV2(@Valid @RequestBody List<PickupHeaderV2> updatePickupHeaderList) {

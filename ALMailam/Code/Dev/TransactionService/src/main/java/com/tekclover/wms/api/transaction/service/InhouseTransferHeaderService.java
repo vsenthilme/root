@@ -798,6 +798,7 @@ public class InhouseTransferHeaderService extends BaseService {
             }
 
             //restrict bin to bin transfer from bin class Id 3
+            //11-03-2024 - Ticket No. ALM/2024/004
             storageBinPutAway.setBin(newInhouseTransferLine.getSourceStorageBin());
             StorageBinV2 dbSourceStorageBin = null;
             try {

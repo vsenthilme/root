@@ -61,6 +61,7 @@ public interface StorageBinV2Repository extends JpaRepository<StorageBinV2, Long
             Long binClassId, boolean capacityCheck, int i, int j, Long deletionIndicator);
 
     //pick_block=0 and putaway_block=0 condition removed since it is not requered in Almailem
+    //11-03-2024 validation removed as per business requirement - Ticket No. ALM/2024/001
     @Query(value = "SELECT top 1 * FROM tblstoragebin WHERE bin_cl_id = :binclassId and c_id = :companyCode and plant_id = :plantId and \n" +
             "wh_id = :warehouseId and lang_id = :languageId and CAP_CHECK = 'TRUE' and \n" +
 //            "pick_block = 0 and putaway_block = 0 and status_id = :statusId and \n" +

@@ -17,6 +17,7 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.SearchPutAwayL
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.PutAwayLineImpl;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.AXApiResponse;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PutAwayLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.PutAwayLineV2Specification;
@@ -96,6 +97,9 @@ public class PutAwayLineService extends BaseService {
 
     @Autowired
     private GrLineService grLineService;
+
+    @Autowired
+    private InboundHeaderService inboundHeaderService;
 
     String statusDescription = null;
     String stockTypeDesc = null;
@@ -1064,6 +1068,15 @@ public class PutAwayLineService extends BaseService {
             throws IllegalAccessException, InvocationTargetException, ParseException {
         List<PutAwayLineV2> createdPutAwayLines = new ArrayList<>();
         log.info("newPutAwayLines to confirm : " + newPutAwayLines);
+
+        String itemCode = null;
+        String companyCode = null;
+        String plantId = null;
+        String languageId = null;
+        String warehouseId = null;
+        String refDocNumber = null;
+        String preInboundNo = null;
+
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
         AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
         try {
@@ -1094,11 +1107,13 @@ public class PutAwayLineService extends BaseService {
                 PutAwayLineV2 dbPutAwayLine = new PutAwayLineV2();
 //                PutAwayHeaderV2 dbPutAwayHeader = new PutAwayHeaderV2();
 
-                String itemCode = newPutAwayLine.getItemCode();
-                String companyCode = newPutAwayLine.getCompanyCode();
-                String plantId = newPutAwayLine.getPlantId();
-                String languageId = newPutAwayLine.getLanguageId();
-                String warehouseId = newPutAwayLine.getWarehouseId();
+                itemCode = newPutAwayLine.getItemCode();
+                companyCode = newPutAwayLine.getCompanyCode();
+                plantId = newPutAwayLine.getPlantId();
+                languageId = newPutAwayLine.getLanguageId();
+                warehouseId = newPutAwayLine.getWarehouseId();
+                refDocNumber = newPutAwayLine.getRefDocNumber();
+                preInboundNo = newPutAwayLine.getPreInboundNo();
 
                 Double cbmPerQuantity = 0D;
                 Double cbm = 0D;
@@ -1818,6 +1833,16 @@ public class PutAwayLineService extends BaseService {
                     }
                 } else {
                     log.info("Putaway Line already exist : " + existingPutAwayLine);
+                }
+            }
+            //Automatic Inbound Confirmation Pre Check Process
+            long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
+            log.info("Inbound confirmation PreCheck Process ----> PutAwayHeader status 19L Count----> : " + putAwayHeaderStatusIdCount);
+            if (putAwayHeaderStatusIdCount == 0) {
+                log.info("Inbound confirm Process Initiated");
+                AXApiResponse response = inboundHeaderService.updateInboundHeaderConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
+                if(response.getStatusCode().equalsIgnoreCase("200")) {
+                    log.info("Inbound Confirmation Successful. Inventory Created Successfully");
                 }
             }
             return createdPutAwayLines;

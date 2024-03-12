@@ -155,5 +155,8 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
             @Param("updatedOn") Date updatedOn
     );
 
+    InboundLineV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+            String preInboundNo, Long lineNo, String itemCode, String manufacturerName, Long deletionIndicator);
 }
 

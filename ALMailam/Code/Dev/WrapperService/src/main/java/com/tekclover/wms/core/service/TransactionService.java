@@ -8604,6 +8604,32 @@ public class TransactionService {
         }
     }
 
+    // PATCH - Batch Process
+    public InboundLineV2[] batchUpdateInboundLineV2(List<InboundLineV2> modifiedInboundLines, String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(modifiedInboundLines, headers);
+
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "inboundline/v2/batchUpdateInboundLines")
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<InboundLineV2[]> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity,
+                    InboundLineV2[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     // DELETE
     public boolean deleteInboundLineV2(String companyCode, String plantId, String languageId,
                                        String warehouseId, String refDocNumber, String preInboundNo, Long lineNo,

@@ -617,6 +617,41 @@ public class InboundLineService extends BaseService {
     }
 
     /**
+     * Batch Update for Inbound Confirm
+     * @param loginUserID
+     * @param updateInboundLine
+     * @return
+     */
+    public List<InboundLineV2> updateBatchInboundLineV2(List<InboundLineV2> updateInboundLine, String loginUserID) {
+        log.info("InboundLines to Update: " + updateInboundLine.size());
+        List<InboundLineV2> updatedInboundLines = new ArrayList<>();
+        if(updateInboundLine != null && !updateInboundLine.isEmpty()) {
+            for(InboundLineV2 inboundLine : updateInboundLine) {
+                InboundLineV2 dbInboundLine = inboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        inboundLine.getLanguageId(),
+                        inboundLine.getCompanyCode(),
+                        inboundLine.getPlantId(),
+                        inboundLine.getWarehouseId(),
+                        inboundLine.getRefDocNumber(),
+                        inboundLine.getPreInboundNo(),
+                        inboundLine.getLineNo(),
+                        inboundLine.getItemCode(),
+                        inboundLine.getManufacturerName(),
+                        0L );
+                if(dbInboundLine != null) {
+                    BeanUtils.copyProperties(inboundLine, dbInboundLine, CommonUtils.getNullPropertyNames(inboundLine));
+                    dbInboundLine.setUpdatedBy(loginUserID);
+                    dbInboundLine.setUpdatedOn(new Date());
+                    inboundLineV2Repository.save(dbInboundLine);
+                    updatedInboundLines.add(dbInboundLine);
+                }
+            }
+        }
+        log.info("InboundLines Updated : " + updatedInboundLines.size());
+        return updatedInboundLines;
+    }
+
+    /**
      *
      * @param companyCode
      * @param plantId

@@ -2525,6 +2525,14 @@ public class TransactionServiceController {
                         preInboundNo, lineNo, itemCode, loginUserID, updateInboundLine, authToken);
         return new ResponseEntity<>(updatedInboundLine, HttpStatus.OK);
     }
+    //Batch Update Process
+    @ApiOperation(response = InboundLineV2.class, value = "Batch Update InboundLines V2") // label for swagger
+    @RequestMapping(value = "/inboundline/v2/batchUpdateInboundLines", method = RequestMethod.PATCH)
+    public ResponseEntity<?> batchUpdateInboundLineV2(@RequestParam String loginUserID, @RequestParam String authToken,
+                                                      @Valid @RequestBody List<InboundLineV2> updateInboundLines) {
+        InboundLineV2[] updatedInboundLines = transactionService.batchUpdateInboundLineV2(updateInboundLines, loginUserID, authToken);
+        return new ResponseEntity<>(updatedInboundLines, HttpStatus.OK);
+    }
 
     @ApiOperation(response = InboundLineV2.class, value = "Delete InboundLine V2") // label for swagger
     @DeleteMapping("/inboundline/v2/{lineNo}")

@@ -1836,15 +1836,15 @@ public class PutAwayLineService extends BaseService {
                 }
             }
             //Automatic Inbound Confirmation Pre Check Process
-            long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
-            log.info("Inbound confirmation PreCheck Process ----> PutAwayHeader status 19L Count----> : " + putAwayHeaderStatusIdCount);
-            if (putAwayHeaderStatusIdCount == 0) {
-                log.info("Inbound confirm Process Initiated");
-                AXApiResponse response = inboundHeaderService.updateInboundHeaderConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
-                if(response.getStatusCode().equalsIgnoreCase("200")) {
-                    log.info("Inbound Confirmation Successful. Inventory Created Successfully");
-                }
-            }
+//            long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
+//            log.info("Inbound confirmation PreCheck Process ----> PutAwayHeader status 19L Count----> : " + putAwayHeaderStatusIdCount);
+//            if (putAwayHeaderStatusIdCount == 0) {
+//                log.info("Inbound confirm Process Initiated");
+//                AXApiResponse response = inboundHeaderService.updateInboundHeaderConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
+//                if(response.getStatusCode().equalsIgnoreCase("200")) {
+//                    log.info("Inbound Confirmation Successful. Inventory Created Successfully");
+//                }
+//            }
             return createdPutAwayLines;
 
         } catch (Exception e) {

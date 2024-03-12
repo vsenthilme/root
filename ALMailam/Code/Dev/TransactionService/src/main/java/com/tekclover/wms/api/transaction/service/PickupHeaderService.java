@@ -1094,6 +1094,9 @@ public class PickupHeaderService {
         }
         return null;
     }
+    
+    //API changed without parameters - only request body is required to update picker
+    //11-03-2024 Ticket No. ALM/2024/002
 
     /**
      *

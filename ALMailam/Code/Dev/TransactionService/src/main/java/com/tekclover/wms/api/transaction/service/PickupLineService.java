@@ -1644,15 +1644,14 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setPlantDescription(description.getPlantDesc());
                 dbPickupLine.setWarehouseDescription(description.getWarehouseDesc());
             }
-            OrderManagementLineV2 dbOrderManagementLine = orderManagementLineService.getOrderManagementLineForQualityLineV2(String.valueOf(newPickupLine.getCompanyCodeId()),
+            OrderManagementLineV2 dbOrderManagementLine = orderManagementLineService.getOrderManagementLineForLineUpdateV2(String.valueOf(newPickupLine.getCompanyCodeId()),
                     newPickupLine.getPlantId(),
                     newPickupLine.getLanguageId(),
                     newPickupLine.getWarehouseId(),
                     newPickupLine.getPreOutboundNo(),
                     newPickupLine.getRefDocNumber(),
                     newPickupLine.getLineNumber(),
-                    newPickupLine.getItemCode(),
-                    newPickupLine.getManufacturerName());
+                    newPickupLine.getItemCode());
             log.info("OrderManagementLine: " + dbOrderManagementLine);
 
             if (dbOrderManagementLine != null) {

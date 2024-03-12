@@ -1260,7 +1260,7 @@ public class QualityLineService extends BaseService {
                 dbQualityLine.setPlantDescription(description.getPlantDesc());
                 dbQualityLine.setWarehouseDescription(description.getWarehouseDesc());
 
-                OrderManagementLineV2 dbOrderManagementLine = orderManagementLineService.getOrderManagementLineForQualityLineV2(
+                OrderManagementLineV2 dbOrderManagementLine = orderManagementLineService.getOrderManagementLineForLineUpdateV2(
                         newQualityLine.getCompanyCodeId(),
                         newQualityLine.getPlantId(),
                         newQualityLine.getLanguageId(),
@@ -1268,8 +1268,7 @@ public class QualityLineService extends BaseService {
                         newQualityLine.getPreOutboundNo(),
                         newQualityLine.getRefDocNumber(),
                         newQualityLine.getLineNumber(),
-                        newQualityLine.getItemCode(),
-                        newQualityLine.getManufacturerName());
+                        newQualityLine.getItemCode());
                 log.info("OrderManagementLine: " + dbOrderManagementLine);
 
                 if (dbOrderManagementLine != null) {

@@ -1173,15 +1173,13 @@ public class OrderManagementLineService extends BaseService {
      * @param refDocNumber
      * @param lineNumber
      * @param itemCode
-     * @param manufacturerName
      * @return
      */
-    public OrderManagementLineV2 getOrderManagementLineForQualityLineV2(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                                        String preOutboundNo, String refDocNumber, Long lineNumber,
-                                                                        String itemCode, String manufacturerName) {
+    public OrderManagementLineV2 getOrderManagementLineForLineUpdateV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                       String preOutboundNo, String refDocNumber, Long lineNumber, String itemCode) {
         List<OrderManagementLineV2> orderManagementHeader = orderManagementLineV2Repository
-                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
-                        companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, lineNumber, itemCode, manufacturerName, 0L);
+                .findByPlantIdAndCompanyCodeIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndLineNumberAndItemCodeAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, lineNumber, itemCode, 0L);
         if (orderManagementHeader != null && !orderManagementHeader.isEmpty()) {
             return orderManagementHeader.get(0);
         } else {

@@ -1644,18 +1644,6 @@ public class PickupLineService extends BaseService {
                 dbPickupLine.setPlantDescription(description.getPlantDesc());
                 dbPickupLine.setWarehouseDescription(description.getWarehouseDesc());
             }
-
-            PickupHeaderV2 dbPickupHeader = pickupHeaderService.getPickupHeaderV2(
-                    dbPickupLine.getCompanyCodeId(), dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(), dbPickupLine.getWarehouseId(),
-                    dbPickupLine.getPreOutboundNo(), dbPickupLine.getRefDocNumber(), dbPickupLine.getPartnerCode(), dbPickupLine.getPickupNumber());
-            if (dbPickupHeader != null) {
-                dbPickupLine.setPickupCreatedOn(dbPickupHeader.getPickupCreatedOn());
-                if (dbPickupHeader.getPickupCreatedBy() != null) {
-                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickupCreatedBy());
-                } else {
-                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickUpdatedBy());
-                }
-
             OrderManagementLineV2 dbOrderManagementLine = orderManagementLineService.getOrderManagementLineForQualityLineV2(String.valueOf(newPickupLine.getCompanyCodeId()),
                     newPickupLine.getPlantId(),
                     newPickupLine.getLanguageId(),
@@ -1664,8 +1652,7 @@ public class PickupLineService extends BaseService {
                     newPickupLine.getRefDocNumber(),
                     newPickupLine.getLineNumber(),
                     newPickupLine.getItemCode(),
-                    newPickupLine.getManufacturerName(),
-                    dbPickupHeader.getProposedStorageBin());
+                    newPickupLine.getManufacturerName());
             log.info("OrderManagementLine: " + dbOrderManagementLine);
 
             if (dbOrderManagementLine != null) {
@@ -1687,7 +1674,19 @@ public class PickupLineService extends BaseService {
 //                dbPickupLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                 dbPickupLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
             }
-        }
+
+            PickupHeaderV2 dbPickupHeader = pickupHeaderService.getPickupHeaderV2(
+                    dbPickupLine.getCompanyCodeId(), dbPickupLine.getPlantId(), dbPickupLine.getLanguageId(), dbPickupLine.getWarehouseId(),
+                    dbPickupLine.getPreOutboundNo(), dbPickupLine.getRefDocNumber(), dbPickupLine.getPartnerCode(), dbPickupLine.getPickupNumber());
+            if (dbPickupHeader != null) {
+                dbPickupLine.setPickupCreatedOn(dbPickupHeader.getPickupCreatedOn());
+                if(dbPickupHeader.getPickupCreatedBy() != null) {
+                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickupCreatedBy());
+                } else {
+                    dbPickupLine.setPickupCreatedBy(dbPickupHeader.getPickUpdatedBy());
+                }
+            }
+
             Double VAR_QTY = (dbPickupLine.getAllocatedQty() != null ? dbPickupLine.getAllocatedQty() : 0) - (dbPickupLine.getPickConfirmQty() != null ? dbPickupLine.getPickConfirmQty() : 0);
             dbPickupLine.setVarianceQuantity(VAR_QTY);
             log.info("Var_Qty: " + VAR_QTY);

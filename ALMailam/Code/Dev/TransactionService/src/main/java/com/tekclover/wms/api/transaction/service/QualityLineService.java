@@ -1268,7 +1268,8 @@ public class QualityLineService extends BaseService {
                         newQualityLine.getPreOutboundNo(),
                         newQualityLine.getRefDocNumber(),
                         newQualityLine.getLineNumber(),
-                        newQualityLine.getItemCode());
+                        newQualityLine.getItemCode(),
+                        newQualityLine.getManufacturerName());
                 log.info("OrderManagementLine: " + dbOrderManagementLine);
 
                 if (dbOrderManagementLine != null) {

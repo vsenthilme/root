@@ -1057,6 +1057,41 @@ public class PutAwayLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @param lineNumber
+     * @param preInboundNo
+     * @return
+     */
+    public List<PutAwayLineV2> getPutAwayLineForInboundConfirmV2(String companyCode, String plantId, String languageId, String warehouseId,
+                                                                 String refDocNumber, String itemCode, String manufacturerName,
+                                                                 Long lineNumber, String preInboundNo) {
+        List<PutAwayLineV2> putAwayLine =
+                putAwayLineV2Repository.findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndItemCodeAndManufacturerNameAndLineNoAndStatusIdAndDeletionIndicator(
+                        companyCode,
+                        languageId,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        preInboundNo,
+                        itemCode,
+                        manufacturerName,
+                        lineNumber,
+                        20L,
+                        0L);
+        if (putAwayLine == null) {
+            return null;
+        }
+        return putAwayLine;
+    }
+
+    /**
      * @param newPutAwayLines
      * @param loginUserID
      * @return

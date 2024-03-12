@@ -1447,6 +1447,11 @@ public class GrLineService extends BaseService {
                     dbGrLine.setPackBarcodes(packBarcode.getBarcode());
                     dbGrLine.setStatusId(14L);
 
+                    //12-03-2024 - Ticket No. ALM/2024/006
+                    if(dbGrLine.getGoodReceiptQty() < 0){
+                        throw new BadRequestException("Gr Quantity Cannot be Negative");
+                    }
+
                     //GoodReceipt Qty should be less than or equal to ordered qty---> if GrQty > OrdQty throw Exception
                     Double dbGrQty = grLineV2Repository.getGrLineQuantity(
                             newGrLine.getCompanyCode(), newGrLine.getPlantId(), newGrLine.getLanguageId(), newGrLine.getWarehouseId(),

@@ -1179,7 +1179,7 @@ public class OrderManagementLineService extends BaseService {
                                                                        String preOutboundNo, String refDocNumber, Long lineNumber, String itemCode) {
         List<OrderManagementLineV2> orderManagementHeader = orderManagementLineV2Repository
                 .findByPlantIdAndCompanyCodeIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndLineNumberAndItemCodeAndDeletionIndicator(
-                        companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, lineNumber, itemCode, 0L);
+                         plantId, companyCodeId, languageId, warehouseId, preOutboundNo, refDocNumber, lineNumber, itemCode, 0L);
         if (orderManagementHeader != null && !orderManagementHeader.isEmpty()) {
             return orderManagementHeader.get(0);
         } else {

@@ -45,6 +45,8 @@ import java.util.stream.Stream;
 @Service
 public class InboundHeaderService extends BaseService {
     @Autowired
+    private GrLineV2Repository grLineV2Repository;
+    @Autowired
     private InventoryMovementRepository inventoryMovementRepository;
     @Autowired
     private PutAwayHeaderV2Repository putAwayHeaderV2Repository;
@@ -1550,6 +1552,14 @@ public class InboundHeaderService extends BaseService {
         preInboundLineV2Repository.updatePreInboundLineStatusUpdateInboundConfirmProc(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
                 log.info("PreInboundLine updated");
+
+        stagingLineV2Repository.updateStagingLineStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+                log.info("StagingLine updated");
+
+        grLineV2Repository.updateGrLineStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+                log.info("GrLine updated");
 
         Long inboundLinesV2CountForInboundConfirmWithStatusId = inboundLineV2Repository.getInboundLinesV2CountForInboundConfirmWithStatusId(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, 24L);

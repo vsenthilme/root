@@ -303,4 +303,19 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
             @Param("preInboundNo") String preInboundNo,
             @Param("updatedOn") Date updatedOn
     );
+
+    @Transactional
+    @Procedure(procedureName = "stagingline_status_update_ib_cnf_proc")
+    public void updateStagingLineStatusUpdateInboundConfirmProc(
+            @Param("companyCodeId") String companyCode,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedBy") String updatedBy,
+            @Param("updatedOn") Date updatedOn
+    );
 }

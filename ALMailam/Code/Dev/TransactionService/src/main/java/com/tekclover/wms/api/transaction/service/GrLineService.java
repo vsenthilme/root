@@ -1773,6 +1773,7 @@ public class GrLineService extends BaseService {
 
             //Update staging Line using stored Procedure
             stagingLineV2Repository.updateStagingLineUpdateNewProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo,new Date());
+            log.info("stagingLine Status updated using Stored Procedure ");
 
             //Update InboundLine using Stored Procedure
             inboundLineV2Repository.updateInboundLineStatusUpdateNewProc(

@@ -1547,7 +1547,7 @@ public class PreOutboundHeaderService extends BaseService {
      */
     private void createPickUpHeaderAssignPickerModified(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                         OutboundIntegrationHeaderV2 outboundIntegrationHeader,
-                                                   String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
+                                                        String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
 
         List<OrderManagementLineV2> orderManagementLineV2List = orderManagementLineService.
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
@@ -1822,9 +1822,9 @@ public class PreOutboundHeaderService extends BaseService {
                     hhtUserCount = hhtUserList.stream().count();
                     log.info("hhtUserList count: " + hhtUserCount);
 
-                    PickupHeaderV2 assignPickerPickUpHeader = pickupHeaderService.getPickupHeaderAutomation(companyCodeId, plantId, languageId, warehouseId,
-                            orderManagementLine.getItemCode(), orderManagementLine.getManufacturerName());
-                    log.info("pickupHeader--> Status48---> assignPicker---> SameItem: " + assignPickerPickUpHeader);
+                    PickupHeaderV2 assignPickerPickUpHeader = pickupHeaderService.getPickupHeaderAutomationByLevelId(companyCodeId, plantId, languageId, warehouseId,
+                            orderManagementLine.getItemCode(), orderManagementLine.getManufacturerName(), String.valueOf(LEVEL_ID));
+                    log.info("pickupHeader--> Status48---> assignPicker---> SameItem ---> same level: " + assignPickerPickUpHeader);
                     if (assignPickerPickUpHeader != null) {
                         log.info("Picker Assigned: " + assignPickerPickUpHeader.getAssignedPickerId());
                         assignPickerId = assignPickerPickUpHeader.getAssignedPickerId();

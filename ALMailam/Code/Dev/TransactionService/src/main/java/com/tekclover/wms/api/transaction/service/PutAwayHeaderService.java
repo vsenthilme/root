@@ -1221,6 +1221,7 @@ public class PutAwayHeaderService extends BaseService {
      * @return
      * @throws ParseException
      */
+    @Transactional
     public List<PutAwayHeaderV2> batchPutAwayReversal(List<InboundReversalInput> inboundReversalInputList, String loginUserID) throws ParseException {
         log.info("PutAway Reversal Input: " + inboundReversalInputList);
         if(inboundReversalInputList != null && !inboundReversalInputList.isEmpty()) {
@@ -2138,8 +2139,8 @@ public class PutAwayHeaderService extends BaseService {
 
                 StagingLineEntityV2 stagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, grLine.getItemCode(), grLine.getManufacturerName(), grLine.getLineNo());
                 if (stagingLineEntity != null) {
-                    Double rec_accept_qty = stagingLineEntity.getRec_accept_qty() - grLine.getAcceptedQty();
-                    Double rec_damage_qty = stagingLineEntity.getRec_damage_qty() - grLine.getDamageQty();
+                    Double rec_accept_qty = (stagingLineEntity.getRec_accept_qty() != null ? stagingLineEntity.getRec_accept_qty() : 0) - (grLine.getAcceptedQty() != null ? grLine.getAcceptedQty() : 0);
+                    Double rec_damage_qty = (stagingLineEntity.getRec_damage_qty() != null ? stagingLineEntity.getRec_damage_qty() : 0) - (grLine.getDamageQty() != null ? grLine.getDamageQty() : 0);
 
                     stagingLineEntity.setRec_accept_qty(rec_accept_qty);
                     stagingLineEntity.setRec_damage_qty(rec_damage_qty);

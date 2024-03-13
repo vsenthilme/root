@@ -940,6 +940,23 @@ public class PickupHeaderService {
      * @param plantId
      * @param languageId
      * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public PickupHeaderV2 getPickupHeaderAutomationByLevelId(String companyCodeId, String plantId, String languageId, String warehouseId, String itemCode, String manufacturerName, String levelId) {
+        PickupHeaderV2 header =
+                pickupHeaderV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdAndLevelIdAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 48L, levelId, 0L);
+        return header;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
      * @param assignedPickerId
      * @return
      */

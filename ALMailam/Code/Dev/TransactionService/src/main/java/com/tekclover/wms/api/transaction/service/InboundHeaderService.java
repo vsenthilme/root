@@ -1507,51 +1507,8 @@ public class InboundHeaderService extends BaseService {
 
         AXApiResponse axapiResponse = new AXApiResponse();
 
-        statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
-
-        inboundLineV2Repository.updateInboundLineStatusUpdateInboundConfirmProc(
-                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
-        log.info("InboundLine updated");
-
-        putAwayLineV2Repository.updatePutawayLineStatusUpdateInboundConfirmProc(
-                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
-        log.info("putAwayLine updated");
-
-        preInboundLineV2Repository.updatePreInboundLineStatusUpdateInboundConfirmProc(
-                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
-                log.info("PreInboundLine updated");
-
-        Long inboundLinesV2CountForInboundConfirmWithStatusId = inboundLineV2Repository.getInboundLinesV2CountForInboundConfirmWithStatusId(
-                companyCode, plantId, languageId, warehouseId, refDocNumber, 24L);
-        Long inboundLinesV2CountForInboundConfirm = inboundLineV2Repository.getInboundLinesV2CountForInboundConfirm(
-                companyCode, plantId, languageId, warehouseId, refDocNumber);
-        if(inboundLinesV2CountForInboundConfirmWithStatusId == null) {
-            inboundLinesV2CountForInboundConfirmWithStatusId = 0L;
-        }
-        if(inboundLinesV2CountForInboundConfirm == null) {
-            inboundLinesV2CountForInboundConfirm = 0L;
-        }
-        boolean isConditionMet = inboundLinesV2CountForInboundConfirmWithStatusId.equals(inboundLinesV2CountForInboundConfirm);
-        log.info("Inbound Line 24_StatusCount, Line Count: " + isConditionMet + ", " + inboundLinesV2CountForInboundConfirmWithStatusId + ", " + inboundLinesV2CountForInboundConfirm);
-        if(isConditionMet) {
-            inboundHeaderV2Repository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
-            log.info("InboundHeader updated");
-
-            preInboundHeaderV2Repository.updatePreInboundHeaderEntityStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-            log.info("PreInboundHeader updated");
-
-            grHeaderV2Repository.updateGrHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-            log.info("grHeader updated");
-
-            stagingHeaderV2Repository.updateStagingHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-            log.info("stagingHeader updated");
-
-            putAwayHeaderV2Repository.updatePutAwayHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-            log.info("PutAwayHeader Updated");
-        }
-
         List<InboundLineV2> inboundLineList = inboundLineService.getInboundLineForInboundConfirmPartialAllocationV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
-        
+
         if (inboundLineList != null) {
             for (InboundLineV2 inboundLine : inboundLineList) {
                 List<GrLineV2> grLineList = grLineService.getGrLineForInboundConformV2(
@@ -1580,8 +1537,51 @@ public class InboundHeaderService extends BaseService {
             }
         }
 
-        axapiResponse.setStatusCode("200");                         //HardCode for Testing
-        axapiResponse.setMessage("Success");                        //HardCode for Testing
+        statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
+
+        inboundLineV2Repository.updateInboundLineStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+        log.info("InboundLine updated");
+
+        putAwayLineV2Repository.updatePutawayLineStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+        log.info("putAwayLine updated");
+
+        preInboundLineV2Repository.updatePreInboundLineStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+                log.info("PreInboundLine updated");
+
+        Long inboundLinesV2CountForInboundConfirmWithStatusId = inboundLineV2Repository.getInboundLinesV2CountForInboundConfirmWithStatusId(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, 24L);
+        Long inboundLinesV2CountForInboundConfirm = inboundLineV2Repository.getInboundLinesV2CountForInboundConfirm(
+                companyCode, plantId, languageId, warehouseId, refDocNumber);
+        if(inboundLinesV2CountForInboundConfirmWithStatusId == null) {
+            inboundLinesV2CountForInboundConfirmWithStatusId = 0L;
+        }
+        if(inboundLinesV2CountForInboundConfirm == null) {
+            inboundLinesV2CountForInboundConfirm = 0L;
+        }
+        boolean isConditionMet = inboundLinesV2CountForInboundConfirmWithStatusId.equals(inboundLinesV2CountForInboundConfirm);
+        log.info("Inbound Line 24_StatusCount, Line Count: " + isConditionMet + ", " + inboundLinesV2CountForInboundConfirmWithStatusId + ", " + inboundLinesV2CountForInboundConfirm);
+        if(isConditionMet) {
+            inboundHeaderV2Repository.updateIbheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+            log.info("InboundHeader updated");
+
+            preInboundHeaderV2Repository.updatePreIbheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+            log.info("PreInboundHeader updated");
+
+            grHeaderV2Repository.updateGrheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+            log.info("grHeader updated");
+
+            stagingHeaderV2Repository.updateStagingheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+            log.info("stagingHeader updated");
+
+            putAwayHeaderV2Repository.updatepaheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+            log.info("PutAwayHeader Updated");
+        }
+
+        axapiResponse.setStatusCode("200");                         //HardCoded
+        axapiResponse.setMessage("Success");                        //HardCoded
         log.info("axapiResponse: " + axapiResponse);
         return axapiResponse;
     }

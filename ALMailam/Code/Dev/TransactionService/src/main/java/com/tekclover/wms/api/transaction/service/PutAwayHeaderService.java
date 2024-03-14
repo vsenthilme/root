@@ -1555,8 +1555,11 @@ public class PutAwayHeaderService extends BaseService {
                         }
 
                         if (dbstorageBin != null) {
+                            Long lineNo = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
+
                             StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
-                                    dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(), dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode());
+                                    dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(),
+                                    dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode(), lineNo);
 
                             if (dbStagingLineEntity != null) {
                                 dbStagingLineEntity.setStatusId(13L);
@@ -1979,8 +1982,11 @@ public class PutAwayHeaderService extends BaseService {
                         }
 
                         if (dbstorageBin != null) {
+                            Long lineNo = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
+
                             StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
-                                    dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(), dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode());
+                                    dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(),
+                                    dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode(), lineNo);
 
                             if (dbStagingLineEntity != null) {
 //                                Double rec_accept_qty = 0D;

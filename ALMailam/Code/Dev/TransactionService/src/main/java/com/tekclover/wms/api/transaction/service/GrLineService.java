@@ -1451,7 +1451,7 @@ public class GrLineService extends BaseService {
                     if(dbGrLine.getGoodReceiptQty() < 0){
                         throw new BadRequestException("Gr Quantity Cannot be Negative");
                     }
-                    if(dbGrLine.getStatusId().equals(24)){
+                    if(newGrLine.getStatusId().equals(24)){
                         throw new BadRequestException("GrLine is already Confirmed");
                     }
 

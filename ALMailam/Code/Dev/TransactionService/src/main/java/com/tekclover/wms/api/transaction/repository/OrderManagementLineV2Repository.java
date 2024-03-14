@@ -84,4 +84,21 @@ public interface OrderManagementLineV2Repository extends JpaRepository<OrderMana
     List<OrderManagementLineV2> findByPlantIdAndCompanyCodeIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndLineNumberAndItemCodeAndDeletionIndicator(
             String plantId, String companyCodeId, String languageId, String warehouseId, String preOutboundNo,
             String refDocNumber, Long lineNumber, String itemCode, Long deletionIndicator);
+
+    @Query(value = "select \n" +
+            "case when exists( \n" +
+            "            select count(ob_line_no) lines from tblordermangementline where \n" +
+            "            ref_doc_no = :refDocNumber and c_id = :companyCodeId and plant_id = :plantId and lang_id = :languageId and wh_id = :warehouseId and is_deleted = 0 \n" +
+            "            intersect \n" +
+            "            select count(ob_line_no) noStkLines from tblordermangementline where status_id=47 and \n" +
+            "            ref_doc_no = :refDocNumber and c_id = :companyCodeId and plant_id = :plantId and lang_id = :languageId and wh_id = :warehouseId and is_deleted = 0 \n" +
+            "           )\n" +
+            "     then 'true' \n" +
+            "     else 'false'\n" +
+            "end;", nativeQuery = true)
+    public boolean getNoStockStatusOrderManagementLine(@Param("companyCodeId") String companyCodeId,
+                                                       @Param("plantId") String plantId,
+                                                       @Param("languageId") String languageId,
+                                                       @Param("warehouseId") String warehouseId,
+                                                       @Param("refDocNumber") String refDocumentNo);
 }

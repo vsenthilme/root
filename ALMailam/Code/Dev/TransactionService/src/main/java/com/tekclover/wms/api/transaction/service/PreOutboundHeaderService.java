@@ -3845,7 +3845,17 @@ public class PreOutboundHeaderService extends BaseService {
         outboundHeader.setRefDocDate(new Date());
         outboundHeader.setStatusId(statusId);
 
-        statusDescription = stagingLineV2Repository.getStatusDescription(statusId, createdPreOutboundHeader.getLanguageId());
+        //check the status of OrderManagementLine for NoStock
+        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+                .getNoStockStatusOrderManagementLine(createdPreOutboundHeader.getCompanyCodeId(),
+                        createdPreOutboundHeader.getPlantId(), createdPreOutboundHeader.getLanguageId(),
+                        createdPreOutboundHeader.getWarehouseId(), outboundIntegrationHeader.getRefDocumentNo());
+        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
+        if(orderManagementLineNoStockStatus){
+            outboundHeader.setStatusId(47L);
+        }
+
+        statusDescription = stagingLineV2Repository.getStatusDescription(outboundHeader.getStatusId(), createdPreOutboundHeader.getLanguageId());
 
         outboundHeader.setStatusDescription(statusDescription);
 
@@ -3949,8 +3959,17 @@ public class PreOutboundHeaderService extends BaseService {
          * Setting up KuwaitTime
          */
 //        Date kwtDate = DateUtils.getCurrentKWTDateTime();
+
+        //check the status of OrderManagementLine for NoStock
+        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
+        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
+
         preOutboundHeader.setRefDocDate(new Date());
         preOutboundHeader.setStatusId(39L);
+        if(orderManagementLineNoStockStatus){
+            preOutboundHeader.setStatusId(47L);
+        }
         preOutboundHeader.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
 
         // REF_FIELD_1
@@ -3980,7 +3999,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         // Status Description
 //		StatusId idStatus = idmasterService.getStatus(39L, outboundIntegrationHeader.getWarehouseID(), authTokenForIDService.getAccess_token());
-        statusDescription = stagingLineV2Repository.getStatusDescription(39L, languageId);
+        statusDescription = stagingLineV2Repository.getStatusDescription(preOutboundHeader.getStatusId(), languageId);
         log.info("PreOutboundHeader StatusDescription: " + statusDescription);
         // REF_FIELD_10
         preOutboundHeader.setReferenceField10(statusDescription);
@@ -4141,6 +4160,9 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setLanguageId(languageId);
         preOutboundLine.setCompanyCodeId(companyCodeId);
         preOutboundLine.setPlantId(plantId);
+        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
+        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
 
         // WH_ID
         preOutboundLine.setWarehouseId(warehouseId);
@@ -4165,6 +4187,10 @@ public class PreOutboundHeaderService extends BaseService {
 
         // STATUS_ID
         preOutboundLine.setStatusId(39L);
+        //If all ordermangementLines are No Stock Status then preoutboundline status also NoStockAvailable
+        if(orderManagementLineNoStockStatus) {
+            preOutboundLine.setStatusId(47L);
+        }
 
         // STCK_TYP_ID
         preOutboundLine.setStockTypeId(1L);
@@ -4179,7 +4205,7 @@ public class PreOutboundHeaderService extends BaseService {
                 preOutboundLine.getPlantId(),
                 preOutboundLine.getWarehouseId());
 
-        statusDescription = stagingLineV2Repository.getStatusDescription(39L, languageId);
+        statusDescription = stagingLineV2Repository.getStatusDescription(preOutboundLine.getStatusId(), languageId);
         preOutboundLine.setStatusDescription(statusDescription);
 
         preOutboundLine.setCompanyDescription(description.getCompanyDesc());

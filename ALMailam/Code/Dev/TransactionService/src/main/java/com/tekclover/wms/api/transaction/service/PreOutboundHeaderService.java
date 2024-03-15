@@ -1497,6 +1497,10 @@ public class PreOutboundHeaderService extends BaseService {
 //        OutboundHeaderV2 outboundHeader = createOutboundHeaderV2(createdPreOutboundHeader, createdOrderManagementHeader.getStatusId());
         OutboundHeaderV2 outboundHeader = createOutboundHeaderV2(createdPreOutboundHeader, createdOrderManagementHeader.getStatusId(), outboundIntegrationHeader);
 
+        //check the status of OrderManagementLine for NoStock update status of outbound header, preoutbound header, preoutboundline
+        statusDescription = stagingLineV2Repository.getStatusDescription(47L, languageId);
+        orderManagementLineV2Repository.updateNostockStatusUpdateProc(companyCodeId, plantId, languageId, warehouseId, outboundHeader.getRefDocNumber(), 47L, statusDescription);
+
         /*------------------------------------------------------------------------------------*/
         updateStatusAs47ForOBHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, outboundHeader.getRefDocNumber());
 
@@ -3846,14 +3850,14 @@ public class PreOutboundHeaderService extends BaseService {
         outboundHeader.setStatusId(statusId);
 
         //check the status of OrderManagementLine for NoStock
-        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-                .getNoStockStatusOrderManagementLine(createdPreOutboundHeader.getCompanyCodeId(),
-                        createdPreOutboundHeader.getPlantId(), createdPreOutboundHeader.getLanguageId(),
-                        createdPreOutboundHeader.getWarehouseId(), outboundIntegrationHeader.getRefDocumentNo());
-        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
-        if(orderManagementLineNoStockStatus){
-            outboundHeader.setStatusId(47L);
-        }
+//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+//                .getNoStockStatusOrderManagementLine(createdPreOutboundHeader.getCompanyCodeId(),
+//                        createdPreOutboundHeader.getPlantId(), createdPreOutboundHeader.getLanguageId(),
+//                        createdPreOutboundHeader.getWarehouseId(), outboundIntegrationHeader.getRefDocumentNo());
+//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
+//        if(orderManagementLineNoStockStatus){
+//            outboundHeader.setStatusId(47L);
+//        }
 
         statusDescription = stagingLineV2Repository.getStatusDescription(outboundHeader.getStatusId(), createdPreOutboundHeader.getLanguageId());
 
@@ -3943,7 +3947,7 @@ public class PreOutboundHeaderService extends BaseService {
      */
     private PreOutboundHeaderV2 createPreOutboundHeaderV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
                                                           OutboundIntegrationHeaderV2 outboundIntegrationHeader, String refField1ForOrderType) throws ParseException {
-        AuthToken authTokenForIDService = authTokenService.getIDMasterServiceAuthToken();
+//        AuthToken authTokenForIDService = authTokenService.getIDMasterServiceAuthToken();
         PreOutboundHeaderV2 preOutboundHeader = new PreOutboundHeaderV2();
         preOutboundHeader.setLanguageId(languageId);
         preOutboundHeader.setCompanyCodeId(companyCodeId);
@@ -3961,15 +3965,15 @@ public class PreOutboundHeaderService extends BaseService {
 //        Date kwtDate = DateUtils.getCurrentKWTDateTime();
 
         //check the status of OrderManagementLine for NoStock
-        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
-        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
+//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+//                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
+//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
 
         preOutboundHeader.setRefDocDate(new Date());
         preOutboundHeader.setStatusId(39L);
-        if(orderManagementLineNoStockStatus){
-            preOutboundHeader.setStatusId(47L);
-        }
+//        if(orderManagementLineNoStockStatus){
+//            preOutboundHeader.setStatusId(47L);
+//        }
         preOutboundHeader.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
 
         // REF_FIELD_1
@@ -4010,6 +4014,7 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundHeader.setCreatedBy("MW_AMS");
         preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeaderV2 createdPreOutboundHeader = preOutboundHeaderV2Repository.save(preOutboundHeader);
+
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
         return createdPreOutboundHeader;
     }
@@ -4160,9 +4165,9 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setLanguageId(languageId);
         preOutboundLine.setCompanyCodeId(companyCodeId);
         preOutboundLine.setPlantId(plantId);
-        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
-        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
+//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
+//                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
+//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
 
         // WH_ID
         preOutboundLine.setWarehouseId(warehouseId);
@@ -4188,9 +4193,9 @@ public class PreOutboundHeaderService extends BaseService {
         // STATUS_ID
         preOutboundLine.setStatusId(39L);
         //If all ordermangementLines are No Stock Status then preoutboundline status also NoStockAvailable
-        if(orderManagementLineNoStockStatus) {
-            preOutboundLine.setStatusId(47L);
-        }
+//        if(orderManagementLineNoStockStatus) {
+//            preOutboundLine.setStatusId(47L);
+//        }
 
         // STCK_TYP_ID
         preOutboundLine.setStockTypeId(1L);

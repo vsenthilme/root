@@ -1549,6 +1549,10 @@ public class InboundHeaderService extends BaseService {
                 companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
         log.info("putAwayLine updated");
 
+        putAwayHeaderV2Repository.updatepaheaderStatusUpdateInboundConfirmProc(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
+        log.info("PutAwayHeader Updated");
+
         preInboundLineV2Repository.updatePreInboundLineStatusUpdateInboundConfirmProc(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
                 log.info("PreInboundLine updated");
@@ -1585,9 +1589,6 @@ public class InboundHeaderService extends BaseService {
 
             stagingHeaderV2Repository.updateStagingheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
             log.info("stagingHeader updated");
-
-            putAwayHeaderV2Repository.updatepaheaderStatusUpdateInboundConfirmProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, statusDescription, loginUserID, new Date());
-            log.info("PutAwayHeader Updated");
         }
 
         axapiResponse.setStatusCode("200");                         //HardCoded

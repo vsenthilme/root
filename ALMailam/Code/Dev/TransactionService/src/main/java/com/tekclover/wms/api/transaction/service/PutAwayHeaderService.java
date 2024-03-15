@@ -1298,6 +1298,10 @@ public class PutAwayHeaderService extends BaseService {
             storageBin = dbPutAwayHeader.getProposedStorageBin();
             preInboundNo = dbPutAwayHeader.getPreInboundNo();
 
+            if(dbPutAwayHeader.getStatusId() == 24L) {
+                throw new BadRequestException("Putaway already confirmed cannot be reversed: " + dbPutAwayHeader.getPutAwayNumber());
+            }
+
             log.info("dbPutAwayHeader---------> : " + dbPutAwayHeader.getWarehouseId() + "," + refDocNumber + "," + dbPutAwayHeader.getPutAwayNumber());
             if (dbPutAwayHeader.getStatusId() == 20L) {
                 /*

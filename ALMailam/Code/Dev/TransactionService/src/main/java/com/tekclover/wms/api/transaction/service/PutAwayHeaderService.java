@@ -2129,8 +2129,8 @@ public class PutAwayHeaderService extends BaseService {
                         plantId, languageId, warehouseId, refDocNumber,
                         grLine.getPreInboundNo(), grLine.getLineNo(), grLine.getItemCode());
 
-                inboundLine.setStatusId(13L);
-                statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
+                inboundLine.setStatusId(14L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(14L, languageId);
                 inboundLine.setStatusDescription(statusDescription);
                 // warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, loginUserID, updateInboundLine
                 InboundLineV2 updatedInboundLine = inboundLineV2Repository.save(inboundLine);
@@ -2154,8 +2154,8 @@ public class PutAwayHeaderService extends BaseService {
 
                     stagingLineEntity.setRec_accept_qty(rec_accept_qty);
                     stagingLineEntity.setRec_damage_qty(rec_damage_qty);
-                    stagingLineEntity.setStatusId(13L);
-                    statusDescription = stagingLineV2Repository.getStatusDescription(13L, grLine.getLanguageId());
+                    stagingLineEntity.setStatusId(14L);
+                    statusDescription = stagingLineV2Repository.getStatusDescription(14L, grLine.getLanguageId());
                     stagingLineEntity.setStatusDescription(statusDescription);
                     stagingLineEntity = stagingLineV2Repository.save(stagingLineEntity);
                     log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + stagingLineEntity);
@@ -2204,8 +2204,8 @@ public class PutAwayHeaderService extends BaseService {
         StagingHeaderV2 stagingHeader = stagingHeaderService.getStagingHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
 
         // STATUS_ID
-        stagingHeader.setStatusId(12L);
-        statusDescription = stagingLineV2Repository.getStatusDescription(12L, preInboundHeader.getLanguageId());
+        stagingHeader.setStatusId(14L);
+        statusDescription = stagingLineV2Repository.getStatusDescription(14L, preInboundHeader.getLanguageId());
         stagingHeader.setStatusDescription(statusDescription);
         stagingHeaderV2Repository.save(stagingHeader);
         log.info("StagingHeader Status Updated: " + stagingHeader);

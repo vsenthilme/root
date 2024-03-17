@@ -13,6 +13,7 @@ import com.tekclover.wms.api.transaction.model.impl.StockMovementReportImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.integration.IntegrationApiResponse;
 import com.tekclover.wms.api.transaction.model.outbound.*;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.OrderManagementLine;
@@ -42,10 +43,7 @@ import com.tekclover.wms.api.transaction.model.report.StockMovementReport1;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.AXApiResponse;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.confirmation.*;
 import com.tekclover.wms.api.transaction.repository.*;
-import com.tekclover.wms.api.transaction.repository.specification.ImBasicData1Specification;
-import com.tekclover.wms.api.transaction.repository.specification.OutboundLineReportSpecification;
-import com.tekclover.wms.api.transaction.repository.specification.OutboundLineSpecification;
-import com.tekclover.wms.api.transaction.repository.specification.OutboundLineV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.*;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +62,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class OutboundLineService extends BaseService {
+    @Autowired
+    private OutboundLineInterimRepository outboundLineInterimRepository;
     @Autowired
     private InboundLineV2Repository inboundLineV2Repository;
     @Autowired
@@ -685,7 +685,7 @@ public class OutboundLineService extends BaseService {
      */
     public List<OutboundLine> findOutboundLineReport(SearchOutboundLineReport searchOutboundLineReport)
             throws ParseException, java.text.ParseException {
-        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getStartConfirmedOn() != null) {
+        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundLineReport.getStartConfirmedOn(), searchOutboundLineReport.getEndConfirmedOn());
             searchOutboundLineReport.setStartConfirmedOn(dates[0]);
             searchOutboundLineReport.setEndConfirmedOn(dates[1]);
@@ -723,7 +723,7 @@ public class OutboundLineService extends BaseService {
                 searchOrderStatusReport.getItemCode(),
                 searchOrderStatusReport.getFromDeliveryDate(),
                 searchOrderStatusReport.getToDeliveryDate());
-        log.info("OrderStatusReportImpl: " + results);
+        log.info("OrderStatusReportImpl: " + results.size());
         return results;
     }
 
@@ -1288,7 +1288,6 @@ public class OutboundLineService extends BaseService {
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
-                    ;
 
                     //Delete pickupheader after inventory update
                     for (PickupLine pickupLine : pickupLineList) {
@@ -2116,7 +2115,7 @@ public class OutboundLineService extends BaseService {
         long outboundLineCount =
                 outboundLineV2Repository.getOutboudLineByWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndStatusIdInAndDeletionIndicatorV2(
                         companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusIds, 0);
-        log.info("OuboundLine status Id 57L :----------->" + outboundLineCount);
+        log.info("OuboundLine status Id 47L,51L,57L :----------->" + outboundLineCount);
         return outboundLineCount;
     }
 
@@ -2172,6 +2171,23 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<OutboundLineV2> getOutboundLineV2(String companyCodeId, String plantId, String languageId,
+                                                  String warehouseId, String refDocNumber) {
+        List<OutboundLineV2> outboundLine =
+                outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+            return outboundLine;
+    }
+
+    /**
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
@@ -2223,15 +2239,19 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @return
      */
     public Long getSumOfOrderedQtyByPartnerCodeV2(String companyCodeId, String plantId, String languageId,
-                                                  String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, String partnerCode) {
-        Long sumOfOrderedQty = outboundLineV2Repository.getSumOfOrderedQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode);
+                                                  String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, Long outboundOrderTypeId) {
+        Long sumOfOrderedQty = outboundLineV2Repository.getSumOfOrderedQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, outboundOrderTypeId);
         return sumOfOrderedQty;
     }
 
@@ -2260,16 +2280,20 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @return
      */
     public Long getDeliveryQtyByPartnerCodeV2(String companyCodeId, String plantId, String languageId,
-                                              String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, String partnerCode) {
+                                              String warehouseId, List<String> preOutboundNo, List<String> refDocNumber, Long outboundOrderTypeId) {
         Long deliveryQty = outboundLineV2Repository.getDeliveryQtyByPartnerCodeV2(companyCodeId, plantId, languageId, warehouseId,
-                preOutboundNo, refDocNumber, partnerCode);
+                preOutboundNo, refDocNumber, outboundOrderTypeId);
         return deliveryQty;
     }
 
@@ -2355,6 +2379,62 @@ public class OutboundLineService extends BaseService {
                 ",lineNumber:" + lineNumber +
                 ",itemCode:" + itemCode +
                 " doesn't exist.");
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preOutboundNo
+     * @param refDocNumber
+     * @param partnerCode
+     * @param lineNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public OutboundLineV2 getOutboundLineV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
+                                            String refDocNumber, String partnerCode, Long lineNumber, String itemCode, String manufacturerName) {
+        OutboundLineV2 outboundLine = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode, manufacturerName,  0L);
+        if (outboundLine != null) {
+            return outboundLine;
+        }
+        throw new BadRequestException("The given OutboundLine ID : " +
+                "companyCodeId:" + companyCodeId +
+                "plantId:" + plantId +
+                "languageId:" + languageId +
+                "warehouseId:" + warehouseId +
+                ",preOutboundNo:" + preOutboundNo +
+                ",refDocNumber:" + refDocNumber +
+                ",partnerCode:" + partnerCode +
+                ",lineNumber:" + lineNumber +
+                ",itemCode:" + itemCode +
+                ",manufacturerName:" + manufacturerName +
+                " doesn't exist.");
+    }
+
+    /**
+     *
+     * @param searchOutboundLineReport
+     * @return
+     * @throws ParseException
+     * @throws java.text.ParseException
+     */
+    public List<OutboundLineV2> findOutboundLineReportV2(SearchOutboundLineReportV2 searchOutboundLineReport)
+            throws ParseException, java.text.ParseException {
+        if (searchOutboundLineReport.getStartConfirmedOn() != null && searchOutboundLineReport.getEndConfirmedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchOutboundLineReport.getStartConfirmedOn(), searchOutboundLineReport.getEndConfirmedOn());
+            searchOutboundLineReport.setStartConfirmedOn(dates[0]);
+            searchOutboundLineReport.setEndConfirmedOn(dates[1]);
+        }
+
+        OutboundLineReportV2Specification spec = new OutboundLineReportV2Specification(searchOutboundLineReport);
+        List<OutboundLineV2> results = outboundLineV2Repository.findAll(spec);
+        log.info("results: " + results);
+        return results;
     }
 
 
@@ -2504,12 +2584,22 @@ public class OutboundLineService extends BaseService {
             if (searchOutboundLine.getPartnerCode() == null || searchOutboundLine.getPartnerCode().isEmpty()) {
                 searchOutboundLine.setPartnerCode(null);
             }
+            if (searchOutboundLine.getSalesOrderNumber() == null || searchOutboundLine.getSalesOrderNumber().isEmpty()) {
+                searchOutboundLine.setSalesOrderNumber(null);
+            }
+            if (searchOutboundLine.getTargetBranchCode() == null || searchOutboundLine.getTargetBranchCode().isEmpty()) {
+                searchOutboundLine.setTargetBranchCode(null);
+            }
+            if (searchOutboundLine.getManufacturerName() == null || searchOutboundLine.getManufacturerName().isEmpty()) {
+                searchOutboundLine.setManufacturerName(null);
+            }
 
             List<OutboundLineOutput> outboundLineSearchResults = outboundLineV2Repository.findOutboundLineNew(
                     searchOutboundLine.getCompanyCodeId(), searchOutboundLine.getLanguageId(),
                     searchOutboundLine.getPlantId(), searchOutboundLine.getWarehouseId(),
                     searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate(), searchOutboundLine.getPreOutboundNo(),
                     searchOutboundLine.getRefDocNumber(), searchOutboundLine.getLineNumber(), searchOutboundLine.getItemCode(),
+                    searchOutboundLine.getSalesOrderNumber(), searchOutboundLine.getTargetBranchCode(), searchOutboundLine.getManufacturerName(),
                     searchOutboundLine.getStatusId(), searchOutboundLine.getOrderType(), searchOutboundLine.getPartnerCode());
 
             return outboundLineSearchResults;
@@ -2551,8 +2641,8 @@ public class OutboundLineService extends BaseService {
         dbOutboundLine.setDeletionIndicator(0L);
         dbOutboundLine.setCreatedBy(loginUserID);
         dbOutboundLine.setUpdatedBy(loginUserID);
-        dbOutboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOutboundLine.setCreatedOn(new Date());
+        dbOutboundLine.setUpdatedOn(new Date());
         return outboundLineV2Repository.save(dbOutboundLine);
     }
 
@@ -2575,14 +2665,35 @@ public class OutboundLineService extends BaseService {
     public OutboundLineV2 updateOutboundLineV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
                                                String partnerCode, Long lineNumber, String itemCode, String loginUserID, OutboundLineV2 updateOutboundLine)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
-        OutboundLineV2 outboundLine = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode);
+        OutboundLineV2 outboundLine = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber, itemCode, updateOutboundLine.getManufacturerName());
         BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
         outboundLine.setUpdatedBy(loginUserID);
-        outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        outboundLine.setUpdatedOn(new Date());
 
         if (updateOutboundLine != null && updateOutboundLine.getStatus() != null) {
             statusDescription = stagingLineV2Repository.getStatusDescription(updateOutboundLine.getStatusId(), languageId);
             outboundLine.setStatusDescription(statusDescription);
+        }
+
+        List<OutboundLineV2> outboundLineList = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber);
+        List<OutboundLineV2> outboundLineListStatus90 = null;
+        if(outboundLineList != null && !outboundLineList.isEmpty()) {
+            log.info("outboundLineList : " + outboundLineList);
+            Long outboundLineCount = outboundLineList.stream().count();
+            log.info("outboundLine count : " + outboundLineCount);
+            outboundLineListStatus90 = outboundLineList.stream().filter(a-> a.getStatusId() == 90L).collect(Collectors.toList());
+            Long outboundLineCountStatus90 = outboundLineListStatus90.stream().count();
+            log.info("outboundLineListCount : " + outboundLineCountStatus90);
+            if(outboundLineCount.equals(outboundLineCountStatus90)){
+                OutboundHeaderV2 outboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber);
+                if(outboundHeader != null) {
+                    outboundHeader.setStatusId(90L);
+                    statusDescription = stagingLineV2Repository.getStatusDescription(90L, languageId);
+                    outboundHeader.setStatusDescription(statusDescription);
+                    outboundHeaderV2Repository.save(outboundHeader);
+                    log.info("Outbound Header Updated to Status 90: " + outboundHeader);
+                }
+            }
         }
 
         outboundLineV2Repository.save(outboundLine);
@@ -2616,7 +2727,7 @@ public class OutboundLineService extends BaseService {
                     updateOutboundLine.getItemCode());
             BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             statusDescription = stagingLineV2Repository.getStatusDescription(outboundLine.getStatusId(), outboundLine.getLanguageId());
             outboundLine.setStatusDescription(statusDescription);
             outboundLine = outboundLineRepository.save(outboundLine);
@@ -2655,7 +2766,7 @@ public class OutboundLineService extends BaseService {
         for (OutboundLine outboundLine : outboundLines) {
             BeanUtils.copyProperties(updateOutboundLine, outboundLine, CommonUtils.getNullPropertyNames(updateOutboundLine));
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             outboundLineRepository.save(outboundLine);
         }
         return outboundLines;
@@ -2674,7 +2785,7 @@ public class OutboundLineService extends BaseService {
         if (outboundLine != null) {
             outboundLine.setDeletionIndicator(1L);
             outboundLine.setUpdatedBy(loginUserID);
-            outboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundLine.setUpdatedOn(new Date());
             outboundLineV2Repository.save(outboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2706,7 +2817,7 @@ public class OutboundLineService extends BaseService {
                 dbOutboundLine.setPhoneNumber(outboundIntegrationHeader.getPhoneNumber());
                 dbOutboundLine.setAlternateNo(outboundIntegrationHeader.getAlternateNo());
                 dbOutboundLine.setStatus(outboundIntegrationHeader.getStatus());
-                dbOutboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOutboundLine.setUpdatedOn(new Date());
                 updateOutboundLineList.add(dbOutboundLine);
             }
             outboundLineV2Repository.saveAll(updateOutboundLineList);
@@ -2716,23 +2827,44 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
-     * @param refDocNumber
-     * @param itemCode
+     *
+     * @param outboundReversalInputList
      * @param loginUserID
      * @return
-     * @throws IllegalAccessException
+     * @throws ParseException
+     * @throws java.text.ParseException
      * @throws InvocationTargetException
+     * @throws IllegalAccessException
      */
+    public List<OutboundReversalV2> batchOutboundReversal(List<InboundReversalInput> outboundReversalInputList, String loginUserID) throws ParseException, java.text.ParseException, InvocationTargetException, IllegalAccessException {
+            log.info("OutboundReversal Input: " + outboundReversalInputList);
+            if(outboundReversalInputList != null && !outboundReversalInputList.isEmpty()) {
+                for (InboundReversalInput outboundReversalInput : outboundReversalInputList){
+                    doReversalBatchV2(
+                            outboundReversalInput.getCompanyCodeId(),
+                            outboundReversalInput.getPlantId(),
+                            outboundReversalInput.getLanguageId(),
+                            outboundReversalInput.getWarehouseId(),
+                            outboundReversalInput.getRefDocNumber(),
+                            outboundReversalInput.getItemCode(),
+                            outboundReversalInput.getManufacturerName(),
+                            loginUserID);
+                }
+            }
+            return null;
+        }
     @Transactional(rollbackFor = {Exception.class, Throwable.class})
-    public List<OutboundReversalV2> doReversalV2(String refDocNumber, String itemCode, String manufacturerName, String loginUserID)
+    public List<OutboundReversalV2> doReversalBatchV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                      String refDocNumber, String itemCode, String manufacturerName, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         List<OutboundLineV2> outboundLineList =
-                outboundLineV2Repository.findByRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(refDocNumber, itemCode, manufacturerName, 0L);
+                outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, itemCode, manufacturerName, 0L);
         log.info("outboundLineList---------> : " + outboundLineList);
 
         List<OutboundReversalV2> outboundReversalList = new ArrayList<>();
         for (OutboundLineV2 outboundLine : outboundLineList) {
-            Warehouse warehouse = getWarehouse(outboundLine.getWarehouseId(), outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId());
+            Warehouse warehouse = getWarehouse(warehouseId, companyCodeId, plantId, languageId);
             /*--------------STEP 1-------------------------------------*/
             // If STATUS_ID = 57 - Reversal of QC/Picking confirmation
             if (outboundLine.getStatusId() == 57L) {
@@ -2741,7 +2873,7 @@ public class OutboundLineService extends BaseService {
 
                 outboundLine.setDeliveryQty(0D);
                 outboundLine.setReversedBy(loginUserID);
-                outboundLine.setReversedOn(DateUtils.getCurrentKWTDateTime());
+                outboundLine.setReversedOn(new Date());
                 outboundLine.setStatusId(47L);
                 statusDescription = stagingLineV2Repository.getStatusDescription(47L, outboundLine.getLanguageId());
                 outboundLine.setStatusDescription(statusDescription);
@@ -2830,7 +2962,8 @@ public class OutboundLineService extends BaseService {
 //								for (PickupHeader pickupHeaderData : pickupHeader) {
 //									Double ALLOC_QTY = (inventory.getAllocatedQuantity() != null ? inventory.getAllocatedQuantity() : 0) + (pickupHeaderData.getPickToQty() != null ? pickupHeaderData.getPickToQty() : 0);
 //									inventory.setAllocatedQuantity(ALLOC_QTY);
-                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+//                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
                             inventory.setInventoryQuantity(INV_QTY);
                             Double ALLOC_QTY = 0D;
                             if(inventory.getAllocatedQuantity() != null) {
@@ -2841,6 +2974,7 @@ public class OutboundLineService extends BaseService {
 //                                log.info("inventory updated : " + inventory);
                             InventoryV2 newInventoryV2 = new InventoryV2();
                             BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
                             newInventoryV2.setInventoryId(System.currentTimeMillis());
                             InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
                             log.info("InventoryV2 created : " + createdInventoryV2);
@@ -2871,24 +3005,24 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 5L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(
-                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
-                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 5L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(
+//                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+//                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3006,6 +3140,7 @@ public class OutboundLineService extends BaseService {
 //                            log.info("inventory updated : " + inventory);
                             InventoryV2 newInventoryV2 = new InventoryV2();
                             BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
                             newInventoryV2.setInventoryId(System.currentTimeMillis());
                             InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
                             log.info("InventoryV2 created : " + createdInventoryV2);
@@ -3024,24 +3159,373 @@ public class OutboundLineService extends BaseService {
 
                         /*-----------------------InventoryMovement----------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 1-----------------------
-                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                        Long BIN_CLASS_ID = 4L;
-                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
-                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-
-                        String movementDocumentNo = pickupLine.getRefDocNumber();
-                        String stBin = storageBin.getStorageBin();
-                        String movementQtyValue = "N";
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, false);
-                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 4L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+//                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//
+//                        String movementDocumentNo = pickupLine.getRefDocNumber();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
 
                         /*----------------------UPDATE-2------------------------------------------------*/
                         // Inserting record in InventoryMovement------UPDATE 2-----------------------
-                        movementDocumentNo = pickupLine.getPickupNumber();
-                        stBin = pickupLine.getPickedStorageBin();
-                        movementQtyValue = "P";
-                        inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
+                    }
+
+                    //Delete pickupheader after inventory update
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.deletePickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode(), loginUserID);
+                        log.info("pickupHeader deleted : " + pickupHeader);
+                    }
+                }
+            }
+        }
+
+        return outboundReversalList;
+    }
+    /**
+     * @param refDocNumber
+     * @param itemCode
+     * @param loginUserID
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public List<OutboundReversalV2> doReversalV2(String refDocNumber, String itemCode, String manufacturerName, String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
+        List<OutboundLineV2> outboundLineList =
+                outboundLineV2Repository.findByRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(refDocNumber, itemCode, manufacturerName, 0L);
+        log.info("outboundLineList---------> : " + outboundLineList);
+
+        List<OutboundReversalV2> outboundReversalList = new ArrayList<>();
+        for (OutboundLineV2 outboundLine : outboundLineList) {
+            Warehouse warehouse = getWarehouse(outboundLine.getWarehouseId(), outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId());
+            /*--------------STEP 1-------------------------------------*/
+            // If STATUS_ID = 57 - Reversal of QC/Picking confirmation
+            if (outboundLine.getStatusId() == 57L) {
+                //Get current status id for inventory update
+                Long outboundLineStatusIdBeforeUpdate = outboundLine.getStatusId();
+
+                outboundLine.setDeliveryQty(0D);
+                outboundLine.setReversedBy(loginUserID);
+                outboundLine.setReversedOn(new Date());
+                outboundLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, outboundLine.getLanguageId());
+                outboundLine.setStatusDescription(statusDescription);
+                outboundLine = outboundLineV2Repository.save(outboundLine);
+                log.info("outboundLine updated : " + outboundLine);
+
+                /*--------------STEP 2-------------------------------------
+                 * Pass WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values fetched
+                 * from OUTBOUNDHEADER and OUTBOUNDLINE table into QCLINE table  and update STATUS_ID = 56
+                 */
+                List<QualityLineV2> qualityLine = qualityLineService.deleteQualityLineForReversalV2(outboundLine.getCompanyCodeId(),
+                        outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(),
+                        outboundLine.getPreOutboundNo(), outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                        outboundLine.getLineNumber(), outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("QualityLine----------Deleted-------> : " + qualityLine);
+
+                List<OutboundLineInterim> outboundLineInterim = qualityLineService.deleteOutboundLineInterimForReversalV2(
+                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("OutboundLineInterim----------Deleted-------> : " + outboundLineInterim);
+
+                if (qualityLine != null && qualityLine.size() > 0) {
+                    for (QualityLine qualityLineData : qualityLine) {
+                        List<QualityHeaderV2> qualityHeader = qualityHeaderService.deleteQualityHeaderForReversalV2(outboundLine.getCompanyCodeId(),
+                                outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), refDocNumber,
+                                qualityLineData.getQualityInspectionNo(), qualityLineData.getActualHeNo(), loginUserID);
+                        log.info("QualityHeader----------Deleted-------> : " + qualityHeader);
+                    }
+                }
+
+                /*---------------STEP 3------------------------------------
+                 * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from QCLINE table and
+                 * pass the keys in PICKUPLINE table  and update STATUS_ID = 53
+                 */
+                // HAREESH 06/09/2022 change from single line delete to multiple line delete since there maybe be multiple records for same parameter
+                List<PickupLineV2> pickupLineList = pickupLineService.deletePickupLineForReversalV2(outboundLine.getCompanyCodeId(),
+                        outboundLine.getPlantId(), outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                log.info("PickupLine----------Deleted-------> : ");
+
+                /*---------------STEP 3.1-----Inventory update-------------------------------
+                 * Pass WH_ID/_ITM_CODE/ST_BIN of BIN_CLASS_ID=5/PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE
+                 * in INVENTORY table and update INV_QTY as (INV_QTY - DLV_QTY ) and
+                 * delete the record if INV_QTY = 0 (Update 1)
+                 */
+                if (pickupLineList != null && !pickupLineList.isEmpty()) {
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+//                        InventoryV2 inventory = updateInventory1V2(pickupLine, outboundLineStatusIdBeforeUpdate);
+
+                        //Get pickupheader for inventory update
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.getPickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode());
+                        log.info("get pickupHeader : " + pickupHeader);
+
+                        /*---------------STEP 5-----OrderManagement update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPHEADER table
+                         * and pass the keys in ORDERMANAGEMENTLINE table and update STATUS_ID as 47
+                         */
+                        // HAREESH 07/09/2022 change from single line get to multiple line get since there maybe be multiple records for same parameter
+                        if (pickupHeader != null) {
+                            for (PickupHeaderV2 pickupHeaderData : pickupHeader) {
+                                List<OrderManagementLineV2> orderManagementLine = updateOrderManagementLineForReversalV2(pickupHeaderData, loginUserID);
+                                log.info("orderManagementLine updated : " + orderManagementLine);
+                            }
+
+                        }
+
+                        /*---------------STEP 3.2-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN from PICK_ST_BIN /PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE
+                         * in INVENTORY table and update INV_QTY as (INV_QTY + DLV_QTY ) - (Update 2)
+                         */
+//                        if (inventory != null) {
+                        InventoryV2 inventory = inventoryService.getInventoryV2(
+                                pickupLine.getCompanyCodeId(), pickupLine.getPlantId(), pickupLine.getLanguageId(),
+                                pickupLine.getWarehouseId(), pickupLine.getPickedPackCode(),
+                                pickupLine.getItemCode(), pickupLine.getPickedStorageBin(), pickupLine.getManufacturerName());
+
+                        // HAREESH -28-08-2022 change to update allocated qty
+                        if (inventory != null && pickupHeader != null) {
+//								for (PickupHeader pickupHeaderData : pickupHeader) {
+//									Double ALLOC_QTY = (inventory.getAllocatedQuantity() != null ? inventory.getAllocatedQuantity() : 0) + (pickupHeaderData.getPickToQty() != null ? pickupHeaderData.getPickToQty() : 0);
+//									inventory.setAllocatedQuantity(ALLOC_QTY);
+//                            Double INV_QTY = inventory.getInventoryQuantity() + pickupLine.getPickConfirmQty();
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
+                            inventory.setInventoryQuantity(INV_QTY);
+                            Double ALLOC_QTY = 0D;
+                            if(inventory.getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventory.getAllocatedQuantity();
+                            }
+                            inventory.setReferenceField4(INV_QTY + ALLOC_QTY);
+//                                inventory = inventoryV2Repository.save(inventory);
+//                                log.info("inventory updated : " + inventory);
+                            InventoryV2 newInventoryV2 = new InventoryV2();
+                            BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
+                            newInventoryV2.setInventoryId(System.currentTimeMillis());
+                            InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
+                            log.info("InventoryV2 created : " + createdInventoryV2);
+//								}
+                        }
+//                        }
+
+
+                        /*------------------------Record insertion in Outbound Reversal table----------------------------*/
+                        /////////RECORD-1/////////////////////////////////////////////////////////////////////////////////
+                        for (QualityLineV2 qualityLineData : qualityLine) {
+                            String reversalType = "QUALITY";
+                            Double reversedQty = qualityLineData.getQualityQty();
+                            OutboundReversalV2 createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber,
+                                    qualityLineData.getManufacturerName(), outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode,
+                                    qualityLineData.getPickPackBarCode(), reversedQty, 60L, loginUserID,
+                                    outboundLine.getSalesOrderNumber(), qualityLineData.getBarcodeId());
+                            outboundReversalList.add(createdOutboundReversal);
+
+                            /////////RECORD-2/////////////////////////////////////////////////////////////////////////////////
+                            reversalType = "PICKING";
+                            reversedQty = pickupLine.getPickConfirmQty();
+                            createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber, outboundLine.getManufacturerName(),
+                                    outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode, qualityLineData.getPickPackBarCode(), reversedQty,
+                                    outboundLine.getStatusId(), loginUserID, outboundLine.getSalesOrderNumber(), qualityLineData.getBarcodeId());
+                            outboundReversalList.add(createdOutboundReversal);
+                        }
+
+                        /*-----------------------InventoryMovement----------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 1-----------------------
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 5L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(
+//                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+//                                outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//                        String movementDocumentNo = outboundLine.getDeliveryOrderNo();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+
+                        /*----------------------UPDATE-2------------------------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 2-----------------------
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+                                movementQtyValue, loginUserID, false);
+                        log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
+                    }
+
+
+                    //Delete pickupheader after inventory update
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        /*---------------STEP 4-----PickupHeader update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPLINE table
+                         * and pass the keys in PICKUPHEADER table and Delete PickUpHeader
+                         */
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.deletePickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode(), loginUserID);
+                        log.info("pickupHeader deleted : " + pickupHeader);
+                    }
+                }
+            }
+
+            /*-----------------------------Next Process----------------------------------------------------------*/
+            // If STATUS_ID = 50 - Reversal of Picking Confirmation
+            // HAREESH 27-08-2022 added status id 51
+            if (outboundLine.getStatusId() == 50L || outboundLine.getStatusId() == 51L) {
+                /*----------------------STEP 1------------------------------------------------
+                 * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from OUTBOUNDLINE table and
+                 * pass the keys in PICKUPLINE table and update STATUS_ID=53 and Delete the record
+                 */
+                // HAREESH 25/11/2022 update outboundline
+                //Get current status id for inventory update
+                Long outboundLineStatusIdBeforeUpdate = outboundLine.getStatusId();
+                outboundLine.setStatusId(47L);
+                outboundLine = outboundLineV2Repository.save(outboundLine);
+                log.info("outboundLine updated : " + outboundLine);
+
+                // HAREESH 07/09/2022 change from single line delete to multiple line delete since there maybe be multiple records for same parameter
+                List<PickupLineV2> pickupLineList = pickupLineService.deletePickupLineForReversalV2(
+                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                        outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                        outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                if (pickupLineList != null && !pickupLineList.isEmpty()) {
+                    for (PickupLineV2 pickupLine : pickupLineList) {
+                        //get pickup header
+                        List<PickupHeaderV2> pickupHeader = pickupHeaderService.getPickupHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(),
+                                pickupLine.getPickupNumber(), outboundLine.getLineNumber(), outboundLine.getItemCode());
+                        log.info("get pickupHeader : " + pickupHeader);
+
+                        List<QualityLineV2> qualityLine = qualityLineService.deleteQualityLineForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(),
+                                outboundLine.getRefDocNumber(), outboundLine.getPartnerCode(), outboundLine.getLineNumber(),
+                                outboundLine.getItemCode(), outboundLine.getManufacturerName(), loginUserID);
+                        log.info("QualityLine----------Deleted-------> : " + qualityLine);
+
+                        // DELETE QUALITY_HEADER
+                        List<QualityHeaderV2> dbQualityHeader = qualityHeaderService.getInitialQualityHeaderForReversalV2(
+                                outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), outboundLine.getRefDocNumber(),
+                                pickupLine.getPickupNumber(), outboundLine.getPartnerCode());
+                        if (dbQualityHeader != null && dbQualityHeader.size() > 0) {
+                            for (QualityHeaderV2 qualityHeaderData : dbQualityHeader) {
+                                QualityHeaderV2 qualityHeader = qualityHeaderService.deleteQualityHeaderV2(
+                                        outboundLine.getCompanyCodeId(), outboundLine.getPlantId(), outboundLine.getLanguageId(),
+                                        outboundLine.getWarehouseId(), outboundLine.getPreOutboundNo(), refDocNumber,
+                                        qualityHeaderData.getQualityInspectionNo(), qualityHeaderData.getActualHeNo(), loginUserID);
+                                log.info("QualityHeader----------Deleted-------> : " + qualityHeader);
+                            }
+                        }
+
+                        /*---------------STEP 3-----OrderManagementLine update-------------------------------
+                         * Fetch WH_ID/PRE_OB_NO/REF_DOC_NO/PARTNER_CODE/OB_LINE_NO/ITM_CODE values from PICKUPHEADER table and
+                         * pass the keys in ORDERMANAGEMENTLINE table  and update STATUS_ID as 47
+                         */
+                        // HAREESH 07/09/2022 change from single line get to multiple line get since there maybe be multiple records for same parameter
+                        if (pickupHeader != null) {
+                            for (PickupHeaderV2 pickupHeaderData : pickupHeader) {
+                                List<OrderManagementLineV2> orderManagementLine = updateOrderManagementLineForReversalV2(pickupHeaderData, loginUserID);
+                                log.info("orderManagementLine updated : " + orderManagementLine);
+                            }
+                        }
+
+                        /*---------------STEP 3.1-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN of BIN_CLASS_ID=4/PACK_BARCODE as PICK_PACK_BARCODE of PICKUPLINE in
+                         * INVENTORY table and update INV_QTY as (INV_QTY - PICK_CNF_QTY ) and
+                         * delete the record If INV_QTY = 0 - (Update 1)
+                         */
+//                        updateInventory1V2(pickupLine, outboundLineStatusIdBeforeUpdate);
+
+                        /*---------------STEP 3.2-----Inventory update-------------------------------
+                         * Pass WH_ID/_ITM_CODE/ST_BIN from PICK_ST_BIN/PACK_BARCODE from PICK_PACK_BARCODE of PICKUPLINE in
+                         * INVENTORY table and update INV_QTY as (INV_QTY + PICK_CNF_QTY )- (Update 2)
+                         */
+                        InventoryV2 inventory = inventoryService.getInventoryV2(pickupLine.getCompanyCodeId(), pickupLine.getPlantId(), pickupLine.getLanguageId(),
+                                pickupLine.getWarehouseId(), pickupLine.getPickedPackCode(), pickupLine.getItemCode(), pickupLine.getPickedStorageBin(), pickupLine.getManufacturerName());
+
+                        if (inventory != null) {
+                            // HAREESH -28-08-2022 change to update allocated qty
+                            Double INV_QTY = (inventory.getInventoryQuantity() != null ? inventory.getInventoryQuantity() : 0) + (pickupLine.getPickConfirmQty() != null ? pickupLine.getPickConfirmQty() : 0);
+                            if (INV_QTY < 0) {
+                                log.info("inventory qty calculated is less than 0: " + INV_QTY);
+                                INV_QTY = Double.valueOf(0);
+                            }
+                            inventory.setInventoryQuantity(INV_QTY);
+                            Double ALLOC_QTY = 0D;
+                            if(inventory.getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventory.getAllocatedQuantity();
+                            }
+                            inventory.setReferenceField4(INV_QTY + ALLOC_QTY);
+//                            inventory = inventoryV2Repository.save(inventory);
+//                            log.info("inventory updated : " + inventory);
+                            InventoryV2 newInventoryV2 = new InventoryV2();
+                            BeanUtils.copyProperties(inventory, newInventoryV2, CommonUtils.getNullPropertyNames(inventory));
+                            newInventoryV2.setUpdatedOn(new Date());
+                            newInventoryV2.setInventoryId(System.currentTimeMillis());
+                            InventoryV2 createdInventoryV2 = inventoryV2Repository.save(newInventoryV2);
+                            log.info("InventoryV2 created : " + createdInventoryV2);
+                        }
+
+                        /*------------------------Record insertion in Outbound Reversal table----------------------------*/
+                        /////////RECORD-1/////////////////////////////////////////////////////////////////////////////////
+                        String reversalType = "PICKING";
+                        Double reversedQty = pickupLine.getPickConfirmQty();
+                        OutboundReversalV2 createdOutboundReversal = createOutboundReversalV2(warehouse, reversalType, refDocNumber,
+                                outboundLine.getManufacturerName(), outboundLine.getPartnerCode(), outboundLine.getTargetBranchCode(), itemCode,
+                                pickupLine.getPickedPackCode(), reversedQty, outboundLine.getStatusId(), loginUserID,
+                                outboundLine.getSalesOrderNumber(), pickupLine.getBarcodeId());
+                        outboundReversalList.add(createdOutboundReversal);
+                        /****************************************************************************/
+
+                        /*-----------------------InventoryMovement----------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 1-----------------------
+//                        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                        Long BIN_CLASS_ID = 4L;
+//                        StorageBinV2 storageBin = mastersService.getStorageBin(outboundLine.getCompanyCodeId(), outboundLine.getPlantId(),
+//                                outboundLine.getLanguageId(), outboundLine.getWarehouseId(), BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//
+//                        String movementDocumentNo = pickupLine.getRefDocNumber();
+//                        String stBin = storageBin.getStorageBin();
+//                        String movementQtyValue = "N";
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, false);
+//                        log.info("InventoryMovement created for update 1-->: " + inventoryMovement);
+
+                        /*----------------------UPDATE-2------------------------------------------------*/
+                        // Inserting record in InventoryMovement------UPDATE 2-----------------------
+                        String movementDocumentNo = pickupLine.getPickupNumber();
+                        String stBin = pickupLine.getPickedStorageBin();
+                        String movementQtyValue = "P";
+                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
                                 movementQtyValue, loginUserID, false);
                         log.info("InventoryMovement created for update 2-->: " + inventoryMovement);
                     }
@@ -3084,7 +3568,7 @@ public class OutboundLineService extends BaseService {
         inventoryMovement.setMovementType(3L);
 
         // SUB_MVT_TYP_ID
-        inventoryMovement.setSubmovementType(5L);
+        inventoryMovement.setSubmovementType(2L);
 
         // PACK_BARCODE
         inventoryMovement.setPackBarcodes(pickupLine.getPickedPackCode());
@@ -3117,14 +3601,23 @@ public class OutboundLineService extends BaseService {
         inventoryMovement.setInventoryUom(pickupLine.getPickUom());
 
         // BAL_OH_QTY
-        Double sumOfInvQty = inventoryService.getInventoryQtyCountV2(
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
                 pickupLine.getCompanyCodeId(),
                 pickupLine.getPlantId(),
                 pickupLine.getLanguageId(),
                 pickupLine.getWarehouseId(),
                 pickupLine.getManufacturerName(),
                 pickupLine.getItemCode());
+        log.info("BalanceOhQty: " + sumOfInvQty);
+        if(sumOfInvQty != null) {
         inventoryMovement.setBalanceOHQty(sumOfInvQty);
+            Double openQty = sumOfInvQty - pickupLine.getPickConfirmQty();
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));
+        }
+        if(sumOfInvQty == null) {
+            inventoryMovement.setBalanceOHQty(0D);
+            inventoryMovement.setReferenceField2("0");
+        }
 
         // IM_CTD_BY
         inventoryMovement.setCreatedBy(pickupLine.getPickupConfirmedBy());
@@ -3256,7 +3749,7 @@ public class OutboundLineService extends BaseService {
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
             dbOrderManagementLine.setPickupNumber(null);
             dbOrderManagementLine.setStatusId(43L);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             updatedOrderManagementLine = orderManagementLineRepository.save(dbOrderManagementLine);
             log.info("OrderManagementLine updated : " + updatedOrderManagementLine);
         }
@@ -3290,11 +3783,7 @@ public class OutboundLineService extends BaseService {
                 data.setStatusId(47L);
                 data.setReferenceField7(statusDescription);    // ref_field_7
                 data.setStatusDescription(statusDescription);
-                try {
-                    data.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (java.text.ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                data.setPickupUpdatedOn(new Date());
                 orderManagementLineList.add(data);
             });
 
@@ -3414,24 +3903,29 @@ public class OutboundLineService extends BaseService {
                 searchOutboundLine.setFromDeliveryDate(dates[0]);
                 searchOutboundLine.setToDeliveryDate(dates[1]);
             }
+            if(searchOutboundLine.getManufacturerName() == null || searchOutboundLine.getManufacturerName().isEmpty()){
+                searchOutboundLine.setManufacturerName(null);
+            }
 
             log.info("searchOutboundLine.getWarehouseId() :  " + searchOutboundLine.getWarehouseId());
             List<StockMovementReportImpl> allLineData = new ArrayList<>();
             List<StockMovementReportImpl> outboundLineSearchResults =
-                    outboundLineV2Repository.findOutboundLineForStockMovement(searchOutboundLine.getItemCode(),
+                    pickupLineV2Repository.findPickupLineForStockMovement(searchOutboundLine.getItemCode(),
+                            searchOutboundLine.getManufacturerName(),
                             searchOutboundLine.getWarehouseId(),
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),
                             searchOutboundLine.getLanguageId(),
-                            59L, searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate());
+                            50L, searchOutboundLine.getFromDeliveryDate(), searchOutboundLine.getToDeliveryDate());
 
             List<StockMovementReportImpl> inboundLineSearchResults =
                     inboundLineV2Repository.findInboundLineForStockMovement(searchOutboundLine.getItemCode(),
+                            searchOutboundLine.getManufacturerName(),
                             searchOutboundLine.getWarehouseId(),
                             searchOutboundLine.getCompanyCodeId(),
                             searchOutboundLine.getPlantId(),
                             searchOutboundLine.getLanguageId(),
-                            Arrays.asList(14L, 20L, 24L));
+                            Arrays.asList(24L));
 
             allLineData.addAll(outboundLineSearchResults);
             allLineData.addAll(inboundLineSearchResults);
@@ -3514,71 +4008,36 @@ public class OutboundLineService extends BaseService {
         }
 
         //----------------------------------------------------------------------------------------------------------
-        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L, 41L);
+//        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L, 41L);
+        List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L);
         long outboundLineListCount = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusIdsToBeChecked);
         log.info("outboundLineListCount : " + outboundLineListCount);
         isConditionMet = (outboundLineListCount > 0 ? true : false);
         log.info("isConditionMet : " + isConditionMet);
 
-        AXApiResponse axapiResponse = new AXApiResponse();
         if (!isConditionMet) {
             throw new BadRequestException("OutboundLine: Order is not completely Processed.");
         } else {
             log.info("Order can be Processed.");
-            /*
-             * Call this respective API end points when REF_DOC_NO is confirmed with STATUS_ID = 59 in OUTBOUNDHEADER and
-             * OUTBOUNDLINE tables and based on OB_ORD_TYP_ID as per API document
-             */
-            OutboundHeaderV2 confirmedOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
-            List<OutboundLineV2> confirmedOutboundLines = getOutboundLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
-            log.info("OutboundOrderTypeId : " + confirmedOutboundHeader.getOutboundOrderTypeId());
-            log.info("confirmedOutboundLines: " + confirmedOutboundLines);
-
-            /*---------------------AXAPI-integration----------------------------------------------------------*/
-
-            // if OB_ORD_TYP_ID = 0 in OUTBOUNDHEADER table - call Shipment Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 0L && confirmedOutboundLines != null) {
-//                axapiResponse = postShipment(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            // if OB_ORD_TYP_ID = 1 in OUTBOUNDHEADER table - Interwarehouse Shipment Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 1L && confirmedOutboundLines != null) {
-//                axapiResponse = postInterwarehouseShipment(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            //  if OB_ORD_TYP_ID = 2 in OUTBOUNDHEADER table - Return PO Confirmation
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 2L && confirmedOutboundLines != null) {
-//                axapiResponse = postReturnPO(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-
-            // if OB_ORD_TYP_ID = 3 in OUTBOUNDHEADER table - Sale Order Confirmation - True Express
-//            if (confirmedOutboundHeader.getOutboundOrderTypeId() == 3L && confirmedOutboundLines != null) {
-//                axapiResponse = postSalesOrder(confirmedOutboundHeader, confirmedOutboundLines);
-//                log.info("AXApiResponse: " + axapiResponse);
-//            }
-            axapiResponse.setStatusCode("200");         //Hard Coded for testing
         }
 
-        if (axapiResponse.getStatusCode() != null && axapiResponse.getStatusCode().equalsIgnoreCase("200")) {
             try {
                 Long STATUS_ID_59 = 59L;
                 List<Long> statusId57 = Arrays.asList(57L);
                 statusDescription = stagingLineV2Repository.getStatusDescription(STATUS_ID_59, languageId);
-//                AuthToken authTokenForIDService = authTokenService.getIDMasterServiceAuthToken();
                 List<OutboundLineV2> outboundLineByStatus57List = findOutboundLineByStatusV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, statusId57);
 
                 // ----------------OutboundLine update-----------------------------------------------------------------------------------------
                 List<Long> lineNumbers = outboundLineByStatus57List.stream().map(OutboundLine::getLineNumber).collect(Collectors.toList());
                 List<String> itemCodes = outboundLineByStatus57List.stream().map(OutboundLine::getItemCode).collect(Collectors.toList());
-                Date deliveryConfirmedOn = DateUtils.getCurrentKWTDateTime();
+                Date deliveryConfirmedOn = new Date();
                 outboundLineV2Repository.updateOutboundLineStatusV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, lineNumbers, deliveryConfirmedOn);
                 log.info("OutboundLine updated ");
 
                 //----------------Outbound Header update----------------------------------------------------------------------------------------
-                outboundHeaderV2Repository.updateOutboundHeaderStatusV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, new Date());
+                log.info("c_id, plant_id, lang_id, wh_id, ref_doc_no, status_id, Status_desc, date:---->OBH Update----> "
+                        + companyCodeId + "," + plantId + "," + languageId + "," + warehouseId + "," + refDocNumber + "," + STATUS_ID_59 + "," + statusDescription + "," + new Date());
+                outboundHeaderV2Repository.updateOutboundHeaderStatusNewV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription, new Date());
                 OutboundHeaderV2 isOrderConfirmedOutboundHeader = outboundHeaderService.getOutboundHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
                 log.info("OutboundHeader updated----1---> : " + isOrderConfirmedOutboundHeader.getRefDocNumber() + "---" + isOrderConfirmedOutboundHeader.getStatusId());
                 if (isOrderConfirmedOutboundHeader.getStatusId() != 59L) {
@@ -3587,8 +4046,8 @@ public class OutboundLineService extends BaseService {
                     isOrderConfirmedOutboundHeader.setStatusId(STATUS_ID_59);
                     isOrderConfirmedOutboundHeader.setStatusDescription(statusDescription);
                     isOrderConfirmedOutboundHeader.setUpdatedBy(loginUserID);
-                    isOrderConfirmedOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                    isOrderConfirmedOutboundHeader.setDeliveryConfirmedOn(DateUtils.getCurrentKWTDateTime());
+                    isOrderConfirmedOutboundHeader.setUpdatedOn(new Date());
+                    isOrderConfirmedOutboundHeader.setDeliveryConfirmedOn(new Date());
                     outboundHeaderV2Repository.saveAndFlush(isOrderConfirmedOutboundHeader);
                     log.info("OutboundHeader updated---2---> : " + isOrderConfirmedOutboundHeader.getRefDocNumber() + "---" + isOrderConfirmedOutboundHeader.getStatusId());
                 }
@@ -3598,9 +4057,12 @@ public class OutboundLineService extends BaseService {
                 log.info("PreOutbound Line updated");
 
                 //----------------Preoutbound Header--------------------------------------------------------------------------------------------
-//                StatusId idStatus = idmasterService.getStatus(STATUS_ID_59, warehouseId, authTokenForIDService.getAccess_token());
-                preOutboundHeaderV2Repository.updatePreOutboundHeaderStatus(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
+                preOutboundHeaderV2Repository.updatePreOutboundHeaderStatusV2(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
                 log.info("PreOutbound Header updated");
+
+                //----------------OrderManagement Line--------------------------------------------------------------------------------------------
+                orderManagementLineV2Repository.updateOrderManagementLineStatus(companyCodeId, plantId, languageId, warehouseId, refDocNumber, STATUS_ID_59, statusDescription);
+                log.info("OrderManagement Line updated");
 
                 /*-----------------Inventory Updates---------------------------*/
 //                List<QualityLineV2> dbQualityLine = qualityLineService.getQualityLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumbers, itemCodes);
@@ -3632,39 +4094,81 @@ public class OutboundLineService extends BaseService {
 //                }
 
                 /*-------------------Inserting record in InventoryMovement-------------------------------------*/
-                Long BIN_CLASS_ID = 5L;
-                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                StorageBinV2 storageBin = mastersService.getStorageBin(companyCodeId, plantId, languageId, warehouseId, BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
-                String movementDocumentNo = refDocNumber;
-                String stBin = storageBin.getStorageBin();
-                String movementQtyValue = "N";
+//                Long BIN_CLASS_ID = 5L;
+//                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                StorageBinV2 storageBin = mastersService.getStorageBin(companyCodeId, plantId, languageId, warehouseId, BIN_CLASS_ID, authTokenForMastersService.getAccess_token());
+//                String movementDocumentNo = refDocNumber;
+//                String stBin = storageBin.getStorageBin();
+//                String movementQtyValue = "N";
 
-                List<PickupLineV2> dbPickupLine = pickupLineService.getPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumbers, itemCodes);
-                log.info("dbPickupLine: " + dbPickupLine.size());
-                if (dbPickupLine != null) {
-                    List<InventoryMovement> newInventoryMovementList = new ArrayList<>();
-                    for (PickupLineV2 pickupLine : dbPickupLine) {
-                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
-                                movementQtyValue, loginUserID, true);
-                        newInventoryMovementList.add(inventoryMovement);
-                    }
-                    if (newInventoryMovementList.size() > 0) {
-                        inventoryMovementRepository.saveAll(newInventoryMovementList);
-                        log.info("InventoryMovement list created.");
-                    }
-                }
+//                List<PickupLineV2> dbPickupLine = pickupLineService.getPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumbers, itemCodes);
+//                log.info("dbPickupLine: " + dbPickupLine.size());
+//                if (dbPickupLine != null) {
+//                    List<InventoryMovement> newInventoryMovementList = new ArrayList<>();
+//                    for (PickupLineV2 pickupLine : dbPickupLine) {
+//                        InventoryMovement inventoryMovement = createInventoryMovementV2(pickupLine, movementDocumentNo, stBin,
+//                                movementQtyValue, loginUserID, true);
+//                        newInventoryMovementList.add(inventoryMovement);
+//                    }
+//                    if (newInventoryMovementList.size() > 0) {
+//                        inventoryMovementRepository.saveAll(newInventoryMovementList);
+//                        log.info("InventoryMovement list created.");
+//                    }
+//                }
                 return outboundLineByStatus57List;
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            String errorFromAXAPI = axapiResponse.getMessage();
-            throw new BadRequestException("Error from AX: " + errorFromAXAPI);
-        }
         return null;
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public List<OutboundLineV2> getOutBoundLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                         String warehouseId, String refDocNumber, String itemCode, String manufacturerName) {
+        List<OutboundLineV2> outboundLineV2List = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, refDocNumber, itemCode, manufacturerName, 0L);
+        log.info("PickList Cancellation - OutboundLine : " + outboundLineV2List);
+        return outboundLineV2List;
+    }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<OutboundLineV2> getOutBoundLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                         String warehouseId, String refDocNumber) {
+        List<OutboundLineV2> outboundLineV2List = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundLine : " + outboundLineV2List);
+        return outboundLineV2List;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //Delete OutBoundLine
     public List<OutboundLineV2> deleteOutBoundLine(String companyCodeId, String plantId, String languageId,
                                                    String warehouseId, String refDocNumber, String loginUserID) throws Exception {
@@ -3672,15 +4176,43 @@ public class OutboundLineService extends BaseService {
         List<OutboundLineV2> outboundLineV2List = new ArrayList<>();
         List<OutboundLineV2> dbOutBoundLine = outboundLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-        if (dbOutBoundLine != null) {
+        log.info("PickList Cancellation - OutboundLine : " + dbOutBoundLine);
+        if (dbOutBoundLine != null && !dbOutBoundLine.isEmpty()) {
             for (OutboundLineV2 outboundLineV2 : dbOutBoundLine) {
                 outboundLineV2.setDeletionIndicator(1L);
                 outboundLineV2.setUpdatedBy(loginUserID);
-                outboundLineV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                outboundLineV2.setUpdatedOn(new Date());
                 OutboundLineV2 outboundLine = outboundLineV2Repository.save(outboundLineV2);
                 outboundLineV2List.add(outboundLine);
             }
         }
         return outboundLineV2List;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     */
+    public List<OutboundLineInterim> deleteOutboundLineInterimForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                                        String warehouseId, String refDocNumber, String loginUserID) {
+        List<OutboundLineInterim> listOutboundLineInterim = outboundLineInterimRepository.
+                findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundLine Interim: " + listOutboundLineInterim);
+        if (listOutboundLineInterim != null && !listOutboundLineInterim.isEmpty()) {
+            listOutboundLineInterim.forEach(data -> {
+                data.setDeletionIndicator(1L);
+                data.setUpdatedBy(loginUserID);
+                data.setUpdatedOn(new Date());
+            });
+            return outboundLineInterimRepository.saveAll(listOutboundLineInterim);
+        }
+        return listOutboundLineInterim;
     }
 }

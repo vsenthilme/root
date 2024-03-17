@@ -573,7 +573,7 @@ public class OutboundHeaderService {
             dbOutboundHeader.setPhoneNumber(outboundIntegrationHeader.getPhoneNumber());
             dbOutboundHeader.setAlternateNo(outboundIntegrationHeader.getAlternateNo());
             dbOutboundHeader.setStatus(outboundIntegrationHeader.getStatus());
-            dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOutboundHeader.setUpdatedOn(new Date());
 
             outboundHeaderV2Repository.save(dbOutboundHeader);
             log.info("OutboundHeader updated with salesInvoice: " + outboundIntegrationHeader.getSalesInvoiceNumber());
@@ -934,8 +934,8 @@ public class OutboundHeaderService {
         dbOutboundHeader.setDeletionIndicator(0L);
         dbOutboundHeader.setCreatedBy(loginUserID);
         dbOutboundHeader.setUpdatedBy(loginUserID);
-        dbOutboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOutboundHeader.setCreatedOn(new Date());
+        dbOutboundHeader.setUpdatedOn(new Date());
         return outboundHeaderV2Repository.save(dbOutboundHeader);
     }
 
@@ -955,14 +955,20 @@ public class OutboundHeaderService {
                                                    OutboundHeaderV2 updateOutboundHeader, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         OutboundHeaderV2 dbOutboundHeader = getOutboundHeaderForUpdateV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode);
+        Date ctdOn = dbOutboundHeader.getCreatedOn();
+        Date refDocDate = dbOutboundHeader.getRefDocDate();
+//        log.info("dbOutboundHeader for updating status 57: " + dbOutboundHeader);
         if (dbOutboundHeader != null) {
             BeanUtils.copyProperties(updateOutboundHeader, dbOutboundHeader, CommonUtils.getNullPropertyNames(updateOutboundHeader));
             dbOutboundHeader.setUpdatedBy(loginUserID);
-            dbOutboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOutboundHeader.setUpdatedOn(new Date());
             if (dbOutboundHeader.getStatusId() != null) {
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbOutboundHeader.getStatusId(), dbOutboundHeader.getLanguageId());
                 dbOutboundHeader.setStatusDescription(statusDescription);
             }
+            log.info("dbOutboundHeader.getCreatedOn(), ref_doc_date :--->" + ctdOn + ", " + refDocDate);
+            dbOutboundHeader.setCreatedOn(ctdOn);
+            dbOutboundHeader.setRefDocDate(refDocDate);
             return outboundHeaderV2Repository.save(dbOutboundHeader);
         }
         return null;
@@ -980,23 +986,35 @@ public class OutboundHeaderService {
         if (outboundHeader != null) {
             outboundHeader.setDeletionIndicator(1L);
             outboundHeader.setUpdatedBy(loginUserID);
-            outboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundHeader.setUpdatedOn(new Date());
             outboundHeaderV2Repository.save(outboundHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + preOutboundNo);
         }
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //Delete OutBoundHeaderV2
     public OutboundHeaderV2 deleteOutBoundHeader(String companyCodeId, String plantId, String languageId,
                                                  String warehouseId, String refDocNumber,String loginUserID) throws Exception{
 
         OutboundHeaderV2 outboundHeaderV2 = outboundHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OutboundHeader : " + outboundHeaderV2);
         if (outboundHeaderV2 != null) {
             outboundHeaderV2.setDeletionIndicator(1L);
             outboundHeaderV2.setUpdatedBy(loginUserID);
-            outboundHeaderV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            outboundHeaderV2.setUpdatedOn(new Date());
             outboundHeaderV2Repository.save(outboundHeaderV2);
         }
         return outboundHeaderV2;

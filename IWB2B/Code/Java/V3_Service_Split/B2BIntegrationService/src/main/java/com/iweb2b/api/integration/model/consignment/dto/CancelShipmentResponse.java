@@ -10,4 +10,5 @@ public class CancelShipmentResponse {
 		}
 	 */
     private String status;
+    private Boolean success;
 }

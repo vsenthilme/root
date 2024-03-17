@@ -26,7 +26,6 @@ public interface GrLineRepository extends JpaRepository<GrLine,Long>,
 	/**
 	 * 
 	 * @param languageId
-	 * @param companyCodeId
 	 * @param plantId
 	 * @param warehouseId
 	 * @param preInboundNo
@@ -96,7 +95,6 @@ public interface GrLineRepository extends JpaRepository<GrLine,Long>,
 	 * @param warehouseId
 	 * @param preInboundNo
 	 * @param caseCode
-	 * @param l
 	 * @return
 	 */
 	public List<GrLine> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndDeletionIndicator(

@@ -1,0 +1,318 @@
+<div class="row mx-1 pl-2">
+  <div class="col-12">
+    <div class="row  text-secondary pr-0 mt-1">
+      <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+
+
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+          <ol class="breadcrumb mb-0 bg-white">
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a routerLink="/main/dashboard">Home</a>
+            </li>
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a
+                routerLink="/main/reports/report-list">Reports</a></li>
+            <li class="breadcrumb-item whs-fontsize-1-2rem  my-auto">Stock List Report By Bin Location</li>
+          </ol>
+        </nav>
+
+
+        <div class="d-flex ml-auto my-auto">
+          <div [hidden]="isShowDiv"> <input matInput 
+            class="form-control filter_button mt-2 mt-2 mx-2 border-bottom" placeholder="Search" style="width:90%">
+        </div>
+          <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row d-flex align-items-center">
+            <!--
+                          <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-2"
+                          matTooltip="Add">
+                          <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                        </button>
+                        -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+              matTooltip="Display">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+              matTooltip="Edit">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+              matTooltip="Delete">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+            </button>
+            <!-- 
+                          <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                        class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="Info">
+                        <mat-icon class="action-icon d-flex align-items-center justify-content-center">info_outline</mat-icon>
+                      </button>
+                        -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+              matTooltip="Download" (click)="filtersearch(true)">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+            </button>
+
+
+            <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+              [ngClass]="{'bg-orange' : toggle, 'purple': !toggle}">
+              <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab
+              class=" floating-buttons1  d-flex align-items-center justify-content-center darkaction text-white mx-2 mr-3 align-middle"
+              matTooltip="New">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">add</mat-icon>
+            </button>
+            <button mat-mini-fab
+              class=" floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-2 mr-3 align-middle"
+              matTooltip="Save">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center my-auto">save</mat-icon>
+            </button>
+            <button mat-mini-fab class="text-white mx-2 action-button  bg-red " type="button" mat-button>
+              <mat-icon class="">tune</mat-icon> Filter
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 mainsection mt-1  border-top px-0 uatwhite" style="height: calc(100vh - 12rem);">
+    <div class="d-flex align-items-center justify-content-between pb-2"
+      style="height: 3rem !important;background-color: #f5f5f5 !important;">
+      <div>
+        <h6 class="my-auto mb-0 mx-3 font-weight-bold whs-text-grey">Stock List  By Bin Location</h6>
+      </div>
+      <div *ngIf="fullscreen">
+        <button mat-mini-fab (click)="togglesearch()"
+          class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+          matTooltip="Fullscreen">
+          <mat-icon class="action-icon whs-text-grey d-flex align-items-center justify-content-center my-auto">launch
+          </mat-icon>
+        </button>
+      </div>
+      <div *ngIf="back">
+        <button mat-mini-fab (click)="backsearch()"
+          class=" floating-buttons1  d-flex align-items-center justify-content-center roundedhover text-white mx-2 mr-3 align-middle"
+          matTooltip="Back">
+          <mat-icon class="action-icon whs-text-grey d-flex align-items-center justify-content-center my-auto">
+            arrow_back</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="mt-3 mb-0 " *ngIf="search">
+
+      <div class="row  px-3">
+
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 text-black">Warehouse No</p>
+            <div class="form-group input_field mb-0" appearance="outline">
+              <ng-multiselect-dropdown [placeholder]="'Select'" [settings]="dropdownSettings"
+                [data]="multiselectWarehouseList" [(ngModel)]="selectedItems" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)" [ngModelOptions]="{standalone: true}">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Item Code </p>
+            <div class="form-group input_field mb-0" appearance="outline">
+              <ng-multiselect-dropdown [placeholder]="'Select'" [settings]="dropdownSettings"
+                [data]="multiselectItemCodeList" [(ngModel)]="selectedItems1" (onSelect)="onItemSelect($event)"
+                (onSelectAll)="onSelectAll($event)" [ngModelOptions]="{standalone: true}">
+              </ng-multiselect-dropdown>
+            </div>
+          </div>
+        </div> -->
+
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Product Code </p>
+            <!-- <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" [(ngModel)]="productCode">
+            </mat-form-field> -->
+            <p-dropdown placeholder="Select" [filter]="true" class="w-100" [options]="multiselectItemCodeList"
+            [resetFilterOnHide]="true" 
+              [(ngModel)]="productCode" name="product" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"
+                (onFilter)="onItemType($event)"  >
+          </p-dropdown>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Pallet ID</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" [(ngModel)]="packBarcodes">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Storage Bin </p>
+            <!-- <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <input matInput placeholder="Enter" [(ngModel)]="storageBinCode">
+            </mat-form-field> -->
+            <p-dropdown placeholder="Select" [filter]="true" class="w-100" [options]="multiselectStorageList"
+            [resetFilterOnHide]="true" 
+            [(ngModel)]="storageBinCode" name="product" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}"
+                (onFilter)="onStorageType($event)"  >
+          </p-dropdown>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Storage Section </p>
+            <p-multiSelect placeholder="Select"    appendTo="body" class="w-100" [options]="multiSelectStorageSectionID"
+            [(ngModel)]="storageSectionId" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+          </p-multiSelect>
+          </div>
+        </div> 
+        <div class="col-lg-3 col-md-4">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0">Total Quantity </p>
+            <div class="form-group input_field mb-0" appearance="outline" style="margin-top:10px;">
+              <mat-label>{{totalQty}}</mat-label>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-lg-3 col-md-4 ">
+                    <div class="d-flex flex-column">
+                      <p class="mb-0 py-0">Stock Type </p>
+                      <mat-form-field class="mb-0 w-100 " appearance="outline">
+                      
+                        <mat-select class="mb-0" value="all" placeholder="Select">
+                          <mat-option value="Hand">On Hand</mat-option>
+                          <mat-option value="Damaged">Damaged</mat-option>
+                          <mat-option value="Hold">Hold</mat-option>
+                          <mat-option value="all">All</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div> -->
+
+      </div>
+      <div class="d-flex justify-content-end align-items-center pr-3">
+        <button mat-raised-button color="warn" class="text-white mb-2 mx-1" (click)="reset();">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        
+        <button mat-raised-button class=" bg-darkblue text-white mb-2" (click)="filtersearch()"> <i
+            class="bi bi-gear-fill me-1 font-size-1_5rem pr-2"></i>Execute</button>
+      </div>
+    </div>
+    <div class="row  px-2 ">
+        <div class="row " style="padding-right: 15px !important;">
+      <p-table #stocksampleTag  [value]="stocksample"
+      styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single"  [globalFilterFields]="['itemCode', 'referenceField8', 'referenceField9', 'storageBin',  'referenceField10','packBarcodes','inventoryQuantity','allocatedQuantity','total','stockTypeId']"
+      scrollHeight="calc(100vh - 14.8rem)" sortField="stagingNo" [sortOrder]="-1" [paginator]="true" [rows]="100" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true" style="width: 100%;margin-left: 10px;background-color:white" >
+      <ng-template pTemplate="header">
+        <tr>
+         
+          <th  pSortableColumn="itemCode"  pResizableColumn> Product Code<p-sortIcon field="itemCode"></p-sortIcon></th> 
+          <th  pSortableColumn="referenceField8"   pResizableColumn>Description<p-sortIcon field="referenceField8"></p-sortIcon></th>
+          <th  pSortableColumn="referenceField9"  pResizableColumn>Mfr Part No <p-sortIcon field="referenceField9"></p-sortIcon></th> 
+          <th  pSortableColumn="storageBin"  pResizableColumn>Storage Bin<p-sortIcon field="storageBin"></p-sortIcon></th> 
+          <th  pSortableColumn="referenceField10"  pResizableColumn>Storage Section<p-sortIcon field="referenceField10"></p-sortIcon></th> 
+          <th  pSortableColumn="packBarcodes"  pResizableColumn>Pallet<p-sortIcon field="packBarcodes"></p-sortIcon></th> 
+        <th  pSortableColumn="inventoryQuantity"  pResizableColumn>Inv Qty <p-sortIcon field="inventoryQuantity"></p-sortIcon></th>
+        <th  pSortableColumn="allocatedQuantity"  pResizableColumn>Alloc Qty <p-sortIcon field="allocatedQuantity"></p-sortIcon></th>
+        <th  pSortableColumn="total"  pResizableColumn>Total <p-sortIcon field="total"></p-sortIcon></th>
+        <th  pSortableColumn="stockTypeId"  pResizableColumn>Stock Type<p-sortIcon field="stockTypeId"></p-sortIcon></th>
+        </tr>
+         
+        <tr >
+       
+        <th>
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'itemCode', 'contains')" 
+            [value]="$any(stocksampleTag.filters['itemCode'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th> 
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'referenceField8', 'contains')" 
+            [value]="$any(stocksampleTag.filters['referenceField8'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+            <th >
+              <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'referenceField9', 'contains')" 
+              [value]="$any(stocksampleTag.filters['referenceField9'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'storageBin', 'contains')" 
+            [value]="$any(stocksampleTag.filters['storageBin'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th> 
+          <th>
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'referenceField10', 'contains')" 
+            [value]="$any(stocksampleTag.filters['referenceField10'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'packBarcodes', 'contains')" 
+            [value]="$any(stocksampleTag.filters['packBarcodes'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'inventoryQuantity', 'contains')" 
+            [value]="$any(stocksampleTag.filters['inventoryQuantity'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'allocatedQuantity', 'contains')" 
+            [value]="$any(stocksampleTag.filters['allocatedQuantity'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'total', 'contains')" 
+            [value]="$any(stocksampleTag.filters['total'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th >
+            <input pInputText  type="text" (input)="stocksampleTag.filter($any($event.target)?.value, 'stockTypeId', 'contains')" 
+            [value]="$any(stocksampleTag.filters['stockTypeId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-stock let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="stock" [pSelectableRowIndex]="rowIndex">
+            <td >{{stock.itemCode}}</td>
+          <td >{{stock.referenceField8}}</td>
+          <td >{{stock.referenceField9}}</td>
+          <td >{{stock.storageBin}}</td>
+          <td >{{stock.referenceField10 }}</td>
+          <td >{{stock.packBarcodes }}</td>
+          <td >{{stock.inventoryQuantity }}</td>
+          <td >{{stock.allocatedQuantity }}</td>
+          <td >{{stock.total }}</td>
+          <td >{{stock.stockTypeId1 }}</td>
+        </tr>
+     
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td ></td>
+          <td ></td>
+          <td ></td>
+          <td ></td>
+          <td ></td>
+          <td >Total</td>
+          <td >{{getInvQty() }}</td>
+          <td >{{getAllocQty() }}</td>
+          <td >{{getTotal() }}</td>
+          <td ></td>
+        </tr>
+    </ng-template>
+    </p-table>
+  </div>
+      <!-- <div class="buttons  pb-1 w-100 d-flex justify-content-end ">
+        <div class="p-0 mx-1">
+          <mat-paginator class="mx-3 me-3" showFirstLastButtons [length]="totalRecords" [pageSize]=pageSize
+            [pageSizeOptions]="[500, 1000, 1500, 2000]" aria-label="Select page of periodic elements"
+            (page)="pageHandler($event)">
+          </mat-paginator>
+        </div>
+      </div> -->
+      
+
+    </div>
+  </div>
+
+</div>

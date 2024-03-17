@@ -134,7 +134,7 @@ public class SparkGrLineService {
                 "IS_COMPLETED as isCompleted " +
                 "FROM tblGrlineV2 WHERE IS_DELETED = 0 ");
 
-        grLineQueryV2.cache();
+//        grLineQueryV2.cache();
 
         if (findGrLineV2.getLanguageId() != null && !findGrLineV2.getLanguageId().isEmpty()) {
             grLineQueryV2 = grLineQueryV2.filter(col("LANG_ID").isin(findGrLineV2.getLanguageId().toArray()));

@@ -75,15 +75,15 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
     @Query(value = "SELECT SUM(ORD_QTY) AS ordQtyTotal \r\n"
             + "FROM tbloutboundline \r\n"
             + "WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND PRE_OB_NO IN :preOutboundNo "
-            + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND PARTNER_CODE = :partnerCode \r\n"
-            + "GROUP BY PARTNER_CODE;", nativeQuery = true)
+            + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND OB_ORD_TYP_ID = :outboundOrderTypeId \r\n"
+            + "GROUP BY OB_ORD_TYP_ID;", nativeQuery = true)
     public Long getSumOfOrderedQtyByPartnerCodeV2(@Param("companyCodeId") String companyCodeId,
                                                   @Param("plantId") String plantId,
                                                   @Param("languageId") String languageId,
                                                   @Param("warehouseId") String warehouseId,
                                                   @Param("preOutboundNo") List<String> preOutboundNo,
                                                   @Param("refDocNumber") List<String> refDocNumber,
-                                                  @Param("partnerCode") String partnerCode);
+                                                  @Param("outboundOrderTypeId") Long outboundOrderTypeId);
 
     @Query(value = "SELECT COUNT(OB_LINE_NO) AS deliveryLines \r\n"
             + "FROM tbloutboundline \r\n"
@@ -136,14 +136,14 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             + "FROM tbloutboundline \r\n"
             + "WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND WH_ID = :warehouseId AND PRE_OB_NO IN :preOutboundNo "
             + "AND REF_DOC_NO IN :refDocNumber AND REF_FIELD_2 IS NULL AND DLV_QTY > 0 \r\n"
-            + "AND PARTNER_CODE = :partnerCode GROUP BY PARTNER_CODE;", nativeQuery = true)
+            + "AND OB_ORD_TYP_ID = :outboundOrderTypeId GROUP BY OB_ORD_TYP_ID;", nativeQuery = true)
     public Long getDeliveryQtyByPartnerCodeV2(@Param("companyCodeId") String companyCodeId,
                                               @Param("plantId") String plantId,
                                               @Param("languageId") String languageId,
                                               @Param("warehouseId") String warehouseId,
                                               @Param("preOutboundNo") List<String> preOutboundNo,
                                               @Param("refDocNumber") List<String> refDocNumber,
-                                              @Param("partnerCode") String partnerCode);
+                                              @Param("outboundOrderTypeId") Long outboundOrderTypeId);
 
     /*
      * Line Shipped
@@ -264,9 +264,11 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.wh_id warehouseId,\n" +
             "ob.str_no batchSerialNumber,\n" +
             "ob.dlv_ctd_by createdBy,\n" +
+//            "DATEADD(HOUR,3,ob.dlv_ctd_on) createdOn,\n" +
             "ob.dlv_ctd_on createdOn,\n" +
             "ob.is_deleted deletionIndicator,\n" +
             "ob.dlv_cnf_by deliveryConfirmedBy,\n" +
+//            "DATEADD(HOUR,3,ob.dlv_cnf_on) deliveryConfirmedOn,\n" +
             "ob.dlv_cnf_on deliveryConfirmedOn,\n" +
             "ob.dlv_ord_no deliveryOrderNo,\n" +
             "ob.dlv_qty deliveryQty,\n" +
@@ -284,17 +286,20 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.ref_field_7 referenceField7,\n" +
             "ob.ref_field_8 referenceField8,\n" +
             "ob.dlv_rev_by reversedBy,\n" +
+//            "DATEADD(HOUR,3,ob.dlv_rev_on) reversedOn,\n" +
             "ob.dlv_rev_on reversedOn,\n" +
             "ob.sp_st_ind_id specialStockIndicatorId,\n" +
             "ob.status_id statusId,\n" +
             "ob.stck_typ_id stockTypeId,\n" +
             "ob.dlv_utd_by updatedBy,\n" +
+//            "DATEADD(HOUR,3,ob.dlv_utd_on) updatedOn,\n" +
             "ob.dlv_utd_on updatedOn,\n" +
             "ob.var_id variantCode,\n" +
             "ob.var_sub_id variantSubCode,\n" +
             "ob.mfr_name manufacturerName,\n" +
             "ob.SALES_INVOICE_NUMBER salesInvoiceNumber,\n" +
             "ob.PICK_LIST_NUMBER pickListNumber,\n" +
+//            "DATEADD(HOUR,3,ob.INVOICE_DATE) invoiceDate,\n" +
             "ob.INVOICE_DATE invoiceDate,\n" +
             "ob.DELIVERY_TYPE deliveryType,\n" +
             "ob.CUSTOMER_ID customerId,\n" +
@@ -316,6 +321,12 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "ob.sales_order_number salesOrderNumber,\n" +
             "ob.manufacturer_full_name manufacturerFullName,\n" +
             "ob.PARTNER_ITEM_BARCODE barcodeId,\n" +
+            "ob.HE_NO handlingEquipment,\n" +
+            "ob.ASS_PICKER_ID assignedPickerId,\n" +
+            "ob.CUSTOMER_TYPE customerType,\n" +
+//            "(select count(ref_doc_no) from tbloutboundline ob2 where \n" +
+//            "ob2.wh_id = ob.wh_id and ob2.c_id = ob2.c_id and ob2.plant_id=ob.plant_id and ob2.lang_id = ob.lang_id and \n" +
+//            "ob2.status_id in (48,50,57) and ob2.is_deleted = 0) tracking, \n" +
             "(select pcQty from #tpl p \n" +
             "where \n" +
             "p.wh_id = ob.wh_id and p.c_id = ob.c_id and p.plant_id=ob.plant_id and p.lang_id = ob.lang_id and \n" +
@@ -326,6 +337,7 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "q.PRE_OB_NO = ob.PRE_OB_NO and q.OB_LINE_NO = ob.OB_LINE_NO and q.itm_code = ob.itm_code and q.ref_doc_no = ob.ref_doc_no) as referenceField10 \n" +
             "from tbloutboundline ob\n" +
             "where \n" +
+            "ob.is_deleted = 0 and \n"+
             "(COALESCE(:companyCodeId, null) IS NULL OR (ob.c_id IN (:companyCodeId))) and \n" +
             "(COALESCE(:languageId, null) IS NULL OR (ob.lang_id IN (:languageId))) and \n" +
             "(COALESCE(:plantId, null) IS NULL OR (ob.plant_id IN (:plantId))) and \n" +
@@ -336,6 +348,9 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             "(COALESCE(:statusId, null) IS NULL OR (ob.status_id IN (:statusId))) and \n" +
             "(COALESCE(:lineNo, null) IS NULL OR (ob.ob_line_no IN (:lineNo))) and \n" +
             "(COALESCE(:itemCode, null) IS NULL OR (ob.itm_code IN (:itemCode))) and\n" +
+            "(COALESCE(:manufacturerName, null) IS NULL OR (ob.MFR_NAME IN (:manufacturerName))) and\n" +
+            "(COALESCE(:salesOrderNumber, null) IS NULL OR (ob.SALES_ORDER_NUMBER IN (:salesOrderNumber))) and\n" +
+            "(COALESCE(:targetBranchCode, null) IS NULL OR (ob.TARGET_BRANCH_CODE IN (:targetBranchCode))) and\n" +
             "(COALESCE(:orderType, null) IS NULL OR (ob.ob_ord_typ_id IN (:orderType))) and \n" +
             "(COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) IS NULL OR (ob.DLV_CNF_ON between COALESCE(CONVERT(VARCHAR(255), :fromDeliveryDate), null) and COALESCE(CONVERT(VARCHAR(255), :toDeliveryDate), null))) \n"
             , nativeQuery = true)
@@ -349,6 +364,9 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
                                                         @Param("refDocNo") List<String> refDocNo,
                                                         @Param("lineNo") List<Long> lineNo,
                                                         @Param("itemCode") List<String> itemCode,
+                                                        @Param("salesOrderNumber") List<String> salesOrderNumber,
+                                                        @Param("targetBranchCode") List<String> targetBranchCode,
+                                                        @Param("manufacturerName") List<String> manufacturerName,
                                                         @Param("statusId") List<Long> statusId,
                                                         @Param("orderType") List<String> orderType,
                                                         @Param("partnerCode") List<String> partnerCode);
@@ -393,4 +411,46 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
     List<OutboundLineV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, Long DeletionIndicator);
 
+    List<OutboundLineV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId,
+            String refDocNumber, String itemCode, String manufacturerName, Long DeletionIndicator);
+
+    @Transactional
+    @Procedure(procedureName = "outboundline_status_update_proc")
+    public void updateOutboundlineStatusUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preOutboundNo") String preOutboundNo,
+            @Param("itmCode") String itmCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("partnerCode") String partnerCode,
+            @Param("handlingEquipment") String handlingEquipment,
+            @Param("assignedPickerId") String assignedPickerId,
+            @Param("lineNumber") Long lineNumber,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedOn") Date updatedOn
+    );
+
+    @Query(value = "SELECT COUNT(ref_doc_no) as count FROM \n"
+            + "tbloutboundline qh WHERE \n"
+            + "(:companyCode IS NULL OR qh.c_id IN (:companyCode)) AND \n"
+            + "(:plantId IS NULL OR qh.plant_id IN (:plantId)) AND \n"
+            + "(:languageId IS NULL OR qh.lang_id IN (:languageId)) AND \n"
+            + "(:warehouseId IS NULL OR qh.wh_id IN (:warehouseId)) AND \n"
+            + "(qh.status_id IN (:statusId)) AND \n"
+            + "qh.is_deleted = 0 ", nativeQuery = true)
+    public Long gettrackingCount(
+            @Param("companyCode") List<String> companyCode,
+            @Param("plantId") List<String> plantId,
+            @Param("languageId") List<String> languageId,
+            @Param("warehouseId") List<String> warehouseId,
+            @Param("statusId") List<Long> statusId);
+
+    OutboundLineV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
+            String refDocNumber, String partnerCode, Long lineNumber, String itemCode, String manufacturerName, Long deletionIndicator);
 }

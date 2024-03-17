@@ -1,0 +1,106 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+      <h6 class="my-auto">Inbound Lines </h6>
+      <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+    </div>
+    <div class="row  p-1">
+      <div class="d-flex ml-auto my-auto">
+      <div> <input matInput (input)="inboundlineTag.filterGlobal($any($event.target).value, 'contains')"
+        class="form-control filter_button mt-2 mt-2 mx-2 border-bottom" placeholder="Search" style="width:90%">
+    </div>
+      </div>
+      <div class=" mt-2 mx-3 w-100">
+        <p-table #inboundlineTag  [value]="inboundline" 
+        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single"   [globalFilterFields]="['lineNo', 'itemCode', 'description', 'manufacturerPartNo',  'orderQty','acceptedQty','damageQty','varianceQty']"
+        scrollHeight="calc(100vh - 14.8rem)" sortField="stagingNo" [sortOrder]="-1" [paginator]="true" [rows]="100" [showCurrentPageReport]="true" [scrollable]="true" selectionMode="single"  scrollDirection="both"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true" style="width: 100%;margin-left: 10px;background-color:white" >
+        <ng-template pTemplate="header">
+          <tr>
+            
+            <th style="width: 11.5rem;" st pSortableColumn="lineNo"  pResizableColumn>Line<p-sortIcon field="lineNo"></p-sortIcon></th> 
+            <th style="width: 11.5rem;" pSortableColumn="itemCode"  pResizableColumn>Product Code<p-sortIcon field="itemCode"></p-sortIcon></th> 
+            <th style="width: 11.5rem;" pSortableColumn="description"   pResizableColumn>Description<p-sortIcon field="description"></p-sortIcon></th>
+            <th style="width: 11.5rem;" pSortableColumn="manufacturerPartNo"  pResizableColumn>Mfr Part NO<p-sortIcon field="manufacturerPartNo"></p-sortIcon></th> 
+            <th style="width: 11.5rem;" pSortableColumn="orderQty"  pResizableColumn>Expt Qty<p-sortIcon field="orderQty"></p-sortIcon></th> 
+            <th style="width: 11.5rem;" pSortableColumn="acceptedQty"  pResizableColumn>Acc Qty<p-sortIcon field="acceptedQty"></p-sortIcon></th> 
+            <th style="width: 11.5rem;" pSortableColumn="damageQty"  pResizableColumn>Damage Qty<p-sortIcon field="damageQty"></p-sortIcon></th> 
+          <th style="width: 11.5rem;" pSortableColumn="varianceQty"  pResizableColumn>Variance <p-sortIcon field="varianceQty"></p-sortIcon></th>
+         
+        
+         
+          </tr>
+           
+          <tr >
+         
+          <th  style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'statusId', 'contains')" 
+              [value]="$any(inboundlineTag.filters['statusId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th> 
+            <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'itemCode', 'contains')" 
+              [value]="$any(inboundlineTag.filters['itemCode'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+              <th style="width: 11.5rem;">
+                <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'description', 'contains')" 
+                [value]="$any(inboundlineTag.filters['description'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+              </th>
+              <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'manufacturerPartNo', 'contains')" 
+              [value]="$any(inboundlineTag.filters['manufacturerPartNo'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th> 
+            <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'orderQty', 'contains')" 
+              [value]="$any(inboundlineTag.filters['orderQty'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'acceptedQty', 'contains')" 
+              [value]="$any(inboundlineTag.filters['acceptedQty'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'damageQty', 'contains')" 
+              [value]="$any(inboundlineTag.filters['damageQty'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <!--<th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'pickedStorageBin', 'contains')" 
+              [value]="$any(inboundlineTag.filters['pickedStorageBin'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>-->
+            <th style="width: 11.5rem;">
+              <input pInputText  type="text" (input)="inboundlineTag.filter($any($event.target)?.value, 'varianceQty', 'contains')" 
+              [value]="$any(inboundlineTag.filters['varianceQty'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+           
+            
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-picker let-rowIndex="rowIndex">
+          <tr [pSelectableRow]="picker" [pSelectableRowIndex]="rowIndex">
+              <td style="width: 11.5rem;">{{picker.lineNo}}</td>
+            <td style="width: 11.5rem;"> {{picker.itemCode}}</td>
+            <td style="width: 11.5rem;">{{picker.description}}</td>
+            <td style="width: 11.5rem;">{{picker.manufacturerPartNo}}</td>
+            <td style="width: 11.5rem;">{{picker.orderQty }}</td>
+            <td style="width: 11.5rem;">{{picker.acceptedQty}}</td>
+            <td style="width: 11.5rem;">{{picker.damageQty }}</td>
+           <!-- <td style="width: 11.5rem;">{{picker.pickedStorageBin }}</td>-->
+            <td style="width: 11.5rem;"> {{picker.varianceQty}}</td>
+            
+          </tr>
+       
+        </ng-template>
+      
+      </p-table>
+        
+      </div>
+      
+  
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+          <!-- <button mat-raised-button color="warn" mat-dialog-close class="mx-2 bg-darkblue px-4 text-white" (click)="submit()"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>Create Quote</button> -->
+    </div>
+  </div>
+  

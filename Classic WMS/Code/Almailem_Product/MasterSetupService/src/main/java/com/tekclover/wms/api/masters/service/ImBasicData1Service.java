@@ -1,6 +1,9 @@
 package com.tekclover.wms.api.masters.service;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
+import com.tekclover.wms.api.masters.model.IKeyValuePair;
+import com.tekclover.wms.api.masters.model.dto.LikeSearchInput;
+import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.model.imbasicdata1.AddImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.ImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.SearchImBasicData1;
@@ -8,9 +11,11 @@ import com.tekclover.wms.api.masters.model.imbasicdata1.UpdateImBasicData1;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData1V2;
 import com.tekclover.wms.api.masters.model.impl.ItemListImpl;
+import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1Repository;
 import com.tekclover.wms.api.masters.repository.ImBasicData1V2Repository;
 import com.tekclover.wms.api.masters.repository.specification.ImBasicData1Specification;
+import com.tekclover.wms.api.masters.repository.specification.ImBasicData1V2Specification;
 import com.tekclover.wms.api.masters.util.CommonUtils;
 import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +49,9 @@ public class ImBasicData1Service {
     @Autowired
     private IDMasterService idMasterService;
 
+    @Autowired
+    private ExceptionLogRepository exceptionLogRepo;
+
     /**
      * getImBasicData1s
      *
@@ -76,6 +84,9 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+//        createImBasicData1Log3(itemCode, languageId, companyCodeId, plantId, warehouseId, uomId, manufacturerPartNo,
+//                "ImBasicData1 with given values and itemCode-" + itemCode + " doesn't exists.");
         return null;
     }
 
@@ -110,6 +121,9 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+//        createImBasicData1Log4(itemCode, languageId, companyCodeId, plantId, warehouseId, manufacturerPartNo,
+//                "ImBasicData1 with given values and itemCode-" + itemCode + " doesn't exists.");
         return null;
     }
 
@@ -220,6 +234,25 @@ public class ImBasicData1Service {
         }
     }
 
+    //Like Search filter ItemCode, Description, Company Code, Plant, Language and warehouse
+    public List<ItemListImpl> findImBasicData1LikeSearchV2(LikeSearchInput likeSearchInput) {
+
+        if (likeSearchInput.getLikeSearchByDesc() != null && !likeSearchInput.getLikeSearchByDesc().trim().isEmpty()) {
+
+            List<ItemListImpl> data = imbasicdata1Repository.getItemListBySearchV2(
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getLikeSearchByDesc().trim(),
+                    likeSearchInput.getCompanyCodeId(),
+                    likeSearchInput.getPlantId(),
+                    likeSearchInput.getLanguageId(),
+                    likeSearchInput.getWarehouseId());
+            return data;
+        } else {
+            throw new BadRequestException("Search string must not be empty");
+        }
+    }
+
     /**
      * createImBasicData1
      *
@@ -236,6 +269,8 @@ public class ImBasicData1Service {
                 newImBasicData1.getUomId(), newImBasicData1.getManufacturerPartNo(), newImBasicData1.getLanguageId(), 0L);
 
         if (!duplicateImBasicData1.isEmpty()) {
+            // Exception Log
+//            createImBasicData1Log1(newImBasicData1, "Record is getting Duplicated.");
             throw new EntityNotFoundException("Record is Getting Duplicated");
         } else {
             BeanUtils.copyProperties(newImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(newImBasicData1));
@@ -251,8 +286,8 @@ public class ImBasicData1Service {
             dbImBasicData1.setDeletionIndicator(0L);
             dbImBasicData1.setCreatedBy(loginUserID);
             dbImBasicData1.setUpdatedBy(loginUserID);
-            dbImBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImBasicData1.setCreatedOn(new Date());
+            dbImBasicData1.setUpdatedOn(new Date());
             return imbasicdata1Repository.save(dbImBasicData1);
         }
     }
@@ -274,6 +309,8 @@ public class ImBasicData1Service {
                 newImBasicData1.getUomId(), newImBasicData1.getManufacturerPartNo(), newImBasicData1.getLanguageId(), 0L);
 
         if (!duplicateImBasicData1.isEmpty()) {
+            // Exception Log
+//            createImBasicData1Log2(newImBasicData1, "Record is getting Duplicated.");
             throw new EntityNotFoundException("Record is Getting Duplicated");
         } else {
             BeanUtils.copyProperties(newImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(newImBasicData1));
@@ -286,11 +323,23 @@ public class ImBasicData1Service {
             if(newImBasicData1.getItemType() == null) {
                 dbImBasicData1.setItemType(1L);
             }
+
+            IKeyValuePair description = imBasicData1V2Repository.getDescription(newImBasicData1.getCompanyCodeId(),
+                    newImBasicData1.getLanguageId(),
+                    newImBasicData1.getPlantId(),
+                    newImBasicData1.getWarehouseId());
+
+            if(description != null) {
+                dbImBasicData1.setCompanyDescription(description.getCompanyDesc());
+                dbImBasicData1.setPlantDescription(description.getPlantDesc());
+                dbImBasicData1.setWarehouseDescription(description.getWarehouseDesc());
+            }
+
             dbImBasicData1.setDeletionIndicator(0L);
             dbImBasicData1.setCreatedBy(loginUserID);
             dbImBasicData1.setUpdatedBy(loginUserID);
-            dbImBasicData1.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbImBasicData1.setCreatedOn(new Date());
+            dbImBasicData1.setUpdatedOn(new Date());
             return imBasicData1V2Repository.save(dbImBasicData1);
         }
     }
@@ -316,7 +365,7 @@ public class ImBasicData1Service {
                 getImBasicData1(itemCode, warehouseId, companyCodeId, plantId, uomId, manufacturerPartNo, languageId);
         BeanUtils.copyProperties(updateImBasicData1, dbImBasicData1, CommonUtils.getNullPropertyNames(updateImBasicData1));
         dbImBasicData1.setUpdatedBy(loginUserID);
-        dbImBasicData1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbImBasicData1.setUpdatedOn(new Date());
         return imbasicdata1Repository.save(dbImBasicData1);
     }
 
@@ -335,7 +384,7 @@ public class ImBasicData1Service {
         if (imbasicdata1 != null) {
             imbasicdata1.setDeletionIndicator(1L);
             imbasicdata1.setUpdatedBy(loginUserID);
-            imbasicdata1.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            imbasicdata1.setUpdatedOn(new Date());
             imbasicdata1Repository.save(imbasicdata1);
         } else {
             throw new EntityNotFoundException("Error in deleting itemCode Id:" + itemCode);
@@ -354,7 +403,30 @@ public class ImBasicData1Service {
         if (!imbasicdata1.isEmpty()) {
             return imbasicdata1.get();
         }
+        // Exception Log
+//        createImBasicData1Log(imBasicData, "ImBasicData1 with given values Not Available!");
         return null;
+    }
+
+    //Streaming
+    public Stream<ImBasicData1V2> findImBasicData1V2Stream(SearchImBasicData1 searchImBasicData1)
+            throws Exception {
+        if (searchImBasicData1.getStartCreatedOn() != null && searchImBasicData1.getEndCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getStartCreatedOn(), searchImBasicData1.getEndCreatedOn());
+            searchImBasicData1.setStartCreatedOn(dates[0]);
+            searchImBasicData1.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchImBasicData1.getStartUpdatedOn() != null && searchImBasicData1.getEndUpdatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getStartUpdatedOn(), searchImBasicData1.getEndUpdatedOn());
+            searchImBasicData1.setStartUpdatedOn(dates[0]);
+            searchImBasicData1.setEndUpdatedOn(dates[1]);
+        }
+
+        ImBasicData1V2Specification spec = new ImBasicData1V2Specification(searchImBasicData1);
+        Stream<ImBasicData1V2> results = imBasicData1V2Repository.stream(spec, ImBasicData1V2.class);
+//		log.info("results: " + results);
+        return results;
     }
 
     /**
@@ -379,4 +451,96 @@ public class ImBasicData1Service {
             throw new EntityNotFoundException("Error in deleting itemCode Id:" + itemCode);
         }
     }
+
+    //========================================ImBasicData1_ExceptionLog================================================
+    private void createImBasicData1Log(ImBasicData imBasicData, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(imBasicData.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(imBasicData.getLanguageId());
+        exceptionLog.setCompanyCodeId(imBasicData.getCompanyCodeId());
+        exceptionLog.setPlantId(imBasicData.getPlantId());
+        exceptionLog.setWarehouseId(imBasicData.getWarehouseId());
+        exceptionLog.setReferenceField1(imBasicData.getItemCode());
+        exceptionLog.setReferenceField2(imBasicData.getManufacturerName());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log1(AddImBasicData1 addImBasicData1, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(addImBasicData1.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(addImBasicData1.getLanguageId());
+        exceptionLog.setCompanyCodeId(addImBasicData1.getCompanyCodeId());
+        exceptionLog.setPlantId(addImBasicData1.getPlantId());
+        exceptionLog.setWarehouseId(addImBasicData1.getWarehouseId());
+        exceptionLog.setReferenceField1(addImBasicData1.getItemCode());
+        exceptionLog.setReferenceField2(addImBasicData1.getUomId());
+        exceptionLog.setReferenceField3(addImBasicData1.getManufacturerPartNo());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log2(ImBasicData1 imBasicData1, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(imBasicData1.getItemCode());
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(imBasicData1.getLanguageId());
+        exceptionLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        exceptionLog.setPlantId(imBasicData1.getPlantId());
+        exceptionLog.setWarehouseId(imBasicData1.getWarehouseId());
+        exceptionLog.setReferenceField1(imBasicData1.getItemCode());
+        exceptionLog.setReferenceField2(imBasicData1.getUomId());
+        exceptionLog.setReferenceField3(imBasicData1.getManufacturerPartNo());
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log3(String itemCode, String languageId, String companyCodeId, String plantId,
+                                        String warehouseId, String uomId, String manufacturerPartNo, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(itemCode);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(itemCode);
+        exceptionLog.setReferenceField2(uomId);
+        exceptionLog.setReferenceField3(manufacturerPartNo);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
+    private void createImBasicData1Log4(String itemCode, String languageId, String companyCodeId, String plantId,
+                                        String warehouseId, String manufacturerPartNo, String error) {
+
+        ExceptionLog exceptionLog = new ExceptionLog();
+        exceptionLog.setOrderTypeId(itemCode);
+        exceptionLog.setOrderDate(new Date());
+        exceptionLog.setLanguageId(languageId);
+        exceptionLog.setCompanyCodeId(companyCodeId);
+        exceptionLog.setPlantId(plantId);
+        exceptionLog.setWarehouseId(warehouseId);
+        exceptionLog.setReferenceField1(itemCode);
+        exceptionLog.setReferenceField2(manufacturerPartNo);
+        exceptionLog.setErrorMessage(error);
+        exceptionLog.setCreatedBy("MSD_API");
+        exceptionLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(exceptionLog);
+    }
+
 }

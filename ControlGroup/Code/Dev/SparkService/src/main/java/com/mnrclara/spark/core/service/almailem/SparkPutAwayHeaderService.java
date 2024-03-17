@@ -135,8 +135,23 @@ public class SparkPutAwayHeaderService {
         if (searchPutAwayHeaderV2.getProposedStorageBin() != null && !searchPutAwayHeaderV2.getProposedStorageBin().isEmpty()) {
             imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("PROP_ST_BIN").isin(searchPutAwayHeaderV2.getProposedStorageBin().toArray()));
         }
+        if (searchPutAwayHeaderV2.getManufacturerCode() != null && !searchPutAwayHeaderV2.getManufacturerCode().isEmpty()) {
+            imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("MFR_CODE").isin(searchPutAwayHeaderV2.getManufacturerCode().toArray()));
+        }
+        if (searchPutAwayHeaderV2.getManufacturerName() != null && !searchPutAwayHeaderV2.getManufacturerName().isEmpty()) {
+            imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("MFR_NAME").isin(searchPutAwayHeaderV2.getManufacturerName().toArray()));
+        }
+        if (searchPutAwayHeaderV2.getOrigin() != null && !searchPutAwayHeaderV2.getOrigin().isEmpty()) {
+            imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("ORIGIN").isin(searchPutAwayHeaderV2.getOrigin().toArray()));
+        }
+        if (searchPutAwayHeaderV2.getBrand() != null && !searchPutAwayHeaderV2.getBrand().isEmpty()) {
+            imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("BRAND").isin(searchPutAwayHeaderV2.getBrand().toArray()));
+        }
         if (searchPutAwayHeaderV2.getProposedHandlingEquipment() != null && !searchPutAwayHeaderV2.getProposedHandlingEquipment().isEmpty()) {
             imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("PROP_HE_NO").isin(searchPutAwayHeaderV2.getProposedHandlingEquipment().toArray()));
+        }
+        if (searchPutAwayHeaderV2.getBarcodeId() != null && !searchPutAwayHeaderV2.getBarcodeId().isEmpty()) {
+            imPutawayHeaderQueryV2 = imPutawayHeaderQueryV2.filter(col("BARCODE_ID").isin(searchPutAwayHeaderV2.getBarcodeId().toArray()));
         }
         if (searchPutAwayHeaderV2.getStatusId() != null && !searchPutAwayHeaderV2.getStatusId().isEmpty()) {
             List<String> statusIdStrings = searchPutAwayHeaderV2.getStatusId().stream().map(String::valueOf).collect(Collectors.toList());

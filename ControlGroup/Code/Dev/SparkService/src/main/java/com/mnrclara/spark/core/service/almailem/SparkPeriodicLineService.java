@@ -118,7 +118,7 @@ public class SparkPeriodicLineService {
                 + "SECOND_CTD_QTY as secondCountedQty "
                 + "From tblperiodiclinev2 Where IS_DELETED = 0 "
         );
-        periodicLineV2Query.cache();
+//        periodicLineV2Query.cache();
 
         if (findPeriodicLineV2.getLanguageId() != null && !findPeriodicLineV2.getLanguageId().isEmpty()) {
             periodicLineV2Query = periodicLineV2Query.filter(col("LANG_ID").isin(findPeriodicLineV2.getLanguageId().toArray()));

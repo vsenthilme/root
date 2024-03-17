@@ -36,7 +36,7 @@ interface SelectItem {
 })
 export class QuotationsListComponent implements OnInit {
   screenid = 1134;
-  displayedColumns: string[] = ['select', 'clientId', 'matterNumber', 'quotationNo', 'quotationRevisionNo', 'quotationAmount', 'quotationDate', 'document', 'paymentlink', 'statusId',];
+  displayedColumns: string[] = ['select','action', 'clientId', 'matterNumber', 'quotationNo', 'quotationRevisionNo', 'quotationAmount', 'quotationDate', 'document', 'paymentlink', 'statusId',];
   public icon = 'expand_more';
   isShowDiv = false;
   showFloatingButtons: any;
@@ -419,9 +419,10 @@ export class QuotationsListComponent implements OnInit {
     this.getAllListData();
   }
   sendtoClient(data: any) {
-    data.statusId = 10;
+    this.spin.show();
+    data.referenceField10 = "Sent";
     this.sub.add(this.service.Update(data, data.quotationNo, data.quotationRevisionNo).subscribe(res => {
-      this.toastr.success(res.quotationNo + " updated successfully!", "Notification", {
+      this.toastr.success(res.quotationNo + " sent successfully!", "Notification", {
         timeOut: 2000,
         progressBar: false,
       });

@@ -216,4 +216,11 @@ public ResponseEntity<?> findPutAwayHeader(@RequestBody FindPutAwayHeader findPu
         PreOutboundHeader[] preOutboundHeader = sparkService.findPreOutboundHeader(searchPreOutboundHeader);
         return new ResponseEntity<>(preOutboundHeader, HttpStatus.OK);
     }
+
+    @ApiOperation(response = ImBasicData1.class, value = "Spark ImBasicData1 details")
+    @PostMapping("/imbasicdata1")
+    public ResponseEntity<?> findImBasicData1(@RequestBody SearchImBasicData1 searchImBasicData1) throws Exception {
+        ImBasicData1[] imBasicData1s = sparkService.findImBasicData1(searchImBasicData1);
+        return new ResponseEntity<>(imBasicData1s, HttpStatus.OK);
+    }
 }

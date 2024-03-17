@@ -1,0 +1,275 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">LMD</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Picking</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-lmd-tab></app-lmd-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  <div class="d-flex justify-content-end ml-3">
+    <div class=" bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+        <button class="btn mr-2 btn-outline-danger btn-sm d-flex align-items-center" type="button">
+            <mat-icon class="mr-1">close</mat-icon>Cancel
+          </button>
+      <button class="btn mr-2 btn-outline-info btn-sm d-flex align-items-center" type="button">
+        <mat-icon class="mr-1">download</mat-icon>Download
+      </button>
+      <button class="btn mr-2 btn-outline-success btn-sm d-flex align-items-center" type="button" (click)="newPickup()">
+        <mat-icon class="mr-1">add</mat-icon>New
+      </button>
+      <div class="btn-group">
+        <button class="btn btn-outline-warning btn-sm d-flex align-items-center" type="button">
+          <mat-icon class="mr-1">assignment_ind</mat-icon>Assign
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" (click)="excelAssign()">
+              <mat-icon class="mr-2">upload</mat-icon>Upload Excel For Bulk Assign
+            </a></li>
+          <!-- <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li>
+            <p class="mb-0 py-0 text-muted">Choose ride to assign</p>
+            <mat-form-field class="form-group input_field mb-0" floatLabel="never">
+              <select matNativeControl>
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+              </select>
+            </mat-form-field>
+          </li> -->
+        </ul>
+      </div>
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+  </div>
+    <div class=" bg-white">
+      <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+        scrollHeight="calc(100vh - 17.5rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+  
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:4rem;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Pickup Ids
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Consignments
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:14rem;" pResizableColumn>Customer Name & Code
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Sender Name
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Pickup Created At
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Pickup Phone
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:15rem;" pResizableColumn>Pickup/Sender's Address
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:14rem;" pResizableColumn>Pickup Pincode
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Pickup city
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+  
+            <th style="width:12rem;" pResizableColumn>Pickup Date & Slot
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+  
+            <th style="width:12rem;" pResizableColumn>Closing Time
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Pickup Status
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Exp No of Shipments
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>            
+            <th style="width:12rem;" pResizableColumn>Destination Details
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>            
+            <th style="width:12rem;" pResizableColumn>Pickup Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>          
+            <th style="width:12rem;" pResizableColumn>Load Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>     
+            <th style="width:12rem;" pResizableColumn>Hub Code
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Assigned Rider
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Rejection Reason
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>COP
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="width:4rem;"></th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+            </th>
+            <th style="width:14rem;">
+              <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType2"></p-columnFilter>
+            </th>
+            <th style="width:15rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType4"></p-columnFilter>
+            </th>
+            <th style="width:14rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType3"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="accessType"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="alerts"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="activehrs2"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field1"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field2"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field3"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field4"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field5"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field6"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="field7"></p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:4rem;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="width:12rem;">{{product.organization}}</td>
+            <td style="width:12rem;">{{product.apiSubs}}</td>
+            <td style="width:14rem;">{{product.partnerType}}</td>
+            <td style="width:10rem;">{{product.systemType}}</td>
+            <td style="width:12rem;">{{product.systemType1}}</td>
+            <td style="width:12rem;">{{product.systemType4}} </td>
+            <td style="width:15rem;">{{product.systemType2}}</td>
+            <td style="width:14rem;">{{product.systemType3}}</td>
+            <td style="width:10rem;">{{product.accessType}}</td>
+            <td style="width:12rem;">{{product.alerts}}</td>
+            <td style="width:12rem;">{{product.activehrs}}</td>
+            <td style="width:12rem;">{{product.activehrs1}}</td>
+            <td style="width:12rem;">{{product.activehrs2}}</td>
+            <td style="width:12rem;">{{product.field1}}</td>
+            <td style="width:12rem;">{{product.field2}}</td>
+            <td style="width:12rem;">{{product.field3}}</td>
+            <td style="width:12rem;">{{product.field4}}</td>
+            <td style="width:12rem;">{{product.field5}}</td>
+            <td style="width:12rem;">{{product.field6}}</td>
+            <td style="width:12rem;">{{product.field7}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

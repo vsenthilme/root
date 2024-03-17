@@ -13,7 +13,6 @@ import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementHeaderV2;
 import com.tekclover.wms.api.transaction.repository.OrderManagementHeaderV2Repository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -325,9 +324,9 @@ public class OrderManagementHeaderService {
 
         dbOrderManagementHeader.setDeletionIndicator(0L);
         dbOrderManagementHeader.setPickupCreatedBy(loginUserID);
-        dbOrderManagementHeader.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementHeader.setPickupCreatedOn(new Date());
         dbOrderManagementHeader.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementHeader.setPickupupdatedOn(new Date());
         return orderManagementHeaderV2Repository.save(dbOrderManagementHeader);
     }
 
@@ -353,7 +352,7 @@ public class OrderManagementHeaderService {
         if (dbOrderManagementHeader != null) {
             BeanUtils.copyProperties(updateOrderManagementHeader, dbOrderManagementHeader, CommonUtils.getNullPropertyNames(updateOrderManagementHeader));
             dbOrderManagementHeader.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementHeader.setPickupupdatedOn(new Date());
 
             if (dbOrderManagementHeader.getStatusId() != null) {
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbOrderManagementHeader.getStatusId(), dbOrderManagementHeader.getLanguageId());
@@ -382,14 +381,24 @@ public class OrderManagementHeaderService {
         if (orderManagementHeader != null) {
             orderManagementHeader.setDeletionIndicator(1L);
             orderManagementHeader.setPickupUpdatedBy(loginUserID);
-            orderManagementHeader.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeader.setPickupupdatedOn(new Date());
             orderManagementHeaderV2Repository.save(orderManagementHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
     }
 
-
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     // DeleteOrderManagementHeader
     public OrderManagementHeaderV2 deleteOrderManagementHeaderV2(String companyCodeId, String plantId, String languageId,
                                                                  String warehouseId, String refDocNumber,String loginUserID)throws Exception{
@@ -397,11 +406,11 @@ public class OrderManagementHeaderService {
         OrderManagementHeaderV2 orderManagementHeaderV2 =
                 orderManagementHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-
+        log.info("PickList Cancellation - OrderManagementHeader : " + orderManagementHeaderV2);
         if(orderManagementHeaderV2 != null){
             orderManagementHeaderV2.setDeletionIndicator(1L);
             orderManagementHeaderV2.setPickupUpdatedBy(loginUserID);
-            orderManagementHeaderV2.setPickupupdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeaderV2.setPickupupdatedOn(new Date());
 //            orderManagementHeaderV2.setPickupupdatedOn(new Date());
             orderManagementHeaderV2Repository.save(orderManagementHeaderV2);
         }

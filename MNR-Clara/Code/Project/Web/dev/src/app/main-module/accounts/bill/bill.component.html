@@ -211,7 +211,15 @@
               </button>
             </td>
           </ng-container>
-
+          <ng-container matColumnDef="action" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="stick">Actions </th>
+            <td *matCellDef="let row;let element" class="tableborder p-0 border-bottom stick">
+              <button mat-icon-button (click)="clearselection(row)" [matMenuTriggerFor]="menu"
+                [matMenuTriggerData]="{element: element}">
+                <mat-icon class="text-secondary">more_horiz</mat-icon>
+              </button>
+            </td>
+          </ng-container>
           <ng-container matColumnDef="textFile">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Leeds </th>
             <td *matCellDef="let row;let element" class="tableborder p-0 border-bottom">
@@ -275,5 +283,8 @@
 </mat-drawer-container>
 
 <mat-menu #menu="matMenu">
-  <button mat-menu-item routerLink="/main/accounts/prebill-approve">Approve</button>
+  <ng-template matMenuContent let-aliasMenuItems="element">
+
+    <button mat-menu-item [disabled]="aliasMenuItems.referenceField10 != null" (click)="sendtoClient(aliasMenuItems)">Send to Client Portal</button>
+  </ng-template>
 </mat-menu>

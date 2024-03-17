@@ -10,4 +10,5 @@ public class UpdatePeriodicLineV2 {
     private String cycleCountNo;
     private String manufacturerName;
     private Double InventoryQty;
+    private Long lineNo;
 }

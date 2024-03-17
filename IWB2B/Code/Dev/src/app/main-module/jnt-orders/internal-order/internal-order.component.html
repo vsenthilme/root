@@ -1,0 +1,143 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">
+          <mat-icon class="text-white align-middle">home</mat-icon>
+        </li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Test Order</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3 d-flex justify-content-between">
+    <app-jnt-tab></app-jnt-tab>
+    <div class="div d-flex justify-content-between align-self-end">
+      <input matInput class="mx-3 border-bottom border " (input)="applyFilterGlobal($event, 'contains')"
+          placeholder="Search" style="width:90%; background-color: transparent !important;">
+      <button   class="btn bg-danger w-75 me-2 text-white btn-sm d-flex align-items-center" (click)="bulkLabel()"  type="button">
+        <mat-icon class="me-1">print</mat-icon>Print Label
+      </button>
+
+      <button   class="btn bg-warning w-75 me-2 text-white btn-sm d-flex align-items-center" (click)="downloadExcel()" type="button">
+        <mat-icon class="me-1">download</mat-icon>Download
+      </button>
+
+      <!-- <div class="btn-group">
+        <button   class="btn bgblue text-white btn-sm d-flex align-items-center"  type="button">
+          <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" class="btn btn-sm bgblue text-white dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">edit</mat-icon>Edit
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">search</mat-icon>Display
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">delete</mat-icon>Delete
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" type="button" (click)="downloadExcel()">
+              <mat-icon class="mr-3">download</mat-icon>Download
+            </a></li>
+        </ul>
+      </div> -->
+    </div>
+  </div>
+  <div class="mx-3 mt-2 bg-white">
+    <div class=" bg-white">
+          <p-table #userProfile [globalFilterFields]="['reference_number', 'customer_reference_number', 'status_description', 'awb_3rd_Party', 'created_at', 'scanType', 'customer_code' ]" [value]="jntOrders"
+        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single"  [(selection)]="selectedjntOrders"  
+        scrollHeight="calc(100vh - 13.1rem)" [paginator]="true" [rows]="100" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true" sortField="created_at" [sortOrder]="-1">
+  
+        <ng-template pTemplate="header">
+          <tr>
+             <!-- <th style="max-width:4%; justify-content: center;">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+            </th>  -->
+            <th style="max-width:4%; justify-content: center;">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+            <th style="max-width: 10%;"pSortableColumn="reference_number"  pResizableColumn>Shipsy AWB No <p-sortIcon field="reference_number"></p-sortIcon></th>
+            <th style="max-width: 10%;"pSortableColumn="customer_reference_number"  pResizableColumn>Customer Code <p-sortIcon field="customer_reference_number"></p-sortIcon></th>
+            <th style="max-width: 10%;"pSortableColumn="status_description"  pResizableColumn>Hub Code <p-sortIcon field="status_description"></p-sortIcon></th>
+            <th style="max-width: 11%;"pSortableColumn="awb_3rd_Party"  pResizableColumn>JNT Bill Code <p-sortIcon field="awb_3rd_Party"></p-sortIcon></th>
+            <th style="max-width: 10%;"pSortableColumn="created_at"  pResizableColumn>Created On <p-sortIcon field="created_at"></p-sortIcon></th>
+            <th style="max-width: 13%;"pSortableColumn="scanType"  pResizableColumn>Event <p-sortIcon field="scanType"></p-sortIcon></th>
+            <th pSortableColumn="printStatus"  pResizableColumn>Print Status <p-sortIcon field="printStatus"></p-sortIcon></th>
+            <!-- <th pSortableColumn="customer_code"  pResizableColumn>Doc<p-sortIcon field="customer_code"></p-sortIcon></th> -->
+          </tr>
+          <tr > 
+          <th style="max-width: 3.5rem; justify-content: center;">
+              <!-- <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox> -->
+              <!-- <p-tableCheckbox [value]="jntOrders" [disabled]="true"></p-tableCheckbox> -->
+            </th>  
+            <th style="max-width: 10%">
+                 <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'reference_number', 'contains')" 
+                [value]="$any(userProfile.filters['reference_number'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+              </th>
+              <th style="max-width: 10%">
+                  <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customer_code', 'contains')" 
+                  [value]="$any(userProfile.filters['customer_code'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                </th>
+                <th style="max-width: 10%">
+                    <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'status_description', 'contains')" 
+                    [value]="$any(userProfile.filters['status_description'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                  </th>
+                  <th style="max-width: 10%">
+                    <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'awb_3rd_Party', 'contains')" 
+                      [value]="$any(userProfile.filters['awb_3rd_Party'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                    
+                    </th>
+                    
+                  <th style="max-width: 11%">
+                     <input pInputText  type="date" (input)="userProfile.filter($any($event.target)?.value, 'created_at', 'contains')" 
+                    [value]="$any(userProfile.filters['created_at'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                    <!-- <p-columnFilter type="date" field="created_at" display="menu"></p-columnFilter> -->
+                  </th>
+                    <th style="max-width: 13%">
+                        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'scanType', 'contains')" 
+                        [value]="$any(userProfile.filters['scanType'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                      </th>
+                      <th>
+                        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'printStatus', 'contains')" 
+                        [value]="$any(userProfile.filters['printStatus'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                      </th>
+                     <!--   <th >
+                         <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customer_code', 'contains')" 
+                          [value]="$any(userProfile.filters['customer_code'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                        </th> -->
+          </tr>
+        </ng-template>
+            <ng-template pTemplate="body" let-jntOrders let-rowIndex="rowIndex">
+                <tr>
+            <!-- <td style="max-width:3.5rem;  justify-content: center;">
+                <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedjntOrders"  [value]="jntOrders"></p-checkbox>
+            </td>  -->
+            <td style="max-width:3.5rem;  justify-content: center;">
+              <p-tableCheckbox [value]="jntOrders"></p-tableCheckbox>
+          </td>
+            <td style="max-width:10%">{{jntOrders.reference_number}}</td>
+            <td style="max-width:10%">{{jntOrders.customer_code}}</td>
+            <td style="max-width:10%"><img src="./assets/Img/LOGO2.png" class="ml-2" alt="" srcset="" style="width: 40%;"></td>
+            <td style="max-width:11%">{{jntOrders.awb_3rd_Party}}</td>
+            <td style="max-width:10%">{{jntOrders.created_at | date : 'dd-MM-yyyy HH:mm' :'GMT'}}</td>
+            <td style="max-width:13%">{{jntOrders.scanType}}</td>
+            <td >{{jntOrders.printStatus}}</td>
+            <!-- <td ><i type="button" (click)="genrateLabel(jntOrders)" class="far fa-file-pdf ml-3" style="font-size: 18PX;"></i></td> -->
+             <!-- <td [ngClass]="jntOrders.awb_3rd_Party ? 'text-success' : ''">
+              {{jntOrders.awb_3rd_Party ? 'Label Printed' : ''}}-->
+              <td>
+             <img type="button" src="./assets/Img/pdf (1).png" class="ml-3" [ngClass]="jntOrders.awb_3rd_Party ? '' : 'd-none'"  (click)="genrateLabel(jntOrders)" alt="" srcset=""> 
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

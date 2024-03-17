@@ -15,6 +15,7 @@ public class ExactResultInGroup {
     private Long coOwnerId8;
     private Long coOwnerId9;
     private Long coOwnerId10;
+    private String groupId;
 
 
 }

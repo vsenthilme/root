@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.impl.GrLineImpl;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.AddGrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.SearchGrLineV2;
@@ -135,7 +136,7 @@ public class GrLineController {
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										 @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
 										 @RequestParam String itemCode) {
-		GrLineV2 grline = grlineService.getGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+		GrLineV2 grline = grlineService.getGrLineV2(companyCode, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
 				goodsReceiptNo, palletCode, caseCode, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
@@ -148,7 +149,7 @@ public class GrLineController {
 										 @RequestParam String plantId, @RequestParam String languageId,
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 										 @RequestParam String packBarcodes, @RequestParam String itemCode) {
-		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, plantId, languageId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
+		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, languageId, plantId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
 	}
@@ -159,13 +160,20 @@ public class GrLineController {
 			throws Exception {
 		return grlineService.findGrLineV2(searchGrLine);
 	}
+	@ApiOperation(response = GrLineV2.class, value = "Search GrLine V2 SQL") // label for swagger
+	@PostMapping("/findGrLineNew/v2")
+	public List<GrLineImpl> findGrLineV2SQL(@RequestBody SearchGrLineV2 searchGrLine)
+			throws Exception {
+		return grlineService.findGrLineSQLV2(searchGrLine);
+	}
 
 	@ApiOperation(response = GrLineV2.class, value = "Create GrLine V2") // label for swagger
 	@PostMapping("/v2")
 	public ResponseEntity<?> postGrLineV2(@Valid @RequestBody List<AddGrLineV2> newGrLine,
 										  @RequestParam String loginUserID)
 			throws IllegalAccessException, InvocationTargetException, ParseException {
-		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+//		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+		List<GrLineV2> createdGrLine = grlineService.createGrLineNonCBMV2(newGrLine, loginUserID);
 		return new ResponseEntity<>(createdGrLine, HttpStatus.OK);
 	}
 

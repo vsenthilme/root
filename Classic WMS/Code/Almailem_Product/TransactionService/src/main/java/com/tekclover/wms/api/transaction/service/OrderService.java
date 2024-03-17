@@ -1,15 +1,28 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountHeader;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderLinesV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.FindOutboundOrderLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.FindOutboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.OutboundOrderLineV2;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.OutboundOrderV2;
 import com.tekclover.wms.api.transaction.repository.*;
+import com.tekclover.wms.api.transaction.repository.specification.InboundOrderLineV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.InboundOrderV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.OuboundOrderLineV2Specification;
+import com.tekclover.wms.api.transaction.repository.specification.OuboundOrderV2Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +74,21 @@ public class OrderService {
 
 	@Autowired
 	private InboundOrderV2Repository inboundOrderV2Repository;
+
+
+	@Autowired
+	private InboundOrderLinesV2Repository inboundOrderLinesV2Repository;
+
+	@Autowired
+	private OutboundOrderLinesV2Repository outboundOrderLinesV2Repository;
+
+	@Autowired
+	private ErrorLogRepository errorLogRepository;
+
+	@Autowired
+	private ErrorLogService errorLogService;
+
+
 	//------------------------------------------------------------------------------------------------
 	
 	/**
@@ -151,13 +179,13 @@ public class OrderService {
 	 * @param orderId
 	 * @return
 	 */
-	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId) throws ParseException {
+	public InboundOrderV2 updateProcessedInboundOrderV2(String orderId, Long processStatusId) throws ParseException {
 		InboundOrderV2 dbInboundOrder = getOrderByIdV2 (orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbInboundOrder : " + dbInboundOrder);
 		if (dbInboundOrder != null) {
-			dbInboundOrder.setProcessedStatusId(10L);
-			dbInboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbInboundOrder.setProcessedStatusId(processStatusId);
+			dbInboundOrder.setOrderProcessedOn(new Date());
 			InboundOrderV2 inboundOrder = inboundOrderV2Repository.save(dbInboundOrder);
 			return inboundOrder;
 		}
@@ -169,10 +197,12 @@ public class OrderService {
 	 * @param newInboundOrderV2
 	 * @return
 	 */
-	public InboundOrderV2 createInboundOrdersV2(InboundOrderV2 newInboundOrderV2) {
+	public InboundOrderV2 createInboundOrdersV2(InboundOrderV2 newInboundOrderV2) throws IOException, CsvException {
 //		InboundOrderV2 dbInboundOrder = inboundOrderV2Repository.findByRefDocumentNoAndProcessedStatusIdOrderByOrderReceivedOn(newInboundOrderV2.getOrderId(),0L);
 		InboundOrderV2 dbInboundOrder = getOrderByIdV2(newInboundOrderV2.getOrderId());
 		if(dbInboundOrder != null) {
+			// Error Log
+			createIbOrderLog(dbInboundOrder, "Inbound Order Id - " + dbInboundOrder.getOrderId() + " is getting Duplicated.");
 			throw new BadRequestException("Order is getting Duplicated");
 		}
 		InboundOrderV2 inboundOrderV2 = inboundOrderV2Repository.save(newInboundOrderV2);
@@ -241,7 +271,7 @@ public class OrderService {
 		log.info("dbOutboundOrder : " + dbOutboundOrder);
 		if (dbOutboundOrder != null) {
 			dbOutboundOrder.setProcessedStatusId(10L);
-			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbOutboundOrder.setOrderProcessedOn(new Date());
 			OutboundOrder outboundOrder = outboundOrderRepository.save(dbOutboundOrder);
 			return outboundOrder;
 		}
@@ -266,7 +296,7 @@ public class OrderService {
 	 * @param orderId
 	 * @return
 	 */
-	public ShipmentOrder pushOrder(String orderId) {
+	public ShipmentOrder pushOrder(String orderId) throws IOException, CsvException {
 		OutboundOrder existingOrder = outboundOrderRepository.findByOrderId(orderId);
 		if (existingOrder == null) {
 			throw new BadRequestException(" Order : " + orderId + " doesn't exist.");
@@ -343,13 +373,13 @@ public class OrderService {
 
 	//===================================================================V2========================================================================
 
-	public OutboundOrderV2 updateProcessedOrderV2(String orderId) throws ParseException {
+	public OutboundOrderV2 updateProcessedOrderV2(String orderId, Long processStatusId) throws ParseException {
 		OutboundOrderV2 dbOutboundOrder = getOBOrderByIdV2(orderId);
 		log.info("orderId : " + orderId);
 		log.info("dbOutboundOrder : " + dbOutboundOrder);
 		if (dbOutboundOrder != null) {
-			dbOutboundOrder.setProcessedStatusId(10L);
-			dbOutboundOrder.setOrderProcessedOn(DateUtils.getCurrentKWTDateTime());
+			dbOutboundOrder.setProcessedStatusId(processStatusId);
+			dbOutboundOrder.setOrderProcessedOn(new Date());
 			OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(dbOutboundOrder);
 			return outboundOrder;
 		}
@@ -372,17 +402,150 @@ public class OrderService {
 		}
 		}
 
-	public OutboundOrderV2 createOutboundOrdersV2(OutboundOrderV2 newOutboundOrder) throws ParseException {
+	public OutboundOrderV2 createOutboundOrdersV2(OutboundOrderV2 newOutboundOrder) throws ParseException, IOException, CsvException {
 //		OutboundOrderV2 dbOutboundOrder = outboundOrderV2Repository.findByRefDocumentNoAndProcessedStatusIdOrderByOrderReceivedOn(newOutboundOrder.getOrderId(), 0L);
 		OutboundOrderV2 dbOutboundOrder = getOBOrderByIdV2(newOutboundOrder.getOrderId());
 		if(dbOutboundOrder != null) {
+			// Error Log
+			createObOrderLog(dbOutboundOrder, "Outbound Order Id - " + newOutboundOrder.getOrderId() + " is getting duplicated.");
 			throw new BadRequestException("Order is getting Duplicated");
 		}
 
-		Date date = DateUtils.getCurrentKWTDateTime();
-		log.info("Kuwait Date: " + date);
-		newOutboundOrder.setUpdatedOn(date);
+		newOutboundOrder.setUpdatedOn(new Date());
 		OutboundOrderV2 outboundOrder = outboundOrderV2Repository.save(newOutboundOrder);
 		return outboundOrder;
 	}
+
+
+	//Find InboundOrder
+	public List<InboundOrderV2> findInboundOrderV2(FindInboundOrderV2 findInboundOrder) throws ParseException {
+
+		if (findInboundOrder.getFromOrderProcessedOn() != null && findInboundOrder.getToOrderProcessedOn() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findInboundOrder.getFromOrderProcessedOn(), findInboundOrder.getToOrderProcessedOn());
+			findInboundOrder.setFromOrderProcessedOn(dates[0]);
+			findInboundOrder.setToOrderProcessedOn(dates[1]);
+		}
+		if (findInboundOrder.getFromOrderReceivedOn() != null && findInboundOrder.getToOrderReceivedOn() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findInboundOrder.getFromOrderReceivedOn(), findInboundOrder.getToOrderReceivedOn());
+			findInboundOrder.setFromOrderReceivedOn(dates[0]);
+			findInboundOrder.setToOrderReceivedOn(dates[1]);
+		}
+
+
+		InboundOrderV2Specification spec = new InboundOrderV2Specification(findInboundOrder);
+		List<InboundOrderV2> results = inboundOrderV2Repository.findAll(spec);
+		return results;
+
+	}
+
+	//Find InboundOrderLine
+	public List<InboundOrderLinesV2> findInboundOrderLineV2(FindInboundOrderLineV2 findInboundOrderLineV2) throws ParseException {
+
+		if (findInboundOrderLineV2.getFromExpectedDate() != null && findInboundOrderLineV2.getToExpectedDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findInboundOrderLineV2.getFromExpectedDate(), findInboundOrderLineV2.getToExpectedDate());
+			findInboundOrderLineV2.setFromExpectedDate(dates[0]);
+			findInboundOrderLineV2.setToExpectedDate(dates[1]);
+		}
+		if (findInboundOrderLineV2.getFromReceivedDate() != null && findInboundOrderLineV2.getToReceivedDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findInboundOrderLineV2.getFromReceivedDate(), findInboundOrderLineV2.getToReceivedDate());
+			findInboundOrderLineV2.setFromReceivedDate(dates[0]);
+			findInboundOrderLineV2.setToReceivedDate(dates[1]);
+		}
+
+
+		InboundOrderLineV2Specification spec = new InboundOrderLineV2Specification(findInboundOrderLineV2);
+		List<InboundOrderLinesV2> results = inboundOrderLinesV2Repository.findAll(spec);
+		return results;
+
+	}
+
+	//Find OutboundOrder
+	public List<OutboundOrderV2> findOutboundOrderV2(FindOutboundOrderV2 findOutboundOrderV2) throws ParseException {
+
+		if (findOutboundOrderV2.getFromOrderProcessedOn() != null && findOutboundOrderV2.getToOrderProcessedOn() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findOutboundOrderV2.getFromOrderProcessedOn(), findOutboundOrderV2.getToOrderProcessedOn());
+			findOutboundOrderV2.setFromOrderProcessedOn(dates[0]);
+			findOutboundOrderV2.setToOrderProcessedOn(dates[1]);
+		}
+		if (findOutboundOrderV2.getFromOrderReceivedOn() != null && findOutboundOrderV2.getToOrderReceivedOn() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findOutboundOrderV2.getFromOrderReceivedOn(), findOutboundOrderV2.getToOrderReceivedOn());
+			findOutboundOrderV2.setFromOrderReceivedOn(dates[0]);
+			findOutboundOrderV2.setToOrderReceivedOn(dates[1]);
+		}
+		if (findOutboundOrderV2.getFromSalesInvoiceDate() != null && findOutboundOrderV2.getToSalesInvoiceDate() != null) {
+			Date[] dates = DateUtils.addTimeToDatesForSearch(findOutboundOrderV2.getFromSalesInvoiceDate(), findOutboundOrderV2.getToSalesInvoiceDate());
+			findOutboundOrderV2.setFromSalesInvoiceDate(dates[0]);
+			findOutboundOrderV2.setToSalesInvoiceDate(dates[1]);
+		}
+
+
+
+		OuboundOrderV2Specification spec = new OuboundOrderV2Specification(findOutboundOrderV2);
+		List<OutboundOrderV2> results = outboundOrderV2Repository.findAll(spec);
+		return results;
+
+	}
+
+	//Find OutboundOrderLine
+	public List<OutboundOrderLineV2> findOutboundOrderLineV2(FindOutboundOrderLineV2 findOutboundOrderLineV2) throws ParseException {
+
+
+		OuboundOrderLineV2Specification spec = new OuboundOrderLineV2Specification(findOutboundOrderLineV2);
+		List<OutboundOrderLineV2> results = outboundOrderLinesV2Repository.findAll(spec);
+		return results;
+
+	}
+
+	//==========================================Order_ExceptionLog=====================================================
+	private void createIbOrderLog(InboundOrderV2 inboundOrder, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (InboundOrderLinesV2 inboundOrderLines : inboundOrder.getLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(inboundOrder.getOrderId());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(inboundOrder.getCompanyCode());
+			errorLog.setPlantId(inboundOrder.getBranchCode());
+			errorLog.setWarehouseId(inboundOrder.getWarehouseID());
+			errorLog.setRefDocNumber(inboundOrder.getRefDocumentNo());
+			errorLog.setItemCode(inboundOrderLines.getItemCode());
+			errorLog.setManufacturerName(inboundOrderLines.getManufacturerName());
+			errorLog.setReferenceField1(inboundOrder.getRefDocumentType());
+			errorLog.setReferenceField2("lineNo - " + inboundOrderLines.getLineReference());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createObOrderLog(OutboundOrderV2 outboundOrder, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (OutboundOrderLineV2 outboundOrderLine : outboundOrder.getLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(outboundOrder.getOrderId());
+			errorLog.setOrderDate(new Date());
+			errorLog.setLanguageId(outboundOrder.getLanguageId());
+			errorLog.setCompanyCodeId(outboundOrder.getCompanyCode());
+			errorLog.setPlantId(outboundOrder.getBranchCode());
+			errorLog.setWarehouseId(outboundOrder.getWarehouseID());
+			errorLog.setRefDocNumber(outboundOrder.getRefDocumentNo());
+			errorLog.setItemCode(outboundOrderLine.getItemCode());
+			errorLog.setManufacturerName(outboundOrderLine.getManufacturerName());
+			errorLog.setReferenceField1(outboundOrder.getRefDocumentType());
+			errorLog.setReferenceField2("lineNo - " + outboundOrderLine.getLineReference());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
 }

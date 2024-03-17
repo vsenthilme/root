@@ -1,6 +1,8 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.AddInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.SearchInboundLine;
@@ -10,6 +12,7 @@ import com.tekclover.wms.api.transaction.model.inbound.putaway.UpdatePutAwayLine
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SearchInboundLineV2;
+import com.tekclover.wms.api.transaction.repository.ErrorLogRepository;
 import com.tekclover.wms.api.transaction.repository.InboundLineRepository;
 import com.tekclover.wms.api.transaction.repository.InboundLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
@@ -24,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -63,6 +67,12 @@ public class InboundLineService extends BaseService {
     private StagingLineV2Repository stagingLineV2Repository;
 
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
     //----------------------------------------------------------------------------------------------------
 
     /**
@@ -390,7 +400,7 @@ public class InboundLineService extends BaseService {
      * @return
      */
     public List<InboundLineV2> getInboundLinebyRefDocNoISNULLV2(String companyCode, String plantId, String languageId,
-                                                                String warehouseId, String refDocNumber, String preInboundNo) {
+                                                                String warehouseId, String refDocNumber, String preInboundNo) throws IOException, CsvException {
         List<InboundLineV2> inboundLine =
                 inboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndReferenceField1AndStatusIdAndDeletionIndicator(
                         languageId,
@@ -404,6 +414,9 @@ public class InboundLineService extends BaseService {
                         0L);
         log.info("inboundLine : " + inboundLine);
         if (inboundLine.isEmpty()) {
+            // Error Log
+            createInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "InboundLine with given values and refDocNumber - " + refDocNumber + " doesn't exists");
             throw new BadRequestException("The given values in getInboundLinebyRefDocNoISNULL: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -420,7 +433,7 @@ public class InboundLineService extends BaseService {
      * @return
      */
     public List<InboundLineV2> getInboundLineV2(String companyCode, String plantId, String languageId,
-                                                String warehouseId, String refDocNumber, String preInboundNo) {
+                                                String warehouseId, String refDocNumber, String preInboundNo) throws IOException, CsvException {
         List<InboundLineV2> inboundLine =
                 inboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                         languageId,
@@ -432,12 +445,39 @@ public class InboundLineService extends BaseService {
                         0L);
         log.info("inboundLine : " + inboundLine);
         if (inboundLine.isEmpty()) {
+            // Error Log
+            createInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "InboundLine with given values and refDocNumber - " + refDocNumber + " doesn't exists");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
                     " doesn't exist.");
         }
 
+        return inboundLine;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<InboundLineV2> getInboundLineForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                      String warehouseId, String refDocNumber, Long statusId) {
+        List<InboundLineV2> inboundLine =
+                inboundLineV2Repository.findByRefDocNumberAndCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        statusId,
+                        0L);
+        log.info("inboundLine : " + inboundLine);
         return inboundLine;
     }
 
@@ -454,7 +494,7 @@ public class InboundLineService extends BaseService {
      */
     public InboundLineV2 getInboundLineV2(String companyCode, String plantId,
                                           String languageId, String warehouseId, String refDocNumber,
-                                          String preInboundNo, Long lineNo, String itemCode) {
+                                          String preInboundNo, Long lineNo, String itemCode) throws IOException, CsvException {
         Optional<InboundLineV2> inboundLine =
                 inboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndDeletionIndicator(
                         languageId,
@@ -468,6 +508,9 @@ public class InboundLineService extends BaseService {
                         0L);
         log.info("inboundLine : " + inboundLine);
         if (inboundLine.isEmpty()) {
+            // Error Log
+            createInboundLineLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "InboundLine with given values and lineNo - " + lineNo + " doesn't exists");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -493,8 +536,6 @@ public class InboundLineService extends BaseService {
         dbInboundLine.setDeletionIndicator(0L);
         dbInboundLine.setCreatedBy(loginUserID);
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setCreatedOn(new Date());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
@@ -507,7 +548,7 @@ public class InboundLineService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public InboundLineV2 confirmInboundLineV2(List<InboundLineV2> newInboundLines, String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+    public InboundLineV2 confirmInboundLineV2(List<InboundLineV2> newInboundLines, String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         for (InboundLineV2 addInboundLine : newInboundLines) {
             /*
              * Pass WH_ID/PRE_IB_NO/REF_DOC_NO/IB_LINE_NO/ITM_CODE values in INBOUNDLINE tables and
@@ -586,11 +627,10 @@ public class InboundLineService extends BaseService {
                                              String refDocNumber, String preInboundNo,
                                              Long lineNo, String itemCode,
                                              String loginUserID, InboundLineV2 updateInboundLine)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         InboundLineV2 dbInboundLine = getInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         BeanUtils.copyProperties(updateInboundLine, dbInboundLine, CommonUtils.getNullPropertyNames(updateInboundLine));
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
     }
@@ -608,17 +648,17 @@ public class InboundLineService extends BaseService {
      * @param loginUserID
      */
     public void deleteInboundLineV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                    String refDocNumber, String preInboundNo, Long lineNo, String itemCode, String loginUserID) throws ParseException {
+                                    String refDocNumber, String preInboundNo, Long lineNo, String itemCode, String loginUserID) throws ParseException, IOException, CsvException {
         InboundLineV2 inboundLine = getInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         if (inboundLine != null) {
             inboundLine.setDeletionIndicator(1L);
             inboundLine.setUpdatedBy(loginUserID);
-
-//            inboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundLine.setUpdatedOn(new Date());
-
             inboundLineV2Repository.save(inboundLine);
         } else {
+            // Error Log
+            createInboundLineLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "Error in deleting InboundLine with lineNo - " + lineNo);
             throw new EntityNotFoundException("Error in deleting Id: " + lineNo);
         }
     }
@@ -659,7 +699,7 @@ public class InboundLineService extends BaseService {
      */
     //Delete InboundLine
     public List<InboundLineV2> deleteInboundLineV2(String companyCode, String plantId, String languageId,
-                                                   String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+                                                   String warehouseId, String refDocNumber, String loginUserID) throws ParseException, IOException, CsvException {
 
         List<InboundLineV2> inboundLineV2List = new ArrayList<>();
         List<InboundLineV2> inboundLineList = inboundLineV2Repository.findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
@@ -673,8 +713,78 @@ public class InboundLineService extends BaseService {
                 InboundLineV2 dbInboundLine = inboundLineV2Repository.save(inboundLineV2);
                 inboundLineV2List.add(dbInboundLine);
             }
+        }  else {
+            // Error Log
+            createInboundLineLog2(languageId, companyCode, plantId, warehouseId, refDocNumber,
+                    "Error in deleting InboundLine with refDocNumber - " + refDocNumber);
+            throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
         return inboundLineV2List;
+    }
+
+    //========================================InboundLine_ExceptionLog=================================================
+    private void createInboundLineLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                      String refDocNumber, String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundLineLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                       String refDocNumber, String preInboundNo, Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(String.valueOf(lineNo));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundLineLog2(String languageId, String companyCode, String plantId,
+                                       String warehouseId, String refDocNumber, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
     }
 
 }

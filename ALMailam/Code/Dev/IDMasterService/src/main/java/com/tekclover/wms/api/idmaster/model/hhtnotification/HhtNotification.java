@@ -35,17 +35,20 @@ public class HhtNotification {
 	@Column(name = "WH_ID",columnDefinition = "nvarchar(50)")
 	private String warehouseId;
 
-	@Column(name = "DEVICE_ID",columnDefinition = "nvarchar(50)")
+	@Column(name = "DEVICE_ID",columnDefinition = "nvarchar(500)")
 	private String deviceId;
 
 	@Column(name = "USR_ID",columnDefinition = "nvarchar(50)")
 	private String userId;
 
-	@Column(name = "TOKEN_ID",columnDefinition = "nvarchar(200)")
+	@Column(name = "TOKEN_ID",columnDefinition = "nvarchar(500)")
 	private String tokenId;
 
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "notificationHeaderId", fetch = FetchType.EAGER)
 //	private List<HhtNotificationToken> hhtNotificationTokens;
+
+	@Column(name = "IS_LOGGED_IN")
+	private Boolean isLoggedIn;
 
 	@Column(name = "IS_DELETED")
 	private Long deletionIndicator;

@@ -38,4 +38,6 @@ public interface PerpetualHeaderRepository extends JpaRepository<PerpetualHeader
 
     PerpetualHeader findTopByPerpetualHeaderIdAndCompanyCodeAndBranchCodeAndCycleCountNoOrderByOrderReceivedOnDesc(
             Long perpetualHeaderId, String companyCode, String branchCode, String cycleCountNo);
+
+    List<PerpetualHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

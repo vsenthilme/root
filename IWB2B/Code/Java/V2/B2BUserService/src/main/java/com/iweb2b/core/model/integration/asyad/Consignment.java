@@ -115,4 +115,7 @@ public class Consignment {
     
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Set<Pieces_Details> pieces_detail;
+
+
+    private String hsn_code;
 }

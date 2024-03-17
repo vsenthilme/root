@@ -106,12 +106,14 @@ public class Consignment {
     private Boolean is_awb_printed;
     private String inco_terms;
     
-//    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Origin_Details origin_details;
 	
-//    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Destination_Details destination_details;
     
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Set<Pieces_Details> pieces_detail;
+
+    private String hsn_code;
 }

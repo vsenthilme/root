@@ -130,6 +130,10 @@ export class CommonService {
     const del_date = this.datepipe.transform(date, 'yyyy-MM-ddT00:00:00.000', "GMT00:00");
     return del_date;
   }
+  dateapiWithTime(date: any) {
+    const del_date = this.datepipe.transform(date, "MM-dd-yyyy HH:mm:ss", "GMT-06:00");
+    return del_date;
+  }
   matterApiSearch1(date: any) {
     const del_date = this.datepipe.transform(date, 'yyyy-MM-ddT00:00:00.000', "GMT-06:00");
     return del_date;

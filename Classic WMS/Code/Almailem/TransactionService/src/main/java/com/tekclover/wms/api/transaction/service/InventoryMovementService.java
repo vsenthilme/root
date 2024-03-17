@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -141,15 +140,10 @@ public class InventoryMovementService extends BaseService {
 	 * @param warehouseId
 	 * @param movementType
 	 * @param submovementType
-	 * @param palletCode
-	 * @param caseCode
 	 * @param packBarcodes
 	 * @param itemCode
-	 * @param variantCode
-	 * @param variantSubCode
 	 * @param batchSerialNumber
 	 * @param movementDocumentNo
-	 * @param loginUserID
 	 * @param updateInventoryMovement
 	 * @return
 	 * @throws IllegalAccessException
@@ -181,17 +175,30 @@ public class InventoryMovementService extends BaseService {
 		}
 	}
 
+	/**
+	 *
+	 * @param warehouseId
+	 * @param companyCodeId
+	 * @param plantId
+	 * @param languageId
+	 * @param refDocNumber
+	 * @param loginUserID
+	 * @return
+	 */
 	// Delete InventoryMovement
-	public InventoryMovement deleteInventoryMovement (String warehouseId, String companyCodeId, String plantId,
-													  String languageId, String refDocNumber, String loginUserID) {
-
-		InventoryMovement inventoryMovement = inventoryMovementRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+	public List<InventoryMovement> deleteInventoryMovement (String warehouseId, String companyCodeId, String plantId,
+															String languageId, String refDocNumber, String loginUserID) {
+		List<InventoryMovement> inventoryMovements = new ArrayList<>();
+		List<InventoryMovement> inventoryMovementList = inventoryMovementRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
 				companyCodeId, plantId, languageId,warehouseId, refDocNumber, 0L);
-
-		if ( inventoryMovement != null) {
-			inventoryMovement.setDeletionIndicator(1L);
-			inventoryMovementRepository.save(inventoryMovement);
+		log.info("InventoryMovement - cancellation : " + inventoryMovementList);
+		if ( inventoryMovementList != null && !inventoryMovementList.isEmpty()) {
+			for (InventoryMovement inventoryMovement : inventoryMovementList) {
+				inventoryMovement.setDeletionIndicator(1L);
+				inventoryMovementRepository.save(inventoryMovement);
+				inventoryMovements.add(inventoryMovement);
+			}
 		}
-		return inventoryMovement;
+		return inventoryMovements;
 	}
 }

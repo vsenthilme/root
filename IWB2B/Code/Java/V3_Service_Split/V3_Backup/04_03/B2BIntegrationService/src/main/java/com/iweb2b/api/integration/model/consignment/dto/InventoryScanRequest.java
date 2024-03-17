@@ -1,0 +1,11 @@
+package com.iweb2b.api.integration.model.consignment.dto;
+
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
+public class InventoryScanRequest {
+	private Date fromDate;
+	private Date toDate;
+}

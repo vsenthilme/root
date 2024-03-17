@@ -73,7 +73,7 @@ export class LAndEComponent implements OnInit, OnDestroy {
     contactNumber: this.ContactNumber,
     date: [, [Validators.required]],
     doYouAlreadyHaveAnAttorney: [, [Validators.required]],
-    emailAddress: [, [Validators.required]],
+    emailAddress: [, [Validators.email, Validators.required]],
     inquiryNo: [,],
     itFormID: [,],
     itFormNo: [,],
@@ -436,7 +436,7 @@ export class LAndEComponent implements OnInit, OnDestroy {
 
 
     if (this.pageflow == 'validate')
-      if (this.intakefg.controls.statusId.value != 5 && this.intakefg.controls.statusId.value != 6 && this.intakefg.controls.statusId.value != 10) {
+      if (this.intakefg.controls.statusId.value != 5 && this.intakefg.controls.statusId.value != 6 && this.intakefg.controls.statusId.value != 10 && this.intakefg.controls.statusId.value != 70 && this.intakefg.controls.statusId.value != 71 && this.intakefg.controls.statusId.value != 72 && this.intakefg.controls.statusId.value != 73 && this.intakefg.controls.statusId.value != 74) {
         this.toastr.error(
           "Please fill the required status Field to continue",
           "Notification", {
@@ -587,7 +587,7 @@ export class LAndEComponent implements OnInit, OnDestroy {
       this.useridList = this.cas.foreachlist(results[0], this.cas.dropdownlist.setup.userId.key, { userTypeId: [1, 2] });
       this.useridList.forEach((x: { key: string; value: string; }) => this.multiuseridList.push({ id: x.key, itemName: x.value }))
       this.multiselectuseridList = this.multiuseridList;
-      this.statusIdList = this.cas.foreachlist(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 10].includes(s.key));
+      this.statusIdList = this.cas.foreachlist(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 10,70,71,72,73,74].includes(s.key));
       //this.referralList = this.cas.foreachlist1(results[2], this.cas.dropdownlist.setup.referralId.key, { languageId: 'EN' });
       this.referralList = results[2];
       this.filterreferralList1 = this.referralList

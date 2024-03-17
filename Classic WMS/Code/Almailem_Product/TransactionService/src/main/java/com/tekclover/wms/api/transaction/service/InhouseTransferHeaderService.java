@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -705,7 +707,7 @@ public class InhouseTransferHeaderService extends BaseService {
      */
     @Transactional
     public InhouseTransferHeaderEntity createInHouseTransferHeaderV2(AddInhouseTransferHeader newInhouseTransferHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         if (newInhouseTransferHeader != null) {
             if (newInhouseTransferHeader.getInhouseTransferLine() != null) {
                 Long transferQtyNull = newInhouseTransferHeader.getInhouseTransferLine().stream().filter(a -> a.getTransferOrderQty() == null || a.getTransferConfirmedQty() == null).count();
@@ -749,8 +751,8 @@ public class InhouseTransferHeaderService extends BaseService {
         dbInhouseTransferHeader.setDeletionIndicator(0L);
         dbInhouseTransferHeader.setCreatedBy(loginUserID);
         dbInhouseTransferHeader.setUpdatedBy(loginUserID);
-        dbInhouseTransferHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbInhouseTransferHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbInhouseTransferHeader.setCreatedOn(new Date());
+        dbInhouseTransferHeader.setUpdatedOn(new Date());
 
         // - TR_TYP_ID -
         Long transferTypeId = dbInhouseTransferHeader.getTransferTypeId();
@@ -793,11 +795,11 @@ public class InhouseTransferHeaderService extends BaseService {
             dbInhouseTransferLine.setStatusId(30L);
             dbInhouseTransferLine.setDeletionIndicator(0L);
             dbInhouseTransferLine.setCreatedBy(loginUserID);
-            dbInhouseTransferLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setCreatedOn(new Date());
             dbInhouseTransferLine.setUpdatedBy(loginUserID);
-            dbInhouseTransferLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setUpdatedOn(new Date());
             dbInhouseTransferLine.setConfirmedBy(loginUserID);
-            dbInhouseTransferLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
+            dbInhouseTransferLine.setConfirmedOn(new Date());
 
             IKeyValuePair description = stagingLineV2Repository.getDescription(dbInhouseTransferLine.getCompanyCodeId(),
                     dbInhouseTransferLine.getLanguageId(),
@@ -936,7 +938,7 @@ public class InhouseTransferHeaderService extends BaseService {
      * @throws IllegalAccessException
      */
     private void updateInventoryV2(InhouseTransferHeader createdInhouseTransferHeader,
-                                   InhouseTransferLine createdInhouseTransferLine, String loginUserID) throws IllegalAccessException, InvocationTargetException {
+                                   InhouseTransferLine createdInhouseTransferLine, String loginUserID) throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         Long transferTypeId = createdInhouseTransferHeader.getTransferTypeId();
         String transferMethod = createdInhouseTransferHeader.getTransferMethod();
         String warehouseId = createdInhouseTransferHeader.getWarehouseId();
@@ -1026,6 +1028,7 @@ public class InhouseTransferHeaderService extends BaseService {
 //                log.info("--------source---inventory-----updated----->" + updatedInventory);
                 InventoryV2 newInventoryV2 = new InventoryV2();
                 BeanUtils.copyProperties(inventorySourceItemCode, newInventoryV2, CommonUtils.getNullPropertyNames(inventorySourceItemCode));
+                newInventoryV2.setUpdatedOn(new Date());
                 newInventoryV2.setInventoryId(System.currentTimeMillis());
                 Double totalQty = inventorySourceItemCode.getInventoryQuantity() + inventorySourceItemCode.getAllocatedQuantity();
                 newInventoryV2.setReferenceField4(totalQty);
@@ -1040,8 +1043,11 @@ public class InhouseTransferHeaderService extends BaseService {
 
                     InventoryV2 deleteInventoryV2 = new InventoryV2();
                     BeanUtils.copyProperties(inventorySourceItemCode, deleteInventoryV2, CommonUtils.getNullPropertyNames(inventorySourceItemCode));
-                    deleteInventoryV2.setInventoryId(System.currentTimeMillis());
+                    deleteInventoryV2.setUpdatedOn(new Date());
                     deleteInventoryV2.setInventoryQuantity(0D);
+                    deleteInventoryV2.setAllocatedQuantity(0D);
+                    deleteInventoryV2.setReferenceField4(0D);
+                    deleteInventoryV2.setInventoryId(System.currentTimeMillis());
                     InventoryV2 deletedInventoryV2 = inventoryV2Repository.save(deleteInventoryV2);
                     log.info("---------inventory-----deleted-----");
                     try {
@@ -1094,6 +1100,7 @@ public class InhouseTransferHeaderService extends BaseService {
 //                    log.info("------->updatedInventory : " + targetUpdatedInventory);
                     InventoryV2 newInventoryV2_1 = new InventoryV2();
                     BeanUtils.copyProperties(inventoryTargetItemCode, newInventoryV2_1, CommonUtils.getNullPropertyNames(inventoryTargetItemCode));
+                    newInventoryV2_1.setUpdatedOn(new Date());
                     newInventoryV2_1.setInventoryId(System.currentTimeMillis());
                     newInventoryV2_1.setReferenceField4(inventoryTargetItemCode.getInventoryQuantity() + inventoryTargetItemCode.getAllocatedQuantity());
                     createdInventoryV2 = inventoryV2Repository.save(newInventoryV2_1);
@@ -1141,7 +1148,6 @@ public class InhouseTransferHeaderService extends BaseService {
                             createdInhouseTransferLine.getManufacturerName(), languageId);
                     log.info("Barcode : " + barcode);
                     if (inventorySourceItemCode.getBarcodeId() == null) {
-//                        newInventory.setBarcodeId(barcode.replaceAll("\\s", "").trim());             //to remove white space
                         if (barcode != null && !barcode.isEmpty()) {
                             newInventory.setBarcodeId(barcode.get(0));
                         }
@@ -1174,6 +1180,8 @@ public class InhouseTransferHeaderService extends BaseService {
                         newInventory.setReferenceField7(storageBin.getRowId());
                         newInventory.setLevelId(String.valueOf(storageBin.getFloorId()));
                     }
+                    newInventory.setCreatedOn(new Date());
+                    newInventory.setUpdatedOn(new Date());
                     newInventory.setInventoryId(System.currentTimeMillis());
                     InventoryV2 createdInventory = inventoryService.createInventoryV2(newInventory, loginUserID);
                     log.info("createdInventory------> : " + createdInventory);

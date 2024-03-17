@@ -389,13 +389,13 @@ export class MenuService {
         id: 1160,
         disabled: false,
       },
-      {
-        displayName: 'Sub Group Type',
-        iconName: 'fas fa-user-friends mx-2 mr-3 font_1-5',
-        route: '/main/controlgroup/idmaster/subgroup',
-        id: 1160,
-        disabled: false,
-      },
+      // {
+      //   displayName: 'Sub Group Type',
+      //   iconName: 'fas fa-user-friends mx-2 mr-3 font_1-5',
+      //   route: '/main/controlgroup/idmaster/subgroup',
+      //   id: 1160,
+      //   disabled: false,
+      // },
     
       {
         displayName: 'Relationship',
@@ -467,6 +467,13 @@ export class MenuService {
         displayName: 'Approval',
         iconName: 'fas fa-users  font_1-5 mx-2 mr-3 font_1-5',
         route: '/main/controlgroup/transaction/approvalAdmin',
+        id: 1161,
+        disabled: true,
+      },
+      {
+        displayName: 'Report',
+        iconName: 'fas fa-users  font_1-5 mx-2 mr-3 font_1-5',
+        route: '/main/controlgroup/transaction/transactionreport',
         id: 1161,
         disabled: true,
       },

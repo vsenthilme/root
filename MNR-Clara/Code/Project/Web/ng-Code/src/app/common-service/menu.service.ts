@@ -315,30 +315,33 @@ export class MenuService {
     children: [{
       displayName: 'Inquiry',
       iconName: 'fas fa-external-link-alt mx-2 mr-3 font_1-5',
-      id: 200001,
-      children: [{
-        displayName: 'New Inquiry',
-        iconName: 'fas fa-file-signature mx-2 mr-3 font_1-5',
-        route: 'crm/inquirynew',
-        id: 1060,
-        disabled: true,
-      },
-      {
-        displayName: 'Inquiry Assign',
-        iconName: 'fas fa-user-cog mx-2 mr-3 font_1-5',
-        route: 'crm/inquiryassign',
-        id: 1062,
-        disabled: false,
-      },
-      {
-        displayName: 'Inquiry Validation',
-        iconName: 'fas fa-user mx-2 mr-3 font_1-5',
-        route: 'crm/inquiryvalidate',
-        id: 1064,
-        disabled: false,
-      }
-      ],
+      id: 1064,
+      route: 'crm/inquiryvalidate',
       disabled: false,
+   //   children: [
+      //   {
+        
+      //   displayName: 'New Inquiry',
+      //   iconName: 'fas fa-file-signature mx-2 mr-3 font_1-5',
+      //   route: 'crm/inquirynew',
+      //   id: 1060,
+      //   disabled: true,
+      // },
+      // {
+      //   displayName: 'Inquiry Assign',
+      //   iconName: 'fas fa-user-cog mx-2 mr-3 font_1-5',
+      //   route: 'crm/inquiryassign',
+      //   id: 1062,
+      //   disabled: false,
+      // },
+      // {
+      //   displayName: 'Inquiry',
+      //   iconName: 'fas fa-user mx-2 mr-3 font_1-5',
+      //   route: 'crm/inquiryvalidate',
+      //   id: 1064,
+      //   disabled: false,
+      // }
+   //   ],
     },
 
     {

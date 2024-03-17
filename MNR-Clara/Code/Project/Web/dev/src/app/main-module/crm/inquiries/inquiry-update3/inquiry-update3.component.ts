@@ -11,6 +11,8 @@ import { CommonService } from "src/app/common-service/common-service.service";
 import { AuthService } from "src/app/core/core";
 import { InquiresService } from "../inquires.service";
 import {ErrorStateMatcher} from '@angular/material/core';
+import { HttpClient, HttpRequest, HttpResponse } from "@angular/common/http";
+import { isConstructorDeclaration } from "typescript";
 
 interface SelectItem {
   id: string;
@@ -35,11 +37,13 @@ export class InquiryUpdate3Component implements OnInit {
   code: string = '';
   title: string = 'New';
   btntxt = 'Save';
-  assigif = false;
+  assigif = true;
   validationif = false;
   sub = new Subscription();
   form = this.fb.group({
     assignedUserId: [],
+    howDidYouHearAboutUs:[],
+    others:[],
     assignedUserIdFE: [],
     classId: [],
     //contactNumber: [, [Validators.required,Validators.minLength(12),Validators.maxLength(12),Validators.pattern('[0-9 -]+$')]],
@@ -57,6 +61,7 @@ export class InquiryUpdate3Component implements OnInit {
     lastName: [, [Validators.required,Validators.maxLength(20), Validators.pattern('[a-zA-Z \S]+')]],
     // /referenceField9: [, Validators.pattern('[A-Za-z0-9]+$')],
     referenceField9: [],
+    referenceField1: [],
     statusId: [],
     // transactionId: [],
     createdOn: [this.today],
@@ -90,15 +95,18 @@ export class InquiryUpdate3Component implements OnInit {
     private spin: NgxSpinnerService, public toastr: ToastrService,
     private cas: CommonApiService,
     private cs: CommonService,
+    public HttpClient: HttpClient,
 
   ) { }
-
+seeother=false;
   ngOnInit(): void {
     this.form.controls.createdBy.disable();
     this.form.controls.createdOn.disable();
     this.form.controls.updatedBy.disable();
     this.form.controls.updatedOn.disable();
     this.form.controls.inquiryDate.disable();
+    this.form.controls.assignedUserId.setValidators(Validators.required);
+      this.form.controls.classId.setValidators(Validators.required);// n
     this.auth.isuserdata();
     this.title = this.data.pageflow.replace(' - H', '');
     this.dropdownlist();
@@ -106,6 +114,10 @@ export class InquiryUpdate3Component implements OnInit {
     if (this.data.code) {
       this.title = this.data.pageflow + ' - ' + this.data.code;
       this.fill();
+      this.assigif = true;
+      this.form.controls.classId.setValidators([Validators.required]);
+
+      this.form.controls.assignedUserId.setValidators([Validators.required]);
       this.btntxt = 'Update';
     }
 
@@ -152,6 +164,7 @@ export class InquiryUpdate3Component implements OnInit {
 
 
   dropdownlist() {
+   
     this.spin.show();
     this.cas.getalldropdownlist([this.cas.dropdownlist.setup.inquiryModeId.url,
     this.cas.dropdownlist.setup.classId.url,
@@ -194,8 +207,8 @@ export class InquiryUpdate3Component implements OnInit {
       //     this.form.controls.assignedUserId.patchValue([element]);
       //   }
       // });
-      this.form.controls.createdOn.patchValue(this.cs.dateapi(this.form.controls.createdOn.value));
-      this.form.controls.updatedOn.patchValue(this.cs.dateapi(this.form.controls.updatedOn.value));
+      this.form.controls.createdOn.patchValue(this.cs.dateapiWithTime(this.form.controls.createdOn.value));
+      this.form.controls.updatedOn.patchValue(this.cs.dateapiWithTime(this.form.controls.updatedOn.value));
 
       this.spin.hide();
     }, err => {
@@ -231,7 +244,9 @@ export class InquiryUpdate3Component implements OnInit {
     }
 
     // this.form.patchValue({ updatedby: this.auth.userID, updatedOn: this.cs.todayapi() });
+ 
     if (this.data.code) {
+         this.uploadFiles(this.form.controls.inquiryNumber.value, this.form.controls.classId.value);
       if (this.data.pageflow == 'Inquiry Assign')
         this.sub.add(this.service.Assign(this.form.getRawValue(), this.data.code).subscribe(res => {
           this.toastr.success(this.data.code + ' ' + this.btntxt + " successfully","Notification",{
@@ -288,11 +303,25 @@ export class InquiryUpdate3Component implements OnInit {
     else {
       // this.form.patchValue({ createdOn: this.cs.todayapi(), inquiryDate: this.cs.todayapi() });
       this.sub.add(this.service.Create(this.form.getRawValue()).subscribe(res => {
-
+        this.uploadFiles(res.inquiryNumber, res.classId);
         this.toastr.success(res.inquiryNumber + " saved successfully!", "Notification", {
           timeOut: 2000,
           progressBar: false,
         });
+        this.sub.add(this.service.Assign(this.form.getRawValue(),res.inquiryNumber).subscribe(result => {
+          this.toastr.success(result.inquiryNumber + ' ' + this.btntxt + " successfully","Notification",{
+              timeOut: 2000,
+              progressBar: false,
+            });
+          this.spin.hide();
+          this.dialogRef.close();
+
+        }, err => {
+
+          this.cs.commonerror(err);
+          this.spin.hide();
+
+        }));
         this.spin.hide();
         this.dialogRef.close();
 
@@ -340,5 +369,48 @@ export class InquiryUpdate3Component implements OnInit {
 
   panelOpenState = false;
 
+
+  locationfile: any;
+  classId: any;
+  isupload: any;
+  files: File[] = [];
+  myFormData!: FormData;
+  onFilechange(event){  
+    this.form.controls.referenceField1.patchValue(event.target.files[0].name);
+  }
+  uploadFiles(inquiryNumber, classId) {
+    this.spin.show();
+      this.locationfile =  'inquiry/' + inquiryNumber ;
+      this.classId = classId;
+      if (this.files.length > 0) {
+        this.spin.show();
+        //  const config = new HttpRequest('POST', `/doc-storage/upload?` + 'location=' + this.locationfile,  this.myFormData, {
+        const config = new HttpRequest('POST', `/doc-storage/upload?` + `location=${this.locationfile}&classId=${this.classId}`, this.myFormData, {
+          reportProgress: true
+        })
+        this.HttpClient.request(config)
+          .subscribe(event => {
+            if (event instanceof HttpResponse) {
+              this.spin.hide();
+              let body: any = event.body;
+              this.toastr.success("Document uploaded successfully.", "Notification", {
+                timeOut: 2000,
+                progressBar: false,
+              });
+              this.isupload = false;
+            }
+          },
+            error => {
+              this.spin.hide();
+
+              this.cs.commonerror(error);
+
+            })
+      }
+  }
+
+ 
+  
 }
+
 

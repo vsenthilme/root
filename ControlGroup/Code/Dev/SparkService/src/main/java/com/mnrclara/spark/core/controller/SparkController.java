@@ -27,8 +27,8 @@ public class SparkController {
 
     @Autowired
     PutAwayHeaderService putAwayHeaderService;
-    @Autowired
-    ImBasicData1Service imBasicData1Service;
+//    @Autowired
+//    ImBasicData1Service imBasicData1Service;
 
     @Autowired
     AccountingService accountingService;
@@ -200,12 +200,12 @@ public class SparkController {
 //        return new ResponseEntity<>(inventoryMvts, HttpStatus.OK);
 //    }
 
-    @ApiOperation(response = ImBasicData1.class, value = "Spark ImBasicData1")
-    @PostMapping("/imbasicData1")
-    public ResponseEntity<?> findImBasicData1(FindImBasicData1 findImBasicData1) throws Exception {
-        List<ImBasicData1> imBasicData1List = imBasicData1Service.findImBasicData1(findImBasicData1);
-        return new ResponseEntity<>(imBasicData1List, HttpStatus.OK);
-    }
+//    @ApiOperation(response = ImBasicData1.class, value = "Spark ImBasicData1")
+//    @PostMapping("/imbasicData1")
+//    public ResponseEntity<?> findImBasicData1(FindImBasicData1 findImBasicData1) throws Exception {
+//        List<ImBasicData1> imBasicData1List = imBasicData1Service.findImBasicData1(findImBasicData1);
+//        return new ResponseEntity<>(imBasicData1List, HttpStatus.OK);
+//    }
 
     @ApiOperation(response = PutAwayHeader.class, value = "Spark PutawayHeader")
     @PostMapping("/putaway")

@@ -19,6 +19,8 @@ export interface inquiryElement {
   sinquiryDate: Date;
   inquiryModeId: number;
   inquiryNotesNumber: string;
+  others: string;
+  howDidYouHearAboutUs: string;
   inquiryNumber: number;
   intakeFormId: number;
   intakeNotesNumber: string;

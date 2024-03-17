@@ -3,13 +3,10 @@ package com.mnrclara.api.cg.setup.service;
 
 import com.mnrclara.api.cg.setup.model.IKeyValuePair;
 import com.mnrclara.api.cg.setup.model.auth.AuthToken;
-import com.mnrclara.api.cg.setup.model.store.AddStoreId;
-import com.mnrclara.api.cg.setup.model.store.StoreId;
+import com.mnrclara.api.cg.setup.model.store.*;
 import com.mnrclara.api.cg.setup.repository.*;
 import com.mnrclara.api.cg.setup.util.CommonUtils;
 import com.mnrclara.api.cg.setup.exception.BadRequestException;
-import com.mnrclara.api.cg.setup.model.store.FindStoreId;
-import com.mnrclara.api.cg.setup.model.store.UpdateStoreId;
 import com.mnrclara.api.cg.setup.repository.specification.StoreSpecification;
 import com.mnrclara.api.cg.setup.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -196,6 +193,9 @@ public class StoreIdService {
                         +updateStoreId.getState()+ " cityId "
                         +updateStoreId.getCity()+ " doesn't exists ");
             }
+
+            storeIdRepository.updateStorePartnerList(dbStoreId.getStoreId(), dbStoreId.getStoreName());
+            storeIdRepository.updateOwnershipRequest(dbStoreId.getStoreId(), dbStoreId.getStoreName());
             dbStoreId.setUpdatedBy(loginUserID);
             dbStoreId.setUpdatedOn(new Date());
              storeIdRepository.save(dbStoreId);
@@ -259,5 +259,25 @@ public class StoreIdService {
             newStore.add(dbStoreId);
         }
         return newStore;
+    }
+
+    //StoreDropDown
+    public List<StoreDropDown> getStoreDropDown() {
+        List<IKeyValuePair> storeDropDownList = storeIdRepository.getStoreDropDown();
+
+        List<StoreDropDown> storeDropList = new ArrayList<>();
+        if (storeDropDownList != null) {
+            for (IKeyValuePair ikeyValuePair : storeDropDownList) {
+                StoreDropDown storeDropDown = new StoreDropDown();
+
+                String storeId = String.valueOf(ikeyValuePair.getStoreId());
+                String storeName = ikeyValuePair.getDescription();
+                storeDropDown.setStoreId(storeId);
+                storeDropDown.setStoreName(storeName);
+                storeDropList.add(storeDropDown);
+            }
+        }
+        log.info("results: " + storeDropDownList);
+        return storeDropList;
     }
 }

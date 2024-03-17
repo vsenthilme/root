@@ -20,7 +20,6 @@ import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.QualityLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.QualityLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1224,7 +1223,7 @@ public class QualityLineService extends BaseService {
     public List<QualityLineV2> createQualityLineV2(List<AddQualityLineV2> newQualityLines, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         try {
-            log.info("-------createQualityLine--------called-------> " + DateUtils.getCurrentKWTDateTime());
+            log.info("-------createQualityLine--------called-------> " + newQualityLines);
 
             List<AddQualityLineV2> dupQualityLines = getDuplicatesV2(newQualityLines);
             log.info("-------dupQualityLines--------> " + dupQualityLines);
@@ -1286,15 +1285,16 @@ public class QualityLineService extends BaseService {
                     dbQualityLine.setDescription(dbOrderManagementLine.getDescription());
                     dbQualityLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                     dbQualityLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
-                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
+//                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                     dbQualityLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
                 }
 
+                dbQualityLine.setBarcodeId(newQualityLine.getBarcodeId());
                 dbQualityLine.setDeletionIndicator(0L);
                 dbQualityLine.setQualityCreatedBy(loginUserID);
                 dbQualityLine.setQualityUpdatedBy(loginUserID);
-                dbQualityLine.setQualityCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbQualityLine.setQualityCreatedOn(new Date());
+                dbQualityLine.setQualityUpdatedOn(new Date());
 
                 /*
                  * String warehouseId, String preOutboundNo, String refDocNumber, String
@@ -1406,11 +1406,11 @@ public class QualityLineService extends BaseService {
 
                 /*-----------------Inventory Updates--------------------------------------*/
                 // Pass WH_ID/ITM_CODE/ST_BIN/PACK_BARCODE in INVENTORY table
-                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-                Long BIN_CLASS_ID = 4L;
-                StorageBinV2 storageBin = mastersService.getStorageBin(dbQualityLine.getCompanyCodeId(), dbQualityLine.getPlantId(),
-                        dbQualityLine.getLanguageId(), dbQualityLine.getWarehouseId(), BIN_CLASS_ID,
-                        authTokenForMastersService.getAccess_token());
+//                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//                Long BIN_CLASS_ID = 4L;
+//                StorageBinV2 storageBin = mastersService.getStorageBin(dbQualityLine.getCompanyCodeId(), dbQualityLine.getPlantId(),
+//                        dbQualityLine.getLanguageId(), dbQualityLine.getWarehouseId(), BIN_CLASS_ID,
+//                        authTokenForMastersService.getAccess_token());
 ////                Warehouse warehouse = getWarehouse(dbQualityLine.getWarehouseId());
 //                InventoryV2 inventory = null;
 //                try {
@@ -1438,13 +1438,13 @@ public class QualityLineService extends BaseService {
 //                }
 
                 /*-------------------Inserting record in InventoryMovement-------------------------------------*/
-                Long subMvtTypeId = 2L;
-                String movementDocumentNo = dbQualityLine.getQualityInspectionNo();
-                String stBin = storageBin.getStorageBin();
-                String movementQtyValue = "N";
-                InventoryMovement inventoryMovement = createInventoryMovementV2(dbQualityLine, subMvtTypeId,
-                        movementDocumentNo, stBin, movementQtyValue, loginUserID);
-                log.info("InventoryMovement created : " + inventoryMovement);
+//                Long subMvtTypeId = 2L;
+//                String movementDocumentNo = dbQualityLine.getQualityInspectionNo();
+//                String stBin = storageBin.getStorageBin();
+//                String movementQtyValue = "N";
+//                InventoryMovement inventoryMovement = createInventoryMovementV2(dbQualityLine, subMvtTypeId,
+//                        movementDocumentNo, stBin, movementQtyValue, loginUserID);
+//                log.info("InventoryMovement created : " + inventoryMovement);
 
                 /*--------------------------------------------------------------------------*/
                 // 2.Insert a new record in INVENTORY table as below
@@ -1552,13 +1552,13 @@ public class QualityLineService extends BaseService {
 
                 /*-----------------------InventoryMovement----------------------------------*/
                 // Inserting record in InventoryMovement
-                subMvtTypeId = 2L;
-                movementDocumentNo = DLV_ORD_NO;
-                stBin = storageBin.getStorageBin();
-                movementQtyValue = "P";
-                inventoryMovement = createInventoryMovementV2(dbQualityLine, subMvtTypeId, movementDocumentNo, stBin,
-                        movementQtyValue, loginUserID);
-                log.info("InventoryMovement created for update2: " + inventoryMovement);
+//                subMvtTypeId = 2L;
+//                movementDocumentNo = DLV_ORD_NO;
+//                stBin = storageBin.getStorageBin();
+//                movementQtyValue = "P";
+//                inventoryMovement = createInventoryMovementV2(dbQualityLine, subMvtTypeId, movementDocumentNo, stBin,
+//                        movementQtyValue, loginUserID);
+//                log.info("InventoryMovement created for update2: " + inventoryMovement);
 
                 boolean qtyEqual = dbQualityLine.getQualityQty().equals(dbQualityLine.getPickConfirmQty());
                 log.info("getQualityQty, getPickConfirmQty: " + dbQualityLine.getQualityQty() + "," + dbQualityLine.getPickConfirmQty());
@@ -1707,7 +1707,7 @@ public class QualityLineService extends BaseService {
         outboundLineInterim.setDeletionIndicator(0L);
         outboundLineInterim.setDeliveryQty(dbQualityLine.getQualityQty());
         outboundLineInterim.setCreatedBy(dbQualityLine.getQualityCreatedBy());
-        outboundLineInterim.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        outboundLineInterim.setCreatedOn(new Date());
 
         OutboundLineInterim createdOutboundLine = outboundLineInterimRepository.saveAndFlush(outboundLineInterim);
         log.info("outboundLineInterim created ----------->: " + createdOutboundLine);
@@ -1879,6 +1879,7 @@ public class QualityLineService extends BaseService {
 
                 long count_57 = 0;
                 if (outboundLineV2List != null) {
+                    List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L);
                     count_57 = outboundLineService.getOutboundLineV2(dbQualityLines.get(0).getCompanyCodeId(),
                             dbQualityLines.get(0).getPlantId(),
                             dbQualityLines.get(0).getLanguageId(),
@@ -1886,49 +1887,49 @@ public class QualityLineService extends BaseService {
                             dbQualityLines.get(0).getPreOutboundNo(),
                             dbQualityLines.get(0).getRefDocNumber(),
                             dbQualityLines.get(0).getPartnerCode(),
-                            Collections.singletonList(57L));
-                }
-                log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
+                            statusIdsToBeChecked);
+                    log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
 
-                if (count_57 == outboundLineV2List.size()) {
-                    log.info("All Outbound Lines Confirmed - Automate/Calling the Delivery Confirm Procedure");
+                    if (count_57 == outboundLineV2List.size()) {
+                        log.info("All Outbound Lines Confirmed - Automate/Calling the Delivery Confirm Procedure");
 
-                    SearchOutboundHeaderV2 searchOutboundHeaderV2 = new SearchOutboundHeaderV2();
-                    searchOutboundHeaderV2.setCompanyCodeId(companyCodeId);
-                    searchOutboundHeaderV2.setPlantId(plantId);
-                    searchOutboundHeaderV2.setLanguageId(languageId);
-                    searchOutboundHeaderV2.setWarehouseId(warehouseId);
+                        SearchOutboundHeaderV2 searchOutboundHeaderV2 = new SearchOutboundHeaderV2();
+                        searchOutboundHeaderV2.setCompanyCodeId(companyCodeId);
+                        searchOutboundHeaderV2.setPlantId(plantId);
+                        searchOutboundHeaderV2.setLanguageId(languageId);
+                        searchOutboundHeaderV2.setWarehouseId(warehouseId);
 
-                    searchOutboundHeaderV2.setRefDocNumber(refDocNumber);
+                        searchOutboundHeaderV2.setRefDocNumber(refDocNumber);
 
-                    List<OutboundHeaderV2Stream> outboundHeaderV2List = outboundHeaderService.findOutboundHeadernewV2(searchOutboundHeaderV2);
-                    log.info("outboundHeaderV2List ----------->: " + outboundHeaderV2List.stream().count());
+                        List<OutboundHeaderV2Stream> outboundHeaderV2List = outboundHeaderService.findOutboundHeadernewV2(searchOutboundHeaderV2);
+                        log.info("outboundHeaderV2List ----------->: " + outboundHeaderV2List.stream().count());
 
-                    for (OutboundHeaderV2Stream dbOutboundHeader : outboundHeaderV2List) {
-                        SearchOutboundLineV2 searchOutboundLineV2 = new SearchOutboundLineV2();
-                        searchOutboundLineV2.setCompanyCodeId(List.of(dbOutboundHeader.getCompanyCodeId()));
-                        searchOutboundLineV2.setPlantId(List.of(dbOutboundHeader.getPlantId()));
-                        searchOutboundLineV2.setLanguageId(List.of(dbOutboundHeader.getLanguageId()));
-                        searchOutboundLineV2.setWarehouseId(List.of(dbOutboundHeader.getWarehouseId()));
+                        for (OutboundHeaderV2Stream dbOutboundHeader : outboundHeaderV2List) {
+                            SearchOutboundLineV2 searchOutboundLineV2 = new SearchOutboundLineV2();
+                            searchOutboundLineV2.setCompanyCodeId(List.of(dbOutboundHeader.getCompanyCodeId()));
+                            searchOutboundLineV2.setPlantId(List.of(dbOutboundHeader.getPlantId()));
+                            searchOutboundLineV2.setLanguageId(List.of(dbOutboundHeader.getLanguageId()));
+                            searchOutboundLineV2.setWarehouseId(List.of(dbOutboundHeader.getWarehouseId()));
 
-                        searchOutboundLineV2.setRefDocNumber(List.of(dbOutboundHeader.getRefDocNumber()));
-                        searchOutboundLineV2.setPreOutboundNo(List.of(dbOutboundHeader.getPreOutboundNo()));
-                        List<OutboundLineOutput> outboundLineV2s = outboundLineService.findOutboundLineNewV2(searchOutboundLineV2);
-                        log.info("outboundLineV2s ----------->: " + outboundLineV2s.stream().count());
+                            searchOutboundLineV2.setRefDocNumber(List.of(dbOutboundHeader.getRefDocNumber()));
+                            searchOutboundLineV2.setPreOutboundNo(List.of(dbOutboundHeader.getPreOutboundNo()));
+                            List<OutboundLineOutput> outboundLineV2s = outboundLineService.findOutboundLineNewV2(searchOutboundLineV2);
+                            log.info("outboundLineV2s ----------->: " + outboundLineV2s.stream().count());
 
-                        List<OutboundLineV2> updatedOutboundLinesV2 = outboundLineService.updateOutboundLinesV2(dbOutboundHeader.getCreatedBy(), outboundLineV2s);
-                        log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2.stream().count());
-                        log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2);
+                            List<OutboundLineV2> updatedOutboundLinesV2 = outboundLineService.updateOutboundLinesV2(dbOutboundHeader.getCreatedBy(), outboundLineV2s);
+                            log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2.stream().count());
+                            log.info("updatedOutboundLinesV2 ----------->: " + updatedOutboundLinesV2);
 
-                        if (updatedOutboundLinesV2 != null) {
-                            log.info("Initiating deliveryConfirm ----------->: " + updatedOutboundLinesV2);
-                            List<OutboundLineV2> deliveryConfirm = outboundLineService.deliveryConfirmationV2(
-                                    updatedOutboundLinesV2.get(0).getCompanyCodeId(), updatedOutboundLinesV2.get(0).getPlantId(),
-                                    updatedOutboundLinesV2.get(0).getLanguageId(), updatedOutboundLinesV2.get(0).getWarehouseId(),
-                                    updatedOutboundLinesV2.get(0).getPreOutboundNo(), updatedOutboundLinesV2.get(0).getRefDocNumber(),
-                                    updatedOutboundLinesV2.get(0).getPartnerCode(), updatedOutboundLinesV2.get(0).getDeliveryConfirmedBy());
+                            if (updatedOutboundLinesV2 != null) {
+                                log.info("Initiating deliveryConfirm ----------->: " + updatedOutboundLinesV2);
+                                List<OutboundLineV2> deliveryConfirm = outboundLineService.deliveryConfirmationV2(
+                                        updatedOutboundLinesV2.get(0).getCompanyCodeId(), updatedOutboundLinesV2.get(0).getPlantId(),
+                                        updatedOutboundLinesV2.get(0).getLanguageId(), updatedOutboundLinesV2.get(0).getWarehouseId(),
+                                        updatedOutboundLinesV2.get(0).getPreOutboundNo(), updatedOutboundLinesV2.get(0).getRefDocNumber(),
+                                        updatedOutboundLinesV2.get(0).getPartnerCode(), updatedOutboundLinesV2.get(0).getDeliveryConfirmedBy());
+                            }
+                            log.info("<------------------Delivery Confirm Finished Processing------------------>");
                         }
-                        log.info("<------------------Delivery Confirm Finished Processing------------------>");
                     }
                 }
             }
@@ -2166,12 +2167,7 @@ public class QualityLineService extends BaseService {
             dbQualityLine.forEach(data -> {
                 BeanUtils.copyProperties(updateQualityLine, data, CommonUtils.getNullPropertyNames(updateQualityLine));
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
             });
             return qualityLineV2Repository.saveAll(dbQualityLine);
         }
@@ -2200,7 +2196,7 @@ public class QualityLineService extends BaseService {
             BeanUtils.copyProperties(updateQualityLine, dbQualityLine,
                     CommonUtils.getNullPropertyNames(updateQualityLine));
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         }
         return null;
@@ -2229,7 +2225,7 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2259,12 +2255,7 @@ public class QualityLineService extends BaseService {
             dbQualityLine.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
                 qualityLineList.add(data);
             });
             return qualityLineV2Repository.saveAll(qualityLineList);
@@ -2296,12 +2287,7 @@ public class QualityLineService extends BaseService {
             listOutboundLineInterim.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setUpdatedBy(loginUserID);
-                try {
-                    data.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setUpdatedOn(new Date());
             });
             return outboundLineInterimRepository.saveAll(listOutboundLineInterim);
         }
@@ -2329,7 +2315,7 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         } else {
             return null;
@@ -2355,27 +2341,37 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             qualityLineV2Repository.save(dbQualityLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
         }
     }
 
-
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //DeleteQualityHeaderV2
-    public List<QualityLineV2> deleteQualityLine(String companyCodeId, String plantId,
-                                                 String languageId, String warehouseId, String refDocNumber, String loginUserID) throws Exception {
+    public List<QualityLineV2> deleteQualityLine(String companyCodeId, String plantId, String languageId,
+                                                 String warehouseId, String refDocNumber, String loginUserID) throws Exception {
 
         List<QualityLineV2> qualityLineV2List = new ArrayList<>();
-        List<QualityLineV2> dbQualityLine = qualityLineV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<QualityLineV2> dbQualityLineList = qualityLineV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, languageId, plantId, warehouseId, refDocNumber, 0L);
-
-        if (dbQualityLine != null) {
-            for (QualityLineV2 qualityLineV2 : dbQualityLine) {
+        log.info("PickList Cancellation - QualityLine : " + dbQualityLineList);
+        if (dbQualityLineList != null && !dbQualityLineList.isEmpty()) {
+            for (QualityLineV2 qualityLineV2 : dbQualityLineList) {
                 qualityLineV2.setDeletionIndicator(1L);
                 qualityLineV2.setQualityUpdatedBy(loginUserID);
-                qualityLineV2.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                qualityLineV2.setQualityUpdatedOn(new Date());
                 QualityLineV2 saveQualityLine = qualityLineV2Repository.save(qualityLineV2);
                 qualityLineV2List.add(saveQualityLine);
             }

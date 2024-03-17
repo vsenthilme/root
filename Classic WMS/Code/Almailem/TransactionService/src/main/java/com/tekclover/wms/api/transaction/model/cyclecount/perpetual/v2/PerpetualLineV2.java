@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)
@@ -22,9 +24,6 @@ public class PerpetualLineV2 extends PerpetualLine {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
-
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
 
 	@Column(name = "MFR_CODE", columnDefinition = "nvarchar(255)")
 	private String manufacturerCode;
@@ -64,5 +63,8 @@ public class PerpetualLineV2 extends PerpetualLine {
 
 	@Column(name = "LEVEL_ID", columnDefinition = "nvarchar(255)")
 	private String levelId;
+
+	@Column(name = "AMS_VAR_QTY")
+	private Double amsVarianceQty;
 
 }

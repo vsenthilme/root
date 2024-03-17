@@ -74,6 +74,9 @@ public class BatchJobScheduler {
 	@Autowired
 	private Job inventoryJob;
 
+	@Autowired
+	private Job errorlogJob;
+
 
 	/**
 	 * jobBomHeader
@@ -314,6 +317,16 @@ public class BatchJobScheduler {
 				.toJobParameters();
 		try {
 			jobLauncher.run(inventoryJob, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void runErrorLogJob() {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(errorlogJob, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

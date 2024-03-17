@@ -36,7 +36,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iweb2b.api.integration.config.PropertiesConfig;
 import com.iweb2b.api.integration.controller.exception.BadRequestException;
-import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
 import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
 import com.iweb2b.api.integration.model.consignment.dto.Consignment;
 import com.iweb2b.api.integration.model.consignment.dto.ConsignmentImpl;
@@ -45,6 +44,7 @@ import com.iweb2b.api.integration.model.consignment.dto.ConsignmentWebhook;
 import com.iweb2b.api.integration.model.consignment.dto.CountInput;
 import com.iweb2b.api.integration.model.consignment.dto.DashboardCountOutput;
 import com.iweb2b.api.integration.model.consignment.dto.FindConsignment;
+import com.iweb2b.api.integration.model.consignment.dto.InventoryScanRequest;
 import com.iweb2b.api.integration.model.consignment.dto.Items;
 import com.iweb2b.api.integration.model.consignment.dto.JNTResponse;
 import com.iweb2b.api.integration.model.consignment.dto.OrderStatusUpdate;
@@ -52,6 +52,8 @@ import com.iweb2b.api.integration.model.consignment.dto.OrderStatusUpdateRespons
 import com.iweb2b.api.integration.model.consignment.dto.Pieces_Details;
 import com.iweb2b.api.integration.model.consignment.dto.Receiver;
 import com.iweb2b.api.integration.model.consignment.dto.Sender;
+import com.iweb2b.api.integration.model.consignment.dto.ShipsyCancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.dto.alialgm.OrderStatusUpdateRequest;
 import com.iweb2b.api.integration.model.consignment.dto.jnt.Details;
 import com.iweb2b.api.integration.model.consignment.dto.jnt.JNTOrderCreate;
 import com.iweb2b.api.integration.model.consignment.dto.jnt.JNTOrderCreateRequest;
@@ -121,8 +123,13 @@ public class IntegrationService {
 
     private String JNT_HUBCODE = "JT";
     private String QAP_HUBCODE = "QATARPOST";
+    private String AJX_CUST_CODE= "AJX";
+    private String GNM_CUST_CODE= "GNM";
     private final String PASS = "PASS";
-
+    
+    private static final String INTRANSIT_TO_HUB = "intransit_to_hub";
+    private static final String INSCAN_AT_HUB = "inscan_at_hub";
+    
     /**
      * Returns RestTemplate Object
      *
@@ -145,9 +152,22 @@ public class IntegrationService {
      * @return
      */
     public String getConsigmentByWayBillNumber (String wayBillNumber) {
-    	String referenceNumber = consignmentRepository.findConsigmentByWayBillNumber (wayBillNumber);
+    	String referenceNumber = consignmentRepository.findConsigmentByCustomerReferenceNumberV2 (wayBillNumber);
     	if (referenceNumber == null) {
     		throw new BadRequestException("The given wayBillNumber is not found : " + wayBillNumber);
+    	}
+    	return referenceNumber;
+    }
+    
+    /**
+     * 
+     * @param customerReferenceNumber
+     * @return
+     */
+    public String getConsigmentByCustomerReferenceNumber (String customerReferenceNumber) {
+    	String referenceNumber = consignmentRepository.findConsigmentByCustomerReferenceNumberV2 (customerReferenceNumber);
+    	if (referenceNumber == null) {
+    		throw new BadRequestException("The given wayBillNumber is not found : " + customerReferenceNumber);
     	}
     	return referenceNumber;
     }
@@ -278,11 +298,14 @@ public class IntegrationService {
      * @param cancelShipmentRequest
      * @return
      */
-    public CancelShipmentResponse cancelShipment(@RequestBody CancelShipmentRequest cancelShipmentRequest) {
+    public CancelShipmentResponse cancelShipment(@RequestBody ShipsyCancelShipmentRequest cancelShipmentRequest) {
         // Invoke Shipsy API
         try {
+        	log.info("---cancelShipmentRequest-----: " + cancelShipmentRequest); 
             String authToken = propertiesConfig.getShipsyApiAuthtoken();
-            String cancelShipmentUrl = propertiesConfig.getShipsyApiOrderCancel();
+            
+            String cancelShipmentUrl = propertiesConfig.getShipsyApiServer()
+                    + propertiesConfig.getShipsyApiOrderCancel();
             
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -295,6 +318,7 @@ public class IntegrationService {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(cancelShipmentUrl);
             ResponseEntity<CancelShipmentResponse> result = 
             		getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, CancelShipmentResponse.class);
+            log.info("---cancelShipment-----: " + result.getBody());            
             return result.getBody();
         } catch (RestClientException e) {
         	e.printStackTrace();
@@ -401,7 +425,7 @@ public class IntegrationService {
                     orderStatusUpdate.setNotes("");
 
                     // Station sending/DC sending
-                    if (shipsyStatusEvent.equalsIgnoreCase("intransit_to_hub")) {
+                    if (shipsyStatusEvent.equalsIgnoreCase(INTRANSIT_TO_HUB)) {
                         orderStatusUpdate.setHub_code("JT");
                         orderStatusUpdate.setDestination_hub_code("JT");
                     }
@@ -550,11 +574,34 @@ public class IntegrationService {
             }
             createdConsignmentWebhook.setPoc_image_list(pocImageList);
             createdConsignmentWebhook.setQuality_check_image_list(qualityCheckImageList);
+            
+            /*
+             * ----------------AJEX PUSH------------------------------------------------------------------------
+             */
+            if (createdConsignmentWebhook.getCustomer_code() != null &&
+            		createdConsignmentWebhook.getCustomer_code().equalsIgnoreCase(AJX_CUST_CODE)) {
+            	postToAJEX(createdConsignmentWebhook);
+            }
+            
+            /*
+             * ----------------ALI ALGHANIM PUSH------------------------------------------------------------------------
+             */
+            log.info("----ALI_ALGHANIM-------createdConsignmentWebhook---------> : " + createdConsignmentWebhook.getCustomer_code()); 
+            if (createdConsignmentWebhook.getCustomer_code() != null &&
+            		createdConsignmentWebhook.getCustomer_code().equalsIgnoreCase(GNM_CUST_CODE)) {
+            	OrderStatusUpdateRequest orderStatusUpdateRequest = new OrderStatusUpdateRequest();
+            	orderStatusUpdateRequest.setOrder_id(createdConsignmentWebhook.getCustomer_reference_number());
+            	orderStatusUpdateRequest.setNew_status(createdConsignmentWebhook.getType());
+            	log.info("----ALI_ALGHANIM-------orderStatusUpdateRequest---------> : " + orderStatusUpdateRequest); 
+            	
+            	String updateResponse = postToAliAlghanim(orderStatusUpdateRequest);
+            	log.info("----ALI_ALGHANIM-------updateResponse---------> : " + updateResponse);           
+            }
 
             // Push the order to JNT
             // type = intransittohub, hub_code = JT
             String INTRANSIT_TO_HUB = "intransittohub";
-
+            
             /*
              * -------------ROUTER-CONF-------------------------------------------------------------------------
              */
@@ -579,12 +626,11 @@ public class IntegrationService {
                 }
                 
                 if (objJNTResponse.getMsg() != null && objJNTResponse.getMsg().equalsIgnoreCase("success")) {
-//					String OUT_FOR_PICKUP = "out_for_pickup";
                     if (consignmentEntity == null) {
                         try {
                             Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
                             consignment.setScanType(INTRANSIT_TO_HUB);
-                            ConsignmentResponse response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+                            ConsignmentEntity response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
                             log.info("created Consignment in  LocalDB : " + response);
                         } catch (Exception e) {
                             log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
@@ -598,24 +644,6 @@ public class IntegrationService {
                             softDataUploadService.updateConsignment(createdConsignmentWebhook.getReference_number(),
                                     objJNTResponse.getData().getBillCode(), JNT_HUBCODE);
 //					log.info("updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
-
-//                    log.info("-----------Updating the status to Shipsy--------> : ");
-//                    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(objJNTResponse.getData().getCreateOrderTime());
-//                    log.info("create Order Date&Time-------> : " + date.getTime());
-//                    long milli = date.getTime();
-//
-//                    OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
-//                    orderStatusUpdate.setReference_number(createdConsignmentWebhook.getReference_number());
-//                    orderStatusUpdate.setEvent_time_epoch(milli);
-//                    orderStatusUpdate.setWorker_code("");
-//                    orderStatusUpdate.setLat("");
-//                    orderStatusUpdate.setLng("");
-//                    orderStatusUpdate.setNotes(objJNTResponse.getData().getBillCode());
-//                    orderStatusUpdate.setHub_code("JT");
-//                    log.info("Updating the status to Shipsy---#2--------> : " + orderStatusUpdate);
-//
-//                    OrderStatusUpdateResponse response = orderStatusUpdateToShipsy(orderStatusUpdate, INTRANSIT_TO_HUB);
-//                    log.info("OrderStatusUpdateResponse : " + response);
                 } else {
                     objJNTResponse = new JNTResponse();
                     objJNTResponse.setMsg("Ref_Number:"
@@ -631,21 +659,29 @@ public class IntegrationService {
                 log.info("---createConsignmentWebhook-----consignmentFromLocalDB---order---found---status--1----->: " + consignmentEntity);
                 if (consignmentEntity == null || consignmentEntity.getQp_webhook_status() == null) {
                 	try {
-		                QPOrderCreateResponse qpResponse = postQPRequest(createdConsignmentWebhook.getReference_number());
-		                log.info("--createConsignmentWebhook----QPOrderCreateResponse----2----> : " + qpResponse);
-		                if (qpResponse.isSuccessful() == true) {
-	                        Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
-	                        consignment.setScanType(INTRANSIT_TO_HUB);
-	                        ConsignmentResponse response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
-	                        log.info("--------created Consignment in  LocalDB : " + response);
-	                        
-	                        /*
-	                         * Update BillCode with the created Consignment
-	                         */
-	                        ConsignmentEntity updatedConsignmentEntity =
-	                                softDataUploadService.updateQPConsignment(createdConsignmentWebhook.getReference_number(),
-	                                		createdConsignmentWebhook.getReference_number(), QAP_HUBCODE);
-	        				log.info("------updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
+		                List<QPOrderCreateResponse> qpResponseList = postQPRequest(createdConsignmentWebhook.getReference_number());
+		                log.info("--createConsignmentWebhook----QPOrderCreateResponse----2----> : " + qpResponseList);
+		                for (QPOrderCreateResponse qpResponse : qpResponseList) {
+		                	if (qpResponse.getIsSuccessful().booleanValue() == true) {
+		                		consignmentEntity = 
+		                				consignmentRepository.findConsigmentUniqueRecord(newConsignmentWebhook.getReference_number());
+		                		if (consignmentEntity == null) {
+		                			Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
+			                        consignment.setScanType(INTRANSIT_TO_HUB);
+			                        ConsignmentEntity createdConsignmentEntity = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+			                        log.info("--------created QP Consignment in B2B DB : " + createdConsignmentEntity);
+			                        
+			                        ConsignmentEntity newlyCreatedConsignmentEntity =
+			                                softDataUploadService.updateQPConsignment(createdConsignmentWebhook.getReference_number(),
+			                                		createdConsignmentWebhook.getReference_number(), QAP_HUBCODE);
+			        				log.info("------newlyCreatedConsignmentEntity--------> : " + newlyCreatedConsignmentEntity);
+		                		} else {
+		                			ConsignmentEntity updatedConsignmentEntity =
+			                                softDataUploadService.updateQPConsignment(createdConsignmentWebhook.getReference_number(),
+			                                		createdConsignmentWebhook.getReference_number(), QAP_HUBCODE);
+			        				log.info("------updatedConsignmentEntity--------> : " + updatedConsignmentEntity);
+		                		}
+			                }
 		                }
                     } catch (Exception e) {
                         log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
@@ -673,8 +709,8 @@ public class IntegrationService {
         Sender newSender = new Sender();
         Receiver newReceiver = new Receiver();
 
-        Date today = new Date(); // Dummy Date
-//		newJNTRequest.setCustomerCode("J0086024173"); // J0086024173
+        Date today = new Date(); 						// Current Date
+//		newJNTRequest.setCustomerCode("J0086024173"); 	// J0086024173
         newJNTRequest.setCustomerCode(propertiesConfig.getJntCustomerCode()); // J0086024173
 
         String bzDigest = propertiesConfig.getJntBzSignature();
@@ -865,67 +901,12 @@ public class IntegrationService {
     }
 
     /**
-     * @param hubCode
-     * @return
-     */
-//    public List<Consignment> getConsignments(String hubCode) {
-//        List<String> consignmentReferenceNumberList = consignmentRepository.getByHubcode(hubCode);
-//        log.info("consignmentReferenceNumberList : " + consignmentReferenceNumberList);
-//        ;
-//        List<Consignment> consignmentList = new ArrayList<>();
-//        if (!consignmentReferenceNumberList.isEmpty()) {
-//            consignmentReferenceNumberList.stream().forEach(n -> {
-//                ConsignmentEntity consignmentEntityList = consignmentRepository.findConsigmentUniqueRecord(n);
-//                if (consignmentEntityList != null) {
-////			consignmentEntityList.stream().forEach(c -> {
-//                    Consignment consignment = new Consignment();
-//                    BeanUtils.copyProperties(consignmentEntityList, consignment, CommonUtils.getNullPropertyNames(consignmentEntityList));
-//
-//                    OriginDetailsEntity originDetailsEntity = originDetailRepository
-//                            .findByConsignmentId(consignmentEntityList.getConsignmentId());
-//                    if (originDetailsEntity != null) {
-//                        Origin_Details odetails = new Origin_Details();
-//                        BeanUtils.copyProperties(originDetailsEntity, odetails,
-//                                CommonUtils.getNullPropertyNames(originDetailsEntity));
-//                        consignment.setOrigin_details(odetails);
-//                    }
-//
-//                    DestinationDetailEntity destinationDetailsEntity = destinationDetailRepository
-//                            .findByConsignmentId(consignmentEntityList.getConsignmentId());
-//                    if (destinationDetailsEntity != null) {
-//                        Destination_Details ddetails = new Destination_Details();
-//                        BeanUtils.copyProperties(destinationDetailsEntity, ddetails,
-//                                CommonUtils.getNullPropertyNames(destinationDetailsEntity));
-//                        consignment.setDestination_details(ddetails);
-//                    }
-//
-//                    List<PiecesDetailsEntity> piecesDetailsEntityList = piecesDetailRepository
-//                            .findByConsignmentId(consignmentEntityList.getConsignmentId());
-//                    Set<Pieces_Details> piecesDetailsList = new HashSet<>();
-//                    piecesDetailsEntityList.stream().forEach(p -> {
-//                        Pieces_Details pdetails = new Pieces_Details();
-//                        BeanUtils.copyProperties(p, pdetails, CommonUtils.getNullPropertyNames(p));
-//                        piecesDetailsList.add(pdetails);
-//                    });
-//                    consignment.setPieces_detail(piecesDetailsList);
-//                    consignment.setScanType(consignmentRepository.getScanType(consignmentEntityList.getAwb_3rd_Party()));
-//                    consignmentList.add(consignment);
-//                    
-//                    log.info("---------consignment-----> : " + consignment);
-//                }
-//            });
-//            return consignmentList;
-//        }
-//        return consignmentList;
-//    }
-    
-    /**
      * 
      * @param hubCode
      * @return
      */
     public List<Consignment> getConsignments(String hubCode) {
-        List<String> consignmentReferenceNumberList = consignmentRepository.getByHubcode(hubCode);
+        List<String> consignmentReferenceNumberList = consignmentRepository.getOrdersByHubcode(hubCode);
         log.info("consignmentReferenceNumberList : " + consignmentReferenceNumberList);
 
         List<Consignment> consignmentList = new ArrayList<>();
@@ -1152,7 +1133,7 @@ public class IntegrationService {
      * @return
      * @throws Exception
      */
-    public QPOrderCreateResponse postQPRequest(String referenceNumber) throws Exception {
+    public List<QPOrderCreateResponse> postQPRequest(String referenceNumber) throws Exception {
         Consignment dbConsignment = softDataUploadService.getConsignment(referenceNumber);
         log.info("---postQPRequest----Consignment retrieved for QP:----> " + dbConsignment);
 
@@ -1233,85 +1214,186 @@ public class IntegrationService {
     public QPTrackingResponse listenQPWebhook() throws Exception {
         try {
         	QPTrackingResponse response = scheduleQPWebhook();
-            createWebhook(response);
-            if (response.getData() != null && response.getData().size() > 0) {
-            	String referenceNumber = response.getData().get(0).getTracking_No();
-            	String actionName = response.getData().get(0).getItem_Action_Name();
-            	String actionTime = response.getData().get(0).getAction_Time();
-            	
-    			/*
-    			 * Send respective status to Shipsy
-    			 */
-    			String shipsyStatusEvent = CommonUtils.getStatusMapping_QP(actionName);
-    			log.info("shipsyStatusEvent for QP : " + actionName + " - " + shipsyStatusEvent );
-    			if (shipsyStatusEvent != null) {
-    				OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
-
-                    // "scanTime":"2023-07-26 12:04:26"
-                    log.info("--------------ScanTime()-------> : " + actionTime);
-                    long milli = 0;
-                    if (actionTime == null) {
-                        milli = new Date().getTime();
-                    } else {
-                    	// "action_Time": "2023-06-12T12:56:33.317"
-                    	String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-                        Date date = new SimpleDateFormat(FORMAT_DATE_ISO).parse(actionTime);
-                        log.info("convertStringToDate-------> : " + date.getTime());
-                        milli = date.getTime();
-                    }
-
-                    orderStatusUpdate.setReference_number(referenceNumber);
-                    orderStatusUpdate.setEvent_time_epoch(milli);
-                    orderStatusUpdate.setWorker_code("");
-                    orderStatusUpdate.setLat("");
-                    orderStatusUpdate.setLng("");
-                    orderStatusUpdate.setNotes("");
-
-                    // Station sending/DC sending
-                    if (shipsyStatusEvent.equalsIgnoreCase("intransit_to_hub")) {
-                        orderStatusUpdate.setHub_code(QAP_HUBCODE);
-                    }
-
-                    // Abnormal Parcel Scan
-                    if (shipsyStatusEvent.equalsIgnoreCase("attempted")) {
-                        /*
-                         *  JNTWebhookEntity(jnt_webhook_id=2823, billCode=JTE000158664438, description=【Riyadh】[Riyadh Middle 1] has operated
-                         *  abnormal parcel scaning, the operator is [JTS201992-Muhannad Quhaim ahmed Hummad Al quhaim], abnormal reason is [Uncontactable],
-                         *  scanNetworkCity=Riyadh, scanNetworkId=192, scanNetworkName=Riyadh Middle 1, scanNetworkProvince=null, scanNetworkTypeName=网点,
-                         *  scanTime=2023-08-02 08:17:14, scanType=Abnormal parcel scan)
-                         */
-
-                        String reason_code = ""; //getJNTFailureResponseCode(parseReason(detail.getDesc()));
-                        log.info("OrderStatusUpdate----attempted--matched--> reason_code : " + reason_code);
-                        orderStatusUpdate.setReason_code(reason_code);
-                    }
-
-                    // Delivery-Scan/accept event
-                    if (shipsyStatusEvent.equalsIgnoreCase("accept")) {
-                        orderStatusUpdate.setWorker_code("3PLRider");
-                    }
-                    
-                    log.info("OrderStatusUpdate----Request----> : " + orderStatusUpdate + "----event----->" + shipsyStatusEvent);
-                    OrderStatusUpdateResponse eventUpdateResponse = orderStatusUpdateToShipsy(orderStatusUpdate, shipsyStatusEvent);
-    				log.info("OrderStatusUpdateResponse : " + eventUpdateResponse);
-    				
-    				/*
-    				 * Update the Status in Consignment
-    				 */
-    				ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
-    				consignmentEntity.setQp_webhook_status(shipsyStatusEvent);
-    				consignmentEntity = consignmentRepository.save(consignmentEntity);
-    				log.info("ConsignmentEntity----updated----> : " + consignmentEntity);
-    				return response;
-    			} else {
-    				log.info("shipsyStatusEvent : " + shipsyStatusEvent );
-    			}
-            }
+        	
+        	// Updating updateQPWebhook
+        	updateQPWebhook(response);
+        	
+        	List<String> trackingNos = qpWebhookRepository.findUniqueTrackingNo();
+        	trackingNos.stream().forEach(t -> {
+        		List<QPWebhook> qpWebhookActionWise = qpWebhookRepository.findByTrackingNoAndItemActionNameNotOrderByActionTime(t, "CREATED");
+        		qpWebhookActionWise.stream().forEach(qp -> {
+        			log.info("DB qp.getLmdStatus ---> : " + qp.getTrackingNo() + ":" + qp.getLmdStatus());
+        			if(qp.getLmdStatus() != 1) {
+		            	String referenceNumber = qp.getTrackingNo();
+		            	String actionName = qp.getItemActionName();
+		            	String actionTime = qp.getActionTime();
+		            	log.info("--------------actionName-------> : " + actionName);
+		            	
+	        			/*
+		    			 * Send respective status to Shipsy
+		    			 */
+		    			String shipsyStatusEvent = CommonUtils.getStatusMapping_QP(actionName);
+		    			log.info("@@@@@@@@@@@@@@@@@@-------> : " + actionName + "," + actionName.equalsIgnoreCase("RECIEVED"));
+		    			
+		    			if (actionName != null && actionName.equalsIgnoreCase("RECIEVED")) {
+		    				shipsyStatusEvent = "reached_at_hub";
+		    			} else if (actionName != null && actionName.equalsIgnoreCase("DELIVERY  FAILED")) {
+		    				// "DELIVERY  FAILED", "attempted"
+		    				shipsyStatusEvent = "attempted";
+		    			}
+		    			
+		    			log.info("shipsyStatusEvent for QP : " + actionName + " - " + shipsyStatusEvent );
+		    			
+		    			// "scanTime":"2023-07-26 12:04:26"
+						
+		    			if (shipsyStatusEvent != null) {
+		    				try {
+								OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
+								long milli = 0;
+								if (actionTime == null) {
+								    milli = new Date().getTime();
+								} else {
+									// "action_Time": "2023-06-12T12:56:33.317"
+									String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+								    Date date = new SimpleDateFormat(FORMAT_DATE_ISO).parse(actionTime);
+								    log.info("convertStringToDate-------> : " + date.getTime());
+								    milli = date.getTime();
+								}
+		
+								orderStatusUpdate.setReference_number(referenceNumber);
+								orderStatusUpdate.setEvent_time_epoch(milli);
+								orderStatusUpdate.setWorker_code("");
+								orderStatusUpdate.setLat("");
+								orderStatusUpdate.setLng("");
+								orderStatusUpdate.setNotes("");
+		
+								// Station sending/DC sending
+								if (shipsyStatusEvent.equalsIgnoreCase("intransit_to_hub")) {
+								    orderStatusUpdate.setHub_code(QAP_HUBCODE);
+								}
+		
+								// Abnormal Parcel Scan
+								if (shipsyStatusEvent.equalsIgnoreCase("attempted")) {
+									log.info("OrderStatusUpdate----qp.getRemarks()---> : " + qp.getRemarks());
+								    String reason_code = getJNTFailureResponseCode (qp.getRemarks());
+			                    	log.info("OrderStatusUpdate----attempted--matched--> reason_code : " + reason_code);
+								    orderStatusUpdate.setReason_code(reason_code);
+								}
+		
+								// Delivery-Scan/accept event
+								if (shipsyStatusEvent.equalsIgnoreCase("accept")) {
+								    orderStatusUpdate.setWorker_code("3PLRider");
+								}
+								
+								log.info("OrderStatusUpdate----Request----> : " + orderStatusUpdate + "----event----->" + shipsyStatusEvent);
+								OrderStatusUpdateResponse eventUpdateResponse = orderStatusUpdateToShipsy(orderStatusUpdate, shipsyStatusEvent);
+								log.info("OrderStatusUpdateResponse-----1----->: " + eventUpdateResponse);
+								log.info("OrderStatusUpdateResponse-----2-----> : " + eventUpdateResponse.getStatus());
+								
+								if (eventUpdateResponse.getStatus() == 1L) {
+									qp.setLmdStatus(1L);
+									qpWebhookRepository.saveAndFlush(qp);
+								}
+							} catch (Exception e) {
+								log.info("OrderStatusUpdate Error: " + e.toString());
+								String errorReason = e.toString();
+								if (errorReason.indexOf("CONSIGNMENT_COMPLETED") > 0){
+									qp.setLmdStatus(1L);
+									qpWebhookRepository.saveAndFlush(qp);
+								}
+								e.printStackTrace();
+							}
+		    				
+		    				/*
+		    				 * Update the Status in Consignment
+		    				 */
+		    				ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
+		    				consignmentEntity.setScanType_3rd_Party(shipsyStatusEvent);
+		    				consignmentEntity = consignmentRepository.save(consignmentEntity);
+		    				log.info("ConsignmentEntity----updated----> : " + consignmentEntity);
+		    			}
+	        		}
+        		});
+        	});
+        	
+        	
+//            if (response.getData() != null && response.getData().size() > 0) {
+//            	for (QPData data : response.getData()) {
+//	            	String referenceNumber = data.getTracking_No();
+//	            	String actionName = data.getItem_Action_Name();
+//	            	String actionTime = data.getAction_Time();
+//	            	
+//	    			/*
+//	    			 * Send respective status to Shipsy
+//	    			 */
+//	    			String shipsyStatusEvent = CommonUtils.getStatusMapping_QP(actionName);
+//	    			log.info("shipsyStatusEvent for QP : " + actionName + " - " + shipsyStatusEvent );
+//	    			if (shipsyStatusEvent != null && !actionName.equalsIgnoreCase("CREATED")) {
+//	    				try {
+//							OrderStatusUpdate orderStatusUpdate = new OrderStatusUpdate();
+//	
+//							// "scanTime":"2023-07-26 12:04:26"
+//							log.info("--------------ScanTime()-------> : " + actionTime);
+//							long milli = 0;
+//							if (actionTime == null) {
+//							    milli = new Date().getTime();
+//							} else {
+//								// "action_Time": "2023-06-12T12:56:33.317"
+//								String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+//							    Date date = new SimpleDateFormat(FORMAT_DATE_ISO).parse(actionTime);
+//							    log.info("convertStringToDate-------> : " + date.getTime());
+//							    milli = date.getTime();
+//							}
+//	
+//							orderStatusUpdate.setReference_number(referenceNumber);
+//							orderStatusUpdate.setEvent_time_epoch(milli);
+//							orderStatusUpdate.setWorker_code("");
+//							orderStatusUpdate.setLat("");
+//							orderStatusUpdate.setLng("");
+//							orderStatusUpdate.setNotes("");
+//	
+//							// Station sending/DC sending
+//							if (shipsyStatusEvent.equalsIgnoreCase("intransit_to_hub")) {
+//							    orderStatusUpdate.setHub_code(QAP_HUBCODE);
+//							}
+//	
+//							// Abnormal Parcel Scan
+//							if (shipsyStatusEvent.equalsIgnoreCase("attempted")) {
+//							    String reason_code = "";
+//							    log.info("OrderStatusUpdate----attempted--matched--> reason_code : " + reason_code);
+//							    orderStatusUpdate.setReason_code(reason_code);
+//							}
+//	
+//							// Delivery-Scan/accept event
+//							if (shipsyStatusEvent.equalsIgnoreCase("accept")) {
+//							    orderStatusUpdate.setWorker_code("3PLRider");
+//							}
+//							
+//							log.info("OrderStatusUpdate----Request----> : " + orderStatusUpdate + "----event----->" + shipsyStatusEvent);
+//							OrderStatusUpdateResponse eventUpdateResponse = orderStatusUpdateToShipsy(orderStatusUpdate, shipsyStatusEvent);
+//							log.info("OrderStatusUpdateResponse : " + eventUpdateResponse);
+//						} catch (Exception e) {
+//							log.info("OrderStatusUpdate Error: " + e.toString());
+//							e.printStackTrace();
+//						}
+//	    				
+//	    				/*
+//	    				 * Update the Status in Consignment
+//	    				 */
+//	    				ConsignmentEntity consignmentEntity = consignmentRepository.findConsigmentUniqueRecord(referenceNumber);
+//	    				consignmentEntity.setScanType_3rd_Party(shipsyStatusEvent);
+//	    				consignmentEntity = consignmentRepository.save(consignmentEntity);
+//	    				log.info("ConsignmentEntity----updated----> : " + consignmentEntity);
+//	    			} else {
+//	    				log.info("shipsyStatusEvent : " + shipsyStatusEvent );
+//	    			}
+//            	}
+//            }
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
-		return null;
     }
 
     /**
@@ -1323,19 +1405,25 @@ public class IntegrationService {
         try {
             log.info("------------Calling----QP----TRACKING------API-----------");
 
-            List<String> qpOrders = softDataUploadService.getConsigmentByQP(QAP_HUBCODE);
+            List<String[]> qpOrders = softDataUploadService.getConsigmentByQP(QAP_HUBCODE);
             log.info("qpOrders : " + qpOrders);
             
-            List<String> qpNotDeliveredOrders = qpWebhookRepository.findByActionName(qpOrders, "DELIVERED");
+            createWebhookForNewOrders(qpOrders);
+            
+            List<String> qpOrderIds = softDataUploadService.getOrdersByHubcode(QAP_HUBCODE);
+            List<String> qpNotDeliveredOrders = qpWebhookRepository.findByActionName(qpOrderIds, "DELIVERED");
             log.info("qpNotDeliveredOrders : " + qpNotDeliveredOrders);
             
             QPTrackingRequest qpTrackingRequest = new QPTrackingRequest();
             qpTrackingRequest.setPageNumber("1");
-            qpTrackingRequest.setTackingNumbers(qpNotDeliveredOrders);
+        	qpTrackingRequest.setTackingNumbers(qpNotDeliveredOrders);
             log.info("QPTrackingRequest : " + qpTrackingRequest);
-
+            
             // https://web.qatarpost.qa/shipmentapi/partner/order/create
-            String trackingUrl = propertiesConfig.getQpAddress() + propertiesConfig.getQpTracking();
+//            String trackingUrl = propertiesConfig.getQpAddress() + propertiesConfig.getQpTracking();
+            
+            // https://web.qatarpost.qa/ShipmentV3/partner/order/trackingnumbers/
+            String trackingUrl = "https://web.qatarpost.qa/ShipmentV3/partner/order/trackingnumbers";
             log.info("trackingUrl : " + trackingUrl);
 
             QPToken qpToken = generateQPPartnerToken();
@@ -1361,7 +1449,40 @@ public class IntegrationService {
      * @param qpTrackingResponse
      * @return 
      */
-    private void createWebhook (QPTrackingResponse qpTrackingResponse) {
+//    private void createWebhook (QPTrackingResponse qpTrackingResponse) {
+//    	/*
+//    	 *  "tracking_No": "QP12333536TM",
+//            "item_Action_Id": 5,
+//            "item_Action_Name": "CREATED",
+//            "action_Date": "2023-06-12T12:56:33.317",
+//            "action_Time": "2023-06-12T12:56:33.317",
+//            "operator_Name": "0",
+//            "totalRows": 1
+//    	 */
+//    	List<QPData> qpDataList = qpTrackingResponse.getData();
+//    	for (QPData qpData : qpDataList) {
+//    		QPWebhook dbQPWebhook = qpWebhookRepository.findByTrackingNoAndItemActionName(qpData.getTracking_No(), qpData.getItem_Action_Name());
+//    		if (dbQPWebhook == null) {
+//    			QPWebhook qpWebhook = new QPWebhook();
+//    			qpWebhook.setTrackingNo(qpData.getTracking_No());
+//    			qpWebhook.setItemActionId(qpData.getItem_Action_Id());
+//    			qpWebhook.setItemActionName(qpData.getItem_Action_Name());
+//    			qpWebhook.setActionDate(qpData.getAction_Date());
+//    			qpWebhook.setActionTime(qpData.getAction_Time());    			
+//    			qpWebhook.setOperatorName(qpData.getOperator_Name());    	
+//    			qpWebhook.setTotalRows(qpData.getTotalRows());
+//    			
+//    			QPWebhook createdQPWebhook = qpWebhookRepository.save(qpWebhook);
+//            	log.info("------createdQPWebhook-------> " + createdQPWebhook);
+//    		}
+//    	}
+//    }
+    
+    /**
+     * 
+     * @param qpTrackingResponse
+     */
+    private void updateQPWebhook (QPTrackingResponse qpTrackingResponse) {
     	/*
     	 *  "tracking_No": "QP12333536TM",
             "item_Action_Id": 5,
@@ -1373,8 +1494,10 @@ public class IntegrationService {
     	 */
     	List<QPData> qpDataList = qpTrackingResponse.getData();
     	for (QPData qpData : qpDataList) {
-    		QPWebhook dbQPWebhook = qpWebhookRepository.findByTrackingNoAndItemActionName(qpData.getTracking_No(), qpData.getItem_Action_Name());
-    		if (dbQPWebhook == null) {
+    		log.info("------QUery-------> " + qpData.getTracking_No() + ":" + qpData.getItem_Action_Name());
+    		List<QPWebhook> dbQPWebhook = qpWebhookRepository.findByTrackingNoAndItemActionName(qpData.getTracking_No(), qpData.getItem_Action_Name());
+    		log.info("------qUERIED dbQPWebhook-------> " + dbQPWebhook);
+    		if (dbQPWebhook == null || dbQPWebhook.isEmpty()){
     			QPWebhook qpWebhook = new QPWebhook();
     			qpWebhook.setTrackingNo(qpData.getTracking_No());
     			qpWebhook.setItemActionId(qpData.getItem_Action_Id());
@@ -1383,43 +1506,82 @@ public class IntegrationService {
     			qpWebhook.setActionTime(qpData.getAction_Time());    			
     			qpWebhook.setOperatorName(qpData.getOperator_Name());    	
     			qpWebhook.setTotalRows(qpData.getTotalRows());
-    			
+    			qpWebhook.setLmdStatus(0L);
+    			qpWebhook.setRemarks(qpData.getRemarks());    			
     			QPWebhook createdQPWebhook = qpWebhookRepository.save(qpWebhook);
             	log.info("------createdQPWebhook-------> " + createdQPWebhook);
     		}
+		}
+    }
+    
+    /**
+     * 
+     * @param qpOrders
+     */
+    private void createWebhookForNewOrders(List<String[]> qpOrders) {
+    	/*
+    	 *  "tracking_No": "QP12333536TM",
+            "item_Action_Id": 5,
+            "item_Action_Name": "CREATED",
+            "action_Date": "2023-06-12T12:56:33.317",
+            "action_Time": "2023-06-12T12:56:33.317",
+            "operator_Name": "0",
+            "totalRows": 1
+    	 */
+    	for (String[] qpOrder : qpOrders) {
+    		List<QPWebhook> existingQPOrderList = qpWebhookRepository.findByTrackingNo(qpOrder[0]);
+    		if (existingQPOrderList == null || existingQPOrderList.isEmpty()) {
+    			QPWebhook qpWebhook = new QPWebhook();
+    			qpWebhook.setTrackingNo(qpOrder[0]);
+    			qpWebhook.setItemActionId(5L);
+    			qpWebhook.setItemActionName("CREATED");
+    			qpWebhook.setActionDate(qpOrder[1]);
+    			qpWebhook.setActionTime(qpOrder[1]);		
+    			qpWebhook.setOperatorName("0");
+    			qpWebhook.setTotalRows(1L);			
+    			QPWebhook createdQPWebhook = qpWebhookRepository.save(qpWebhook);
+            	log.info("------created QPWebhook -------> " + createdQPWebhook);
+    		}
     	}
     }
+    
 
     /**
      * @param qpOrderList
      * @return
      * @throws Exception
      */
-    private QPOrderCreateResponse sendOrder2QP(List<QPOrder> qpOrderList) throws Exception {
+    private List<QPOrderCreateResponse> sendOrder2QP(List<QPOrder> qpOrderList) throws Exception {
         try {
-            log.info("qpOrderList: " + qpOrderList);
-
-//			ObjectMapper Obj = new ObjectMapper();
-//			String jsonStr = Obj.writeValueAsString(qpOrderList);
-//			log.info("jsonStr : " + jsonStr);
-
-            // https://web.qatarpost.qa/shipmentapi/partner/order/create
-            String createUrl = propertiesConfig.getQpAddress() + propertiesConfig.getQpCreate();
-            log.info("createUrl : " + createUrl);
-
-            QPToken qpToken = generateQPPartnerToken();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Token", qpToken.getToken());
-            headers.add("Partner-Token", qpToken.getPartnerToken());
-            log.info("orders------->" + qpOrderList);
-
-            HttpEntity<?> entity = new HttpEntity<>(qpOrderList, headers);
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createUrl);
-            ResponseEntity<QPOrderCreateResponse> result =
-                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, QPOrderCreateResponse.class);
-            log.info("QPOrderCreateResponse : " + result);
-            return result.getBody();
+        	List<QPOrderCreateResponse> orderCreateResponseList = new ArrayList<>();
+            log.info("Received qpOrderList: " + qpOrderList);
+            
+            /*
+             * Sending an order one by one to QP API
+             */
+            for (QPOrder qpOrder : qpOrderList) {
+            	List<QPOrder> orderList = new ArrayList<>();
+            	orderList.add(qpOrder);         
+	            // https://web.qatarpost.qa/shipmentapi/partner/order/create
+	            String createUrl = propertiesConfig.getQpAddress() + propertiesConfig.getQpCreate();
+	            log.info("createUrl : " + createUrl);
+	
+	            QPToken qpToken = generateQPPartnerToken();
+	            HttpHeaders headers = new HttpHeaders();
+	            headers.setContentType(MediaType.APPLICATION_JSON);
+	            headers.add("Token", qpToken.getToken());
+	            headers.add("Partner-Token", qpToken.getPartnerToken());
+	            log.info("Sending order to QP API: ------->" + orderList);
+	
+	            HttpEntity<?> entity = new HttpEntity<>(orderList, headers);
+	            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createUrl);
+	            ResponseEntity<QPOrderCreateResponse> result =
+	                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, QPOrderCreateResponse.class);
+	            log.info("-----QPOrderCreateResponse : " + result);
+//	            return result.getBody();
+	            orderCreateResponseList.add(result.getBody());
+            }
+            return orderCreateResponseList;
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -1551,14 +1713,6 @@ public class IntegrationService {
         }
         return responseCode;
     }
-    
-//    public String getJNTFailureResponseCode(JNTFailureResponseInput jntFailureResponseDesc) {
-//        String jntFailureResponseCode = null;
-//        if (jntFailureResponseDesc.getJntFailureResponseDescription() != null) {
-//            jntFailureResponseCode = jntFailureResponseRepository.getFailureResponseCode(jntFailureResponseDesc.getJntFailureResponseDescription());
-//        }
-//        return jntFailureResponseCode;
-//    }
     
     public static void main(String[] args) {
     	/*
@@ -1717,4 +1871,55 @@ public class IntegrationService {
 
         return results;
     }
+    
+    /**
+     * sendFeedToAJEX
+     * @param createdConsignmentWebhook
+     */
+    private void postToAJEX (ConsignmentWebhook createdConsignmentWebhook) {
+    	// Send Feed to AJEX
+    }
+    
+    /**
+     * postToAliAlghanim
+     * @param orderStatusUpdateRequest
+     * @return 
+     */
+    private String postToAliAlghanim (OrderStatusUpdateRequest orderStatusUpdateRequest) {
+    	// Send Feed to AliAlghanim
+    	try {
+            String authToken = propertiesConfig.getAlialgmAuthToken();
+            String orderStatusUpdateUrl = propertiesConfig.getAlialgmApiOrderStatusUpdate();            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(orderStatusUpdateRequest, headers);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(orderStatusUpdateUrl);
+            ResponseEntity<String> result = 
+            		getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+            log.info("---postToAliAlghanim-----OrderStatusUpdateRespone----->: " + result.getBody());           
+            return result.getBody();
+        } catch (RestClientException e) {
+        	e.printStackTrace();
+        	throw e;
+        }
+    }
+
+    /**
+     * 
+     * @param inventoryScanRequest
+     * @return
+     */
+	public List<ConsignmentWebhookEntity> scanInventory(InventoryScanRequest inventoryScanRequest) {
+		inventoryScanRequest.setCustomerCode(AJX_CUST_CODE);
+		inventoryScanRequest.setType(INSCAN_AT_HUB);
+		log.info("inventoryScanRequest : " + inventoryScanRequest);
+		
+		List<ConsignmentWebhookEntity> webhookResponse = 
+				consignmentWebhookRepository.findByTypeAndEventTimeAndCustomerCode(inventoryScanRequest.getType(),
+						inventoryScanRequest.getFromDate(), inventoryScanRequest.getToDate(),
+						inventoryScanRequest.getCustomerCode());
+		log.info("inventoryScan webhookResponse-----------> : " + webhookResponse);
+		return webhookResponse;
+	}
 }

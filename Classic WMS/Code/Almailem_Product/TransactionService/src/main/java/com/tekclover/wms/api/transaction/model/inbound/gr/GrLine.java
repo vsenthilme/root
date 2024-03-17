@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 		uniqueConstraints = { 
 				@UniqueConstraint (
 						name = "unique_key_grline", 
-						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "PRE_IB_NO", "REF_DOC_NO", "GR_NO", "PAL_CODE", "CASE_CODE", "PACK_BARCODE", "IB_LINE_NO", "ITM_CODE"})
+						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "PRE_IB_NO", "REF_DOC_NO", "GR_NO", "PAL_CODE", "CASE_CODE", "PACK_BARCODE", "IB_LINE_NO", "ITM_CODE", "GR_CTD_ON"})
 				}
 		)
 @IdClass(GrLineCompositeKey.class)
@@ -215,7 +215,7 @@ public class GrLine {
 	
 	@Column(name = "GR_CTD_BY") 
 	private String createdBy;
-	
+	@Id
 	@Column(name = "GR_CTD_ON")
 	private Date createdOn = new Date();
 	

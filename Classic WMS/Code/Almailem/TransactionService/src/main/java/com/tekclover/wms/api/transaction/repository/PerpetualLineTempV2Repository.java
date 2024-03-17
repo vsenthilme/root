@@ -18,10 +18,11 @@ import java.util.List;
 public interface PerpetualLineTempV2Repository extends JpaRepository<PerpetualLineTempV2, Long>,
         JpaSpecificationExecutor<PerpetualLineTempV2>, StreamableJpaSpecificationRepository<PerpetualLineTempV2> {
 
-    @Query(value = "SELECT SUM(CTD_QTY) inventoryQty, itm_code itemCode, mfr_name manufacturerName, ref_no referenceCycleCountNo FROM tblperpetualtempline \n"
+    @Query(value = "SELECT SUM(CTD_QTY) inventoryQty, itm_code itemCode, mfr_name manufacturerName, \n"
+            + "ref_no referenceCycleCountNo, sc_line_no lineNumber FROM tblperpetualtempline \n"
             + "WHERE WH_ID = :warehouseId AND CC_NO = :cycleCountNo AND\r\n"
             + "C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND IS_DELETED = 0 \r\n"
-            + "GROUP BY itm_code,mfr_name,ref_no", nativeQuery = true)
+            + "GROUP BY itm_code,mfr_name,ref_no,sc_line_no", nativeQuery = true)
     public List<IKeyValuePair> getPickupLineCount(@Param("warehouseId") String warehouseId,
                                                   @Param("companyCodeId") String companyCodeId,
                                                   @Param("plantId") String plantId,

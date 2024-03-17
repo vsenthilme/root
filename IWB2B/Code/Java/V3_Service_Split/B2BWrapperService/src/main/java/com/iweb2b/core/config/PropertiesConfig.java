@@ -45,11 +45,17 @@ public class PropertiesConfig {
 	
 	@Value("${api.b2bportal.service.url}")
 	private String b2bportalServiceUrl;
+	
+	@Value("${api.spark.service.url}")
+	private String sparkServiceUrl;
 
 	//-----------------------------------------------------------------------------------
 	// file.upload.location
 	@Value("${file.upload.location}")
 	private String fileUploadLocation;
+	
+	@Value("${file.uplpad.url}")
+	private String fileUploadUrl;
 
 	//-----------------------------------------------------------------------------------
 	

@@ -54,6 +54,6 @@ public interface QualityHeaderV2Repository extends JpaRepository<QualityHeaderV2
     public void updateQualityHeader (@Param ("referenceField10") String referenceField10,
                                      @Param ("qualityInspectionNo") String qualityInspectionNo);
 
-    QualityHeaderV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+    List<QualityHeaderV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
 }

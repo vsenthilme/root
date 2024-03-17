@@ -22,6 +22,8 @@ public class SearchPickupLineV2 {
     private List<String> pickedStorageBin;
     private List<String> pickedPackCode;
     private List<String> assignedPickerId;
+    private List<String> levelId;
+
 
     private List<Long> statusId;
     private Date fromPickConfirmedOn;

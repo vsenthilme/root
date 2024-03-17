@@ -137,7 +137,7 @@ public class SparkOrderManagementLineService {
                 + "IS_COMPLETED as isCompleted, "
                 + "IS_CANCELLED as isCancelled "
                 + "FROM tblordermangementlinev2 WHERE IS_DELETED = 0");
-        imOrderManagementLineQuery.cache();
+//        imOrderManagementLineQuery.cache();
 
         if (findOrderManagementLine.getWarehouseId() != null && !findOrderManagementLine.getWarehouseId().isEmpty()) {
             imOrderManagementLineQuery = imOrderManagementLineQuery.filter(col("WH_ID").isin(findOrderManagementLine.getWarehouseId().toArray()));
@@ -188,6 +188,9 @@ public class SparkOrderManagementLineService {
         }
         if (findOrderManagementLine.getPlantId() != null && !findOrderManagementLine.getPlantId().isEmpty()) {
             imOrderManagementLineQuery = imOrderManagementLineQuery.filter(col("PLANT_ID").isin(findOrderManagementLine.getPlantId().toArray()));
+        }
+        if (findOrderManagementLine.getManufacturerName() != null && !findOrderManagementLine.getManufacturerName().isEmpty()) {
+            imOrderManagementLineQuery = imOrderManagementLineQuery.filter(col("MFR_NAME").isin(findOrderManagementLine.getManufacturerName().toArray()));
         }
 
 

@@ -2,6 +2,8 @@ package com.tekclover.wms.core.batch.config;
 
 import javax.sql.DataSource;
 
+import com.tekclover.wms.core.batch.dto.*;
+import com.tekclover.wms.core.batch.mapper.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -19,22 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.tekclover.wms.core.batch.dto.BinLocation;
-import com.tekclover.wms.core.batch.dto.BomHeader;
-import com.tekclover.wms.core.batch.dto.BomLine;
-import com.tekclover.wms.core.batch.dto.BusinessPartner;
-import com.tekclover.wms.core.batch.dto.HandlingEquipment;
-import com.tekclover.wms.core.batch.dto.IMPartner;
-import com.tekclover.wms.core.batch.dto.ImBasicData1;
-import com.tekclover.wms.core.batch.dto.Inventory;
-import com.tekclover.wms.core.batch.mapper.BinLocationFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BomHeaderFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BomLineFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.BusinessPartnerFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.HandlingEquipmentFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.IMPartnerFieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.ImBasicData1FieldSetMapper;
-import com.tekclover.wms.core.batch.mapper.InventoryFieldSetMapper;
 import com.tekclover.wms.core.config.PropertiesConfig;
 import com.tekclover.wms.core.model.transaction.InventoryStock;
 
@@ -278,11 +264,13 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 		DefaultLineMapper<Inventory> inventoryLineMapper = new DefaultLineMapper<>();
 		DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
 		tokenizer.setNames(new String[]{"inventoryId", "languageId", "companyCodeId", "plantId", "warehouseId", "palletCode", "caseCode",
-				"itemCode", "packBarcode", "variantCode", "variantSubCode", "batchSerialNumber", "storageBin",
+				"itemCode", "packBarcodes", "variantCode", "variantSubCode", "batchSerialNumber", "storageBin",
 				"stockTypeId", "specialStockIndicatorId", "referenceOrderNo", "storageMethod", "binClassId", "description",
 				"allocatedQuantity", "inventoryQuantity", "inventoryUom", "manufacturerCode", "manufacturerDate", "expiryDate",
-				"barcodeId", "cbm", "cbmUnit", "cbmPerQuantity", "manufacturerName", "origin", "brand", "referenceDocumentNo",
-				"companyDescription", "plantDescription", "warehouseDescription", "statusDescription", "deletionIndicator", "dType", "createdBy"});
+				"barcodeId", "cbm", "cbmUnit", "cbmPerQuantity", "manufacturerName", "origin", "brand", "referenceDocumentNo", "levelId",
+				"companyDescription", "plantDescription", "warehouseDescription", "statusDescription", "stockTypeDescription", "deletionIndicator", "referenceField1",
+				"referenceField2", "referenceField3", "referenceField4", "referenceField5", "referenceField6", "referenceField7",
+				"referenceField8", "referenceField9", "referenceField10", "dType", "createdBy"});
 		inventoryLineMapper.setLineTokenizer(tokenizer);
 		inventoryLineMapper.setFieldSetMapper(new InventoryFieldSetMapper());
 		inventoryLineMapper.afterPropertiesSet();
@@ -295,16 +283,18 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 	public JdbcBatchItemWriter<Inventory> inventoryItemWriter() {
 		JdbcBatchItemWriter<Inventory> itemWriter = new JdbcBatchItemWriter<>();
 		itemWriter.setDataSource(this.dataSource);
-		itemWriter.setSql("INSERT INTO tblinventory (INV_ID, LANG_ID, C_ID, PLANT_ID, WH_ID, PAL_CODE, CASE_CODE, ITM_CODE, PACK_BARCODE, "
-				+ "VAR_ID, VAR_SUB_ID, STR_NO, ST_BIN, STCK_TYP_ID, SP_ST_IND_ID, REF_ORD_NO, STR_MTD, BIN_CL_ID, TEXT, ALLOC_QTY, "
-				+ "INV_QTY, INV_UOM, MFR_CODE, MFR_DATE, EXP_DATE, BARCODE_ID, CBM, CBM_UNIT, CBM_PER_QTY, MFR_NAME, ORIGIN, BRAND, "
-				+ "REF_DOC_NO, C_TEXT, PLANT_TEXT, WH_TEXT, STATUS_TEXT, IS_DELETED, DTYPE, IU_CTD_BY, IU_CTD_ON) "
-				+ "VALUES (:inventoryId, :languageId, :companyCodeId, :plantId, :warehouseId, :palletCode, :caseCode, :itemCode, :packBarcode, "
+		itemWriter.setSql(" INSERT INTO tblinventory (INV_ID, LANG_ID, C_ID, PLANT_ID, WH_ID, PAL_CODE, CASE_CODE, ITM_CODE, PACK_BARCODE, "
+				+ " VAR_ID, VAR_SUB_ID, STR_NO, ST_BIN, STCK_TYP_ID, SP_ST_IND_ID, REF_ORD_NO, STR_MTD, BIN_CL_ID, TEXT, ALLOC_QTY, "
+				+ " INV_QTY, INV_UOM, MFR_CODE, MFR_DATE, EXP_DATE, BARCODE_ID, CBM, CBM_UNIT, CBM_PER_QTY, MFR_NAME, ORIGIN, BRAND, "
+				+ " REF_DOC_NO,LEVEL_ID, C_TEXT, PLANT_TEXT, WH_TEXT, STATUS_TEXT,STCK_TYP_TEXT, IS_DELETED, REF_FIELD_1, REF_FIELD_2, REF_FIELD_3, REF_FIELD_4, "
+				+ " REF_FIELD_5, REF_FIELD_6, REF_FIELD_7, REF_FIELD_8, REF_FIELD_9, REF_FIELD_10, DTYPE, IU_CTD_BY, IU_CTD_ON) "
+				+ " VALUES (:inventoryId, :languageId, :companyCodeId, :plantId, :warehouseId, :palletCode, :caseCode, :itemCode, :packBarcodes, "
 				+ " :variantCode, :variantSubCode, :batchSerialNumber, :storageBin, :stockTypeId, :specialStockIndicatorId,"
 				+ " :referenceOrderNo, :storageMethod, :binClassId, :description, :allocatedQuantity, :inventoryQuantity, :inventoryUom,"
 				+ " :manufacturerCode, :manufacturerDate, :expiryDate, :barcodeId, :cbm, :cbmUnit, :cbmPerQuantity, :manufacturerName,"
-				+ " :origin, :brand, :referenceDocumentNo, :companyDescription, :plantDescription, :warehouseDescription,"
-				+ " :statusDescription, :deletionIndicator, :dType, :createdBy, GETDATE())");
+				+ " :origin, :brand, :referenceDocumentNo,:levelId, :companyDescription, :plantDescription, :warehouseDescription,"
+				+ " :statusDescription, :stockTypeDescription, :deletionIndicator, :referenceField1, :referenceField2, :referenceField3, :referenceField4,"
+				+ " :referenceField5, :referenceField6, :referenceField7, :referenceField8, :referenceField9, :referenceField10, :dType, :createdBy, GETDATE())");
 		itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider());
 		itemWriter.afterPropertiesSet();
 		return itemWriter;
@@ -903,7 +893,49 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 				.build();
 	}
 
+	//---------------------------ErrorLog--------------------------------------------------------------------//
 
+	@Bean
+	public FlatFileItemReader<ErrorLog> errorLogItemReader() {
+		FlatFileItemReader<ErrorLog> reader = new FlatFileItemReader<>();
+		reader.setLinesToSkip(1);
+		reader.setResource(new FileSystemResource(propertiesConfig.getErrorlogFolderName() + propertiesConfig.getErrorlogFileName()));
+
+		DefaultLineMapper<ErrorLog> customerLineMapper = new DefaultLineMapper<>();
+		DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+		tokenizer.setNames(new String[]{"orderId", "orderTypeId", "orderDate", "errorMessage", "languageId", "companyCode",
+				"plantId", "warehouseId", "refDocNumber", "itemCode", "manufacturerName", "referenceField1", "referenceField2",
+				"referenceField3", "referenceField4", "referenceField5", "referenceField6", "referenceField7", "referenceField8",
+				"referenceField8", "referenceField9", "referenceField10", "createdBy", "createdOn"});
+		customerLineMapper.setLineTokenizer(tokenizer);
+		customerLineMapper.setFieldSetMapper(new ErrorLogFieldSetMapper());
+		customerLineMapper.afterPropertiesSet();
+		reader.setLineMapper(customerLineMapper);
+		return reader;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Bean
+	public JdbcBatchItemWriter<ErrorLog> errorLogItemWriter() {
+		JdbcBatchItemWriter<ErrorLog> itemWriter = new JdbcBatchItemWriter<>();
+		itemWriter.setDataSource(this.dataSource);
+		itemWriter.setSql("INSERT INTO tblexceptionlog "
+				+ " (ORDER_TYPE_ID,ORDER_DATE,ERR_MSG,LANG_ID,C_ID,PLANT_ID,WH_ID,REF_DOC_NO,ITM_CODE,MFR_NAME,REF_FIELD_1, "
+				+ " REF_FIELD_2,REF_FIELD_3,REF_FIELD_4,REF_FIELD_5,REF_FIELD_6,REF_FIELD_7,REF_FIELD_8,REF_FIELD_9,REF_FIELD_10,CTD_BY,CTD_ON) "
+				+ " VALUES (:orderTypeId, :orderDate, :errorMessage, :languageId, :companyCode, :plantId, :warehouseId, "
+				+ " :refDocNumber, :itemCode, :manufacturerName, :referenceField1, :referenceField2, :referenceField3, "
+				+ " :referenceField4, :referenceField5, :referenceField6, :referenceField7, :referenceField8, :referenceField9, "
+				+ " :referenceField10, :createdBy, :createdOn)");
+		itemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider());
+		itemWriter.afterPropertiesSet();
+		return itemWriter;
+	}
+
+	@Bean
+	public Step step16() {
+		return stepBuilderFactory.get("step16").<ErrorLog, ErrorLog>chunk(10).reader(errorLogItemReader())
+				.writer(errorLogItemWriter()).build();
+	}
 	/*-----------------------------------------------------------------------------------------*/
 	@Bean
 	public JobListener wmsListener() throws Exception {
@@ -1028,6 +1060,14 @@ public class JobConfiguration extends DefaultBatchConfigurer {
 		return jobBuilderFactory.get("InventoryJob")
 				.listener(wmsListener())
 				.start(step15())
+				.build();
+	}
+
+	@Bean
+	public Job errorlogJob() throws Exception {
+		return jobBuilderFactory.get("jobErrorLog")
+				.listener(wmsListener())
+				.start(step16())
 				.build();
 	}
 }

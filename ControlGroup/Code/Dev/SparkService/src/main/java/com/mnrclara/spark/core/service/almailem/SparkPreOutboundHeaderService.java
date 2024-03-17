@@ -95,7 +95,7 @@ public class SparkPreOutboundHeaderService {
                 + "TARGET_BRANCH_CODE as targetBranchCode "
                 + "FROM tblpreoutboundheaderv2 WHERE IS_DELETED=0 ");
 
-        preObHeaderQuery.cache();
+//        preObHeaderQuery.cache();
 
 
         if (findPreObHeader.getWarehouseId() != null && !findPreObHeader.getWarehouseId().isEmpty()) {

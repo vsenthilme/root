@@ -132,7 +132,7 @@ public class IntegrationService {
 			headers.add("User-Agent", "RestTemplate");
 			headers.add("Authorization", "Bearer " + authToken);
 			UriComponentsBuilder builder =
-					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/" + referenceNumber + "/shipment/v2");
+					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignmentTracking/" + referenceNumber + "/shipment/v2");
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			ResponseEntity<ConsignmentTracking> result =
 					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, ConsignmentTracking.class);
@@ -209,6 +209,32 @@ public class IntegrationService {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param referenceNumber
+	 * @return
+	 */
+	public byte[] getShippingLabelV3(String referenceNumber) {
+		try {
+			AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+			String authToken = integAuthToken.getAccess_token();
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/" + referenceNumber + "/shippingLabel/v3");
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<byte[]> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, byte[].class);
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 	// POST
 	public CancelShipmentResponse cancelShipment (CancelShipmentRequest cancelShipmentRequest) {
 		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
@@ -223,6 +249,23 @@ public class IntegrationService {
 		HttpEntity<?> entity = new HttpEntity<>(cancelShipmentRequest, headers);
 		ResponseEntity<CancelShipmentResponse> result =
 				getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, CancelShipmentResponse.class);
+		return result.getBody();
+	}
+	
+	// POST
+	public ConsignmentWebhook[] scanInventory (InventoryScanRequest inventoryScanRequest) {
+		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
+		String authToken = integAuthToken.getAccess_token();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.add("User-Agent", "RestTemplate");
+		headers.add("Authorization", "Bearer " + authToken);
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/inventoryScan");
+
+		HttpEntity<?> entity = new HttpEntity<>(inventoryScanRequest, headers);
+		ResponseEntity<ConsignmentWebhook[]> result =
+				getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, ConsignmentWebhook[].class);
 		return result.getBody();
 	}
 	
@@ -449,7 +492,7 @@ public class IntegrationService {
 	}
 
 	// POST
-	public QPOrderCreateResponse postQPRequest (String referenceNumber) {
+	public QPOrderCreateResponse[] postQPRequest (String referenceNumber) {
 		AuthToken integAuthToken = authTokenService.getIntegrationServiceAuthToken();
 		String authToken = integAuthToken.getAccess_token();
 		
@@ -461,8 +504,8 @@ public class IntegrationService {
 				UriComponentsBuilder.fromHttpUrl(getB2bintegrationServiceUrl() + "consignment/qp")
 				.queryParam("referenceNumber", referenceNumber);
 		HttpEntity<?> entity = new HttpEntity<>(headers);
-		ResponseEntity<QPOrderCreateResponse> result =
-				getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, QPOrderCreateResponse.class);
+		ResponseEntity<QPOrderCreateResponse[]> result =
+				getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, QPOrderCreateResponse[].class);
 		return result.getBody();
 	}
 

@@ -2,8 +2,10 @@ package com.tekclover.wms.api.transaction.model.inbound.gr.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.gr.AddGrLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class AddGrLineV2 extends AddGrLine {

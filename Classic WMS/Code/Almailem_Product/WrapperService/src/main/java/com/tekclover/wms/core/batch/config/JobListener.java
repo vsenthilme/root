@@ -237,6 +237,23 @@ public class JobListener implements JobExecutionListener {
 					e.printStackTrace();
 				}
 			}
+
+			// jobBusinessPartner
+			if (jobName.equalsIgnoreCase("jobErrorLog") && jobExecutionStatus.getBatchStatus().name().equalsIgnoreCase("COMPLETED")) {
+				Path temp;
+				try {
+					String time = DateUtils.getCurrentTimestamp();
+					String fileName = propertiesConfig.getFileMoveToDir() + "/" + "error_log" + "_" + time + ".csv";
+					File renamedFile = new File (fileName);
+					temp = Files.move (
+							Paths.get(propertiesConfig.getErrorlogFolderName() + propertiesConfig.getErrorlogFileName()),
+							Paths.get(renamedFile.getAbsolutePath())
+					);
+					log.info("temp : " + temp);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }

@@ -120,9 +120,10 @@ export class InvoiceComponent implements OnInit {
   this.sub.add(this.service.search({ clientId: [this.auth.clientId] }).subscribe((res: any[]) => {
     
  let result = res.filter((x: any) =>   x.statusId == 52 || x.statusId == 51 || x.statusId == 53 || x.statusId == 54);
-    this.ELEMENT_DATA = result;
+ let result1 = result.filter(x => x.referenceField10 == "Sent");
+    this.ELEMENT_DATA = result1;
     console.log(this.ELEMENT_DATA);
-    this.dataSource = new MatTableDataSource<any>(result);
+    this.dataSource = new MatTableDataSource<any>(result1);
     this.selection = new SelectionModel<any>(true, []);
     this.dataSource.sort = this.sort;
    this.dataSource.paginator = this.paginator;

@@ -211,7 +211,24 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
               <td mat-cell *matCellDef="let element"> {{element.statusId}} </td>
             </ng-container>
-
+            <ng-container matColumnDef="notes">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Intake Notes </th>
+              <td *matCellDef="let element" class="tableborder p-0 border-bottom">
+                <button mat-icon-button (click)="openNotes(element)">
+                  <!-- <mat-icon class="text-secondary">text_snippet</mat-icon> -->
+                  <img src="./assets/img/icons/notes.png" style="height: 27px;width:27px;" alt="" srcset="">
+                </button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="pcnotes">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Prospective Client Notes </th>
+              <td *matCellDef="let element" class="tableborder p-0 border-bottom">
+                <button mat-icon-button (click)="openNotesProsperctive(element)">
+                  <!-- <mat-icon class="text-secondary">text_snippet</mat-icon> -->
+                  <img src="./assets/img/icons/notes.png" style="height: 27px;width:27px;" alt="" srcset="">
+                </button>
+              </td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="clearselection(row);openDialog('Edit')">
             </tr>

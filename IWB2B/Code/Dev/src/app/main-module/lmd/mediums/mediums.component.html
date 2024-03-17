@@ -1,0 +1,246 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">LMD</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Mediums</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-lmd-tab></app-lmd-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  <div class="d-flex justify-content-end ml-3">
+    <div class=" bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+      <button class="btn mr-2 btn-outline-info btn-sm d-flex align-items-center" type="button">
+        <mat-icon class="mr-1">download</mat-icon>Download
+      </button>
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+  </div>
+    <div class="row">
+     
+     <div class="col-6">
+        <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+        scrollHeight="calc(100vh - 17.5rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+  
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:4rem;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width:9rem;" pResizableColumn>Rider Name
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:9rem;" pResizableColumn>Rider Code
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:11rem;" pResizableColumn>Total Task Assigned
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:11rem;" pResizableColumn>Total Pending Task
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="width:4rem;"></th>
+            <th style="width:9rem;">
+              <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+            </th>
+            <th style="width:9rem;">
+              <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+            </th>
+            <th style="width:11rem;">
+              <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+            </th>
+            <th style="width:11rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:4rem;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="width:9rem;">{{product.organization}}</td>
+            <td style="width:9rem;">{{product.apiSubs}}</td>
+            <td style="width:11rem;">{{product.partnerType}}</td>
+            <td style="width:11rem;">{{product.systemType}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+     </div>
+     <div class="col-6">
+        <p class="mb-0 fw-bold">Rider Code</p>
+
+        <p-tabView>
+            <p-tabPanel header="Pickup">
+                <p-table #userProfile [globalFilterFields]="['pickupId', 'status', 'pickupPincode','loadType','pickupTime']" [value]="pickup"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+        scrollHeight="calc(100vh - 21.7rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:4rem;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width:9rem;" pResizableColumn>Pickup ID
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:9rem;" pResizableColumn>Status
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:11rem;" pResizableColumn>Pickup Pincode
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:11rem;" pResizableColumn>Load Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:11rem;" pResizableColumn>Pickup Time
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="width:4rem;"></th>
+            <th style="width:9rem;">
+              <p-columnFilter type="text" placeholder="Search" field="pickupId"></p-columnFilter>
+            </th>
+            <th style="width:9rem;">
+              <p-columnFilter type="text" placeholder="Search" field="status"></p-columnFilter>
+            </th>
+            <th style="width:11rem;">
+              <p-columnFilter type="text" placeholder="Search" field="pickupPincode"></p-columnFilter>
+            </th>
+            <th style="width:11rem;">
+              <p-columnFilter type="text" placeholder="Search" field="loadType"></p-columnFilter>
+            </th>
+            <th style="width:11rem;">
+              <p-columnFilter type="text" placeholder="Search" field="pickupTime"></p-columnFilter>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:4rem;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="width:9rem;">{{product.pickupId}}</td>
+            <td style="width:9rem;">{{product.status}}</td>
+            <td style="width:11rem;">{{product.pickupPincode}}</td>
+            <td style="width:11rem;">{{product.loadType}}</td>
+            <td style="width:11rem;">{{product.pickupTime}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+            </p-tabPanel>
+            <p-tabPanel header="Delivery">
+                <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+                styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+                scrollHeight="calc(100vh - 21.7rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+                [resizableColumns]="true">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width:4rem;" pResizableColumn>
+                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th style="width:9rem;" pResizableColumn>Consignment No
+                      <button mat-icon-button (click)="advanceFilter();">
+                        <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                      </button>
+                    </th>
+                    <th style="width:9rem;" pResizableColumn>Status
+                      <button mat-icon-button (click)="advanceFilter();">
+                        <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                      </button>
+                    </th>
+                    <th style="width:11rem;" pResizableColumn>Destination Code
+                      <button mat-icon-button (click)="advanceFilter();">
+                        <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                      </button>
+                    </th>
+                    <th style="width:11rem;" pResizableColumn>Delivery Type
+                      <button mat-icon-button (click)="advanceFilter();">
+                        <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                      </button>
+                    </th>
+                    <th style="width:11rem;" pResizableColumn>Receipt Name
+                      <button mat-icon-button (click)="advanceFilter();">
+                        <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                      </button>
+                    </th>
+                  </tr>
+          
+                  <tr *ngIf="advanceFilterShow">
+                    <th style="width:4rem;"></th>
+                    <th style="width:9rem;">
+                      <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+                    </th>
+                    <th style="width:9rem;">
+                      <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+                    </th>
+                    <th style="width:11rem;">
+                      <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+                    </th>
+                    <th style="width:11rem;">
+                      <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+                    </th>
+                    <th style="width:11rem;">
+                      <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                  <tr>
+                    <td style="width:4rem;">
+                      <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                    </td>
+                    <td style="width:9rem;">{{product.organization}}</td>
+                    <td style="width:9rem;">{{product.apiSubs}}</td>
+                    <td style="width:11rem;">{{product.partnerType}}</td>
+                    <td style="width:11rem;">{{product.systemType}}</td>
+                    <td style="width:11rem;">{{product.systemType}}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-tabPanel>
+        </p-tabView>
+
+   
+     </div>
+    </div>
+  
+  </div>
+  

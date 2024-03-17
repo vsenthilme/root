@@ -21,7 +21,7 @@ import java.util.Date;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "unique_key_clientcontrolgroup",
-                        columnNames = {"C_ID","CLIENT_ID","LANG_ID","GRP_TYP_ID","SUB_GRP_TYP_ID","VERSION_NO"})
+                        columnNames = {"C_ID","CLIENT_ID","LANG_ID","GRP_TYP_ID","VERSION_NO"})
         }
 )
 @IdClass(ClientControlGroupCompositeKey.class)
@@ -47,7 +47,7 @@ public class ClientControlGroup {
     @Column(name = "GRP_TYP_ID")
     private Long groupTypeId;
 
-    @Id
+//    @Id
     @Column(name = "SUB_GRP_TYP_ID")
     private Long subGroupTypeId;
 

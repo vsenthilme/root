@@ -1,0 +1,150 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="card bg-white ">
+        <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+        class="d-flex  border-botton align-items-center text-secondary fontBold text-center p-2">
+        <h6 class="my-auto mx-auto">User Profile - {{this.data.pageflow}} </h6>
+        <mat-icon class="text-secondary " mat-dialog-close>close</mat-icon>
+      </div>
+      <mat-accordion>
+        <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              General
+              <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row scroll2 mt-2 p-1 px-3">
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black required">User Name</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Editable" formControlName="userName">
+                  </mat-form-field>
+                <mat-error *ngIf="errorHandling('userName')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div> 
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">User ID</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Editable" formControlName="userId">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('userId')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+  
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">First Name</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Editable" formControlName="firstName">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('firstName')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">Last Name</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="lastName">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('lastName')">{{getErrorMessage()}}</mat-error>
+  
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">Password</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="passwordFE" [type]="hide ? 'password' : 'text'"  (change)="passwordChange($event)">
+                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('passwordFE')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">User Status</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+  
+                  <mat-select formControlName="statusId">
+                    <mat-option value="0">Active </mat-option>
+                    <mat-option value="1">Inactive </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 required">Email</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="emailId">
+                </mat-form-field>
+                <mat-error *ngIf="errorHandling('emailId')">{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              Admin
+              <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row mt-2 p-1 px-3">
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Created By</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="createdBy">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Created On</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="createdOn">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Updated By</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="updatedBy">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0">Updated On</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput placeholder="Enter" formControlName="updatedOn">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+  
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+            class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+        <button *ngIf="data.pageflow!= 'Display'" mat-raised-button class="mx-2 bgblue text-white" type="submit"> <i
+            class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+      </div>
+  
+  
+  
+    </div>
+  </form>

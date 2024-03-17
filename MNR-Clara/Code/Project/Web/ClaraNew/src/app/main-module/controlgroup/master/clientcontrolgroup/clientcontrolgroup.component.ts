@@ -54,6 +54,7 @@ import {
 import {
   DeleteComponent
 } from 'src/app/common-field/dialog_modules/delete/delete.component';
+import { NotesComponent } from 'src/app/common-field/notes/notes.component';
 
 @Component({
   selector: 'app-clientcontrolgroup',
@@ -62,7 +63,7 @@ import {
 })
 export class ClientcontrolgroupComponent implements OnInit {
   screenid = 1035;
-  displayedColumns: string[] = ['select',  'groupTypeName', 'subGroupTypeName','relationshipDescription', 'clientName', 'statusId', 'createdBy', 'createdOn'];
+  displayedColumns: string[] = ['select',  'groupTypeName','relationshipDescription', 'clientName','notes', 'statusId', 'createdBy', 'createdOn'];
   public icon = 'expand_more';
   sub = new Subscription();
   ELEMENT_DATA: any[] = [];
@@ -143,14 +144,14 @@ export class ClientcontrolgroupComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
 
       if (result) {
-        this.deleterecord(this.selection.selected[0].clientId, this.selection.selected[0].languageId, this.selection.selected[0].companyId, this.selection.selected[0].groupTypeId, this.selection.selected[0].subGroupTypeId, this.selection.selected[0].versionNumber);
+        this.deleterecord(this.selection.selected[0].clientId, this.selection.selected[0].languageId, this.selection.selected[0].companyId, this.selection.selected[0].groupTypeId, this.selection.selected[0].versionNumber);
 
       }
     });
   }
-  deleterecord(id: any, languageId: any, companyId: any, groupTypeId: any, subGroupTypeId: any, versionNumber: any) {
+  deleterecord(id: any, languageId: any, companyId: any, groupTypeId: any, versionNumber: any) {
     this.spin.show();
-    this.sub.add(this.service.Delete(id, languageId, companyId, groupTypeId, subGroupTypeId, versionNumber).subscribe((res) => {
+    this.sub.add(this.service.Delete(id, languageId, companyId, groupTypeId, versionNumber).subscribe((res) => {
       this.toastr.success(id + " Client Id Assignment deleted successfully!", "Notification", {
         timeOut: 2000,
         progressBar: false,
@@ -327,7 +328,39 @@ export class ClientcontrolgroupComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.adminCost + 1}`;
   }
 
+  openNotes(data: any): void {
 
+
+    this.spin.show();
+    console.log(data);
+    let obj: any = {}   
+    obj.groupTypeId = [data.groupTypeId];
+    obj.clientId = [data.clientId];
+    obj.versionNumber=[data.versionNumber];
+    this.sub.add(this.service.search(obj).subscribe((res) => {
+      console.log(res);
+      this.spin.hide();
+
+
+      const dialogRef = this.dialog.open(NotesComponent, {
+        disableClose: true,
+        width: '50%',
+        maxWidth: '80%',
+        data: res[0].referenceField1
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+
+
+
+      });
+    }, err => {
+      this.cs.commonerror(err);
+      this.spin.hide();
+    }));
+
+
+  }
   searhform = this.fb.group({
     languageId: [],
     companyId: [],

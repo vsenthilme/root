@@ -1,11 +1,13 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.SearchPutAwayLineV2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +139,7 @@ public class PutAwayLineController {
 											  @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
 											  @RequestParam String goodsReceiptNo, @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 											  @RequestParam String putAwayNumber, @RequestParam Long lineNo, @RequestParam String itemCode,
-											  @RequestParam String proposedStorageBin) {
+											  @RequestParam String proposedStorageBin) throws IOException, CsvException {
 		PutAwayLineV2 putawayline =
 				putawaylineService.getPutAwayLineV2(companyCode, plantId, languageId, warehouseId,
 						goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber,
@@ -150,7 +152,7 @@ public class PutAwayLineController {
 	@GetMapping("/{lineNo}/inboundline/v2")
 	public ResponseEntity<?> getPutAwayLineForInboundLineV2(@PathVariable Long lineNo, @RequestParam String warehouseId,
 															@RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
-															@RequestParam String refDocNumber, @RequestParam String preInboundNo, @RequestParam String itemCode) {
+															@RequestParam String refDocNumber, @RequestParam String preInboundNo, @RequestParam String itemCode) throws IOException, CsvException {
 		List<PutAwayLineV2> putawayline =
 				putawaylineService.getPutAwayLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, lineNo, itemCode);
 		log.info("PutAwayLine : " + putawayline);
@@ -160,7 +162,7 @@ public class PutAwayLineController {
 	@ApiOperation(response = PutAwayLineV2.class, value = "Get a PutAwayLine V2") // label for swagger
 	@GetMapping("/{refDocNumber}/inboundreversal/palletId/v2")
 	public ResponseEntity<?> getPutAwayLineForInboundLineV2(@PathVariable String refDocNumber, @RequestParam String companyCode,
-															@RequestParam String plantId, @RequestParam String languageId) {
+															@RequestParam String plantId, @RequestParam String languageId) throws IOException, CsvException {
 		List<PutAwayLineV2> putawayline = putawaylineService.getPutAwayLineV2(companyCode, plantId, languageId, refDocNumber);
 		log.info("PutAwayLine : " + putawayline);
 		return new ResponseEntity<>(putawayline, HttpStatus.OK);
@@ -170,7 +172,7 @@ public class PutAwayLineController {
 	@PostMapping("/confirm/v2")
 	public ResponseEntity<?> postPutAwayLineConfirmV2(@Valid @RequestBody List<PutAwayLineV2> newPutAwayLine,
 													  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException, ParseException {
+			throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
 		log.info("Request for putAwayLines to confirm : " + newPutAwayLine);
 		List<PutAwayLineV2> createdPutAwayLine = putawaylineService.putAwayLineConfirmV2(newPutAwayLine, loginUserID);
 		return new ResponseEntity<>(createdPutAwayLine, HttpStatus.OK);
@@ -198,7 +200,7 @@ public class PutAwayLineController {
 												@RequestParam String goodsReceiptNo, @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 												@RequestParam String putAwayNumber, @RequestParam Long lineNo, @RequestParam String itemCode,
 												@RequestParam String proposedStorageBin, @Valid @RequestBody PutAwayLineV2 updatePutAwayLine,
-												@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+												@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		PutAwayLineV2 createdPutAwayLine =
 				putawaylineService.updatePutAwayLinev2(companyCode, plantId, languageId, warehouseId,
 						goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber, lineNo,
@@ -213,7 +215,7 @@ public class PutAwayLineController {
 												 @RequestParam String warehouseId, @RequestParam String goodsReceiptNo,
 												 @RequestParam String preInboundNo, @RequestParam String refDocNumber,
 												 @RequestParam String putAwayNumber, @RequestParam Long lineNo,
-												 @RequestParam String itemCode, @RequestParam String proposedStorageBin, @RequestParam String loginUserID) throws ParseException {
+												 @RequestParam String itemCode, @RequestParam String proposedStorageBin, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
 		putawaylineService.deletePutAwayLineV2(languageId, companyCode, plantId, warehouseId,
 				goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber,
 				lineNo, itemCode, proposedStorageBin, confirmedStorageBin, loginUserID);

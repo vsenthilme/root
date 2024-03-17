@@ -284,7 +284,7 @@ public class InboundLineService extends BaseService {
      * @throws Exception
      */
     public List<InboundLine> findInboundLine(SearchInboundLine searchInboundLine) throws Exception {
-        if (searchInboundLine.getStartConfirmedOn() != null && searchInboundLine.getStartConfirmedOn() != null) {
+        if (searchInboundLine.getStartConfirmedOn() != null && searchInboundLine.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundLine.getStartConfirmedOn(),
                     searchInboundLine.getEndConfirmedOn());
             searchInboundLine.setStartConfirmedOn(dates[0]);
@@ -442,6 +442,30 @@ public class InboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<InboundLineV2> getInboundLineForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                      String warehouseId, String refDocNumber, Long statusId) {
+        List<InboundLineV2> inboundLine =
+                inboundLineV2Repository.findByRefDocNumberAndCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        statusId,
+                        0L);
+        log.info("inboundLine : " + inboundLine);
+        return inboundLine;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -493,8 +517,6 @@ public class InboundLineService extends BaseService {
         dbInboundLine.setDeletionIndicator(0L);
         dbInboundLine.setCreatedBy(loginUserID);
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setCreatedOn(new Date());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
@@ -590,7 +612,6 @@ public class InboundLineService extends BaseService {
         InboundLineV2 dbInboundLine = getInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         BeanUtils.copyProperties(updateInboundLine, dbInboundLine, CommonUtils.getNullPropertyNames(updateInboundLine));
         dbInboundLine.setUpdatedBy(loginUserID);
-//        dbInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundLine.setUpdatedOn(new Date());
         return inboundLineV2Repository.save(dbInboundLine);
     }
@@ -613,10 +634,7 @@ public class InboundLineService extends BaseService {
         if (inboundLine != null) {
             inboundLine.setDeletionIndicator(1L);
             inboundLine.setUpdatedBy(loginUserID);
-
-//            inboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundLine.setUpdatedOn(new Date());
-
             inboundLineV2Repository.save(inboundLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNo);
@@ -646,27 +664,33 @@ public class InboundLineService extends BaseService {
         inboundLineV2Repository.saveAll(inboundLines);
     }
 
-
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     */
     //Delete InboundLine
-    public List<InboundLineV2> deleteInboundLineV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                    String refDocNumber, String loginUserID) throws ParseException {
+    public List<InboundLineV2> deleteInboundLineV2(String companyCode, String plantId, String languageId,
+                                                   String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
 
         List<InboundLineV2> inboundLineV2List = new ArrayList<>();
-        List<InboundLineV2> inboundLine = inboundLineV2Repository.findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<InboundLineV2> inboundLineList = inboundLineV2Repository.findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCode, languageId, plantId, warehouseId, refDocNumber, 0L);
-
-        if(inboundLine != null){
-            for(InboundLineV2 inboundLineV2 : inboundLine){
+        log.info("InboundLine - cancellation : " + inboundLineList);
+        if(inboundLineList != null && !inboundLineList.isEmpty()){
+            for(InboundLineV2 inboundLineV2 : inboundLineList){
                 inboundLineV2.setUpdatedBy(loginUserID);
                 inboundLineV2.setDeletionIndicator(1L);
-
-//                inboundLineV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLineV2.setUpdatedOn(new Date());
                 InboundLineV2 dbInboundLine = inboundLineV2Repository.save(inboundLineV2);
                 inboundLineV2List.add(dbInboundLine);
             }
-        } else {
-            throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
         return inboundLineV2List;
     }

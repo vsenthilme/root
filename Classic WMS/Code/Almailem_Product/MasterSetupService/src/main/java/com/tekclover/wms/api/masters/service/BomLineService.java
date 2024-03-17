@@ -12,6 +12,8 @@ import javax.persistence.EntityNotFoundException;
 import com.tekclover.wms.api.masters.model.bom.SearchBomLine;
 import com.tekclover.wms.api.masters.model.driver.Driver;
 import com.tekclover.wms.api.masters.model.driver.SearchDriver;
+import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
+import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.masters.repository.specification.BomLineSpecification;
 import com.tekclover.wms.api.masters.repository.specification.DriverSpecification;
 import com.tekclover.wms.api.masters.util.DateUtils;
@@ -34,6 +36,9 @@ public class BomLineService {
 
 	@Autowired
 	private BomLineRepository bomLineRepository;
+
+	@Autowired
+	private ExceptionLogRepository exceptionLogRepo;
 
 	/**
 	 * getBomLines
@@ -77,6 +82,9 @@ public class BomLineService {
 						childItemCode,
 						0L);
 		if (bomLine.isEmpty()) {
+			// Exception Log
+//			createBomLineLog(bomNumber, languageId, companyCode, plantId, warehouseId,
+//					"Bom Line with given values and bomNumber-" + bomNumber + " doesn't exists.");
 			throw new BadRequestException("The given values: warehouseId:" + warehouseId +
 					",bomNumber: " + bomNumber +
 					",childItemCode: " + childItemCode +
@@ -105,8 +113,8 @@ public class BomLineService {
 			dbBomLine.setDeletionIndicator(0L);
 			dbBomLine.setCreatedBy(loginUserID);
 			dbBomLine.setUpdatedBy(loginUserID);
-			dbBomLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbBomLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbBomLine.setCreatedOn(new Date());
+			dbBomLine.setUpdatedOn(new Date());
 			return bomLineRepository.save(dbBomLine);
 		}
 	}
@@ -126,7 +134,7 @@ public class BomLineService {
 		BomLine dbBomLine = getBomLine(warehouseId, bomNumber, childItemCode,companyCode,plantId,languageId);
 		BeanUtils.copyProperties(updateBomLine, dbBomLine, CommonUtils.getNullPropertyNames(updateBomLine));
 		dbBomLine.setUpdatedBy(loginUserID);
-		dbBomLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomLine.setUpdatedOn(new Date());
 		return bomLineRepository.save(dbBomLine);
 	}
 
@@ -161,4 +169,23 @@ public class BomLineService {
 		log.info("results: " + results);
 		return results;
 	}
+
+	//============================================BomLine_ExceptionLog=================================================
+	private void createBomLineLog(Long lineNo, String languageId, String companyCodeId,
+								  String plantId, String warehouseId, String error) {
+
+		ExceptionLog dbExceptionLog = new ExceptionLog();
+		dbExceptionLog.setOrderTypeId(String.valueOf(lineNo));
+		dbExceptionLog.setOrderDate(new Date());
+		dbExceptionLog.setLanguageId(languageId);
+		dbExceptionLog.setCompanyCodeId(companyCodeId);
+		dbExceptionLog.setPlantId(plantId);
+		dbExceptionLog.setWarehouseId(warehouseId);
+		dbExceptionLog.setReferenceField1(String.valueOf(lineNo));
+		dbExceptionLog.setErrorMessage(error);
+		dbExceptionLog.setCreatedBy("MSD_API");
+		dbExceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(dbExceptionLog);
+	}
+
 }

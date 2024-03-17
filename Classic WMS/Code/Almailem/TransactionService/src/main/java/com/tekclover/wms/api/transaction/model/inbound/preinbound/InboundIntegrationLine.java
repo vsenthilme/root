@@ -2,7 +2,6 @@ package com.tekclover.wms.api.transaction.model.inbound.preinbound;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.util.Date;
 
 @Data

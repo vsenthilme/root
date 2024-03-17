@@ -1,7 +1,12 @@
 package com.mnrclara.spark.core.controller;
 
 
+import com.mnrclara.spark.core.model.mnrclara.ClientGeneral;
 import com.mnrclara.spark.core.model.wmscorev2.*;
+import com.mnrclara.spark.core.service.clara.ClientGeneralNewService;
+import com.mnrclara.spark.core.model.mnrclara.FindClientGeneral;
+import com.mnrclara.spark.core.service.download.DownloadInventoryWithBean;
+import com.mnrclara.spark.core.service.download.InventoryDownloadService;
 import com.mnrclara.spark.core.service.wmscorev2.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,10 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,6 +120,19 @@ public class WmsCoreController {
 
     @Autowired
     SparkImBasicData1ServiceV2 sparkImBasicData1Service;
+
+    @Autowired
+    InventoryDownloadService inventoryDownloadService;
+
+//    @Autowired
+//    ClientGeneralService clientGeneralService;
+
+    @Autowired
+    ClientGeneralNewService clientGeneralNewService;
+
+    @Autowired
+    DownloadInventoryWithBean downloadInventoryWithBean;
+
 
     //=======================================================================================================================
 
@@ -371,4 +386,25 @@ public class WmsCoreController {
         List<ImBasicData1> imBasicData1List = sparkImBasicData1Service.searchImBasicData1(findImBasicData1);
         return new ResponseEntity<>(imBasicData1List, HttpStatus.OK);
     }
+
+    @ApiOperation(response = ClientGeneral.class, value = "Spark ClientGeneral")
+    @PostMapping("/clientGeneral")
+    public ResponseEntity<?> findClientGeneral(@RequestBody FindClientGeneral findClientGeneral) throws Exception {
+        List<ClientGeneral> clientGeneralList = clientGeneralNewService.findClientGeneral(findClientGeneral) ;
+        return new ResponseEntity<>(clientGeneralList, HttpStatus.OK);
+    }
+
+    @GetMapping("/downloadInventory")
+    public String downloadInventoryInCSV(){
+        try {
+            inventoryDownloadService.downloadInventoryInCSV();
+            return "Successfully Download";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error During CSV Download";
+        }
+    }
+
+
+
 }

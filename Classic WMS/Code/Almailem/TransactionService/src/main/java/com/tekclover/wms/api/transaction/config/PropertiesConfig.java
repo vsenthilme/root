@@ -105,4 +105,8 @@ public class PropertiesConfig {
 	// axapi.service.saleorder.url=http://168.187.214.59:8040/api/salesorder/packingslip
 	@Value("${axapi.service.salesorder.url}")
 	private String axapiServiceSalesOrderUrl;
+
+	//--------------------------------------------------------------------------------------
+	@Value("${errorlog.folder.name}")
+	private String errorlogFolderName;
 }

@@ -35,6 +35,9 @@ public class PropertiesConfig {
 	
 	@Value("${b2bportal.oauth.access_token_url}")
 	private String b2bportalAccessTokenUrl;
+
+	@Value("${api.spark.service.url}")
+	private String sparkServiceUrl;
 	
 	//-----------------------------------------------------------------------------------
 	@Value("${api.b2bmaster.service.url}")

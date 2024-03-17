@@ -18,7 +18,13 @@ public interface IKeyValuePair {
     String getReferenceCycleCountNo();
 
     String getRefDocNumber();
+
     String getAssignPicker();
+
+    String getWarehouseId();
+
+    String getRefDocType();
+
     Long getPickerCount();
     Long getLineNumber();
 

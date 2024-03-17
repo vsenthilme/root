@@ -1,0 +1,80 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Admin</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">User Profile</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+  
+    <app-admin-tab></app-admin-tab>
+    <div class="bg-white py-2 px-3 d-flex justify-content-between align-items-center">
+      <button mat-stroked-button class="NewButton" class="mx-2">
+        <mat-icon>add</mat-icon>New
+      </button>
+  
+      <div> <input matInput class="form-control filter_button mx-2  border-bottom" placeholder="Search" style="width:90%">
+      </div>
+    </div>
+    <div class="scrollTable bg-white">
+      <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+  
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell class="fontBold" *matHeaderCellDef mat-sort-header>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+  
+        <!-- Weight Column -->
+        <ng-container matColumnDef="profileType">
+          <th mat-header-cell class="fontBold" *matHeaderCellDef mat-sort-header>Profile Types</th>
+          <td mat-cell *matCellDef="let element"> {{element.profileType}} </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell class="fontBold" *matHeaderCellDef mat-sort-header>User Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+        </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="partner">
+          <th mat-header-cell class="fontBold" *matHeaderCellDef mat-sort-header>Partner</th>
+          <td mat-cell *matCellDef="let element"> {{element.partner}} </td>
+        </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell class="fontBold" *matHeaderCellDef mat-sort-header>Actions </th>
+          <td *matCellDef="let row;let element" class="tableborder p-0 border-bottom ">
+            <button mat-icon-button class="mx-1">
+              <i class="bi bi-pencil actionIcon textblue"></i>
+            </button>
+             <button mat-icon-button class="mx-1">
+              <i class="bi bi-trash actionIcon textblue"></i>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+        </tr>
+      </table>
+    </div>
+  
+    <div class="buttons  pb-1 w-100 d-flex justify-content-end bg-white">
+      <div class="p-0 mx-1">
+        <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+  

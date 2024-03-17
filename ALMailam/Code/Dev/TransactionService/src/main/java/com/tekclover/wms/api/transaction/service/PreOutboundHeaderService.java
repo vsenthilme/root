@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -1551,7 +1552,7 @@ public class PreOutboundHeaderService extends BaseService {
      */
     private void createPickUpHeaderAssignPickerModified(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                         OutboundIntegrationHeaderV2 outboundIntegrationHeader,
-                                                        String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
+                                                   String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException, FirebaseMessagingException {
 
         List<OrderManagementLineV2> orderManagementLineV2List = orderManagementLineService.
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
@@ -2058,7 +2059,7 @@ public class PreOutboundHeaderService extends BaseService {
 
     private void createPickUpHeaderAssignPicker(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                 OutboundIntegrationHeaderV2 outboundIntegrationHeader,
-                                                String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
+                                                String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException, FirebaseMessagingException {
 
         List<OrderManagementLineV2> orderManagementLineV2List = orderManagementLineService.
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
@@ -2444,7 +2445,7 @@ public class PreOutboundHeaderService extends BaseService {
 
     private void updateStatusAs48ForPickupHeader(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                               OutboundIntegrationHeaderV2 outboundIntegrationHeader,
-                                                              String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
+                                                              String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException, FirebaseMessagingException {
 
         List<OrderManagementLineV2> orderManagementLineV2List = orderManagementLineService.
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
@@ -3187,7 +3188,7 @@ public class PreOutboundHeaderService extends BaseService {
      */
     private void updateStatusAs48ForPickupHeaderCreateSuccess(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                               OutboundIntegrationHeaderV2 outboundIntegrationHeader,
-                                                              String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException {
+                                                              String preOutboundNo, String refDocNumber, String partnerCode) throws InvocationTargetException, IllegalAccessException, ParseException, FirebaseMessagingException {
 
         List<OrderManagementLineV2> orderManagementLineV2List = orderManagementLineService.
                 getOrderManagementLineForPickupLineV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber);
@@ -3849,17 +3850,7 @@ public class PreOutboundHeaderService extends BaseService {
         outboundHeader.setRefDocDate(new Date());
         outboundHeader.setStatusId(statusId);
 
-        //check the status of OrderManagementLine for NoStock
-//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-//                .getNoStockStatusOrderManagementLine(createdPreOutboundHeader.getCompanyCodeId(),
-//                        createdPreOutboundHeader.getPlantId(), createdPreOutboundHeader.getLanguageId(),
-//                        createdPreOutboundHeader.getWarehouseId(), outboundIntegrationHeader.getRefDocumentNo());
-//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
-//        if(orderManagementLineNoStockStatus){
-//            outboundHeader.setStatusId(47L);
-//        }
-
-        statusDescription = stagingLineV2Repository.getStatusDescription(outboundHeader.getStatusId(), createdPreOutboundHeader.getLanguageId());
+        statusDescription = stagingLineV2Repository.getStatusDescription(statusId, createdPreOutboundHeader.getLanguageId());
 
         outboundHeader.setStatusDescription(statusDescription);
 
@@ -3963,17 +3954,8 @@ public class PreOutboundHeaderService extends BaseService {
          * Setting up KuwaitTime
          */
 //        Date kwtDate = DateUtils.getCurrentKWTDateTime();
-
-        //check the status of OrderManagementLine for NoStock
-//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-//                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
-//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
-
         preOutboundHeader.setRefDocDate(new Date());
         preOutboundHeader.setStatusId(39L);
-//        if(orderManagementLineNoStockStatus){
-//            preOutboundHeader.setStatusId(47L);
-//        }
         preOutboundHeader.setRequiredDeliveryDate(outboundIntegrationHeader.getRequiredDeliveryDate());
 
         // REF_FIELD_1
@@ -4003,7 +3985,7 @@ public class PreOutboundHeaderService extends BaseService {
 
         // Status Description
 //		StatusId idStatus = idmasterService.getStatus(39L, outboundIntegrationHeader.getWarehouseID(), authTokenForIDService.getAccess_token());
-        statusDescription = stagingLineV2Repository.getStatusDescription(preOutboundHeader.getStatusId(), languageId);
+        statusDescription = stagingLineV2Repository.getStatusDescription(39L, languageId);
         log.info("PreOutboundHeader StatusDescription: " + statusDescription);
         // REF_FIELD_10
         preOutboundHeader.setReferenceField10(statusDescription);
@@ -4014,7 +3996,6 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundHeader.setCreatedBy("MW_AMS");
         preOutboundHeader.setCreatedOn(new Date());
         PreOutboundHeaderV2 createdPreOutboundHeader = preOutboundHeaderV2Repository.save(preOutboundHeader);
-
         log.info("createdPreOutboundHeader : " + createdPreOutboundHeader);
         return createdPreOutboundHeader;
     }
@@ -4165,9 +4146,6 @@ public class PreOutboundHeaderService extends BaseService {
         preOutboundLine.setLanguageId(languageId);
         preOutboundLine.setCompanyCodeId(companyCodeId);
         preOutboundLine.setPlantId(plantId);
-//        boolean orderManagementLineNoStockStatus = orderManagementLineV2Repository
-//                .getNoStockStatusOrderManagementLine(companyCodeId, plantId, languageId, warehouseId, outboundIntegrationHeader.getRefDocumentNo());
-//        log.info("orderManagementLineNoStockStatus: " + orderManagementLineNoStockStatus);
 
         // WH_ID
         preOutboundLine.setWarehouseId(warehouseId);
@@ -4192,10 +4170,6 @@ public class PreOutboundHeaderService extends BaseService {
 
         // STATUS_ID
         preOutboundLine.setStatusId(39L);
-        //If all ordermangementLines are No Stock Status then preoutboundline status also NoStockAvailable
-//        if(orderManagementLineNoStockStatus) {
-//            preOutboundLine.setStatusId(47L);
-//        }
 
         // STCK_TYP_ID
         preOutboundLine.setStockTypeId(1L);
@@ -4210,7 +4184,7 @@ public class PreOutboundHeaderService extends BaseService {
                 preOutboundLine.getPlantId(),
                 preOutboundLine.getWarehouseId());
 
-        statusDescription = stagingLineV2Repository.getStatusDescription(preOutboundLine.getStatusId(), languageId);
+        statusDescription = stagingLineV2Repository.getStatusDescription(39L, languageId);
         preOutboundLine.setStatusDescription(statusDescription);
 
         preOutboundLine.setCompanyDescription(description.getCompanyDesc());

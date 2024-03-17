@@ -112,7 +112,7 @@ public class SparkPreOutBoundLineService {
                 + "TARGET_BRANCH_CODE as targetBranchCode "
                 + "From tblpreoutboundlinev2 Where IS_DELETED = 0 "
         );
-        periodicLineQuery.cache();
+//        periodicLineQuery.cache();
 
         if (findPreOutBoundLineV2.getWarehouseId() != null && !findPreOutBoundLineV2.getWarehouseId().isEmpty()) {
             periodicLineQuery = periodicLineQuery.filter(col("WH_ID").isin(findPreOutBoundLineV2.getWarehouseId().toArray()));

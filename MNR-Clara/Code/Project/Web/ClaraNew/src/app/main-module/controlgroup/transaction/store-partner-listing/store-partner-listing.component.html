@@ -138,12 +138,12 @@
           <!-- Symbol Column -->
           <ng-container matColumnDef="groupTypeId">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Group Type</th>
-            <td mat-cell *matCellDef="let element"> {{element.groupTypeId}} {{element.groupTypeName}} </td>
+            <td mat-cell *matCellDef="let element">  {{element.groupTypeName}} </td> <!--{{element.groupTypeId}}-->
           </ng-container>
-          <ng-container matColumnDef="versionNumber">
+        <!--  <ng-container matColumnDef="versionNumber">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Group Type</th>
             <td mat-cell *matCellDef="let element"> {{element.subGroupId}} {{element.subGroupName}} </td>
-          </ng-container>
+          </ng-container>-->
           <ng-container matColumnDef="storeId">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Store ID</th>
             <td mat-cell *matCellDef="let element">{{element.storeId}} - {{element.storeName}} </td>

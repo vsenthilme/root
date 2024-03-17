@@ -20,44 +20,52 @@ import java.util.Date;
 		uniqueConstraints = { 
 				@UniqueConstraint (
 						name = "unique_key_perpetualtempline",
-						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ST_BIN", "ITM_CODE", 
-								"PACK_BARCODE"})
+						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ST_BIN", "ITM_CODE", "MFR_NAME",
+								"PACK_BARCODE", "SC_LINE_NO"})
 				}
 		)
 @IdClass(PerpetualLineCompositeKey.class)
 public class PerpetualLineTempV2 {
-	
+
 	@Id
-	@Column(name = "LANG_ID")
+	@Column(name = "LANG_ID", columnDefinition = "nvarchar(25)")
 	private String languageId;
-	
+
 	@Id
-	@Column(name = "C_ID")
+	@Column(name = "C_ID", columnDefinition = "nvarchar(25)")
 	private String companyCodeId;
-	
+
 	@Id
-	@Column(name = "PLANT_ID") 
+	@Column(name = "PLANT_ID", columnDefinition = "nvarchar(25)")
 	private String plantId;
-	
+
 	@Id
-	@Column(name = "WH_ID") 
+	@Column(name = "WH_ID", columnDefinition = "nvarchar(25)")
 	private String warehouseId;
-	
+
 	@Id
-	@Column(name = "CC_NO")
+	@Column(name = "CC_NO", columnDefinition = "nvarchar(50)")
 	private String cycleCountNo;
-	
+
 	@Id
-	@Column(name = "ST_BIN") 
+	@Column(name = "ST_BIN", columnDefinition = "nvarchar(50)")
 	private String storageBin;
-	
+
 	@Id
-	@Column(name = "ITM_CODE") 
+	@Column(name = "ITM_CODE", columnDefinition = "nvarchar(100)")
 	private String itemCode;
-	
+
 	@Id
-	@Column(name = "PACK_BARCODE") 
+	@Column(name = "PACK_BARCODE", columnDefinition = "nvarchar(25)")
 	private String packBarcodes;
+
+	@Id
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(25)")
+	private String manufacturerName;
+
+	@Id
+	@Column(name = "SC_LINE_NO")
+	private Long lineNo;
 	
 	@Column(name = "ITM_DESC") 
 	private String itemDesc;
@@ -187,9 +195,6 @@ public class PerpetualLineTempV2 {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
-
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
 
 	@Column(name = "MIDDLEWARE_ID", columnDefinition = "nvarchar(50)")
 	private String middlewareId;

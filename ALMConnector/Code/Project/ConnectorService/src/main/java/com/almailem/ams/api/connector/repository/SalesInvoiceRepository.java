@@ -42,4 +42,6 @@ public interface SalesInvoiceRepository extends JpaRepository<SalesInvoice, Stri
 
     SalesInvoice findTopBySalesInvoiceIdAndCompanyCodeAndBranchCodeAndSalesInvoiceNumberOrderByOrderReceivedOnDesc(
             Long salesInvoiceId, String companyCode, String branchCode, String salesInvoiceNumber);
+
+    List<SalesInvoice> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

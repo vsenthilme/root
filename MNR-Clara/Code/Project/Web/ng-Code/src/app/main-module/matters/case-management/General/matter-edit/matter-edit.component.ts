@@ -245,6 +245,8 @@ export class MatterEditComponent implements OnInit {
     this.form.controls.referenceField4.disable();
     this.form.controls.priorityDate.disable();
     this.form.controls.referenceField2.disable();
+    this.form.controls.referenceField29.disable();
+    this.form.controls.referenceField30.disable();
 
     this.form.controls.caseCategoryId.valueChanges.subscribe(x => {
 

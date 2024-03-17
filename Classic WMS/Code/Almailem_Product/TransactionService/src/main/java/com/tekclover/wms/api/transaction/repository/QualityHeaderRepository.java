@@ -69,4 +69,21 @@ public interface QualityHeaderRepository extends JpaRepository<QualityHeader, Lo
             @Param("warehouseId") String warehouseId,
             @Param("statusId") Long statusId);
 
+    @Query(value = "SELECT COUNT(ref_doc_no) as count FROM (\n"
+            + "select distinct ref_doc_no from \n"
+            + "tblqualityheader qh WHERE \n"
+            + "(:companyCode IS NULL OR qh.c_id IN (:companyCode)) AND \n"
+            + "(:plantId IS NULL OR qh.plant_id IN (:plantId)) AND \n"
+            + "(:languageId IS NULL OR qh.lang_id IN (:languageId)) AND \n"
+            + "(:warehouseId IS NULL OR qh.wh_id IN (:warehouseId)) AND \n"
+            + "(qh.status_id IN (:statusId)) AND \n"
+            + "qh.is_deleted = 0) x ", nativeQuery = true)
+    public Long getQualityCount(
+            @Param("companyCode") List<String> companyCode,
+            @Param("plantId") List<String> plantId,
+            @Param("languageId") List<String> languageId,
+            @Param("warehouseId") List<String> warehouseId,
+            @Param("statusId") Long statusId);
+
+
 }

@@ -341,6 +341,18 @@ export class CommonService {
 
   currentEnv: string;
 
+ uniqByFilter<T>(array: T[]) {
+    return array.filter((value, index) => array.indexOf(value) === index);
+}
+
+arrayToObject(arr: any[]): Object {
+  return arr.reduce((obj, item) => {
+      obj[item.id] = item;
+      return obj;
+  }, {});
+}
+
+
   prod: boolean;
   prodInstance(){
     this.currentEnv = environment.name; 

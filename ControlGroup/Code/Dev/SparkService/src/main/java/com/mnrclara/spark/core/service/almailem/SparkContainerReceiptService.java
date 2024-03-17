@@ -84,7 +84,7 @@ public class SparkContainerReceiptService {
                 + "MIDDLEWARE_TABLE as middlewareTable "
                 + "FROM tblcontainerreceiptv2 WHERE IS_DELETED = 0 ");
 
-        containerReceiptQueryV2.cache();
+//        containerReceiptQueryV2.cache();
 
         if (findContainerReceiptV2.getLanguageId() != null && !findContainerReceiptV2.getLanguageId().isEmpty()) {
             containerReceiptQueryV2 = containerReceiptQueryV2.filter(col("LANG_ID").isin(findContainerReceiptV2.getLanguageId().toArray()));

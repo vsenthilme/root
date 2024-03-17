@@ -10,7 +10,7 @@ import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
-import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderEntityV2;
@@ -44,6 +44,10 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class InboundHeaderService extends BaseService {
+    @Autowired
+    private InventoryMovementRepository inventoryMovementRepository;
+    @Autowired
+    private PutAwayHeaderV2Repository putAwayHeaderV2Repository;
     @Autowired
     private PutAwayLineV2Repository putAwayLineV2Repository;
     @Autowired
@@ -288,13 +292,13 @@ public class InboundHeaderService extends BaseService {
      * @throws Exception
      */
     public List<InboundHeader> findInboundHeader(SearchInboundHeader searchInboundHeader) throws Exception {
-        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getStartCreatedOn() != null) {
+        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartCreatedOn(), searchInboundHeader.getEndCreatedOn());
             searchInboundHeader.setStartCreatedOn(dates[0]);
             searchInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getStartConfirmedOn() != null) {
+        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartConfirmedOn(), searchInboundHeader.getEndConfirmedOn());
             searchInboundHeader.setStartConfirmedOn(dates[0]);
             searchInboundHeader.setEndConfirmedOn(dates[1]);
@@ -313,13 +317,13 @@ public class InboundHeaderService extends BaseService {
      */
     //Stream
     public Stream<InboundHeader> findInboundHeaderNew(SearchInboundHeader searchInboundHeader) throws Exception {
-        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getStartCreatedOn() != null) {
+        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartCreatedOn(), searchInboundHeader.getEndCreatedOn());
             searchInboundHeader.setStartCreatedOn(dates[0]);
             searchInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getStartConfirmedOn() != null) {
+        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getEndConfirmedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartConfirmedOn(), searchInboundHeader.getEndConfirmedOn());
             searchInboundHeader.setStartConfirmedOn(dates[0]);
             searchInboundHeader.setEndConfirmedOn(dates[1]);
@@ -1247,7 +1251,6 @@ public class InboundHeaderService extends BaseService {
         InboundHeaderV2 dbInboundHeader = optInboundHeader.get();
         BeanUtils.copyProperties(updateInboundHeader, dbInboundHeader, CommonUtils.getNullPropertyNames(updateInboundHeader));
         dbInboundHeader.setUpdatedBy(loginUserID);
-//        dbInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundHeader.setUpdatedOn(new Date());
         return inboundHeaderV2Repository.save(dbInboundHeader);
     }
@@ -1267,7 +1270,6 @@ public class InboundHeaderService extends BaseService {
         if (inboundHeader != null) {
             inboundHeader.setDeletionIndicator(1L);
             inboundHeader.setUpdatedBy(loginUserID);
-//            inboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundHeader.setUpdatedOn(new Date());
             inboundHeaderV2Repository.save(inboundHeader);
         } else {
@@ -1344,13 +1346,13 @@ public class InboundHeaderService extends BaseService {
         List<Boolean> validationStatusList = new ArrayList<>();
 
         // PutawayLine Validation
-        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
-        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
-
-        if (putAwayLineStatusIdCount == 0) {
-            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
-        }
-        validationStatusList.add(true);
+//        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
+//        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
+//
+//        if (putAwayLineStatusIdCount == 0) {
+//            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
+//        }
+//        validationStatusList.add(true);
 
         // PutawayHeader Validation
         long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
@@ -1438,7 +1440,8 @@ public class InboundHeaderService extends BaseService {
                                     grLine.getPackBarcodes());
                     if (putAwayLineList != null) {
                         for(PutAwayLineV2 putAwayLine : putAwayLineList) {
-                            createInventoryV2(putAwayLine, grLine.getQuantityType());
+                            InventoryV2 createdInventory = createInventoryV2(putAwayLine, grLine.getQuantityType());
+                            createInventoryMovementV2(putAwayLine);
                             log.info("All Inbound Line --> Inventory Created Successfully");
                         }
                     }
@@ -1448,11 +1451,9 @@ public class InboundHeaderService extends BaseService {
 
         List<InboundLineV2> inboundLineV2List = inboundLineService.getInboundLineForInboundConfirmWithStatusIdV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
         statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
-//        inboundLineRepository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundLineV2Repository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundLine updated");
 
-//        inboundHeaderRepository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundHeaderV2Repository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundHeader updated");
 
@@ -1466,8 +1467,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PreInboundLine updated");
             }
         }
-//        preInboundLineV2Repository.updatePreInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-//        log.info("PreInboundLine updated");
 
         grHeaderV2Repository.updateGrHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("grHeader updated");
@@ -1477,6 +1476,9 @@ public class InboundHeaderService extends BaseService {
 
         putAwayLineV2Repository.updatePutawayLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("putAwayLine updated");
+
+        putAwayHeaderV2Repository.updatePutAwayHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
+        log.info("PutAwayHeader Updated");
 
         axapiResponse.setStatusCode("200");                         //HardCode for Testing
         axapiResponse.setMessage("Success");                        //HardCode for Testing
@@ -1516,11 +1518,13 @@ public class InboundHeaderService extends BaseService {
                     inventory2.setInventoryQuantity(INV_QTY);
                     inventory2.setReferenceField4(INV_QTY);         //Allocated Qty is always 0 for BinClassId 3
                     log.info("INV_QTY---->TOT_QTY---->: " + INV_QTY + ", " + INV_QTY);
-                    inventory2.setInventoryId(System.currentTimeMillis());
 
                     palletCode = existinginventory.getPalletCode();
                     caseCode = existinginventory.getCaseCode();
 
+                    inventory2.setCreatedOn(existinginventory.getCreatedOn());
+                    inventory2.setUpdatedOn(new Date());
+                    inventory2.setInventoryId(System.currentTimeMillis());
                     InventoryV2 createdInventoryV2 = inventoryV2Repository.save(inventory2);
                     log.info("----existinginventory--createdInventoryV2--------> : " + createdInventoryV2);
                 }
@@ -1533,7 +1537,7 @@ public class InboundHeaderService extends BaseService {
         try {
             InventoryV2 inventory = new InventoryV2();
             BeanUtils.copyProperties(putAwayLine, inventory, CommonUtils.getNullPropertyNames(putAwayLine));
-            inventory.setInventoryId(System.currentTimeMillis());
+
             inventory.setCompanyCodeId(putAwayLine.getCompanyCode());
 
             // VAR_ID, VAR_SUB_ID, STR_MTD, STR_NO ---> Hard coded as '1'
@@ -1574,7 +1578,12 @@ public class InboundHeaderService extends BaseService {
             storageBinPutAway.setWarehouseId(putAwayLine.getWarehouseId());
             storageBinPutAway.setBin(putAwayLine.getConfirmedStorageBin());
 
-            StorageBinV2 storageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+            StorageBinV2 storageBin = null;
+            try {
+                storageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+            } catch (Exception e) {
+                throw new BadRequestException("Invalid StorageBin");
+            }
             log.info("storageBin: " + storageBin);
 
             ImBasicData imBasicData = new ImBasicData();
@@ -1618,17 +1627,6 @@ public class InboundHeaderService extends BaseService {
 
             // SP_ST_IND_ID
             inventory.setSpecialStockIndicatorId(1L);
-
-//            IInventoryImpl existingInventory = inventoryService.getInventoryForCreateInvInboundConfirm(
-//                    putAwayLine.getCompanyCode(),
-//                    putAwayLine.getPlantId(),
-//                    putAwayLine.getLanguageId(),
-//                    putAwayLine.getWarehouseId(),
-//                    putAwayLine.getItemCode(),
-//                    binClassId,
-//                    1L,
-//                    putAwayLine.getManufacturerName(),
-//                    putAwayLine.getConfirmedStorageBin());
 
             InventoryV2 existingInventory = inventoryService.getInventoryForInhouseTransferV2(
                     putAwayLine.getCompanyCode(),
@@ -1681,8 +1679,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PA UOM: " + putAwayLine.getPutAwayUom());
             }
             inventory.setCreatedBy(putAwayLine.getCreatedBy());
-//            inventory.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            inventory.setCreatedOn(new Date());
 
             //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
             boolean capacityCheck = false;
@@ -1690,10 +1686,11 @@ public class InboundHeaderService extends BaseService {
             Double cbm = 0D;
             Double cbmPerQty = 0D;
             Double invCbm = 0D;
-
-            if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                log.info("CBM Check");
-                capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+            if(itemCodeCapacityCheck != null) {
+                if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                    log.info("CBM Check");
+                    capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+                }
             }
             log.info("CapacityCheck -----------> : " + capacityCheck);
 
@@ -1723,17 +1720,105 @@ public class InboundHeaderService extends BaseService {
 
             inventory.setReferenceDocumentNo(putAwayLine.getRefDocNumber());
             inventory.setReferenceOrderNo(putAwayLine.getRefDocNumber());
+            inventory.setDeletionIndicator(0L);
 
-//            inventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            if(existingInventory != null) {
+                inventory.setCreatedOn(existingInventory.getCreatedOn());
+            }
+            if(existingInventory == null) {
+                inventory.setCreatedOn(new Date());
+            }
             inventory.setUpdatedOn(new Date());
-
+            inventory.setInventoryId(System.currentTimeMillis());
             InventoryV2 createdinventory = inventoryV2Repository.save(inventory);
             log.info("created inventory : " + createdinventory);
             return createdinventory;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new BadRequestException("Error While Creating Inventory");
         }
+    }
+
+    /**
+     *
+     * @param putAwayLineV2
+     */
+    private void createInventoryMovementV2(PutAwayLineV2 putAwayLineV2) {
+        InventoryMovement inventoryMovement = new InventoryMovement();
+        BeanUtils.copyProperties(putAwayLineV2, inventoryMovement, CommonUtils.getNullPropertyNames(putAwayLineV2));
+        inventoryMovement.setCompanyCodeId(putAwayLineV2.getCompanyCode());
+
+        // MVT_TYP_ID
+        inventoryMovement.setMovementType(1L);
+
+        // SUB_MVT_TYP_ID
+        inventoryMovement.setSubmovementType(1L);    //1 - Inbound/Gr Confirm
+
+        // STR_MTD
+        inventoryMovement.setStorageMethod("1");
+
+        // STR_NO
+        inventoryMovement.setBatchSerialNumber("1");
+
+        inventoryMovement.setManufacturerName(putAwayLineV2.getManufacturerName());
+        inventoryMovement.setRefDocNumber(putAwayLineV2.getRefDocNumber());
+        inventoryMovement.setCompanyDescription(putAwayLineV2.getCompanyDescription());
+        inventoryMovement.setPlantDescription(putAwayLineV2.getPlantDescription());
+        inventoryMovement.setWarehouseDescription(putAwayLineV2.getWarehouseDescription());
+        inventoryMovement.setBarcodeId(putAwayLineV2.getBarcodeId());
+        inventoryMovement.setDescription(putAwayLineV2.getDescription());
+
+        // MVT_DOC_NO
+//        inventoryMovement.setMovementDocumentNo(putAwayLineV2.getPutAwayNumber());
+        inventoryMovement.setReferenceField10(putAwayLineV2.getPutAwayNumber());
+
+        // ST_BIN
+        inventoryMovement.setStorageBin(putAwayLineV2.getConfirmedStorageBin());
+
+        // MVT_QTY
+        inventoryMovement.setMovementQty(putAwayLineV2.getPutawayConfirmedQty());
+
+        // MVT_QTY_VAL
+        inventoryMovement.setMovementQtyValue("P");
+
+        // MVT_UOM
+        inventoryMovement.setInventoryUom(putAwayLineV2.getPutAwayUom());
+
+        // BAL_OH_QTY
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
+                putAwayLineV2.getCompanyCode(),
+                putAwayLineV2.getPlantId(),
+                putAwayLineV2.getLanguageId(),
+                putAwayLineV2.getWarehouseId(),
+                putAwayLineV2.getManufacturerName(),
+                putAwayLineV2.getItemCode());
+        log.info("BalanceOhQty: " + sumOfInvQty);
+        if(sumOfInvQty != null) {
+        inventoryMovement.setBalanceOHQty(sumOfInvQty);
+            Double openQty = sumOfInvQty - putAwayLineV2.getPutawayConfirmedQty();
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+            log.info("OH Qty, OpenQty : " + sumOfInvQty + ", " + openQty);
+        }
+        if(sumOfInvQty == null) {
+            inventoryMovement.setBalanceOHQty(0D);
+//            Double openQty = sumOfInvQty - putAwayLineV2.getPutawayConfirmedQty();
+            inventoryMovement.setReferenceField2("0");          //Qty before inventory Movement occur
+            log.info("OH Qty, OpenQty : 0 , 0" );
+        }
+
+        inventoryMovement.setVariantCode(1L);
+        inventoryMovement.setVariantSubCode("1");
+
+        inventoryMovement.setPackBarcodes(putAwayLineV2.getPackBarcodes());
+
+        // IM_CTD_BY
+        inventoryMovement.setCreatedBy(putAwayLineV2.getCreatedBy());
+
+        // IM_CTD_ON
+        inventoryMovement.setCreatedOn(new Date());
+        inventoryMovement.setMovementDocumentNo(String.valueOf(System.currentTimeMillis()));
+        inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
+        log.info("inventoryMovement : " + inventoryMovement);
     }
 
     /**
@@ -1758,7 +1843,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
 
                 ASNLineV2 asnLine = new ASNLineV2();
@@ -1841,7 +1925,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceAsnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1868,7 +1951,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 StoreReturnLine storeReturnLine = new StoreReturnLine();
 
@@ -1942,7 +2024,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceStoreReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1969,7 +2050,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 SOReturnLine soReturnLine = new SOReturnLine();
 
@@ -2033,7 +2113,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceSOReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -2061,7 +2140,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 InterWarehouseTransferInLineV2 iwhTransferLine = new InterWarehouseTransferInLineV2();
 
@@ -2141,29 +2219,54 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceInterwareHouseUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
         return apiResponse;
     }
 
-
-    //Delete InboundHeader
-    public InboundHeaderV2 deleteInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                      String refDocNumber, String loginUserID) throws ParseException {
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    //Get InboundHeader
+    public InboundHeaderV2 getInboundHeaderForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                    String warehouseId, String refDocNumber) {
 
         InboundHeaderV2 inboundHeader = inboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("InboundHeaderV2 - cancellation : " + inboundHeader);
+        return inboundHeader;
+    }
 
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     */
+    //Delete InboundHeader
+    public InboundHeaderV2 deleteInboundHeaderV2(String companyCode, String plantId, String languageId,
+                                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+
+        InboundHeaderV2 inboundHeader = inboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("InboundHeaderV2 - cancellation : " + inboundHeader);
         if (inboundHeader != null) {
             inboundHeader.setDeletionIndicator(1L);
             inboundHeader.setUpdatedBy(loginUserID);
-//            inboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundHeader.setUpdatedOn(new Date());
             inboundHeaderV2Repository.save(inboundHeader);
-        } else {
-            throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
         return inboundHeader;
     }

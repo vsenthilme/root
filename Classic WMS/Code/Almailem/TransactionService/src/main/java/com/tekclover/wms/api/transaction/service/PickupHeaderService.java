@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.*;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.PickHeaderV2Specification;
 import com.tekclover.wms.api.transaction.repository.specification.PickupHeaderV2Specification;
@@ -42,6 +43,9 @@ public class PickupHeaderService {
 
     @Autowired
     private PickupHeaderV2Repository pickupHeaderV2Repository;
+
+    @Autowired
+    private OutboundLineService outboundLineService;
 
     String statusDescription = null;
     //------------------------------------------------------------------------------------------------------
@@ -241,6 +245,19 @@ public class PickupHeaderService {
         List<PickupHeader> header =
                 pickupHeaderRepository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndOutboundOrderTypeIdInAndDeletionIndicator(
                         companyCodeId, plantId, languageId, warehouseId, 48L, orderTypeId, 0L);
+        return header;
+    }
+
+    /**
+     * @param warehouseId
+     * @param orderTypeId
+     * @return
+     */
+    public List<PickupHeaderV2> getPickupHeaderCount(String companyCodeId, String plantId, String languageId,
+                                                     String warehouseId,String levelId, List<Long> orderTypeId) {
+        List<PickupHeaderV2> header =
+                pickupHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndLevelIdAndOutboundOrderTypeIdInAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, 48L, levelId, orderTypeId, 0L);
         return header;
     }
 
@@ -470,6 +487,27 @@ public class PickupHeaderService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<PickupHeaderV2> getPickupHeaderForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<PickupHeaderV2> pickupHeader =
+                pickupHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("New Picklist ---> pickup header : " + pickupHeader);
+        if (pickupHeader != null && !pickupHeader.isEmpty()) {
+            return pickupHeader;
+        }
+        log.info("No Pickup Header for New Picklist");
+        return null;
+    }
+
+    /**
      * @param warehouseId
      * @param refDocNumber
      * @param statusId
@@ -669,10 +707,173 @@ public class PickupHeaderService {
      * @param assignedPickerId
      * @return
      */
-    public List<PickupHeaderV2> getPickupHeaderAutomation(String companyCodeId, String plantId, String languageId, String warehouseId, List<String> assignedPickerId) {
+    public List<PickupHeaderV2> getPickupHeaderAutomation(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId, Long statusId) throws java.text.ParseException {
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
         List<PickupHeaderV2> header =
-                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdInAndStatusIdAndDeletionIndicator(
-                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, 0L);
+                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, statusId, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param assignedPickerId
+     * @return
+     */
+    public List<PickupHeaderV2> getPickupHeaderAutomateCurrentDate(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        List<PickupHeaderV2> header =
+                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    public PickupHeaderV2 getPickupHeaderAutomateCurrentDateNew(String companyCodeId, String plantId, String languageId, String warehouseId, String assignedPickerId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        PickupHeaderV2 header =
+                pickupHeaderV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    public List<PickupHeaderV2> getPickupHeaderAutomateCurrentDateHhtList(String companyCodeId, String plantId, String languageId, String warehouseId, List<String> assignedPickerId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        List<PickupHeaderV2> header =
+                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdInAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    public PickupHeaderV2 getPickupHeaderAutomateCurrentDateHhtListNew(String companyCodeId, String plantId, String languageId, String warehouseId, List<String> assignedPickerId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        PickupHeaderV2 header =
+                pickupHeaderV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdInAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param assignedPickerId
+     * @param levelId
+     * @return
+     * @throws java.text.ParseException
+     */
+    public String getPickupHeaderAutomateCurrentDateHhtListCount(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                 List<String> assignedPickerId, Long levelId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        IKeyValuePair header =
+                pickupHeaderV2Repository.getAssignPickerNew(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, levelId, 48L, dates[0], dates[1]);
+        if(header != null) {
+            return header.getAssignPicker();
+        }
+        return null;
+    }
+
+    public String getPickupHeaderAutomateCurrentDateHhtListCount(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                 List<String> assignedPickerId, Long levelId, Long statusId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        IKeyValuePair header =
+                pickupHeaderV2Repository.getAssignPickerNew(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, levelId, statusId, dates[0], dates[1]);
+        if(header != null) {
+            return header.getAssignPicker();
+        }
+        return null;
+    }
+
+    public String getPickupHeaderAutomateCurrentDateHhtListCountNew(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                         List<String> assignedPickerId, Long outboundOrderTypeId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        IKeyValuePair header =
+                pickupHeaderV2Repository.getAssignPickerWh100New(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, 48L,outboundOrderTypeId, dates[0], dates[1]);
+        if(header != null) {
+            return header.getAssignPicker();
+        }
+        return null;
+    }
+
+    public String getPickupHeaderAutomateCurrentDateHhtListCountNew(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                    List<String> assignedPickerId, Long outboundOrderTypeId, Long statusId) throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        IKeyValuePair header =
+                pickupHeaderV2Repository.getAssignPickerWh100New(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, statusId,outboundOrderTypeId, dates[0], dates[1]);
+        if(header != null) {
+            return header.getAssignPicker();
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param assignedPickerId
+     * @param refDocNumber
+     * @return
+     * @throws java.text.ParseException
+     */
+    public List<PickupHeaderV2> getPickupHeaderAutomateCurrentDateSameOrder(String companyCodeId, String plantId, String languageId,
+                                                                            String warehouseId, String assignedPickerId, String refDocNumber)
+            throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        List<PickupHeaderV2> header =
+                pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndRefDocNumberAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, refDocNumber, 48L, dates[0], dates[1], 0L);
+        return header;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param assignedPickerId
+     * @param refDocNumber
+     * @return
+     * @throws java.text.ParseException
+     */
+    public PickupHeaderV2 getPickupHeaderAutomateCurrentDateSameOrderNew(String companyCodeId, String plantId, String languageId,
+                                                                         String warehouseId, String assignedPickerId, String refDocNumber)
+            throws java.text.ParseException {
+
+        Date[] dates = DateUtils.addTimeToDatesForSearch(new Date(), new Date());
+
+        PickupHeaderV2 header =
+                pickupHeaderV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndAssignedPickerIdAndRefDocNumberAndStatusIdAndPickupCreatedOnBetweenAndDeletionIndicatorOrderByPickupCreatedOn(
+                        companyCodeId, plantId, languageId, warehouseId, assignedPickerId, refDocNumber, 48L, dates[0], dates[1], 0L);
         return header;
     }
 
@@ -719,7 +920,7 @@ public class PickupHeaderService {
      * @throws InvocationTargetException
      */
     public PickupHeaderV2 createPickupHeaderV2(PickupHeaderV2 newPickupHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         PickupHeaderV2 dbPickupHeader = new PickupHeaderV2();
         log.info("newPickupHeader : " + newPickupHeader);
         BeanUtils.copyProperties(newPickupHeader, dbPickupHeader, CommonUtils.getNullPropertyNames(newPickupHeader));
@@ -738,9 +939,21 @@ public class PickupHeaderService {
         dbPickupHeader.setPlantDescription(description.getPlantDesc());
         dbPickupHeader.setWarehouseDescription(description.getWarehouseDesc());
 
-//        if(newPickupHeader.getLevelId() == null) {
-//
-//        }
+        OutboundLineV2 updateOutboundLine = new OutboundLineV2();
+        updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+        updateOutboundLine.setManufacturerName(dbPickupHeader.getManufacturerName());
+        outboundLineService.updateOutboundLineV2(
+                            dbPickupHeader.getCompanyCodeId(),
+                            dbPickupHeader.getPlantId(),
+                            dbPickupHeader.getLanguageId(),
+                            dbPickupHeader.getWarehouseId(),
+                            dbPickupHeader.getPreOutboundNo(),
+                            dbPickupHeader.getRefDocNumber(),
+                            dbPickupHeader.getPartnerCode(),
+                            dbPickupHeader.getLineNumber(),
+                            dbPickupHeader.getItemCode(),
+                            loginUserID,
+                            updateOutboundLine);
 
         dbPickupHeader.setDeletionIndicator(0L);
         dbPickupHeader.setPickupCreatedBy(loginUserID);
@@ -769,16 +982,59 @@ public class PickupHeaderService {
      */
     public PickupHeaderV2 updatePickupHeaderV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
                                                String partnerCode, String pickupNumber, Long lineNumber, String itemCode, String loginUserID,
-                                               PickupHeaderV2 updatePickupHeader) throws IllegalAccessException, InvocationTargetException {
+                                               PickupHeaderV2 updatePickupHeader) throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         PickupHeaderV2 dbPickupHeader = getPickupHeaderForUpdateV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode,
                 pickupNumber, lineNumber, itemCode);
         if (dbPickupHeader != null) {
             BeanUtils.copyProperties(updatePickupHeader, dbPickupHeader, CommonUtils.getNullPropertyNames(updatePickupHeader));
+
+            OutboundLineV2 updateOutboundLine = new OutboundLineV2();
+            updateOutboundLine.setAssignedPickerId(dbPickupHeader.getAssignedPickerId());
+            updateOutboundLine.setManufacturerName(dbPickupHeader.getManufacturerName());
+            outboundLineService.updateOutboundLineV2(
+                                dbPickupHeader.getCompanyCodeId(),
+                                dbPickupHeader.getPlantId(),
+                                dbPickupHeader.getLanguageId(),
+                                dbPickupHeader.getWarehouseId(),
+                                dbPickupHeader.getPreOutboundNo(),
+                                dbPickupHeader.getRefDocNumber(),
+                                dbPickupHeader.getPartnerCode(),
+                                dbPickupHeader.getLineNumber(),
+                                dbPickupHeader.getItemCode(),
+                                loginUserID,
+                                updateOutboundLine);
+
             dbPickupHeader.setPickUpdatedBy(loginUserID);
             dbPickupHeader.setPickUpdatedOn(new Date());
             return pickupHeaderV2Repository.save(dbPickupHeader);
         }
         return null;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     */
+    public void updatePickupHeaderForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                               String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<PickupHeaderV2> dbPickupHeaderList = pickupHeaderV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, 48L, 0L);
+        log.info("PickupHeader status_48: " + dbPickupHeaderList);
+        if (dbPickupHeaderList != null && !dbPickupHeaderList.isEmpty()) {
+            for (PickupHeaderV2 dbPickupHeader : dbPickupHeaderList) {
+                dbPickupHeader.setBarcodeId(barcodeId);
+                dbPickupHeader.setPickUpdatedBy(loginUserID);
+                dbPickupHeader.setPickUpdatedOn(new Date());
+                pickupHeaderV2Repository.save(dbPickupHeader);
+            }
+        }
     }
 
     public List<PickupHeaderV2> updatePickupHeaderForConfirmationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo, String refDocNumber,
@@ -965,21 +1221,34 @@ public class PickupHeaderService {
         return pickUpHeaderReport;
     }
 
-
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //Delete PickUpHeaderV2
-    public PickupHeaderV2 deletePickUpHeaderV2(String companyCodeId, String plantId, String languageId,
-                                               String warehouseId, String refDocNumber, String loginUserID)throws Exception {
+    public List<PickupHeaderV2> deletePickUpHeaderV2(String companyCodeId, String plantId, String languageId,
+                                                     String warehouseId, String refDocNumber, String loginUserID)throws Exception {
 
-        PickupHeaderV2 pickupHeaderV2 = pickupHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<PickupHeaderV2> pickupHeaderList = pickupHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-
-        if (pickupHeaderV2 != null) {
+        log.info("PickList Cancellation - PickupHeader : " + pickupHeaderList);
+        List<PickupHeaderV2> pickupHeaders = new ArrayList<>();
+        if (pickupHeaderList != null && !pickupHeaderList.isEmpty()) {
+            for(PickupHeaderV2 pickupHeaderV2 : pickupHeaderList){
             pickupHeaderV2.setDeletionIndicator(1L);
             pickupHeaderV2.setPickupReversedBy(loginUserID);
-            pickupHeaderV2.setPickupReversedOn(DateUtils.getCurrentKWTDateTime());
-//            pickupHeaderV2.setPickupReversedOn(new Date());
+            pickupHeaderV2.setPickupReversedOn(new Date());
             pickupHeaderV2Repository.save(pickupHeaderV2);
+            pickupHeaders.add(pickupHeaderV2);
+            }
         }
-        return pickupHeaderV2;
+        return pickupHeaders;
     }
 }

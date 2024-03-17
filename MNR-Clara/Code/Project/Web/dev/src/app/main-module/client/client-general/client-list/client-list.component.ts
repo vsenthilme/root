@@ -15,6 +15,7 @@ import { CommonService } from "src/app/common-service/common-service.service";
 import { ExcelService } from "src/app/common-service/excel.service";
 import { AuthService } from "src/app/core/core";
 import { ClientGeneralElement, ClientGeneralService } from "../client-general.service";
+import { NotesComponent } from "src/app/common-field/notes/notes.component";
 
 
 interface SelectItem {
@@ -38,7 +39,7 @@ export class ClientListComponent implements OnInit {
   id: string | undefined;
 
   ELEMENT_DATA: ClientGeneralElement[] = [];
-  displayedColumns: string[] = ['select', 'classID', 'clientId', 'firstName', 'emailId', 'contactNumber', 'addressLine1', 'form', 'createdOnString', 'statusId', 'corporationClientId',];
+  displayedColumns: string[] = ['select', 'classID', 'clientId', 'firstName', 'emailId', 'contactNumber', 'addressLine1', 'form','notes','pcnotes', 'createdOnString', 'statusId', 'corporationClientId',];
   dataSource = new MatTableDataSource<ClientGeneralElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<ClientGeneralElement>(true, []);
 
@@ -157,7 +158,7 @@ export class ClientListComponent implements OnInit {
   getAllListData(excel: boolean = false) {
     this.spin.show();
     // this.sub.add(this.service.getAllByPagination(this.pageNumber, this.pageSize, this.classObj).subscribe((res: any) => {
-      this.sub.add(this.service.SearchNew(this.searhform.getRawValue()).subscribe((res: any[]) => {
+      this.sub.add(this.service.SearchSpark(this.searhform.getRawValue()).subscribe((res: any[]) => {
       this.showListByFilter = false;
       this.spin.hide();
  
@@ -210,7 +211,62 @@ export class ClientListComponent implements OnInit {
       this.spin.hide();
     }));
   }
+  openNotes(data: any): void {
+    this.spin.show();
+    this.sub.add(this.service.Get(data.clientId).subscribe((result) => {
+    this.sub.add(this.service.getInquiry(result.inquiryNumber).subscribe((res) => {
+      this.spin.hide();
 
+
+      const dialogRef = this.dialog.open(NotesComponent, {
+        disableClose: true,
+        width: '50%',
+        maxWidth: '80%',
+        data: res.referenceField8
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+
+
+
+      });
+    }, err => {
+      this.cs.commonerror(err);
+      this.spin.hide();
+    }));
+
+  
+}
+ ) )}
+  openNotesProsperctive(data: any): void {
+    console.log(data);
+    this.sub.add(this.service.Get(data.clientId).subscribe((result) => {
+    let obj:any={};
+    obj.inquiryNumber=[result.inquiryNumber];
+        this.spin.show();
+        this.sub.add(this.service.SearchPotentialClient(obj).subscribe((res) => {
+          this.spin.hide();
+    
+    
+          const dialogRef = this.dialog.open(NotesComponent, {
+            disableClose: true,
+            width: '50%',
+            maxWidth: '80%',
+            data: res.referenceField9
+          });
+    
+          dialogRef.afterClosed().subscribe(result => {
+    
+    
+    
+          });
+        }, err => {
+          this.cs.commonerror(err);
+          this.spin.hide();
+        }));
+    }))
+    
+      }
   downloadexcel() {
     // if (excel)
     var res: any = [];

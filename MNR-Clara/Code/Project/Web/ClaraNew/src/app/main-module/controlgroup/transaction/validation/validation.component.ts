@@ -179,9 +179,25 @@ export class ValidationComponent implements OnInit {
     //   this.spin.hide();
     // })
 
+
+
+    if (this.selection.selected.length === 0) {
+      this.toastr.error("Kindly select any Row", "Notification", {
+        timeOut: 2000,
+        progressBar: false,
+      });
+      return;
+    }
+    if(this.selection.selected[0].groupTypeId == "1002"){
     let paramdata = "";
     paramdata = this.cs.encrypt({ pageflow: 'New', code:  this.js.line, });
     this.router.navigate(['/main/controlgroup/transaction/brotherSisterRemplate/' + paramdata]);
+    }
+    if(this.selection.selected[0].groupTypeId == "1001"){
+      let paramdata = "";
+      paramdata = this.cs.encrypt({ pageflow: 'New', code:  this.js.line, });
+      this.router.navigate(['/main/controlgroup/transaction/familytemplate/' + paramdata]);
+      }
 
   }
 

@@ -2,6 +2,7 @@ package com.mnrclara.wrapper.core.controller;
 
 import com.mnrclara.wrapper.core.model.cgtransaction.*;
 import com.mnrclara.wrapper.core.service.CGTransactionService;
+import com.mnrclara.wrapper.core.service.FileStorageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @CrossOrigin(origins = "*")
@@ -28,6 +31,8 @@ public class CGTransactionController {
     @Autowired
     private CGTransactionService cgTransactionService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
 
     /*
      * --------------------------------OwnerShipRequest---------------------------------
@@ -152,6 +157,19 @@ public class CGTransactionController {
                         loginUserID, storePartnerListing, authToken);
         return new ResponseEntity<>(updateStorePartnerListing, HttpStatus.OK);
     }
+
+
+    @ApiOperation(response = StorePartnerListing.class, value = "Batch Update StorePartnerListing") // label for swagger
+    @RequestMapping(value = "/storepartnerlisting/batchUpdate", method = RequestMethod.PATCH)
+    public ResponseEntity<?> batchUpdateStorePartnerListing(@RequestParam String loginUserID, @RequestParam String authToken,
+                                                       @Valid @RequestBody List<StorePartnerListing> storePartnerListing)
+            throws IllegalAccessException, InvocationTargetException {
+
+        StorePartnerListing[] updateStorePartnerListing =
+                cgTransactionService.batchUpdateStorePartnerListing(loginUserID, storePartnerListing, authToken);
+        return new ResponseEntity<>(updateStorePartnerListing, HttpStatus.OK);
+    }
+
 
     @ApiOperation(response = StorePartnerListing.class, value = "Delete StorePartnerListing") // label for swagger
     @DeleteMapping("/storepartnerlisting/{storeId}")
@@ -447,4 +465,11 @@ public class CGTransactionController {
         return cgTransactionService.findRequestId(findRequestId, authToken);
     }
 
+    //ReturnPo V2 Upload
+    @ApiOperation(response = StorePartnerListing.class, value = "Create StorePartnerListing Upload")
+    @PostMapping("storePartnerListing/upload")
+    public ResponseEntity<?> createStorePartnerListing(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processStorePartnerListProcess(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

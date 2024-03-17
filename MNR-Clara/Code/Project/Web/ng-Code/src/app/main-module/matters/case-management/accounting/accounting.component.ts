@@ -199,19 +199,19 @@ export class AccountingComponent implements OnInit {
 
     //this.form.controls.statusId.disable();
 
-    // this.form.controls.flatFeeAmount.valueChanges.subscribe((x: number) => {
-    //   this.form.controls.administrativeCost.patchValue(0);
-    //   this.sub.add(this.admincostservice.Getall().subscribe(res => {
-    //     let data = this.cs.filterArray(res, { classId: this.form.controls.classId.value });
-    //     let filter = data.filter((f: any) => x >= (f.flatFeeRateFrom as number) && x <= (f.flatFeeRateTo as number));
-    //     if (filter.length > 0)
-    //       this.form.controls.administrativeCost.patchValue(filter[0].adminCost);
-    //   }, err => {
-    //     this.cs.commonerror(err);
-    //     this.spin.hide();
-    //   }));
-    // }
-    // );
+     this.form.controls.flatFeeAmount.valueChanges.subscribe((x: number) => {
+       this.form.controls.administrativeCost.patchValue(0);
+     this.sub.add(this.admincostservice.Getall().subscribe(res => {
+       let data = this.cs.filterArray(res, { classId: this.form.controls.classId.value });
+         let filter = data.filter((f: any) => x >= (f.flatFeeRateFrom as number) && x <= (f.flatFeeRateTo as number));
+         if (filter.length > 0)
+           this.form.controls.administrativeCost.patchValue(filter[0].adminCost);
+       }, err => {
+         this.cs.commonerror(err);
+         this.spin.hide();
+       }));
+     }
+     );
 
     sessionStorage.setItem('matter', this.route.snapshot.params.code);
 
@@ -454,7 +454,7 @@ export class AccountingComponent implements OnInit {
             })
 
           }
-          if(res.length == 1){
+          if(res.length == 1 && res[0].statusId == 37){
             let obj: any = {};
             obj.caseCategoryId = this.form.controls.caseCategoryId.value;
             obj.caseSubCategoryId = this.form.controls.caseSubCategoryId.value;
@@ -469,7 +469,7 @@ export class AccountingComponent implements OnInit {
             obj.matterNumber = this.form.controls.matterNumber.value;
             obj.numberofItems = 1;
             obj.referenceField5 = "Soft Cost";
-            obj.referenceField2 = this.cs.todayapi();
+           // obj.referenceField2 = this.cs.todayapi();
             obj.statusId = 37;
 
             this.expenseservice.Update(obj, res[0].matterExpenseId).subscribe(res =>{

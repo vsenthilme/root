@@ -1,0 +1,25 @@
+ 
+// ::ng-deep .mat-tab-label-active
+// { padding: 0rem 2rem;height: 3rem; color: white !important;
+//  }
+
+ ::ng-deep .mat-ink-bar{
+  height: 0px !important
+}
+
+
+
+
+
+
+::ng-deep .mat-tab-body-content{
+  //overflow-y: scroll !important;
+  padding-right: 1rem !important;
+}
+
+.tabactive {
+  background-color: #ec830a !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  color: #fff !important;
+}

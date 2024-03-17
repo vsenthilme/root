@@ -117,7 +117,7 @@ public class SparkInventoryMovementService {
 //                "JOIN tblwarehouseid wDesc ON imv.C_ID = wDesc.C_ID AND imv.LANG_ID = wDesc.LANG_ID AND imv.WH_ID = wDesc.WH_ID " +
                 " WHERE imv.IS_DELETED = 0");
 
-        imInventoryMovementQuery.cache();
+//        imInventoryMovementQuery.cache();
 
         if (searchInventoryMovementV2.getWarehouseId() != null && !searchInventoryMovementV2.getWarehouseId().isEmpty()) {
             imInventoryMovementQuery = imInventoryMovementQuery.filter(col("imv.WH_ID").isin(searchInventoryMovementV2.getWarehouseId().toArray()));

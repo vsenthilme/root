@@ -102,7 +102,7 @@ public class SparkInhouseTransferLineService {
                 + "WHERE imv.IS_DELETED = 0 ");
 
         // Cache the DataFrame
-        inhouseTransferLineSqlQuery.cache();
+//        inhouseTransferLineSqlQuery.cache();
 
         if (searchInhouseTransferLine.getLanguageId() != null && !searchInhouseTransferLine.getLanguageId().isEmpty()) {
             inhouseTransferLineSqlQuery = inhouseTransferLineSqlQuery.filter(col("LANG_ID").isin(searchInhouseTransferLine.getLanguageId().toArray()));

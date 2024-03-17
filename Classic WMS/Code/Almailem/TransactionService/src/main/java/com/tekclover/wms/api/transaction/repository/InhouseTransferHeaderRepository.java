@@ -26,7 +26,6 @@ public interface InhouseTransferHeaderRepository extends JpaRepository<InhouseTr
 	 * @param warehouseId
 	 * @param transferNumber
 	 * @param transferTypeId
-	 * @param l 
 	 * @return
 	 */
 	public Optional<InhouseTransferHeader> 

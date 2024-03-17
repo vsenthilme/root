@@ -1,0 +1,174 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a>
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Controlled Groups</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Transactions</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Transaction Report</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div [hidden]="isShowDiv"> <input matInput 
+        class="form-control filter_button mx-2 border-bottom" placeholder="Filter" style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download Excel" >
+        <mat-icon class="">download</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true"  class="floating-buttons bg-yellow1 text-white mx-2"
+        matTooltip="Delete" >
+        <!---->
+        <mat-icon class="">delete</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+        matTooltip="Display"  >
+        <mat-icon class="">search</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true"  class="floating-buttons primary1 text-white mx-2 me-3"
+        matTooltip="Edit" matTooltip="Edit">
+        <mat-icon class="">edit</mat-icon>
+      </button>
+      <button  mat-mini-fab (click)="toggleFloat()" class=" mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab class="bg-darkblue text-white mx-2 action-button" >
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab class="text-white mx-2 action-button" color="warn" type="button" mat-button
+        (click)="drawer.toggle()">
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav " mode="over" position="end">
+    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+      <h3 class="my-auto mb-0">Search Parameter</h3>
+      <i mat-dialog-close class="bi bi-x-lg px-2" (click)="drawer.toggle()"></i>
+    </div>
+   <!-- <form [formGroup]="searhform">
+      <div class="row scroll2 mx-0">
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Language ID</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" formControlName="languageId"
+            [options]="multilanguageList" [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Company ID</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" formControlName="companyId"
+            [options]="multicompanyList" [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Request ID</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" formControlName="requestId"
+            [options]="multirequestList" [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+        <div class="col-12 mt-2 2">
+          <p class="mb-0 py-0">Store ID</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" formControlName="storeId"
+            [options]="multistoreList" [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Created By</p>
+          <p-multiSelect placeholder="Select" appendTo="body" class="w-100" formControlName="createdBy"
+            [options]="multiselectyseridList" [style]="{'width': '100%'}"></p-multiSelect>
+        </div>
+        <div class="col-12 mt-2">
+          <p class="mb-0 py-0">Created On</p>
+          <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate placeholder="Start date" formControlName="startCreatedOnFE">
+              <input matEndDate placeholder="End date" formControlName="endCreatedOnFE">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button color="warn" class="text-white mx-1 px-4" (click)="reset();">
+          <mat-icon class="">restart_alt</mat-icon> Reset
+        </button>
+        <button mat-raised-button (click)="search(); drawer.toggle();" class="bg-blue text-white mx-1">
+          <mat-icon class="">done</mat-icon> Search
+        </button>
+      </div>
+    </form>-->
+  </mat-drawer>
+  <div class="example-sidenav-content">
+    <div class="row ms-2 me-2 px-1 mt-1  " style="padding-right: 10x !important;">
+      
+        <p-table #transactionTag  [value]="Transaction"  rowGroupMode="subheader" groupRowsBy="groupId"
+        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single" 
+        scrollHeight="calc(100vh - 15rem)" sortField="refDocDate" [sortOrder]="-1" [paginator]="true" [rows]="100" [showCurrentPageReport]="true" crollDirection="both"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+           [resizableColumns]="true" style="width: 100%;margin-left: 10px;background-color:white" >
+        <ng-template pTemplate="header">
+          <tr>
+          
+              <th style="width: 3.5rem;" pSortableColumn="sno"   pResizableColumn>S No<p-sortIcon field="sno"></p-sortIcon></th>
+              <th style="width: 8rem;" pSortableColumn="groupId"   pResizableColumn>Group ID<p-sortIcon field="groupId"></p-sortIcon></th>
+              <th style="width: 8rem;" pSortableColumn="groupName"   pResizableColumn>Group Name<p-sortIcon field="groupName"></p-sortIcon></th>
+            <th style="width: 8rem;" pSortableColumn="storeId"   pResizableColumn>Store Id<p-sortIcon field="storeId"></p-sortIcon></th>
+            <th  pSortableColumn="storeName" pResizableColumn> Store Name <p-sortIcon field="storeName"></p-sortIcon></th> 
+          </tr>
+           
+          <tr >
+        
+          <th style="width: 3.5rem;">
+            <input pInputText  type="text" (input)="transactionTag.filter($any($event.target)?.value, '[sno]', 'contains')" 
+            [value]="$any(transactionTag.filters['sno'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th style="width: 8rem;">
+            <input pInputText  type="text" (input)="transactionTag.filter($any($event.target)?.value, 'groupId', 'contains')" 
+            [value]="$any(transactionTag.filters['groupId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+          <th style="width: 8rem;">
+            <input pInputText  type="text" (input)="transactionTag.filter($any($event.target)?.value, 'groupName', 'contains')" 
+            [value]="$any(transactionTag.filters['groupName'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+          </th>
+            <th style="width: 8rem;">
+              <input pInputText  type="text" (input)="transactionTag.filter($any($event.target)?.value, 'storeId', 'contains')" 
+              [value]="$any(transactionTag.filters['storeId'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th>
+            <th >
+              <input pInputText  type="text" (input)="transactionTag.filter($any($event.target)?.value, 'storeName', 'contains')" 
+              [value]="$any(transactionTag.filters['storeName'])?.value" placeholder="Search" class=" w-100 p-column-filter">
+            </th> 
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-Transaction let-rowIndex="rowIndex">
+          <tr >
+             
+              <td style="width: 3.5rem;">{{rowIndex+1}}</td>
+              <td style="width: 8rem;">{{Transaction.groupId}}</td>
+              <td style="width: 8rem;">{{Transaction.groupName}}</td>
+            <td style="width: 8rem;">{{Transaction.storeId}}</td>
+            <td  >{{Transaction.storeName}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      </div>
+   
+  </div>
+</mat-drawer-container>
+
+
+
+
+
+
+
+
+
+

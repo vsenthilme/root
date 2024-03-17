@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,7 +121,7 @@ public interface PutAwayLineV2Repository extends JpaRepository<PutAwayLineV2, Lo
             String preInboundNo, String itemCode, String manufacturerName, Long lineNumber, Long statusId, String packBarcodes, Long deletionIndicator);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE PutAwayLine ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
+    @Query("UPDATE PutAwayLineV2 ib SET ib.statusId = :statusId, ib.statusDescription = :statusDescription \n" +
             "WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber and ib.companyCode = :companyCode and ib.plantId = :plantId and ib.languageId = :languageId and ib.statusId = 20")
     void updatePutawayLineStatus(@Param("warehouseId") String warehouseId,
                                  @Param("companyCode") String companyCode,
@@ -129,4 +130,29 @@ public interface PutAwayLineV2Repository extends JpaRepository<PutAwayLineV2, Lo
                                  @Param("refDocNumber") String refDocNumber,
                                  @Param("statusId") Long statusId,
                                  @Param("statusDescription") String statusDescription);
+
+    @Query(value = "SELECT DATEDIFF(MINUTE, ib.PA_CTD_ON, :lDate) from tblputawayheader ib \n"
+            + "where ib.pa_no = :putAwayNumber and ib.wh_id = :warehouseId and ib.c_id = :companyCode and ib.plant_Id = :plantId and ib.lang_Id = :languageId and ib.is_deleted = 0", nativeQuery = true)
+    public String getleadtime(@Param("companyCode") String companyCode,
+                              @Param("plantId") String plantId,
+                              @Param("languageId") String languageId,
+                              @Param("warehouseId") String warehouseId,
+                              @Param(value = "putAwayNumber") String putAwayNumber,
+                              @Param("lDate") Date lDate);
+
+    @Query(value = "select sum(pa_cnf_qty) \n" +
+            "from tblputawayline where c_id = :companyCode and plant_id = :plantId and lang_id = :languageId and \n" +
+            "wh_id = :warehouseId and REF_DOC_NO = :refDocNumber and PRE_IB_NO = :preInboundNo and \n" +
+            "itm_code = :itemCode and mfr_name = :manufacturerName and \n" +
+            "is_deleted = 0 and ib_line_no = :lineNo \n"+
+            "group by itm_code,mfr_name,pre_ib_no,ref_doc_no,ib_line_no,lang_id,wh_id,plant_id,c_id ",nativeQuery = true)
+    public Double getPutawayCnfQuantity(@Param("companyCode") String companyCode,
+                                        @Param("plantId") String plantId,
+                                        @Param("languageId") String languageId,
+                                        @Param("warehouseId") String warehouseId,
+                                        @Param("refDocNumber") String refDocNumber,
+                                        @Param("preInboundNo") String preInboundNo,
+                                        @Param("itemCode") String itemCode,
+                                        @Param("manufacturerName") String manufacturerName,
+                                        @Param("lineNo") Long lineNo);
 }

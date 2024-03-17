@@ -1,0 +1,162 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Invoice Status</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <div class="row  mx-0 py-2 d-flex justify-content-end align-items-center">
+    </div>
+    <div class=" my-0 py-0 ">
+      <mat-tab-group mat-align-tabs="end"   [(selectedIndex)]="selectedIndex" (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Success {{this.data.createdInvoiceHeaders.length}}">
+          <div class="scroll">
+            <table mat-table [dataSource]="dataSource" matSort class="col-12 w-100">
+  
+              <!-- <ng-container matColumnDef="select">
+               <th mat-header-cell *matHeaderCellDef>
+                 <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                   disabled [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                 </mat-checkbox>
+               </th>
+               <td mat-cell *matCellDef="let row">
+                 <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                   [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                 </mat-checkbox>
+               </td>
+             </ng-container>  -->
+              <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="matterNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                <td mat-cell *matCellDef="let element">{{element.matterNumber}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="partnerAssigned">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Partner</th>
+                <td mat-cell *matCellDef="let element">{{element.partnerAssigned}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="preBillNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Prebill No</th>
+                <td mat-cell *matCellDef="let element">{{element.preBillNumber}} </td>
+              </ng-container>
+  
+  
+  
+  
+              <ng-container matColumnDef="clientId1">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill To</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+              <ng-container matColumnDef="invoiceAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Amount</th>
+                <td mat-cell *matCellDef="let element">{{element.invoiceAmount | currency}} </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+        <mat-tab label="Duplicates {{this.data.duplicateInvoiceHeaders.length}}">
+          <div class="scroll">
+            <table mat-table [dataSource]="dataSource2" matSort class="col-12 w-100">
+              <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="matterNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                <td mat-cell *matCellDef="let element">{{element.matterNumber}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="partnerAssigned">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Partner</th>
+                <td mat-cell *matCellDef="let element">{{element.partnerAssigned}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="preBillNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Prebill No</th>
+                <td mat-cell *matCellDef="let element">{{element.preBillNumber}} </td>
+              </ng-container>
+  
+  
+  
+  
+              <ng-container matColumnDef="clientId1">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill To</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+              <ng-container matColumnDef="invoiceAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Amount</th>
+                <td mat-cell *matCellDef="let element">{{element.invoiceAmount | currency}} </td>
+              </ng-container>
+  
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns2;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns2;" (click)="selection.toggle(row)">
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+        <mat-tab label="Failed  {{this.data.erroredOutPrebillNumbers.length}}">
+          <div class="scroll">
+            <table mat-table [dataSource]="dataSource1" matSort class="col-12 w-100">
+              <ng-container matColumnDef="clientId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client ID</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="matterNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Matter No</th>
+                <td mat-cell *matCellDef="let element">{{element.matterNumber}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="partnerAssigned">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Partner</th>
+                <td mat-cell *matCellDef="let element">{{element.partnerAssigned}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="preBillNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Prebill No</th>
+                <td mat-cell *matCellDef="let element">{{element.preBillNumber}} </td>
+              </ng-container>
+  
+  
+  
+              <ng-container matColumnDef="clientId1">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill To</th>
+                <td mat-cell *matCellDef="let element">{{element.clientId}} </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="invoiceAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Amount</th>
+                <td mat-cell *matCellDef="let element">{{element.invoiceAmount | currency}} </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns1;sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns1;" (click)="selection.toggle(row)">
+              </tr>
+            </table>
+          </div>
+        </mat-tab>
+  
+      </mat-tab-group>
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2 bg-white">
+      <button mat-raised-button mat-dialog-close class="text-white bg-yellow mr-1 px-4" (click)="back()" >
+        <mat-icon class="">arrow_forward</mat-icon> Continue
+      </button>
+  
+        <button *ngIf="this.data.erroredOutPrebillNumbers.length > 0" mat-raised-button class="mx-2 bg-blue text-white" (click)="resbumit()"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
+          Resubmit</button>
+  
+    </div>
+  
+  </div>
+  

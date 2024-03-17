@@ -1,0 +1,92 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+  <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+    class="d-flex  border-muted border-bottom align-items-center text-secondary fontBold text-center p-2">
+    <h6 class="my-auto mx-auto">Upload Excel</h6>
+    <mat-icon class="text-secondary " mat-dialog-close>close</mat-icon>
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header class="border-bottom padding-space border-top">
+        <mat-panel-title class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+          Rider
+          <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row text-secondary fw-bold desc mx-3 p-1 mb-1">
+        <div class="col-lg-6 col-md-6 mt-2">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 desc">Select Ride</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select placeholder="Select Rider" [(ngModel)]="selectRider" (ngModelChange)="onInputChange($event)">
+                <mat-option value="1">Option 1 </mat-option>
+                <mat-option value="1">Option 2 </mat-option>
+                <mat-option value="1">Option 3 </mat-option>
+                <mat-option value="1">Option 4 </mat-option>
+              </mat-select>
+              <mat-hint class="mt-2">Please select a rider to proceed</mat-hint>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 my-auto">
+          <mat-checkbox color="primary" class="example-margin ml-4">Auto assign to rider
+          </mat-checkbox>
+        </div>
+
+        <div class="col-lg-6 col-md-6 my-2 mt-3" *ngIf="this.selectRider">
+          <p class="mb-1 py-0 ">Upload File</p>
+
+          <input ngf type="file" accept="*" class="form-control form-control-lg" id="" style="min-width: 21rem;"
+            required />
+
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel #panel2 hideToggle>
+      <mat-expansion-panel-header class="border-bottom padding-space border-top">
+        <mat-panel-title class="d-flex justify-content-between collapsefont text-secondary fw-bold align-items-center">
+          HUB
+          <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row text-secondary fw-bold desc mx-3 p-1 mb-1">
+        <div class="col-lg-6 col-md-6 mt-2">
+          <div class="d-flex flex-column">
+            <p class="mb-0 py-0 desc">Select HUB</p>
+            <mat-form-field class="form-group input_field mb-0" appearance="outline">
+              <mat-select placeholder="Select Rider" [(ngModel)]="selecthub" (ngModelChange)="onInputChange($event)">
+                <mat-option value="1">Option 1 </mat-option>
+                <mat-option value="1">Option 2 </mat-option>
+                <mat-option value="1">Option 3 </mat-option>
+                <mat-option value="1">Option 4 </mat-option>
+              </mat-select>
+              <mat-hint class="mt-2">Please select a hub to proceed</mat-hint>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 my-auto">
+          <mat-checkbox color="primary" class="example-margin ml-4">Auto assign to hub
+          </mat-checkbox>
+        </div>
+
+        <div class="col-lg-6 col-md-6 my-2 mt-3" *ngIf="this.selectRider">
+          <p class="mb-1 py-0 ">Upload File</p>
+
+          <input ngf type="file" accept="*" class="form-control form-control-lg" id="" style="min-width: 21rem;"
+            required />
+
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div class="d-flex justify-content-center border-top align-items-center py-2">
+    <button mat-flat-button mat-dialog-close class="mx-2 cancelcolor"> <i
+        class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+    <button mat-flat-button class="mx-2 saveColor px-4"> <i
+        class="bi bi-check2 me-1 font-size-1_5rem"></i>Assign</button>
+  </div>
+
+
+</div>

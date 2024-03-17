@@ -5,7 +5,6 @@ import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLine;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLine;
 import com.tekclover.wms.api.transaction.model.dto.BusinessPartner;
-import com.tekclover.wms.api.transaction.model.dto.BusinessPartnerV2;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBin;
 import com.tekclover.wms.api.transaction.model.impl.OrderStatusReportImpl;
@@ -18,16 +17,14 @@ import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMoveme
 import com.tekclover.wms.api.transaction.model.inbound.inventory.SearchInventory;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.PutAwayHeader;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.model.outbound.OutboundHeader;
-import com.tekclover.wms.api.transaction.model.outbound.OutboundLine;
-import com.tekclover.wms.api.transaction.model.outbound.SearchOutboundLine;
-import com.tekclover.wms.api.transaction.model.outbound.SearchOutboundLineReport;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupHeader;
-import com.tekclover.wms.api.transaction.model.outbound.quality.QualityHeader;
+import com.tekclover.wms.api.transaction.model.outbound.*;
+import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
 import com.tekclover.wms.api.transaction.model.report.*;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.StockMovementReportNewSpecification;
+import com.tekclover.wms.api.transaction.repository.specification.StockReportOutputSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.TransactionHistoryReportSpecification;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +53,20 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class ReportsService extends BaseService {
+    @Autowired
+    private OutboundLineV2Repository outboundLineV2Repository;
+    @Autowired
+    private PeriodicLineRepository periodicLineRepository;
+    @Autowired
+    private PerpetualLineRepository perpetualLineRepository;
+    @Autowired
+    private PickupHeaderRepository pickupHeaderRepository;
+    @Autowired
+    private PutAwayHeaderRepository putAwayHeaderRepository;
+    @Autowired
+    private GrHeaderRepository grHeaderRepository;
+    @Autowired
+    private QualityHeaderRepository qualityHeaderRepository;
     @Autowired
     private InventoryV2Repository inventoryV2Repository;
     @Autowired
@@ -163,6 +174,9 @@ public class ReportsService extends BaseService {
 
     @Autowired
     PeriodicHeaderService periodicHeaderService;
+
+    @Autowired
+    StockReportOutputRepository stockReportOutputRepository;
 
 
     /**
@@ -383,6 +397,112 @@ public class ReportsService extends BaseService {
             stockReportList.add(stockReport);
         });
         return stockReportList;
+    }
+
+    /**
+     *
+     * @param searchStockReport
+     * @return
+     */
+    public List<StockReportImpl> stockReport(SearchStockReport searchStockReport) {
+
+        if (searchStockReport.getCompanyCodeId() == null || searchStockReport.getCompanyCodeId().isEmpty()) {
+            searchStockReport.setCompanyCodeId(null);
+        }
+
+        if (searchStockReport.getPlantId() == null || searchStockReport.getPlantId().isEmpty()) {
+            searchStockReport.setPlantId(null);
+        }
+
+        if (searchStockReport.getLanguageId() == null || searchStockReport.getLanguageId().isEmpty()) {
+            searchStockReport.setLanguageId(null);
+        }
+
+        if (searchStockReport.getWarehouseId() == null || searchStockReport.getWarehouseId().isEmpty()) {
+            searchStockReport.setWarehouseId(null);
+        }
+
+//        if (searchStockReport.getStockTypeText() == null) {
+//            throw new BadRequestException("StockTypeText can't be blank.");
+//        }
+
+        if (searchStockReport.getItemCode() == null || searchStockReport.getItemCode().isEmpty()) {
+            searchStockReport.setItemCode(null);
+        }
+        if (searchStockReport.getManufacturerName() == null || searchStockReport.getManufacturerName().isEmpty()) {
+            searchStockReport.setManufacturerName(null);
+        }
+
+        if (searchStockReport.getItemText() == null || searchStockReport.getItemText().isEmpty()) {
+            searchStockReport.setItemText(null);
+        }
+
+        List<StockReportImpl> reportList = inventoryV2Repository.stockReportNew(
+                searchStockReport.getLanguageId(),
+                searchStockReport.getCompanyCodeId(),
+                searchStockReport.getPlantId(),
+                searchStockReport.getWarehouseId(),
+                searchStockReport.getItemCode(),
+                searchStockReport.getItemText(),
+                searchStockReport.getManufacturerName());
+//                searchStockReport.getStockTypeText());
+
+        return reportList;
+    }
+
+    public Stream<StockReportOutput> stockReportUsingStoredProcedure(SearchStockReportInput searchStockReport) {
+
+        if (searchStockReport.getCompanyCodeId() == null) {
+            throw new BadRequestException("Company Code Cannot be Null");
+        }
+
+        if (searchStockReport.getPlantId() == null) {
+            throw new BadRequestException("Plant Cannot be Null");
+        }
+
+        if (searchStockReport.getLanguageId() == null) {
+            throw new BadRequestException("Language Cannot be Null");
+        }
+
+        if (searchStockReport.getWarehouseId() == null) {
+            throw new BadRequestException("warehouse Cannot be Null");
+        }
+
+        if (searchStockReport.getStockTypeText() == null || searchStockReport.getStockTypeText().equalsIgnoreCase("ALL")) {
+            searchStockReport.setStockTypeText("0");
+        }
+        if (searchStockReport.getStockTypeText().equalsIgnoreCase("ONHAND")) {
+            searchStockReport.setStockTypeText("1");
+        }
+        if (searchStockReport.getStockTypeText().equalsIgnoreCase("DAMAGED")) {
+            searchStockReport.setStockTypeText("7");
+        }
+        if (searchStockReport.getItemCode() == null) {
+            searchStockReport.setItemCode("0");
+        }
+        if (searchStockReport.getManufacturerName() == null) {
+            searchStockReport.setManufacturerName("0");
+        }
+
+        if (searchStockReport.getItemText() == null) {
+            searchStockReport.setItemText("0");
+        }
+
+        stockReportOutputRepository.updateSpStockReport(
+                searchStockReport.getCompanyCodeId(),
+                searchStockReport.getPlantId(),
+                searchStockReport.getLanguageId(),
+                searchStockReport.getWarehouseId(),
+                searchStockReport.getItemCode(),
+                searchStockReport.getManufacturerName(),
+                searchStockReport.getItemText(),
+                searchStockReport.getStockTypeText()
+        );
+        log.info("Report Generated successfully through Stored Procedure");
+        StockReportOutputSpecification specification = new StockReportOutputSpecification();
+        Stream<StockReportOutput> reportList = stockReportOutputRepository.stream(specification, StockReportOutput.class);
+        log.info("Stock Report Output -----> ");
+        return reportList;
     }
 
     /**
@@ -916,9 +1036,9 @@ public class ReportsService extends BaseService {
         }
 
         // DeliveryDate
-        if (request.getFromDeliveryDate() == null || request.getToDeliveryDate() == null) {
-            throw new BadRequestException("DeliveryDate can't be blank");
-        }
+//        if (request.getFromDeliveryDate() == null || request.getToDeliveryDate() == null) {
+//            throw new BadRequestException("DeliveryDate can't be blank");
+//        }
 
         SearchOrderStatusReport searchOutboundLine = new SearchOrderStatusReport();
         searchOutboundLine.setWarehouseId(request.getWarehouseId());
@@ -1109,6 +1229,119 @@ public class ReportsService extends BaseService {
     }
 
     /**
+     *
+     * @param warehouseId
+     * @param fromDeliveryDate
+     * @param toDeliveryDate
+     * @param storeCode
+     * @param soType
+     * @param orderNumber
+     * @return
+     * @throws ParseException
+     * @throws java.text.ParseException
+     */
+    public List<ShipmentDeliveryReport> getShipmentDeliveryReportV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                    String fromDeliveryDate, String toDeliveryDate, String storeCode,
+                                                                    List<String> soType, String orderNumber)
+            throws ParseException, java.text.ParseException {
+        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+
+        try {
+            // WH_ID
+            if (warehouseId == null) {
+                throw new BadRequestException("WarehouseId can't be blank.");
+            }
+
+            if (orderNumber == null) {
+                throw new BadRequestException("OrderNumber can't be blank.");
+            }
+
+            SearchOutboundLineReportV2 searchOutboundLineReport = new SearchOutboundLineReportV2();
+            searchOutboundLineReport.setWarehouseId(warehouseId);
+            searchOutboundLineReport.setRefDocNumber(orderNumber);
+            searchOutboundLineReport.setCompanyCodeId(Collections.singletonList(companyCodeId));
+            searchOutboundLineReport.setPlantId(Collections.singletonList(plantId));
+            searchOutboundLineReport.setLanguageId(Collections.singletonList(languageId));
+
+            if (!storeCode.isEmpty()) {
+                searchOutboundLineReport.setPartnerCode(storeCode);
+                log.info("storeCode: " + storeCode);
+            }
+
+            if (!soType.isEmpty()) {
+                searchOutboundLineReport.setSoTypeRefField1(soType);
+                log.info("soType: " + soType);
+            }
+
+            if (fromDeliveryDate != null && fromDeliveryDate.trim().length() > 0 && toDeliveryDate != null
+                    && toDeliveryDate.trim().length() > 0) {
+                log.info("fromDeliveryDate : " + fromDeliveryDate);
+                log.info("toDeliveryDate : " + toDeliveryDate);
+
+                Date fromDeliveryDate_d = DateUtils.convertStringToDate(fromDeliveryDate);
+                fromDeliveryDate_d = DateUtils.addTimeToDate(fromDeliveryDate_d);
+
+                Date toDeliveryDate_d = DateUtils.convertStringToDate(toDeliveryDate);
+                toDeliveryDate_d = DateUtils.addDayEndTimeToDate(toDeliveryDate_d);
+
+                log.info("Date: " + fromDeliveryDate_d + "," + toDeliveryDate_d);
+
+                searchOutboundLineReport.setStartConfirmedOn(fromDeliveryDate_d);
+                searchOutboundLineReport.setEndConfirmedOn(toDeliveryDate_d);
+                log.info("fromDeliveryDate_d : " + fromDeliveryDate_d);
+            }
+
+            List<OutboundLineV2> outboundLineSearchResults = outboundLineService
+                    .findOutboundLineReportV2(searchOutboundLineReport);
+            log.info("outboundLineSearchResults : " + outboundLineSearchResults);
+            double total = 0;
+            if (outboundLineSearchResults.isEmpty()) {
+                log.info("Resultset is EMPTY");
+            } else {
+                total = outboundLineSearchResults.stream().filter(a -> a.getDeliveryQty() != null)
+                        .mapToDouble(OutboundLine::getDeliveryQty).sum();
+                log.info("total : " + total);
+            }
+
+            List<ShipmentDeliveryReport> shipmentDeliveryList = new ArrayList<>();
+            for (OutboundLineV2 outboundLine : outboundLineSearchResults) {
+                ShipmentDeliveryReport shipmentDelivery = new ShipmentDeliveryReport();
+                shipmentDelivery.setDeliveryDate(outboundLine.getDeliveryConfirmedOn());
+                shipmentDelivery.setDeliveryTo(outboundLine.getPartnerCode());
+                shipmentDelivery.setOrderType(getOutboundOrderTypeDesc(outboundLine.getOutboundOrderTypeId()));
+                shipmentDelivery.setCustomerRef(outboundLine.getRefDocNumber()); // REF_DOC_NO
+                shipmentDelivery.setCommodity(outboundLine.getItemCode());
+                shipmentDelivery.setDescription(outboundLine.getDescription());
+                shipmentDelivery.setManfCode(outboundLine.getManufacturerName());
+
+                // Obtain Partner Name
+//                BusinessPartner partner = mastersService.getBusinessPartner(outboundLine.getPartnerCode(),
+//                        authTokenForMastersService.getAccess_token());
+                shipmentDelivery.setPartnerName(outboundLine.getCustomerId() +" - " + outboundLine.getCustomerName());
+                shipmentDelivery.setTargetBranch(outboundLine.getTargetBranchCode());
+
+                /*
+                 * MFR_PART
+                 */
+
+//                ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCode(outboundLine.getItemCode(),
+//                        warehouseId, authTokenForMastersService.getAccess_token());
+//                if (imBasicData1 != null) {
+//                    shipmentDelivery.setManfCode(imBasicData1.getManufacturerPartNo());
+//                }
+
+                shipmentDelivery.setQuantity(outboundLine.getDeliveryQty()); // DLV_QTY
+                shipmentDelivery.setTotal(total);
+                shipmentDeliveryList.add(shipmentDelivery);
+            }
+            return shipmentDeliveryList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * @param fromDeliveryDate
      * @param toDeliveryDate
      * @param customerCode
@@ -1116,10 +1349,157 @@ public class ReportsService extends BaseService {
      * @throws java.text.ParseException
      * @throws ParseException
      */
+//    public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
+//                                                                          List<String> customerCode, String warehouseIds,
+//                                                                          String companyCodeId, String plantId, String languageId)
+//            throws ParseException, java.text.ParseException {
+//        /*
+//         * Pass the Input Parameters in Outbound Line table (From and TO date in
+//         * DLV_CNF_ON fields) and fetch the below Fields, If Customer Code is Selected
+//         * all, Pass all the values into OUTBOUNDLINE table
+//         */
+//        // Date range
+//        if (fromDeliveryDate == null || toDeliveryDate == null) {
+//            throw new BadRequestException("DeliveryDate can't be blank.");
+//        }
+//
+//        Date fromDeliveryDate_d = null;
+//        Date toDeliveryDate_d = null;
+//        try {
+//            log.info("Input Date: " + fromDeliveryDate + "," + toDeliveryDate);
+//            if (fromDeliveryDate.indexOf("T") > 0) {
+//                fromDeliveryDate_d = DateUtils.convertStringToDateWithT(fromDeliveryDate);
+//                toDeliveryDate_d = DateUtils.convertStringToDateWithT(toDeliveryDate);
+//            } else {
+//                fromDeliveryDate_d = DateUtils.addTimeToDate(fromDeliveryDate, 14, 0, 0);
+//                toDeliveryDate_d = DateUtils.addTimeToDate(toDeliveryDate, 13, 59, 59);
+//            }
+//            log.info("Date: " + fromDeliveryDate_d + "," + toDeliveryDate_d);
+//        } catch (Exception e) {
+//            throw new BadRequestException("Date should be in yyyy-MM-dd format.");
+//        }
+//
+//        List<OutboundHeaderV2> outboundHeaderList = outboundHeaderV2Repository
+//                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeliveryConfirmedOnBetween(
+//                        companyCodeId, plantId, languageId, warehouseIds, 59L, fromDeliveryDate_d, toDeliveryDate_d);
+//        ShipmentDeliverySummaryReport shipmentDeliverySummaryReport = new ShipmentDeliverySummaryReport();
+//        List<ShipmentDeliverySummary> shipmentDeliverySummaryList = new ArrayList<>();
+////        String languageId = null;
+//        String companyCode = null;
+////        String plantId = null;
+//        String warehouseId = null;
+//
+//        try {
+//            double sumOfLineItems = 0.0;
+//            Set<String> partnerCodes = new HashSet<>();
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//            for (OutboundHeaderV2 outboundHeader : outboundHeaderList) {
+//                languageId = outboundHeader.getLanguageId();
+//                companyCode = outboundHeader.getCompanyCodeId();
+//                plantId = outboundHeader.getPlantId();
+//                warehouseId = outboundHeader.getWarehouseId();
+//                partnerCodes.add(outboundHeader.getPartnerCode());
+//
+//                // Report Preparation
+//                ShipmentDeliverySummary shipmentDeliverySummary = new ShipmentDeliverySummary();
+//
+//                shipmentDeliverySummary.setSo(outboundHeader.getRefDocNumber());                            // SO
+//                shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
+//                shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
+//                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
+//
+//                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        2L,
+//                        outboundHeader.getPartnerCode(),
+//                        authTokenForMastersService.getAccess_token());
+//                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
+//
+//                shipmentDeliverySummary.setOrderType(outboundHeader.getReferenceField1());
+//
+//                // Line Ordered
+//                List<Long> countOfOrderedLines = outboundLineService.getCountofOrderedLinesV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Line Shipped
+//                List<Long> deliveryLines = outboundLineService.getDeliveryLinesV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Ordered Qty
+//                List<Long> sumOfOrderedQty = outboundLineService.getSumOfOrderedQtyV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                // Shipped Qty
+//                List<Long> sumOfDeliveryQtyList = outboundLineService.getDeliveryQtyV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
+//                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
+//                        outboundHeader.getPreOutboundNo(), outboundHeader.getRefDocNumber());
+//
+//                double pickupLineCount = pickupLineService.getPickupLineCountV2(
+//                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(), outboundHeader.getLanguageId(),
+//                        outboundHeader.getWarehouseId(), outboundHeader.getPreOutboundNo(),
+//                        Arrays.asList(outboundHeader.getRefDocNumber()));
+//
+//                double countOfOrderedLinesvalue = countOfOrderedLines.stream().mapToLong(Long::longValue).sum();
+//                double deliveryLinesCount = deliveryLines.stream().mapToLong(Long::longValue).sum();
+//                double sumOfOrderedQtyValue = sumOfOrderedQty.stream().mapToLong(Long::longValue).sum();
+//                double sumOfDeliveryQty = sumOfDeliveryQtyList.stream().mapToLong(Long::longValue).sum();
+//
+//                sumOfLineItems += countOfOrderedLinesvalue;
+//                shipmentDeliverySummary.setLineOrdered(countOfOrderedLinesvalue);
+//                shipmentDeliverySummary.setLineShipped(deliveryLinesCount);
+//                shipmentDeliverySummary.setOrderedQty(sumOfOrderedQtyValue);
+//                shipmentDeliverySummary.setShippedQty(sumOfDeliveryQty);
+//                shipmentDeliverySummary.setPickedQty(pickupLineCount);
+//
+//                // % Shipped - Divide (Shipped lines/Ordered Lines)*100
+//                double percShipped = Math.round((deliveryLinesCount / countOfOrderedLinesvalue) * 100);
+//                shipmentDeliverySummary.setPercentageShipped(percShipped);
+//                log.info("shipmentDeliverySummary : " + shipmentDeliverySummary);
+//
+//                shipmentDeliverySummaryList.add(shipmentDeliverySummary);
+//            }
+//
+//            // --------------------------------------------------------------------------------------------------------------------------------
+//            /*
+//             * Partner Code : 101, 102, 103, 107, 109, 111, 113 - Normal
+//             */
+//            //List<String> partnerCodes = Arrays.asList("101", "102", "103", "107", "109", "111", "112", "113");
+//            List<SummaryMetrics> summaryMetricsList = new ArrayList<>();
+//            for (String pCode : partnerCodes) {
+//                SummaryMetrics partnerCode_N = getMetricsDetails(languageId, companyCode, plantId, "N", warehouseId, pCode, "N", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
+//                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
+//
+//                if (partnerCode_N != null) {
+//                    summaryMetricsList.add(partnerCode_N);
+//                }
+//
+//                if (partnerCode_S != null) {
+//                    summaryMetricsList.add(partnerCode_S);
+//                }
+//            }
+//
+//            shipmentDeliverySummaryReport.setShipmentDeliverySummary(shipmentDeliverySummaryList);
+//            shipmentDeliverySummaryReport.setSummaryMetrics(summaryMetricsList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return shipmentDeliverySummaryReport;
+//    }
+
     public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
                                                                           List<String> customerCode, String warehouseIds,
-                                                                          String companyCodeId, String plantId, String languageId)
-            throws ParseException, java.text.ParseException {
+                                                                          String companyCodeId, String plantId, String languageId) {
         /*
          * Pass the Input Parameters in Outbound Line table (From and TO date in
          * DLV_CNF_ON fields) and fetch the below Fields, If Customer Code is Selected
@@ -1158,14 +1538,15 @@ public class ReportsService extends BaseService {
 
         try {
             double sumOfLineItems = 0.0;
-            Set<String> partnerCodes = new HashSet<>();
-            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+            Set<Long> outboundOrderTypeIds = new HashSet<>();
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
             for (OutboundHeaderV2 outboundHeader : outboundHeaderList) {
                 languageId = outboundHeader.getLanguageId();
                 companyCode = outboundHeader.getCompanyCodeId();
                 plantId = outboundHeader.getPlantId();
                 warehouseId = outboundHeader.getWarehouseId();
-                partnerCodes.add(outboundHeader.getPartnerCode());
+//                partnerCodes.add(outboundHeader.getPartnerCode());
+                outboundOrderTypeIds.add(outboundHeader.getOutboundOrderTypeId());
 
                 // Report Preparation
                 ShipmentDeliverySummary shipmentDeliverySummary = new ShipmentDeliverySummary();
@@ -1173,16 +1554,11 @@ public class ReportsService extends BaseService {
                 shipmentDeliverySummary.setSo(outboundHeader.getRefDocNumber());                            // SO
                 shipmentDeliverySummary.setExpectedDeliveryDate(outboundHeader.getRequiredDeliveryDate());    // DEL_DATE
                 shipmentDeliverySummary.setDeliveryDateTime(outboundHeader.getDeliveryConfirmedOn());        // DLV_CNF_ON
-                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
-                BusinessPartnerV2 dbBusinessPartner = mastersService.getBusinessPartnerV2(
-                        outboundHeader.getCompanyCodeId(), outboundHeader.getPlantId(),
-                        outboundHeader.getLanguageId(), outboundHeader.getWarehouseId(),
-                        2L,
-                        outboundHeader.getPartnerCode(),
-                        authTokenForMastersService.getAccess_token());
-                shipmentDeliverySummary.setBranchDesc(dbBusinessPartner.getPartnerName());
+//                shipmentDeliverySummary.setBranchCode(outboundHeader.getPartnerCode());                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setBranchCode(outboundHeader.getPlantId());                    // PARTNER_CODE/PARTNER_NM
+                shipmentDeliverySummary.setOrderType(String.valueOf(outboundHeader.getOutboundOrderTypeId()));
 
-                shipmentDeliverySummary.setOrderType(outboundHeader.getReferenceField1());
+                shipmentDeliverySummary.setBranchDesc(getOutboundOrderTypeDesc(outboundHeader.getOutboundOrderTypeId()));
 
                 // Line Ordered
                 List<Long> countOfOrderedLines = outboundLineService.getCountofOrderedLinesV2(
@@ -1239,19 +1615,19 @@ public class ReportsService extends BaseService {
              */
             //List<String> partnerCodes = Arrays.asList("101", "102", "103", "107", "109", "111", "112", "113");
             List<SummaryMetrics> summaryMetricsList = new ArrayList<>();
-            for (String pCode : partnerCodes) {
+            for (Long pCode : outboundOrderTypeIds) {
                 SummaryMetrics partnerCode_N = getMetricsDetails(languageId, companyCode, plantId, "N", warehouseId, pCode, "N", fromDeliveryDate_d,
                         toDeliveryDate_d);
-                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
-                        toDeliveryDate_d);
+//                SummaryMetrics partnerCode_S = getMetricsDetails(languageId, companyCode, plantId, "S", warehouseId, pCode, "S", fromDeliveryDate_d,
+//                        toDeliveryDate_d);
 
                 if (partnerCode_N != null) {
                     summaryMetricsList.add(partnerCode_N);
                 }
 
-                if (partnerCode_S != null) {
-                    summaryMetricsList.add(partnerCode_S);
-                }
+//                if (partnerCode_S != null) {
+//                    summaryMetricsList.add(partnerCode_S);
+//                }
             }
 
             shipmentDeliverySummaryReport.setShipmentDeliverySummary(shipmentDeliverySummaryList);
@@ -1762,12 +2138,13 @@ public class ReportsService extends BaseService {
     }
 
     /**
+     *
      * @param languageId
      * @param companyCode
      * @param plantId
      * @param type
      * @param warehouseId
-     * @param partnerCode
+     * @param outboundOrderTypeId
      * @param refField1
      * @param fromDeliveryDate_d
      * @param toDeliveryDate_d
@@ -1776,31 +2153,29 @@ public class ReportsService extends BaseService {
      * @throws Exception
      */
     private SummaryMetrics getMetricsDetails(String languageId, String companyCode, String plantId, String type,
-                                             String warehouseId, String partnerCode, String refField1, Date fromDeliveryDate_d, Date toDeliveryDate_d) throws ParseException, Exception {
+                                             String warehouseId, Long outboundOrderTypeId, String refField1, Date fromDeliveryDate_d, Date toDeliveryDate_d) throws ParseException, Exception {
         List<OutboundHeaderV2> outboundHeaderList = outboundHeaderV2Repository
-                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndPartnerCodeAndDeliveryConfirmedOnBetween(
-                        companyCode, plantId, languageId, warehouseId, 59L, partnerCode, fromDeliveryDate_d, toDeliveryDate_d);
-        log.info("partnerCode--->: " + partnerCode + " refField1:----> : " + refField1 + "--:fromDeliveryDate_d:---> : " + fromDeliveryDate_d
+                .findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndOutboundOrderTypeIdAndDeliveryConfirmedOnBetween(
+                        companyCode, plantId, languageId, warehouseId, 59L, outboundOrderTypeId, fromDeliveryDate_d, toDeliveryDate_d);
+        log.info("OutboundOrderTypeId--->: " + outboundOrderTypeId + " refField1:----> : " + refField1 + "--:fromDeliveryDate_d:---> : " + fromDeliveryDate_d
                 + " --> toDeliveryDate_d;  " + toDeliveryDate_d);
         log.info("---------------------->outboundHeaderList : " + outboundHeaderList);
 
-        List<String> refDocNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1().equalsIgnoreCase(refField1)).map(OutboundHeader::getRefDocNumber)
-                .collect(Collectors.toList());
+        List<String> refDocNoList = outboundHeaderList.stream().map(OutboundHeader::getRefDocNumber).collect(Collectors.toList());
         log.info("refDocNoList : " + refDocNoList);
 
-        List<String> preOutboundNoList = outboundHeaderList.stream()
-                .filter(a -> a.getReferenceField1().equalsIgnoreCase(refField1) &&
-                        a.getPartnerCode().equalsIgnoreCase(partnerCode))
-                .map(OutboundHeader::getPreOutboundNo)
-                .collect(Collectors.toList());
+        List<String> preOutboundNoList = outboundHeaderList.stream().filter(a -> a.getOutboundOrderTypeId().equals(outboundOrderTypeId))
+                .map(OutboundHeader::getPreOutboundNo).collect(Collectors.toList());
         log.info("preOutboundNoList : " + preOutboundNoList);
 
-        List<String> refField1List = outboundHeaderList.stream().map(OutboundHeader::getReferenceField1)
+        List<Long> outboundOrderTypeIdList = outboundHeaderList.stream().filter(a -> a.getOutboundOrderTypeId().equals(outboundOrderTypeId)).map(OutboundHeader::getOutboundOrderTypeId)
                 .collect(Collectors.toList());
 
-        Long totalOrdeCount = refField1List.stream().filter(a -> a.equalsIgnoreCase(refField1)).count();
-        log.info("refField1List : " + refField1List + "," + totalOrdeCount);
+        Long totalOrdeCount = 0L;
+        if(outboundOrderTypeIdList != null && !outboundOrderTypeIdList.isEmpty()) {
+            totalOrdeCount = outboundOrderTypeIdList.stream().filter(a -> a.equals(outboundOrderTypeId)).count();
+        }
+        log.info("refField1List : " + outboundOrderTypeIdList + "," + totalOrdeCount);
 
         /*
          * 101- Line items(N) ----------------------- Pass the selected REF_DOC_NO in
@@ -1828,20 +2203,20 @@ public class ReportsService extends BaseService {
             double percShipped_N = Math.round((shipped_lines_N / line_item_N) * 100);
 
             // PickupLine Count
-            log.info("---getMetricsDetails--1---pickupLineCount--------> : " + preOutboundNoList + "," + refDocNoList + "," + partnerCode);
-            double pickupLineCount = pickupLineService.getPickupLineCount(languageId, companyCode, plantId, warehouseId,
-                    preOutboundNoList, refDocNoList, partnerCode);
+            log.info("---getMetricsDetails--1---pickupLineCount--------> : " + preOutboundNoList + "," + refDocNoList + "," + outboundOrderTypeId);
+            double pickupLineCount = pickupLineService.getPickupLineCountV2(languageId, companyCode, plantId, warehouseId,
+                    preOutboundNoList, refDocNoList, outboundOrderTypeId);
             log.info("---getMetricsDetails--2--pickupLineCount--------> : " + pickupLineCount);
 
             // SumOfOrderQty by PartnerCode
             Long sumOfOrderQty =
                     outboundLineService.getSumOfOrderedQtyByPartnerCodeV2(companyCode, plantId, languageId,
-                            warehouseId, preOutboundNoList, refDocNoList, partnerCode);
+                            warehouseId, preOutboundNoList, refDocNoList, outboundOrderTypeId);
 
             // SunOfDeliveryQty by PartnerCode
             Long sumOfDeliveryQty =
                     outboundLineService.getDeliveryQtyByPartnerCodeV2(companyCode, plantId, languageId,
-                            warehouseId, preOutboundNoList, refDocNoList, partnerCode);
+                            warehouseId, preOutboundNoList, refDocNoList, outboundOrderTypeId);
 
             // Populate Metrics
             MetricsSummary metricsSummary = new MetricsSummary();
@@ -1854,13 +2229,13 @@ public class ReportsService extends BaseService {
             metricsSummary.setShippedLines(shipped_lines_N);
 
             // Obtain Partner Name
-            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-            BusinessPartnerV2 partner = mastersService.getBusinessPartnerV2(companyCode, plantId, languageId, warehouseId, 2L,
-                    partnerCode, authTokenForMastersService.getAccess_token());
+//            AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+//            BusinessPartnerV2 partner = mastersService.getBusinessPartnerV2(companyCode, plantId, languageId, warehouseId, 2L,
+//                    partnerCode, authTokenForMastersService.getAccess_token());
 
             SummaryMetrics summaryMetrics = new SummaryMetrics();
-            summaryMetrics.setPartnerCode(partnerCode + "-" + partner.getPartnerName());
-            summaryMetrics.setType(type);
+            summaryMetrics.setPartnerCode(outboundOrderTypeId + "-" + getOutboundOrderTypeDesc(outboundOrderTypeId));
+            summaryMetrics.setType(String.valueOf(outboundOrderTypeId));
             summaryMetrics.setMetricsSummary(metricsSummary);
             return summaryMetrics;
         }
@@ -1919,7 +2294,7 @@ public class ReportsService extends BaseService {
      * @param warehouseId
      * @return
      */
-    public MobileDashboard getMobileDashboard(String companyCode, String plantId, String warehouseId, String languageId) {
+    public MobileDashboard getMobileDashboard(String companyCode, String plantId, String warehouseId, String languageId, String loginUserID) {
         MobileDashboard mobileDashboard = new MobileDashboard();
 
         /*--------------Inbound--------------------------------*/
@@ -1932,7 +2307,7 @@ public class ReportsService extends BaseService {
 //		long cases = stagingHeaderList.stream().count();
 //		inboundCount.setCases(cases);
 
-        List<Long> statusId = Arrays.asList(16L, 17L);
+        List<Long> statusId = Arrays.asList(16L);
         List<GrHeader> grHeaders = grHeaderService.getGrHeader(companyCode, plantId, languageId, warehouseId, statusId);
         long cases = grHeaders.stream().count();
         inboundCount.setCases(cases);
@@ -1956,6 +2331,9 @@ public class ReportsService extends BaseService {
         long reversals = putAwayHeaderList.stream().count();
         inboundCount.setReversals(reversals);
 
+        //Get LevelId from User HHtUser
+        String levelId = pickupLineRepository.getLevelId(companyCode, plantId, languageId, warehouseId, loginUserID);
+
         /*--------------Outbound--------------------------------*/
         MobileDashboard.OutboundCount outboundCount = mobileDashboard.new OutboundCount();
 
@@ -1964,8 +2342,8 @@ public class ReportsService extends BaseService {
         // STATUS_ID=48 and
         // OB_ORD_TYP_ID= 0,1 and 3
         orderTypeId = Arrays.asList(0L, 1L, 3L);
-        List<PickupHeader> pickupHeaderList =
-                pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, orderTypeId);
+        List<PickupHeaderV2> pickupHeaderList =
+                pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, levelId, orderTypeId);
         long picking = pickupHeaderList.stream().count();
         outboundCount.setPicking(picking);
 
@@ -1974,24 +2352,28 @@ public class ReportsService extends BaseService {
         // STATUS_ID=48 and
         // OB_ORD_TYP_ID= 2
         orderTypeId = Arrays.asList(2L);
-        pickupHeaderList = pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, orderTypeId);
+        pickupHeaderList = pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, levelId, orderTypeId);
         reversals = pickupHeaderList.stream().count();
         outboundCount.setReversals(reversals);
 
         // -----------Quality-----------------------------------------------------------------------------
         // Pass Login WH_ID into QUALITYHEADER table and fetch the count of records
         // where STATUS_ID=54
-        List<QualityHeader> qualityHeader = qualityHeaderService.getQualityHeaderCount(companyCode, plantId, languageId, warehouseId);
-        long quality = qualityHeader.stream().count();
+
+
+        List<Long> qualityHeaderCount = qualityHeaderRepository.getQualityHeaderCount(companyCode, plantId, languageId, warehouseId,54L);
+//        List<QualityHeader> qualityHeader = qualityHeaderService.getQualityHeaderCount(companyCode, plantId, languageId, warehouseId);
+        long quality = qualityHeaderCount.stream().count();
+
         outboundCount.setQuality(quality);
 
         /*--------------StockCount--------------------------------*/
         MobileDashboard.StockCount stockCount = mobileDashboard.new StockCount();
 
-        List<Long> status2 = Arrays.asList(72L);
+        List<Long> status2 = Arrays.asList(72L, 75L);
 
-        List<PerpetualLine> perpetualLines = perpetualLineService.getPerpetualLine(companyCode, languageId, plantId, warehouseId, status2);
-        List<PeriodicLine> periodicLines = periodicLineService.getPeriodicLine(companyCode, languageId, plantId, warehouseId, status2);
+        List<PerpetualLine> perpetualLines = perpetualLineService.getPerpetualLine(companyCode, languageId, plantId, warehouseId, loginUserID, status2);
+        List<PeriodicLine> periodicLines = periodicLineService.getPeriodicLine(companyCode, languageId, plantId, warehouseId, loginUserID, status2);
 
         long perpetualCount = perpetualLines.stream().count();
         long periodicLineCount = periodicLines.stream().count();
@@ -2030,6 +2412,79 @@ public class ReportsService extends BaseService {
         mobileDashboard.setOutboundCount(outboundCount);
         mobileDashboard.setStockCount(stockCount);
         return mobileDashboard;
+    }
+
+
+    //Find MobileDashBoard
+    public MobileDashboard findMobileDashBoard(FindMobileDashBoard findMobileDashBoard)throws Exception {
+
+        MobileDashboard mobileDashboard = new MobileDashboard();
+
+        List<String> companyCode = findMobileDashBoard.getCompanyCode();
+        List<String> plantId = findMobileDashBoard.getPlantId();
+        List<String> warehouseId = findMobileDashBoard.getWarehouseId();
+        List<String> languageId = findMobileDashBoard.getLanguageId();
+        List<String> userId = findMobileDashBoard.getUserID();
+
+        /*--------------Inbound--------------------------------*/
+        MobileDashboard.InboundCount inboundCount = mobileDashboard.new InboundCount();
+
+        Long grHeaders = grHeaderRepository.grHeaderCount(companyCode,plantId,languageId, warehouseId, 16L);
+        inboundCount.setCases(grHeaders);
+
+        // -------------Putaway----------------------------------
+        List<Long> orderTypeId = Arrays.asList(1L, 3L, 4L, 5L);
+        Long putAwayHeaderList = putAwayHeaderRepository.getPutAwayHeaderCount(companyCode, plantId, warehouseId, languageId, 19L, orderTypeId);
+        inboundCount.setPutaway(putAwayHeaderList);
+
+        // -------------Reversals-------------------------------
+        orderTypeId = Arrays.asList(2L);
+        Long  putAwayHeaderReversals = putAwayHeaderRepository.getPutAwayHeaderCount(companyCode, plantId, warehouseId, languageId, 19L, orderTypeId);
+        inboundCount.setReversals(putAwayHeaderReversals);
+
+        /*--------------Outbound--------------------------------*/
+        MobileDashboard.OutboundCount outboundCount = mobileDashboard.new OutboundCount();
+
+        //Get LevelId from User HHtUser
+//        String levelId = pickupLineRepository.getLevelIdForUserId(companyCode, plantId, languageId, warehouseId, userId);
+
+        // --------------Picking---------------------------------------------------------------------------
+        orderTypeId = Arrays.asList(0L, 1L, 3L);
+//        List<PickupHeaderV2> pickupHeaderList =
+//                pickupHeaderService.getPickupHeaderCount(companyCode, plantId, languageId, warehouseId, levelId, orderTypeId);
+        Long pickupHeaderList = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, userId, 48L,  orderTypeId);
+        outboundCount.setPicking(pickupHeaderList);
+
+        // -------------Reversals-------------------------------------------------------------------------
+        orderTypeId = Arrays.asList(2L);                //Returns
+        Long pickupHeaderListReversal = pickupHeaderRepository.getPickupHeaderCount(companyCode, plantId, warehouseId, languageId, userId, 48L, orderTypeId);
+        outboundCount.setReversals(pickupHeaderListReversal);
+
+        // -----------Quality-----------------------------------------------------------------------------
+        Long qualityHeaderCount = qualityHeaderRepository.getQualityCount(companyCode, plantId, languageId, warehouseId,54L);
+//        Long quality = qualityHeaderCount.stream().count();
+        outboundCount.setQuality(qualityHeaderCount);
+
+        // -----------Tracking-----------------------------------------------------------------------------
+        List<Long> statusId = Arrays.asList(48L, 50L, 57L);
+        Long tracking = outboundLineV2Repository.gettrackingCount(companyCode, plantId, languageId, warehouseId, statusId);
+        outboundCount.setTracking(tracking);
+        /*--------------StockCount--------------------------------*/
+        MobileDashboard.StockCount stockCount = mobileDashboard.new StockCount();
+
+        List<Long> status2 = Arrays.asList(72L, 75L);
+
+        Long perpetualLines = perpetualLineRepository.getPerpetualLineCount(companyCode, plantId, warehouseId, languageId, status2, userId);
+        Long periodicLines = periodicLineRepository.getPeriodicLineCount(companyCode, plantId, warehouseId, languageId, status2, userId);
+
+        stockCount.setPerpertual(perpetualLines);
+        stockCount.setPeriodic(periodicLines);
+
+        mobileDashboard.setInboundCount(inboundCount);
+        mobileDashboard.setOutboundCount(outboundCount);
+        mobileDashboard.setStockCount(stockCount);
+        return mobileDashboard;
+
     }
 
     /**
@@ -2547,7 +3002,7 @@ public class ReportsService extends BaseService {
      */
     public Stream<TransactionHistoryReport> getTransactionHistoryReport(FindImBasicData1 searchImBasicData1) {
         try {
-            if (searchImBasicData1.getFromCreatedOn() != null && searchImBasicData1.getFromCreatedOn() != null) {
+            if (searchImBasicData1.getFromCreatedOn() != null && searchImBasicData1.getToCreatedOn() != null) {
                 Date[] dates = DateUtils.addTimeToDatesForSearch(searchImBasicData1.getFromCreatedOn(),
                         searchImBasicData1.getToCreatedOn());
                 searchImBasicData1.setFromCreatedOn(dates[0]);
@@ -2749,5 +3204,8 @@ public class ReportsService extends BaseService {
         Stream<StockMovementReport1> results = stockMovementReport1Repository.stream(spec, StockMovementReport1.class);
         return results;
     }
+
+
+
 
 }

@@ -166,7 +166,7 @@ public class StagingHeaderService extends BaseService {
      */
     public List<StagingHeader> findStagingHeader(SearchStagingHeader searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);
@@ -186,7 +186,7 @@ public class StagingHeaderService extends BaseService {
     //Streaming
     public Stream<StagingHeader> findStagingHeaderNew(SearchStagingHeader searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);
@@ -511,7 +511,7 @@ public class StagingHeaderService extends BaseService {
     //Streaming
     public Stream<StagingHeaderV2> findStagingHeaderV2(SearchStagingHeaderV2 searchStagingHeader)
             throws Exception {
-        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getStartCreatedOn() != null) {
+        if (searchStagingHeader.getStartCreatedOn() != null && searchStagingHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchStagingHeader.getStartCreatedOn(), searchStagingHeader.getEndCreatedOn());
             searchStagingHeader.setStartCreatedOn(dates[0]);
             searchStagingHeader.setEndCreatedOn(dates[1]);
@@ -540,8 +540,6 @@ public class StagingHeaderService extends BaseService {
         dbStagingHeader.setDeletionIndicator(0L);
         dbStagingHeader.setCreatedBy(loginUserID);
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setCreatedOn(new Date());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
@@ -564,7 +562,6 @@ public class StagingHeaderService extends BaseService {
         StagingHeaderV2 dbStagingHeader = getStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo);
         BeanUtils.copyProperties(updateStagingHeader, dbStagingHeader, CommonUtils.getNullPropertyNames(updateStagingHeader));
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
     }
@@ -590,7 +587,6 @@ public class StagingHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
             dbStagingHeader.setStatusDescription(statusDescription);
             dbStagingHeader.setUpdatedBy(loginUserID);
-//            dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingHeader.setUpdatedOn(new Date());
             dbStagingHeader = stagingHeaderV2Repository.save(dbStagingHeader);
             log.info("dbStagingHeader : " + dbStagingHeader);
@@ -603,7 +599,6 @@ public class StagingHeaderService extends BaseService {
             stagingLineEntity.setStatusId(statusId);
             stagingLineEntity.setStatusDescription(statusDescription);
             stagingLineEntity.setUpdatedBy(loginUserID);
-//            stagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingLineEntity.setUpdatedOn(new Date());
             stagingLineEntity = stagingLineV2Repository.save(stagingLineEntity);
             log.info("stagingLineEntity : " + stagingLineEntity);
@@ -633,7 +628,6 @@ public class StagingHeaderService extends BaseService {
         if (stagingHeader != null) {
             stagingHeader.setDeletionIndicator(1L);
             stagingHeader.setUpdatedBy(loginUserID);
-//            stagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingHeader.setUpdatedOn(new Date());
             stagingHeaderV2Repository.save(stagingHeader);
         } else {
@@ -644,25 +638,29 @@ public class StagingHeaderService extends BaseService {
         }
     }
 
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     */
     // Delete StagingHeader
     public StagingHeaderV2 deleteStagingHeaderV2(String companyCode, String plantId, String languageId,
-                                      String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+                                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
         StagingHeaderV2 stagingHeader = stagingHeaderV2Repository.findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCode, languageId, plantId, warehouseId, refDocNumber, 0L);
-
+        log.info("stagingHeader - cancellation : " + stagingHeader);
         if (stagingHeader != null) {
             stagingHeader.setDeletionIndicator(1L);
             stagingHeader.setUpdatedBy(loginUserID);
-//            stagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingHeader.setUpdatedOn(new Date());
             stagingHeaderV2Repository.save(stagingHeader);
         }
-//        else {
-//            throw new EntityNotFoundException("Error in deleting Id: warehouseId: " + warehouseId +
-//                    ",refDocNumber: " + refDocNumber + "," +
-//                    ",companyId: " + companyCode +
-//                    ",languageId: " + languageId + " doesn't exist.");
-//        }
         return stagingHeader;
     }
 }

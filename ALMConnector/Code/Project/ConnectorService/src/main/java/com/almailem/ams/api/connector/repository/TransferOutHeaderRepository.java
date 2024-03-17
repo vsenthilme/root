@@ -50,4 +50,6 @@ public interface TransferOutHeaderRepository extends JpaRepository<TransferOutHe
     @Query(value = "select * \n" +
             "from TRANSFEROUTHEADER where Transferoutheaderid = :transferOutHeaderId ",nativeQuery = true)
     public TransferOutHeader getTransferOutHeader(@Param(value = "transferOutHeaderId") Long transferOutHeaderId);
+
+    List<TransferOutHeader> findByProcessedStatusIdOrderByOrderReceivedOnDesc(long l);
 }

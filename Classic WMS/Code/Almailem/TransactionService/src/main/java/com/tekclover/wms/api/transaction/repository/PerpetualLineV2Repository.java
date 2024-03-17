@@ -45,6 +45,10 @@ public interface PerpetualLineV2Repository extends JpaRepository<PerpetualLineV2
             String companyCodeId, String plantId, String languageId, String warehouseId,
             String cycleCountNo, String storageBin, String itemCode, String packBarcodes, Long deletionIndicator);
 
+    PerpetualLineV2 findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndStorageBinAndItemCodeAndManufacturerNameAndPackBarcodesAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String cycleCountNo,
+            String storageBin, String itemCode, String manufacturerName, String packBarcodes, Long deletionIndicator);
+
     List<PerpetualLineV2> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndCycleCountNoAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String cycleCountNo, Long deletionIndicator);
 

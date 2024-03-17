@@ -466,7 +466,7 @@ export class ExpensesComponent implements OnInit {
   async download(element) {
     this.spin.show()
     console.log(element);
-    const blob = await this.downloadApi.download(element.documentName,element.clientId,element.matterNumber,'check')
+    const blob = await this.downloadApi.download(element.documentName,element.matterExpenseId,'expensecheckrequest')
       .catch((err: HttpErrorResponse) => {
         this.cs.commonerror(err);
       });

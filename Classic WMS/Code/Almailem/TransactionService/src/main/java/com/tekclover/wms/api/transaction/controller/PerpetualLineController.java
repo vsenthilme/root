@@ -3,9 +3,11 @@ package com.tekclover.wms.api.transaction.controller;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualUpdateResponseV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualZeroStockLine;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.SearchPerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
 import com.tekclover.wms.api.transaction.service.PerpetualLineService;
+import com.tekclover.wms.api.transaction.service.PerpetualZeroStkLineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -33,6 +35,9 @@ public class PerpetualLineController {
 
     @Autowired
     PerpetualLineService perpetualLineService;
+
+    @Autowired
+    PerpetualZeroStkLineService perpetualZeroStkLineService;
 
     @ApiOperation(response = PerpetualLine.class, value = "SearchPerpetualLine") // label for swagger
     @PostMapping("/findPerpetualLine")
@@ -71,7 +76,7 @@ public class PerpetualLineController {
 
     @ApiOperation(response = PerpetualLineV2.class, value = "SearchPerpetualLine") // label for swagger
     @PostMapping("/v2/findPerpetualLine")
-    public Stream<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
+    public List<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
             throws Exception {
         return perpetualLineService.findPerpetualLineV2(searchPerpetualLine);
     }
@@ -91,6 +96,14 @@ public class PerpetualLineController {
             throws IllegalAccessException, InvocationTargetException, ParseException {
         PerpetualUpdateResponseV2 createdPerpetualLine =
                 perpetualLineService.updatePerpetualLineV2(cycleCountNo, updatePerpetualLine, loginUserID);
+        return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
+    }
+    //=================================================Zero Stock to Create Inventory===========================================================
+    @ApiOperation(response = PerpetualLineV2.class, value = "Update PerpetualLine") // label for swagger
+    @PostMapping("/v2/createPerpetualFromZeroStk")
+    public ResponseEntity<?> createPerpetualLineV2(@RequestBody List<PerpetualZeroStockLine> updatePerpetualLine, @RequestParam String loginUserID) {
+        List<PerpetualLineV2> createdPerpetualLine =
+                perpetualZeroStkLineService.updatePerpetualZeroStkLine(updatePerpetualLine, loginUserID);
         return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
     }
 

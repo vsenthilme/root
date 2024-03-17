@@ -51,6 +51,14 @@ public class DeliveryLineSpecification implements Specification<DeliveryLine> {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("itemCode");
             predicates.add(group.in(searchDeliveryLine.getItemCode()));
         }
+        if (searchDeliveryLine.getBarcodeId() != null && !searchDeliveryLine.getBarcodeId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("barcodeId");
+            predicates.add(group.in(searchDeliveryLine.getBarcodeId()));
+        }
+        if (searchDeliveryLine.getManufacturerName() != null && !searchDeliveryLine.getManufacturerName().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("manufacturerName");
+            predicates.add(group.in(searchDeliveryLine.getManufacturerName()));
+        }
         if (searchDeliveryLine.getInvoiceNumber() != null && !searchDeliveryLine.getInvoiceNumber().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("invoiceNumber");
             predicates.add(group.in(searchDeliveryLine.getInvoiceNumber()));
@@ -70,6 +78,14 @@ public class DeliveryLineSpecification implements Specification<DeliveryLine> {
         if (searchDeliveryLine.getVehicleNo() != null && !searchDeliveryLine.getVehicleNo().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("vehicleNo");
             predicates.add(group.in(searchDeliveryLine.getVehicleNo()));
+        }
+        if (searchDeliveryLine.getDriverId() != null && !searchDeliveryLine.getDriverId().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("driverName");
+            predicates.add(group.in(searchDeliveryLine.getDriverId()));
+        }
+        if (searchDeliveryLine.getReDelivered() != null ) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group> get("reDelivered");
+            predicates.add(group.in(searchDeliveryLine.getReDelivered()));
         }
 
         predicates.add(cb.equal(root.get("deletionIndicator"), 0L));

@@ -96,6 +96,7 @@ public class Consignment {
     private String awb_3rd_Party;
     private String scanType;
     private String action_time;
+    private String action_name;
     private String qpWebhookStatus;
     private String orderType;
     private String jntPushStatus;

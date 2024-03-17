@@ -471,7 +471,7 @@ export class SummaryComponent implements OnInit {
         paramdata1 = this.cs.encrypt({code: element, line: element, pageflow: 'Display', pageflow1: 'Approve'});
         sessionStorage.setItem('controlGroupsSummary1', paramdata1);
         let paramdata = '';
-        paramdata = this.cs.encrypt({ line: element, pageflow: 'Display', pageflow1: 'Approve' });
+        paramdata = this.cs.encrypt({ line: element, code: element,  pageflow: 'Display', pageflow1: 'Approve', });
         this.router.navigate(['/main/controlgroup/transaction/proposal1/' +  paramdata])
       }
       if (element.statusId == 5) {

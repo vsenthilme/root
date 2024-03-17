@@ -26,43 +26,51 @@ import lombok.NoArgsConstructor;
 				@UniqueConstraint (
 						name = "unique_key_periodicline", 
 						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ST_BIN", 
-								"ITM_CODE", "PACK_BARCODE"})
+								"ITM_CODE", "PACK_BARCODE", "MFR_NAME", "SC_LINE_NO"})
 				}
 		)
 @IdClass(PeriodicLineCompositeKey.class)
-public class PeriodicLine { 
-	
+public class PeriodicLine {
+
 	@Id
-	@Column(name = "LANG_ID")
+	@Column(name = "LANG_ID", columnDefinition = "nvarchar(25)")
 	private String languageId;
-	
+
 	@Id
-	@Column(name = "C_ID") 
+	@Column(name = "C_ID", columnDefinition = "nvarchar(25)")
 	private String companyCode;
-	
+
 	@Id
-	@Column(name = "PLANT_ID") 
+	@Column(name = "PLANT_ID", columnDefinition = "nvarchar(25)")
 	private String plantId;
-	
+
 	@Id
-	@Column(name = "WH_ID")
+	@Column(name = "WH_ID", columnDefinition = "nvarchar(25)")
 	private String warehouseId;
-	
+
 	@Id
-	@Column(name = "CC_NO") 
+	@Column(name = "CC_NO", columnDefinition = "nvarchar(50)")
 	private String cycleCountNo;
-	
+
 	@Id
-	@Column(name = "ST_BIN") 
+	@Column(name = "ST_BIN", columnDefinition = "nvarchar(50)")
 	private String storageBin;
-	
+
 	@Id
-	@Column(name = "ITM_CODE") 
+	@Column(name = "ITM_CODE", columnDefinition = "nvarchar(100)")
 	private String itemCode;
-	
+
 	@Id
-	@Column(name = "PACK_BARCODE")
+	@Column(name = "PACK_BARCODE", columnDefinition = "nvarchar(25)")
 	private String packBarcodes;
+
+	@Id
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(25)")
+	private String manufacturerName;
+
+	@Id
+	@Column(name = "SC_LINE_NO")
+	private Long lineNo;
 	
 	@Column(name = "VAR_ID") 
 	private Long variantCode;

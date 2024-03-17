@@ -88,6 +88,10 @@ export class ClientGeneralService {
   Search(obj: any) {
     return this.http.post<any>(this.url + '/findClientGeneral', obj);
   }
+  SearchPotentialClient(code: string) {
+    return this.http.post<any>('/mnr-crm-service/potentialClient/findPotentialClient', code);
+  }
+
 
   GetClientdetails() {
     return this.http.get<any>('/mnr-management-service/clientgeneral/');
@@ -105,4 +109,14 @@ export class ClientGeneralService {
   SearchNew(obj: any) {
     return this.http.post<any>('/mnr-management-service/clientgeneral/findClientGeneralNew', obj);
   }
+  getInquiry(code:string){
+    return this.http.get<any>('/mnr-crm-service/inquiry/' + code);
+  }
+
+  SearchSpark(obj: any) {
+    return this.http.post<any>('/mnr-spark-service/findClientGeneral', obj);
+  }
 }
+
+
+

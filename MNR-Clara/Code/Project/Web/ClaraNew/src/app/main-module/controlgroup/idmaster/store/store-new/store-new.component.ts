@@ -87,7 +87,7 @@ export class StoreNewComponent implements OnInit {
     groupTypeId:[,[Validators.required]],
     groupTypeName:[],
     subGroupTypeName:[],
-    subGroupTypeId:[,[Validators.required]],
+    subGroupTypeId:[],
     state: [,[Validators.required]],
     stateIdAndDescription: [],
     status: [0,],

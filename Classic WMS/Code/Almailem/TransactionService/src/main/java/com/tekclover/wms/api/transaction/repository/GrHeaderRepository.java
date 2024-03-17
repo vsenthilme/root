@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
-import lombok.extern.java.Log;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -48,11 +47,9 @@ public interface GrHeaderRepository extends JpaRepository<GrHeader, Long>, JpaSp
      * @param companyCode
      * @param plantId
      * @param refDocNumber
-     * @param packBarcodes
      * @param warehouseId
      * @param preInboundNo
      * @param caseCode
-     * @param l
      * @return
      */
     public List<GrHeader> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndWarehouseIdAndPreInboundNoAndCaseCodeAndDeletionIndicator(
@@ -64,8 +61,6 @@ public interface GrHeaderRepository extends JpaRepository<GrHeader, Long>, JpaSp
             String refDocNumber, long l);
 
     /**
-     * @param rssFeedEntryId
-     * @param isRead
      */
     @Modifying(clearAutomatically = true)
     @Query("UPDATE GrHeader ib SET ib.statusId = :statusId WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")
@@ -84,9 +79,26 @@ public interface GrHeaderRepository extends JpaRepository<GrHeader, Long>, JpaSp
                               @Param("statusDescription") String statusDescription);
 
 
-    List<GrHeader> findByWarehouseIdAndStatusIdAndDeletionIndicator(String warehouseId, Long statusId,Long deletionIndicator);
+    @Query(value = "SELECT COUNT(*) AS count FROM tblgrheader WHERE "
+            + "(:companyCode IS NULL OR c_id = :companyCode) AND "
+            + "(:plantId IS NULL OR plant_id = :plantId) AND "
+            + "(:warehouseId IS NULL OR wh_id = :warehouseId) AND "
+            + "(:languageId IS NULL OR lang_id = :languageId) AND "
+            + "(:statusId IS NULL OR status_id IN (:statusId)) AND "
+            + "is_deleted = 0", nativeQuery = true)
+    Long grHeaderCount(@Param("companyCode") List<String> companyCode,
+                       @Param("plantId") List<String> plantId,
+                       @Param("languageId") List<String> languageId,
+                       @Param("warehouseId") List<String> warehouseId,
+                       @Param("statusId") Long statusId);
+
+
+    List<GrHeader> findByWarehouseIdAndStatusIdAndDeletionIndicator(String warehouseId, Long statusId ,Long deletionIndicator);
 
     List<GrHeader> findByCompanyCodeAndLanguageIdAndPlantIdAndWarehouseIdAndStatusIdInAndDeletionIndicator(
             String companyCode, String languageId, String plantId, String warehouseId,
             List<Long> statusId, Long deletionIndicator);
+
+
+
 }

@@ -360,8 +360,8 @@ export class QuotationsNewComponent implements OnInit {
       ])
       .subscribe(
         (results) => {
-          let statusL = [10, 1];
-          if (this.form.controls.statusId.value == 1) statusL = [10, 1];
+          let statusL =  [1,54];  // [10, 1,52]
+          if (this.form.controls.statusId.value == 1) statusL =  [1,54]; //[10, 1,52];
           // else if (this.form.controls.statusId.value == 12)
           //   statusL = [10];
           // else if (this.form.controls.statusId.value == 13)

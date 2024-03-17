@@ -85,7 +85,7 @@ public class SparkPeriodicHeaderService {
                 + "REF_CC_NO as referenceCycleCountNo "
                 + "From tblperiodicheaderv2 Where IS_DELETED = 0 "
         );
-        periodicHeaderV2Query.cache();
+//        periodicHeaderV2Query.cache();
 
         if (findPeriodicHeaderV2.getWarehouseId() != null && !findPeriodicHeaderV2.getWarehouseId().isEmpty()) {
             periodicHeaderV2Query = periodicHeaderV2Query.filter(col("WH_ID").isin(findPeriodicHeaderV2.getWarehouseId().toArray()));

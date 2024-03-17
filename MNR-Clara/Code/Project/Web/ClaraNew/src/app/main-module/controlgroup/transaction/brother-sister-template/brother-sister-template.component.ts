@@ -438,9 +438,9 @@ tableBrotherStatus: any;
       totalStore10 = totalStore10 + (element.store10 != null ? Number(element.store10) : 0);
     })
 
-    if((totalStore1 == 100 || totalStore1 == 0) && (totalStore2 == 100 || totalStore2 == 0) &&  (totalStore3 == 100 || totalStore3 == 0) &&  (totalStore4 == 100 || totalStore4 == 0)
-    &&  (totalStore5 == 100 || totalStore5 == 0) &&  (totalStore6 == 100 || totalStore6 == 0) &&  (totalStore7 == 100 || totalStore7 == 0)
-    &&  (totalStore8 == 100 || totalStore8 == 0) &&  (totalStore9 == 100 || totalStore9 == 0) &&  (totalStore10 == 100 || totalStore10 == 0)){
+    if((totalStore1 >= 80 || totalStore1 == 0) && (totalStore2 >= 80 || totalStore2 == 0) &&  (totalStore3 >= 80 || totalStore3 == 0) &&  (totalStore4 >= 80 || totalStore4 == 0)
+    &&  (totalStore5 >= 80 || totalStore5 == 0) &&  (totalStore6 >= 80 || totalStore6 == 0) &&  (totalStore7 >= 80 || totalStore7 == 0)
+    &&  (totalStore8 >= 80 || totalStore8 == 0) &&  (totalStore9 >= 80 || totalStore9 == 0) &&  (totalStore10 >= 80 || totalStore10 == 0)){
       this.controlTest = true;
     }else{
         this.controlTest = false;
@@ -495,18 +495,46 @@ tableBrotherStatus: any;
   
   formatResult(Result){ 
     let obj: any = {};
-  
+    let arrayNew: any[] = [];
     Result.exactMatchResult.forEach((clientName, i) => {
-     clientName.store.forEach((stores, j) => {
-        console.log(stores);
-          clientName['store' + (j+1)] = stores.storePercentage;
-          obj['storeName'+(j+1)] = stores.storeName;
+      clientName.store.forEach((stores, j) => {
+        arrayNew.push(stores.storeName);
       });
-    })
+    });
   
     let res: any; 
     res = Result;
-    res.exactMatchResult.forEach(element => {
+
+    // console.log(res.exactMatchResult);
+    // console.log(obj);
+    
+    // res.exactMatchResult.splice(0, 0, obj);
+    //  this.dataSource = new MatTableDataSource<any>(res.exactMatchResult);
+    //  this.validateControlTest();
+    //  this.validateEffectiveControl();
+
+    
+    let duplicatedArray = this.cs.uniqByFilter(arrayNew);
+
+
+    this.formatDataFinal(res, duplicatedArray)
+
+  }
+
+  formatDataFinal(Result, duplicatedArray) {
+    console.log(duplicatedArray)
+    duplicatedArray.forEach((x, index) => {
+      Result.exactMatchResult.forEach((clientName, i) => {
+        clientName.store.forEach((stores, j) => {
+          //clientName['store' + (j+1)] = stores.storePercentage;
+          if (stores.storeName == x) {
+            clientName['store' + (index + 1)] = stores.storePercentage;
+          }
+        });
+      });
+    })
+
+    Result.exactMatchResult.forEach(element => {
       let a = [(element.store1 ? element.store1 : 0), (element.store2 ? element.store2 : 0), 
       (element.store3 ? element.store3 : 0), (element.store4 ? element.store4 : 0),(element.store5 ? element.store5 : 0),
       (element.store6 ? element.store6 : 0), (element.store7 ? element.store7 : 0),(element.store8 ? element.store8 : 0),
@@ -516,15 +544,15 @@ tableBrotherStatus: any;
        element['effective'] = minValue;
     })
     
-    console.log(res.exactMatchResult);
-    console.log(obj);
     
-    res.exactMatchResult.splice(0, 0, obj);
-     this.dataSource = new MatTableDataSource<any>(res.exactMatchResult);
-     this.validateControlTest();
-     this.validateEffectiveControl();
-  }
 
+    let obj: any = {};
+    duplicatedArray.filter((x, i) => (obj['storeName' + (i + 1)] = x));
+    Result.exactMatchResult.splice(0, 0, obj);
+    this.dataSource = new MatTableDataSource<any>(Result.exactMatchResult);
+    this.validateControlTest();
+    this.validateEffectiveControl();
+  }
 
 ApproveAdmin(element, action): void {
   const dialogRef = this.dialog.open(ConfirmComponent, {

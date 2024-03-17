@@ -122,9 +122,9 @@ export class UserRoleEditComponent implements OnInit {
     },
     {
       mainMenu: "CRM", Menu: [
-        { screenId: 2, subScreenId: 1060, referenceField1: "	Inquiry New - List	", createUpdate: true, delete: true, view: true, },
-        { screenId: 2, subScreenId: 1062, referenceField1: "	Inquiry Assign - List	", createUpdate: true, delete: true, view: true, },
-        { screenId: 2, subScreenId: 1064, referenceField1: "	Inquiry Validation - Snapshot / List	", createUpdate: true, delete: true, view: true, },
+     //   { screenId: 2, subScreenId: 1060, referenceField1: "	Inquiry New - List	", createUpdate: true, delete: true, view: true, },
+       // { screenId: 2, subScreenId: 1062, referenceField1: "	Inquiry Assign - List	", createUpdate: true, delete: true, view: true, },
+        { screenId: 2, subScreenId: 1064, referenceField1: "	Inquiry	", createUpdate: true, delete: true, view: true, },
 
         { screenId: 2, subScreenId: 1073, referenceField1: "	Intake Form - List	", createUpdate: true, delete: true, view: true, },
         { screenId: 2, subScreenId: 1075, referenceField1: "	Prospective Client - List	", createUpdate: true, delete: true, view: true, },

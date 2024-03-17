@@ -1,12 +1,17 @@
 package com.iweb2b.api.integration.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.iweb2b.api.integration.config.PropertiesConfig;
 import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentRequest;
 import com.iweb2b.api.integration.model.consignment.dto.CancelShipmentResponse;
+import com.iweb2b.api.integration.model.consignment.dto.ShipsyCancelShipmentRequest;
+import com.iweb2b.api.integration.model.consignment.entity.ConsignmentEntity;
 import com.iweb2b.api.integration.model.tracking.ConsignmentTracking;
+import com.iweb2b.api.integration.repository.ConsignmentRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +24,9 @@ public class ConsignmentTrackingService {
 	
 	@Autowired
 	IntegrationService integrationService;
+	
+	@Autowired
+	ConsignmentRepository consignmentRepository;
 
 	/**
 	 * 
@@ -37,9 +45,9 @@ public class ConsignmentTrackingService {
 	 * @param wayBillNumber
 	 * @return
 	 */
-	public ConsignmentTracking getConsignmentTrackingByWayBillNo (String wayBillNumber) {
+	public ConsignmentTracking getConsignmentTrackingByCustomerReferenceNumber (String customerReferenceNumber) {
 		// Getting ReferenceNumber from our local DB for the given wayBillNumber
-		String referrenceNumber = integrationService.getConsigmentByWayBillNumber (wayBillNumber);
+		String referrenceNumber = integrationService.getConsigmentByCustomerReferenceNumber(customerReferenceNumber);
 		ConsignmentTracking consignmentTracking = integrationService.getClientConsignmentTracking(referrenceNumber);
 		log.info("consignmentTracking------> : " + consignmentTracking);
 		return consignmentTracking;
@@ -51,8 +59,26 @@ public class ConsignmentTrackingService {
 	 * @return
 	 */
 	public CancelShipmentResponse cancelShipment (CancelShipmentRequest cancelShipmentRequest) {
-		CancelShipmentResponse cancelShipmentResponse = integrationService.cancelShipment(cancelShipmentRequest);
-		log.info("cancelShipmentResponse------> : " + cancelShipmentResponse);
-		return cancelShipmentResponse;
+		List<String[]> consignments = 
+				consignmentRepository.findConsigmentByCustomerReferenceNumber (cancelShipmentRequest.getCustomerReferenceNo());
+		log.info("cancelShipment-----> : " + cancelShipmentRequest);
+		if (consignments != null) {
+			for (String[] consignmentArr : consignments) {
+				ShipsyCancelShipmentRequest cancelReq = new ShipsyCancelShipmentRequest();
+				cancelReq.setAWBNo(new String[] {consignmentArr[0]});
+				cancelReq.setCustomerCode(consignmentArr[1]);
+				CancelShipmentResponse cancelShipmentResponse = integrationService.cancelShipment(cancelReq);
+				log.info("cancelShipmentResponse------> : " + cancelShipmentResponse);
+				
+				if (cancelShipmentResponse.getStatus() != null && cancelShipmentResponse.getStatus().equalsIgnoreCase("OK")) {
+					ConsignmentEntity consignmentEntity = consignmentRepository.findConsigment (consignmentArr[0]);
+					consignmentEntity.setCancelStatus(1L);
+					consignmentRepository.save(consignmentEntity);
+					log.info("cancelShipmentResponse-updated---in---local----> : " + consignmentEntity);
+				}
+				return cancelShipmentResponse;
+			}
+		}
+		return null;
 	}
 }

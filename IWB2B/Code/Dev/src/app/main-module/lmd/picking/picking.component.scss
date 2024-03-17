@@ -1,0 +1,49 @@
+.mat-stroked-button {
+    border: 1px solid #9FD037 !important;
+    color: #9FD037 !important;
+  }
+
+  .mat-stroked-button:hover {
+    background-color: #9FD037 !important;
+    color: #fff !important;
+  }
+
+
+  .scrollTable{
+    height: calc(100vh - 17.5rem);
+    overflow-y: scroll;
+  }
+
+  ::ng-deep.optionsButton{
+    color: #FDBB12 !important;
+    border: 1px #FDBB12 !important;
+    background-color: transparent !important;
+  }
+  
+  ::ng-deep.optionsButton:hover{
+    color: #efefef !important;
+    background-color: 1px #FDBB12 !important;
+  }
+
+
+  .mat-column-select {flex: 0 0 17% !important; width: 5% !important;padding-right: 20px !important;}
+  .mat-column-actions {flex: 0 0 17% !important; width: 8% !important;padding-right: 20px !important;}
+.mat-column-profileType {flex: 0 0 17% !important; width: 12% !important;padding-right: 20px !important;}
+.mat-column-userName {flex: 0 0 17% !important; width: 15% !important;padding-right: 20px !important;}
+
+
+
+::ng-deep .action-button{border-radius: 4px !important;min-width: 6rem !important;min-height: 2.3rem !important;max-height: 2.3rem !important;}
+
+
+::ng-deep.btn-outline-warning:hover {
+  color: #ffff !important;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+.bg-yellow{
+  background-color: #ffc107 !important;
+  color: #ffff;
+}
+

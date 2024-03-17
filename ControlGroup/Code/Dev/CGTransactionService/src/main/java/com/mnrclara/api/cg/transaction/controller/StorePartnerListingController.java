@@ -1,8 +1,6 @@
 package com.mnrclara.api.cg.transaction.controller;
 
 //import com.mnrclara.api.cg.transaction.batch.scheduler.BatchJobScheduler;
-import com.mnrclara.api.cg.transaction.model.ownershiprequest.AddOwnerShipRequest;
-import com.mnrclara.api.cg.transaction.model.ownershiprequest.OwnerShipRequest;
 import com.mnrclara.api.cg.transaction.model.storepartnerlisting.*;
 import com.mnrclara.api.cg.transaction.service.StorePartnerListingService;
 import io.swagger.annotations.Api;
@@ -15,12 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Validated
@@ -83,6 +80,18 @@ public class StorePartnerListingController {
         StorePartnerListing dbStorePartnerListing =
                 storePartnerListingService.updateStorepartnerListing(
                         versionNumber, storeId, languageId, companyId, loginUserID, updateStorePartnerListing);
+        return new ResponseEntity<>(dbStorePartnerListing, HttpStatus.OK);
+    }
+
+    // UPDATE BATCH
+    @ApiOperation(response = StorePartnerListing.class, value = "Batch Update StorePartnerListing") // label for swagger
+    @PatchMapping("/batchUpdate")
+    public ResponseEntity<?> batchUpdateStorePartnerListing(@RequestParam String loginUserID,
+                                                      @RequestBody List<UpdateStorePartnerListing> updateStorePartnerListing)
+            throws IllegalAccessException, InvocationTargetException {
+
+        List<StorePartnerListing> dbStorePartnerListing =
+                storePartnerListingService.batchUpdateStorePartner(loginUserID, updateStorePartnerListing);
         return new ResponseEntity<>(dbStorePartnerListing, HttpStatus.OK);
     }
 
@@ -202,5 +211,33 @@ public ResponseEntity<?> findResponse(@Valid @RequestBody FindMatchResult findMa
                 storePartnerListingService.findMatchResultResponse(findMatchResult);
         return new ResponseEntity<>(createLikeMatchResult, HttpStatus.OK);
     }
+
+    @ApiOperation(response = StorePartnerListing.class, value = "Upload StorePartnerListing") // label for swagger
+    @PostMapping("/batchupload")
+    public ResponseEntity<?> postSPUploadV2(@Valid @RequestBody List<StorePartnerListing> storePartnerListings)
+            throws IllegalAccessException, InvocationTargetException {
+        try {
+            List<WarehouseApiResponse> responseList = new ArrayList<>();
+            for (StorePartnerListing listing : storePartnerListings) {
+                StorePartnerListing createdStorePartnerListing =
+                        storePartnerListingService.createStorePartnerListing(listing);
+                if (createdStorePartnerListing != null) {
+                    WarehouseApiResponse response = new WarehouseApiResponse();
+                    response.setStatusCode("200");
+                    response.setMessage("Success");
+                    responseList.add(response);
+                }
+            }
+            return new ResponseEntity<>(responseList, HttpStatus.OK);
+        } catch (Exception e) {
+            log.info("interWarehouseTransfer order Error: " + e);
+            e.printStackTrace();
+            WarehouseApiResponse response = new WarehouseApiResponse();
+            response.setStatusCode("1400");
+            response.setMessage("Not Success: " + e.getLocalizedMessage());
+            return new ResponseEntity<>(response, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
 
 }

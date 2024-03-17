@@ -13,9 +13,9 @@
             <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row scroll mt-2 px-3 p-1">
+        <div class="row ">
 
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 text-black required">Document Type </p>
               <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
@@ -30,7 +30,7 @@
                formControlName="documentType"></angular2-multiselect> -->
 
                
-               <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectdocumentList" [(ngModel)]="selectedItems"
+               <p-dropdown placeholder="Select" [filter]="true" appendTo="body" [panelStyle]="{'width':'20%'}"   class="w-100 my-1 mb-2" [options]="multiselectdocumentList" [(ngModel)]="selectedItems"
                formControlName="documentType" [style]="{'width': '100%'}"></p-dropdown>
 
               <mat-error *ngIf="errorHandling('documentType')">{{getErrorMessage()}}</mat-error>
@@ -38,7 +38,7 @@
             </div>
 
           </div>
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <p class="mb-0 py-0">Approval Date</p>
             <mat-form-field class="form-group input_field mb-0" appearance="outline">
               <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker1" formControlName="approvalDate" >
@@ -47,7 +47,7 @@
             </mat-form-field>
             <mat-error *ngIf="errorHandling('approvalDate')">{{getErrorMessage()}}</mat-error>
           </div>
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <p class="mb-0 py-0">Expiration Date</p>
             <mat-form-field class="form-group input_field mb-0" appearance="outline">
               <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker2" formControlName="expirationDate">
@@ -56,7 +56,7 @@
             </mat-form-field>
             <mat-error *ngIf="errorHandling('expirationDate')">{{getErrorMessage()}}</mat-error>
           </div>
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <p class="mb-0 py-0">Eligibility Date</p>
             <mat-form-field class="form-group input_field mb-0" appearance="outline">
               <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker3" formControlName="eligibilityDate" >
@@ -65,7 +65,7 @@
             </mat-form-field>
             <mat-error *ngIf="errorHandling('eligibilityDate')">{{getErrorMessage()}}</mat-error>
           </div>
-          <div class="col-lg-6 col-md-6 mt-1" *ngIf="form.value.eligibilityDate">
+          <div class="col-lg-3 col-md-4 mt-2" *ngIf="form.value.eligibilityDate">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Reminder Days</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -75,7 +75,7 @@
               <mat-error *ngIf="errorHandling('reminderDays')">{{getErrorMessage()}}</mat-error>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-1" >
+          <div class="col-lg-3 col-md-4 mt-2" >
             <p class="mb-0 py-0">Reminder Date</p>
             <mat-form-field class="form-group input_field mb-0" appearance="outline" >
               <input matInput placeholder="Choose Date" placeholder="Choose Date"[matDatepicker]="picker4" formControlName="reminderDate">
@@ -84,9 +84,15 @@
             </mat-form-field>
             <mat-error *ngIf="errorHandling('reminderDate')">{{getErrorMessage()}}</mat-error>
           </div>
-          <div class="col-12 mt-1">
+
+          <div class="col-lg-3 col-md-4 mt-2 my-auto">
+            <mat-slide-toggle formControlName="toggleNotification">Send Notification</mat-slide-toggle>
+            <mat-error *ngIf="errorHandling('toggleNotification')">{{getErrorMessage()}}</mat-error>
+          </div>
+
+          <div class="col-12 mt-1" *ngIf="this.form.controls.toggleNotification.value == true">
             <div class="d-flex flex-column">
-              <p class="mb-0 py-0 required">Mozeo SMS Notes</p>
+              <p class="mb-0 py-0">Mozeo SMS Notes</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
                 <textarea matInput rows="7" placeholder="Enter" (change)="omit_special_char($event)" formControlName="reminderDescription"></textarea>
               </mat-form-field>

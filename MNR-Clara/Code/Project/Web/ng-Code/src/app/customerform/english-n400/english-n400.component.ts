@@ -433,7 +433,7 @@ export class EnglishN400Component implements OnInit {
     doHaveImmigrationAttorney:  [, [Validators.required]],
     doNeedImmigrationUpdates: [, [Validators.required]],
     doYouLiveAtThisAddress:  [, [Validators.required]],
-    emailAddress: [, [Validators.required]],
+    emailAddress: [, [Validators.email,Validators.required]],
     feeInDollar: [],
     goodMoralCharacterQuestions: this.GoodMoralCharacterQuestions,
     inquiryNo: [,],
@@ -853,7 +853,7 @@ export class EnglishN400Component implements OnInit {
 
 
     if (this.pageflow == 'validate')
-    if (this.intakefg.controls.statusId.value != 5 && this.intakefg.controls.statusId.value != 6 && this.intakefg.controls.statusId.value != 10) {
+    if (this.intakefg.controls.statusId.value != 5 && this.intakefg.controls.statusId.value != 6 && this.intakefg.controls.statusId.value != 10 && this.intakefg.controls.statusId.value != 70 && this.intakefg.controls.statusId.value != 71 && this.intakefg.controls.statusId.value != 72 && this.intakefg.controls.statusId.value != 73 && this.intakefg.controls.statusId.value != 74) {
          this.toastr.error(
           "Please fill the required status field to continue",
           "Notification",{
@@ -984,7 +984,7 @@ selectedItems: any[] = [];
         this.useridList = this.cas.foreachlist(results[0], this.cas.dropdownlist.setup.userId.key, { userTypeId: [1, 2] });
         this.useridList.forEach((x: { key: string; value: string; }) => this.multiassignList.push({id: x.key, itemName:  x.value}))
         this.multiselectassignList = this.multiassignList;
-        this.statusIdList = this.cas.foreachlist(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 10].includes(s.key));
+        this.statusIdList = this.cas.foreachlist(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 10,70,71,72,73,74].includes(s.key));
 
       }, (err) => {
         this.toastr.error(err, "");

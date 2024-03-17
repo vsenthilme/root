@@ -1,0 +1,112 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">System</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Order</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-orders-tab></app-orders-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  
+    <div class="bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+      <div class="btn-group">
+        <button disabled  class=" disabled btn btn-outline-warning btn-sm d-flex align-items-center"  type="button">
+          <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">edit</mat-icon>Edit
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">search</mat-icon>Display
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">delete</mat-icon>Delete
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">download</mat-icon>Download
+            </a></li>
+        </ul>
+      </div>
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+    <div class=" bg-white">
+          <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner' ]" [value]="orders"
+        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single"  
+        scrollHeight="calc(100vh - 16.8rem)" [paginator]="true" [rows]="100" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true" >
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="max-width:4%; justify-content: center;">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+            </th>
+            <th style="max-width: 14%;"pSortableColumn="reference_number"  pResizableColumn>CN <p-sortIcon field="reference_number"></p-sortIcon></th>
+            <th style="max-width: 16%;"pSortableColumn="customer_reference_number"  pResizableColumn>Customer Ref No <p-sortIcon field="customer_reference_number"></p-sortIcon></th>
+            <th style="max-width: 16%;"pSortableColumn="status_description"  pResizableColumn>Status <p-sortIcon field="status_description"></p-sortIcon></th>
+            <th style="max-width: 16%;"pSortableColumn="created_at"  pResizableColumn>Created On <p-sortIcon field="created_at"></p-sortIcon></th>
+            <th style="max-width: 16%;"pSortableColumn="service_type_id"  pResizableColumn>Service Type ID <p-sortIcon field="service_type_id"></p-sortIcon></th>
+            <th pSortableColumn="customer_code"  pResizableColumn>Customer Code <p-sortIcon field="customer_code"></p-sortIcon></th>
+          </tr>
+          <tr > 
+            <th style="max-width: 3.5rem; justify-content: center;">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+            </th>
+            <th style="max-width: 14%">
+                <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'reference_number', 'contains')" 
+                [value]="$any(userProfile.filters['reference_number'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+              </th>
+              <th style="max-width: 16%">
+                  <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customer_reference_number', 'contains')" 
+                  [value]="$any(userProfile.filters['customer_reference_number'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                </th>
+                <th style="max-width: 16%">
+                    <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'status_description', 'contains')" 
+                    [value]="$any(userProfile.filters['status_description'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                  </th>
+                  <th style="max-width: 16%">
+                      <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'created_at', 'contains')" 
+                      [value]="$any(userProfile.filters['created_at'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                    </th>
+                    <th style="max-width: 16%">
+                        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'service_type_id', 'contains')" 
+                        [value]="$any(userProfile.filters['service_type_id'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                      </th>
+                      <th >
+                          <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'customer_code', 'contains')" 
+                          [value]="$any(userProfile.filters['customer_code'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                        </th>
+          </tr>
+        </ng-template>
+            <ng-template pTemplate="body" let-orders let-rowIndex="rowIndex">
+                <tr >
+            <td style="max-width:3.5rem;  justify-content: center;">
+                <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedOrders"  [value]="orders"></p-checkbox>
+            </td>
+            <td style="max-width:14%">{{orders.reference_number}}</td>
+            <td style="max-width:16%">{{orders.customer_reference_number}}</td>
+            <td style="max-width:16%">{{orders.status_description}}</td>
+            <td style="max-width:16%">{{orders.created_at | date:'mediumDate'}}</td>
+            <td style="max-width:16%">{{orders.service_type_id}}</td>
+            <td >{{orders.customer_code}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

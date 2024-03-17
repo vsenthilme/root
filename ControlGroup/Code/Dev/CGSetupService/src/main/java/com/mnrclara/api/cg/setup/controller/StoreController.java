@@ -1,11 +1,8 @@
 package com.mnrclara.api.cg.setup.controller;
 
 
-import com.mnrclara.api.cg.setup.model.store.AddStoreId;
-import com.mnrclara.api.cg.setup.model.store.StoreId;
+import com.mnrclara.api.cg.setup.model.store.*;
 import com.mnrclara.api.cg.setup.service.StoreIdService;
-import com.mnrclara.api.cg.setup.model.store.FindStoreId;
-import com.mnrclara.api.cg.setup.model.store.UpdateStoreId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -87,6 +84,13 @@ public class StoreController {
     public ResponseEntity<?> findStoreId(@Valid @RequestBody FindStoreId findStoreId) throws Exception {
         List<StoreId> createdStoreId= storeIdService.findStoreId(findStoreId);
         return new ResponseEntity<>(createdStoreId, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StoreDropDown.class, value = "Get All StoreDropDown")
+    @GetMapping("/storeDropDown")
+    public ResponseEntity<?> getAllStoreDropDown(){
+        List<StoreDropDown> storeDropDownList = storeIdService.getStoreDropDown();
+        return new ResponseEntity<>(storeDropDownList, HttpStatus.OK);
     }
 
 }

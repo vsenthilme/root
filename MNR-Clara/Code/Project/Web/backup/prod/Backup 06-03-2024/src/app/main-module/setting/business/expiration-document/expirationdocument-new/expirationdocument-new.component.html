@@ -1,0 +1,125 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="card bg-white ">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">Expiration Document Type - {{data.pageflow}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            General
+            <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Class </p>
+              <mat-form-field appearance="outline">
+                <mat-select class="form-group input_field mb-0" formControlName="classId" placeholder="select">
+                  <mat-option *ngFor="let food of classIdList" [value]="food.key">
+                    {{food.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('classId')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Expiration Document Type</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter"  (keydown.space)="$event.preventDefault()" formControlName="documentType">
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('documentType')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 required">Description</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" formControlName="documentTypeDescription">
+              </mat-form-field>
+            <mat-error *ngIf="form.controls.documentTypeDescription.errors?.maxlength" class="mt-1">Maximum 200 Characters</mat-error>
+             <mat-error *ngIf="errorHandling('documentTypeDescription')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Status </p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+
+                <mat-select formControlName="statusId">
+                  <mat-option value="Active">Active </mat-option>
+                  <mat-option value="Inactive">Inactive </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
+
+            </div>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel2 hideToggle *ngIf="data.code">
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Admin
+            <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" readOnly formControlName="createdBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Created On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" readOnly formControlName="createdOn">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated By</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" readOnly formControlName="updatedBy">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Updated On</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter" readOnly formControlName="updatedOn">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="d-flex justify-content-center align-items-center py-2">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button *ngIf="data.pageflow!= 'Display'" mat-raised-button class="mx-2 bg-blue text-white" type="submit"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        {{data.pageflow =='Edit'? 'Update': 'Save'}}</button>
+
+    </div>
+
+
+  </div>
+</form>

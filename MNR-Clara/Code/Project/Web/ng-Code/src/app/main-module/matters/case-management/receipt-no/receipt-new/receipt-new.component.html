@@ -13,9 +13,9 @@
             <mat-icon class="text-primary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row scroll mt-2 px-3 p-1">
+        <div class="row ">
 
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 text-black required">Document Type </p>
               <!-- <mat-form-field class="form-group input_field mb-0 " appearance="outline">
@@ -29,7 +29,7 @@
               [settings]="dropdownSettings" 
                formControlName="documentType"></angular2-multiselect> -->
 
-               <p-dropdown placeholder="Select" [filter]="true" appendTo="body"  class="w-100 my-1 mb-2" [options]="multiselectdocumentList"
+               <p-dropdown placeholder="Select" [filter]="true" appendTo="body" [panelStyle]="{'width':'20%'}"  class="w-100 my-1 mb-2" [options]="multiselectdocumentList"
                formControlName="documentType" [style]="{'width': '100%'}"></p-dropdown>
 
               <mat-error *ngIf="errorHandling('documentType')">{{getErrorMessage()}}</mat-error>
@@ -37,7 +37,7 @@
             </div>
 
           </div>
-          <div class="col-lg-6 col-md-6 mt-1" *ngIf="uploadbutton">
+          <div class="col-lg-3 col-md-4 mt-2" *ngIf="uploadbutton">
             <div class="d-flex flex-column">
               <p class="mb-1 py-0 required">Upload Receipt No</p>
 
@@ -50,7 +50,7 @@
 
           </div>
 
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-1 py-0 required"> Receipt No</p>
               <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
@@ -61,7 +61,7 @@
             </div>
 
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 text-black ">Receipt Type </p>
               <mat-form-field class="form-group input_field mb-0 " appearance="outline">
@@ -88,7 +88,7 @@
 
           </div>
 
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Date Sent to Goverment Agency</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -99,7 +99,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 required">Receipt Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -113,7 +113,7 @@
           </div>
 
 
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Receipt No Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -126,7 +126,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6 col-md-6 mt-1">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 text-black">Status</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -140,17 +140,21 @@
               <mat-error *ngIf="errorHandling('statusId')">{{getErrorMessage()}}</mat-error>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-1" *ngIf="form.value.receiptFile">
+          <div class="col-lg-3 col-md-4 mt-2" *ngIf="form.value.receiptFile">
             <p class="mb-0 py-0">Receipt No File</p>
             <mat-form-field class="form-group input_field mb-0" appearance="outline">
               <input matInput formControlName="receiptFile" readOnly placeholder="Enter">
             </mat-form-field>
           </div>
-          <div class="col-12 mt-1">
+          <div class="col-lg-4 col-md-6 mt-2 my-auto"  *ngIf="this.form.controls.statusId.value == 10">
+            <mat-slide-toggle formControlName="toggleNotification">Send Notification</mat-slide-toggle>
+            <mat-error *ngIf="errorHandling('toggleNotification')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-12 mt-1" *ngIf="this.form.controls.toggleNotification.value == true">
             <div class="d-flex flex-column">
-              <p class="mb-0 py-0 required">Mozeo SMS Notes</p>
+              <p class="mb-0 py-0 ">Mozeo SMS Notes</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
-                <textarea matInput rows="7" placeholder="Enter" formControlName="receiptNote"></textarea>
+                <textarea matInput rows="3" placeholder="Enter" formControlName="receiptNote"></textarea>
               </mat-form-field>
 
             </div>
@@ -166,7 +170,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="row mt-2 p-1 px-3">
-          <!-- <div class="col-lg-6 col-md-6 mt-2">
+          <!-- <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Approved On</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -176,7 +180,7 @@
               </mat-form-field>
             </div>
           </div> -->
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Approval Receipt Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -187,7 +191,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Approval Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -197,7 +201,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Expiration Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -207,7 +211,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 required" >Eligibility Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -217,7 +221,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 required">Reminder Days</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -225,7 +229,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Reminder Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -245,7 +249,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="row mt-2 p-1 px-3">
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Created By</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
@@ -253,7 +257,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+          <div class="col-lg-3 col-md-4 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0">Created On</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">

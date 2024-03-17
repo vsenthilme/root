@@ -200,6 +200,7 @@
 
   <mat-menu #menu="matMenu">
     <ng-template matMenuContent let-aliasMenuItems="element">
-        <button mat-menu-item (click)="approvalSend(aliasMenuItems)">Send to Approval</button> <!--(click)="openDialog(aliasMenuItems)"-->
+        <button mat-menu-item (click)="approvalSend(aliasMenuItems)">Send to Approval</button>
+        <button mat-menu-item (click)="edit()">Reassign</button> <!--(click)="openDialog(aliasMenuItems)"-->
     </ng-template>
   </mat-menu>

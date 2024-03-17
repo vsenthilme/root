@@ -2,10 +2,13 @@ package com.tekclover.wms.api.transaction.model.inbound.gr.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.gr.SearchGrLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class SearchGrLineV2 extends SearchGrLine {
@@ -23,4 +26,7 @@ public class SearchGrLineV2 extends SearchGrLine {
 	private List<String> brand;
 	private List<String> rejectType;
 	private List<String> rejectReason;
+
+	private Date startCreatedOn;
+	private Date endCreatedOn;
 }

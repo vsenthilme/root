@@ -14,7 +14,9 @@ export class ValidationService {
   findGroup(obj:any){
     return this.http.post<any>('/mnr-cg-transaction-service/storepartnerlisting/findGroup/count', obj);
   }
-  
+  findGroupNew(obj:any){
+    return this.http.post<any>('/mnr-cg-transaction-service/storepartnerlisting/findStore/entity', obj);
+  }
   findGroupbackup(obj:any){
     return this.http.post<any>('/mnr-cg-transaction-service/storepartnerlisting/findGroup', obj);
   }

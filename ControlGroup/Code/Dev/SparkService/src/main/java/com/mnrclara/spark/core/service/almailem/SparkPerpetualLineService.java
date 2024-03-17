@@ -116,7 +116,7 @@ public class SparkPerpetualLineService {
                 + "SECOND_CTD_QTY as secondCountedQty "
                 + "From tblperpetuallinev2 where IS_DELETED = 0 ");
 
-        perpetualLineQuery.cache();
+//        perpetualLineQuery.cache();
 
         if (searchPerpetualLineV2.getLanguageId() != null && !searchPerpetualLineV2.getLanguageId().isEmpty()) {
             perpetualLineQuery = perpetualLineQuery.filter(col("LANG_ID").isin(searchPerpetualLineV2.getLanguageId().toArray()));

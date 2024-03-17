@@ -42,4 +42,6 @@ public interface PurchaseReturnHeaderRepository extends JpaRepository<PurchaseRe
 
     PurchaseReturnHeader findTopByPurchaseReturnHeaderIdAndCompanyCodeAndBranchCodeAndReturnOrderNoOrderByOrderReceivedOnDesc(
             Long purchaseReturnHeaderId, String companyCode, String branchCode, String returnOrderNo);
+
+    List<PurchaseReturnHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

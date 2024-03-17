@@ -134,7 +134,7 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
     private excel: ExcelService,
     private router: ActivatedRoute,
     private auth: AuthService) { 
-      this.currentEnv = environment.name; 
+      //this.currentEnv = environment.name; 
     }
 
 
@@ -173,11 +173,11 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
   }
   RA: any = {};
   ngOnInit(): void {
-      if(this.currentEnv == 'prod'){
-        this.prod = true;
-      }else{
-        this.prod = false;
-      }
+      // if(this.currentEnv == 'prod'){
+      //   this.prod = true;
+      // }else{
+      //   this.prod = false;
+      // }
 
     this.router.data.subscribe(x => {
       this.pageflow = x.title;

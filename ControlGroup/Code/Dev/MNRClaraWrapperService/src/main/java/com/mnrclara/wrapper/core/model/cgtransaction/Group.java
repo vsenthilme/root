@@ -5,13 +5,15 @@ import lombok.Data;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class Group {
 
     @Valid
-    private List<LikeMatchGroup> likeMatchGroup;
+    private Set<ExactMatchGroup> exactMatchGroups;
 
     @Valid
-    private List<ExactMatchGroup> exactMatchGroups;
+    private Set<LikeMatchGroup> likeMatchGroup;
+
 }

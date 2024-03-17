@@ -1,0 +1,318 @@
+<form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+  <div class=" my-0 py-0">
+    <div class="row ms-3 me-3 px-1 smallscreen">
+      <div class="d-flex justify-content-between align-items-center bg-white p-2 py-3 ps-4 ">
+        <h2 class="my-auto header-text fw-bolder ps-2">Check & Credit Card Request Form</h2>
+      </div>
+      <div class="auto">
+        <form [formGroup]="form">
+          <div class="scroll">
+            <div class="auto">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required">Request Date</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Choose Date" [matDatepicker]="picker1" formControlName="requestDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('requestDate')">{{getErrorMessage()}}</mat-error>
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 required">Required Date</p>
+                  <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Choose Date" [matDatepicker]="picker" formControlName="requiredDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="errorHandling('requiredDate')">{{getErrorMessage()}}</mat-error>
+                </div>
+              </div>
+              <p class="mb-0 py-0 fw-bolder my-2 required">(Please Check One)</p>
+              <div class="row mt-2">
+                <mat-radio-group formControlName="paymentMode" layout="row">
+
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Check" #stoppedbyimmigration>
+                    Check
+                  </mat-radio-button>
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Debit Card">Debit Card
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Credit Card"> Credit Card
+                  </mat-radio-button>
+
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('paymentMode')">{{getErrorMessage()}}</mat-error>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <div class="input-container">
+                    <p class="col-6 col-4  fw-bolder required ">Amount</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <span matPrefix class="text-secondary "
+                        style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+                      <input matInput currencyMask placeholder="Enter" formControlName="expenseAmount">
+                    </mat-form-field> -->
+                    <p-inputNumber   formControlName="expenseAmount" placeholder="Enter" class="input_field3 w-100" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+                    <mat-error *ngIf="errorHandling('expenseAmount')">{{getErrorMessage()}}</mat-error>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row mt-2">
+                <p class="col-6 col-4 required">Cards Not Accepted</p>
+                <mat-radio-group formControlName="cardNotAccepted" layout="row">
+
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Amex" #stoppedbyimmigration>Amex
+                  </mat-radio-button>
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Visa">Visa
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Master"> Master
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="N/A"> N/A
+                  </mat-radio-button>
+
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('cardNotAccepted')">{{getErrorMessage()}}
+                </mat-error>
+
+              </div>
+              <div class="row mt-2">
+                <p class="col-6 col-4 required">Request Physical Card</p>
+                <mat-radio-group formControlName="physicalCard" layout="row">
+
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Yes">Yes
+                  </mat-radio-button>
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="No">No
+                  </mat-radio-button>
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="N/A">N/A
+                  </mat-radio-button>
+
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('physicalCard')">{{getErrorMessage()}}
+                </mat-error>
+
+              </div>
+              <div class="row mt-2">
+                <p class="col-6 col-4 required">Has the client paid?</p>
+                <mat-radio-group formControlName="hasTheClientPaid" layout="row">
+
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Yes" >Yes
+                  </mat-radio-button>
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="No" #hasTheClientPaid>No
+                  </mat-radio-button>
+
+                </mat-radio-group>
+                <mat-error *ngIf="errorHandling('hasTheClientPaid')">{{getErrorMessage()}}
+                </mat-error>
+
+              </div>
+              <div [hidden]="!hasTheClientPaid.checked">
+              <div class="row mt-2"  >
+                <p class="col-6 col-4 required"> Is this a Corporate Client?</p>
+                <mat-radio-group formControlName="isThisCorporateClient" layout="row">
+
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="Yes" #isThisCorporateClient>Yes
+                  </mat-radio-button>
+
+                  <mat-radio-button color="primary" class="example-margin ml-4" value="No">No
+                  </mat-radio-button>
+
+                </mat-radio-group>
+
+
+              </div>
+              <div class="col-lg-3 col-md-6 mt-2" [hidden]="!isThisCorporateClient.checked">
+                <p class="mb-0 py-0 required "> Corporate client?</p>
+                <p-dropdown placeholder="Select" [filter]="true" appendTo="body" class="w-100 my-1 mb-2" 
+                [options]="multiselectclientList" formControlName="corporateClient" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+              </p-dropdown>
+            
+              </div>
+            </div>
+              <p class="col-lg-3 col-md-4  fw-bolder my-2">Vendor Information:</p>
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Payable To (Vendors's Name)</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="payableTo">
+                  </mat-form-field> -->
+                  <input type="text"   formControlName="payableTo"  placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Vendor's Mailing Address</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="vendorMailingAddress">
+                  </mat-form-field> -->
+                  <input type="text"   formControlName="vendorMailingAddress" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Phone No</p>
+                   <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput [textMask]="{mask: mask}" placeholder="Enter" formControlName="vendorPhone">
+                  </mat-form-field> 
+                  <!-- <p-inputMask formControlName="vendorPhone" mask="999-999-9999" class="input_field3 100" placeholder="Enter"></p-inputMask> -->
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Fax</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="vendorFax">
+                  </mat-form-field> -->
+                  <input type="number"  formControlName="vendorFax" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Description</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="expenseDescription">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="expenseDescription" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+
+                <div class="col-12 mt-2">
+                  <p class="mb-0 py-0 ">Notes or Email</p>
+                  <!-- <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+                    <textarea matInput rows="7" placeholder="Enter" formControlName="vendorNotes"></textarea>
+                  </mat-form-field> -->
+                  <textarea [rows]="5"  pInputTextarea class="input_field3 w-100"></textarea>
+                </div>
+              </div>
+
+              <p class="col-lg-3 col-md-4  fw-bolder my-2">Client Information:</p>
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Client Name</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="clientName">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="clientName" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0  ">Case or Matter</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="matterNumber">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="matterNumber" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0  ">Description</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="matterDescription">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="matterDescription" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Billable To Client</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="billableToClient">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="billableToClient" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <p class="mb-0 py-0 ">Your Name</p>
+                  <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                    <input matInput placeholder="Enter" formControlName="userName">
+                  </mat-form-field> -->
+                  <input type="text"  formControlName="userName" placeholder="Enter" class="input_field3 w-100" pInputText />
+                </div>
+                <div class="col-lg-3 col-md-6 mt-2">
+                  <div class="d-flex flex-column   ">
+                    <label for="inputState" class="mb-0 text-dark ">QB Department</label>
+
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <mat-select formControlName="qbDepartment" placeholder="Select">
+                        <mat-option value="Corporate">Corporate</mat-option>
+                        <mat-option value="Labor & Employment">Labor & Employment </mat-option>
+                        <mat-option value="Immigration"> Immigration</mat-option>
+
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+              <div class="div" *ngIf="this.js.pageflow == 'Approve'">
+                <p class="col-lg-3 col-md-4  fw-bolder my-2">Business Use Only:</p>
+                <div class="row">
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0 ">Name On Card/Check</p>
+                    <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="nameOnCardOrCheck">
+                    </mat-form-field> -->
+                    <input type="text"  formControlName="nameOnCardOrCheck" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  </div>
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Type of Card</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <mat-select formControlName="typeOfCreditCard" placeholder="Select">
+                        <mat-option value="Amex - 83001">Amex - 83001</mat-option>
+                        <mat-option value="Amex - DNR">Amex - DNR</mat-option>
+                        <mat-option value="Chase - Visa"> Chase - Visa</mat-option>
+                        <mat-option value="Bank of America - Amex"> Bank of America - Amex</mat-option>
+                        <mat-option value="Bano Popular - Visa"> Bano Popular - Visa</mat-option>
+                        <mat-option value="Debit Card"> Debit Card</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0  ">Credit Card</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput [textMask]="{mask: mask1}" placeholder="Enter" formControlName="creditCard">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0 ">Security Code</p>
+                    <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+                      <input matInput placeholder="Enter" formControlName="securityCode">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 mt-2">
+                    <p class="mb-0 py-0">Expiration Date</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="Choose Date" [matDatepicker]="picker12"
+                        formControlName="expirationDate">
+                      <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                      <mat-datepicker #picker12></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="errorHandling('expirationDate')">{{getErrorMessage()}}</mat-error>
+                  </div>
+
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </form>
+
+        <div class="d-flex justify-content-center align-items-center py-2 bg-white  fixed-bottom w-100">
+          <button mat-raised-button class="text-white mx-1 px-3" color="warn" (click)="back()">
+            <mat-icon class="">close</mat-icon>Cancel
+          </button>
+          <button mat-raised-button (click)="submit()" class="mx-2 bg-blue text-white"> <i
+              class="bi bi-check2 me-1 font-size-1_5rem"></i>
+            Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

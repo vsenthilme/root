@@ -3,12 +3,15 @@ package com.tekclover.wms.api.transaction.service;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.staging.*;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.SearchStagingHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
+import com.tekclover.wms.api.transaction.repository.ErrorLogRepository;
 import com.tekclover.wms.api.transaction.repository.StagingHeaderRepository;
 import com.tekclover.wms.api.transaction.repository.StagingHeaderV2Repository;
 import com.tekclover.wms.api.transaction.repository.StagingLineRepository;
@@ -65,6 +68,12 @@ public class StagingHeaderService extends BaseService {
     private StagingLineV2Repository stagingLineV2Repository;
 
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
     //---------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -399,7 +408,7 @@ public class StagingHeaderService extends BaseService {
      * @return
      */
     public StagingHeaderV2 getStagingHeaderV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                              String preInboundNo, String refDocNumber, String stagingNo) {
+                                              String preInboundNo, String refDocNumber, String stagingNo) throws IOException, CsvException {
         log.info("Staging Header value : " + languageId + "," + companyCode
                 + "," + plantId + "," + warehouseId + "," + refDocNumber + "," + preInboundNo + "," + stagingNo);
 
@@ -415,6 +424,9 @@ public class StagingHeaderService extends BaseService {
                         0L);
         log.info("stagingHeader : " + stagingHeader);
         if (stagingHeader.isEmpty()) {
+            // Error Log
+            createStagingHeaderLog(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber, stagingNo,
+                    "StagingHeader with given values and stagingNo - " + stagingNo + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -431,7 +443,7 @@ public class StagingHeaderService extends BaseService {
      * @return
      */
     public List<StagingHeaderV2> getStagingHeaderV2(String companyCode, String plantId, String languageId,
-                                                    String warehouseId, String preInboundNo, String refDocNumber) {
+                                                    String warehouseId, String preInboundNo, String refDocNumber) throws IOException, CsvException {
         List<StagingHeaderV2> stagingHeader =
                 stagingHeaderV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
                         languageId,
@@ -443,6 +455,9 @@ public class StagingHeaderService extends BaseService {
                         0L);
         log.info("stagingHeader : " + stagingHeader);
         if (stagingHeader.isEmpty()) {
+            // Error Log
+            createStagingHeaderLog1(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber,
+                    "StagingHeader with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -540,8 +555,6 @@ public class StagingHeaderService extends BaseService {
         dbStagingHeader.setDeletionIndicator(0L);
         dbStagingHeader.setCreatedBy(loginUserID);
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setCreatedOn(new Date());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
@@ -560,11 +573,10 @@ public class StagingHeaderService extends BaseService {
     public StagingHeaderV2 updateStagingHeaderV2(String companyCode, String plantId, String languageId,
                                                  String warehouseId, String preInboundNo, String refDocNumber, String stagingNo,
                                                  String loginUserID, StagingHeaderV2 updateStagingHeader)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         StagingHeaderV2 dbStagingHeader = getStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo);
         BeanUtils.copyProperties(updateStagingHeader, dbStagingHeader, CommonUtils.getNullPropertyNames(updateStagingHeader));
         dbStagingHeader.setUpdatedBy(loginUserID);
-//        dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingHeader.setUpdatedOn(new Date());
         return stagingHeaderV2Repository.save(dbStagingHeader);
     }
@@ -583,14 +595,13 @@ public class StagingHeaderService extends BaseService {
      */
     public void updateStagingHeaderV2(String companyCode, String plantId, String languageId,
                                       String warehouseId, String preInboundNo, String refDocNumber, Long lineNo,
-                                      String itemCode, Long statusId, String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+                                      String itemCode, Long statusId, String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         List<StagingHeaderV2> dbStagingHeaderList = getStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
         for (StagingHeaderV2 dbStagingHeader : dbStagingHeaderList) {
             dbStagingHeader.setStatusId(statusId);
             statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
             dbStagingHeader.setStatusDescription(statusDescription);
             dbStagingHeader.setUpdatedBy(loginUserID);
-//            dbStagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingHeader.setUpdatedOn(new Date());
             dbStagingHeader = stagingHeaderV2Repository.save(dbStagingHeader);
             log.info("dbStagingHeader : " + dbStagingHeader);
@@ -603,7 +614,6 @@ public class StagingHeaderService extends BaseService {
             stagingLineEntity.setStatusId(statusId);
             stagingLineEntity.setStatusDescription(statusDescription);
             stagingLineEntity.setUpdatedBy(loginUserID);
-//            stagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingLineEntity.setUpdatedOn(new Date());
             stagingLineEntity = stagingLineV2Repository.save(stagingLineEntity);
             log.info("stagingLineEntity : " + stagingLineEntity);
@@ -628,15 +638,17 @@ public class StagingHeaderService extends BaseService {
      */
     public void deleteStagingHeaderV2(String companyCode, String plantId, String languageId,
                                       String warehouseId, String preInboundNo, String refDocNumber,
-                                      String stagingNo, String loginUserID) throws ParseException {
+                                      String stagingNo, String loginUserID) throws ParseException, IOException, CsvException {
         StagingHeaderV2 stagingHeader = getStagingHeaderV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo);
         if (stagingHeader != null) {
             stagingHeader.setDeletionIndicator(1L);
             stagingHeader.setUpdatedBy(loginUserID);
-//            stagingHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             stagingHeader.setUpdatedOn(new Date());
             stagingHeaderV2Repository.save(stagingHeader);
         } else {
+            // Error Log
+            createStagingHeaderLog(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber, stagingNo,
+                    "Error in deleting StagingHeader with stagingNo - " + stagingNo);
             throw new EntityNotFoundException("Error in deleting Id: warehouseId: " + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -669,4 +681,49 @@ public class StagingHeaderService extends BaseService {
         }
         return stagingHeader;
     }
+
+    //========================================StagingHeader_ErrorLog===================================================
+    private void createStagingHeaderLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                        String preInboundNo, String refDocNumber, String stagingNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(stagingNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(stagingNo);
+        errorLog.setReferenceField2(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createStagingHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                         String preInboundNo, String refDocNumber, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
 }

@@ -80,6 +80,30 @@
           </div>
           <div class="col-lg-6 col-md-6 mt-2">
             <div class="d-flex flex-column">
+              <p class="mb-0 py-0">How Did You Hear About Us?</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <mat-select class="form-group input_field mb-0" placeholder="Select" formControlName="howDidYouHearAboutUs">
+                  <mat-option value ="Facebook">Facebook </mat-option>
+                  <mat-option value ="Google/Search Engine">Google/Search Engine </mat-option>
+                  <mat-option value ="Church Event">Church Event</mat-option>
+                  <mat-option value ="Radio">Radio</mat-option>
+                  <mat-option value ="Building Sign">Building Sign</mat-option>
+                  <mat-option value ="Friend or Family">Friend or Family</mat-option>
+                  <mat-option value ="other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2" *ngIf="(this.form.controls.howDidYouHearAboutUs.value == 'other')">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0  ">Other</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="others" >
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-2">
+            <div class="d-flex flex-column">
               <p class="mb-0 py-0  ">Inquiry Date</p>
               <mat-form-field class="form-group input_field mb-0" appearance="outline">
                 <input matInput formControlName="inquiryDate" readOnly>
@@ -175,6 +199,28 @@
           </div>
 
 
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel #panel1 hideToggle>
+        <mat-expansion-panel-header class="border-bottom padding-space border-top">
+          <mat-panel-title class="d-flex justify-content-between collapsefont">
+            Upload
+            <mat-icon class="text-primary">{{panel1.expanded? 'remove' : 'add'}}</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row  mt-2 p-1 px-3">
+          <div class="col-lg-6 col-md-6 mt-2">
+            <input mat-raised-button class="form-control" ngf type="file" accept="*" [(files)]="files"  (change)="this.onFilechange($event)"
+            (click)="files =[]" />
+            <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+          </div>
+          <div class="col-lg-6 col-md-6" *ngIf="this.form.controls.referenceField1.value">
+            <div class="d-flex flex-column">
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput formControlName="referenceField1" readOnly>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
       </mat-expansion-panel>
       <mat-expansion-panel #panel1 hideToggle>

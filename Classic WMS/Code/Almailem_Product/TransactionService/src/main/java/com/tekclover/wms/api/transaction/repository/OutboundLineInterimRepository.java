@@ -38,4 +38,7 @@ public interface OutboundLineInterimRepository extends JpaRepository<OutboundLin
     List<OutboundLineInterim> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreOutboundNoAndRefDocNumberAndPartnerCodeAndLineNumberAndItemCodeAndManufacturerNameAndDeletionIndicator(
             String companyCodeId, String plantId, String languageId, String warehouseId, String preOutboundNo,
             String refDocNumber, String partnerCode, Long lineNumber, String itemCode, String manufacturerName, Long deletionIndicator);
+
+    List<OutboundLineInterim> findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+            String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
 }

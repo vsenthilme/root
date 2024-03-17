@@ -127,7 +127,7 @@ public class SparkPickupLineService {
                 + "FROM tblpickuplinev2 WHERE IS_DELETED = 0 ");
 
         // Cache the DataFrame
-        pickupLineSqlQuery.cache();
+//        pickupLineSqlQuery.cache();
 
 
         if (searchPickupLine.getLanguageId() != null && !searchPickupLine.getLanguageId().isEmpty()) {
@@ -169,6 +169,9 @@ public class SparkPickupLineService {
         }
         if (searchPickupLine.getAssignedPickerId() != null && !searchPickupLine.getAssignedPickerId().isEmpty()) {
             pickupLineSqlQuery = pickupLineSqlQuery.filter(col("ASS_PICKER_ID").isin(searchPickupLine.getAssignedPickerId().toArray()));
+        }
+        if (searchPickupLine.getLevelId() != null && !searchPickupLine.getLevelId().isEmpty()) {
+            pickupLineSqlQuery = pickupLineSqlQuery.filter(col("LEVEL_ID").isin(searchPickupLine.getLevelId().toArray()));
         }
         if (searchPickupLine.getStatusId() != null && !searchPickupLine.getStatusId().isEmpty()) {
             List<String> statusIdString = searchPickupLine.getStatusId().stream().map(String::valueOf).collect(Collectors.toList());

@@ -1,0 +1,184 @@
+<div class="row mx-1 pl-2">
+  <div class="col-12">
+    <div class="row  text-secondary pr-0 mt-1">
+      <div class="col bg-white d-flex align-items-center mt-1 px-1 py-1 pathname">
+
+
+        <nav aria-label="breadcrumb" class="d-flex align-items-center">
+          <ol class="breadcrumb mb-0 bg-white">
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem "><a routerLink="/main/dashboard">Home</a></li>
+            <li class="breadcrumb-item" class=" whs-fontsize-1-2rem  my-auto"><a
+                routerLink="/main/reports/report-list">Reports</a></li>
+            <li class="breadcrumb-item whs-fontsize-1-2rem ">List</li>
+          </ol>
+        </nav>
+
+
+        <div class="d-flex ml-auto">
+          <div [hidden]="isShowDiv"> <input matInput class="form-control filter_button mt-2 mt-2 mx-3 border-bottom"
+              placeholder="Search" style="width:90%">
+          </div>
+          <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'"
+            class="button-row d-flex align-items-center">
+            <!--
+                            <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons  d-flex align-items-center justify-content-center bg-pink text-white mx-3"
+                            matTooltip="Add">
+                            <mat-icon class="action-icon d-flex align-items-center justify-content-center">add_circle_outline</mat-icon>
+                          </button>
+                          -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center text-white   yellowaction"
+              matTooltip="Display">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">search</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  blueaction "
+              matTooltip="Edit">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">edit</mat-icon>
+            </button>
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class=" floating-buttons  d-flex align-items-center justify-content-center redaction text-white  align-middle"
+              matTooltip="Delete">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">delete</mat-icon>
+            </button>
+            <!-- 
+                            <button  mat-mini-fab *ngIf="showFloatingButtons == true"
+                          class="floating-buttons  d-flex align-items-center justify-content-center text-white  bg-success  " matTooltip="search">
+                          <mat-icon class="action-icon d-flex align-items-center justify-content-center">search_outline</mat-icon>
+                        </button>
+                          -->
+            <button mat-mini-fab *ngIf="showFloatingButtons == true"
+              class="floating-buttons  d-flex align-items-center justify-content-center text-white  darkblueaction "
+              matTooltip="Download">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">download</mat-icon>
+            </button>
+
+
+            <button mat-mini-fab (click)="toggleFloat()" class="mx-3 text-white action-button"
+              [ngClass]="{'bg-orange' : toggle, 'purple': !toggle}">
+              <mat-icon>{{icon}}</mat-icon>Options
+            </button>
+            <button mat-mini-fab
+              class=" floating-buttons1  d-flex align-items-center justify-content-center darkaction text-white mx-3 mr-3 align-middle"
+              matTooltip="New">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">add</mat-icon>
+            </button>
+            <button mat-mini-fab
+              class=" floating-buttons1  d-flex align-items-center justify-content-center greyaction text-white mx-3 mr-3 align-middle"
+              matTooltip="Save">
+              <mat-icon class="action-icon d-flex align-items-center justify-content-center">save</mat-icon>
+            </button>
+            <button mat-mini-fab class="text-white mx-3 action-button  bg-red" type="button" mat-button>
+              <mat-icon class="">tune</mat-icon> Filter
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file"
+      accept=".xlsx">
+    <!-- <button type="button" class="btn btn-info" (click)="Upload()" >Upload</button>  -->
+    <button mat-raised-button class="mx-2 bg-darkblue text-white" (click)="Upload()"> <i
+        class="bi bi-check2 mr-1 font-size-1_5rem"></i>
+      Upload</button>
+  </div>
+
+  <div class="row mt-2 px-2">
+    <div class="px-0 pl-1 pb-1 w-100  scrollfull  ">
+      <div class="">
+        <table mat-table [dataSource]="dataSource" matSort matSortActive="refDocNumber" matSortDirection="desc"
+          class=" w-100">
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="headerselect">
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()" disabled
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()" (change)="clearselection(row)"
+                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> S No </th>
+            <td mat-cell *matCellDef="let element;let i = index;">{{i+1}}</td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="itemCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Code</th>
+            <td mat-cell *matCellDef="let element"> {{element.itemCode}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="mfrPartNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mfr Part No</th>
+            <td mat-cell *matCellDef="let element"> {{element.mfrPartNo}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="storageBin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Storage Bin</th>
+            <td mat-cell *matCellDef="let element"> {{element.storageBin}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="storageSection">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Storage Section</th>
+            <td mat-cell *matCellDef="let element"> {{element.storageSection}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="palletID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Pallet ID</th>
+            <td mat-cell *matCellDef="let element"> {{element.palletID}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="invQty">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Inv Qty</th>
+            <td mat-cell *matCellDef="let element"> {{element.invQty}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="accocQty">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Alloc Qty</th>
+            <td mat-cell *matCellDef="let element"> {{element.accocQty}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+            <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="stockType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock Type</th>
+            <td mat-cell *matCellDef="let element">{{element.stockType}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="clearselection(row)">
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="buttons  pb-1 w-100 d-flex justify-content-end ">
+      <div class="p-0 mx-1">
+        <mat-paginator class="" showFirstLastButtons [pageSize]="100" [pageSizeOptions]="[100, 150, 200, 250]"
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+      <!-- <p style="text-align: right;font-weight: bold;" class="text-secondary mt-4 mr-2 pb-0" *ngIf="table">Number of Records :
+              {{totalRecords}}
+            </p>  -->
+    </div>
+
+  </div>
+</div>

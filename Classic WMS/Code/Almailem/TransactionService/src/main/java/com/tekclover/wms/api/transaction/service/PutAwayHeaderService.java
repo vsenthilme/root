@@ -18,6 +18,7 @@ import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHead
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.*;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.SearchPutAwayHeaderV2;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.*;
@@ -316,7 +318,7 @@ public class PutAwayHeaderService extends BaseService {
      */
     public List<PutAwayHeader> findPutAwayHeader(SearchPutAwayHeader searchPutAwayHeader)
             throws Exception {
-        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getStartCreatedOn() != null) {
+        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPutAwayHeader.getStartCreatedOn(),
                     searchPutAwayHeader.getEndCreatedOn());
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
@@ -336,7 +338,7 @@ public class PutAwayHeaderService extends BaseService {
     //Stream
     public Stream<PutAwayHeader> findPutAwayHeaderNew(SearchPutAwayHeader searchPutAwayHeader)
             throws Exception {
-        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getStartCreatedOn() != null) {
+        if (searchPutAwayHeader.getStartCreatedOn() != null && searchPutAwayHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPutAwayHeader.getStartCreatedOn(),
                     searchPutAwayHeader.getEndCreatedOn());
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
@@ -549,8 +551,10 @@ public class PutAwayHeaderService extends BaseService {
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
-        for (GrLine grLine : grLineList) {
-            createInventoryMovement(grLine, caseCode, palletCode, storageBin);
+        if(grLineList != null && !grLineList.isEmpty()) {
+            for (GrLine grLine : grLineList) {
+                createInventoryMovement(grLine, caseCode, palletCode, storageBin);
+            }
         }
 
         return putAwayHeaderList;
@@ -800,6 +804,80 @@ public class PutAwayHeaderService extends BaseService {
     }
 
     /**
+     *
+     * @param warehouseId
+     * @param preInboundNo
+     * @param refDocNumber
+     * @param putAwayNumber
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @return
+     */
+    public PutAwayHeaderV2 getPutAwayHeaderV2ForPutAwayLine(String warehouseId, String preInboundNo, String refDocNumber, String putAwayNumber,
+                                                            String companyCodeId, String plantId, String languageId) {
+        PutAwayHeaderV2 putAwayHeader =
+                putAwayHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
+                        companyCodeId,
+                        plantId,
+                        languageId,
+                        warehouseId,
+                        preInboundNo,
+                        refDocNumber,
+                        putAwayNumber,
+                        0L
+                );
+        if (putAwayHeader == null) {
+            throw new BadRequestException("The given values: warehouseId:" + warehouseId +
+                    ",refDocNumber: " + refDocNumber +
+                    ",preInboundNo: " + preInboundNo +
+                    ",putAwayNumber: " + putAwayNumber +
+                    " doesn't exist.");
+        }
+        return putAwayHeader;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preInboundNo
+     * @param refDocNumber
+     * @param lineNumber
+     * @param itemCode
+     * @param manufacturerName
+     * @return
+     */
+    public PutAwayHeaderV2 getPutAwayHeaderV2ForPutAwayLine(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                            String preInboundNo, String refDocNumber, String lineNumber,
+                                                            String itemCode, String manufacturerName) {
+        PutAwayHeaderV2 putAwayHeader =
+                putAwayHeaderV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndReferenceField5AndManufacturerNameAndReferenceField9AndDeletionIndicatorOrderByCreatedBy(
+                        companyCodeId,
+                        plantId,
+                        languageId,
+                        warehouseId,
+                        preInboundNo,
+                        refDocNumber,
+                        itemCode,
+                        manufacturerName,
+                        lineNumber,
+                        0L
+                );
+        if (putAwayHeader == null) {
+            throw new BadRequestException("The given values: warehouseId:" + warehouseId +
+                    ",refDocNumber: " + refDocNumber +
+                    ",preInboundNo: " + preInboundNo +
+                    ",itemCode: " + itemCode +
+                    ",manufacturerName: " + manufacturerName +
+                    " doesn't exist.");
+        }
+        return putAwayHeader;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -879,6 +957,40 @@ public class PutAwayHeaderService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param putawayNumber
+     * @return
+     */
+    public List<PutAwayHeaderV2> getPutAwayHeaderForReversalV2(String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, String putawayNumber) {
+        List<PutAwayHeaderV2> putAwayHeader =
+                putAwayHeaderV2Repository.findByLanguageIdAndCompanyCodeIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        putawayNumber,
+                        0L
+                );
+        if (putAwayHeader.isEmpty()) {
+            throw new BadRequestException("The given values: " +
+                    "companyCode: " + companyCode + "," +
+                    "plantId: " + plantId + "," +
+                    "languageId: " + languageId + "," +
+                    "warehouseId: " + warehouseId + "," +
+                    "refDocNumber: " + refDocNumber + "," +
+                    "putawayNumber: " + putawayNumber + "," +
+                    " doesn't exist.");
+        }
+        return putAwayHeader;
+    }
+
+    /**
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -918,10 +1030,10 @@ public class PutAwayHeaderService extends BaseService {
             searchPutAwayHeader.setStartCreatedOn(dates[0]);
             searchPutAwayHeader.setEndCreatedOn(dates[1]);
         }
-
+        log.info("searchPutAwayHeader V2: " + searchPutAwayHeader);
         PutAwayHeaderV2Specification spec = new PutAwayHeaderV2Specification(searchPutAwayHeader);
         List<PutAwayHeaderV2> results = putAwayHeaderV2Repository.findAll(spec);
-//        log.info("putAwayHeader results:" + results);
+        log.info("putAwayHeader results:" + results.size());
         return results;
     }
 
@@ -1011,8 +1123,6 @@ public class PutAwayHeaderService extends BaseService {
         dbPutAwayHeader.setDeletionIndicator(0L);
         dbPutAwayHeader.setCreatedBy(loginUserID);
         dbPutAwayHeader.setUpdatedBy(loginUserID);
-//        dbPutAwayHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayHeader.setCreatedOn(new Date());
         dbPutAwayHeader.setUpdatedOn(new Date());
         return putAwayHeaderV2Repository.save(dbPutAwayHeader);
@@ -1047,7 +1157,6 @@ public class PutAwayHeaderService extends BaseService {
                 palletCode, caseCode, packBarcodes, putAwayNumber, proposedStorageBin);
         BeanUtils.copyProperties(updatePutAwayHeader, dbPutAwayHeader, CommonUtils.getNullPropertyNames(updatePutAwayHeader));
         dbPutAwayHeader.setUpdatedBy(loginUserID);
-//        dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayHeader.setUpdatedOn(new Date());
         return putAwayHeaderV2Repository.save(dbPutAwayHeader);
     }
@@ -1064,7 +1173,6 @@ public class PutAwayHeaderService extends BaseService {
             if (dbPutAwayHeader != null) {
                 BeanUtils.copyProperties(putAwayHeaderV2, dbPutAwayHeader, CommonUtils.getNullPropertyNames(putAwayHeaderV2));
                 dbPutAwayHeader.setUpdatedBy(loginUserID);
-//                dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 dbPutAwayHeader.setUpdatedOn(new Date());
                 PutAwayHeaderV2 savePutAway = putAwayHeaderV2Repository.save(dbPutAwayHeader);
                 putAwayHeaderV2List.add(savePutAway);
@@ -1100,12 +1208,37 @@ public class PutAwayHeaderService extends BaseService {
                 dbPutAwayHeader.setStatusDescription(statusDescription);
             }
             dbPutAwayHeader.setUpdatedBy(loginUserID);
-//            dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbPutAwayHeader.setUpdatedOn(new Date());
             updatedPutAwayHeaderList.add(putAwayHeaderV2Repository.save(dbPutAwayHeader));
         }
         return updatedPutAwayHeaderList;
     }
+
+    /**
+     *
+     * @param inboundReversalInputList
+     * @param loginUserID
+     * @return
+     * @throws ParseException
+     */
+    public List<PutAwayHeaderV2> batchPutAwayReversal(List<InboundReversalInput> inboundReversalInputList, String loginUserID) throws ParseException {
+        log.info("PutAway Reversal Input: " + inboundReversalInputList);
+        if(inboundReversalInputList != null && !inboundReversalInputList.isEmpty()) {
+            for (InboundReversalInput inboundReversalInput : inboundReversalInputList){
+                updatePutAwayHeaderReversalBatch(
+                        inboundReversalInput.getCompanyCodeId(),
+                        inboundReversalInput.getPlantId(),
+                        inboundReversalInput.getLanguageId(),
+                        inboundReversalInput.getWarehouseId(),
+                        inboundReversalInput.getRefDocNumber(),
+                        inboundReversalInput.getPackBarcodes(),
+                        inboundReversalInput.getPutAwayNumber(),
+                        loginUserID);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * @param companyCode
@@ -1119,9 +1252,412 @@ public class PutAwayHeaderService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
+    public List<PutAwayHeaderV2> updatePutAwayHeaderReversalBatch(String companyCode, String plantId, String languageId, String warehouseId,
+                                                                  String refDocNumber, String packBarcodes, String putAwayNumber, String loginUserID) throws ParseException {
+
+        String caseCode = null;
+        String palletCode = null;
+        String storageBin = null;
+        String preInboundNo = null;
+
+        boolean capacityCheck = false;
+        boolean storageBinCapacityCheck = false;
+
+        Double invQty = 0D;
+        Double itemLength = 0D;
+        Double itemWidth = 0D;
+        Double itemHeight = 0D;
+        Double itemVolume = 0D;
+        Double remainingVolume = 0D;
+        Double occupiedVolume = 0D;
+        Double totalVolume = 0D;
+        Double reversalVolume = 0D;
+        /*
+         * Pass WH_ID/REF_DOC_NO/PACK_BARCODE values in PUTAWAYHEADER table and fetch STATUS_ID value and PA_NO
+         * 1. If STATUS_ID=20, then
+         */
+        List<PutAwayHeaderV2> putAwayHeaderList = getPutAwayHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber, putAwayNumber);
+        List<GrLineV2> grLineList = grLineService.getGrLineV2ForReversal(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
+//        List<IInventoryImpl> createInventoryMovement = null;
+
+        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+
+        // Fetching Item Code
+        String itemCode = null;
+        String manufactureName = null;
+        if (grLineList != null && !grLineList.isEmpty()) {
+            itemCode = grLineList.get(0).getItemCode();
+            manufactureName = grLineList.get(0).getManufacturerName();
+        }
+
+        for (PutAwayHeaderV2 dbPutAwayHeader : putAwayHeaderList) {
+            warehouseId = dbPutAwayHeader.getWarehouseId();
+            palletCode = dbPutAwayHeader.getPalletCode();
+            caseCode = dbPutAwayHeader.getCaseCode();
+            storageBin = dbPutAwayHeader.getProposedStorageBin();
+            preInboundNo = dbPutAwayHeader.getPreInboundNo();
+
+            log.info("dbPutAwayHeader---------> : " + dbPutAwayHeader.getWarehouseId() + "," + refDocNumber + "," + dbPutAwayHeader.getPutAwayNumber());
+            if (dbPutAwayHeader.getStatusId() == 20L) {
+                /*
+                 * Checking whether Line Items have updated with STATUS_ID = 22.
+                 */
+                long STATUS_ID_22_COUNT = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId,
+                        dbPutAwayHeader.getPutAwayNumber(), refDocNumber, 22L);
+                log.info("putAwayLine---STATUS_ID_22_COUNT---> : " + STATUS_ID_22_COUNT);
+                if (STATUS_ID_22_COUNT > 0) {
+                    throw new BadRequestException("Pallet_ID : " + dbPutAwayHeader.getPalletCode() + " is already reversed.");
+                }
+
+                /*
+                 * Pass WH_ID/REF_DOC_NO/PA_NO values in PUTAWAYLINE table and fetch PA_CNF_QTY values and QTY_TYPE values and
+                 * update Status ID as 22, PA_UTD_BY = USR_ID and PA_UTD_ON=Server time
+                 */
+                List<PutAwayLineV2> putAwayLineList =
+                        putAwayLineService.getPutAwayLineV2ForReversal(dbPutAwayHeader.getCompanyCodeId(),
+                                dbPutAwayHeader.getPlantId(),
+                                dbPutAwayHeader.getLanguageId(),
+                                dbPutAwayHeader.getWarehouseId(),
+                                refDocNumber,
+                                dbPutAwayHeader.getPutAwayNumber());
+                log.info("putAwayLineList : " + putAwayLineList);
+                if(putAwayLineList != null && !putAwayLineList.isEmpty()) {
+                for (PutAwayLineV2 dbPutAwayLine : putAwayLineList) {
+                    log.info("dbPutAwayLine---------> : " + dbPutAwayLine);
+
+                    itemCode = dbPutAwayLine.getItemCode();
+
+                    ImBasicData imBasicData = new ImBasicData();
+                    imBasicData.setCompanyCodeId(companyCode);
+                    imBasicData.setPlantId(plantId);
+                    imBasicData.setLanguageId(languageId);
+                    imBasicData.setWarehouseId(warehouseId);
+                    imBasicData.setItemCode(itemCode);
+                    imBasicData.setManufacturerName(dbPutAwayLine.getManufacturerName());
+                    ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                    log.info("ImbasicData1 : " + itemCodeCapacityCheck);
+                    if(itemCodeCapacityCheck != null) {
+                        if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                            capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                            log.info("capacity Check: " + capacityCheck);
+                        }
+                    }
+
+                    InventoryV2 updateStorageBin =
+                            inventoryService.getInventoryForReversalV2(companyCode, plantId, languageId, warehouseId, "99999", itemCode, manufactureName);
+                    log.info("Inventory for Delete: " + updateStorageBin);
+//                    createInventoryMovement = inventoryService.getInventoryForInvMmt(companyCode, plantId, languageId, warehouseId, itemCode, manufactureName, 1L);
+
+                    /*
+                     * On Successful reversal, update INVENTORY table as below
+                     * Pass WH_ID/PACK_BARCODE/ITM_CODE values in Inventory table and delete the records
+                     */
+                    boolean isDeleted = false;
+                    if(updateStorageBin != null) {
+                        InventoryV2 deleteInventory = new InventoryV2();
+                        BeanUtils.copyProperties(updateStorageBin, deleteInventory, CommonUtils.getNullPropertyNames(updateStorageBin));
+                        deleteInventory.setInventoryId(System.currentTimeMillis());
+                        deleteInventory.setInventoryQuantity(updateStorageBin.getInventoryQuantity() - dbPutAwayHeader.getPutAwayQuantity());
+                        deleteInventory.setReferenceField4(deleteInventory.getInventoryQuantity());         //Allocated Qty is always 0 for BinClassId 3
+                        InventoryV2 createInventory = inventoryV2Repository.save(deleteInventory);
+                        log.info("Delete Inventory Inserted: " + createInventory);
+                        isDeleted = true;
+                    }
+                    log.info("deleteInventory deleted.." + isDeleted);
+
+                    if (isDeleted) {
+                            StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 1L, updateStorageBin.getStorageBin());
+                            log.info("dbStorageBin: " + dbstorageBin);
+
+                            if (dbstorageBin != null) {
+                                StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
+                                        dbPutAwayLine.getPreInboundNo(), dbPutAwayLine.getItemCode(), dbPutAwayLine.getManufacturerName(), dbPutAwayLine.getLineNo());
+
+                                if (dbStagingLineEntity != null) {
+                                    dbStagingLineEntity.setStatusId(13L);
+                                    statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
+                                    dbStagingLineEntity.setStatusDescription(statusDescription);
+                                    stagingLineV2Repository.save(dbStagingLineEntity);
+                                    log.info("invQty, rec_accept_qty, rec_damage_qty updated successfully: ");
+                                }
+
+                                storageBinCapacityCheck = dbstorageBin.isCapacityCheck();
+                                log.info("storageBinCapacityCheck: " + storageBinCapacityCheck);
+
+                                if (capacityCheck && storageBinCapacityCheck) {
+                                    if (updateStorageBin.getInventoryQuantity() != null) {
+                                        invQty = updateStorageBin.getInventoryQuantity();
+                                    }
+                                    if (itemCodeCapacityCheck.getLength() != null) {
+                                        itemLength = itemCodeCapacityCheck.getLength();
+                                    }
+                                    if (itemCodeCapacityCheck.getWidth() != null) {
+                                        itemWidth = itemCodeCapacityCheck.getWidth();
+                                    }
+                                    if (itemCodeCapacityCheck.getHeight() != null) {
+                                        itemHeight = itemCodeCapacityCheck.getHeight();
+                                    }
+
+                                    itemVolume = itemLength * itemWidth * itemHeight;
+                                    reversalVolume = itemVolume * invQty;
+
+                                    log.info("item Length, Width, Height: " + itemLength + ", " + itemWidth + "," + itemHeight);
+                                    log.info("item volume, invQty, reversalVolume: " + itemVolume + ", " + invQty + "," + reversalVolume);
+
+                                    if (dbstorageBin.getRemainingVolume() != null) {
+                                        remainingVolume = Double.valueOf(dbstorageBin.getRemainingVolume());
+                                        log.info("remainingVolume: " + dbstorageBin.getRemainingVolume());
+                                    }
+                                    if (dbstorageBin.getOccupiedVolume() != null) {
+                                        occupiedVolume = Double.valueOf(dbstorageBin.getOccupiedVolume());
+                                    }
+                                    if (dbstorageBin.getTotalVolume() != null) {
+                                        totalVolume = Double.valueOf(dbstorageBin.getTotalVolume());
+                                    }
+
+                                    log.info("remainingVolume, occupiedVolume: " + remainingVolume + ", " + occupiedVolume);
+
+                                    remainingVolume = remainingVolume + reversalVolume;
+                                    occupiedVolume = occupiedVolume - reversalVolume;
+
+                                    log.info("after reversal remainingVolume, occupiedVolume, totalVolume: " + remainingVolume + ", " + occupiedVolume + ", " + totalVolume);
+
+                                    if (remainingVolume.equals(totalVolume) && (occupiedVolume == 0D || occupiedVolume == 0 || occupiedVolume == 0.0)) {
+                                        dbstorageBin.setStatusId(0L);
+                                        log.info("status Id: 0 [Storage Bin Emptied]");
+                                    }
+                                    dbstorageBin.setRemainingVolume(String.valueOf(remainingVolume));
+                                    dbstorageBin.setOccupiedVolume(String.valueOf(occupiedVolume));
+                                    dbstorageBin.setCapacityCheck(true);
+
+                                    StorageBinV2 updateStorageBinV2 = mastersService.updateStorageBinV2(dbstorageBin.getStorageBin(),
+                                            dbstorageBin,
+                                            companyCode,
+                                            plantId,
+                                            languageId,
+                                            warehouseId,
+                                            loginUserID,
+                                            authTokenForMastersService.getAccess_token());
+
+                                    if (updateStorageBinV2 != null) {
+                                        log.info("Storage Bin Volume Updated successfully ");
+                                    }
+                                }
+                            }
+                        //End - CBM StorageBin Update
+
+//                        dbPutAwayLine.setStatusId(22L);
+//                        statusDescription = stagingLineV2Repository.getStatusDescription(22L, languageId);
+//                        dbPutAwayLine.setStatusDescription(statusDescription);
+
+                        //delete code
+                        dbPutAwayLine.setDeletionIndicator(1L);
+
+                        dbPutAwayLine.setConfirmedBy(loginUserID);
+                        dbPutAwayLine.setUpdatedBy(loginUserID);
+                        dbPutAwayLine.setConfirmedOn(new Date());
+                        dbPutAwayLine.setUpdatedOn(new Date());
+                        dbPutAwayLine = putAwayLineV2Repository.save(dbPutAwayLine);
+                        log.info("dbPutAwayLine updated: " + dbPutAwayLine);
+                    }
+
+                    /*
+                     * Pass WH_ID/REF_DOC_NO/IB_LINE_NO/ ITM_CODE values in Inboundline table and update
+                     * If QTY_TYPE = A, update ACCEPT_QTY as (ACCEPT_QTY-PA_CNF_QTY)
+                     * if QTY_TYPE= D, update DAMAGE_QTY as (DAMAGE_QTY-PA_CNF_QTY)
+                     */
+                    InboundLineV2 inboundLine = inboundLineService.getInboundLineV2(
+                            dbPutAwayHeader.getCompanyCodeId(), dbPutAwayHeader.getPlantId(),
+                            dbPutAwayHeader.getLanguageId(), dbPutAwayHeader.getWarehouseId(),
+                            refDocNumber, dbPutAwayHeader.getPreInboundNo(),
+                            dbPutAwayLine.getLineNo(), dbPutAwayLine.getItemCode());
+                    if (dbPutAwayLine.getQuantityType().equalsIgnoreCase("A")) {
+                        Double acceptedQty = inboundLine.getAcceptedQty() - dbPutAwayLine.getPutawayConfirmedQty();
+                        log.info("Accepted Qty: " + acceptedQty);
+                        inboundLine.setAcceptedQty(acceptedQty);
+                        Double VAR_QTY = 0D;
+                        if(inboundLine.getVarianceQty() != null) {
+                            VAR_QTY = inboundLine.getVarianceQty() - acceptedQty;
+                        }
+                        inboundLine.setVarianceQty(VAR_QTY);
+                    }
+
+                    if (dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
+                        Double damageQty = inboundLine.getDamageQty() - dbPutAwayLine.getPutawayConfirmedQty();
+                        log.info("Damage Qty: " + damageQty);
+                        inboundLine.setDamageQty(damageQty);
+                        Double VAR_QTY = 0D;
+                        if(inboundLine.getVarianceQty() != null) {
+                            VAR_QTY = inboundLine.getVarianceQty() - damageQty;
+                        }
+                        inboundLine.setVarianceQty(VAR_QTY);
+                    }
+
+                    if (isDeleted) {
+                        // Updating InboundLine only if Inventory got deleted
+                        InboundLineV2 updatedInboundLine = inboundLineV2Repository.save(inboundLine);
+                        log.info("updatedInboundLine : " + updatedInboundLine);
+                    }
+                }
+            }
+            }
+
+            /*
+             * 3. For STATUS_ID=19 and 20 , below tables to be updated
+             * Pass the selected REF_DOC_NO/PACK_BARCODE values  and PUTAWAYHEADER tables and update Status ID as 22 and
+             * PA_UTD_BY = USR_ID and PA_UTD_ON=Server time and fetch CASE_CODE
+             */
+            if (dbPutAwayHeader.getStatusId() == 19L) {
+
+//                List<InventoryV2> updateStorageBinList = inventoryService.getInventoryForDeleteV2(companyCode, plantId, languageId, warehouseId, packBarcodes, itemCode, manufactureName);
+                InventoryV2 updateStorageBin = inventoryService.getInventoryForReversalV2(companyCode, plantId, languageId, warehouseId, "99999", itemCode, manufactureName);
+                log.info("Inventory for Delete: " + updateStorageBin);
+//                createInventoryMovement = inventoryService.getInventoryForInvMmt(companyCode, plantId, languageId, warehouseId, itemCode, manufactureName, 1L);
+
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(companyCode);
+                imBasicData.setPlantId(plantId);
+                imBasicData.setLanguageId(languageId);
+                imBasicData.setWarehouseId(warehouseId);
+                imBasicData.setItemCode(itemCode);
+                imBasicData.setManufacturerName(manufactureName);
+                ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImbasicData1 : " + itemCodeCapacityCheck);
+                if(itemCodeCapacityCheck != null) {
+                    if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                        capacityCheck = itemCodeCapacityCheck.getCapacityCheck();
+                        log.info("capacity Check: " + capacityCheck);
+                    }
+                }
+
+                log.info("---#---deleteInventory: " + warehouseId + "," + packBarcodes + "," + itemCode);
+                boolean isDeleted = false;
+                if(updateStorageBin != null){
+                    InventoryV2 deleteInventory = new InventoryV2();
+                    BeanUtils.copyProperties(updateStorageBin, deleteInventory, CommonUtils.getNullPropertyNames(updateStorageBin));
+                    deleteInventory.setInventoryId(System.currentTimeMillis());
+                    deleteInventory.setInventoryQuantity(updateStorageBin.getInventoryQuantity() - dbPutAwayHeader.getPutAwayQuantity());
+                    deleteInventory.setReferenceField4(deleteInventory.getInventoryQuantity());         //Allocated Qty is always 0 for BinClassId 3
+                    InventoryV2 createInventory = inventoryV2Repository.save(deleteInventory);
+                    log.info("Delete Inventory Inserted: " + createInventory);
+                    isDeleted = true;
+                }
+
+                log.info("---#---deleteInventory deleted.." + isDeleted);
+
+                if (isDeleted) {
+                        StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 1L, updateStorageBin.getStorageBin());
+                        log.info("dbStorageBin: " + dbstorageBin);
+
+                        if (dbstorageBin == null) {
+                            dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 1L, storageBin);
+                        }
+
+                        if (dbstorageBin != null) {
+                            StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
+                                    dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(), dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode());
+
+                            if (dbStagingLineEntity != null) {
+                                dbStagingLineEntity.setStatusId(13L);
+                                statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
+                                dbStagingLineEntity.setStatusDescription(statusDescription);
+                                stagingLineV2Repository.save(dbStagingLineEntity);
+                                log.info("invQty, rec_accept_qty, rec_damage_qty updated successfully: ");
+                            }
+
+                            storageBinCapacityCheck = dbstorageBin.isCapacityCheck();
+                            log.info("storageBinCapacityCheck: " + storageBinCapacityCheck);
+
+                            if (capacityCheck && storageBinCapacityCheck) {
+                                if (updateStorageBin.getInventoryQuantity() != null) {
+                                    invQty = updateStorageBin.getInventoryQuantity();
+                                }
+                                if (itemCodeCapacityCheck.getLength() != null) {
+                                    itemLength = itemCodeCapacityCheck.getLength();
+                                }
+                                if (itemCodeCapacityCheck.getWidth() != null) {
+                                    itemWidth = itemCodeCapacityCheck.getWidth();
+                                }
+                                if (itemCodeCapacityCheck.getHeight() != null) {
+                                    itemHeight = itemCodeCapacityCheck.getHeight();
+                                }
+
+                                itemVolume = itemLength * itemWidth * itemHeight;
+                                reversalVolume = itemVolume * invQty;
+
+                                log.info("item Length, Width, Height: " + itemLength + ", " + itemWidth + "," + itemHeight);
+                                log.info("item volume, invQty, reversalVolume: " + itemVolume + ", " + invQty + "," + reversalVolume);
+
+                                if (dbstorageBin.getRemainingVolume() != null) {
+                                    remainingVolume = Double.valueOf(dbstorageBin.getRemainingVolume());
+                                    log.info("remainingVolume: " + dbstorageBin.getRemainingVolume());
+                                }
+                                if (dbstorageBin.getOccupiedVolume() != null) {
+                                    occupiedVolume = Double.valueOf(dbstorageBin.getOccupiedVolume());
+                                }
+                                if (dbstorageBin.getTotalVolume() != null) {
+                                    totalVolume = Double.valueOf(dbstorageBin.getTotalVolume());
+                                }
+
+                                log.info("remainingVolume, occupiedVolume: " + remainingVolume + ", " + occupiedVolume);
+
+                                remainingVolume = remainingVolume + reversalVolume;
+                                occupiedVolume = occupiedVolume - reversalVolume;
+
+                                log.info("after reversal remainingVolume, occupiedVolume, totalVolume: " + remainingVolume + ", " + occupiedVolume + ", " + totalVolume);
+
+                                if (remainingVolume.equals(totalVolume) && (occupiedVolume == 0D || occupiedVolume == 0 || occupiedVolume == 0.0)) {
+                                    dbstorageBin.setStatusId(0L);
+                                    log.info("status Id: 0 [Storage Bin Emptied]");
+                                }
+                                dbstorageBin.setRemainingVolume(String.valueOf(remainingVolume));
+                                dbstorageBin.setOccupiedVolume(String.valueOf(occupiedVolume));
+                                dbstorageBin.setCapacityCheck(true);
+
+                                StorageBinV2 updateStorageBinV2 = mastersService.updateStorageBinV2(dbstorageBin.getStorageBin(),
+                                        dbstorageBin,
+                                        companyCode,
+                                        plantId,
+                                        languageId,
+                                        warehouseId,
+                                        loginUserID,
+                                        authTokenForMastersService.getAccess_token());
+
+                                if (updateStorageBinV2 != null) {
+                                    log.info("Storage Bin Volume Updated successfully ");
+                                }
+                            }
+                        }
+                    //End - CBM StorageBin Update
+                }
+            }
+            //delete code
+            dbPutAwayHeader.setStatusId(22L);
+            statusDescription = stagingLineV2Repository.getStatusDescription(22L, languageId);
+            dbPutAwayHeader.setStatusDescription(statusDescription);
+            dbPutAwayHeader.setUpdatedBy(loginUserID);
+            dbPutAwayHeader.setUpdatedOn(new Date());
+            PutAwayHeaderV2 updatedPutAwayHeader = putAwayHeaderV2Repository.save(dbPutAwayHeader);
+            log.info("updatedPutAwayHeader : " + updatedPutAwayHeader);
+        }
+
+        // Insert a record into INVENTORYMOVEMENT table as below
+//        if(grLineList != null && !grLineList.isEmpty()) {
+//            for (GrLineV2 grLine : grLineList) {
+//                createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+//            }
+//        }
+
+        //update the statusId to complete reversal process
+        reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
+
+        return putAwayHeaderList;
+    }
+
+    @Transactional
     public List<PutAwayHeaderV2> updatePutAwayHeaderV2(String companyCode, String plantId, String languageId,
                                                        String warehouseId, String refDocNumber, String packBarcodes, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws ParseException {
 
         String caseCode = null;
         String palletCode = null;
@@ -1245,21 +1781,21 @@ public class PutAwayHeaderService extends BaseService {
                                         dbPutAwayLine.getPreInboundNo(), dbPutAwayLine.getItemCode(), dbPutAwayLine.getManufacturerName(), dbPutAwayLine.getLineNo());
 
                                 if (dbStagingLineEntity != null) {
-                                    Double rec_accept_qty = 0D;
-                                    Double rec_damage_qty = 0D;
-
-                                    if (updateStorageBin.getInventoryQuantity() != null) {
-                                        invQty = updateStorageBin.getInventoryQuantity();
-                                    }
-                                    if (dbStagingLineEntity.getRec_accept_qty() != null && dbPutAwayLine.getQuantityType().equalsIgnoreCase("A")) {
-                                        rec_accept_qty = dbStagingLineEntity.getRec_accept_qty() - invQty;
-                                        dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
-                                    }
-                                    if (dbStagingLineEntity.getRec_damage_qty() != null && dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
-                                        rec_damage_qty = dbStagingLineEntity.getRec_damage_qty() - invQty;
-                                        dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
-                                    }
-                                    log.info("invQty, rec_accept_qty, rec_damage_qty: " + invQty + ", " + rec_accept_qty + "," + rec_damage_qty);
+//                                    Double rec_accept_qty = 0D;
+//                                    Double rec_damage_qty = 0D;
+//
+//                                    if (updateStorageBin.getInventoryQuantity() != null) {
+//                                        invQty = updateStorageBin.getInventoryQuantity();
+//                                    }
+//                                    if (dbStagingLineEntity.getRec_accept_qty() != null && dbPutAwayLine.getQuantityType().equalsIgnoreCase("A")) {
+//                                        rec_accept_qty = dbStagingLineEntity.getRec_accept_qty() - invQty;
+//                                        dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
+//                                    }
+//                                    if (dbStagingLineEntity.getRec_damage_qty() != null && dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
+//                                        rec_damage_qty = dbStagingLineEntity.getRec_damage_qty() - invQty;
+//                                        dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
+//                                    }
+//                                    log.info("invQty, rec_accept_qty, rec_damage_qty: " + invQty + ", " + rec_accept_qty + "," + rec_damage_qty);
                                     dbStagingLineEntity.setStatusId(13L);
                                     statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
                                     dbStagingLineEntity.setStatusDescription(statusDescription);
@@ -1342,8 +1878,6 @@ public class PutAwayHeaderService extends BaseService {
 
                         dbPutAwayLine.setConfirmedBy(loginUserID);
                         dbPutAwayLine.setUpdatedBy(loginUserID);
-//                        dbPutAwayLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
-//                        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                         dbPutAwayLine.setConfirmedOn(new Date());
                         dbPutAwayLine.setUpdatedOn(new Date());
                         dbPutAwayLine = putAwayLineV2Repository.save(dbPutAwayLine);
@@ -1364,12 +1898,22 @@ public class PutAwayHeaderService extends BaseService {
                         Double acceptedQty = inboundLine.getAcceptedQty() - dbPutAwayLine.getPutawayConfirmedQty();
                         log.info("Accepted Qty: " + acceptedQty);
                         inboundLine.setAcceptedQty(acceptedQty);
+                        Double VAR_QTY = 0D;
+                        if(inboundLine.getVarianceQty() != null) {
+                            VAR_QTY = inboundLine.getVarianceQty() - acceptedQty;
+                        }
+                        inboundLine.setVarianceQty(VAR_QTY);
                     }
 
                     if (dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
                         Double damageQty = inboundLine.getDamageQty() - dbPutAwayLine.getPutawayConfirmedQty();
                         log.info("Damage Qty: " + damageQty);
                         inboundLine.setDamageQty(damageQty);
+                        Double VAR_QTY = 0D;
+                        if(inboundLine.getVarianceQty() != null) {
+                            VAR_QTY = inboundLine.getVarianceQty() - damageQty;
+                        }
+                        inboundLine.setVarianceQty(VAR_QTY);
                     }
 
                     if (isDeleted) {
@@ -1438,20 +1982,20 @@ public class PutAwayHeaderService extends BaseService {
                                     dbPutAwayHeader.getPreInboundNo(), updateStorageBin.getItemCode(), updateStorageBin.getManufacturerName(), dbPutAwayHeader.getCaseCode(), dbPutAwayHeader.getPalletCode());
 
                             if (dbStagingLineEntity != null) {
-                                Double rec_accept_qty = 0D;
-                                Double rec_damage_qty = 0D;
-                                if (updateStorageBin.getInventoryQuantity() != null) {
-                                    invQty = updateStorageBin.getInventoryQuantity();
-                                }
-                                if (dbStagingLineEntity.getRec_accept_qty() != null && dbPutAwayHeader.getQuantityType().equalsIgnoreCase("A")) {
-                                    rec_accept_qty = dbStagingLineEntity.getRec_accept_qty() - invQty;
-                                    dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
-                                }
-                                if (dbStagingLineEntity.getRec_damage_qty() != null && dbPutAwayHeader.getQuantityType().equalsIgnoreCase("D")) {
-                                    rec_damage_qty = dbStagingLineEntity.getRec_damage_qty() - invQty;
-                                    dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
-                                }
-                                log.info("invQty, rec_accept_qty, rec_damage_qty: " + invQty + ", " + rec_accept_qty + "," + rec_damage_qty);
+//                                Double rec_accept_qty = 0D;
+//                                Double rec_damage_qty = 0D;
+//                                if (updateStorageBin.getInventoryQuantity() != null) {
+//                                    invQty = updateStorageBin.getInventoryQuantity();
+//                                }
+//                                if (dbStagingLineEntity.getRec_accept_qty() != null && dbPutAwayHeader.getQuantityType().equalsIgnoreCase("A")) {
+//                                    rec_accept_qty = dbStagingLineEntity.getRec_accept_qty() - invQty;
+//                                    dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
+//                                }
+//                                if (dbStagingLineEntity.getRec_damage_qty() != null && dbPutAwayHeader.getQuantityType().equalsIgnoreCase("D")) {
+//                                    rec_damage_qty = dbStagingLineEntity.getRec_damage_qty() - invQty;
+//                                    dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
+//                                }
+//                                log.info("invQty, rec_accept_qty, rec_damage_qty: " + invQty + ", " + rec_accept_qty + "," + rec_damage_qty);
                                 dbStagingLineEntity.setStatusId(13L);
                                 statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
                                 dbStagingLineEntity.setStatusDescription(statusDescription);
@@ -1535,16 +2079,17 @@ public class PutAwayHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(22L, languageId);
             dbPutAwayHeader.setStatusDescription(statusDescription);
             dbPutAwayHeader.setUpdatedBy(loginUserID);
-//            dbPutAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbPutAwayHeader.setUpdatedOn(new Date());
             PutAwayHeaderV2 updatedPutAwayHeader = putAwayHeaderV2Repository.save(dbPutAwayHeader);
             log.info("updatedPutAwayHeader : " + updatedPutAwayHeader);
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
-        for (GrLineV2 grLine : grLineList) {
-            createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
-        }
+//        if(grLineList != null && !grLineList.isEmpty()) {
+//            for (GrLineV2 grLine : grLineList) {
+//                createInventoryMovementV2(grLine, createInventoryMovement, caseCode, palletCode, storageBin);
+//            }
+//        }
 
         //update the statusId to complete reversal process
         reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
@@ -1567,6 +2112,7 @@ public class PutAwayHeaderService extends BaseService {
                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
         // Update PREINBOUNDHEADER and PREINBOUNDLINE table with STATUS_ID = 05 and update the other fields from UI
         // PREINBOUNDLINE Update
+        if (inputGrLineList != null && !inputGrLineList.isEmpty()) {
         for (GrLineV2 grLine : inputGrLineList) {
             InboundLineV2 inboundLine = inboundLineService.getInboundLineV2(companyCode,
                     plantId, languageId, warehouseId, refDocNumber,
@@ -1586,7 +2132,6 @@ public class PutAwayHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(13L, languageId);
             preInboundLine.setStatusDescription(statusDescription);
             preInboundLine.setUpdatedBy(loginUserID);
-//            preInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             preInboundLine.setUpdatedOn(new Date());
             PreInboundLineEntityV2 updatedPreInboundLine = preInboundLineV2Repository.save(preInboundLine);
             log.info("preInboundLine status updated: " + updatedPreInboundLine);
@@ -1609,6 +2154,7 @@ public class PutAwayHeaderService extends BaseService {
             grLine.setDeletionIndicator(1L);
             grLineV2Repository.save(grLine);
             log.info("grLine deleted successfully");
+        }
         }
 
         //Gr Header
@@ -1719,6 +2265,12 @@ public class PutAwayHeaderService extends BaseService {
             double sumOfInvQty = createInventoryMovement.stream().mapToDouble(a -> a.getInventoryQuantity()).sum();
             log.info("InvMmt - SumOfInvQty: " + sumOfInvQty);
             inventoryMovement.setBalanceOHQty(sumOfInvQty);
+            Double openQty = sumOfInvQty + grLine.getGoodReceiptQty();
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));                      //Qty before inventory Movement occur
+        }
+        if(createInventoryMovement == null) {
+            inventoryMovement.setBalanceOHQty(0D);
+            inventoryMovement.setReferenceField2(String.valueOf(grLine.getGoodReceiptQty()));   //Qty before inventory Movement occur
         }
 
         // MVT_UOM
@@ -1788,22 +2340,32 @@ public class PutAwayHeaderService extends BaseService {
         putAwayHeaderV2Repository.saveAll(putAwayHeaders);
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     */
     //Delete PutAwayHeader
     public List<PutAwayHeaderV2> deletePutAwayHeaderV2(String companyCodeId, String plantId, String languageId,
                                                        String warehouseId, String refDocNumber, String loginUserID) {
 
-        List<PutAwayHeaderV2> putAwayHeaderV2s = new ArrayList<>();
-        List<PutAwayHeaderV2> putAwayHeader = putAwayHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<PutAwayHeaderV2> putAwayHeaderV2List = new ArrayList<>();
+        List<PutAwayHeaderV2> putAwayHeaderList = putAwayHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-
-        if (putAwayHeader != null) {
-            for (PutAwayHeaderV2 putAwayHeaderV2 : putAwayHeader) {
+        log.info("PutAwayHeader - Cancellation : " + putAwayHeaderList);
+        if (putAwayHeaderList != null && !putAwayHeaderList.isEmpty()) {
+            for (PutAwayHeaderV2 putAwayHeaderV2 : putAwayHeaderList) {
                 putAwayHeaderV2.setDeletionIndicator(1L);
                 putAwayHeaderV2.setUpdatedBy(loginUserID);
-                PutAwayHeaderV2 putAwayHeaderV21 = putAwayHeaderV2Repository.save(putAwayHeaderV2);
-                putAwayHeaderV2s.add(putAwayHeaderV21);
+                PutAwayHeaderV2 putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeaderV2);
+                putAwayHeaderV2List.add(putAwayHeader);
             }
         }
-        return putAwayHeaderV2s;
+        return putAwayHeaderV2List;
     }
 }

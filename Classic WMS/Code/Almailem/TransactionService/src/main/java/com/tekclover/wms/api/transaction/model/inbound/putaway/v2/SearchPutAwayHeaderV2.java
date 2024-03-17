@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.inbound.putaway.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.putaway.SearchPutAwayHeader;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class SearchPutAwayHeaderV2 extends SearchPutAwayHeader {
@@ -20,4 +22,5 @@ public class SearchPutAwayHeaderV2 extends SearchPutAwayHeader {
 	private List<String> origin;
 	private List<String> brand;
 	private List<String> approvalStatus;
+	private List<String> itemCode;				//Ref_field_5
 }

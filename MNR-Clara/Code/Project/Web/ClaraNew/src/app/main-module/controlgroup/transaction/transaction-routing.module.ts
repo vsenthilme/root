@@ -14,6 +14,7 @@ import { MergeComponent } from './store-partner-listing/merge/merge.component';
 import { AdminApprovalComponent } from './admin-approval/admin-approval.component';
 import { ApprovalDisplayComponent } from './admin-approval/approval-display/approval-display.component';
 import { FamilyTemplateComponent } from './Template/family-template/family-template.component';
+import { TrsanctionreportscreenComponent } from './trsanctionreportscreen/trsanctionreportscreen.component';
 
 
 const routes: Routes = [ {
@@ -52,6 +53,7 @@ children:[
 { path:'ownershipNew/:code', component: OwnershipNewComponent, pathMatch: 'full', data: { title: 'Client', module: 'Controlled Groups' } }, 
 { path:'brotherSisterRemplate/:code', component: BrotherSisterTemplateComponent, pathMatch: 'full', data: { title: 'Client', module: 'Controlled Groups' } },
 { path:'familytemplate/:code', component: FamilyTemplateComponent, pathMatch: 'full', data: { title: 'Client', module: 'Controlled Groups' } },
+{ path:'transactionreport', component: TrsanctionreportscreenComponent, pathMatch: 'full', data: { title: 'Client', module: 'Controlled Groups' } },
  // { path:'brotherSisterRemplate', component: BrotherSisterTemplateComponent, pathMatch: 'full', data: { title: 'Client', module: 'Brother Sister' } },
 ];
 

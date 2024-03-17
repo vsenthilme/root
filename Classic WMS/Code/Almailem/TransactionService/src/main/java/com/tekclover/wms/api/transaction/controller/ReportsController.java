@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.tekclover.wms.api.transaction.model.impl.StockReportImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.report.*;
 import com.tekclover.wms.api.transaction.service.ReportsService;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,11 +32,20 @@ public class ReportsController {
     @Autowired
     ReportsService reportsService;
 
-    @ApiOperation(response = MobileDashboard.class, value = "Get Dashboard Report") // label for swagger 
+    @ApiOperation(response = MobileDashboard.class, value = "Get Dashboard Report") // label for swagger
     @GetMapping("/dashboard/mobile")
     public ResponseEntity<?> getMobileDashboard(@RequestParam String warehouseId, @RequestParam String companyCode,
-                                                @RequestParam String plantId, @RequestParam String languageId) throws Exception {
-        MobileDashboard dashboard = reportsService.getMobileDashboard(companyCode, plantId, warehouseId, languageId);
+                                                @RequestParam String plantId, @RequestParam String languageId, @RequestParam String loginUserID) throws Exception {
+        MobileDashboard dashboard = reportsService.getMobileDashboard(companyCode, plantId, warehouseId, languageId, loginUserID);
+        return new ResponseEntity<>(dashboard, HttpStatus.OK);
+    }
+
+    // Search DeliveryLine
+    @ApiOperation(response = MobileDashboard.class, value = "Find MobileDashBoard") // label for swagger
+    @PostMapping("/dashboard/mobile/find")
+    public ResponseEntity<?> findMobileDashBoard(@Valid @RequestBody FindMobileDashBoard findMobileDashBoard) throws Exception {
+
+        MobileDashboard dashboard = reportsService.findMobileDashBoard(findMobileDashBoard);
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
     }
 
@@ -88,6 +99,20 @@ public class ReportsController {
                                                @RequestParam(required = false) List<String> manufacturerName,
                                                @RequestParam(required = true) String stockTypeText) {
         List<StockReport> stockReportList = reportsService.getAllStockReport(languageId, companyCodeId, plantId, warehouseId, itemCode, manufacturerName, itemText, stockTypeText);
+        return new ResponseEntity<>(stockReportList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = Inventory.class, value = "Get All Stock Reports New") // label for swagger
+    @PostMapping("/v2/stockReport-all")
+    public ResponseEntity<?> getAllStockReportV2(@Valid @RequestBody SearchStockReport searchStockReport) {
+        List<StockReportImpl> stockReportList = reportsService.stockReport(searchStockReport);
+        return new ResponseEntity<>(stockReportList, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StockReportOutput.class, value = "Get All Stock Reports StoredProcedure") // label for swagger
+    @PostMapping("/v2/stockReportSP")
+    public ResponseEntity<?> getAllStockReportV2SP(@Valid @RequestBody SearchStockReportInput searchStockReport) {
+        Stream<StockReportOutput> stockReportList = reportsService.stockReportUsingStoredProcedure(searchStockReport);
         return new ResponseEntity<>(stockReportList, HttpStatus.OK);
     }
 
@@ -164,6 +189,20 @@ public class ReportsController {
         return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
     }
 
+    @ApiOperation(response = ShipmentDeliveryReport.class, value = "Get ShipmentDelivery Report v2") // label for swagger
+    @GetMapping("/v2/shipmentDelivery")
+    public ResponseEntity<?> getShipmentDeliveryReport(@RequestParam String companyCodeId,@RequestParam String plantId,
+                                                       @RequestParam String languageId,@RequestParam String warehouseId,
+                                                       @RequestParam(required = false) String fromDeliveryDate,
+                                                       @RequestParam(required = false) String toDeliveryDate,
+                                                       @RequestParam(required = false) String storeCode,
+                                                       @RequestParam(required = false) List<String> soType,
+                                                       @RequestParam String orderNumber) throws ParseException, java.text.ParseException {
+        List<ShipmentDeliveryReport> shipmentDeliveryList = reportsService.getShipmentDeliveryReportV2(companyCodeId, plantId, languageId, warehouseId,
+                fromDeliveryDate, toDeliveryDate, storeCode, soType, orderNumber);
+        return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
+    }
+
     /*
      * Shipment Delivery Summary
      */
@@ -182,8 +221,7 @@ public class ReportsController {
     /*
      * Shipment Dispatch Summary
      */
-    @ApiOperation(response = ShipmentDispatchSummaryReport.class, value = "Get ShipmentDispatchSummary Report")
-    // label for swagger
+    @ApiOperation(response = ShipmentDispatchSummaryReport.class, value = "Get ShipmentDispatchSummary Report")    // label for swagger
     @GetMapping("/shipmentDispatchSummary")
     public ResponseEntity<?> getShipmentDispatchSummaryReport(@RequestParam String fromDeliveryDate,
                                                               @RequestParam String toDeliveryDate, @RequestParam(required = false) List<String> customerCode, @RequestParam(required = true) String warehouseId)
@@ -196,8 +234,7 @@ public class ReportsController {
     /*
      * Receipt Confirmation
      */
-    @ApiOperation(response = ReceiptConfimationReport.class, value = "Get ReceiptConfimation Report")
-    // label for swagger
+    @ApiOperation(response = ReceiptConfimationReport.class, value = "Get ReceiptConfimation Report")    // label for swagger
     @GetMapping("/receiptConfirmation")
     public ResponseEntity<?> getReceiptConfimationReport(@RequestParam String asnNumber)
             throws Exception {
@@ -208,8 +245,7 @@ public class ReportsController {
     /*
      * Transaction History Report renamed from open/inventory stock report
      */
-    @ApiOperation(response = TransactionHistoryReport.class, value = "Get Transaction History Report")
-    // label for swagger
+    @ApiOperation(response = TransactionHistoryReport.class, value = "Get Transaction History Report")    // label for swagger
     @PostMapping("/transactionHistoryReport")
     public ResponseEntity<?> getTransactionHistoryReport(@RequestBody FindImBasicData1 searchImBasicData1) throws java.text.ParseException {
         Stream<TransactionHistoryReport> transactionHistoryReportList = reportsService.getTransactionHistoryReport(searchImBasicData1);

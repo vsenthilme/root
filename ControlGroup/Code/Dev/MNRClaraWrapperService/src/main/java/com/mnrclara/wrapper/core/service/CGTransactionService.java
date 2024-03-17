@@ -300,6 +300,32 @@ public class CGTransactionService {
         }
     }
 
+    //Batch Update
+    public StorePartnerListing[] batchUpdateStorePartnerListing(String loginUserID, List <StorePartnerListing> storePartnerListing,
+                                                         String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "MNRClara's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(storePartnerListing, headers);
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getCgTransactionServiceApiUrl() + "batchUpdate")
+                            .queryParam("loginUserID", loginUserID);
+
+            ResponseEntity<StorePartnerListing[]> result = restTemplate.
+                    exchange(builder.toUriString(), HttpMethod.PATCH, entity, StorePartnerListing[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     //DELETE
     public boolean deleteStorePartnerListing(String languageId, String companyId, String storeId,
                                              Long versionNumber, String loginUserID, String authToken) {
@@ -476,6 +502,7 @@ public class CGTransactionService {
             throw e;
         }
     }
+
 
     //SEARCH
     public BrotherSisterResult findBrotherSisterGroup(FindMatchResults findMatchResult, String authToken) {
@@ -957,5 +984,20 @@ public class CGTransactionService {
         }
     }
 
+
+    public WarehouseApiResponse[] postStorePartnerListing(List<com.mnrclara.wrapper.core.batch.dto.StorePartnerListing> shipmentOrderV2s,
+                                                          String loginUserID, String authToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("User-Agent", "RestTemplate");
+        headers.add("Authorization", "Bearer " + authToken);
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(getCgTransactionServiceApiUrl() + "storepartnerlisting/batchupload")
+                        .queryParam("loginUserID", loginUserID);
+        HttpEntity<?> entity = new HttpEntity<>(shipmentOrderV2s, headers);
+        ResponseEntity<WarehouseApiResponse[]> result =
+                getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, WarehouseApiResponse[].class);
+        return result.getBody();
+    }
 
 }

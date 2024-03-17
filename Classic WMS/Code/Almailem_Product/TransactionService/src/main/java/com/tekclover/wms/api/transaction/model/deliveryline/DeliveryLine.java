@@ -148,8 +148,17 @@ public class DeliveryLine {
     @Column(name="PAYMENT_MODE",columnDefinition = "nvarchar(50)")
     private String paymentMode;
 
+    @Column(name = "RE_DELIVERY")
+    private Boolean reDelivered;
+
     @Column(name="STATUS_ID")
     private Long statusId;
+
+    @Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
+    private String barcodeId;
+
+    @Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
+    private String manufacturerName;
 
     @Column(name = "IS_DELETED")
     private Long deletionIndicator;

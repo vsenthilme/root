@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -7,7 +8,10 @@ import java.util.*;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLine;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.warehouse.Warehouse;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountHeader;
 import com.tekclover.wms.api.transaction.model.warehouse.cyclecount.CycleCountLine;
@@ -21,6 +25,7 @@ import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.*;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.*;
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.*;
 import com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment;
+import com.tekclover.wms.api.transaction.repository.ErrorLogRepository;
 import com.tekclover.wms.api.transaction.repository.IntegrationApiResponseRepository;
 import com.tekclover.wms.api.transaction.repository.OutboundOrderV2Repository;
 import com.tekclover.wms.api.transaction.repository.WarehouseRepository;
@@ -81,6 +86,12 @@ public class WarehouseService extends BaseService {
 	@Autowired
 	StockAdjustmentMiddlewareService stockAdjustmentService;
 
+	@Autowired
+	private ErrorLogRepository errorLogRepository;
+
+	@Autowired
+	private ErrorLogService errorLogService;
+
 	/**
 	 * 
 	 * @return
@@ -95,7 +106,7 @@ public class WarehouseService extends BaseService {
 	 * @param asn
 	 * @return
 	 */
-	public InboundOrder postWarehouseASN (ASN asn) {
+	public InboundOrder postWarehouseASN (ASN asn) throws IOException, CsvException {
 		log.info("ASNHeader received from External: " + asn);
 		InboundOrder savedAsnHeader = saveASN (asn);							// Without Mongo
 		log.info("savedAsnHeader: " + savedAsnHeader);
@@ -107,7 +118,7 @@ public class WarehouseService extends BaseService {
 	 * @param storeReturn
 	 * @return
 	 */
-	public InboundOrder postStoreReturn(StoreReturn storeReturn) {
+	public InboundOrder postStoreReturn(StoreReturn storeReturn) throws IOException, CsvException {
 		log.info("StoreReturnHeader received from External: " + storeReturn);
 		InboundOrder savedStoreReturn = saveStoreReturn (storeReturn);
 		log.info("savedStoreReturn: " + savedStoreReturn);
@@ -119,7 +130,7 @@ public class WarehouseService extends BaseService {
 	 * @param soReturn
 	 * @return
 	 */
-	public InboundOrder postSOReturn(SaleOrderReturn soReturn) {
+	public InboundOrder postSOReturn(SaleOrderReturn soReturn) throws IOException, CsvException {
 		log.info("StoreReturnHeader received from External: " + soReturn);
 		InboundOrder savedSOReturn = saveSOReturn (soReturn);
 		log.info("soReturnHeader: " + savedSOReturn);
@@ -131,7 +142,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransferIn
 	 * @return
 	 */
-	public InboundOrder postInterWarehouseTransfer(InterWarehouseTransferIn interWarehouseTransferIn) {
+	public InboundOrder postInterWarehouseTransfer(InterWarehouseTransferIn interWarehouseTransferIn) throws IOException, CsvException {
 		log.info("InterWarehouseTransferHeader received from External: " + interWarehouseTransferIn);
 		InboundOrder savedIWHReturn = saveInterWarehouseTransfer (interWarehouseTransferIn);
 		log.info("interWarehouseTransferHeader: " + savedIWHReturn);
@@ -144,7 +155,7 @@ public class WarehouseService extends BaseService {
 	 * @param shipmenOrder
 	 * @return
 	 */
-	public ShipmentOrder postSO( ShipmentOrder shipmenOrder, boolean isRerun) {
+	public ShipmentOrder postSO( ShipmentOrder shipmenOrder, boolean isRerun) throws IOException, CsvException {
 		log.info("ShipmenOrder received from External: " + shipmenOrder);
 		OutboundOrder savedSoHeader = saveSO (shipmenOrder, isRerun);						// Without Nongo
 		log.info("savedSoHeader: " + savedSoHeader.getRefDocumentNo());
@@ -156,7 +167,7 @@ public class WarehouseService extends BaseService {
 	 * @param salesOrder
 	 * @return
 	 */
-	public SalesOrder postSalesOrder(SalesOrder salesOrder) {
+	public SalesOrder postSalesOrder(SalesOrder salesOrder) throws IOException, CsvException {
 		log.info("SalesOrderHeader received from External: " + salesOrder);
 		OutboundOrder savedSoHeader = saveSalesOrder (salesOrder);								// Without Nongo
 		log.info("salesOrderHeader: " + savedSoHeader);
@@ -168,7 +179,7 @@ public class WarehouseService extends BaseService {
 	 * @param returnPO
 	 * @return
 	 */
-	public ReturnPO postReturnPO( ReturnPO returnPO) {
+	public ReturnPO postReturnPO( ReturnPO returnPO) throws IOException, CsvException {
 		log.info("ReturnPOHeader received from External: " + returnPO);
 		OutboundOrder savedReturnPOHeader = saveReturnPO (returnPO);					// Without Nongo
 		log.info("savedReturnPOHeader: " + savedReturnPOHeader);
@@ -180,7 +191,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransfer
 	 * @return
 	 */
-	public InterWarehouseTransferOut postInterWarehouseTransferOutbound(InterWarehouseTransferOut interWarehouseTransfer) {
+	public InterWarehouseTransferOut postInterWarehouseTransferOutbound(InterWarehouseTransferOut interWarehouseTransfer) throws IOException, CsvException {
 		log.info("InterWarehouseTransferHeader received from External: " + interWarehouseTransfer);
 		OutboundOrder savedInterWarehouseTransferHeader = saveIWHTransfer (interWarehouseTransfer);													// Without Nongo
 		log.info("savedInterWarehouseTransferHeader: " + savedInterWarehouseTransferHeader);
@@ -358,7 +369,7 @@ public class WarehouseService extends BaseService {
 	 * @param wareHouseId
 	 * @return 
 	 */
-	private boolean validateWarehouseId(String wareHouseId) {
+	private boolean validateWarehouseId(String wareHouseId) throws IOException, CsvException {
 		log.info("wareHouseId: " + wareHouseId);
 //		if (wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_110) || wareHouseId.equalsIgnoreCase(WAREHOUSE_ID_111)) {
 //			log.info("wareHouseId:------------> " + wareHouseId);
@@ -370,6 +381,8 @@ public class WarehouseService extends BaseService {
 			log.info("wareHouseId:------------> " + wareHouseId);
 			return true;
 		} else {
+			// Error Log
+			createWarehouseLog(wareHouseId, "Warehouse Id must be either 100 or 200");
 			throw new BadRequestException("Warehouse Id must be either 100 or 200");
 		}
 	}
@@ -386,7 +399,7 @@ public class WarehouseService extends BaseService {
 	//================================================Moongo=Removed================================================================================
 	//------------------------------------------------INBOUND-ORDERS--------------------------------------------------------------------------------
 	// POST ASNHeader
-	private InboundOrder saveASN (ASN asn) {
+	private InboundOrder saveASN (ASN asn) throws IOException, CsvException {
 		try {
 			ASNHeader asnHeader = asn.getAsnHeader();
 			
@@ -458,7 +471,7 @@ public class WarehouseService extends BaseService {
 	}
 	
 	// STORE RETURN
-	private InboundOrder saveStoreReturn (StoreReturn storeReturn) {
+	private InboundOrder saveStoreReturn (StoreReturn storeReturn) throws IOException, CsvException {
 		try {
 			StoreReturnHeader storeReturnHeader = storeReturn.getStoreReturnHeader();
 			
@@ -531,7 +544,7 @@ public class WarehouseService extends BaseService {
 	}
 	
 	// SOReturn
-	private InboundOrder saveSOReturn (SaleOrderReturn soReturn) {
+	private InboundOrder saveSOReturn (SaleOrderReturn soReturn) throws IOException, CsvException {
 		try {
 			SOReturnHeader soReturnHeader = soReturn.getSoReturnHeader();
 			
@@ -605,7 +618,7 @@ public class WarehouseService extends BaseService {
 	}
 	
 	// InterWarehouseTransfer
-	private InboundOrder saveInterWarehouseTransfer (InterWarehouseTransferIn interWarehouseTransferIn) {
+	private InboundOrder saveInterWarehouseTransfer (InterWarehouseTransferIn interWarehouseTransferIn) throws IOException, CsvException {
 		try {
 			InterWarehouseTransferInHeader interWarehouseTransferInHeader = interWarehouseTransferIn.getInterWarehouseTransferInHeader();
 			// Warehouse ID Validation
@@ -680,7 +693,7 @@ public class WarehouseService extends BaseService {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~OUTBOUND~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		
 	// POST SOHeader
-	private OutboundOrder saveSO (ShipmentOrder shipmenOrder, boolean isRerun) {
+	private OutboundOrder saveSO (ShipmentOrder shipmenOrder, boolean isRerun) throws IOException, CsvException {
 		try {
 			SOHeader soHeader = shipmenOrder.getSoHeader();
 			
@@ -751,7 +764,7 @@ public class WarehouseService extends BaseService {
 	}
 	
 	// POST 
-	private OutboundOrder saveSalesOrder(@Valid SalesOrder salesOrder) {
+	private OutboundOrder saveSalesOrder(@Valid SalesOrder salesOrder) throws IOException, CsvException {
 		try {
 			SalesOrderHeader salesOrderHeader = salesOrder.getSalesOrderHeader();
 			
@@ -824,7 +837,7 @@ public class WarehouseService extends BaseService {
 	 * @param returnPO
 	 * @return
 	 */
-	private OutboundOrder saveReturnPO (ReturnPO returnPO) {
+	private OutboundOrder saveReturnPO (ReturnPO returnPO) throws IOException, CsvException {
 		try {
 			ReturnPOHeader returnPOHeader = returnPO.getReturnPOHeader();
 			
@@ -899,7 +912,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransfer
 	 * @return
 	 */
-	private OutboundOrder saveIWHTransfer (InterWarehouseTransferOut interWarehouseTransfer) {
+	private OutboundOrder saveIWHTransfer (InterWarehouseTransferOut interWarehouseTransfer) throws IOException, CsvException {
 		try {
 			InterWarehouseTransferOutHeader interWarehouseTransferOutHeader = 
 					interWarehouseTransfer.getInterWarehouseTransferOutHeader();
@@ -978,7 +991,7 @@ public class WarehouseService extends BaseService {
 	 * @param asnv2
 	 * @return
 	 */
-	public InboundOrderV2 postWarehouseASNV2 (ASNV2 asnv2) {
+	public InboundOrderV2 postWarehouseASNV2 (ASNV2 asnv2) throws IOException, CsvException {
 		log.info("ASNV2Header received from External: " + asnv2);
 		InboundOrderV2 savedAsnV2Header = saveASNV2 (asnv2);
 		log.info("savedAsnV2Header: " + savedAsnV2Header);
@@ -986,7 +999,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// POST ASNV2Header
-	private InboundOrderV2 saveASNV2 (ASNV2 asnv2) {
+	private InboundOrderV2 saveASNV2 (ASNV2 asnv2) throws IOException, CsvException {
 		try {
 			ASNHeaderV2 asnV2Header = asnv2.getAsnHeader();
 			List<ASNLineV2> asnLineV2s = asnv2.getAsnLine();
@@ -1063,6 +1076,8 @@ public class WarehouseService extends BaseService {
 							}
 							apiLine.setExpectedDate(reqDelDate);
 						} catch (Exception e) {
+							// Error Log
+							createWarehouseLog1(asnv2, "Date format should be MM-dd-yyyy " + asnLineV2.getExpectedDate());
 							e.printStackTrace();
 							throw new BadRequestException("Date format should be MM-dd-yyyy");
 						}
@@ -1083,6 +1098,8 @@ public class WarehouseService extends BaseService {
 							Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
 							apiLine.setExpectedDate(date);
 						} catch (Exception e) {
+							// Error Log
+							createWarehouseLog1(asnv2, "Date format should be MM-dd-yyyy " + asnLineV2.getExpectedDate());
 							e.printStackTrace();
 							throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
 						}
@@ -1108,15 +1125,19 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
 				log.info("ASNV2 Order Failed : " + createdOrder);
+				// Error Log
+				createWarehouseLog1(asnv2, "ASNV2 Order doesn't contain any Lines.");
 				throw new BadRequestException("ASNV2 Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog1(asnv2, e.toString());
 			throw e;
 		}
 		return null;
 	}
 
-	public InboundOrderV2 postWarehouseStockReceipt (StockReceiptHeader stockReceipt) {
+	public InboundOrderV2 postWarehouseStockReceipt (StockReceiptHeader stockReceipt) throws IOException, CsvException {
 		log.info("StockReceipt received from External: " + stockReceipt);
 		InboundOrderV2 savedStockReceipt = saveStockReceipt (stockReceipt);
 		log.info("savedStockReceipt: " + savedStockReceipt);
@@ -1124,7 +1145,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// POST StockReceiptHeader
-	private InboundOrderV2 saveStockReceipt (StockReceiptHeader stockReceipt) {
+	private InboundOrderV2 saveStockReceipt (StockReceiptHeader stockReceipt) throws IOException, CsvException {
 		try {
 //			StockReceiptHeader stockReceiptHeader = stockReceipt.getStockReceiptHeader();
 			List<StockReceiptLine> stockReceiptLines = stockReceipt.getStockReceiptLines();
@@ -1201,9 +1222,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
 				log.info("stockReceipt Order Failed : " + createdOrder);
+				// Error Log
+				createWarehouseLog2(stockReceipt, "StockReceipt Order doesn't contain any Lines.");
 				throw new BadRequestException("stockReceipt Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog2(stockReceipt, e.toString());
 			throw e;
 		}
 		return null;
@@ -1213,7 +1238,7 @@ public class WarehouseService extends BaseService {
 	 * @param soReturnV2
 	 * @return
 	 */
-	public InboundOrderV2 postSOReturnV2(SaleOrderReturnV2 soReturnV2) {
+	public InboundOrderV2 postSOReturnV2(SaleOrderReturnV2 soReturnV2) throws IOException, CsvException {
 		log.info("StoreReturnHeader received from External: " + soReturnV2);
 		InboundOrderV2 savedSOReturn = saveSOReturnV2(soReturnV2);
 		log.info("soReturnHeader: " + savedSOReturn);
@@ -1221,7 +1246,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// SOReturnV2
-	private InboundOrderV2 saveSOReturnV2(SaleOrderReturnV2 soReturnV2) {
+	private InboundOrderV2 saveSOReturnV2(SaleOrderReturnV2 soReturnV2) throws IOException, CsvException {
 		try {
 			SOReturnHeaderV2 soReturnHeaderV2 = soReturnV2.getSoReturnHeader();
 			List<SOReturnLineV2> salesOrderReturnLinesV2 = soReturnV2.getSoReturnLine();
@@ -1283,6 +1308,8 @@ public class WarehouseService extends BaseService {
 					}
 					apiLine.setExpectedDate(reqDelDate);
 				} catch (Exception e) {
+					// Error Log
+					createWarehouseLog3(soReturnV2, "Date format should be MM-dd-yyyy " + soReturnLineV2.getExpectedDate());
 					throw new BadRequestException("Date format should be MM-dd-yyyy");
 				}
 
@@ -1306,9 +1333,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrderV2 = orderService.createInboundOrdersV2(apiHeader);
 				log.info("Return Order Reference Order Failed : " + createdOrderV2);
+				// Error Log
+				createWarehouseLog3(soReturnV2, "Return Order Reference Order doesn't contain any Lines.");
 				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog3(soReturnV2, e.toString());
 			throw e;
 		}
 		return null;
@@ -1319,7 +1350,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransferInV2
 	 * @return
 	 */
-	public InboundOrderV2 postInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	public InboundOrderV2 postInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) throws IOException, CsvException {
 		log.info("InterWarehouseTransferHeaderV2 received from External: " + interWarehouseTransferInV2);
 		InboundOrderV2 savedIWHReturnV2 = saveInterWarehouseTransferInV2Upload(interWarehouseTransferInV2);
 		log.info("interWarehouseTransferHeaderV2: " + savedIWHReturnV2);
@@ -1328,7 +1359,7 @@ public class WarehouseService extends BaseService {
 
 
 	// InterWarehouseTransferInV2
-	private InboundOrderV2 saveInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	private InboundOrderV2 saveInterWarehouseTransferInV2Upload(InterWarehouseTransferInV2 interWarehouseTransferInV2) throws IOException, CsvException {
 		try {
 			InterWarehouseTransferInHeaderV2 interWarehouseTransferInHeaderV2 = interWarehouseTransferInV2.getInterWarehouseTransferInHeader();
 			List<InterWarehouseTransferInLineV2> interWarehouseTransferInLinesV2 = interWarehouseTransferInV2.getInterWarehouseTransferInLine();
@@ -1400,6 +1431,8 @@ public class WarehouseService extends BaseService {
 					Date date = Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
 					apiLine.setExpectedDate(date);
 				} catch (Exception e) {
+					// Error Log
+					createWarehouseLog4(interWarehouseTransferInV2, "Date format should be MM-dd-yyyy " + iwhTransferLineV2.getExpectedDate());
 					e.printStackTrace();
 					throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
 				}
@@ -1420,9 +1453,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrderV2 = orderService.createInboundOrdersV2(apiHeader);
 				log.info("InterWarehouseTransferV2 Order Failed : " + createdOrderV2);
+				// Error Log
+				createWarehouseLog4(interWarehouseTransferInV2, "InterWarehouseTransferInV2 Order doesn't contain any Lines.");
 				throw new BadRequestException("InterWarehouseTransferInV2 Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog4(interWarehouseTransferInV2, e.toString());
 			throw e;
 		}
 		return null;
@@ -1434,7 +1471,7 @@ public class WarehouseService extends BaseService {
 	 * @param
 	 * @return
 	 */
-	public InboundOrderV2 postB2bTransferIn(B2bTransferIn b2bTransferIn) {
+	public InboundOrderV2 postB2bTransferIn(B2bTransferIn b2bTransferIn) throws IOException, CsvException {
 		log.info("B2bTransferIn received from External: " + b2bTransferIn);
 		InboundOrderV2 savedB2bTransferIn = saveB2BTransferIn(b2bTransferIn);
 		log.info("B2bTransferIn: " + savedB2bTransferIn);
@@ -1442,7 +1479,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// B2bTransferIn
-	private InboundOrderV2 saveB2BTransferIn(B2bTransferIn b2bTransferIn) {
+	private InboundOrderV2 saveB2BTransferIn(B2bTransferIn b2bTransferIn) throws IOException, CsvException {
 		try {
 			B2bTransferInHeader b2BTransferInHeader = b2bTransferIn.getB2bTransferInHeader();
 			List<B2bTransferInLine> b2bTransferInLines = b2bTransferIn.getB2bTransferLine();
@@ -1512,6 +1549,8 @@ public class WarehouseService extends BaseService {
 					}
 					apiLine.setExpectedDate(reqDelDate);
 				} catch (Exception e) {
+					// Error Log
+					createWarehouseLog5(b2bTransferIn, "Date format should be MM-dd-yyyy " + b2bTransferInLine.getExpectedDate());
 					throw new InboundOrderRequestException("Date format should be MM-dd-yyyy");
 				}
 
@@ -1535,9 +1574,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrder = orderService.createInboundOrdersV2(apiHeader);
 				log.info("Return Order Reference Order Failed : " + createdOrder);
+				// Error Log
+				createWarehouseLog5(b2bTransferIn, "B2bTransferIn Order doesn't contain any Lines.");
 				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog5(b2bTransferIn, e.toString());
 			throw e;
 		}
 		return null;
@@ -1650,7 +1693,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransferInV2
 	 * @return
 	 */
-	public InboundOrderV2 postInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	public InboundOrderV2 postInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) throws IOException, CsvException {
 		log.info("InterWarehouseTransferHeaderV2 received from External: " + interWarehouseTransferInV2);
 		InboundOrderV2 savedIWHReturnV2 = saveInterWarehouseTransferInV2(interWarehouseTransferInV2);
 		log.info("interWarehouseTransferHeaderV2: " + savedIWHReturnV2);
@@ -1658,7 +1701,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// InterWarehouseTransferInV2
-	private InboundOrderV2 saveInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) {
+	private InboundOrderV2 saveInterWarehouseTransferInV2(InterWarehouseTransferInV2 interWarehouseTransferInV2) throws IOException, CsvException {
 		try {
 			InterWarehouseTransferInHeaderV2 interWarehouseTransferInHeaderV2 = interWarehouseTransferInV2.getInterWarehouseTransferInHeader();
 			List<InterWarehouseTransferInLineV2> interWarehouseTransferInLinesV2 = interWarehouseTransferInV2.getInterWarehouseTransferInLine();
@@ -1720,6 +1763,8 @@ public class WarehouseService extends BaseService {
 					}
 					apiLine.setExpectedDate(reqDelDate);
 				} catch (Exception e) {
+					// Error Log
+					createWarehouseLog4(interWarehouseTransferInV2, "Date format should be MM-dd-yyyy " + iwhTransferLineV2.getExpectedDate());
 					throw new BadRequestException("Date format should be MM-dd-yyyy");
 				}
 				apiLine.setBrand(iwhTransferLineV2.getBrand());
@@ -1742,9 +1787,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				InboundOrderV2 createdOrderV2 = orderService.createInboundOrdersV2(apiHeader);
 				log.info("InterWarehouseTransferV2 Order Failed : " + createdOrderV2);
+				// Error Log
+				createWarehouseLog4(interWarehouseTransferInV2, "InterWarehouseTransferInV2 Order doesn't contain any Lines.");
 				throw new BadRequestException("InterWarehouseTransferInV2 Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog4(interWarehouseTransferInV2, e.toString());
 			throw e;
 		}
 		return null;
@@ -1834,7 +1883,7 @@ public class WarehouseService extends BaseService {
 	 * @param perpetual
 	 * @return
 	 */
-	public CycleCountHeader postPerpetual(Perpetual perpetual) {
+	public CycleCountHeader postPerpetual(Perpetual perpetual) throws IOException, CsvException {
 		log.info("CycleCountHeaderOrder received from External: " + perpetual);
 		CycleCountHeader savedCycleCount = savePerpetual(perpetual);
 		log.info("Perpetual: " + perpetual);
@@ -1842,7 +1891,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// Perpetual
-	private CycleCountHeader savePerpetual(Perpetual perpetual) {
+	private CycleCountHeader savePerpetual(Perpetual perpetual) throws IOException, CsvException {
 		try {
 			PerpetualHeaderV1 perpetualHeaderV1 = perpetual.getPerpetualHeaderV1();
 			List<PerpetualLineV1> perpetualLineV1List = perpetual.getPerpetualLineV1();
@@ -1899,9 +1948,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				CycleCountHeader createOrder = orderService.createCycleCountOrder(apiHeader);
 				log.info("Perpetual Order Failed : " + createOrder);
+				// Error Log
+				createWarehouseLog6(perpetual, "Perpetual Order doesn't contain any Lines.");
 				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog6(perpetual, e.toString());
 			throw e;
 		}
 		return null;
@@ -1913,7 +1966,7 @@ public class WarehouseService extends BaseService {
 	 * @param periodic
 	 * @return
 	 */
-	public CycleCountHeader postPeriodic(Periodic periodic) {
+	public CycleCountHeader postPeriodic(Periodic periodic) throws IOException, CsvException {
 		log.info("Periodic received from External: " + periodic);
 		CycleCountHeader savedCycleCount = savePeriodic(periodic);
 		log.info("Periodic: " + periodic);
@@ -1921,7 +1974,7 @@ public class WarehouseService extends BaseService {
 	}
 
 	// periodic
-	private CycleCountHeader savePeriodic(Periodic periodic) {
+	private CycleCountHeader savePeriodic(Periodic periodic) throws IOException, CsvException {
 		try {
 			PeriodicHeaderV1 periodicHeaderV1 = periodic.getPeriodicHeaderV1();
 			List<PeriodicLineV1> periodicLineV1List = periodic.getPeriodicLineV1();
@@ -1977,9 +2030,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				CycleCountHeader createOrder = orderService.createCycleCountOrder(apiHeader);
 				log.info("Periodic Order Failed : " + createOrder);
+				// Error Log
+				createWarehouseLog7(periodic, "Periodic Order doesn't contain any Lines.");
 				throw new BadRequestException("Return Order Reference Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog7(periodic, e.toString());
 			throw e;
 		}
 		return null;
@@ -1994,7 +2051,7 @@ public class WarehouseService extends BaseService {
 	 * @param shipmenOrder
 	 * @return
 	 */
-	public ShipmentOrderV2 postSOV2(ShipmentOrderV2 shipmenOrder, boolean isRerun) throws ParseException {
+	public ShipmentOrderV2 postSOV2(ShipmentOrderV2 shipmenOrder, boolean isRerun) throws ParseException, IOException, CsvException {
 		log.info("ShipmenOrder received from External: " + shipmenOrder);
 		OutboundOrderV2 savedSoHeader = saveSOV2(shipmenOrder, isRerun);                        // Without Nongo
 		log.info("savedSoHeader: " + savedSoHeader.getRefDocumentNo());
@@ -2005,7 +2062,7 @@ public class WarehouseService extends BaseService {
 	 * @param salesOrder
 	 * @return
 	 */
-	public SalesOrderV2 postSalesOrderV2(SalesOrderV2 salesOrder) throws ParseException {
+	public SalesOrderV2 postSalesOrderV2(SalesOrderV2 salesOrder) throws ParseException, IOException, CsvException {
 		log.info("SalesOrderHeader received from External: " + salesOrder);
 		OutboundOrderV2 savedSoHeader = saveSalesOrderV2(salesOrder);                                // Without Nongo
 		log.info("salesOrderHeader: " + savedSoHeader);
@@ -2016,7 +2073,7 @@ public class WarehouseService extends BaseService {
 	 * @param returnPO
 	 * @return
 	 */
-	public ReturnPOV2 postReturnPOV2(ReturnPOV2 returnPO) throws ParseException {
+	public ReturnPOV2 postReturnPOV2(ReturnPOV2 returnPO) throws ParseException, IOException, CsvException {
 		log.info("ReturnPOHeader received from External: " + returnPO);
 		OutboundOrderV2 savedReturnPOHeader = saveReturnPOV2(returnPO);                    // Without Nongo
 		log.info("savedReturnPOHeader: " + savedReturnPOHeader);
@@ -2027,7 +2084,7 @@ public class WarehouseService extends BaseService {
 	 * @param interWarehouseTransfer
 	 * @return
 	 */
-	public InterWarehouseTransferOutV2 postInterWarehouseTransferOutboundV2(InterWarehouseTransferOutV2 interWarehouseTransfer) throws ParseException {
+	public InterWarehouseTransferOutV2 postInterWarehouseTransferOutboundV2(InterWarehouseTransferOutV2 interWarehouseTransfer) throws ParseException, IOException, CsvException {
 		log.info("InterWarehouseTransferHeader received from External: " + interWarehouseTransfer);
 		OutboundOrderV2 savedInterWarehouseTransferHeader = saveIWHTransferV2(interWarehouseTransfer);                                                    // Without Nongo
 		log.info("savedInterWarehouseTransferHeader: " + savedInterWarehouseTransferHeader);
@@ -2040,7 +2097,7 @@ public class WarehouseService extends BaseService {
 	 * @param salesInvoice
 	 * @return
 	 */
-	public OutboundOrderV2 postSalesInvoice(SalesInvoice salesInvoice) throws ParseException {
+	public OutboundOrderV2 postSalesInvoice(SalesInvoice salesInvoice) throws ParseException, IOException, CsvException {
 		log.info("SalesInvoice received from external: " + salesInvoice);
 		OutboundOrderV2 savedSalesInvoice = saveSalesInvoice(salesInvoice);
 		log.info("Saved SalesInvoice: " + savedSalesInvoice);
@@ -2052,7 +2109,7 @@ public class WarehouseService extends BaseService {
 	 * @param stockAdjustment
 	 * @return
 	 */
-	public StockAdjustment postStockAdjustment(StockAdjustment stockAdjustment) {
+	public StockAdjustment postStockAdjustment(StockAdjustment stockAdjustment) throws IOException, CsvException {
 		log.info("StockAdjustment received from external: " + stockAdjustment);
 		StockAdjustment savedStockAdjustment = saveStockAdjustment(stockAdjustment);
 		log.info("Saved StockAdjustment: " + savedStockAdjustment);
@@ -2062,7 +2119,7 @@ public class WarehouseService extends BaseService {
 	/*---------------------------------------------------------------------------------------------------------------------------------*/
 
 //	// POST ShipmentOrderV2
-	private OutboundOrderV2 saveSOV2(ShipmentOrderV2 shipmentOrder, boolean isRerun) throws ParseException {
+	private OutboundOrderV2 saveSOV2(ShipmentOrderV2 shipmentOrder, boolean isRerun) throws ParseException, IOException, CsvException {
 		try {
 			SOHeaderV2 soHeader = shipmentOrder.getSoHeader();
 
@@ -2075,6 +2132,9 @@ public class WarehouseService extends BaseService {
 			// Checking for duplicate RefDocNumber
 			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(soHeader.getTransferOrderNumber());
 			if (obOrder != null) {
+				// Error Log
+				createWarehouseLog14(soHeader.getTransferOrderNumber(),
+						"TransferOrderNumber is getting duplicated. This SO order already exists in the System.");
 				throw new OutboundOrderRequestException("TransferOrderNumber is getting duplicated. This order already exists in the System.");
 			}
 
@@ -2094,6 +2154,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(soHeader.getTransferOrderNumber());
 			apiHeader.setOutboundOrderTypeID(0L);
 			apiHeader.setRefDocumentType("WMS to Non-WMS");                        // Hardcoded value "SO"
+			apiHeader.setCustomerType("TRANSVERSE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 			apiHeader.setTargetCompanyCode(soHeader.getTargetCompanyCode());
 			apiHeader.setTargetBranchCode(soHeader.getTargetBranchCode());
@@ -2102,6 +2163,8 @@ public class WarehouseService extends BaseService {
 				Date date = DateUtils.convertStringToDate2(soHeader.getRequiredDeliveryDate());
 				apiHeader.setRequiredDeliveryDate(date);
 			} catch (Exception e) {
+				// Error Log
+				createWarehouseLog8(shipmentOrder, "Date format should be MM-dd-yyyy " + soHeader.getRequiredDeliveryDate());
 				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
 			}
 
@@ -2137,6 +2200,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerName(soLine.getManufacturerName());
 				apiLine.setRefField1ForOrderType(soLine.getOrderType());        // ORDER_TYPE
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setCustomerType("TRANSVERSE");								//HardCoded
 
 				apiLine.setTransferOrderNumber(soLine.getTransferOrderNumber());
 				apiLine.setMiddlewareId(soLine.getMiddlewareId());
@@ -2160,9 +2224,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader: " + apiHeader);
 				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 				log.info("ShipmentOrder Order Failed: " + createdOrder);
+				// Error Log
+				createWarehouseLog8(shipmentOrder, "ShipmentOrder Order doesn't contain any Lines.");
 				throw new BadRequestException("ShipmentOrder Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog8(shipmentOrder, e.toString());
 			throw e;
 		}
 		return null;
@@ -2278,7 +2346,7 @@ public class WarehouseService extends BaseService {
 //	}
 
 	// POST
-	private OutboundOrderV2 saveSalesOrderV2(@Valid SalesOrderV2 salesOrder) throws ParseException {
+	private OutboundOrderV2 saveSalesOrderV2(@Valid SalesOrderV2 salesOrder) throws ParseException, IOException, CsvException {
 		try {
 			SalesOrderHeaderV2 salesOrderHeader = salesOrder.getSalesOrderHeader();
 
@@ -2292,6 +2360,8 @@ public class WarehouseService extends BaseService {
 			// Checking for duplicate RefDocNumber
 			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(salesOrderHeader.getSalesOrderNumber());
 			if (obOrder != null) {
+				// Error Log
+				createWarehouseLog14(salesOrderHeader.getSalesOrderNumber(), "SalesOrderNumber is already posted and it can't be duplicated.");
 				throw new OutboundOrderRequestException("SalesOrderNumber is already posted and it can't be duplicated.");
 			}
 
@@ -2309,6 +2379,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(salesOrderHeader.getPickListNumber());
 			apiHeader.setOutboundOrderTypeID(3L);                                   // Hardcoded Value "3"
 			apiHeader.setRefDocumentType("PICK LIST");                              // Hardcoded value "SaleOrder"
+			apiHeader.setCustomerType("INVOICE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 			apiHeader.setSalesOrderNumber(salesOrderHeader.getSalesOrderNumber());
 			apiHeader.setTokenNumber(salesOrderHeader.getTokenNumber());
@@ -2320,6 +2391,8 @@ public class WarehouseService extends BaseService {
 				Date reqDate = DateUtils.convertStringToDate2(salesOrderHeader.getRequiredDeliveryDate());
 				apiHeader.setRequiredDeliveryDate(reqDate);
 			} catch (Exception e) {
+				// Error Log
+				createWarehouseLog9(salesOrder, "Date format should be MM-dd-yyyy " + salesOrderHeader.getRequiredDeliveryDate());
 				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
 			}
 
@@ -2347,6 +2420,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerFullName(soLine.getManufacturerFullName());
 				apiLine.setStoreID(salesOrderHeader.getStoreID());
 				apiLine.setRefField1ForOrderType(soLine.getOrderType());
+				apiLine.setCustomerType("INVOICE");								//HardCoded
 
 				apiLine.setLineReference(soLine.getLineReference());            // IB_LINE_NO
 				apiLine.setItemCode(soLine.getSku());                            // ITM_CODE
@@ -2379,9 +2453,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 				log.info("SalesOrder Order Failed: " + createdOrder);
+				// Error Log
+				createWarehouseLog9(salesOrder, "SalesOrder doesn't contain any Lines.");
 				throw new BadRequestException("SalesOrder Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog9(salesOrder, e.toString());
 			throw e;
 		}
 		return null;
@@ -2392,7 +2470,7 @@ public class WarehouseService extends BaseService {
 	 * @param returnPO
 	 * @return
 	 */
-	private OutboundOrderV2 saveReturnPOV2(ReturnPOV2 returnPO) throws ParseException {
+	private OutboundOrderV2 saveReturnPOV2(ReturnPOV2 returnPO) throws ParseException, IOException, CsvException {
 		try {
 			ReturnPOHeaderV2 returnPOHeader = returnPO.getReturnPOHeader();
 
@@ -2408,6 +2486,8 @@ public class WarehouseService extends BaseService {
 			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(returnPOHeader.getPoNumber());
 
 			if (obOrder != null) {
+				// Error Log
+				createWarehouseLog14(returnPOHeader.getPoNumber(), "PO number is already posted and it can't be duplicated.");
 				throw new OutboundOrderRequestException("PO number is already posted and it can't be duplicated");
 			}
 
@@ -2439,6 +2519,8 @@ public class WarehouseService extends BaseService {
 				Date date = DateUtils.convertStringToDate2(returnPOHeader.getRequiredDeliveryDate());
 				apiHeader.setRequiredDeliveryDate(date);
 			} catch (Exception e) {
+				// Error Log
+				createWarehouseLog10(returnPO, "Date format should be MM-dd-yyyy " + returnPOHeader.getRequiredDeliveryDate());
 				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
 			}
 
@@ -2498,9 +2580,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 				log.info("ReturnPO Order Failed: " + createdOrder);
+				// Error Log
+				createWarehouseLog10(returnPO, "ReturnPO Order doesn't contain any Lines.");
 				throw new BadRequestException("ReturnPO Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog10(returnPO, e.toString());
 			throw e;
 		}
 		return null;
@@ -2511,7 +2597,7 @@ public class WarehouseService extends BaseService {
 	 * @param iWhTransferOutV2
 	 * @return
 	 */
-	private OutboundOrderV2 saveIWHTransferV2(InterWarehouseTransferOutV2 iWhTransferOutV2) throws ParseException {
+	private OutboundOrderV2 saveIWHTransferV2(InterWarehouseTransferOutV2 iWhTransferOutV2) throws ParseException, IOException, CsvException {
 		try {
 			InterWarehouseTransferOutHeaderV2 interWhTransferOutHeader =
 					iWhTransferOutV2.getInterWarehouseTransferOutHeader();
@@ -2528,6 +2614,9 @@ public class WarehouseService extends BaseService {
 			OutboundOrderV2 obOrder = orderService.getOBOrderByIdV2(interWhTransferOutHeader.getTransferOrderNumber());
 
 			if (obOrder != null) {
+				// Error Log
+				createWarehouseLog14(interWhTransferOutHeader.getTransferOrderNumber(),
+						"TransferOrderNumber is getting duplicated. This InterWarehouseTransferOut order already exists in the System.");
 				throw new OutboundOrderRequestException("TransferOrderNumber is already posted and it can't be duplicated");
 			}
 
@@ -2555,6 +2644,7 @@ public class WarehouseService extends BaseService {
 			apiHeader.setRefDocumentNo(interWhTransferOutHeader.getTransferOrderNumber());
 			apiHeader.setOutboundOrderTypeID(1L);                             // Hardcoded Value "1"
 			apiHeader.setRefDocumentType("WMS to WMS");                            // Hardcoded value "WH to WH"
+			apiHeader.setCustomerType("TRANSVERSE");								//HardCoded
 			apiHeader.setOrderReceivedOn(new Date());
 
 			apiHeader.setMiddlewareId(interWhTransferOutHeader.getMiddlewareId());
@@ -2564,6 +2654,8 @@ public class WarehouseService extends BaseService {
 				Date reqDate = DateUtils.convertStringToDate2(interWhTransferOutHeader.getRequiredDeliveryDate());
 				apiHeader.setRequiredDeliveryDate(reqDate);
 			} catch (Exception e) {
+				// Error Log
+				createWarehouseLog11(iWhTransferOutV2, "Date format should be MM-dd-yyyy " + interWhTransferOutHeader.getRequiredDeliveryDate());
 				throw new OutboundOrderRequestException("Date format should be MM-dd-yyyy");
 			}
 
@@ -2600,6 +2692,7 @@ public class WarehouseService extends BaseService {
 				apiLine.setManufacturerCode(iwhTransferLine.getManufacturerCode());
 				apiLine.setManufacturerName(iwhTransferLine.getManufacturerName());
 				apiLine.setOrderId(apiHeader.getOrderId());
+				apiLine.setCustomerType("TRANSVERSE");								//HardCoded
 
 				apiLine.setMiddlewareId(iwhTransferLine.getMiddlewareId());
 				apiLine.setMiddlewareHeaderId(iwhTransferLine.getMiddlewareHeaderId());
@@ -2624,9 +2717,13 @@ public class WarehouseService extends BaseService {
 				log.info("apiHeader : " + apiHeader);
 				OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 				log.info("InterWarehouseTransferOut Order Failed: " + createdOrder);
+				// Error Log
+				createWarehouseLog11(iWhTransferOutV2, "InterWarehouseTransferOut Order doesn't contain any Lines.");
 				throw new BadRequestException("InterWarehouseTransferOut Order doesn't contain any Lines.");
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog11(iWhTransferOutV2, e.toString());
 			throw e;
 		}
 		return null;
@@ -2634,10 +2731,12 @@ public class WarehouseService extends BaseService {
 
 
 	//Save SalesInvoice
-	private OutboundOrderV2 saveSalesInvoice(SalesInvoice salesInvoice) throws ParseException {
+	private OutboundOrderV2 saveSalesInvoice(SalesInvoice salesInvoice) throws ParseException, IOException, CsvException {
 		try {
 			OutboundOrderV2 duplicateOrder = orderService.getOBOrderByIdV2(salesInvoice.getSalesInvoiceNumber());
 			if (duplicateOrder != null) {
+				// Error Log
+				createWarehouseLog14(salesInvoice.getSalesInvoiceNumber(), "SalesInvoice is already posted and it can't be duplicated.");
 				throw new OutboundOrderRequestException("Sales Invoice is already posted and it can't be duplicated");
 			}
 
@@ -2674,6 +2773,8 @@ public class WarehouseService extends BaseService {
 				apiHeader.setSalesInvoiceDate(date);
 				apiHeader.setRequiredDeliveryDate(date);
 			} catch (Exception e) {
+				// Error Log
+				createWarehouseLog12(salesInvoice, "Date format should be yyyy-MM-dd " + salesInvoice.getInvoiceDate());
 				throw new OutboundOrderRequestException("Date format should be yyyy-MM-dd");
 			}
 
@@ -2703,7 +2804,9 @@ public class WarehouseService extends BaseService {
 					log.info("SalesInvoice: " + apiHeader);
 					OutboundOrderV2 createdOrder = orderService.createOutboundOrdersV2(apiHeader);
 					log.info("SalesInvoice Order Failed: " + createdOrder);
-					throw new RuntimeException(e);
+					// Error Log
+					createWarehouseLog12(salesInvoice, e.toString());
+					throw e;
 				}
 			}
 //			else if (salesInvoice == null) {
@@ -2715,13 +2818,15 @@ public class WarehouseService extends BaseService {
 //				throw new BadRequestException("SalesInvoice Order doesn't contain any Lines.");
 //			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog12(salesInvoice, e.toString());
 			throw e;
 		}
 		return null;
 	}
 
 	//Save StockAdjustment
-	private StockAdjustment saveStockAdjustment(StockAdjustment stockAdjustment) {
+	private StockAdjustment saveStockAdjustment(StockAdjustment stockAdjustment) throws IOException, CsvException {
 		try {
 
 			StockAdjustment dbStockAdjustment = new StockAdjustment();
@@ -2777,13 +2882,340 @@ public class WarehouseService extends BaseService {
 					log.info("StockAdjustment: " + dbStockAdjustment);
 					StockAdjustment createdOrder = stockAdjustmentService.createStockAdjustment(dbStockAdjustment);
 					log.info("StockAdjustment Order Failed: " + createdOrder);
-					throw new RuntimeException(e);
+					// Error Log
+					createWarehouseLog13(stockAdjustment, e.toString());
+					throw e;
 				}
 			}
 		} catch (Exception e) {
+			// Error Log
+			createWarehouseLog13(stockAdjustment, e.toString());
 			throw e;
 		}
 		return null;
+	}
+
+	//=====================================WarehouseService_ExceptionLog===============================================
+	private void createWarehouseLog(String warehouseId, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(warehouseId);
+		errorLog.setOrderDate(new Date());
+		errorLog.setWarehouseId(warehouseId);
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog1(ASNV2 asnv2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (ASNLineV2 asnLineV2 : asnv2.getAsnLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(asnv2.getAsnHeader().getAsnNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(asnv2.getAsnHeader().getCompanyCode());
+			errorLog.setPlantId(asnv2.getAsnHeader().getBranchCode());
+			errorLog.setRefDocNumber(asnv2.getAsnHeader().getAsnNumber());
+			errorLog.setItemCode(asnLineV2.getSku());
+			errorLog.setManufacturerName(asnLineV2.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog2(StockReceiptHeader stockReceiptHeader, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (StockReceiptLine stockReceiptLine : stockReceiptHeader.getStockReceiptLines()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(stockReceiptHeader.getReceiptNo());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(stockReceiptHeader.getCompanyCode());
+			errorLog.setPlantId(stockReceiptHeader.getBranchCode());
+			errorLog.setRefDocNumber(stockReceiptHeader.getReceiptNo());
+			errorLog.setItemCode(stockReceiptLine.getItemCode());
+			errorLog.setManufacturerName(stockReceiptLine.getManufacturerShortName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog3(SaleOrderReturnV2 saleOrderReturnV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (SOReturnLineV2 soReturnLineV2 : saleOrderReturnV2.getSoReturnLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(saleOrderReturnV2.getSoReturnHeader().getTransferOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(saleOrderReturnV2.getSoReturnHeader().getCompanyCode());
+			errorLog.setPlantId(saleOrderReturnV2.getSoReturnHeader().getBranchCode());
+			errorLog.setRefDocNumber(saleOrderReturnV2.getSoReturnHeader().getTransferOrderNumber());
+			errorLog.setItemCode(soReturnLineV2.getSku());
+			errorLog.setManufacturerName(soReturnLineV2.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog4(InterWarehouseTransferInV2 interWarehouseTransferInV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (InterWarehouseTransferInLineV2 interWarehouseTransferInLineV2 : interWarehouseTransferInV2.getInterWarehouseTransferInLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(interWarehouseTransferInV2.getInterWarehouseTransferInHeader().getTransferOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(interWarehouseTransferInV2.getInterWarehouseTransferInHeader().getToCompanyCode());
+			errorLog.setPlantId(interWarehouseTransferInV2.getInterWarehouseTransferInHeader().getToBranchCode());
+			errorLog.setRefDocNumber(interWarehouseTransferInV2.getInterWarehouseTransferInHeader().getTransferOrderNumber());
+			errorLog.setItemCode(interWarehouseTransferInLineV2.getSku());
+			errorLog.setManufacturerName(interWarehouseTransferInLineV2.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog5(B2bTransferIn b2bTransferIn, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (B2bTransferInLine b2bTransferInLine : b2bTransferIn.getB2bTransferLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(b2bTransferIn.getB2bTransferInHeader().getTransferOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(b2bTransferIn.getB2bTransferInHeader().getCompanyCode());
+			errorLog.setPlantId(b2bTransferIn.getB2bTransferInHeader().getBranchCode());
+			errorLog.setRefDocNumber(b2bTransferIn.getB2bTransferInHeader().getTransferOrderNumber());
+			errorLog.setItemCode(b2bTransferInLine.getSku());
+			errorLog.setManufacturerName(b2bTransferInLine.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog6(Perpetual perpetual, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (PerpetualLineV1 perpetualLineV1 : perpetual.getPerpetualLineV1()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(perpetual.getPerpetualHeaderV1().getCycleCountNo());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(perpetual.getPerpetualHeaderV1().getCompanyCode());
+			errorLog.setPlantId(perpetual.getPerpetualHeaderV1().getBranchCode());
+			errorLog.setItemCode(perpetualLineV1.getItemCode());
+			errorLog.setManufacturerName(perpetualLineV1.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog7(Periodic periodic, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (PeriodicLineV1 periodicLineV1 : periodic.getPeriodicLineV1()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(periodic.getPeriodicHeaderV1().getCycleCountNo());
+			errorLog.setOrderDate(new Date());
+			errorLog.setCompanyCodeId(periodic.getPeriodicHeaderV1().getCompanyCode());
+			errorLog.setPlantId(periodic.getPeriodicHeaderV1().getBranchCode());
+			errorLog.setItemCode(periodicLineV1.getItemCode());
+			errorLog.setManufacturerName(periodicLineV1.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog8(ShipmentOrderV2 shipmentOrderV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (SOLineV2 soLineV2 : shipmentOrderV2.getSoLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(shipmentOrderV2.getSoHeader().getTransferOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setLanguageId(shipmentOrderV2.getSoHeader().getLanguageId());
+			errorLog.setCompanyCodeId(shipmentOrderV2.getSoHeader().getCompanyCode());
+			errorLog.setPlantId(shipmentOrderV2.getSoHeader().getStoreID());
+			errorLog.setWarehouseId(shipmentOrderV2.getSoHeader().getWareHouseId());
+			errorLog.setRefDocNumber(shipmentOrderV2.getSoHeader().getTransferOrderNumber());
+			errorLog.setItemCode(soLineV2.getSku());
+			errorLog.setManufacturerName(soLineV2.getManufacturerName());
+			errorLog.setReferenceField1(shipmentOrderV2.getSoHeader().getTargetBranchCode());
+			errorLog.setReferenceField2(shipmentOrderV2.getSoHeader().getTargetCompanyCode());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog9(SalesOrderV2 salesOrderV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (SalesOrderLineV2 salesOrderLineV2 : salesOrderV2.getSalesOrderLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(salesOrderV2.getSalesOrderHeader().getSalesOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setLanguageId(salesOrderV2.getSalesOrderHeader().getLanguageId());
+			errorLog.setCompanyCodeId(salesOrderV2.getSalesOrderHeader().getCompanyCode());
+			errorLog.setPlantId(salesOrderV2.getSalesOrderHeader().getStoreID());
+			errorLog.setWarehouseId(salesOrderV2.getSalesOrderHeader().getWareHouseId());
+			errorLog.setRefDocNumber(salesOrderV2.getSalesOrderHeader().getSalesOrderNumber());
+			errorLog.setItemCode(salesOrderLineV2.getSku());
+			errorLog.setManufacturerName(salesOrderLineV2.getManufacturerName());
+			errorLog.setReferenceField1(salesOrderV2.getSalesOrderHeader().getPickListNumber());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog10(ReturnPOV2 returnPOV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (ReturnPOLineV2 returnPOLineV2 : returnPOV2.getReturnPOLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(returnPOV2.getReturnPOHeader().getPoNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setLanguageId(returnPOV2.getReturnPOHeader().getLanguageId());
+			errorLog.setCompanyCodeId(returnPOV2.getReturnPOHeader().getCompanyCode());
+			errorLog.setPlantId(returnPOV2.getReturnPOHeader().getStoreID());
+			errorLog.setWarehouseId(returnPOV2.getReturnPOHeader().getWareHouseId());
+			errorLog.setRefDocNumber(returnPOV2.getReturnPOHeader().getPoNumber());
+			errorLog.setItemCode(returnPOLineV2.getSku());
+			errorLog.setManufacturerName(returnPOLineV2.getManufacturerName());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog11(InterWarehouseTransferOutV2 interWarehouseTransferOutV2, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		for (InterWarehouseTransferOutLineV2 interWarehouseTransferOutLineV2 : interWarehouseTransferOutV2.getInterWarehouseTransferOutLine()) {
+			ErrorLog errorLog = new ErrorLog();
+
+			errorLog.setOrderTypeId(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getTransferOrderNumber());
+			errorLog.setOrderDate(new Date());
+			errorLog.setLanguageId(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getLanguageId());
+			errorLog.setCompanyCodeId(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getFromCompanyCode());
+			errorLog.setPlantId(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getFromBranchCode());
+			errorLog.setWarehouseId(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getFromWhsID());
+			errorLog.setRefDocNumber(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getTransferOrderNumber());
+			errorLog.setItemCode(interWarehouseTransferOutLineV2.getSku());
+			errorLog.setManufacturerName(interWarehouseTransferOutLineV2.getManufacturerName());
+			errorLog.setReferenceField1(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getToCompanyCode());
+			errorLog.setReferenceField2(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getToBranchCode());
+			errorLog.setReferenceField3(interWarehouseTransferOutV2.getInterWarehouseTransferOutHeader().getToWhsID());
+			errorLog.setErrorMessage(error);
+			errorLog.setCreatedBy("MSD_API");
+			errorLog.setCreatedOn(new Date());
+			errorLogRepository.save(errorLog);
+			errorLogList.add(errorLog);
+		}
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog12(SalesInvoice salesInvoice, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(salesInvoice.getSalesInvoiceNumber());
+		errorLog.setOrderDate(new Date());
+		errorLog.setCompanyCodeId(salesInvoice.getCompanyCode());
+		errorLog.setPlantId(salesInvoice.getBranchCode());
+		errorLog.setWarehouseId(salesInvoice.getWarehouseID());
+		errorLog.setRefDocNumber(salesInvoice.getSalesInvoiceNumber());
+		errorLog.setReferenceField1(salesInvoice.getSalesOrderNumber());
+		errorLog.setReferenceField2(salesInvoice.getPickListNumber());
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog13(StockAdjustment stockAdjustment, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(String.valueOf(stockAdjustment.getStockAdjustmentId()));
+		errorLog.setOrderDate(new Date());
+		errorLog.setCompanyCodeId(stockAdjustment.getCompanyCode());
+		errorLog.setPlantId(stockAdjustment.getBranchCode());
+		errorLog.setWarehouseId(stockAdjustment.getWarehouseId());
+		errorLog.setItemCode(stockAdjustment.getItemCode());
+		errorLog.setManufacturerName(stockAdjustment.getManufacturerName());
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createWarehouseLog14(String orderNo, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(orderNo);
+		errorLog.setOrderDate(new Date());
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
 	}
 
 }

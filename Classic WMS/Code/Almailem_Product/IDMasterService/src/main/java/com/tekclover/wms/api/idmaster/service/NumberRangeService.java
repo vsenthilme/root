@@ -17,12 +17,14 @@ import org.springframework.stereotype.Service;
 
 import com.tekclover.wms.api.idmaster.controller.exception.BadRequestException;
 import com.tekclover.wms.api.idmaster.model.IKeyValuePair;
+import com.tekclover.wms.api.idmaster.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.idmaster.model.numberrange.AddNumberRange;
 import com.tekclover.wms.api.idmaster.model.numberrange.FindNumberRange;
 import com.tekclover.wms.api.idmaster.model.numberrange.NumberRange;
 import com.tekclover.wms.api.idmaster.model.numberrange.UpdateNumberRange;
 import com.tekclover.wms.api.idmaster.model.warehouseid.Warehouse;
 import com.tekclover.wms.api.idmaster.repository.CompanyIdRepository;
+import com.tekclover.wms.api.idmaster.repository.ExceptionLogRepository;
 import com.tekclover.wms.api.idmaster.repository.NumberRangeRepository;
 import com.tekclover.wms.api.idmaster.repository.PlantIdRepository;
 import com.tekclover.wms.api.idmaster.repository.WarehouseRepository;
@@ -46,6 +48,8 @@ public class NumberRangeService {
 	private CompanyIdRepository companyIdRepository;
 	@Autowired
 	private WarehouseService warehouseService;
+	@Autowired
+	private ExceptionLogRepository exceptionLogRepo;
 
 	public List<NumberRange> getNumberRanges() {
 		List<NumberRange> numberRangeList = numberRangeRepository.findAll();
@@ -93,6 +97,9 @@ public class NumberRangeService {
 				.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndNumberRangeCodeAndFiscalYearAndLanguageIdAndDeletionIndicator(
 						companyCodeId, plantId, warehouseId, numberRangeCode, fiscalYear, languageId, 0L);
 		if (dbNumberRange.isEmpty()) {
+			// Exception Log
+//			createNumberRangeLog1(numberRangeCode, fiscalYear, languageId, companyCodeId, plantId, warehouseId,
+//					"NumberRange with given values and numberRangeCode-" + numberRangeCode + " doesn't exists.");
 			throw new BadRequestException("The given values : " + "warehouseId - " + warehouseId + "numberRangeCode - "
 					+ numberRangeCode + "fiscalYear - " + fiscalYear + " doesn't exist.");
 
@@ -135,6 +142,8 @@ public class NumberRangeService {
 						newNumberRange.getNumberRangeCode(), newNumberRange.getFiscalYear(),
 						newNumberRange.getLanguageId(), 0L);
 		if (!duplicateNumberRange.isEmpty()) {
+			// Exception Log
+//			createNumberRangeLog2(newNumberRange, "Record is getting Duplicated.");
 			throw new EntityNotFoundException("Record is Getting Duplicated");
 		} else {
 			Warehouse dbWarehouse = warehouseService.getWarehouse(newNumberRange.getWarehouseId(),
@@ -148,8 +157,8 @@ public class NumberRangeService {
 					.setWarehouseIdAndDescription(dbWarehouse.getWarehouseId() + "-" + dbWarehouse.getWarehouseDesc());
 			dbNumberRange.setCreatedBy(loginUserID);
 			dbNumberRange.setUpdatedBy(loginUserID);
-			dbNumberRange.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-			dbNumberRange.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+			dbNumberRange.setCreatedOn(new Date());
+			dbNumberRange.setUpdatedOn(new Date());
 			return numberRangeRepository.save(dbNumberRange);
 		}
 
@@ -172,7 +181,7 @@ public class NumberRangeService {
 				fiscalYear);
 		BeanUtils.copyProperties(updateNumberRange, dbNumberRange, CommonUtils.getNullPropertyNames(updateNumberRange));
 		dbNumberRange.setUpdatedBy(loginUserID);
-		dbNumberRange.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbNumberRange.setUpdatedOn(new Date());
 		return numberRangeRepository.save(dbNumberRange);
 	}
 
@@ -191,6 +200,9 @@ public class NumberRangeService {
 			dbNumberRange.setUpdatedBy(loginUserID);
 			numberRangeRepository.save(dbNumberRange);
 		} else {
+			// Exception Log
+//			createNumberRangeLog1(numberRangeCode, fiscalYear, languageId, companyCodeId, plantId, warehouseId,
+//					"Error in deleting Id - " + numberRangeCode);
 			throw new EntityNotFoundException("Error in deleting Id: " + numberRangeCode);
 		}
 	}
@@ -241,6 +253,9 @@ public class NumberRangeService {
 		Optional<NumberRange> optNumberRange = numberRangeRepository
 				.findByNumberRangeCodeAndFiscalYearAndWarehouseId(numberRangeCode, fiscalYear, warehouseId);
 		if (optNumberRange.isEmpty()) {
+			// Exception Log
+//			createNumberRangeLog3(numberRangeCode, fiscalYear, warehouseId,
+//					"The given NumberRangeCode-" + numberRangeCode + " and warehouseId-" + warehouseId + " doesn't exists.");
 			throw new BadRequestException("The given numberRangeCode : " + numberRangeCode + ", warehouseId: "
 					+ warehouseId + " doesn't exist.");
 		}
@@ -275,6 +290,9 @@ public class NumberRangeService {
 					.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndNumberRangeCodeAndLanguageIdAndDeletionIndicator(
 							companyCodeId, plantId, warehouseId, numberRangeCode, languageId, 0L);
 			if (optNumberRange.isEmpty()) {
+				// Exception Log
+//				createNumberRangeLog1(numberRangeCode, fiscalYear, languageId, companyCodeId, plantId, warehouseId,
+//						"The given NumberRangeCode-" + numberRangeCode + " and warehouseId-" + warehouseId + " doesn't exists.");
 				throw new BadRequestException("The given numberRangeCode : " + numberRangeCode + ", warehouseId: "
 						+ warehouseId + " doesn't exist.");
 			}
@@ -320,6 +338,9 @@ public class NumberRangeService {
 					.findByCompanyCodeIdAndPlantIdAndWarehouseIdAndNumberRangeCodeAndLanguageIdAndDeletionIndicator(
 							companyCodeId, plantId, warehouseId, numberRangeCode, languageId, 0L);
 			if (optNumberRange.isEmpty()) {
+				// Exception Log
+//				createNumberRangeLog(numberRangeCode, languageId, companyCodeId, plantId, warehouseId,
+//						"The given NumberRangeCode-" + numberRangeCode + " and warehouseId-" + warehouseId + " doesn't exists.");
 				throw new BadRequestException("The given numberRangeCode : " + numberRangeCode + ", warehouseId: "
 						+ warehouseId + " doesn't exist.");
 			}
@@ -351,4 +372,71 @@ public class NumberRangeService {
 		log.info("New value has been updated in NumberRangeCurrent column");
 		return strCurrentValue;
 	}
+
+	//=========================================NumberRange_ExceptionLog================================================
+	private void createNumberRangeLog(Long numberRangeCode, String languageId, String companyCodeId,
+									  String plantId, String warehouseId, String error) {
+
+		ExceptionLog exceptionLog = new ExceptionLog();
+		exceptionLog.setOrderTypeId(String.valueOf(numberRangeCode));
+		exceptionLog.setOrderDate(new Date());
+		exceptionLog.setLanguageId(languageId);
+		exceptionLog.setCompanyCodeId(companyCodeId);
+		exceptionLog.setPlantId(plantId);
+		exceptionLog.setWarehouseId(warehouseId);
+		exceptionLog.setReferenceField1(String.valueOf(numberRangeCode));
+		exceptionLog.setErrorMessage(error);
+		exceptionLog.setCreatedBy("MSD_API");
+		exceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(exceptionLog);
+	}
+
+	private void createNumberRangeLog1(Long numberRangeCode, Long fiscalYear, String languageId, String companyCodeId,
+									   String plantId, String warehouseId, String error) {
+
+		ExceptionLog exceptionLog = new ExceptionLog();
+		exceptionLog.setOrderTypeId(String.valueOf(numberRangeCode));
+		exceptionLog.setOrderDate(new Date());
+		exceptionLog.setLanguageId(languageId);
+		exceptionLog.setCompanyCodeId(companyCodeId);
+		exceptionLog.setPlantId(plantId);
+		exceptionLog.setWarehouseId(warehouseId);
+		exceptionLog.setReferenceField1(String.valueOf(numberRangeCode));
+		exceptionLog.setReferenceField2(String.valueOf(fiscalYear));
+		exceptionLog.setErrorMessage(error);
+		exceptionLog.setCreatedBy("MSD_API");
+		exceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(exceptionLog);
+	}
+
+	private void createNumberRangeLog2(AddNumberRange addNumberRange, String error) {
+
+		ExceptionLog exceptionLog = new ExceptionLog();
+		exceptionLog.setOrderTypeId(String.valueOf(addNumberRange.getNumberRangeCode()));
+		exceptionLog.setOrderDate(new Date());
+		exceptionLog.setLanguageId(addNumberRange.getLanguageId());
+		exceptionLog.setCompanyCodeId(addNumberRange.getCompanyCodeId());
+		exceptionLog.setPlantId(addNumberRange.getPlantId());
+		exceptionLog.setWarehouseId(addNumberRange.getWarehouseId());
+		exceptionLog.setReferenceField1(String.valueOf(addNumberRange.getFiscalYear()));
+		exceptionLog.setErrorMessage(error);
+		exceptionLog.setCreatedBy("MSD_API");
+		exceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(exceptionLog);
+	}
+
+	private void createNumberRangeLog3(Long numberRangeCode, Long fiscalYear, String warehouseId, String error) {
+
+		ExceptionLog exceptionLog = new ExceptionLog();
+		exceptionLog.setOrderTypeId(String.valueOf(numberRangeCode));
+		exceptionLog.setOrderDate(new Date());
+		exceptionLog.setWarehouseId(warehouseId);
+		exceptionLog.setReferenceField1(String.valueOf(numberRangeCode));
+		exceptionLog.setReferenceField2(String.valueOf(fiscalYear));
+		exceptionLog.setErrorMessage(error);
+		exceptionLog.setCreatedBy("MSD_API");
+		exceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(exceptionLog);
+	}
+
 }

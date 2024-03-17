@@ -100,7 +100,7 @@ export class StorePartnerListingComponent implements OnInit {
     }));
   }
 
-  displayedColumns: string[] = ['select', 'clientDoc', 'groupId', 'groupTypeId', 'versionNumber', 'storeId', 'createdBy', 'createdOn',];
+  displayedColumns: string[] = ['select', 'clientDoc', 'groupId', 'groupTypeId', 'storeId', 'createdBy', 'createdOn',];
   dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
   selection = new SelectionModel<any>(true, []);
 
@@ -276,7 +276,7 @@ export class StorePartnerListingComponent implements OnInit {
         'Company ID': x.companyId,
       "Group":x.groupId +'-'+x.groupName,
       "Group Type":x.groupTypeId +'-'+x.groupTypeName,
-      "Sub Group Type":x.subGroupId+'-'+x.subGroupName,
+      //"Sub Group Type":x.subGroupId+'-'+x.subGroupName,
         "Store ID": x.storeId + ' - ' + x.storeName,
         "Co-Owner1": (x.coOwnerId1 == 0 ? '': x.coOwnerId1 + ' - ' )+ (x.coOwnerName1 == 0 ? ' ':x.coOwnerName1),
         "RelationShip1":x.realtionShipId1+'-'+x.realtionShipName1,

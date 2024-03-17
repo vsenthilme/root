@@ -1,11 +1,13 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +55,7 @@ public class InventoryMovementController {
     @ApiOperation(response = InventoryMovement.class, value = "Get a InventoryMovement") // label for swagger 
 	@GetMapping("/{movementType}")
 	public ResponseEntity<?> getInventoryMovement(@PathVariable Long movementType, @RequestParam String warehouseId, 
-			@RequestParam Long submovementType, @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String batchSerialNumber, @RequestParam String movementDocumentNo) {
+			@RequestParam Long submovementType, @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String batchSerialNumber, @RequestParam String movementDocumentNo) throws IOException, CsvException {
     	InventoryMovement inventorymovement = 
     			inventorymovementService.getInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, 
 						batchSerialNumber, movementDocumentNo);
@@ -70,7 +72,7 @@ public class InventoryMovementController {
     @ApiOperation(response = InventoryMovement.class, value = "Create InventoryMovement") // label for swagger
 	@PostMapping("")
 	public ResponseEntity<?> postInventoryMovement(@Valid @RequestBody AddInventoryMovement newInventoryMovement, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		InventoryMovement createdInventoryMovement = inventorymovementService.createInventoryMovement(newInventoryMovement, loginUserID);
 		return new ResponseEntity<>(createdInventoryMovement , HttpStatus.OK);
 	}
@@ -80,7 +82,7 @@ public class InventoryMovementController {
 	public ResponseEntity<?> patchInventoryMovement(@PathVariable Long movementType, @RequestParam String warehouseId, 
 			@RequestParam Long submovementType, @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String batchSerialNumber, @RequestParam String movementDocumentNo,
 			@Valid @RequestBody UpdateInventoryMovement updateInventoryMovement, @RequestParam String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		InventoryMovement createdInventoryMovement = 
 				inventorymovementService.updateInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, 
 						batchSerialNumber, movementDocumentNo, updateInventoryMovement);
@@ -91,7 +93,7 @@ public class InventoryMovementController {
 	@DeleteMapping("/{movementType}")
 	public ResponseEntity<?> deleteInventoryMovement(@PathVariable Long movementType, @RequestParam String warehouseId, 
 			@RequestParam Long submovementType, @RequestParam String packBarcodes, @RequestParam String itemCode, 
-			@RequestParam String batchSerialNumber, @RequestParam String movementDocumentNo, @RequestParam String loginUserID) {
+			@RequestParam String batchSerialNumber, @RequestParam String movementDocumentNo, @RequestParam String loginUserID) throws IOException, CsvException {
     	inventorymovementService.deleteInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, 
 				batchSerialNumber, movementDocumentNo, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

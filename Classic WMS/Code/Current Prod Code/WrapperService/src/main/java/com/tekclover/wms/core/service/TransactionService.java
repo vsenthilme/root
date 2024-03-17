@@ -17,6 +17,8 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.tekclover.wms.core.model.idmaster.FindNumberRange;
+import com.tekclover.wms.core.model.idmaster.NumberRange;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.BeanUtils;
@@ -7583,5 +7585,44 @@ public class TransactionService {
 		imBasicData1.setUpdatedOn		(resultSet.getDate  	("UTD_ON"));
 
 		return imBasicData1;
+	}
+
+	// GetAll - findTransactionError
+	public TransactionError[] findTransactionError( String authToken) throws Exception {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "ClassicWMS RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+
+			UriComponentsBuilder builder = UriComponentsBuilder
+					.fromHttpUrl(getTransactionServiceApiUrl() + "reports/transactionError");
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+			ResponseEntity<TransactionError[]> result = getRestTemplate().exchange(builder.toUriString(),
+					HttpMethod.GET, entity, TransactionError[].class);
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	//  findTransactionError
+	public TransactionError[] findTransactionError(FindTransactionError findTransactionError, String authToken) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "reports/find/transactionError");
+			HttpEntity<?> entity = new HttpEntity<>(findTransactionError, headers);
+			ResponseEntity<TransactionError[]> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, TransactionError[].class);
+			log.info("result : " + result.getStatusCode());
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

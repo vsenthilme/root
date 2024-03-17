@@ -32,4 +32,5 @@ public interface StockAdjustmentRepository extends JpaRepository<StockAdjustment
     StockAdjustment findTopByStockAdjustmentIdAndCompanyCodeAndBranchCodeAndItemCodeOrderByDateOfAdjustmentDesc(
             Long stockAdjustmentId, String companyCode, String branchCode, String itemCode);
 
+    List<StockAdjustment> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

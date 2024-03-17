@@ -7,8 +7,10 @@ import java.util.stream.Stream;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicLineV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicUpdateResponseV2;
+import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicZeroStockLine;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.SearchPeriodicLineV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
+import com.tekclover.wms.api.transaction.service.PeriodicZeroStkLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,9 @@ public class PeriodicLineController {
 	
 	@Autowired
 	PeriodicLineService periodicLineService;
+
+	@Autowired
+	PeriodicZeroStkLineService periodicZeroStkLineService;
 	
 	@ApiOperation(response = PeriodicLine.class, value = "SearchPeriodicLine") // label for swagger
 	@PostMapping("/findPeriodicLine")
@@ -83,7 +88,7 @@ public class PeriodicLineController {
 
 	@ApiOperation(response = PeriodicLineV2.class, value = "SearchPeriodicLineV2") // label for swagger
 	@PostMapping("/v2/findPeriodicLine")
-	public Stream<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
+	public List<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
 			throws Exception {
 		return periodicLineService.findPeriodicLineStreamV2(searchPeriodicLineV2);
 	}
@@ -114,5 +119,15 @@ public class PeriodicLineController {
 		WarehouseApiResponse createdPerpetualLine =
 				periodicLineService.updatePeriodicLineConfirmV2(cycleCountNo, updatePerpetualLine, loginUserID);
 		return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);
+	}
+
+
+	//=================================================Zero Stock to Create Inventory===========================================================
+	@ApiOperation(response = PeriodicLineV2.class, value = "Update PeriodicLine Zero Stock") // label for swagger
+	@PostMapping("/v2/createPeriodicFromZeroStk")
+	public ResponseEntity<?> createPeriodicLineV2(@RequestBody List<PeriodicZeroStockLine> updatePeriodicLine, @RequestParam String loginUserID) {
+		List<PeriodicLineV2> createdPeriodicLine =
+				periodicZeroStkLineService.updatePeriodicZeroStkLine(updatePeriodicLine, loginUserID);
+		return new ResponseEntity<>(createdPeriodicLine, HttpStatus.OK);
 	}
 }

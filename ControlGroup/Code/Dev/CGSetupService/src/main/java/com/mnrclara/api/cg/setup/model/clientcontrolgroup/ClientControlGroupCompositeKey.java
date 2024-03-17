@@ -19,6 +19,6 @@ public class ClientControlGroupCompositeKey implements Serializable {
     private String languageId;
     private Long clientId;
     private Long groupTypeId;
-    private Long subGroupTypeId;
+//    private Long subGroupTypeId;
     private Long versionNumber;
 }

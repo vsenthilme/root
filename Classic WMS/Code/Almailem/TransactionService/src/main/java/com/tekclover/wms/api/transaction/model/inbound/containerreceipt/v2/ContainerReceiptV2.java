@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.model.inbound.containerreceipt.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.containerreceipt.ContainerReceipt;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

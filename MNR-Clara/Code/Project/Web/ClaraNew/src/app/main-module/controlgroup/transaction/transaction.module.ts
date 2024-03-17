@@ -27,6 +27,7 @@ import { SucesstmplteComponent } from './Template/family-template/sucesstmplte/s
 import { SendEmailApprovalComponent } from './proposed/send-email-approval/send-email-approval.component';
 import { NgxEditorModule } from "ngx-editor";
 import { UploadFilesComponent } from './ownership/ownership-new/upload-files/upload-files.component';
+import { TrsanctionreportscreenComponent } from './trsanctionreportscreen/trsanctionreportscreen.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { UploadFilesComponent } from './ownership/ownership-new/upload-files/upl
     SucesstmplteComponent,
     SendEmailApprovalComponent,
     UploadFilesComponent,
+    TrsanctionreportscreenComponent,
   ],
   imports: [
     CommonModule,

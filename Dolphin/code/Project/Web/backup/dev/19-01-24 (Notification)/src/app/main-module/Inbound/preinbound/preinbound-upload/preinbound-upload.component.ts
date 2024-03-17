@@ -1,0 +1,185 @@
+
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+//import { table } from 'console';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { forkJoin, of, Subscription } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { DialogExampleComponent } from 'src/app/common-field/innerheader/dialog-example/dialog-example.component';
+import { CommonService } from 'src/app/common-service/common-service.service';
+import { AuthService } from 'src/app/core/core';
+import { PreinboundService } from 'src/app/main-module/Inbound/preinbound/preinbound.service';
+import { BOMElement, BOMService } from 'src/app/main-module/Masters -1/other-masters/bom/bom.service';
+import { BusinessPartnerService } from 'src/app/main-module/Masters -1/other-masters/business-partner/business-partner.service';
+import { MasterService } from 'src/app/shared/master.service';
+import { PreinboundaddlinesComponent } from './preinboundaddlines/preinboundaddlines.component';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-preinbound-upload',
+  templateUrl: './preinbound-upload.component.html',
+  styleUrls: ['./preinbound-upload.component.scss']
+})
+
+export class PreinboundUploadComponent implements OnInit {
+
+  email = new FormControl('', [Validators.required, Validators.email, Validators.pattern("[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}")]);
+  displayedColumns: string[] = ['containerNumber', 'expectedDate', 'expectedQty', 'invoiceNumber', 'lineReference', 'manufacturerName',
+    'manufacturerPartNo', 'packQty', 'sku', 'skuDescription', 'supplierCode',
+    'supplierPartNumber', 'uom', 'delete'];
+  ELEMENT_DATA: any[] = [];
+  dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
+  screenid: 1037 | undefined;
+
+  isShowDiv = false;
+  public icon = 'expand_more';
+  showFloatingButtons: any;
+  toggle = true;
+
+  toggleFloat() {
+    this.isShowDiv = !this.isShowDiv;
+    this.toggle = !this.toggle;
+    if (this.icon === 'expand_more') {
+      this.icon = 'chevron_left';
+    } else {
+      this.icon = 'expand_more'
+    }
+    this.showFloatingButtons = !this.showFloatingButtons;
+  }
+
+  sub = new Subscription();
+
+  asnHeader = this.fb.group({
+    asnNumber: [],
+    wareHouseId: [],
+  });
+
+  submitted = false;
+  disabled = false;
+  step = 0;
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
+  panelOpenState = false;
+  constructor(
+    private service: PreinboundService,
+    public toastr: ToastrService,
+    private spin: NgxSpinnerService,
+    private bonService: BusinessPartnerService,
+    private masterService: MasterService,
+    private auth: AuthService,
+    private dialog: MatDialog,
+    private fb: FormBuilder,
+    private router: Router,
+    private cs: CommonService,
+  ) { }
+
+  ngOnInit(): void {
+    this.dropdownfill();
+  }
+
+  multiWarehouseList: any[] = [];
+  multiPartnerList: any[] = [];
+
+  dropdownfill() {
+    this.spin.show();
+    forkJoin({
+      warehouse: this.masterService.getWarehouseMasterDetails().pipe(catchError(err => of(err))),
+    })
+      .subscribe(({ warehouse }) => {
+        warehouse.forEach(x => this.multiWarehouseList.push({ value: x.warehouseId, label: x.warehouseId }));
+        this.asnHeader.controls.wareHouseId.patchValue(this.auth.warehouseId)
+      })
+    this.spin.hide();
+  }
+
+  submit() {
+    let obj: any = {};
+    let asnHeader: any = {};
+    asnHeader.asnNumber = this.asnHeader.controls.asnNumber.value;
+    asnHeader.wareHouseId = this.asnHeader.controls.wareHouseId.value;
+
+    obj.asnHeader = asnHeader;
+    obj.asnLine = this.dataSource.data;
+
+    this.sub.add(this.service.createAsnOrder(obj).subscribe(res => {
+      if (res) {
+        this.toastr.success("Order created successfully!", "Notification");
+        this.router.navigate(['/main/inbound/preinbound']);
+        this.spin.hide();
+      }
+    }, err => {
+      this.cs.commonerror(err);
+      this.spin.hide();
+    }));
+  };
+
+  ngOnDestroy() {
+    if (this.sub != null) {
+      this.sub.unsubscribe();
+    }
+  }
+
+  elementdata: any;
+  @ViewChild(MatTable)
+  table!: MatTable<any>;
+
+  add() {
+    const dialogRef = this.dialog.open(PreinboundaddlinesComponent, {
+      disableClose: true,
+      width: '50%',
+      maxWidth: '80%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && result.length > 0) {
+        this.dataSource.data.push(result);
+      }
+
+      this.dataSource.data.push(result);
+      this.dataSource._updateChangeSubscription();
+    });
+  }
+  
+  removeRow(index: any) {
+    const rowNo = this.dataSource.data.indexOf(index);
+    if (rowNo == -1) {
+      this.dataSource.data.splice(index, 1);
+    }
+    else {
+      this.dataSource.data.splice(rowNo, 1);
+    }
+    this.dataSource._updateChangeSubscription();
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

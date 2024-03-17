@@ -12,8 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbltransactionauditlog")
-public class AuditLog { 
-	
+public class AuditLog {
+
+	@Column(name = "AUD_FILE_NO")
+	private String auditFileNumber;
+
 	@Column(name = "C_ID")
 	private String companyCode;
 	

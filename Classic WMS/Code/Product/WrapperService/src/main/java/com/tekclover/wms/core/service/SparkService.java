@@ -532,6 +532,27 @@ public class SparkService {
             e.printStackTrace();
             throw e;
         }
+    }
 
+
+    //IMBasicData1
+    public ImBasicData1[] findImBasicData1(SearchImBasicData1 searchImBasicData1){
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", " RestTemplate");
+//        headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getSparkServiceApiUrl() + "wms/spark/imbasicData1");
+            HttpEntity<?> entity = new HttpEntity<>(searchImBasicData1, headers);
+            ResponseEntity<ImBasicData1[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, ImBasicData1[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

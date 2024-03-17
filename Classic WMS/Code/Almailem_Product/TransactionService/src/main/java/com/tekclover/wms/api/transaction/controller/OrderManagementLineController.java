@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.AssignPickerV2;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.OrderManagementLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.ordermangement.v2.SearchOrderManagementLineV2;
@@ -203,7 +205,7 @@ public class OrderManagementLineController {
 
     @ApiOperation(response = OrderManagementLineV2.class, value = "UnAllocate") // label for swagger
     @PatchMapping("/v2/unallocate/patch")
-    public ResponseEntity<?> unallocateOrderManagementLineV2(@Valid @RequestBody List<OrderManagementLineV2> orderManagementLineV2, @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+    public ResponseEntity<?> unallocateOrderManagementLineV2(@Valid @RequestBody List<OrderManagementLineV2> orderManagementLineV2, @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         List<OrderManagementLineV2> updatedOrderManagementLine =
                 ordermangementlineService.doUnAllocationV2(orderManagementLineV2, loginUserID);
         return new ResponseEntity<>(updatedOrderManagementLine, HttpStatus.OK);
@@ -215,7 +217,7 @@ public class OrderManagementLineController {
                                                              @RequestParam String languageId, @RequestParam String preOutboundNo,
                                                              @RequestParam String refDocNumber, @RequestParam String partnerCode, @RequestParam Long lineNumber,
                                                              @RequestParam String itemCode, @RequestParam String proposedStorageBin, @RequestParam String proposedPackBarCode,
-                                                             @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+                                                             @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         OrderManagementLineV2 updatedOrderManagementLine =
                 ordermangementlineService.doUnAllocationV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber,
                         itemCode, proposedStorageBin, proposedPackBarCode, loginUserID);
@@ -225,7 +227,7 @@ public class OrderManagementLineController {
     @ApiOperation(response = OrderManagementLineV2.class, value = "Allocate") // label for swagger
     @PatchMapping("/v2/allocate/patch")
     public ResponseEntity<?> allocateOrderManagementLineV2(@Valid @RequestBody List<OrderManagementLineV2> orderManagementLineV2, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         List<OrderManagementLineV2> updatedOrderManagementLine =
                 ordermangementlineService.doAllocationV2(orderManagementLineV2, loginUserID);
         return new ResponseEntity<>(updatedOrderManagementLine, HttpStatus.OK);
@@ -237,7 +239,7 @@ public class OrderManagementLineController {
                                                            @RequestParam String languageId, @RequestParam String preOutboundNo,
                                                            @RequestParam String refDocNumber, @RequestParam String partnerCode, @RequestParam Long lineNumber,
                                                            @RequestParam String itemCode, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         OrderManagementLineV2 updatedOrderManagementLine =
                 ordermangementlineService.doAllocationV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode, lineNumber,
                         itemCode, loginUserID);

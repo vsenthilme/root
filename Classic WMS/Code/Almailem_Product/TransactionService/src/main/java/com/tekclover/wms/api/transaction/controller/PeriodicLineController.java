@@ -1,10 +1,12 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicLineV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.PeriodicUpdateResponseV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.SearchPeriodicLineV2;
@@ -83,7 +85,7 @@ public class PeriodicLineController {
 
 	@ApiOperation(response = PeriodicLineV2.class, value = "SearchPeriodicLineV2") // label for swagger
 	@PostMapping("/v2/findPeriodicLine")
-	public Stream<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
+	public List<PeriodicLineV2> findPeriodicLineV2(@RequestBody SearchPeriodicLineV2 searchPeriodicLineV2)
 			throws Exception {
 		return periodicLineService.findPeriodicLineStreamV2(searchPeriodicLineV2);
 	}
@@ -100,7 +102,7 @@ public class PeriodicLineController {
 	@PatchMapping("/v2/{cycleCountNo}")
 	public ResponseEntity<?> patchPeriodicLineV2(@PathVariable String cycleCountNo,
 												  @RequestBody List<PeriodicLineV2> updatePeriodicLine, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException, ParseException {
+			throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
 		PeriodicUpdateResponseV2 createdPeriodicResponse =
 				periodicLineService.updatePeriodicLineV2(cycleCountNo, updatePeriodicLine, loginUserID);
 		return new ResponseEntity<>(createdPeriodicResponse, HttpStatus.OK);

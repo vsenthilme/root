@@ -71,7 +71,7 @@ public class SparkInhouseTransferHeaderService {
                 + "MFR_NAME as manufacturerName "
                 + "From tblinhousetransferheader where IS_DELETED = 0 "
         );
-        inhouseTransferHeaderQuery.cache();
+//        inhouseTransferHeaderQuery.cache();
 
 
         Encoder<InhouseTransferHeader> inhouseTransferHeaderEncoder = Encoders.bean(InhouseTransferHeader.class);

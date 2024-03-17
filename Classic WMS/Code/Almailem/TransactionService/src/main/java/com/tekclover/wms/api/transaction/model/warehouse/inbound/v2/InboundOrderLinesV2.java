@@ -2,11 +2,13 @@ package com.tekclover.wms.api.transaction.model.warehouse.inbound.v2;
 
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.InboundOrderLines;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @ToString(callSuper = true)

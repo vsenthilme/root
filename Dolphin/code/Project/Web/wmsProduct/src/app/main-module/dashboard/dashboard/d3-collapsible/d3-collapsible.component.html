@@ -1,0 +1,21 @@
+<div class="content" role="main">
+  <div class="row ">
+    <div class="col-lg-2 col-md-6 mt-2">
+      <div class="d-flex flex-column">
+        <p class="mb-0 py-0 mb-1">Order No</p>
+        <p-dropdown placeholder="Select" class="w-100"  [filter]="true" [options]="toList"
+          [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" [panelStyle]="{'width':'20%'}"
+          appendTo="body"> </p-dropdown>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-6 mt-2">
+      <div class="d-flex flex-column">
+        <p class="mb-0 py-0 mb-1">Item Code</p>
+        <p-dropdown placeholder="Select" class="w-100" (onChange)="showDashboard()" [filter]="true" [options]="itemCode"
+          [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}" [panelStyle]="{'width':'20%'}"
+          appendTo="body"> </p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="d3-chart container tree" #chart></div>
+</div>

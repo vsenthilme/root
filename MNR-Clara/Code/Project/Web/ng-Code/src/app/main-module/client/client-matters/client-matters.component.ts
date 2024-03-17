@@ -254,7 +254,7 @@ export class ClientMattersComponent implements OnInit {
     this.cas.getalldropdownlist([
       this.cas.dropdownlist.matter.dropdown.url,
     ]).subscribe((results: any) => {
-      this.spin.hide();
+      this.spin.show();
       results[0].matterList.forEach((x: any) => {
         this.multiselectmatterList.push({ value: x.key, label: x.key + '-' + x.value });
       })
@@ -264,6 +264,7 @@ export class ClientMattersComponent implements OnInit {
       results[0].caseCategoryList.forEach((casecat: any) => {
         this.multiselectcasecatList.push({ value: casecat.key, label: casecat.key + '-' + casecat.value });
       })
+      this.spin.hide();
     }, (err) => {
       this.spin.hide();
       this.toastr.error(err, "");
@@ -288,7 +289,6 @@ export class ClientMattersComponent implements OnInit {
       results[0].caseCategoryList.forEach((casecat: any) => {
         this.multiselectcasecatList.push({ value: casecat.key, label: casecat.key + '-' + casecat.value });
       })
-
 
       this.statuslist = this.cas.foreachlist_searchpage(results[2], this.cas.dropdownlist.setup.statusId.key).filter(s => [26, 27, 28, 29, 30, 36].includes(s.key));
       console.log(this.statuslist)
@@ -336,7 +336,6 @@ export class ClientMattersComponent implements OnInit {
     }, (err) => {
       this.toastr.error(err, "");
     });
-    this.spin.hide();
 
   }
   downloadexcel() {

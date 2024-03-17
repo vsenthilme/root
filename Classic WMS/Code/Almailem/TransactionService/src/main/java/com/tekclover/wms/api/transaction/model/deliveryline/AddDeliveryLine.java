@@ -2,7 +2,6 @@ package com.tekclover.wms.api.transaction.model.deliveryline;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.util.Date;
 
 @Data
@@ -86,7 +85,11 @@ public class AddDeliveryLine {
 
     private Long statusId;
 
+    private Boolean reDelivered;
+
     private Long deletionIndicator;
+    private String barcodeId;
+    private String manufacturerName;
 
     private String referenceField1;
 

@@ -173,9 +173,9 @@ export class ExpirationDateComponent implements OnInit {
       }
     const dialogRef = this.dialog.open(ExpirationNewComponent, {
       disableClose: true,
-      width: '50%',
+      width: '80%',
       maxWidth: '80%',
-      position: { top: '6.5%' },
+      //position: { top: '6.5%' },
       data: { pageflow: data, matter: this.cs.decrypt(this.route.snapshot.params.code).code, matterdesc: this.matterdesc, code: data != 'New' ? this.selection.selected[0] : null }
     });
 

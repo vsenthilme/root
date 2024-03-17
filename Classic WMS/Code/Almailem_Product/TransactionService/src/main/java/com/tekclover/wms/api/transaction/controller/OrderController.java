@@ -1,9 +1,19 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
 
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.FindInboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderLinesV2;
+import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.FindOutboundOrderLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.FindOutboundOrderV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.OutboundOrderLineV2;
+import com.tekclover.wms.api.transaction.model.warehouse.outbound.v2.OutboundOrderV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,7 +137,7 @@ public class OrderController {
     @ApiOperation(response = OutboundOrder.class, value = "Create OutboundOrder") // label for swagger
    	@GetMapping("/outbound/requeue/{orderId}")
    	public ResponseEntity<?> pushOrders(@PathVariable String orderId) 
-   			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
        	ShipmentOrder createdOutboundOrder = orderService.pushOrder(orderId);
    		return new ResponseEntity<>(createdOutboundOrder , HttpStatus.OK);
    	}
@@ -140,4 +150,37 @@ public class OrderController {
     	List<IntegrationApiResponse> integrationApiResponseList = orderService.getConfirmationOrder(orderId);
    		return new ResponseEntity<>(integrationApiResponseList , HttpStatus.OK);
    	}
+
+	@ApiOperation(response = InboundOrderV2.class, value = "Find InboundOrderV2 details")
+	// label for swagger
+	@PostMapping("/findInboundOrderV2")
+	public ResponseEntity<?> findInboundOrderV2(@RequestBody FindInboundOrderV2 findInboundOrderV2) throws ParseException {
+		List<InboundOrderV2> inboundOrderV2List = orderService.findInboundOrderV2(findInboundOrderV2);
+		return new ResponseEntity<>(inboundOrderV2List, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = InboundOrderLinesV2.class, value = "Find InboundOrderLinesV2 details")
+	// label for swagger
+	@PostMapping("/findInboundOrderLinesV2")
+	public ResponseEntity<?> findInboundOrderLinesV2(@RequestBody FindInboundOrderLineV2 findInboundOrderLineV2) throws ParseException {
+		List<InboundOrderLinesV2> inboundOrderLinesV2List = orderService.findInboundOrderLineV2(findInboundOrderLineV2);
+		return new ResponseEntity<>(inboundOrderLinesV2List, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = OutboundOrderV2.class, value = "Find OutboundOrderV2 details")
+	// label for swagger
+	@PostMapping("/findOutboundOrderV2")
+	public ResponseEntity<?> findOutboundOrderV2(@RequestBody FindOutboundOrderV2 findOutboundOrderV2) throws ParseException {
+		List<OutboundOrderV2> outboundOrderV2List = orderService.findOutboundOrderV2(findOutboundOrderV2);
+		return new ResponseEntity<>(outboundOrderV2List, HttpStatus.OK);
+	}
+
+	@ApiOperation(response = OutboundOrderLineV2.class, value = "Find OutboundOrderLineV2 details")
+	// label for swagger
+	@PostMapping("/findOutboundOrderLineV2")
+	public ResponseEntity<?> findOutboundOrderLineV2(@RequestBody FindOutboundOrderLineV2 findOutboundOrderLineV2) throws ParseException {
+		List<OutboundOrderLineV2> outboundOrderLineV2List = orderService.findOutboundOrderLineV2(findOutboundOrderLineV2);
+		return new ResponseEntity<>(outboundOrderLineV2List, HttpStatus.OK);
+	}
+
 }

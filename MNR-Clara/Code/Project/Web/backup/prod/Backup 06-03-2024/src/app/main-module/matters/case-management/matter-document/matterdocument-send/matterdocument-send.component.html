@@ -1,0 +1,99 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2 bg-white">
+  <div class="ps-3">
+    <nav aria-label="breadcrumb mb-0">
+      <ol class="breadcrumb mb-0 d-flex align-items-center">
+        <li class="breadcrumb-item mb-0 ms-3">
+          <a >
+            <mat-icon class="text-secondary align-middle">home</mat-icon>
+          </a>
+        </li>
+        <div class="divider mx-3 border-end"></div>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Matters</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Document</li>
+        <li class="breadcrumb-item mb-0 active " aria-current="page">Send</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+    <div> <input matInput disabled class="form-control disabled filter_button mx-2 border-bottom" placeholder="Search"
+        style="width:90%"></div>
+    <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+      <a mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+        matTooltip="Download" [download]="fileName" [href]="fileUrldownload">
+        <mat-icon class="">download</mat-icon>
+      </a>
+      <!-- <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow1 text-white mx-2"
+            matTooltip="print" (click)="print()">
+            <mat-icon class="">print</mat-icon>
+          </button> -->
+      <button mat-mini-fab *ngIf="showFloatingButtons == true && pageflow !='view' && issend"
+        class="floating-buttons bg-lightblue text-white mx-2" matTooltip="Send" (click)="post_agreement()">
+        <mat-icon class="">send</mat-icon>
+      </button>
+      <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-darkblue1 text-white mx-2"
+        matTooltip="Cancel" (click)="cancel()">
+        <mat-icon class="">close</mat-icon>
+      </button>
+      <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+        [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+        <mat-icon>{{icon}}</mat-icon>Options
+      </button>
+      <button mat-mini-fab disabled class="bg-darkblue text-white mx-2 action-button disabled">
+        <mat-icon class="">add</mat-icon> New
+      </button>
+      <button mat-mini-fab disabled class="text-white mx-2 action-button disabled bg-red" type="button" mat-button>
+        <mat-icon class="">search</mat-icon> Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center text-secondary mx-3"
+  style="height: 3rem;padding-left: 2.4rem;">
+  <h3 class="my-auto mb-0 text-dark" style="font-size:22px;">Document Number - {{documentNo}}</h3>
+</div>
+
+<div *ngIf="pageflowupload" class="mt-2 d-flex justify-content-start align-items-center" style="padding-left: 1.9rem;">
+  <input mat-raised-button class="form-control w-25 ms-4" ngf type="file" accept="*" [(files)]="files"
+    (click)="files =[]" />
+  <!-- <button mat-mini-fab *ngIf="files.length >0" (click)="display(files)"
+    class="floating-buttons bg-pink text-white mx-2 shadow-none">
+    <mat-icon class="">remove_red_eye</mat-icon>
+  </button> -->
+  <!-- <button mat-mini-fab *ngIf="files.length >0 && isupload" (click)="uploadFiles(files)"
+    class="floating-buttons bg-yellow1 text-white mx-2 shadow-none">
+    <mat-icon class="">upload</mat-icon>
+  </button> -->
+  <button mat-mini-fab *ngIf="files.length >0" (click)="display(files)" class="bg-pink1 mx-2 text-white action-button">
+    <mat-icon class="mr-2">remove_red_eye</mat-icon>Display
+  </button>
+
+  <button mat-mini-fab *ngIf="files.length >0 && isupload" (click)="uploadFiles(files)" class="bg-yellow mx-2 text-white action-button">
+  <mat-icon class="mr-2">upload</mat-icon>Upload
+</button>
+
+  <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+
+  <!-- <ngfUploadStatus [(percent)]="uploadPercent" [httpEvent]="httpEvent"></ngfUploadStatus> -->
+
+
+
+</div>
+<br />
+
+
+<div class="pdfheight">
+
+
+
+<!-- <ngx-doc-viewer class="px-5" *ngIf="!fileName.includes('.pdf')" [url]="docurl" viewer="mammoth" style="width:100%;height: 65%;">
+</ngx-doc-viewer> -->
+<ngx-doc-viewer class="px-5" *ngIf="fileName.includes('.d')" [url]="docurl" viewer="mammoth" style="width:100%;height: 65%;">
+</ngx-doc-viewer>
+<img *ngIf="!fileName.includes('.pdf') && !fileName.includes('.d')" [src]="image">
+<pdf-viewer *ngIf="fileName.includes('.pdf')" [src]="docurl" ></pdf-viewer>
+</div>
+<!-- <br />
+    <br /> -->
+<!-- <ngx-doc-viewer [url]="docurl" viewer="office" style="width:100%;height: 65%;">
+    </ngx-doc-viewer> -->

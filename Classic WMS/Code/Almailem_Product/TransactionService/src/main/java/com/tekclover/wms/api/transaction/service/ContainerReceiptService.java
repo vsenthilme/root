@@ -452,8 +452,6 @@ public class ContainerReceiptService extends BaseService {
         newContainerReceipt.setDeletionIndicator(0L);
         newContainerReceipt.setCreatedBy(loginUserID);
         newContainerReceipt.setUpdatedBy(loginUserID);
-//        newContainerReceipt.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        newContainerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         newContainerReceipt.setCreatedOn(new Date());
         newContainerReceipt.setUpdatedOn(new Date());
         return containerReceiptV2Repository.save(newContainerReceipt);
@@ -509,7 +507,6 @@ public class ContainerReceiptService extends BaseService {
         }
 
         dbContainerReceipt.setUpdatedBy(loginUserId);
-//        dbContainerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbContainerReceipt.setUpdatedOn(new Date());
         return containerReceiptV2Repository.save(dbContainerReceipt);
     }
@@ -527,7 +524,6 @@ public class ContainerReceiptService extends BaseService {
         if (containerReceipt != null) {
             containerReceipt.setDeletionIndicator(1L);
             containerReceipt.setUpdatedBy(loginUserID);
-//            containerReceipt.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             containerReceipt.setUpdatedOn(new Date());
             containerReceiptV2Repository.save(containerReceipt);
         } else {

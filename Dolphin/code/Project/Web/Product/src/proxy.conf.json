@@ -1,0 +1,6 @@
+{
+    "/api": {
+      "target": "https://d.classicwms.com",
+      "secure": false
+    }
+  }

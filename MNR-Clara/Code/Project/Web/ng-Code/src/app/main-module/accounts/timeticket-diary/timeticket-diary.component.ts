@@ -152,8 +152,8 @@ export class TimeticketDiaryComponent implements OnInit {
       // }
     }
     this.getall();
-    this.searhform.controls.statusId.patchValue([33])
-   this.getAllMatter();
+
+    this.getAllMatter();
     this.billTypeList.forEach((x: { key: string; value: string; }) => this.multibillList.push({ value: x.key, label: x.value }))
     this.multiselectbillList = this.multibillList;
   }
@@ -232,7 +232,7 @@ export class TimeticketDiaryComponent implements OnInit {
 
 
   getall(excel: boolean = false) {
-    //this.spin.show();
+    this.spin.show();
     this.cas.getalldropdownlist([
       this.cas.dropdownlist.setup.timeKeeperCode.url,
       this.cas.dropdownlist.setup.statusId.url,
@@ -247,7 +247,7 @@ export class TimeticketDiaryComponent implements OnInit {
       this.statuslist = this.cas.foreachlist_searchpage(results[1], this.cas.dropdownlist.setup.statusId.key).filter(s => [33, 34, 35, 46, 56, 51, 62].includes(s.key));
       this.statuslist.forEach((x: { key: string; value: string; }) => this.multistatusList.push({ value: x.key, label: x.value }))
       this.multiselectstatusList = this.multistatusList;
-
+      this.searhform.controls.statusId.patchValue([33]);
       results[2].forEach((x: any) => {
         this.multiSelectMatterNoList.push({ value: x.matterNumber, label: x.matterNumber + '-' + x.matterDescription });
       })
@@ -260,21 +260,22 @@ export class TimeticketDiaryComponent implements OnInit {
   }
 
   getAllMatter() {
+    this.spin.show();
     this.cas.getalldropdownlist([
       this.cas.dropdownlist.matter.matterNumberList.url,
     ]).subscribe((results: any) => {
       this.matterClientList = results[0].matterDropDown;
       results[0].matterDropDown.forEach((x: any) => {
         this.clientlist.push({ value: x.clientId, label: x.clientId + '-' + x.clientName });
-       // this.multiSelectMatterNoList.push({ value: x.matterNumber, label: x.matterNumber + '-' + x.matterDescription });
+        // this.multiSelectMatterNoList.push({ value: x.matterNumber, label: x.matterNumber + '-' + x.matterDescription });
       })
- 
-
+      this.spin.hide();
     }, (err) => {
       this.spin.hide();
       this.toastr.error(err, "");
     });
   }
+
 
   finalCreatedOn = false;
   filterStartDate = '';
@@ -292,6 +293,29 @@ export class TimeticketDiaryComponent implements OnInit {
       this.cs.notifyOther(true);
       return;
     }
+    this.searhform.controls.billType.reset();
+    if (this.searhform.controls.billTypeFE.value) {
+      if (this.searhform.controls.billTypeFE.value.length == 1) {
+        if (this.searhform.controls.billTypeFE.value[0] == 'Billable') {
+          this.searhform.controls.billType.patchValue(['Billable', 'nocharge']);
+        }
+        if (this.searhform.controls.billTypeFE.value[0] == 'Non-Billable') {
+          this.searhform.controls.billType.patchValue(['Non-Billable']);
+        }
+      }
+      if (this.searhform.controls.billTypeFE.value.length == 2) {
+        this.searhform.controls.billType.patchValue(['Billable', 'nocharge', 'Non-Billable']);
+      }
+      if (this.searhform.controls.billTypeFE.value.length == 0) {
+        this.searhform.controls.billType.patchValue(null);
+      }
+    }
+
+    if (!this.searhform.controls.billTypeFE.value) {
+      this.searhform.controls.billType.patchValue(null);
+    }
+
+
     this.searhform.controls.sendTimeTicketDate.patchValue(this.cs.dateNewFormat(this.searhform.controls.sendTimeTicketDateFE.value));
     this.searhform.controls.sstartTimeTicketDate.patchValue(this.cs.dateNewFormat(this.searhform.controls.sstartTimeTicketDateFE.value));
     this.spin.show();
@@ -536,7 +560,7 @@ export class TimeticketDiaryComponent implements OnInit {
     let total = 0;
     this.dataSource.data.forEach(element => {
       element.billType = element.billType.toLowerCase()
-      if (element.billType == 'billable') {
+      if (element.billType == 'billable' || element.billType == 'nocharge') {
         total = total + (element.timeTicketHours != null ? element.timeTicketHours : 0);
         this.billedhrs = this.decimalPipe.transform(total, "1.1-1")
       }

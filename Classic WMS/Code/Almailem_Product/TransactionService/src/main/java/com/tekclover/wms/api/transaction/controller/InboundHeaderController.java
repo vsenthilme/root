@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderEntityV2;
@@ -19,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -141,7 +143,7 @@ public class InboundHeaderController {
     @GetMapping("/v2/{refDocNumber}")
     public ResponseEntity<?> getInboundHeaderV2(@PathVariable String refDocNumber, @RequestParam String warehouseId,
                                                 @RequestParam String preInboundNo, @RequestParam String companyCode,
-                                                @RequestParam String plantId, @RequestParam String languageId) {
+                                                @RequestParam String plantId, @RequestParam String languageId) throws IOException, CsvException {
         InboundHeaderEntityV2 inboundheader = inboundheaderService.getInboundHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
         log.info("InboundHeader : " + inboundheader);
         return new ResponseEntity<>(inboundheader, HttpStatus.OK);
@@ -153,7 +155,7 @@ public class InboundHeaderController {
                                                           @RequestParam String refDocNumber, @RequestParam String companyCode,
                                                           @RequestParam String plantId, @RequestParam String languageId,
                                                           @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         AXApiResponse createdInboundHeaderResponse =
                 inboundheaderService.updateInboundHeaderConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
         return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
@@ -174,7 +176,7 @@ public class InboundHeaderController {
     @DeleteMapping("/v2/{refDocNumber}")
     public ResponseEntity<?> deleteInboundHeaderV2(@PathVariable String refDocNumber, @RequestParam String companyCode, @RequestParam String plantId,
                                                    @RequestParam String languageId, @RequestParam String warehouseId,
-                                                   @RequestParam String preInboundNo, @RequestParam String loginUserID) throws ParseException {
+                                                   @RequestParam String preInboundNo, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
         inboundheaderService.deleteInboundHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

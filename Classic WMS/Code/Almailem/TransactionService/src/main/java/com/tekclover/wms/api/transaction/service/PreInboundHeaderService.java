@@ -1,5 +1,7 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
+
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -119,6 +121,9 @@ public class PreInboundHeaderService extends BaseService {
 
     @Autowired
     private InboundLineV2Repository inboundLineV2Repository;
+
+    @Autowired
+    private ErrorLogRepository exceptionLogRepo;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------------------------------------------
@@ -279,13 +284,13 @@ public class PreInboundHeaderService extends BaseService {
      * @throws ParseException
      */
     public List<PreInboundHeaderEntity> findPreInboundHeader(SearchPreInboundHeader searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -304,13 +309,13 @@ public class PreInboundHeaderService extends BaseService {
      */
     //Streaming
     public Stream<PreInboundHeaderEntity> findPreInboundHeaderNew(SearchPreInboundHeader searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -499,7 +504,7 @@ public class PreInboundHeaderService extends BaseService {
                 imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());        // MFR_PART
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -639,7 +644,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -714,7 +719,7 @@ public class PreInboundHeaderService extends BaseService {
         // STATUS_ID
         preInboundLine.setStatusId(6L);
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -744,7 +749,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setRefDocDate(inboundIntegrationHeader.getOrderReceivedOn());                // REF_DOC_DATE
         preInboundHeader.setStatusId(6L);
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntity createdPreInboundHeader = preInboundHeaderRepository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1080,6 +1085,9 @@ public class PreInboundHeaderService extends BaseService {
                         companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, 0L);
 
         if (preInboundHeaderEntity.isEmpty()) {
+            // Exception log
+            createPreInboundHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "PreInboundHeaderV2 with given values doesn't exists - " + refDocNumber);
             throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
                     ", warehouseId: " + warehouseId + " doesn't exist.");
         }
@@ -1249,13 +1257,13 @@ public class PreInboundHeaderService extends BaseService {
      */
     //Streaming
     public Stream<PreInboundHeaderEntityV2> findPreInboundHeaderV2(SearchPreInboundHeaderV2 searchPreInboundHeader) throws ParseException {
-        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getStartCreatedOn() != null) {
+        if (searchPreInboundHeader.getStartCreatedOn() != null && searchPreInboundHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartCreatedOn(), searchPreInboundHeader.getEndCreatedOn());
             searchPreInboundHeader.setStartCreatedOn(dates[0]);
             searchPreInboundHeader.setEndCreatedOn(dates[1]);
         }
 
-        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getStartRefDocDate() != null) {
+        if (searchPreInboundHeader.getStartRefDocDate() != null && searchPreInboundHeader.getEndRefDocDate() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundHeader.getStartRefDocDate(), searchPreInboundHeader.getEndRefDocDate());
             searchPreInboundHeader.setStartRefDocDate(dates[0]);
             searchPreInboundHeader.setEndRefDocDate(dates[1]);
@@ -1298,8 +1306,6 @@ public class PreInboundHeaderService extends BaseService {
         dbPreInboundHeader.setDeletionIndicator(0L);
         dbPreInboundHeader.setCreatedBy(loginUserID);
         dbPreInboundHeader.setUpdatedBy(loginUserID);
-//        dbPreInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPreInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundHeader.setCreatedOn(new Date());
         dbPreInboundHeader.setUpdatedOn(new Date());
         return preInboundHeaderV2Repository.save(dbPreInboundHeader);
@@ -1321,15 +1327,16 @@ public class PreInboundHeaderService extends BaseService {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndPreInboundNoAndWarehouseIdAndDeletionIndicator(
                         companyCode, plantId, languageId, preInboundNo, warehouseId, 0L);
-        PreInboundHeaderEntityV2 dbEntity = preInboundHeaderEntity.get();
-        if (updatePreInboundHeader.getStatusId() == null) {
-            dbEntity.setStatusId(7L); // Hardcoded as 7 during update
+        PreInboundHeaderEntityV2 dbEntity = null;
+        if(!preInboundHeaderEntity.isEmpty()) {
+            dbEntity = preInboundHeaderEntity.get();
+            if (updatePreInboundHeader.getStatusId() == null) {
+                dbEntity.setStatusId(7L); // Hardcoded as 7 during update
+            }
+            dbEntity.setUpdatedBy(loginUserID);
+            dbEntity.setUpdatedOn(new Date());
+            dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         }
-        dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-        dbEntity.setUpdatedOn(new Date());
-        dbEntity = preInboundHeaderV2Repository.save(dbEntity);
-
         List<PreInboundLineEntityV2> updatedPreInboundLineList = new ArrayList<>();
         for (PreInboundLineEntityV2 updatePreInboundLine : updatePreInboundHeader.getPreInboundLineV2()) {
             // Get Lines items from DB
@@ -1374,7 +1381,6 @@ public class PreInboundHeaderService extends BaseService {
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbEntity.setStatusDescription(statusDescription);
         dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         dbPreInboundHeader = copyHeaderEntityToBean(dbEntity);
@@ -1396,7 +1402,6 @@ public class PreInboundHeaderService extends BaseService {
         if (dbEntity != null) {
             dbEntity.setDeletionIndicator(1L);
             dbEntity.setUpdatedBy(loginUserID);
-//            dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbEntity.setUpdatedOn(new Date());
             preInboundHeaderV2Repository.save(dbEntity);
         } else {
@@ -1411,7 +1416,7 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public InboundHeaderV2 processInboundReceivedV2(String refDocNumber, InboundIntegrationHeader inboundIntegrationHeader)
             throws IllegalAccessException, InvocationTargetException, BadRequestException, Exception {
         /*
@@ -1419,7 +1424,7 @@ public class PreInboundHeaderService extends BaseService {
          */
         Optional<PreInboundHeaderEntityV2> orderProcessedStatus = preInboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(refDocNumber, 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedInboundOrderV2(refDocNumber);
+//            orderService.updateProcessedInboundOrderV2(refDocNumber, 100L);
             throw new BadRequestException("Order :" + refDocNumber + " already processed. Reprocessing can't be allowed.");
         }
 
@@ -1453,11 +1458,11 @@ public class PreInboundHeaderService extends BaseService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw e;
         }
 
         // Getting PreInboundNo from NumberRangeTable
-        String preInboundNo = getPreInboundNo(warehouseId, warehouse.getCompanyCodeId(), warehouse.getPlantId(), warehouse.getLanguageId());
+        String preInboundNo = getPreInboundNo(warehouseId, inboundOrder.getCompanyCode(), inboundOrder.getBranchCode(), warehouse.getLanguageId());
 
         List<PreInboundLineEntityV2> overallCreatedPreInboundLineList = new ArrayList<>();
         for (InboundIntegrationLine inboundIntegrationLine : inboundIntegrationHeader.getInboundIntegrationLine()) {
@@ -1498,7 +1503,7 @@ public class PreInboundHeaderService extends BaseService {
 //                }
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1V2(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1V2(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -1655,7 +1660,7 @@ public class PreInboundHeaderService extends BaseService {
 
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1671,6 +1676,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setBranchCode(inboundIntegrationLine.getBranchCode());
         preInboundLine.setTransferOrderNo(inboundIntegrationLine.getTransferOrderNo());
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
 
         // REF_FIELD_1
         preInboundLine.setReferenceField1("CHILD ITEM");
@@ -1682,8 +1688,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -1773,7 +1778,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1791,8 +1796,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -1844,8 +1848,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setMUpdatedOn(inboundIntegrationHeader.getUpdatedOn());
 
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
-//        preInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntityV2 createdPreInboundHeader = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1922,13 +1925,13 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setManufacturerFullName(createdPreInboundLine.getManufacturerFullName());
             inboundLine.setPurchaseOrderNumber(createdPreInboundLine.getPurchaseOrderNumber());
 
-            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerCode());
+            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerName());
             inboundLine.setManufacturerName(createdPreInboundLine.getManufacturerName());
             inboundLine.setExpectedArrivalDate(createdPreInboundLine.getExpectedArrivalDate());
             inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
             inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
-            inboundLine.setVendorCode(createdPreInboundLine.getPartnerItemNo());
+            inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setManufacturerPartNo(createdPreInboundLine.getManufacturerPartNo());
 
             inboundLine.setBranchCode(createdPreInboundLine.getBranchCode());
@@ -1966,6 +1969,9 @@ public class PreInboundHeaderService extends BaseService {
         String preInboundNo = null;
         String containerNo = null;
         String warehouseId = null;
+        String companyCode = null;
+        String plantId = null;
+        String languageId = null;
         for (PreInboundLineEntityV2 objUpdatePreInboundLine : inputPreInboundLines) {
             objUpdatePreInboundLine.setStatusId(5L);
             statusDescription = stagingLineV2Repository.getStatusDescription(5L, objUpdatePreInboundLine.getLanguageId());
@@ -1979,11 +1985,15 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundNo = updatedPreInboundLine.getPreInboundNo();
                 containerNo = updatedPreInboundLine.getContainerNo();
                 warehouseId = updatedPreInboundLine.getWarehouseId();
+                companyCode = updatedPreInboundLine.getCompanyCode();
+                plantId = updatedPreInboundLine.getPlantId();
+                languageId = updatedPreInboundLine.getLanguageId();
             }
         }
 
         // PREINBOUNDHEADER Update
-        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+        // PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+           PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId, languageId);
         log.info("preInboundHeader---found-------> : " + preInboundHeader);
 
         PreInboundHeaderEntityV2 preInboundHeaderEntity = copyBeanToHeaderEntity(preInboundHeader);
@@ -2003,14 +2013,15 @@ public class PreInboundHeaderService extends BaseService {
             Optional<InboundHeaderV2> optInboundHeader =
                     inboundHeaderV2Repository.findByWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                             warehouseId, preInboundHeader.getRefDocNumber(), preInboundHeader.getPreInboundNo(), 0L);
-            log.info("optInboundHeader : " + optInboundHeader.get());
-            InboundHeaderV2 updateInboundHeader = optInboundHeader.get();
-            updateInboundHeader.setContainerNo(containerNo);
-            updateInboundHeader.setStatusId(5L);
-            statusDescription = stagingLineV2Repository.getStatusDescription(5L, updateInboundHeader.getLanguageId());
-            updateInboundHeader.setStatusDescription(statusDescription);
-            inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
-
+            if(optInboundHeader.isPresent()) {
+                log.info("optInboundHeader : " + optInboundHeader.get());
+                InboundHeaderV2 updateInboundHeader = optInboundHeader.get();
+                updateInboundHeader.setContainerNo(containerNo);
+                updateInboundHeader.setStatusId(5L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(5L, updateInboundHeader.getLanguageId());
+                updateInboundHeader.setStatusDescription(statusDescription);
+                inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
+            }
 //            InboundHeaderV2 updateInboundHeader = new InboundHeaderV2();
 //            updateInboundHeader.setContainerNo(containerNo);
 //            updateInboundHeader.setStatusId(5L);
@@ -2134,7 +2145,6 @@ public class PreInboundHeaderService extends BaseService {
         dbInboundIntegrationLog.setOrderReceiptDate(createdPreInboundHeader.getCreatedOn());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy(createdPreInboundHeader.getCreatedBy());
-//        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
@@ -2178,24 +2188,82 @@ public class PreInboundHeaderService extends BaseService {
         return optWarehouse.get();
     }
 
+    /**
+     *
+     * @param inbound
+     * @param errorDesc
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public InboundIntegrationLog createInboundIntegrationLogV2(InboundIntegrationHeader inbound, String errorDesc)
+            throws IllegalAccessException, InvocationTargetException {
+        com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse =
+                getWarehouse(inbound.getCompanyCode(), inbound.getBranchCode());
+        if (warehouse == null) {
+            throw new BadRequestException("Warehouse not found : " + inbound.getWarehouseID());
+        }
+        InboundIntegrationLog dbInboundIntegrationLog = new InboundIntegrationLog();
+        dbInboundIntegrationLog.setLanguageId("EN");
+        dbInboundIntegrationLog.setCompanyCodeId(warehouse.getCompanyCodeId());
+        dbInboundIntegrationLog.setPlantId(warehouse.getPlantId());
+        dbInboundIntegrationLog.setWarehouseId(warehouse.getWarehouseId());
+        dbInboundIntegrationLog.setIntegrationLogNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setRefDocNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setIntegrationStatus("FAILED");
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setDeletionIndicator(0L);
+        dbInboundIntegrationLog.setCreatedBy("MSD_API");
+
+        dbInboundIntegrationLog.setCreatedOn(new Date());
+        dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
+        log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
+        return dbInboundIntegrationLog;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserId
+     * @return
+     */
     // Delete PreInboundHeader
-    public List<PreInboundHeaderEntityV2> deletePreInoundHeader(String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, String loginUserId) {
-        List<PreInboundHeaderEntityV2> preInboundHeaderEntity =
+    public PreInboundHeaderEntityV2 deletePreInboundHeader(String companyCode, String plantId, String languageId,
+                                                           String warehouseId, String refDocNumber, String loginUserId) {
+        PreInboundHeaderEntityV2 preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                         companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
-        List<PreInboundHeaderEntityV2> preInboundHeaderV2List = new ArrayList<>();
-//        if (preInboundHeaderEntity.isEmpty()) {
-//            throw new BadRequestException("The given PreInboundHeader ID : RefDocNo : " + refDocNumber +
-//                    ", warehouseId: " + warehouseId + " doesn't exist.");
-//        } else
-//        {
-            for (PreInboundHeaderEntityV2 updatePreInboundLine : preInboundHeaderEntity) {
-                updatePreInboundLine.setDeletionIndicator(1L);
-                updatePreInboundLine.setUpdatedBy(loginUserId);
-                PreInboundHeaderEntityV2 preInboundHeaderV2 = preInboundHeaderV2Repository.save(updatePreInboundLine);
-                preInboundHeaderV2List.add(preInboundHeaderV2);
+        log.info("preInboundHeaderEntity - Cancellation: " + preInboundHeaderEntity);
+        if(preInboundHeaderEntity != null){
+            preInboundHeaderEntity.setDeletionIndicator(1L);
+            preInboundHeaderEntity.setUpdatedBy(loginUserId);
+            preInboundHeaderV2Repository.save(preInboundHeaderEntity);
             }
-//        }
-        return preInboundHeaderV2List;
+        return preInboundHeaderEntity;
     }
+
+    //=========================================PreInboundHeader_ExceptionLog===========================================
+    private void createPreInboundHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                            String refDocNumber, String preInboundNo, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
 }

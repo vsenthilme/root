@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
-import com.tekclover.wms.api.transaction.model.outbound.preoutbound.UpdatePreOutboundHeader;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.PreOutboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.SearchPreOutboundHeaderV2;
 import org.springframework.beans.factory.annotation.Autowired;

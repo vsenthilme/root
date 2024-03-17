@@ -15,4 +15,5 @@ public interface IConsignmentEntity {
     public String getOrderType();
 	public String getAwb3rdParty();
 	public String getScanType();
+	public String getActionName();
 }

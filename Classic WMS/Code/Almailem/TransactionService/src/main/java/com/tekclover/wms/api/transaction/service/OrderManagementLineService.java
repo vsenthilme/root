@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -22,11 +22,6 @@ import org.springframework.stereotype.Service;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
-import com.tekclover.wms.api.transaction.model.dto.IInventory;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
-import com.tekclover.wms.api.transaction.model.dto.StatusId;
-import com.tekclover.wms.api.transaction.model.dto.StorageBin;
-import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.outbound.OutboundHeader;
@@ -125,6 +120,9 @@ public class OrderManagementLineService extends BaseService {
 
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+
+    @Autowired
+    private OrderManagementLineService orderManagementLineService;
 
     String statusDescription = null;
     //------------------------------------------------------------------------------------------------------
@@ -1277,6 +1275,38 @@ public class OrderManagementLineService extends BaseService {
         return orderManagementLineCount;
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     */
+    public void updateOrderManagementLineForBarcodeV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                      String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<Long> statusIdList = new ArrayList<>();
+        statusIdList.add(41L);      //Order Allocation
+        statusIdList.add(42L);      //Partial Allocation
+        statusIdList.add(43L);      //Allocated
+        statusIdList.add(48L);      //InPicking
+
+        List<OrderManagementLineV2> orderManagementLineList = orderManagementLineV2Repository.findAllByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndStatusIdInAndDeletionIndicator(
+                companyCodeId, plantId, languageId, warehouseId, itemCode, manufacturerName, statusIdList, 0L);
+        log.info("OrderManagementLine: " + orderManagementLineList);
+        if (orderManagementLineList != null && !orderManagementLineList.isEmpty()) {
+            for (OrderManagementLineV2 dbOrderManagementLine : orderManagementLineList) {
+                dbOrderManagementLine.setBarcodeId(barcodeId);
+                dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
+                orderManagementLineV2Repository.save(dbOrderManagementLine);
+            }
+        }
+    }
+
     //Streaming
     public Stream<OrderManagementLineV2> findOrderManagementLineV2(SearchOrderManagementLineV2 searchOrderManagementLine)
             throws ParseException, java.text.ParseException {
@@ -1359,9 +1389,9 @@ public class OrderManagementLineService extends BaseService {
 
         dbOrderManagementLine.setDeletionIndicator(0L);
         dbOrderManagementLine.setPickupCreatedBy(loginUserID);
-        dbOrderManagementLine.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupCreatedOn(new Date());
         dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupUpdatedOn(new Date());
 
         return orderManagementLineV2Repository.save(dbOrderManagementLine);
     }
@@ -1432,7 +1462,7 @@ public class OrderManagementLineService extends BaseService {
 //            dbOrderManagementLine.setReferenceField7(idStatus.getStatus());
                 dbOrderManagementLine.setReferenceField7(statusDescription);
                 dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-                dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
                 if (i != 0) {
                     dbOrderManagementLine.setDeletionIndicator(1L);
                 }
@@ -1531,7 +1561,7 @@ public class OrderManagementLineService extends BaseService {
 //            dbOrderManagementLine.setReferenceField7(idStatus.getStatus());
             dbOrderManagementLine.setReferenceField7(statusDescription);
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             if (i != 0) {
                 dbOrderManagementLine.setDeletionIndicator(1L);
             }
@@ -1601,7 +1631,7 @@ public class OrderManagementLineService extends BaseService {
                         dbOrderManagementLine.getItemCode(), loginUserID);
 
                 dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-                dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbOrderManagementLine.setPickupUpdatedOn(new Date());
 
             }
             OrderManagementLineV2 updatedOrderManagementLine = orderManagementLineV2Repository.save(dbOrderManagementLine);
@@ -1675,7 +1705,7 @@ public class OrderManagementLineService extends BaseService {
 
         }
         dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-        dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbOrderManagementLine.setPickupUpdatedOn(new Date());
         OrderManagementLineV2 updatedOrderManagementLine = orderManagementLineV2Repository.save(dbOrderManagementLine);
         log.info("OrderManagementLine updated: " + updatedOrderManagementLine);
         return updatedOrderManagementLine;
@@ -1754,6 +1784,7 @@ public class OrderManagementLineService extends BaseService {
                         partnerCode, lineNumber, itemCode);
                 outboundLine.setStatusId(48L);
                 outboundLine.setStatusDescription(statusDescription);
+                outboundLine.setAssignedPickerId(assignedPickerId);
                 outboundLine = outboundLineV2Repository.save(outboundLine);
                 log.info("outboundLine updated : " + outboundLine);
 
@@ -1815,7 +1846,7 @@ public class OrderManagementLineService extends BaseService {
                     pickupHeader.setProposedPackBarCode(dbOrderManagementLine.getProposedPackBarCode());
 
                     pickupHeader.setPickupCreatedBy(loginUserID);
-                    pickupHeader.setPickupCreatedOn(DateUtils.getCurrentKWTDateTime());
+                    pickupHeader.setPickupCreatedOn(new Date());
 
                     // REF_FIELD_1
                     pickupHeader.setReferenceField1(dbOrderManagementLine.getReferenceField1());
@@ -1848,7 +1879,7 @@ public class OrderManagementLineService extends BaseService {
                 inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
                         orderManagementLine.getPlantId(), orderManagementLine.getLanguageId(),
                         warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
-        log.info("---updateAllocation---stockType1InventoryList-------> : " + stockType1InventoryList);
+        log.info("---updateAllocation---stockType1InventoryList-------> : " + stockType1InventoryList.size());
         if (stockType1InventoryList.isEmpty()) {
             return updateOrderManagementLineV2(orderManagementLine);
         }
@@ -1863,19 +1894,31 @@ public class OrderManagementLineService extends BaseService {
                         orderManagementLine.getPlantId(),
                         orderManagementLine.getLanguageId(),
                         warehouseId, itemCode, 1L, binClassId, orderManagementLine.getManufacturerName());
-        log.info("finalInventoryList Inventory ---->: " + finalInventoryList + "\n");
+        log.info("finalInventoryList Inventory ---->: " + finalInventoryList.size() + "\n");
 
         ImBasicData1 dbImBasicData1 = null;
         boolean shelfLifeIndicator = false;
         if (finalInventoryList != null && !finalInventoryList.isEmpty()) {
-            dbImBasicData1 = mastersService.getImBasicData1ByItemCodeV2(itemCode,
-                    orderManagementLine.getLanguageId(), orderManagementLine.getCompanyCodeId(),
-                    orderManagementLine.getPlantId(), orderManagementLine.getWarehouseId(),
-                    orderManagementLine.getManufacturerName(), authTokenForMastersService.getAccess_token());
+
+            ImBasicData imBasicData = new ImBasicData();
+            imBasicData.setCompanyCodeId(orderManagementLine.getCompanyCodeId());
+            imBasicData.setPlantId(orderManagementLine.getPlantId());
+            imBasicData.setLanguageId(orderManagementLine.getLanguageId());
+            imBasicData.setWarehouseId(orderManagementLine.getWarehouseId());
+            imBasicData.setItemCode(itemCode);
+            imBasicData.setManufacturerName(orderManagementLine.getManufacturerName());
+            dbImBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+
+//            dbImBasicData1 = mastersService.getImBasicData1ByItemCodeV2(itemCode,
+//                    orderManagementLine.getLanguageId(), orderManagementLine.getCompanyCodeId(),
+//                    orderManagementLine.getPlantId(), orderManagementLine.getWarehouseId(),
+//                    orderManagementLine.getManufacturerName(), authTokenForMastersService.getAccess_token());
 
             log.info("ImBasicData1: " + dbImBasicData1);
-            if (dbImBasicData1.getShelfLifeIndicator() != null) {
-                shelfLifeIndicator = dbImBasicData1.getShelfLifeIndicator();
+            if(dbImBasicData1 != null) {
+                if (dbImBasicData1.getShelfLifeIndicator() != null) {
+                    shelfLifeIndicator = dbImBasicData1.getShelfLifeIndicator();
+                }
             }
         }
 
@@ -1898,12 +1941,13 @@ public class OrderManagementLineService extends BaseService {
         outerloop:
         for (IInventoryImpl stBinWiseInventory : finalInventoryList) {
             // Getting PackBarCode by passing ST_BIN to Inventory
-            List<InventoryV2> listInventoryForAlloc =
-                    inventoryService.getInventoryForOrderMgmtV2(orderManagementLine.getCompanyCodeId(),
+            List<IInventoryImpl> listInventoryForAlloc =
+                    inventoryService.getInventoryForOrderManagementV2(orderManagementLine.getCompanyCodeId(),
                             orderManagementLine.getPlantId(),
-                            orderManagementLine.getLanguageId(), warehouseId, itemCode, binClassId,
+                            orderManagementLine.getLanguageId(), warehouseId, itemCode,
+                            orderManagementLine.getManufacturerName(), binClassId,
                             stBinWiseInventory.getStorageBin(), 1L);
-            log.info("\nlistInventoryForAlloc Inventory ---->: " + listInventoryForAlloc + "\n");
+            log.info("\nlistInventoryForAlloc Inventory ---->: " + listInventoryForAlloc.size() + "\n");
 
             // Prod Fix: If the queried Inventory is empty then EMPTY orderManagementLine is
             // created.
@@ -1913,14 +1957,14 @@ public class OrderManagementLineService extends BaseService {
 
             //ascending sort - expiryDate
             if (shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(InventoryV2::getExpiryDate)).collect(Collectors.toList());
+                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getExpiryDate)).collect(Collectors.toList());
             }
             //ascending sort - created on
             if (!shelfLifeIndicator) {
-                listInventoryForAlloc.stream().sorted(Comparator.comparing(InventoryV2::getCreatedOn)).collect(Collectors.toList());
+                listInventoryForAlloc.stream().sorted(Comparator.comparing(IInventoryImpl::getCreatedOn)).collect(Collectors.toList());
             }
 
-            for (InventoryV2 stBinInventory : listInventoryForAlloc) {
+            for (IInventoryImpl stBinInventory : listInventoryForAlloc) {
                 log.info("\nBin-wise Inventory : " + stBinInventory + "\n");
 
                 Long STATUS_ID = 0L;
@@ -1975,7 +2019,7 @@ public class OrderManagementLineService extends BaseService {
                 orderManagementLine.setStatusDescription(statusDescription);
                 orderManagementLine.setReferenceField7(statusDescription);
                 orderManagementLine.setPickupUpdatedBy(loginUserID);
-                orderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                orderManagementLine.setPickupUpdatedOn(new Date());
 
                 double allocatedQtyFromOrderMgmt = 0.0;
 
@@ -2005,8 +2049,7 @@ public class OrderManagementLineService extends BaseService {
                     newOrderManagementLine.setLevelId(stBinInventory.getLevelId());
                 }
                 newOrderManagementLine.setProposedPackBarCode(stBinInventory.getPackBarcodes());
-                OrderManagementLineV2 createdOrderManagementLine = orderManagementLineV2Repository
-                        .save(newOrderManagementLine);
+                OrderManagementLineV2 createdOrderManagementLine = orderManagementLineV2Repository.save(newOrderManagementLine);
                 log.info("--else---createdOrderManagementLine newly created------: " + createdOrderManagementLine);
                 allocatedQtyFromOrderMgmt = createdOrderManagementLine.getAllocatedQty();
 
@@ -2053,6 +2096,7 @@ public class OrderManagementLineService extends BaseService {
                     // Create new Inventory Record
                     InventoryV2 inventoryV2 = new InventoryV2();
                     BeanUtils.copyProperties(inventoryForUpdate, inventoryV2, CommonUtils.getNullPropertyNames(inventoryForUpdate));
+                    inventoryV2.setUpdatedOn(new Date());
                     inventoryV2.setInventoryId(System.currentTimeMillis());
                     inventoryV2 = inventoryV2Repository.save(inventoryV2);
                     log.info("-----Inventory2 updated-------: " + inventoryV2);
@@ -2112,7 +2156,7 @@ public class OrderManagementLineService extends BaseService {
             BeanUtils.copyProperties(updateOrderManagementLine, dbOrderManagementLine,
                     CommonUtils.getNullPropertyNames(updateOrderManagementLine));
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             return orderManagementLineV2Repository.save(dbOrderManagementLine);
         }
         return null;
@@ -2147,7 +2191,7 @@ public class OrderManagementLineService extends BaseService {
                 dbOrderManagementLine.setPickupNumber(null);
             }
             dbOrderManagementLine.setPickupUpdatedBy(loginUserID);
-            dbOrderManagementLine.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbOrderManagementLine.setPickupUpdatedOn(new Date());
             return orderManagementLineV2Repository.save(dbOrderManagementLine);
         }
         return null;
@@ -2175,13 +2219,42 @@ public class OrderManagementLineService extends BaseService {
         if (orderManagementHeader != null) {
             orderManagementHeader.setDeletionIndicator(1L);
             orderManagementHeader.setPickupUpdatedBy(loginUserID);
-            orderManagementHeader.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            orderManagementHeader.setPickupUpdatedOn(new Date());
             orderManagementLineV2Repository.save(orderManagementHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
     }
 
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<OrderManagementLineV2> getOrderManagementLineForPickListCancellationV2(String companyCodeId, String plantId, String languageId,
+                                                                                       String warehouseId, String refDocNumber){
+        List<OrderManagementLineV2> orderManagementLineList =
+                orderManagementLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("PickList Cancellation - OrderManagementLine : " + orderManagementLineList);
+        return orderManagementLineList;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //Delete OrderManagementLine
     public List<OrderManagementLineV2> deleteOrderManagementLineV2(String companyCodeId, String plantId, String languageId,
                                                                    String warehouseId, String refDocNumber, String loginUserID) throws Exception{
@@ -2190,12 +2263,13 @@ public class OrderManagementLineService extends BaseService {
         List<OrderManagementLineV2> orderManagementLine =
                 orderManagementLineV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                         companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-        if (orderManagementLine != null) {
+        log.info("PickList Cancellation - OrderManagementLine : " + orderManagementLine);
+
+        if (orderManagementLine != null && !orderManagementLine.isEmpty()) {
             for (OrderManagementLineV2 orderManagementLineV2 : orderManagementLine) {
                 orderManagementLineV2.setDeletionIndicator(1L);
                 orderManagementLineV2.setPickupUpdatedBy(loginUserID);
-                orderManagementLineV2.setPickupUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//                orderManagementLineV2.setPickupUpdatedOn(new Date());
+                orderManagementLineV2.setPickupUpdatedOn(new Date());
                 OrderManagementLineV2 dbOrderManagementLine = orderManagementLineV2Repository.save(orderManagementLineV2);
                 orderManagementLineList.add(dbOrderManagementLine);
             }

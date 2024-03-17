@@ -61,7 +61,7 @@ public class        SparkStockReportService {
                         + "MFR_NAME as manufacturerName "
                         + "FROM tblinventoryv2 WHERE IS_DELETED = 0 "
         );
-        stockReportQuery.cache();
+//        stockReportQuery.cache();
 
         if (findStockReport.getLanguageId() != null && !findStockReport.getLanguageId().isEmpty()) {
             stockReportQuery = stockReportQuery.filter(col("LANG_ID").isin(findStockReport.getLanguageId().toArray()));

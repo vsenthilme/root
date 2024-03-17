@@ -1,10 +1,12 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.impl.InventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
@@ -146,5 +148,37 @@ public class InventoryController {
 	public List<IInventoryImpl> findInventoryNewV2(@RequestBody SearchInventoryV2 searchInventory)
 			throws Exception {
 		return inventoryService.findInventoryNewV2(searchInventory);
+	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Create Inventory V2") // label for swagger
+	@PostMapping("/v2")
+	public ResponseEntity<?> postInventoryV2(@Valid @RequestBody InventoryV2 newInventory, @RequestParam String loginUserID)
+			throws IllegalAccessException, InvocationTargetException {
+		InventoryV2 createdInventory = inventoryService.createInventoryV2(newInventory, loginUserID);
+		return new ResponseEntity<>(createdInventory , HttpStatus.OK);
+	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Update Inventory V2") // label for swagger
+	@PatchMapping("/v2/{stockTypeId}")
+	public ResponseEntity<?> patchInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+											  @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String manufacturerName,
+											  @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String storageBin,
+											  @RequestParam Long specialStockIndicatorId, @Valid @RequestBody InventoryV2 updateInventory,
+											  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException {
+		InventoryV2 updatedInventory =
+				inventoryService.updateInventoryV2(companyCodeId, plantId, languageId, warehouseId,
+						packBarcodes, itemCode, manufacturerName, storageBin,  stockTypeId,
+						specialStockIndicatorId, updateInventory, loginUserID);
+		return new ResponseEntity<>(updatedInventory , HttpStatus.OK);
+	}
+
+	@ApiOperation(response = InventoryV2.class, value = "Delete Inventory V2") // label for swagger
+	@DeleteMapping("/v2/{stockTypeId}")
+	public ResponseEntity<?> deleteInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+											   @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String manufacturerName,
+											   @RequestParam String packBarcodes, @RequestParam String itemCode, @RequestParam String storageBin,
+											   @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID) throws IOException, CsvException {
+		inventoryService.deleteInventoryV2(companyCodeId, plantId, languageId, warehouseId, stockTypeId, specialStockIndicatorId, packBarcodes, itemCode, manufacturerName, storageBin, loginUserID);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

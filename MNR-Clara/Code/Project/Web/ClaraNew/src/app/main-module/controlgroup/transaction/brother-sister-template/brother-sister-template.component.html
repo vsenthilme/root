@@ -58,6 +58,7 @@
     <div class=" my-0 py-0">
       <div class="ms-3 me-3 px-1 mt-1 scroll1">
         <div class="">
+          <div style="margin-bottom:10px;color:#003f5e;"><b>Request Id-{{this.js.code.requestId}}</b></div>
           <table mat-table [dataSource]="dataSource" matSort matSortActive="caseCategoryId" matSortDirection="asc"
             class=" w-100">
             <!-- Symbol Column -->
@@ -76,7 +77,8 @@
                 {{ i== 0 ? element.storeName1 : (element.store1 != null ? element.store1 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore1()}}%</td>
+                [ngClass]="getStore1() >= 80  ||  getStore1() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''">
+                {{getStore1()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store2">
@@ -85,7 +87,7 @@
                 {{ i== 0 ? element.storeName2 : (element.store2 != null ? element.store2 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore2()}}%</td>
+              [ngClass]="getStore2() >= 80  ||  getStore2() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''">{{getStore2()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store3">
@@ -94,7 +96,7 @@
                 {{ i== 0 ? element.storeName3 : (element.store3 != null ? element.store3 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore3()}}%</td>
+              [ngClass]="getStore3() >= 80 ||  getStore3() == 0  ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore3()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store4">
@@ -103,7 +105,7 @@
                 {{ i== 0 ? element.storeName4 : (element.store4 != null ? element.store4 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore4()}}%</td>
+              [ngClass]="getStore4() >= 80  ||  getStore4() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore4()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store5">
@@ -112,7 +114,7 @@
                 {{ i== 0 ? element.storeName5 : (element.store5 != null ? element.store5 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore5()}}%</td>
+              [ngClass]="getStore5() >= 80  ||  getStore5() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore5()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store6">
@@ -121,7 +123,7 @@
                 {{ i== 0 ? element.storeName6 : (element.store6 != null ? element.store6 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore6()}}%</td>
+              [ngClass]="getStore6() >= 80  ||  getStore6() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''">{{getStore6()}}%</td>
             </ng-container>
             <!-- Symbol Column -->
             <ng-container matColumnDef="store7">
@@ -130,7 +132,7 @@
                 {{ i== 0 ? element.storeName7 : (element.store7 != null ? element.store7 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore7()}}%</td>
+              [ngClass]="getStore7() >= 80  ||  getStore7() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore7()}}%</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -140,7 +142,7 @@
                 {{ i== 0 ? element.storeName8 : (element.store8 != null ? element.store8 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore8()}}%</td>
+              [ngClass]="getStore8() >= 80 ||  getStore8() == 0  ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore8()}}%</td>
             </ng-container>
 
 
@@ -151,7 +153,7 @@
                 {{ i== 0 ? element.storeName9 : (element.store9 != null ? element.store9 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore9()}}%</td>
+              [ngClass]="getStore9() >= 80 ||  getStore9() == 0  ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore9()}}%</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -161,7 +163,7 @@
                 {{ i== 0 ? element.storeName10 : (element.store10 != null ? element.store10 + '%' : '')}}
               </td>
               <td mat-footer-cell *matFooterCellDef style="font-weight: bold; padding-left: 0.5rem; font-size: 15px"
-                class="textLightGreen bgDarkGreen"> {{getStore10()}}%</td>
+              [ngClass]="getStore10() >= 80 ||  getStore10() == 0 ? 'textLightGreen bgDarkGreen' : this.tableEffectiveStatus == 'No' ? 'textLightRed bgDarkRed' : ''"> {{getStore10()}}%</td>
             </ng-container>
 
             <ng-container matColumnDef="Effective" stickyEnd>

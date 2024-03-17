@@ -5,14 +5,15 @@ import lombok.Data;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class ResponceObject {
 
     @Valid
-    private List<ExactMatchResultV2> exactMatchResult;
+    private Set<ExactMatchResultV2> exactMatchResult;
 
     @Valid
-    private List<LikeMatchResultV2> likeMatchResult;
+    private Set<LikeMatchResultV2> likeMatchResult;
 
 }

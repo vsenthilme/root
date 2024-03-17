@@ -120,7 +120,7 @@ public class SparkStagingLineV2Service {
                 "IS_COMPLETED as isCompleted " +
                 "FROM tblstaginglineV2 WHERE IS_DELETED = 0 ");
 
-        stagingLineQueryV2.cache();
+//        stagingLineQueryV2.cache();
 
 
         if (findStagingLineV2.getLanguageId() != null && !findStagingLineV2.getLanguageId().isEmpty()) {

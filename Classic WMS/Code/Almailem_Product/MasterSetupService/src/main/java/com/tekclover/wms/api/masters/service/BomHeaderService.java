@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.tekclover.wms.api.masters.model.exceptionlog.ExceptionLog;
 import com.tekclover.wms.api.masters.repository.BomLineRepository;
+import com.tekclover.wms.api.masters.repository.ExceptionLogRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,9 @@ public class BomHeaderService extends BaseService{
 
 	@Autowired
 	private BomLineService bomLineService;
+
+	@Autowired
+	private ExceptionLogRepository exceptionLogRepo;
 
 	/**
 	 * getBomHeaders
@@ -105,6 +110,9 @@ public class BomHeaderService extends BaseService{
 						parentItemCode,
 						0L);
 		if (optBomHeader.isEmpty()) {
+			// Exception Log
+//			createBomHeaderLog(parentItemCode, languageId, companyCode, plantId, warehouseId,
+//					"Bom Header with given values and parentItemCode-" + parentItemCode + " doesn't exists.");
 			throw new BadRequestException("The given values: warehouseId:" + warehouseId +
 					"parentItemCode: " + parentItemCode +
 					"companyCode:" +companyCode+
@@ -270,8 +278,8 @@ public class BomHeaderService extends BaseService{
 		dbBomHeader.setDeletionIndicator(0L);
 		dbBomHeader.setCreatedBy(loginUserID);
 		dbBomHeader.setUpdatedBy(loginUserID);
-		dbBomHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-		dbBomHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomHeader.setCreatedOn(new Date());
+		dbBomHeader.setUpdatedOn(new Date());
 		dbBomHeader = bomHeaderRepository.save(dbBomHeader);
 
 		AddBomHeader createdBomHeader = new AddBomHeader();
@@ -296,7 +304,7 @@ public class BomHeaderService extends BaseService{
 		BomHeader dbBomHeader = getBomHeaderByEntity (warehouseId, parentItemCode,languageId,companyCode,plantId);
 		BeanUtils.copyProperties(updateBomHeader, dbBomHeader, CommonUtils.getNullPropertyNames(updateBomHeader));
 		dbBomHeader.setUpdatedBy(loginUserID);
-		dbBomHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+		dbBomHeader.setUpdatedOn(new Date());
 		dbBomHeader = bomHeaderRepository.save(dbBomHeader);
 
 		List<BomLine> updateBomLines = new ArrayList<>();
@@ -348,4 +356,23 @@ public class BomHeaderService extends BaseService{
 			throw new EntityNotFoundException("Error in deleting Id: " + parentItemCode);
 		}
 	}
+
+	//===========================================BomHeader_ExceptionLog================================================
+	private void createBomHeaderLog(String itemCode, String languageId, String companyCodeId,
+									String plantId, String warehouseId, String error) {
+
+		ExceptionLog exceptionLog = new ExceptionLog();
+		exceptionLog.setOrderTypeId(itemCode);
+		exceptionLog.setOrderDate(new Date());
+		exceptionLog.setLanguageId(languageId);
+		exceptionLog.setCompanyCodeId(companyCodeId);
+		exceptionLog.setPlantId(plantId);
+		exceptionLog.setWarehouseId(warehouseId);
+		exceptionLog.setReferenceField1(itemCode);
+		exceptionLog.setErrorMessage(error);
+		exceptionLog.setCreatedBy("MSD_API");
+		exceptionLog.setCreatedOn(new Date());
+		exceptionLogRepo.save(exceptionLog);
+	}
+
 }

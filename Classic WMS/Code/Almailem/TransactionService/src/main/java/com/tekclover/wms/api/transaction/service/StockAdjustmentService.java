@@ -9,14 +9,16 @@ import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.WarehouseApiResponse;
+import com.tekclover.wms.api.transaction.repository.InventoryMovementRepository;
 import com.tekclover.wms.api.transaction.repository.InventoryV2Repository;
 import com.tekclover.wms.api.transaction.repository.StagingLineV2Repository;
 import com.tekclover.wms.api.transaction.repository.StockAdjustmentRepository;
 import com.tekclover.wms.api.transaction.repository.specification.StockAdjustmentSpecification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +32,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
+
 @Slf4j
 @Service
 public class StockAdjustmentService extends BaseService {
+    @Autowired
+    private InventoryMovementRepository inventoryMovementRepository;
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
     @Autowired
@@ -51,6 +57,7 @@ public class StockAdjustmentService extends BaseService {
     MastersService mastersService;
 
     String statusDescription = null;
+    String LANG_ID = "EN";
 
 
     /**
@@ -63,7 +70,8 @@ public class StockAdjustmentService extends BaseService {
         WarehouseApiResponse warehouseApiResponse = new WarehouseApiResponse();
 
         //Code Changed to do stock Adjustment Automatically
-        StockAdjustment createStockAdjustment = autoUpdateStockAdjustment(stockAdjustment);
+//        StockAdjustment createStockAdjustment = autoUpdateStockAdjustment(stockAdjustment);
+        StockAdjustment createStockAdjustment = autoUpdateStockAdjustmentNew(stockAdjustment);
 
 //        StockAdjustment createStockAdjustment = null;
 //        List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
@@ -120,8 +128,8 @@ public class StockAdjustmentService extends BaseService {
 //                dbStockAdjustment.setStatusDescription(statusDescription);
 //
 //                dbStockAdjustment.setDeletionIndicator(0L);
-//                dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbStockAdjustment.setCreatedBy("MSD_INT");
+//                dbStockAdjustment.setCreatedOn(new Date());
+//                dbStockAdjustment.setCreatedBy("MW_AMS");
 //
 //                createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
 //                stockAdjustmentList.add(dbStockAdjustment);
@@ -178,7 +186,7 @@ public class StockAdjustmentService extends BaseService {
 
                 BeanUtils.copyProperties(updateStockAdjustment, dbStockAdjustment, CommonUtils.getNullPropertyNames(updateStockAdjustment));
                 dbStockAdjustment.setUpdatedBy(loginUserId);
-                dbStockAdjustment.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbStockAdjustment.setUpdatedOn(new Date());
 
                 statusDescription = stagingLineV2Repository.getStatusDescription(dbStockAdjustment.getStatusId(), dbStockAdjustment.getLanguageId());
                 dbStockAdjustment.setStatusDescription(statusDescription);
@@ -227,6 +235,582 @@ public class StockAdjustmentService extends BaseService {
      * @return
      * @throws java.text.ParseException
      */
+    public StockAdjustment autoUpdateStockAdjustmentNew(com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment stockAdjustment) {
+        String movementQtyValue = null;
+        if (stockAdjustment.getIsCycleCount().equalsIgnoreCase("Y") && stockAdjustment.getIsDamage().equalsIgnoreCase("N")) {
+            log.info("IsCycleCount: " + stockAdjustment.getIsCycleCount());
+            PerpetualLineV2 perpetualLine = perpetualLineService.getPerpetualLineForStockAdjustmentV2(
+                    stockAdjustment.getCompanyCode(),
+                    stockAdjustment.getBranchCode(),
+                    "EN",
+                    stockAdjustment.getWarehouseId(),
+                    stockAdjustment.getItemCode(),
+                    stockAdjustment.getManufacturerName());
+            log.info("Perpetual Line: " + perpetualLine);
+
+            if (perpetualLine != null) {
+
+                InventoryV2 dbInventory = inventoryService.getInventoryV2(
+                        perpetualLine.getCompanyCodeId(),
+                        perpetualLine.getPlantId(),
+                        perpetualLine.getLanguageId(),
+                        perpetualLine.getWarehouseId(),
+                        perpetualLine.getPackBarcodes(),
+                        perpetualLine.getItemCode(),
+                        perpetualLine.getStorageBin(),
+                        perpetualLine.getManufacturerName());
+                log.info("Inventory: " + dbInventory);
+
+                if (dbInventory != null) {
+                    InventoryV2 newInventory = new InventoryV2();
+                    BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
+                    Double INV_QTY = dbInventory.getInventoryQuantity();
+                    Double ADJ_QTY = stockAdjustment.getAdjustmentQty();
+                    INV_QTY = INV_QTY + ADJ_QTY;
+                    newInventory.setInventoryQuantity(INV_QTY);
+                    Double ALLOC_QTY = 0D;
+                    if(dbInventory.getAllocatedQuantity() != null) {
+                        ALLOC_QTY = dbInventory.getAllocatedQuantity();
+                    }
+                    Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                    newInventory.setReferenceField4(TOT_QTY);
+                    newInventory.setInventoryId(System.currentTimeMillis());
+                    inventoryV2Repository.save(newInventory);
+
+                    //StockAdjustment Record Insert
+                    StockAdjustment dbStockAdjustment = new StockAdjustment();
+                    BeanUtils.copyProperties(newInventory, dbStockAdjustment, CommonUtils.getNullPropertyNames(newInventory));
+
+                    dbStockAdjustment.setAdjustmentQty(stockAdjustment.getAdjustmentQty());
+                    dbStockAdjustment.setCompanyCode(stockAdjustment.getCompanyCode());
+                    dbStockAdjustment.setBranchCode(stockAdjustment.getBranchCode());
+
+                    if (stockAdjustment.getItemDescription() != null) {
+                        dbStockAdjustment.setItemDescription(stockAdjustment.getItemDescription());
+                    }
+                    if (stockAdjustment.getItemDescription() == null && dbInventory.getDescription() != null) {
+                        dbStockAdjustment.setItemDescription(dbInventory.getDescription());
+                    }
+                    if (stockAdjustment.getItemDescription() == null && dbInventory.getDescription() == null) {
+                        if (dbInventory.getReferenceField8() != null) {
+                            dbStockAdjustment.setItemDescription(dbInventory.getReferenceField8());
+                        }
+                    }
+
+                    dbStockAdjustment.setBeforeAdjustment(dbInventory.getReferenceField4());
+                    dbStockAdjustment.setAfterAdjustment(newInventory.getReferenceField4());
+
+                    dbStockAdjustment.setPackBarcodes(dbInventory.getPackBarcodes());
+                    dbStockAdjustment.setBranchName(newInventory.getPlantDescription());
+                    dbStockAdjustment.setDateOfAdjustment(stockAdjustment.getDateOfAdjustment());
+                    dbStockAdjustment.setUnitOfMeasure(stockAdjustment.getUnitOfMeasure());
+                    dbStockAdjustment.setManufacturerCode(stockAdjustment.getManufacturerCode());
+                    dbStockAdjustment.setReferenceField1(stockAdjustment.getRefDocType());
+                    dbStockAdjustment.setRemarks(stockAdjustment.getRemarks());
+                    dbStockAdjustment.setAmsReferenceNo(stockAdjustment.getAmsReferenceNo());
+                    dbStockAdjustment.setIsCycleCount(stockAdjustment.getIsCycleCount());
+                    dbStockAdjustment.setIsCompleted(stockAdjustment.getIsCompleted());
+                    dbStockAdjustment.setIsDamage(stockAdjustment.getIsDamage());
+                    dbStockAdjustment.setMiddlewareId(stockAdjustment.getMiddlewareId());
+                    dbStockAdjustment.setMiddlewareTable(stockAdjustment.getMiddlewareTable());
+                    dbStockAdjustment.setSaUpdatedOn(stockAdjustment.getUpdatedOn());
+                    dbStockAdjustment.setStockAdjustmentKey(newInventory.getInventoryId());
+
+                    dbStockAdjustment.setStatusId(88L);                 //Hard Code - StockAdjustment Done/Closed
+                    statusDescription = stagingLineV2Repository.getStatusDescription(88L, dbInventory.getLanguageId());
+                    dbStockAdjustment.setStatusDescription(statusDescription);
+
+                    dbStockAdjustment.setDeletionIndicator(0L);
+                    dbStockAdjustment.setCreatedOn(new Date());
+                    dbStockAdjustment.setIsCompleted("Y");
+                    dbStockAdjustment.setCreatedBy("MW_AMS");
+
+                    StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
+                    log.info("createdStockAdjustment: " + createStockAdjustment);
+                    if(stockAdjustment.getAdjustmentQty() < 0) {
+                        movementQtyValue = "N";
+                    }
+                    if(stockAdjustment.getAdjustmentQty() > 0) {
+                        movementQtyValue = "P";
+                    }
+                    createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                    return createStockAdjustment;
+                }
+            }
+            if(perpetualLine == null) {
+                throw new BadRequestException("No PerPetual Line Found for given ItemCode, ManufacturerName : " + stockAdjustment.getItemCode() + ", " + stockAdjustment.getManufacturerName());
+            }
+        }
+
+        //Stock Adjustment Damage Code
+        if (stockAdjustment.getIsDamage().equalsIgnoreCase("Y") && stockAdjustment.getIsCycleCount().equalsIgnoreCase("N")) {
+            log.info("IsDamage: " + stockAdjustment.getIsDamage());
+
+            InventoryV2 dbInventory = inventoryService.getInventoryForStockAdjustmentDamageV2(
+                    stockAdjustment.getCompanyCode(),
+                    stockAdjustment.getBranchCode(),
+                    "EN",
+                    stockAdjustment.getWarehouseId(),
+                    stockAdjustment.getItemCode(),
+                    "99999",
+                    7L,
+                    stockAdjustment.getManufacturerName());
+            log.info("Inventory: " + dbInventory);
+
+            if (dbInventory != null) {
+                if (dbInventory.getInventoryQuantity() > 0) {
+
+                    //Stock Adjustment - Positive Qty - Have to add Stock Adjustment Qty with Inventory
+                    if(stockAdjustment.getAdjustmentQty() > 0) {
+                        InventoryV2 newInventory = new InventoryV2();
+                        log.info("Inventory : " + dbInventory);
+                        BeanUtils.copyProperties(dbInventory, newInventory, CommonUtils.getNullPropertyNames(dbInventory));
+                        Double INV_QTY = dbInventory.getInventoryQuantity();
+                        Double ADJ_QTY = stockAdjustment.getAdjustmentQty();
+                        INV_QTY = INV_QTY + ADJ_QTY;
+                        newInventory.setInventoryQuantity(INV_QTY);
+                        Double ALLOC_QTY = 0D;
+                        if (dbInventory.getAllocatedQuantity() != null) {
+                            ALLOC_QTY = dbInventory.getAllocatedQuantity();
+                        }
+                        Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                        newInventory.setReferenceField4(TOT_QTY);
+
+                        newInventory.setUpdatedOn(new Date());
+                        newInventory.setInventoryId(System.currentTimeMillis());
+                        inventoryV2Repository.save(newInventory);
+                        //Insert New Record in StockAdjustment
+                        StockAdjustment createStockAdjustment = createStockAdjustment(newInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
+                        log.info("createdStockAdjustment: " + createStockAdjustment);
+                        if(stockAdjustment.getAdjustmentQty() < 0) {
+                            movementQtyValue = "N";
+                        }
+                        if(stockAdjustment.getAdjustmentQty() > 0) {
+                            movementQtyValue = "P";
+                        }
+                        createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                        return createStockAdjustment;
+                    }
+                    if(stockAdjustment.getAdjustmentQty() < 0) {
+                        Double STK_ADJ_QTY = 0D;
+                        Double INV_QTY = 0D;
+                        Double STK_QTY = 0D;
+                        Double ALLOC_QTY = 0D;
+                        List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
+                        if(stockAdjustment.getAdjustmentQty() != null) {
+                            STK_ADJ_QTY = abs(stockAdjustment.getAdjustmentQty());
+                        }
+                        if(dbInventory.getInventoryQuantity() != null){
+                            INV_QTY = dbInventory.getInventoryQuantity();
+                        }
+                        if(dbInventory.getAllocatedQuantity() != null) {
+                            ALLOC_QTY = dbInventory.getAllocatedQuantity();
+                        }
+                        if (STK_ADJ_QTY <= INV_QTY) {
+                            STK_QTY = STK_ADJ_QTY;
+                        } else if (STK_ADJ_QTY > INV_QTY) {
+                            STK_QTY = INV_QTY;
+                        } else if (INV_QTY == 0) {
+                            STK_QTY = 0D;
+                        }
+                        log.info("STK_QTY -----1--->: " + STK_QTY);
+
+                        InventoryV2 stkInventory = new InventoryV2();
+                        BeanUtils.copyProperties(dbInventory, stkInventory, CommonUtils.getNullPropertyNames(dbInventory));
+                        INV_QTY = INV_QTY - STK_QTY;
+                        Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                        stkInventory.setInventoryQuantity(INV_QTY);
+                        stkInventory.setReferenceField4(TOT_QTY);
+                        stkInventory.setDeletionIndicator(0L);
+                        stkInventory.setInventoryId(System.currentTimeMillis());
+                        inventoryV2Repository.save(stkInventory);
+
+                        //Insert New Record in StockAdjustment
+                        StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, dbInventory.getReferenceField4(), dbInventory.getReferenceField8(), stockAdjustment);
+                        if(stockAdjustment.getAdjustmentQty() < 0) {
+                            movementQtyValue = "N";
+                        }
+                        if(stockAdjustment.getAdjustmentQty() > 0) {
+                            movementQtyValue = "P";
+                        }
+                        createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                        stockAdjustmentList.add(createStockAdjustment);
+
+                        STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                        log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
+
+                        if(STK_ADJ_QTY > 0) {
+                            List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
+                                    stockAdjustment.getCompanyCode(),
+                                    stockAdjustment.getBranchCode(),
+                                    LANG_ID,
+                                    stockAdjustment.getWarehouseId(),
+                                    stockAdjustment.getItemCode(),
+                                    stockAdjustment.getManufacturerName(),
+                                    1L);
+                            log.info("Inventory-----> BinclassId 7 for this item has been emptied; ----> BinClassId 1 ---> " + inventoryList);
+                            if(inventoryList != null && !inventoryList.isEmpty()){
+                                //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
+                                    outerloop:
+                                    for(IInventoryImpl inventory : inventoryList) {
+                                        if(inventory.getInventoryQuantity() != null){
+                                            INV_QTY = inventory.getInventoryQuantity();
+                                        }
+                                        if(inventory.getAllocatedQuantity() != null) {
+                                            ALLOC_QTY = inventory.getAllocatedQuantity();
+                                        }
+                                        if (STK_ADJ_QTY <= INV_QTY) {
+                                            STK_QTY = STK_ADJ_QTY;
+                                        } else if (STK_ADJ_QTY > INV_QTY) {
+                                            STK_QTY = INV_QTY;
+                                        } else if (INV_QTY == 0) {
+                                            STK_QTY = 0D;
+                                        }
+                                        log.info("STK_QTY -----1--->: " + STK_QTY);
+
+                                        InventoryV2 stkInventoryNew = new InventoryV2();
+                                        BeanUtils.copyProperties(inventory, stkInventoryNew, CommonUtils.getNullPropertyNames(inventory));
+                                        INV_QTY = INV_QTY - STK_QTY;
+                                        TOT_QTY = INV_QTY + ALLOC_QTY;
+                                        stkInventoryNew.setInventoryQuantity(INV_QTY);
+                                        stkInventoryNew.setReferenceField4(TOT_QTY);
+                                        stkInventoryNew.setDeletionIndicator(0L);
+                                        stkInventoryNew.setInventoryId(System.currentTimeMillis());
+                                        inventoryV2Repository.save(stkInventoryNew);
+
+                                        //Insert New Record in StockAdjustment
+                                        StockAdjustment createStockAdjustmentNew = createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                                        if(stockAdjustment.getAdjustmentQty() < 0) {
+                                            movementQtyValue = "N";
+                                        }
+                                        if(stockAdjustment.getAdjustmentQty() > 0) {
+                                            movementQtyValue = "P";
+                                        }
+                                        createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                                        stockAdjustmentList.add(createStockAdjustmentNew);
+
+                                        STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                                        log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
+
+                                        if(STK_ADJ_QTY < 0) {
+                                            STK_ADJ_QTY = 0D;
+                                        }
+                                        if(STK_ADJ_QTY == 0D) {
+                                            log.info("STK_ADJ_QTY fully adjusted: ");
+                                            break outerloop;
+                                        }
+                                    }
+                                    if(STK_ADJ_QTY > 0){
+                                        throw new BadRequestException("Stock Adjustment Qty is greater than physically present in inventory");
+                                    }
+                                    return stockAdjustmentList.get(0);
+                            }
+                            if(inventoryList == null || inventoryList.isEmpty()){
+                                throw new BadRequestException("No Stock found in the Bin Locations");
+                            }
+                        }
+                        return stockAdjustmentList.get(0);
+                    }
+                }
+                if (dbInventory.getInventoryQuantity() <= 0) {
+                    List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
+                            stockAdjustment.getCompanyCode(),
+                            stockAdjustment.getBranchCode(),
+                            LANG_ID,
+                            stockAdjustment.getWarehouseId(),
+                            stockAdjustment.getItemCode(),
+                            stockAdjustment.getManufacturerName(),
+                            1L);
+                    log.info("Inventory-----> BinclassId 7 for this item is empty; ----> BinClassId 1 ---> " + inventoryList);
+
+                    if(inventoryList != null && !inventoryList.isEmpty()){
+                        //Stock Adjustment - Positive Qty - Have to add Stock Adjustment Qty with Inventory
+                        if(stockAdjustment.getAdjustmentQty() > 0){
+                            InventoryV2 stkInventory = new InventoryV2();
+                            BeanUtils.copyProperties(inventoryList.get(0), stkInventory, CommonUtils.getNullPropertyNames(inventoryList.get(0)));
+                            Double INV_QTY = 0D;
+                            if(inventoryList.get(0).getInventoryQuantity() != null) {
+                                INV_QTY = inventoryList.get(0).getInventoryQuantity();
+                                INV_QTY = INV_QTY + stockAdjustment.getAdjustmentQty();
+                            }
+                            Double ALLOC_QTY = 0D;
+                            if(inventoryList.get(0).getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventoryList.get(0).getAllocatedQuantity();
+                            }
+                            Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                            stkInventory.setInventoryQuantity(INV_QTY);
+                            stkInventory.setAllocatedQuantity(ALLOC_QTY);
+                            stkInventory.setReferenceField4(TOT_QTY);
+                            stkInventory.setDeletionIndicator(0L);
+                            stkInventory.setUpdatedOn(new Date());
+                            stkInventory.setInventoryId(System.currentTimeMillis());
+                            inventoryV2Repository.save(stkInventory);
+
+                            //Insert New Record in StockAdjustment
+                            StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventoryList.get(0).getReferenceField4(), inventoryList.get(0).getReferenceField8(), stockAdjustment);
+                            if(stockAdjustment.getAdjustmentQty() < 0) {
+                                movementQtyValue = "N";
+                            }
+                            if(stockAdjustment.getAdjustmentQty() > 0) {
+                                movementQtyValue = "P";
+                            }
+                            createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                            log.info("createdStockAdjustment: " + createStockAdjustment);
+                            return createStockAdjustment;
+                        }
+                        //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
+                        if(stockAdjustment.getAdjustmentQty() < 0){
+                            Double STK_ADJ_QTY = 0D;
+                            Double INV_QTY = 0D;
+                            Double STK_QTY = 0D;
+                            Double ALLOC_QTY = 0D;
+                            List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
+                            if(stockAdjustment.getAdjustmentQty() != null) {
+                                STK_ADJ_QTY = abs(stockAdjustment.getAdjustmentQty());
+                            }
+                            outerloop:
+                            for(IInventoryImpl inventory : inventoryList) {
+                                if(inventory.getInventoryQuantity() != null){
+                                    INV_QTY = inventory.getInventoryQuantity();
+                                }
+                                if(inventory.getAllocatedQuantity() != null) {
+                                    ALLOC_QTY = inventory.getAllocatedQuantity();
+                                }
+                                if (STK_ADJ_QTY <= INV_QTY) {
+                                    STK_QTY = STK_ADJ_QTY;
+                                } else if (STK_ADJ_QTY > INV_QTY) {
+                                    STK_QTY = INV_QTY;
+                                } else if (INV_QTY == 0) {
+                                    STK_QTY = 0D;
+                                }
+                                log.info("STK_QTY -----1--->: " + STK_QTY);
+
+                                InventoryV2 stkInventory = new InventoryV2();
+                                BeanUtils.copyProperties(inventory, stkInventory, CommonUtils.getNullPropertyNames(inventory));
+                                INV_QTY = INV_QTY - STK_QTY;
+                                Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                                stkInventory.setInventoryQuantity(INV_QTY);
+                                stkInventory.setReferenceField4(TOT_QTY);
+                                stkInventory.setDeletionIndicator(0L);
+                                stkInventory.setInventoryId(System.currentTimeMillis());
+                                inventoryV2Repository.save(stkInventory);
+
+                                //Insert New Record in StockAdjustment
+                                StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                                if(stockAdjustment.getAdjustmentQty() < 0) {
+                                    movementQtyValue = "N";
+                                }
+                                if(stockAdjustment.getAdjustmentQty() > 0) {
+                                    movementQtyValue = "P";
+                                }
+                                createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                                stockAdjustmentList.add(createStockAdjustment);
+
+//                            if (STK_ADJ_QTY > STK_QTY) {
+                                STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                                log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
+//                            }
+                                if(STK_ADJ_QTY < 0) {
+                                    STK_ADJ_QTY = 0D;
+                                }
+                                if(STK_ADJ_QTY == 0D) {
+                                    log.info("STK_ADJ_QTY fully adjusted: ");
+                                    break outerloop;
+                                }
+                            }
+                            return stockAdjustmentList.get(0);
+                        }
+                    }
+                    if(inventoryList == null || inventoryList.isEmpty()){
+                        throw new BadRequestException("No Stock found in the Bin Locations");
+                    }
+                }
+            }
+            if (dbInventory == null) {
+                List<IInventoryImpl> inventoryList = inventoryV2Repository.inventoryForStockCount(
+                        stockAdjustment.getCompanyCode(),
+                        stockAdjustment.getBranchCode(),
+                        LANG_ID,
+                        stockAdjustment.getWarehouseId(),
+                        stockAdjustment.getItemCode(),
+                        stockAdjustment.getManufacturerName(),
+                        1L);
+                log.info("Inventory-----> BinclassId 7 for this item is empty; ----> BinClassId 1 ---> " + inventoryList);
+
+                if(inventoryList != null && !inventoryList.isEmpty()){
+                    //Stock Adjustment - Positive Qty - Have to add Stock Adjustment Qty with Inventory
+                    if(stockAdjustment.getAdjustmentQty() > 0){
+                        InventoryV2 stkInventory = new InventoryV2();
+                        BeanUtils.copyProperties(inventoryList.get(0), stkInventory, CommonUtils.getNullPropertyNames(inventoryList.get(0)));
+                        Double INV_QTY = 0D;
+                        if(inventoryList.get(0).getInventoryQuantity() != null) {
+                            INV_QTY = inventoryList.get(0).getInventoryQuantity();
+                            INV_QTY = INV_QTY + stockAdjustment.getAdjustmentQty();
+                        }
+                        Double ALLOC_QTY = 0D;
+                        if(inventoryList.get(0).getAllocatedQuantity() != null) {
+                            ALLOC_QTY = inventoryList.get(0).getAllocatedQuantity();
+                        }
+                        Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                        stkInventory.setInventoryQuantity(INV_QTY);
+                        stkInventory.setAllocatedQuantity(ALLOC_QTY);
+                        stkInventory.setReferenceField4(TOT_QTY);
+                        stkInventory.setDeletionIndicator(0L);
+                        stkInventory.setUpdatedOn(new Date());
+                        stkInventory.setInventoryId(System.currentTimeMillis());
+                        inventoryV2Repository.save(stkInventory);
+
+                        //Insert New Record in StockAdjustment
+                        StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventoryList.get(0).getReferenceField4(), inventoryList.get(0).getReferenceField8(), stockAdjustment);
+                        if(stockAdjustment.getAdjustmentQty() < 0) {
+                            movementQtyValue = "N";
+                        }
+                        if(stockAdjustment.getAdjustmentQty() > 0) {
+                            movementQtyValue = "P";
+                        }
+                        createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                        log.info("createdStockAdjustment: " + createStockAdjustment);
+                        return createStockAdjustment;
+                    }
+                    //Stock Adjustment - Negative Qty - Have to Subtract Stock Adjustment Qty From Inventory
+                    if(stockAdjustment.getAdjustmentQty() < 0){
+                        Double STK_ADJ_QTY = 0D;
+                        Double INV_QTY = 0D;
+                        Double STK_QTY = 0D;
+                        Double ALLOC_QTY = 0D;
+                        List<StockAdjustment> stockAdjustmentList = new ArrayList<>();
+                        if(stockAdjustment.getAdjustmentQty() != null) {
+                            STK_ADJ_QTY = abs(stockAdjustment.getAdjustmentQty());
+                        }
+                        outerloop:
+                        for(IInventoryImpl inventory : inventoryList) {
+                            if(inventory.getInventoryQuantity() != null){
+                                INV_QTY = inventory.getInventoryQuantity();
+                            }
+                            if(inventory.getAllocatedQuantity() != null) {
+                                ALLOC_QTY = inventory.getAllocatedQuantity();
+                            }
+                            if (STK_ADJ_QTY <= INV_QTY) {
+                                STK_QTY = STK_ADJ_QTY;
+                            } else if (STK_ADJ_QTY > INV_QTY) {
+                                STK_QTY = INV_QTY;
+                            } else if (INV_QTY == 0) {
+                                STK_QTY = 0D;
+                            }
+                            log.info("STK_QTY -----1--->: " + STK_QTY);
+
+                            InventoryV2 stkInventory = new InventoryV2();
+                            BeanUtils.copyProperties(inventory, stkInventory, CommonUtils.getNullPropertyNames(inventory));
+                            INV_QTY = INV_QTY - STK_QTY;
+                            Double TOT_QTY = INV_QTY + ALLOC_QTY;
+                            stkInventory.setInventoryQuantity(INV_QTY);
+                            stkInventory.setReferenceField4(TOT_QTY);
+                            stkInventory.setDeletionIndicator(0L);
+                            stkInventory.setInventoryId(System.currentTimeMillis());
+                            inventoryV2Repository.save(stkInventory);
+
+                            //Insert New Record in StockAdjustment
+                            StockAdjustment createStockAdjustment = createStockAdjustment(stkInventory, inventory.getReferenceField4(), inventory.getReferenceField8(), stockAdjustment);
+                            if(stockAdjustment.getAdjustmentQty() < 0) {
+                                movementQtyValue = "N";
+                            }
+                            if(stockAdjustment.getAdjustmentQty() > 0) {
+                                movementQtyValue = "P";
+                            }
+                            createInventoryMovementV2(createStockAdjustment, movementQtyValue);
+                            stockAdjustmentList.add(createStockAdjustment);
+
+//                            if (STK_ADJ_QTY > STK_QTY) {
+                                STK_ADJ_QTY = STK_ADJ_QTY - STK_QTY;
+                                log.info("STK_ADJ_QTY, STK_QTY: " + STK_ADJ_QTY + ", " + STK_QTY);
+//                            }
+                            if(STK_ADJ_QTY < 0) {
+                                STK_ADJ_QTY = 0D;
+                            }
+                            if(STK_ADJ_QTY == 0D) {
+                                log.info("STK_ADJ_QTY fully adjusted: ");
+                                break outerloop;
+                            }
+                        }
+                        return stockAdjustmentList.get(0);
+                    }
+                }
+                if(inventoryList == null || inventoryList.isEmpty()){
+                    throw new BadRequestException("No Stock found in the Bin Locations");
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param newInventory
+     * @param inventoryQty
+     * @param itemDesc
+     * @param stockAdjustment
+     * @return
+     */
+    public StockAdjustment createStockAdjustment(InventoryV2 newInventory,Double inventoryQty, String itemDesc,
+                                                 com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment stockAdjustment){
+        //StockAdjustment Record Insert
+        StockAdjustment dbStockAdjustment = new StockAdjustment();
+        BeanUtils.copyProperties(newInventory, dbStockAdjustment, CommonUtils.getNullPropertyNames(newInventory));
+
+        dbStockAdjustment.setAdjustmentQty(stockAdjustment.getAdjustmentQty());
+        dbStockAdjustment.setCompanyCode(stockAdjustment.getCompanyCode());
+        dbStockAdjustment.setBranchCode(stockAdjustment.getBranchCode());
+
+        if (stockAdjustment.getItemDescription() != null) {
+            dbStockAdjustment.setItemDescription(stockAdjustment.getItemDescription());
+        }
+        if (stockAdjustment.getItemDescription() == null && newInventory.getDescription() != null) {
+            dbStockAdjustment.setItemDescription(newInventory.getDescription());
+        }
+        if (stockAdjustment.getItemDescription() == null && newInventory.getDescription() == null) {
+            if (itemDesc != null) {
+                dbStockAdjustment.setItemDescription(itemDesc);
+            }
+        }
+
+        if (inventoryQty != null) {
+            dbStockAdjustment.setBeforeAdjustment(inventoryQty);
+        }
+        if (inventoryQty == null) {
+            dbStockAdjustment.setBeforeAdjustment(0D);
+        }
+        dbStockAdjustment.setAfterAdjustment(newInventory.getInventoryQuantity());
+
+        dbStockAdjustment.setPackBarcodes(newInventory.getPackBarcodes());
+        dbStockAdjustment.setBranchName(newInventory.getPlantDescription());
+        dbStockAdjustment.setDateOfAdjustment(stockAdjustment.getDateOfAdjustment());
+        dbStockAdjustment.setUnitOfMeasure(stockAdjustment.getUnitOfMeasure());
+        dbStockAdjustment.setManufacturerCode(stockAdjustment.getManufacturerCode());
+        dbStockAdjustment.setReferenceField1(stockAdjustment.getRefDocType());
+        dbStockAdjustment.setRemarks(stockAdjustment.getRemarks());
+        dbStockAdjustment.setAmsReferenceNo(stockAdjustment.getAmsReferenceNo());
+        dbStockAdjustment.setIsCycleCount(stockAdjustment.getIsCycleCount());
+        dbStockAdjustment.setIsCompleted(stockAdjustment.getIsCompleted());
+        dbStockAdjustment.setIsDamage(stockAdjustment.getIsDamage());
+        dbStockAdjustment.setMiddlewareId(stockAdjustment.getMiddlewareId());
+        dbStockAdjustment.setMiddlewareTable(stockAdjustment.getMiddlewareTable());
+        dbStockAdjustment.setSaUpdatedOn(stockAdjustment.getUpdatedOn());
+        dbStockAdjustment.setStockAdjustmentKey(System.currentTimeMillis());
+
+        dbStockAdjustment.setStatusId(88L);                 //Hard Code - StockAdjustment Done/Closed
+        statusDescription = stagingLineV2Repository.getStatusDescription(88L, newInventory.getLanguageId());
+        dbStockAdjustment.setStatusDescription(statusDescription);
+
+        dbStockAdjustment.setDeletionIndicator(0L);
+        dbStockAdjustment.setIsCompleted("Y");
+        dbStockAdjustment.setCreatedOn(new Date());
+        dbStockAdjustment.setCreatedBy("MW_AMS");
+
+        StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
+        log.info("createdStockAdjustment: " + createStockAdjustment);
+
+        return createStockAdjustment;
+    }
     public StockAdjustment autoUpdateStockAdjustment(com.tekclover.wms.api.transaction.model.warehouse.stockAdjustment.StockAdjustment stockAdjustment) throws java.text.ParseException {
 
         if (stockAdjustment.getIsCycleCount().equalsIgnoreCase("Y") && stockAdjustment.getIsDamage().equalsIgnoreCase("N")) {
@@ -309,14 +893,17 @@ public class StockAdjustmentService extends BaseService {
                     dbStockAdjustment.setStatusDescription(statusDescription);
 
                     dbStockAdjustment.setDeletionIndicator(0L);
-                    dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                    dbStockAdjustment.setCreatedOn(new Date());
                     dbStockAdjustment.setIsCompleted("Y");
-                    dbStockAdjustment.setCreatedBy("AMS_INT");
+                    dbStockAdjustment.setCreatedBy("MW_AMS");
 
                     StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
                     log.info("createdStockAdjustment: " + createStockAdjustment);
                     return createStockAdjustment;
                 }
+            }
+            if(perpetualLine == null) {
+                throw new BadRequestException("No PerPetual Line Found for given ItemCode, ManufacturerName : " + stockAdjustment.getItemCode() + ", " + stockAdjustment.getManufacturerName());
             }
         }
 
@@ -352,7 +939,7 @@ public class StockAdjustmentService extends BaseService {
                 newInventory.setCompanyCodeId(stockAdjustment.getCompanyCode());
                 newInventory.setPlantId(stockAdjustment.getBranchCode());
                 newInventory.setWarehouseId(stockAdjustment.getWarehouseId());
-                newInventory.setLanguageId("EN");
+                newInventory.setLanguageId(LANG_ID);
                 newInventory.setVariantCode(1L);                // VAR_ID
                 newInventory.setVariantSubCode("1");            // VAR_SUB_ID
                 newInventory.setStorageMethod("1");            // STR_MTD
@@ -410,17 +997,19 @@ public class StockAdjustmentService extends BaseService {
 
                 // SP_ST_IND_ID
                 newInventory.setSpecialStockIndicatorId(1L);
-
+                Double INV_QTY = 0D;
                 if (stockAdjustment.getAdjustmentQty() >= 0) {
                     newInventory.setInventoryQuantity(stockAdjustment.getAdjustmentQty());
+                    INV_QTY = stockAdjustment.getAdjustmentQty();
                 }
                 if (stockAdjustment.getAdjustmentQty() < 0) {
                     newInventory.setInventoryQuantity(0D);
+                    INV_QTY = 0D;
                 }
 
                 Double ALLOC_QTY = 0D;
                 newInventory.setAllocatedQuantity(ALLOC_QTY);
-                newInventory.setReferenceField4(dbInventory.getInventoryQuantity() + ALLOC_QTY);
+                newInventory.setReferenceField4(INV_QTY + ALLOC_QTY);
                 newInventory.setCompanyDescription(stockAdjustment.getCompanyDescription());
                 newInventory.setPlantDescription(stockAdjustment.getPlantDescription());
                 newInventory.setWarehouseDescription(stockAdjustment.getWarehouseDescription());
@@ -437,10 +1026,10 @@ public class StockAdjustmentService extends BaseService {
                     newInventory.setBarcodeId(barcode.get(0));
                 }
 
-                newInventory.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+                newInventory.setCreatedOn(new Date());
             }
 
-            newInventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            newInventory.setUpdatedOn(new Date());
             newInventory.setInventoryId(System.currentTimeMillis());
             inventoryV2Repository.save(newInventory);
 
@@ -486,7 +1075,7 @@ public class StockAdjustmentService extends BaseService {
             dbStockAdjustment.setMiddlewareId(stockAdjustment.getMiddlewareId());
             dbStockAdjustment.setMiddlewareTable(stockAdjustment.getMiddlewareTable());
             dbStockAdjustment.setSaUpdatedOn(stockAdjustment.getUpdatedOn());
-            dbStockAdjustment.setStockAdjustmentKey(newInventory.getInventoryId());
+            dbStockAdjustment.setStockAdjustmentKey(System.currentTimeMillis());
 
             dbStockAdjustment.setStatusId(88L);                 //Hard Code - StockAdjustment Done/Closed
             statusDescription = stagingLineV2Repository.getStatusDescription(88L, newInventory.getLanguageId());
@@ -494,15 +1083,15 @@ public class StockAdjustmentService extends BaseService {
 
             dbStockAdjustment.setDeletionIndicator(0L);
             dbStockAdjustment.setIsCompleted("Y");
-            dbStockAdjustment.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            dbStockAdjustment.setCreatedBy("AMS_INT");
+            dbStockAdjustment.setCreatedOn(new Date());
+            dbStockAdjustment.setCreatedBy("MW_AMS");
 
             StockAdjustment createStockAdjustment = stockAdjustmentRepository.save(dbStockAdjustment);
             log.info("createdStockAdjustment: " + createStockAdjustment);
 
             return createStockAdjustment;
         }
-        return null;
+        throw new BadRequestException("Either IS_DAMAGE should be 'Y' or IS_CYCLE_COUNT should be 'Y'");
     }
 
     /**
@@ -564,6 +1153,103 @@ public class StockAdjustmentService extends BaseService {
             }
         }
         throw new BadRequestException("The Given StockAdjustmentId doesn't Exist: " + stockAdjustmentKey);
+    }
+
+    /**
+     *
+     * @param stockAdjustment
+     * @param movementQtyValue
+     */
+    private void createInventoryMovementV2(StockAdjustment stockAdjustment, String movementQtyValue) {
+        InventoryMovement inventoryMovement = new InventoryMovement();
+        BeanUtils.copyProperties(stockAdjustment, inventoryMovement, CommonUtils.getNullPropertyNames(stockAdjustment));
+        inventoryMovement.setCompanyCodeId(stockAdjustment.getCompanyCode());
+
+        // MVT_TYP_ID
+        inventoryMovement.setMovementType(4L);
+
+        // SUB_MVT_TYP_ID
+        inventoryMovement.setSubmovementType(1L);
+
+        // STR_MTD
+        inventoryMovement.setStorageMethod("1");
+
+        // STR_NO
+        inventoryMovement.setBatchSerialNumber("1");
+
+        inventoryMovement.setManufacturerName(stockAdjustment.getManufacturerName());
+        inventoryMovement.setRefDocNumber(stockAdjustment.getAmsReferenceNo());
+        inventoryMovement.setCompanyDescription(stockAdjustment.getCompanyDescription());
+        inventoryMovement.setPlantDescription(stockAdjustment.getBranchName());
+        inventoryMovement.setWarehouseDescription(stockAdjustment.getWarehouseDescription());
+        inventoryMovement.setBarcodeId(stockAdjustment.getBarcodeId());
+        inventoryMovement.setDescription(stockAdjustment.getItemDescription());
+
+        // MVT_DOC_NO
+//        inventoryMovement.setMovementDocumentNo(String.valueOf(stockAdjustment.getStockAdjustmentKey()));
+        inventoryMovement.setReferenceField10(String.valueOf(stockAdjustment.getStockAdjustmentKey()));
+
+        // ST_BIN
+        inventoryMovement.setStorageBin(stockAdjustment.getStorageBin());
+
+        // MVT_QTY
+        inventoryMovement.setMovementQty(stockAdjustment.getAdjustmentQty());
+
+        // MVT_QTY_VAL
+        inventoryMovement.setMovementQtyValue(movementQtyValue);
+
+        // MVT_UOM
+        inventoryMovement.setInventoryUom(stockAdjustment.getInventoryUom());
+
+        // BAL_OH_QTY
+        Double sumOfInvQty = inventoryService.getInventoryQtyCountForInvMmt(
+                stockAdjustment.getCompanyCode(),
+                stockAdjustment.getBranchCode(),
+                stockAdjustment.getLanguageId(),
+                stockAdjustment.getWarehouseId(),
+                stockAdjustment.getManufacturerName(),
+                stockAdjustment.getItemCode());
+        log.info("BalanceOhQty: " + sumOfInvQty);
+        if(sumOfInvQty != null) {
+        inventoryMovement.setBalanceOHQty(sumOfInvQty);
+            Double openQty = 0D;
+            if(movementQtyValue.equalsIgnoreCase("P")) {
+                openQty = sumOfInvQty - stockAdjustment.getAdjustmentQty();
+            }
+            if(movementQtyValue.equalsIgnoreCase("N")) {
+                openQty = sumOfInvQty + stockAdjustment.getAdjustmentQty();
+            }
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+        }
+        if(sumOfInvQty == null) {
+            inventoryMovement.setBalanceOHQty(0D);
+            Double openQty = 0D;
+            sumOfInvQty = 0D;
+            if(movementQtyValue.equalsIgnoreCase("P")) {
+                openQty = sumOfInvQty - stockAdjustment.getAdjustmentQty();
+                if(openQty < 0){
+                    openQty = 0D;
+                }
+            }
+            if(movementQtyValue.equalsIgnoreCase("N")) {
+                openQty = sumOfInvQty + stockAdjustment.getAdjustmentQty();
+            }
+            inventoryMovement.setReferenceField2(String.valueOf(openQty));          //Qty before inventory Movement occur
+        }
+
+        inventoryMovement.setVariantCode(1L);
+        inventoryMovement.setVariantSubCode("1");
+
+        inventoryMovement.setPackBarcodes(stockAdjustment.getPackBarcodes());
+
+        // IM_CTD_BY
+        inventoryMovement.setCreatedBy(stockAdjustment.getCreatedBy());
+
+        // IM_CTD_ON
+        inventoryMovement.setCreatedOn(new Date());
+        inventoryMovement.setMovementDocumentNo(String.valueOf(System.currentTimeMillis()));
+        inventoryMovement = inventoryMovementRepository.save(inventoryMovement);
+        log.info("inventoryMovement : " + inventoryMovement);
     }
 
 }

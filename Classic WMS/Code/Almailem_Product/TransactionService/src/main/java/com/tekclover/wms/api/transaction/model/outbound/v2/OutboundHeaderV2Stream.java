@@ -11,6 +11,7 @@ public interface OutboundHeaderV2Stream {
 	public String getPreOutboundNo();
 	public String getRefDocNumber();
 	public String getPartnerCode();
+	public String getCustomerType();
 	public String getDeliveryOrderNo();
 	public String getReferenceDocumentType();
 	public Long getOutboundOrderTypeId();

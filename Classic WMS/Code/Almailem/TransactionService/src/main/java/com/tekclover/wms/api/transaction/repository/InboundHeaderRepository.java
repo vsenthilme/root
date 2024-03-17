@@ -46,7 +46,6 @@ public interface InboundHeaderRepository extends JpaRepository<InboundHeader,Lon
 	 * @param plantId
 	 * @param refDocNumber
 	 * @param preInboundNo
-	 * @param l
 	 * @return
 	 */
 	public List<InboundHeader> findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
@@ -62,10 +61,8 @@ public interface InboundHeaderRepository extends JpaRepository<InboundHeader,Lon
 			String warehouseId, Date fromDate, Date toDate,Long statusId,Long deletionIndicator);
 	
 	/**
-	 * 
-	 * @param rssFeedEntryId
-	 * @param isRead
-	 */
+	 *
+     */
 //	@Modifying(clearAutomatically = true)
 //	@Query("UPDATE InboundHeader ib SET ib.statusId = :statusId WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")
 //	void updateInboundHeaderStatus(@Param ("warehouseId") String warehouseId,

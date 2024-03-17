@@ -52,7 +52,8 @@
                         style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
                       <input matInput currencyMask placeholder="Enter" formControlName="expenseAmount">
                     </mat-form-field> -->
-                    <p-inputNumber   formControlName="expenseAmount" placeholder="Enter" class="input_field3 w-100" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+                    <p-inputNumber formControlName="expenseAmount" placeholder="Enter" class="input_field3 w-100"
+                      mode="currency" currency="USD" locale="en-US"></p-inputNumber>
                     <mat-error *ngIf="errorHandling('expenseAmount')">{{getErrorMessage()}}</mat-error>
                   </div>
                 </div>
@@ -130,8 +131,9 @@
               </div>
               <div class="col-lg-3 col-md-6 mt-2" [hidden]="!isThisCorporateClient.checked">
                 <p class="mb-0 py-0 required "> Corporate client?</p>
-                <p-dropdown placeholder="Select" appendTo="body" class="w-100 my-1 mb-2" 
-                [options]="multiselectclientList" formControlName="corporateClient" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+                <p-dropdown placeholder="Select" [filter]="true" appendTo="body" class="w-100 my-1 mb-2" 
+                    [options]="multiselectclientList" formControlName="corporateClient" [style]="{'width': '100%'}"
+                    [panelStyle]="{'width':'20%'}">
               </p-dropdown>
             
               </div>
@@ -143,14 +145,16 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="payableTo">
                   </mat-form-field> -->
-                  <input type="text"   formControlName="payableTo"  placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="payableTo" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
                 <div class="col-lg-3 col-md-6 mt-2">
                   <p class="mb-0 py-0 ">Vendor's Mailing Address</p>
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="vendorMailingAddress">
                   </mat-form-field> -->
-                  <input type="text"   formControlName="vendorMailingAddress" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="vendorMailingAddress" placeholder="Enter"
+                    class="input_field3 w-100" pInputText />
                 </div>
                 <div class="col-lg-3 col-md-6 mt-2">
                   <p class="mb-0 py-0 ">Phone No</p>
@@ -164,7 +168,8 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="vendorFax">
                   </mat-form-field> -->
-                  <input type="number"  formControlName="vendorFax" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="number" formControlName="vendorFax" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
 
                 <div class="col-lg-3 col-md-6 mt-2">
@@ -172,7 +177,8 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="expenseDescription">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="expenseDescription" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="expenseDescription" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
 
                 <div class="col-12 mt-2">
@@ -191,14 +197,16 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="clientName">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="clientName" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="clientName" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
                 <div class="col-lg-3 col-md-6 mt-2">
                   <p class="mb-0 py-0  ">Case or Matter</p>
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="matterNumber">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="matterNumber" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="matterNumber" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
 
                 <div class="col-lg-3 col-md-6 mt-2">
@@ -206,7 +214,8 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="matterDescription">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="matterDescription" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="matterDescription" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
 
                 <div class="col-lg-3 col-md-6 mt-2">
@@ -214,18 +223,34 @@
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="billableToClient">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="billableToClient" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="billableToClient" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
 
               </div>
-
+              <p class="col-lg-3 col-md-4  fw-bolder my-2">Upload: </p>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <input mat-raised-button class="form-control" ngf type="file" accept="*" [(files)]="files"
+                    (change)="this.onFilechange($event)" (click)="files =[]" />
+                    <ngfFormData [files]="files" [(FormData)]="myFormData" postName="file"></ngfFormData>
+                </div>
+                <div class="col-lg-6 col-md-6" *ngIf="this.form.controls.referenceField1.value">
+                  <div class="d-flex flex-column">
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput formControlName="referenceField1" readOnly>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-lg-3 col-md-6 mt-2">
                   <p class="mb-0 py-0 ">Your Name</p>
                   <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                     <input matInput placeholder="Enter" formControlName="userName">
                   </mat-form-field> -->
-                  <input type="text"  formControlName="userName" placeholder="Enter" class="input_field3 w-100" pInputText />
+                  <input type="text" formControlName="userName" placeholder="Enter" class="input_field3 w-100"
+                    pInputText />
                 </div>
                 <div class="col-lg-3 col-md-6 mt-2">
                   <div class="d-flex flex-column   ">
@@ -254,7 +279,8 @@
                     <!-- <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
                       <input matInput placeholder="Enter" formControlName="nameOnCardOrCheck">
                     </mat-form-field> -->
-                    <input type="text"  formControlName="nameOnCardOrCheck" placeholder="Enter" class="input_field3 w-100" pInputText />
+                    <input type="text" formControlName="nameOnCardOrCheck" placeholder="Enter"
+                      class="input_field3 w-100" pInputText />
                   </div>
                   <div class="col-lg-3 col-md-6 mt-2">
                     <p class="mb-0 py-0  ">Type of Card</p>

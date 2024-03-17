@@ -6,10 +6,12 @@ import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpeci
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,20 +126,20 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
                                         @Param(value = "languageId") String languageId);
 
     //Partner_item_barcode - almailem
-    @Query(value = "select distinct partner_itm_bar from tblimpartner ip \n" +
+    @Query(value = "select partner_itm_bar from tblimpartner ip \n" +
             "WHERE ip.itm_code in (:itemCode) and \n" +
             "ip.c_id in (:companyCode) and \n" +
             "ip.plant_id in (:plantId) and \n" +
             "ip.wh_id in (:warehouseId) and \n" +
             "ip.lang_id in (:languageId) and \n" +
             "ip.mfr_name in (:manufactureName) and \n" +
-            "ip.is_deleted = 0", nativeQuery = true)
+            "ip.is_deleted = 0 order by ctd_on desc", nativeQuery = true)
     public List<String> getPartnerItemBarcode(@Param(value = "itemCode") String itemCode,
-                                       @Param(value = "companyCode") String companyCode,
-                                       @Param(value = "plantId") String plantId,
-                                       @Param(value = "warehouseId") String warehouseId,
-                                       @Param(value = "manufactureName") String manufactureName,
-                                       @Param(value = "languageId") String languageId);
+                                              @Param(value = "companyCode") String companyCode,
+                                              @Param(value = "plantId") String plantId,
+                                              @Param(value = "warehouseId") String warehouseId,
+                                              @Param(value = "manufactureName") String manufactureName,
+                                              @Param(value = "languageId") String languageId);
 
     //Partner_item_barcode - almailem - interim only
     @Query(value = "select string_agg(barcode,', ') from (select distinct barcode from tblinterimbarcodeid ip \n" +
@@ -269,4 +271,24 @@ public interface StagingLineV2Repository extends JpaRepository<StagingLineEntity
     List<StagingLineEntityV2> findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
             String companyCode, String plantId, String languageId, String warehouseId, String refDocNumber, Long deletionIndicator);
 
+    List<StagingLineEntityV2> findAllByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId,
+            String itemCode, String manufacturerName, Long deletionIndicator);
+
+    @Transactional
+    @Procedure(procedureName = "staging_line_update_proc")
+    public void updateStagingLineUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("itmCode") String itmCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("lineNumber") Long lineNumber,
+            @Param("updatedOn") Date updatedOn,
+            @Param("recAcceptQty") Double recAcceptQty,
+            @Param("recDamageQty") Double recDamageQty
+    );
 }

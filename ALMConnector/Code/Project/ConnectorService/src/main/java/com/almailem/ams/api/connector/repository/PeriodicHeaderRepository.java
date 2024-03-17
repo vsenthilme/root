@@ -39,4 +39,6 @@ public interface PeriodicHeaderRepository extends JpaRepository<PeriodicHeader, 
 
     PeriodicHeader findTopByPeriodicHeaderIdAndCompanyCodeAndBranchCodeAndCycleCountNoOrderByOrderReceivedOnDesc(
             Long periodicHeaderId, String companyCode, String branchCode, String cycleCountNo);
+
+    List<PeriodicHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

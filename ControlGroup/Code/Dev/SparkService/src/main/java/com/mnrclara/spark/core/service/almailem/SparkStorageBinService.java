@@ -110,7 +110,7 @@ public class SparkStorageBinService {
                 + "WEIGHT as weight "
                 + "FROM tblstoragebin WHERE IS_DELETED = 0");
 
-        storageBinQuery.cache();
+//        storageBinQuery.cache();
 
         if (searchStorageBin.getAisleNumber() != null && !searchStorageBin.getAisleNumber().isEmpty()) {
             storageBinQuery = storageBinQuery.filter(col("AISLE_ID").isin(searchStorageBin.getAisleNumber().toArray()));

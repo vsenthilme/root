@@ -3038,12 +3038,16 @@ public class TransactionService {
             ResponseEntity<InhouseTransferHeader[]> result = getRestTemplate().exchange(builder.toUriString(),
                     HttpMethod.GET, entity, InhouseTransferHeader[].class);
 
-            List<InhouseTransferHeader> inhouseTransferHeaderList = new ArrayList<>();
-            for (InhouseTransferHeader inhouseTransferHeader : result.getBody()) {
+            //Start of Comment by V.Senthil on 10-03-2024
+//            List<InhouseTransferHeader> inhouseTransferHeaderList = new ArrayList<>();
+//            for (InhouseTransferHeader inhouseTransferHeader : result.getBody()) {
+//
+//                inhouseTransferHeaderList.add(addingTimeWithDateInhouseTransferHeader(inhouseTransferHeader));
+//            }
+//            return inhouseTransferHeaderList.toArray(new InhouseTransferHeader[inhouseTransferHeaderList.size()]);
+            return result.getBody();
+            //End of Comment by V.Senthil on 10-03-2024
 
-                inhouseTransferHeaderList.add(addingTimeWithDateInhouseTransferHeader(inhouseTransferHeader));
-            }
-            return inhouseTransferHeaderList.toArray(new InhouseTransferHeader[inhouseTransferHeaderList.size()]);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -4963,7 +4967,7 @@ public class TransactionService {
         }
     }
 
-    // Get All Stock Reports New
+// Get All Stock Reports New
     public StockReport[] getAllStockReportsV2(SearchStockReport searchStockReport, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();

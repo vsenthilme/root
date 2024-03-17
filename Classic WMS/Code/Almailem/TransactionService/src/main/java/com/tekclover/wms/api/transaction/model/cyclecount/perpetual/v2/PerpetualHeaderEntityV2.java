@@ -2,7 +2,6 @@ package com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.util.Date;
 import java.util.List;
 

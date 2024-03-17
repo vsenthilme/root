@@ -115,7 +115,7 @@ public class SparkInboundLineService {
                 + "IS_COMPLETED as isCompleted "
                 + "From tblinboundlinev3 where IS_DELETED = 0 "
         );
-        inboundLineV2Query.cache();
+//        inboundLineV2Query.cache();
 
 
         if (findInboundLineV2.getWarehouseId() != null && !findInboundLineV2.getWarehouseId().isEmpty()) {
@@ -145,7 +145,7 @@ public class SparkInboundLineService {
         if (findInboundLineV2.getEndConfirmedOn() != null) {
             Date endDate = findInboundLineV2.getEndConfirmedOn();
             endDate = org.apache.commons.lang3.time.DateUtils.ceiling(endDate, Calendar.DAY_OF_MONTH);
-            inboundLineV2Query = inboundLineV2Query.filter(col("IB_CNF_ON").$greater$eq(dateFormat.format(endDate)));
+            inboundLineV2Query = inboundLineV2Query.filter(col("IB_CNF_ON").$less$eq(dateFormat.format(endDate)));
         }
 
         // V2 fields
@@ -159,6 +159,10 @@ public class SparkInboundLineService {
             inboundLineV2Query = inboundLineV2Query.filter(col("PLANT_ID").isin(findInboundLineV2.getPlantId().toArray()));
         }
 
+        if (findInboundLineV2.getInboundOrderTypeId() != null && !findInboundLineV2.getInboundOrderTypeId().isEmpty()) {
+            List<String> headerOrderTypeStrings = findInboundLineV2.getInboundOrderTypeId().stream().map(String::valueOf).collect(Collectors.toList());
+            inboundLineV2Query = inboundLineV2Query.filter(col("IB_ORD_TYP_ID").isin(headerOrderTypeStrings.toArray()));
+        }
 
         Encoder<InboundLineV2> inboundLineEncoder = Encoders.bean(InboundLineV2.class);
         Dataset<InboundLineV2> datasetControlGroup = inboundLineV2Query.as(inboundLineEncoder);

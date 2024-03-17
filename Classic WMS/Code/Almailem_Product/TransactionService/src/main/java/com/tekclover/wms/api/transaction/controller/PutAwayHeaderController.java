@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.PutAwayHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.SearchPutAwayHeaderV2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,7 +148,7 @@ public class PutAwayHeaderController {
                                                 @RequestParam String plantId, @RequestParam String languageId,
                                                 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
                                                 @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
-                                                @RequestParam String proposedStorageBin) {
+                                                @RequestParam String proposedStorageBin) throws IOException, CsvException {
         PutAwayHeaderV2 putawayheader = putawayheaderService.getPutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
                 caseCode, packBarcodes, putAwayNumber, proposedStorageBin);
@@ -157,7 +160,7 @@ public class PutAwayHeaderController {
     @GetMapping("/{putAwayNumber}/status/v2")
     public ResponseEntity<?> getPutAwayHeaderV2(@PathVariable String putAwayNumber, @RequestParam String warehouseId,
                                                 @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
-                                                @RequestParam String preInboundNo, @RequestParam String refDocNumber) {
+                                                @RequestParam String preInboundNo, @RequestParam String refDocNumber) throws IOException, CsvException {
         List<PutAwayHeaderV2> putawayheader = putawayheaderService.getPutAwayHeaderV2(warehouseId, preInboundNo, refDocNumber,
                 putAwayNumber, companyCode, plantId, languageId);
     	log.info("PutAwayHeader : " + putawayheader);
@@ -167,7 +170,7 @@ public class PutAwayHeaderController {
     @ApiOperation(response = PutAwayHeaderV2.class, value = "Get a PutAwayHeader V2") // label for swagger
     @GetMapping("/{refDocNumber}/inboundreversal/asn/v2")
     public ResponseEntity<?> getPutAwayHeaderForASNV2(@RequestParam String companyCode, @RequestParam String plantId,
-                                                      @RequestParam String languageId, @RequestParam String warehouseId, @PathVariable String refDocNumber) {
+                                                      @RequestParam String languageId, @RequestParam String warehouseId, @PathVariable String refDocNumber) throws IOException, CsvException {
         List<PutAwayHeaderV2> putawayheader = putawayheaderService.getPutAwayHeaderV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
 //    	log.info("PutAwayHeader : " + putawayheader);
         return new ResponseEntity<>(putawayheader, HttpStatus.OK);
@@ -196,7 +199,7 @@ public class PutAwayHeaderController {
                                                   @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
                                                   @RequestParam String proposedStorageBin, @Valid @RequestBody PutAwayHeaderV2 updatePutAwayHeader,
                                                   @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException, ParseException {
+			throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         PutAwayHeaderV2 createdPutAwayHeader =
                 putawayheaderService.updatePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                         preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
@@ -208,9 +211,16 @@ public class PutAwayHeaderController {
     @PatchMapping("/{refDocNumber}/reverse/v2")
     public ResponseEntity<?> patchPutAwayHeaderV2(@PathVariable String refDocNumber, @RequestParam String packBarcodes, @RequestParam String warehouseId,
                                                   @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
-                                                  @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+                                                  @RequestParam String loginUserID) throws ParseException, Exception {
         putawayheaderService.updatePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 refDocNumber, packBarcodes, loginUserID);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+	@ApiOperation(response = PutAwayHeaderV2.class, value = "Update PutAwayHeader Reversal V2") // label for swagger
+    @PatchMapping("/reverse/batch/v2")
+    public ResponseEntity<?> batchPutAwayHeaderReversalV2(@RequestBody List<InboundReversalInput> inboundReversalInputs, @RequestParam String loginUserID) throws ParseException, Exception {
+        putawayheaderService.batchPutAwayReversal(inboundReversalInputs, loginUserID);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -220,7 +230,7 @@ public class PutAwayHeaderController {
                                                    @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
                                                    @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
                                                    @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
-                                                   @RequestParam String proposedStorageBin, @RequestParam String loginUserID) {
+                                                   @RequestParam String proposedStorageBin, @RequestParam String loginUserID) throws IOException, CsvException {
         putawayheaderService.deletePutAwayHeaderV2(companyCode, plantId, languageId, warehouseId,
                 preInboundNo, refDocNumber, goodsReceiptNo, palletCode, caseCode,
                 packBarcodes, putAwayNumber, proposedStorageBin, loginUserID);

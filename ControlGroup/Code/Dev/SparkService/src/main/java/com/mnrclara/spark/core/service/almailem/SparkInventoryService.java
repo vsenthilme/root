@@ -114,7 +114,7 @@ public class SparkInventoryService {
 
 
 
-        inventoryV2Query.cache();
+//        inventoryV2Query.cache();
 
         if (findInventoryV2.getWarehouseId() != null && !findInventoryV2.getWarehouseId().isEmpty()) {
             inventoryV2Query = inventoryV2Query.filter(col("WH_ID").isin(findInventoryV2.getWarehouseId().toArray()));

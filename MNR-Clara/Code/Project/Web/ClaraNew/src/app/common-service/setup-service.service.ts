@@ -39,6 +39,12 @@ export class SetupServiceService {
   searchStore(obj: any){
     return this.http.post<any>('/mnr-cg-setup-service/store/findStore', obj);
   }
+  getStore(code: string,languageId:any,companyId:any) {
+    return this.http.get<any>('/mnr-cg-setup-service/store/' + code+'?languageId='+languageId+'&companyId='+companyId);
+  }
+  searchStoredropdown(){
+    return this.http.get<any>( `/mnr-cg-setup-service/getAllStoreGroupDown`);
+  }
   searchControlGroup(obj: any){
     return this.http.post<any>('/mnr-cg-setup-service/controlgroup/findControlGroup', obj);
   }

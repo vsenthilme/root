@@ -1,18 +1,21 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.SearchInventoryV2;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.*;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.repository.*;
+import com.tekclover.wms.api.transaction.repository.specification.PreInboundLineV2Specification;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +59,17 @@ public class PreInboundLineService extends BaseService {
 
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+    
+    @Autowired
+    private InventoryService inventoryService;
 
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
     //--------------------------------------------------------------------------------------
 
     /**
@@ -394,7 +406,7 @@ public class PreInboundLineService extends BaseService {
      */
     public PreInboundLineEntityV2 getPreInboundLineV2(String companyCode, String plantId, String languageId,
                                                       String preInboundNo, String warehouseId,
-                                                      String refDocNumber, Long lineNo, String itemCode) {
+                                                      String refDocNumber, Long lineNo, String itemCode) throws IOException, CsvException {
         Optional<PreInboundLineEntityV2> preInboundLine =
                 preInboundLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndDeletionIndicator(
                         languageId,
@@ -407,6 +419,9 @@ public class PreInboundLineService extends BaseService {
                         itemCode,
                         0L);
         if (preInboundLine.isEmpty()) {
+            // Error Log
+            createPreInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "PreInboundLine with given values and preInboundNo - " + preInboundNo + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -421,10 +436,12 @@ public class PreInboundLineService extends BaseService {
      * @param preInboundNo
      * @return
      */
-    public List<PreInboundLineEntityV2> getPreInboundLineV2(String preInboundNo) {
+    public List<PreInboundLineEntityV2> getPreInboundLineV2(String preInboundNo) throws IOException, CsvException {
         List<PreInboundLineEntityV2> preInboundLines =
                 preInboundLineV2Repository.findByPreInboundNoAndDeletionIndicator(preInboundNo, 0L);
         if (preInboundLines.isEmpty()) {
+            // Error Log
+            createPreInboundLineLog1(preInboundNo, "PreInboundLine with preInboundNo - " + preInboundNo + " doesn't exists.");
             throw new BadRequestException("The given values: preInboundNo:" + preInboundNo +
                     " doesn't exist.");
         }
@@ -455,8 +472,6 @@ public class PreInboundLineService extends BaseService {
         dbPreInboundLine.setDeletionIndicator(0L);
         dbPreInboundLine.setCreatedBy(loginUserID);
         dbPreInboundLine.setUpdatedBy(loginUserID);
-//        dbPreInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setCreatedOn(new Date());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
@@ -475,16 +490,17 @@ public class PreInboundLineService extends BaseService {
      */
     public List<PreInboundLineEntityV2> createPreInboundLineV2(String companyCode, String plantId, String languageId,
                                                                String preInboundNo, String warehouseId, String refDocNumber,
-                                                               String itemCode, Long lineNo, String loginUserID) {
+                                                               String itemCode, Long lineNo, String loginUserID) throws IOException, CsvException {
         try {
             // Query PreInboundLine
             PreInboundLineEntityV2 preInboundLineEntity = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
 
             AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
-            BomHeader bomHeader = mastersService.getBomHeader(itemCode, warehouseId, authTokenForMastersService.getAccess_token());
+            BomHeader bomHeader = mastersService.getBomHeader(itemCode, warehouseId, companyCode, plantId, languageId, authTokenForMastersService.getAccess_token());
             if (bomHeader != null) {
                 BomLine[] bomLine =
-                        mastersService.getBomLine(bomHeader.getBomNumber(), bomHeader.getWarehouseId(), authTokenForMastersService.getAccess_token());
+                        mastersService.getBomLine(bomHeader.getBomNumber(), bomHeader.getCompanyCodeId(), bomHeader.getPlantId(),
+                                bomHeader.getLanguageId(), bomHeader.getWarehouseId(), authTokenForMastersService.getAccess_token());
                 List<PreInboundLineEntityV2> toBeCreatedPreInboundLineList = new ArrayList<>();
                 for (BomLine dbBomLine : bomLine) {
                     toBeCreatedPreInboundLineList.add(createPreInboundLineBOMBasedV2(companyCode,
@@ -530,9 +546,14 @@ public class PreInboundLineService extends BaseService {
                     return createdPreInboundLineList;
                 }
             } else {
+                // Error Log
+                createPreInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber,
+                        preInboundNo, lineNo, itemCode, "There is no Bom for this Item.");
                 throw new BadRequestException("There is No Bom for this item.");
             }
         } catch (Exception e) {
+            // Error Log
+            createPreInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, e.toString());
             e.printStackTrace();
             throw new BadRequestException(e.toString());
         }
@@ -609,7 +630,6 @@ public class PreInboundLineService extends BaseService {
 
         preInboundLine.setDeletionIndicator(0L);
         preInboundLine.setCreatedBy(loginUserID);
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -630,7 +650,7 @@ public class PreInboundLineService extends BaseService {
                                                          String preInboundNo, String warehouseId,
                                                          String refDocNumber, Long lineNo, String itemCode,
                                                          PreInboundLineEntityV2 updatePreInboundLine, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         PreInboundLineEntityV2 dbPreInboundLine = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
         BeanUtils.copyProperties(updatePreInboundLine, dbPreInboundLine, CommonUtils.getNullPropertyNames(updatePreInboundLine));
         dbPreInboundLine.setUpdatedBy(loginUserID);
@@ -653,13 +673,12 @@ public class PreInboundLineService extends BaseService {
     public PreInboundLineEntityV2 updatePreInboundLineV2(String companyCode, String plantId, String languageId,
                                                          String preInboundNo, String warehouseId,
                                                        String refDocNumber, Long lineNo, String itemCode, Long statusId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         PreInboundLineEntityV2 dbPreInboundLine = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
         dbPreInboundLine.setStatusId(statusId);
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbPreInboundLine.setStatusDescription(statusDescription);
         dbPreInboundLine.setUpdatedBy(loginUserID);
-//        dbPreInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundLine.setUpdatedOn(new Date());
         return preInboundLineV2Repository.save(dbPreInboundLine);
     }
@@ -674,6 +693,72 @@ public class PreInboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param searchPreInboundLine
+     * @return
+     * @throws ParseException
+     */
+    public List<PreInboundLineOutputV2> findPreInboundLineV2(SearchPreInboundLineV2 searchPreInboundLine) throws ParseException {
+        if (searchPreInboundLine.getStartCreatedOn() != null && searchPreInboundLine.getStartCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartCreatedOn(), searchPreInboundLine.getEndCreatedOn());
+            searchPreInboundLine.setStartCreatedOn(dates[0]);
+            searchPreInboundLine.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchPreInboundLine.getStartRefDocDate() != null && searchPreInboundLine.getStartRefDocDate() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchPreInboundLine.getStartRefDocDate(), searchPreInboundLine.getEndRefDocDate());
+            searchPreInboundLine.setStartRefDocDate(dates[0]);
+            searchPreInboundLine.setEndRefDocDate(dates[1]);
+        }
+
+        PreInboundLineV2Specification spec = new PreInboundLineV2Specification(searchPreInboundLine);
+        List<PreInboundLineEntityV2> results = preInboundLineV2Repository.stream(spec, PreInboundLineEntityV2.class).collect(Collectors.toList());
+        List<PreInboundLineOutputV2> preInboundLineOutputList = new ArrayList<>();
+        if(results != null && !results.isEmpty()) {
+            for(PreInboundLineEntityV2 preInboundLine : results) {
+                PreInboundLineOutputV2 newPreInboundLineOutput = new PreInboundLineOutputV2();
+                BeanUtils.copyProperties(preInboundLine, newPreInboundLineOutput, CommonUtils.getNullPropertyNames(preInboundLine));
+                List<InventoryDetail> inventoryDetails = new ArrayList<>();
+                SearchInventoryV2 searchInventoryV2 = getSearchInventoryV2(preInboundLine);
+                List<IInventoryImpl> inventoryList = inventoryService.findInventoryNewV2(searchInventoryV2);
+                if(inventoryList != null && !inventoryList.isEmpty()) {
+                    for (IInventoryImpl inventory : inventoryList) {
+                        InventoryDetail inventoryDetail = new InventoryDetail();
+                        inventoryDetail.setStorageBin(inventory.getStorageBin());
+                        inventoryDetail.setInventoryQty(inventory.getReferenceField4());
+                        inventoryDetails.add(inventoryDetail);
+                    }
+                }
+                newPreInboundLineOutput.setInventoryDetail(inventoryDetails);
+                preInboundLineOutputList.add(newPreInboundLineOutput);
+                log.info("PreInboundLine: " + newPreInboundLineOutput);
+            }
+        }
+//		log.info("results: " + results);
+        return preInboundLineOutputList;
+    }
+
+    /**
+     *
+     * @param preInboundLine
+     * @return
+     */
+    private static SearchInventoryV2 getSearchInventoryV2(PreInboundLineEntityV2 preInboundLine) {
+        SearchInventoryV2 searchInventoryV2 = new SearchInventoryV2();
+        searchInventoryV2.setCompanyCodeId(Collections.singletonList(preInboundLine.getCompanyCode()));
+        searchInventoryV2.setPlantId(Collections.singletonList(preInboundLine.getPlantId()));
+        searchInventoryV2.setLanguageId(Collections.singletonList(preInboundLine.getLanguageId()));
+        searchInventoryV2.setWarehouseId(Collections.singletonList(preInboundLine.getWarehouseId()));
+        searchInventoryV2.setItemCode(Collections.singletonList(preInboundLine.getItemCode()));
+        searchInventoryV2.setManufacturerName(Collections.singletonList(preInboundLine.getManufacturerName()));
+        List<Long> binClassIdList = new ArrayList<>();
+        binClassIdList.add(1L);
+        binClassIdList.add(7L);
+        searchInventoryV2.setBinClassId(binClassIdList);
+        return searchInventoryV2;
+    }
+
+    /**
      * deletePreInboundLine
      *
      * @param loginUserID
@@ -681,15 +766,17 @@ public class PreInboundLineService extends BaseService {
      */
     public void deletePreInboundLineV2(String companyCode, String plantId, String languageId,
                                        String preInboundNo, String warehouseId,
-                                       String refDocNumber, Long lineNo, String itemCode, String loginUserID) throws ParseException {
+                                       String refDocNumber, Long lineNo, String itemCode, String loginUserID) throws ParseException, IOException, CsvException {
         PreInboundLineEntityV2 preInboundLine = getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
         if (preInboundLine != null && preInboundLine.getStatusId() == 6L) {
             preInboundLine.setDeletionIndicator(1L);
             preInboundLine.setUpdatedBy(loginUserID);
-//            preInboundLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             preInboundLine.setUpdatedOn(new Date());
             preInboundLineV2Repository.save(preInboundLine);
         } else {
+            // Error Log
+            createPreInboundLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "Error in deleting PreInboundLine with preInboundNo - " + preInboundNo);
             throw new EntityNotFoundException("Error in deleting Id: " + preInboundNo);
         }
     }
@@ -729,4 +816,44 @@ public class PreInboundLineService extends BaseService {
         }
         return preInboundLineEntityV2List;
     }
+
+    //=========================================PreInboundLine_ExceptionLog=============================================
+    private void createPreInboundLineLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                         String refDocNumber, String preInboundNo, Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(preInboundNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(String.valueOf(lineNo));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundLineLog1(String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(preInboundNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
 }

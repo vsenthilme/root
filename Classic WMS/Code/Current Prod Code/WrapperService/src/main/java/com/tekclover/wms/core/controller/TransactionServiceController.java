@@ -2167,4 +2167,23 @@ public class TransactionServiceController {
 		StreamingResponseBody responseBody = transactionService.findStreamStorageBin();
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(responseBody);
 	}
+
+	//===========================================================find Transaction Error==========================================
+
+	//Get All
+	@ApiOperation(response = TransactionError.class, value = "Get all TransactionError details") // label for swagger
+	@GetMapping("/transactionError")
+	public ResponseEntity<?> getTransactionError(@RequestParam String authToken) throws Exception{
+		TransactionError[] transactionErrors = transactionService.findTransactionError(authToken);
+		return new ResponseEntity<>(transactionErrors, HttpStatus.OK);
+	}
+
+	// Find TransactionError
+	@ApiOperation(response = TransactionError.class, value = "Find TransactionError details") // label for swagger
+	@PostMapping("find/transactionError")
+	public ResponseEntity<?> findTransactionError(@RequestBody FindTransactionError findTransactionError,
+												  @RequestParam String authToken) throws Exception{
+		TransactionError[] transactionErrors = transactionService.findTransactionError(findTransactionError, authToken);
+		return new ResponseEntity<>(transactionErrors, HttpStatus.OK);
+	}
 }

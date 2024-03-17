@@ -1,0 +1,374 @@
+<div class="d-flex  align-items-center justify-content-between mx-1 my-2 mb-2">
+    <div class="ps-3">
+      <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0 d-flex align-items-center">
+          <li class="breadcrumb-item mb-0 ms-3">
+            <a >
+              <mat-icon class="text-secondary align-middle">home</mat-icon>
+            </a>
+          </li>
+          <div class="divider mx-3 border-end"></div>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Billing</li>
+          <li class="breadcrumb-item mb-0 active " aria-current="page">Approval</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="pe-2 me-1 d-flex justify-content-between align-items-end">
+      <div [hidden]="isShowDiv"> <input matInput (keyup)="applyFilter($event)"
+          class="form-control filter_button mx-2 border-bottom" placeholder="Search" style="width:90%"></div>
+      <div [ngClass]="showFloatingButtons == true ? 'floating-pane-active' : 'floating-pane-deactive'" class="button-row">
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-pink text-white mx-2"
+          matTooltip="Download Excel">
+          <mat-icon class="">download</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons bg-yellow text-white mx-2"
+          matTooltip="Delete">
+          <mat-icon class="">delete</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-success"
+          matTooltip="Copy">
+          <mat-icon class="">content_copy</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" class="floating-buttons text-white mx-2 bg-lightblue"
+          matTooltip="Display">
+          <mat-icon class="">search</mat-icon>
+        </button>
+        <button mat-mini-fab *ngIf="showFloatingButtons == true" color="primary"
+          class="floating-buttons text-white mx-2 me-3" matTooltip="Edit">
+          <mat-icon class="">edit</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="toggleFloat()" class="mx-2 text-white action-button"
+          [ngClass]="{'bg-yellow' : toggle, 'purple': !toggle}">
+          <mat-icon>{{icon}}</mat-icon>Options
+        </button>
+        <button mat-mini-fab disabled class=" disabled bg-darkblue text-white mx-2 action-button">
+          <mat-icon class="">add</mat-icon> New
+        </button>
+        <button disabled mat-mini-fab class="disabled text-white mx-2 action-button  bg-red" type="button" mat-button>
+          <mat-icon class="">tune</mat-icon> Filter
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-drawer-container class="example-container" autosize style="overflow: hidden !important;">
+    <div class="example-sidenav-content" style="height: calc(100vh - 11rem);">
+      <mat-accordion>
+        <mat-tab-group>
+          <mat-tab label="First">
+        <mat-expansion-panel class="shadow-none" #panel2 hideToggle *ngIf="filter">
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              Pre Bill Details
+              <mat-icon class="text-primary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row mt-2 px-3 mx-1">
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Client Name </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.clientId">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Prebill Batch No </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.preBillBatchNumber">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Prebill No </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.preBillNumber">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Prebill Date </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.preBillDate">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Assigned Partner </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.partnerAssigned">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Matter No </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.matterNumber">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Prebill Amount </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.totalAmount">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mt-2">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 text-black">Status </p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                  <input matInput disabled placeholder="Enter" [(ngModel)]="paymentPlan.statusId">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-tab>
+      <mat-tab label="dd">
+        <mat-expansion-panel class="shadow-none" #panel3 [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between align-items-center collapsefont">
+              Time Tickets
+              <div class="d-flex align-items-center">
+                <button mat-stroked-button (click)="showexpense();"
+                  class="hoverbutton py-1 shadow-none  mx-2 d-inline mr-2 ">
+                  <mat-icon class="mr-1">payments</mat-icon>Expense
+                </button>
+                <button mat-stroked-button (click)="showfilter();"
+                  class="hoverbutton py-1 shadow-none  mx-2 d-inline mr-2 ">
+                  <mat-icon class="">tune</mat-icon>Pre Bill Details
+                </button>
+  
+                <mat-icon class="text-primary">{{panel3.expanded? 'remove' : 'add'}}</mat-icon>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class=" my-0 py-0 ">
+  
+            <div class=" px-1 mt-1 bg-white"
+              [ngClass]="{'scroll7' : !expense, 'scroll1': expense, 'scroll9': filter,'scroll10': filter && expense}">
+              <div class="scroll4">
+                <table mat-table [dataSource]="dataSource" matSort class=" w-100">
+  
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+  
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="timeTicketNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Time Ticket No</th>
+                    <td mat-cell *matCellDef="let element"> {{element.timeTicketNumber}} </td>
+                  </ng-container>
+  
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="approvaldate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Time Ticket Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.approvaldate}} </td>
+                  </ng-container>
+  
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="timeKeeperCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Time Keeper</th>
+                    <td mat-cell *matCellDef="let element"> {{element.timeKeeperCode}} </td>
+                  </ng-container>
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="timeTicketDescription">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ticket Desc</th>
+                    <td mat-cell *matCellDef="let element" class="text-center"> 
+                      <!-- {{element.timeTicketDescription}} -->
+                      <!-- <mat-icon class="" style="font-size: 17px;cursor: pointer;" *ngIf="element.timeTicketDescription"
+                        (click)="openStringPopup(element.timeTicketDescription,'TIME_TICKET_DESCRIPTION','Time Ticket Description')">
+                        edit
+                      </mat-icon> -->
+                      <button mat-icon-button style="font-size: 17px;cursor: pointer;" *ngIf="element.timeTicketDescription"
+                      (click)="openStringPopup(element.timeTicketDescription,'TIME_TICKET_DESCRIPTION','Time Ticket Description')">
+                        <mat-icon class="text-blue">description</mat-icon>
+                        <!-- <img src="./assets/img/icons/notes.png" style="height: 27px;width:27px;" alt="" srcset=""> -->
+                      </button>
+                    </td>
+                  </ng-container>
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="timeTicketHours">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Booked Hrs </th>
+                    <td mat-cell *matCellDef="let element"> {{element.timeTicketHours}} </td>
+                  </ng-container>
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="billable">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Billable Amount </th>
+                    <td mat-cell *matCellDef="let element"class="text-right">{{element.timeTicketAmount | currency}} </td>
+                  </ng-container>
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="timeTicketAmount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount </th>
+                    <td mat-cell *matCellDef="let element"> {{element.timeTicketAmount}} </td>
+                  </ng-container> <!-- Symbol Column -->
+                  <ng-container matColumnDef="billType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Bill Type </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                        <mat-select [(ngModel)]="element.billType" [value]="element.billType"
+                          (selectionChange)="element.approvedAmount = 0" placeholder="Select">
+                          <mat-option value="Billable">Billable</mat-option>
+                          <mat-option value="Non-Billable">Non-Billable</mat-option>  
+                          <mat-option value="No Charge">No Charge</mat-option>
+  
+                        </mat-select>
+                      </mat-form-field>
+  
+                    </td>
+                    <!-- //<td mat-cell *matCellDef="let element"> {{element.billType}} </td> -->
+                  </ng-container> <!-- Symbol Column -->
+                  <ng-container matColumnDef="approvedDescription">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Approved Desc </th>
+  
+                    <td mat-cell *matCellDef="let element;let i = index" class="text-center">
+                      <!-- {{element.approvedDescription}} -->
+                      <!-- <mat-icon class="" style="font-size: 17px;cursor: pointer;"  *ngIf="element.approvedDescription"
+                        (click)="openStringPopup(element.approvedDescription,'TIME_TICKET_APPROVED_DESCRIPTION','Time Ticket Approved Description',i)">
+                        edit
+                      </mat-icon> -->
+                      <button mat-icon-button  style="font-size: 17px;cursor: pointer;" *ngIf="element.approvedDescription"
+                      (click)="openStringPopup(element.approvedDescription,'TIME_TICKET_APPROVED_DESCRIPTION','Approved Description',i)">
+                        <mat-icon class="text-blue">description</mat-icon>
+                        <!-- <img src="./assets/img/icons/notes.png" style="height: 27px;width:27px;" alt="" srcset=""> -->
+                      </button>
+                    </td>
+                  </ng-container> <!-- Symbol Column -->
+                  <ng-container matColumnDef="approvedHours">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Approved Hrs </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                        <input matInput placeholder="Hours" [value]="element.approvedHours"
+                          [(ngModel)]="element.approvedHours"
+                          (change)="element.approvedAmount =(element.approvedHours/element.timeTicketHours) *element.timeTicketAmount">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="approvedAmount" sticky>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Approved Amount </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="form-group input_field mb-0 " appearance="outline">
+                        <span matPrefix class="text-secondary"
+                          style="display: table-cell; vertical-align: middle;">$&nbsp;</span>
+                        <input matInput placeholder="Amount" [value]="element.approvedAmount"
+                          [(ngModel)]="element.approvedAmount">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+  
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                  </tr>
+                </table>
+              </div>
+  
+            </div>
+            <!-- <div class="p-0 mx-1 m-0">
+              <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div> -->
+          </div>
+        </mat-expansion-panel>
+      </mat-tab>
+      <mat-tab label="dd">
+        <mat-expansion-panel class="shadow-none" #panel5 hideToggle *ngIf="expense">
+          <mat-expansion-panel-header class="border-bottom padding-space border-top">
+            <mat-panel-title class="d-flex justify-content-between collapsefont">
+              Expenses
+              <mat-icon class="text-primary">{{panel5.expanded? 'remove' : 'add'}}</mat-icon>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class=" my-0 py-0 ">
+  
+            <div class=" px-1 mt-1  bg-white" [ngClass]="{'scroll1': !filter, 'scroll10': filter}">
+              <table mat-table [dataSource]="dataSource1" matSort class=" w-100">
+  
+                <!-- Checkbox Column -->
+                <!-- Weight Column -->
+                <ng-container matColumnDef="sno">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+                  <td mat-cell *matCellDef="let element;let i = index"> {{i + 1}} </td>
+                </ng-container>
+  
+                <!-- Weight Column -->
+                <ng-container matColumnDef="expenseCode">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expense Code</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expenseCode}} </td>
+                </ng-container>
+                <!-- Weight Column -->
+                <ng-container matColumnDef="expenseno">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expense Description</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expenseDescription}} </td>
+                </ng-container>
+  
+                <!-- Weight Column -->
+                <ng-container matColumnDef="expensedate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expense Date</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expensedate}} </td>
+                </ng-container>
+  
+                <!-- Weight Column -->
+                <ng-container matColumnDef="expenseType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expense Type</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expenseType}} </td>
+                </ng-container>
+  
+  
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="expenseDescription">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expenseDescription}} </td>
+                </ng-container>
+  
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="expenseAmount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Expense Amount</th>
+                  <td mat-cell *matCellDef="let element"> {{element.expenseAmount}} </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedColumns1;sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns1;">
+                </tr>
+              </table>
+  
+            </div>
+            <!-- <div class="p-0 mx-1 m-0">
+              <mat-paginator class="" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div> -->
+          </div>
+        </mat-expansion-panel>
+      </mat-tab>
+      </mat-tab-group>
+      </mat-accordion>
+  
+    </div>
+    <div class="d-flex justify-content-center align-items-center py-2 bottombutton1">
+      <button mat-raised-button color="warn" mat-dialog-close class="mx-2" (click)="back();"> <i
+          class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+      <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="approve();"> <i
+          class="bi bi-check2 me-1 font-size-1_5rem"></i>
+        Approve</button>
+      <!-- <button mat-raised-button class="mx-2 bg-yellow text-white px-4" (click)="showexpense();"> <i
+          class="bi bi-cash me-1 font-size-1_5rem"></i>
+        Expense</button> -->
+  
+    </div>
+  </mat-drawer-container>

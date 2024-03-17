@@ -5,8 +5,8 @@
 
   OAUTH_CLIENT: 'pixeltrice',
   OAUTH_SECRET: 'pixeltrice-secret-key',
-  hyperlink_userid: 'IT',
-  hyperlink_pasword: 'MR@2022',
+  hyperlink_userid: 'RS',
+  hyperlink_pasword: 'TCMR@2024',
   name: 'prod',
   webScoketURL:'https://mrclara.com:27070/mnrclara/api/mnr-crm-service/'
 };

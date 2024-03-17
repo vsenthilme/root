@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.inbound.stock.v2;
 
 import com.tekclover.wms.api.transaction.model.inbound.stock.SearchInventoryStock;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper = true)
 public class SearchInventoryStockV2 extends SearchInventoryStock {

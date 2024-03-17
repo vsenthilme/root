@@ -1,0 +1,177 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">Home</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">Monitoring Section</li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">API console Check</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3">
+    <app-monitoring-tab></app-monitoring-tab>
+  </div>
+  <div class="mx-3 bg-white">
+  
+  
+    <div class="bg-white px-3 d-flex justify-content-end align-items-center" style="min-height: 3.2rem;">
+      <!-- <div class="btn-group">
+        <button class="btn btn-outline-warning btn-sm d-flex align-items-center" type="button">
+          <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-warning  dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">edit</mat-icon>Edit
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">search</mat-icon>Display
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">delete</mat-icon>Delete
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" href="#">
+              <mat-icon class="mr-3">download</mat-icon>Download
+            </a></li>
+        </ul>
+      </div> -->
+  
+      <input matInput class="form-control filter_button mx-2  border-0" (input)="applyFilterGlobal($event, 'contains')"
+        placeholder="Search" style="width:90%">
+  
+  
+    </div>
+    <div class=" bg-white">
+      <p-table #userProfile [globalFilterFields]="['userName', 'profileType', 'partner']" [value]="products"
+        styleClass="p-datatable-gridlines" [scrollable]="true" [(selection)]="selectedProducts" scrollDirection="both"
+        scrollHeight="calc(100vh - 17.5rem)" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+        [resizableColumns]="true">
+  
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:4rem;" pResizableColumn>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Partner Code
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Partner Name
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:12rem;" pResizableColumn>Partner Type
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Active Systems
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            <th style="width:10rem;" pResizableColumn>Inactive Systems
+                <button mat-icon-button (click)="advanceFilter();">
+                  <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                </button>
+              </th>
+              <th style="width:12rem;" pResizableColumn>IP Availability
+                  <button mat-icon-button (click)="advanceFilter();">
+                    <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                  </button>
+                </th>
+              <th style="width:15rem;" pResizableColumn>Devices Memory Utilization
+                  <button mat-icon-button (click)="advanceFilter();">
+                    <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                  </button>
+                </th>
+                <th style="width:14rem;" pResizableColumn>Devices CPU Utilization
+                    <button mat-icon-button (click)="advanceFilter();">
+                      <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+                    </button>
+                  </th>
+                  <th style="width:10rem;" pResizableColumn>Issue Status
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Alerts
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+            
+            <th style="width:12rem;" pResizableColumn>Active Hrs
+              <button mat-icon-button (click)="advanceFilter();">
+                <i class="bi bi-funnel my-auto" style="font-size: 19px;"></i>
+              </button>
+            </th>
+          </tr>
+  
+          <tr *ngIf="advanceFilterShow">
+            <th style="width:4rem;"></th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="organization"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="apiSubs"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+              <p-columnFilter type="text" placeholder="Search" field="partnerType"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="systemType"></p-columnFilter>
+            </th>
+            <th style="width:10rem;">
+                <p-columnFilter type="text" placeholder="Search" field="systemType1"></p-columnFilter>
+              </th>
+              <th style="width:12rem;">
+                  <p-columnFilter type="text" placeholder="Search" field="systemType2"></p-columnFilter>
+                </th>
+                <th style="width:15rem;">
+                    <p-columnFilter type="text" placeholder="Search" field="systemType4"></p-columnFilter>
+                  </th>
+                <th style="width:14rem;">
+                    <p-columnFilter type="text" placeholder="Search" field="systemType3"></p-columnFilter>
+                  </th>
+                  <th style="width:10rem;">
+              <p-columnFilter type="text" placeholder="Search" field="accessType"></p-columnFilter>
+            </th>
+            <th style="width:12rem;">
+        <p-columnFilter type="text" placeholder="Search" field="alerts"></p-columnFilter>
+      </th>
+      <th style="width:12rem;">
+  <p-columnFilter type="text" placeholder="Search" field="activehrs"></p-columnFilter>
+</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td style="width:4rem;">
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td style="width:12rem;">{{product.organization}}</td>
+            <td style="width:12rem;">{{product.apiSubs}}</td>
+            <td style="width:12rem;">{{product.partnerType}}</td>
+            <td style="width:10rem;">{{product.systemType}}</td>
+            <td style="width:10rem;">{{product.systemType1}}</td>
+            <td style="width:12rem;">{{product.systemType4}} <i type="button" class="bi bi-arrow-repeat ml-3"></i></td>
+            <td style="width:15rem;">{{product.systemType2}}</td>
+            <td style="width:14rem;">{{product.systemType3}}</td>
+            <td style="width:10rem;">{{product.accessType}}</td>
+            <td style="width:12rem;">{{product.alerts}}</td>
+            <td style="width:12rem;">{{product.activehrs}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

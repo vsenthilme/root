@@ -80,7 +80,7 @@ public class SparkPreInboundHeaderService {
                 + "MANUFACTURER_FULL_NAME as manufacturerFullName "
 
                 + "FROM tblpreinboundheaderv2 WHERE IS_DELETED = 0");
-        imPreInboundHeaderQueryv2.cache();
+//        imPreInboundHeaderQueryv2.cache();
 
 
         if (findPreInboundHeaderV2.getLanguageId() != null && !findPreInboundHeaderV2.getLanguageId().isEmpty()) {

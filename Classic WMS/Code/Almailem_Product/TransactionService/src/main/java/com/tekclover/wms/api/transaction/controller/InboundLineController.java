@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -103,7 +105,7 @@ public class InboundLineController {
     @GetMapping("/v2/{lineNo}")
     public ResponseEntity<?> getInboundLineV2(@PathVariable Long lineNo, @RequestParam String companyCode, @RequestParam String plantId,
                                               @RequestParam String languageId, @RequestParam String warehouseId,
-                                              @RequestParam String refDocNumber, @RequestParam String preInboundNo, @RequestParam String itemCode) {
+                                              @RequestParam String refDocNumber, @RequestParam String preInboundNo, @RequestParam String itemCode) throws IOException, CsvException {
         InboundLineV2 inboundline = inboundlineService.getInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         log.info("InboundLine : " + inboundline);
         return new ResponseEntity<>(inboundline, HttpStatus.OK);
@@ -127,7 +129,7 @@ public class InboundLineController {
     @ApiOperation(response = InboundLine.class, value = "Create InboundLine") // label for swagger
     @PostMapping("/v2/confirm")
     public ResponseEntity<?> postInboundLineV2(@Valid @RequestBody List<InboundLineV2> newInboundLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         InboundLineV2 createdInboundLine = inboundlineService.confirmInboundLineV2(newInboundLine, loginUserID);
         return new ResponseEntity<>(createdInboundLine, HttpStatus.OK);
     }
@@ -138,7 +140,7 @@ public class InboundLineController {
                                                 @RequestParam String languageId, @RequestParam String warehouseId,
                                                 @RequestParam String refDocNumber, @RequestParam String preInboundNo, @RequestParam String itemCode,
                                                 @Valid @RequestBody InboundLineV2 updateInboundLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         InboundLineV2 createdInboundLine =
                 inboundlineService.updateInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, loginUserID, updateInboundLine);
         return new ResponseEntity<>(createdInboundLine, HttpStatus.OK);
@@ -148,7 +150,7 @@ public class InboundLineController {
     @DeleteMapping("/v2/{lineNo}")
     public ResponseEntity<?> deleteInboundLineV2(@PathVariable Long lineNo, @RequestParam String languageId, @RequestParam String companyCode,
                                                  @RequestParam String plantId, @RequestParam String warehouseId, @RequestParam String refDocNumber,
-                                                 @RequestParam String preInboundNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
+                                                 @RequestParam String preInboundNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
         inboundlineService.deleteInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

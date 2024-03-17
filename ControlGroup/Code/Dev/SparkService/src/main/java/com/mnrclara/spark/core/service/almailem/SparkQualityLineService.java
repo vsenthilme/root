@@ -111,7 +111,7 @@ public class SparkQualityLineService {
                 "MANUFACTURER_NAME as manufacturerName " +
                 "FROM tblqualitylinev2 WHERE IS_DELETED = 0 ");
 
-        qualityLineQueryV2.cache();
+//        qualityLineQueryV2.cache();
 
         if (findQualityLineV2.getLanguageId() != null && !findQualityLineV2.getLanguageId().isEmpty()) {
             qualityLineQueryV2 = qualityLineQueryV2.filter(col("LANG_ID").isin(findQualityLineV2.getLanguageId().toArray()));

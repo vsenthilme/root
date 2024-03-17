@@ -2,12 +2,12 @@ package com.tekclover.wms.api.transaction.repository;
 
 import com.tekclover.wms.api.transaction.model.impl.StockMovementReportImpl;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
-import com.tekclover.wms.api.transaction.model.warehouse.inbound.v2.InboundOrderLinesV2;
 import com.tekclover.wms.api.transaction.repository.fragments.StreamableJpaSpecificationRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,10 +85,12 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
 //            + " join tblimbasicdata1 im on il.itm_code = im.itm_code "
             + "WHERE il.ITM_CODE in (:itemCode) AND "
 //            + "im.WH_ID in (:warehouseId) AND "
+            + "(COALESCE(:manufacturerName, null) IS NULL OR (il.MFR_NAME IN (:manufacturerName))) and \n"
             + "il.C_ID in (:companyCodeId) AND il.PLANT_ID in (:plantId) AND il.LANG_ID in (:languageId) AND il.WH_ID in (:warehouseId) AND il.status_id in (:statusId) "
             + " AND (il.accept_qty is not null OR il.damage_qty is not null)",
             nativeQuery = true)
     public List<StockMovementReportImpl> findInboundLineForStockMovement(@Param("itemCode") List<String> itemCode,
+                                                                         @Param("manufacturerName") List<String> manufacturerName,
                                                                          @Param("warehouseId") List<String> warehouseId,
                                                                          @Param("companyCodeId") List<String> companyCodeId,
                                                                          @Param("plantId") List<String> plantId,
@@ -121,5 +123,23 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
 
     List<InboundLineV2> findByRefDocNumberAndCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndStatusIdAndDeletionIndicator(
             String refDocNumber, String companyCode, String plantId, String languageId, String warehouseId, Long statusId, Long deletionIndicator);
+
+    @Transactional
+    @Procedure(procedureName = "inboundline_status_update_proc")
+    public void updateInboundLineStatusUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("itmCode") String itmCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("lineNumber") Long lineNumber,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedOn") Date updatedOn
+    );
+
 }
 

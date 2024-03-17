@@ -312,7 +312,7 @@
       (click)="open_new_update(aliasMenuItems,'validate')">Validate</button> -->
 
     <button mat-menu-item [disabled]="aliasMenuItems.statusId == '10'"
-      *ngIf="aliasMenuItems.statusId == 8 || aliasMenuItems.statusId == 6 || aliasMenuItems.statusId == 5 "
+      *ngIf="aliasMenuItems.statusId == 8 || aliasMenuItems.statusId == 6 || aliasMenuItems.statusId == 5  || aliasMenuItems.statusId == 70|| aliasMenuItems.statusId == 71 ||  aliasMenuItems.statusId == 72 || aliasMenuItems.statusId == 73 ||  aliasMenuItems.statusId == 74  "
       (click)="open_new_update(aliasMenuItems,'validate')">Preview Intake Form</button>
       <button mat-menu-item [disabled]="aliasMenuItems.feedbackStatus == 'Form Sent' || aliasMenuItems.feedbackStatus == 'Form Received'" *ngIf="aliasMenuItems.statusId != 7 && aliasMenuItems.statusId != 25 " (click)="sendSurvey(aliasMenuItems)" >Send Survey</button> 
       <!--

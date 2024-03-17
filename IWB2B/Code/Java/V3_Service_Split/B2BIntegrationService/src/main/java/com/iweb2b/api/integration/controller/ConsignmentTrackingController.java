@@ -41,11 +41,12 @@ public class ConsignmentTrackingController {
 	}
 	
 	// To fetch shipment tracking for AJEX Client
-	// API for shipment tracking by AJEX waybill number
-	@ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking") // label for swagger
-	@GetMapping("/{wayBillNumber}/shipment/v2")
-	public ResponseEntity<?> getConsignmentTrackingByWaybillNo(@PathVariable String wayBillNumber) {
-		ConsignmentTracking dbConsignmentTracking = consignmentTrackingService.getConsignmentTrackingByWayBillNo(wayBillNumber);
+	// API for shipment tracking by AJEX CustomerReferenceNumber
+	@ApiOperation(response = ConsignmentTracking.class, value = "Get a ConsignmentTracking by CustomerReferenceNumber") // label for swagger
+	@GetMapping("/{customerReferenceNumber}/shipment/v2")
+	public ResponseEntity<?> getConsignmentTrackingByCustomerReferenceNumber(@PathVariable String customerReferenceNumber) {
+		ConsignmentTracking dbConsignmentTracking = 
+				consignmentTrackingService.getConsignmentTrackingByCustomerReferenceNumber(customerReferenceNumber);
 		return new ResponseEntity<>(dbConsignmentTracking, HttpStatus.OK);
 	}
 }

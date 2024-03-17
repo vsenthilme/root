@@ -57,6 +57,7 @@ import {
   MatDialog
 } from '@angular/material/dialog';
 import { CommonApiService } from 'src/app/common-service/common-api.service';
+import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 pdfMake.fonts = fonts1;
 pdfMake.vfs = pdfFontsNew.pdfMake.vfs;
 
@@ -70,7 +71,7 @@ export class ExpensesChequeComponent implements OnInit {
 
   js: any = {};
   constructor(private fb: FormBuilder, private spin: NgxSpinnerService, private matter: MatterExpensesService, private route: ActivatedRoute,
-    private router: Router, public dialog: MatDialog,   private cas: CommonApiService,
+    private router: Router, public dialog: MatDialog,   private cas: CommonApiService,     public HttpClient: HttpClient,
     private cs: CommonService, private toastr: ToastrService, private auth: AuthService, private location: Location, private decimalPipe: DecimalPipe,
     private service: MatterExpensesService, private clientService: ClientGeneralService, private datePipe: DatePipe) {}
 
@@ -102,6 +103,10 @@ export class ExpensesChequeComponent implements OnInit {
       this.form.controls.matterDescription.disable();
       this.form.controls.userName.disable();
     }));
+
+    this.service.Get(this.js.data.matterExpenseId).subscribe(getReult => {
+      this.form.controls.corporateClient.patchValue(getReult.corporateClient);
+    })
 this.getAllDropDown();
 
   }
@@ -203,6 +208,7 @@ this.getAllDropDown();
   }
 
   submit() {
+    this.uploadFiles();
    if(this.form.controls.hasTheClientPaid.value == "No"){
     if(this.form.controls.isThisCorporateClient.value == null || this.form.controls.isThisCorporateClient.value == ""){
     this.toastr.error(
@@ -339,6 +345,51 @@ getAllDropDown() {
     return [...str].reduce((acc, x, i) =>
         (i < str.length - n) ? acc + mask : acc + x, '');
 }
+
+
+locationfile: any;
+isupload: any;
+files: File[] = [];
+myFormData!: FormData;
+onFilechange(event){
+  this.form.controls.referenceField1.patchValue(event.target.files[0].name);
+}
+uploadFiles() {
+
+  if (this.form.controls.referenceField1) {
+    this.spin.show();
+    this.locationfile = 'expensecheckrequest/' + this.js.data.matterExpenseId + '/';
+    if (this.files.length > 0) {
+      this.spin.show();
+      //  const config = new HttpRequest('POST', `/doc-storage/upload?` + 'location=' + this.locationfile,  this.myFormData, {
+      const config = new HttpRequest('POST', `/doc-storage/upload?` + `location=${this.locationfile}`, this.myFormData, {
+        reportProgress: true
+      })
+      this.HttpClient.request(config)
+        .subscribe(event => {
+          if (event instanceof HttpResponse) {
+            this.spin.hide();
+            let body: any = event.body;
+            this.toastr.success("Document uploaded successfully.", "Notification", {
+              timeOut: 2000,
+              progressBar: false,
+            });
+            this.isupload = false;
+            this.spin.hide();
+          }
+        },
+          error => {
+            this.spin.hide();
+
+            this.cs.commonerror(error);
+
+          })
+    }
+    this.spin.hide();
+  }
+
+}
+
 
   generatePdf(element: any, toEmailId) {
     var dd: any;
@@ -1278,7 +1329,9 @@ if(element.isThisCorporateClient == 'Yes' && element.hasTheClientPaid == "No"){
       var file = new File([blob], this.form.controls.matterNumber.value + "_expense_check" + ".pdf"); //  + (new Date().getDate()) +'-'+ (new Date().getMonth() + 1) + '-' + new Date().getFullYear() + '_' + this.cs.timeFormat(new Date()) +  
       if (file) {
         this.spin.show();
-        this.service.uploadfile(file, 'check/' + this.js.data.clientId + '/' + this.js.data.matterNumber, toEmailId, this.form.controls.checkRequestCreatedBy.value).subscribe((resp: any) => {
+        this.service.uploadfile(file, 'expensecheckrequest/' + this.js.data.matterExpenseId + '/').subscribe((resp: any) => {
+          //        this.service.uploadfile(file, 'check/' + this.js.data.clientId + '/' + this.js.data.matterNumber, toEmailId, this.form.controls.checkRequestCreatedBy.value).subscribe((resp: any) => {
+            this.sendEmailWithAttachment(toEmailId)
           this.service.Update({
             documentName: resp.file,
             statusId: this.js.data.statusId
@@ -1297,5 +1350,12 @@ if(element.isThisCorporateClient == 'Yes' && element.hasTheClientPaid == "No"){
       }
     });
 
+  }
+
+
+  sendEmailWithAttachment(toEmailId){
+    this.service.sendEmail('expensecheckrequest/'  + this.js.data.matterExpenseId + '/'  + this.js.data.matterNumber + '/', toEmailId,  this.form.controls.checkRequestCreatedBy.value).subscribe(res => {
+
+    })
   }
 }

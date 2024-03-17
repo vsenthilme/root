@@ -120,7 +120,7 @@ public class SparkPickupHeaderService {
 //        Dataset<Row> queryDF = sparkSession.sql(imPickupHeaderQuery);
 //        queryDF.cache();
 
-        imPickupHeaderQuery.cache();
+//        imPickupHeaderQuery.cache();
 
         if (findPickupHeaderV2.getWarehouseId() != null && !findPickupHeaderV2.getWarehouseId().isEmpty()) {
             imPickupHeaderQuery = imPickupHeaderQuery.filter(col("WH_ID").isin(findPickupHeaderV2.getWarehouseId().toArray()));

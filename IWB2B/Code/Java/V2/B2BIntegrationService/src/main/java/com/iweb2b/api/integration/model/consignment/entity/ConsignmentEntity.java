@@ -124,4 +124,7 @@ public class ConsignmentEntity implements Serializable {
 
     @Column(name = "INCO_TERMS", columnDefinition = "nvarchar(100)")
     private String inco_terms;
+    
+    @Column(name = "HSN_CODE", columnDefinition = "nvarchar(100)")
+    private String hsn_code;
 }

@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,8 +11,12 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
+import com.tekclover.wms.api.transaction.repository.ErrorLogRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
@@ -35,6 +40,12 @@ public class InventoryMovementService extends BaseService {
 	@Autowired
 	private InventoryMovementRepository inventoryMovementRepository;
 	
+	@Autowired
+	private ErrorLogRepository errorLogRepository;
+
+	@Autowired
+	private ErrorLogService errorLogService;
+	
 	/**
 	 * getInventoryMovements
 	 * @return
@@ -52,7 +63,7 @@ public class InventoryMovementService extends BaseService {
 	 * @return
 	 */
 	public InventoryMovement getInventoryMovement (String warehouseId, Long movementType, Long submovementType, String packBarcodes, 
-			String itemCode, String batchSerialNumber, String movementDocumentNo) {
+			String itemCode, String batchSerialNumber, String movementDocumentNo) throws IOException, CsvException {
 		/*
 		 * LANG_ID, C_ID, PLANT_ID, WH_ID, MVT_TYP_ID, SUB_MVT_TYP_ID, PACK_BARCODE, ITM_CODE, STR_NO, MVT_DOC_NO
 		 */
@@ -71,6 +82,9 @@ public class InventoryMovementService extends BaseService {
 						0L
 						);
 		if (inventoryMovement.isEmpty()) {
+			// Error Log
+			createInventoryMovementLog1(warehouseId, movementType, submovementType, packBarcodes, itemCode, batchSerialNumber,
+					movementDocumentNo, "InventoryMovement with given values and movementType - " + movementType + " doesn't exists.");
 			throw new BadRequestException("The given InventoryMovement ID : " +
 										", warehouseId: " + warehouseId + 
 										", movementType: " + movementType + 
@@ -126,7 +140,8 @@ public class InventoryMovementService extends BaseService {
 	 * @throws InvocationTargetException
 	 */
 	public InventoryMovement createInventoryMovement (AddInventoryMovement newInventoryMovement, String loginUserID) 
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
+		try {
 		InventoryMovement dbInventoryMovement = new InventoryMovement();
 		log.info("newInventoryMovement : " + newInventoryMovement);
 		BeanUtils.copyProperties(newInventoryMovement, dbInventoryMovement, CommonUtils.getNullPropertyNames(newInventoryMovement));
@@ -134,6 +149,12 @@ public class InventoryMovementService extends BaseService {
 		dbInventoryMovement.setCreatedBy(loginUserID);
 		dbInventoryMovement.setCreatedOn(new Date());
 		return inventoryMovementRepository.save(dbInventoryMovement);
+		} catch (BeansException e) {
+			// Error Log
+			createInventoryMovementLog(newInventoryMovement, e.toString());
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
@@ -157,7 +178,7 @@ public class InventoryMovementService extends BaseService {
 	 */
 	public InventoryMovement updateInventoryMovement (String warehouseId, Long movementType, Long submovementType, String packBarcodes, 
 			String itemCode, String batchSerialNumber, String movementDocumentNo, UpdateInventoryMovement updateInventoryMovement) 
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		InventoryMovement dbInventoryMovement = 
 				getInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, batchSerialNumber, movementDocumentNo);
 		BeanUtils.copyProperties(updateInventoryMovement, dbInventoryMovement, CommonUtils.getNullPropertyNames(updateInventoryMovement));
@@ -170,13 +191,16 @@ public class InventoryMovementService extends BaseService {
 	 * @param movementType
 	 */
 	public void deleteInventoryMovement (String warehouseId, Long movementType, Long submovementType, String packBarcodes,
-										 String itemCode, String batchSerialNumber, String movementDocumentNo, String loginUserID) {
+										 String itemCode, String batchSerialNumber, String movementDocumentNo, String loginUserID) throws IOException, CsvException {
 		InventoryMovement inventoryMovement =
 				getInventoryMovement(warehouseId, movementType, submovementType, packBarcodes, itemCode, batchSerialNumber, movementDocumentNo);
 		if ( inventoryMovement != null) {
 			inventoryMovement.setDeletionIndicator(1L);
 			inventoryMovementRepository.save(inventoryMovement);
 		} else {
+			// Error Log
+			createInventoryMovementLog1(warehouseId, movementType, submovementType, packBarcodes, itemCode, batchSerialNumber,
+					movementDocumentNo, "Error in deleting InventoryMovement Id - " + movementType);
 			throw new EntityNotFoundException("Error in deleting Id: " + movementType);
 		}
 	}
@@ -207,4 +231,53 @@ public class InventoryMovementService extends BaseService {
 		}
 		return inventoryMovements;
 	}
+
+	//=======================================InventoryMovement_ErrorLog================================================
+	private void createInventoryMovementLog(AddInventoryMovement newInventoryMovement, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(String.valueOf(newInventoryMovement.getMovementType()));
+		errorLog.setOrderDate(new Date());
+		errorLog.setLanguageId(newInventoryMovement.getLanguageId());
+		errorLog.setCompanyCodeId(newInventoryMovement.getCompanyCodeId());
+		errorLog.setPlantId(newInventoryMovement.getPlantId());
+		errorLog.setWarehouseId(newInventoryMovement.getWarehouseId());
+		errorLog.setRefDocNumber(newInventoryMovement.getRefDocNumber());
+		errorLog.setItemCode(newInventoryMovement.getItemCode());
+		errorLog.setReferenceField1(String.valueOf(newInventoryMovement.getSubmovementType()));
+		errorLog.setReferenceField2(newInventoryMovement.getMovementDocumentNo());
+		errorLog.setReferenceField3(newInventoryMovement.getStorageBin());
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+//		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
+	}
+
+	private void createInventoryMovementLog1(String warehouseId, Long movementType, Long submovementType, String packBarcodes,
+											 String itemCode, String batchSerialNumber, String movementDocumentNo, String error) throws IOException, CsvException {
+
+		List<ErrorLog> errorLogList = new ArrayList<>();
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setOrderTypeId(String.valueOf(movementType));
+		errorLog.setOrderDate(new Date());
+		errorLog.setLanguageId(getLanguageId());
+		errorLog.setCompanyCodeId(getCompanyCode());
+		errorLog.setPlantId(getPlantId());
+		errorLog.setWarehouseId(warehouseId);
+		errorLog.setItemCode(itemCode);
+		errorLog.setReferenceField1(String.valueOf(submovementType));
+		errorLog.setReferenceField2(packBarcodes);
+		errorLog.setReferenceField3(batchSerialNumber);
+		errorLog.setReferenceField4(movementDocumentNo);
+		errorLog.setErrorMessage(error);
+		errorLog.setCreatedBy("MSD_API");
+		errorLog.setCreatedOn(new Date());
+//		errorLogRepository.save(errorLog);
+		errorLogList.add(errorLog);
+		errorLogService.writeLog(errorLogList);
+	}
+
 }

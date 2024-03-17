@@ -60,7 +60,7 @@
       <mat-radio-group aria-label="Select an option" [(ngModel)]="showProposed"
         (ngModelChange)="proposedOverwrite($event)">
         <mat-radio-button value="1" [checked]="true" class="mx-3">Proposed</mat-radio-button>
-        <mat-radio-button value="2" class="mx-3">Overwrite</mat-radio-button>
+        <mat-radio-button value="2" class="mx-3">Custom</mat-radio-button>
       </mat-radio-group>
       <button mat-icon-button (click)="backsearch()"
         *ngIf="this.groupIdSelected == true || this.groupIdSelected1 == true"
@@ -72,189 +72,200 @@
       </button>
     </div>
   </div>
-  <mat-accordion *ngIf="showProposed == '1'">
-    <div class="row" *ngIf="this.groupIdSelected != true">
-      <div class="col-6 scrollMain">
-        <h3 class="my-2 font-weight-bold">Exact Result</h3>
-        <p class="my-2 text-muted" *ngIf="this.result1.length <=  0">No records Found</p>
-        <mat-expansion-panel #panel hideToggle *ngFor="let element of result1; let j = index">
-          <mat-expansion-panel-header class="border-bottom padding-space border-top">
-            <mat-panel-title class="d-flex text-blue font-weight-bold justify-content-start align-items-center mr-2"
-              style="font-size: 1rem;">
-              <mat-radio-button ngDefaultControl [(ngModel)]="selectedValue" *ngIf="this.js.pageflow != 'Display'"
-                (ngModelChange)="groupIdSelectedRadio($event, 'exact')" type="radio" [value]="element.groupId"
-                class="mr-3">
-              </mat-radio-button>
-              <!-- {{element.groupId}} - {{element.groupName}} -->
-              <div class="d-flex flex-column">
-                <h4 class="my-1">Group ID: {{element.groupId}}</h4>
-                <h4 class="my-1">Group Name: {{element.groupName}}</h4>
-              </div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-12" *ngFor="let subStores of element.stores; let j = index">
-              <div class="card shadow hvr-float-shadow mx-1 my-2">
-                <div class="card-header p-1 px-4"
-                  [ngClass]="this.js.line.storeId == subStores.storeId ? 'textLightGreen bgDarkGreen' : 'textLightBlue bgDarkBlue' ">
-                  <!-- <p class="mt-2 font-weight-bold">{{subStores.storeName}}</p> -->
-                  <div class="d-flex flex-column">
-                    <h4 class="mb-0">Store ID: {{subStores.storeId}}</h4>
-                    <h4 class="mb-0">Store Name: {{subStores.storeName}}</h4>
+
+  <mat-accordion *ngIf="showProposed == '1'" >
+    <div class="row" [ngClass]="this.js.pageflow1 == 'Approve' ? 'approveScroll' : ''" *ngIf="this.groupIdSelected != true">
+      <div class="col-6 " *ngIf="this.showExact != false">
+        <mat-tab-group animationDuration="0ms">
+          <mat-tab label="Exact Result"  >
+            <div class="scrollMain">
+              <p class="my-2 text-muted" *ngIf="this.result1.length <=  0">No records Found</p>
+              <mat-expansion-panel #panel hideToggle *ngFor="let element of result1; let j = index">
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title
+                    class="d-flex text-blue font-weight-bold justify-content-start align-items-center mr-2"
+                    style="font-size: 1rem;">
+                    <mat-radio-button ngDefaultControl [(ngModel)]="selectedValue" *ngIf="this.js.pageflow != 'Display'"
+                      (ngModelChange)="groupIdSelectedRadio($event, 'exact')" type="radio" [value]="element.groupId"
+                      class="mr-3">
+                    </mat-radio-button>
+                    <!-- {{element.groupId}} - {{element.groupName}} -->
+                    <div class="d-flex flex-column">
+                      <h4 class="my-1">Group ID: {{element.groupId}}</h4>
+                      <h4 class="my-1">Group Name: {{element.groupName}}</h4>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                  <div class="col-12" *ngFor="let subStores of element.stores; let j = index">
+                    <div class="card shadow hvr-float-shadow mx-1 my-2">
+                      <div class="card-header p-1 px-4"
+                        [ngClass]="this.js.line.storeId == subStores.storeId ? 'textLightGreen bgDarkGreen' : 'textLightBlue bgDarkBlue' ">
+                        <!-- <p class="mt-2 font-weight-bold">{{subStores.storeName}}</p> -->
+                        <div class="d-flex flex-column">
+                          <h4 class="mb-0">Store ID: {{subStores.storeId}}</h4>
+                          <h4 class="mb-0">Store Name: {{subStores.storeName}}</h4>
+                        </div>
+                      </div>
+                      <div class="card-header p-1 px-4 bg-light">
+                        <div class="d-flex flex-column">
+                          <h5 class="mb-0">Group Type ID: {{subStores.groupType}}</h5>
+                          <h5 class="mb-0">Sub Group Type ID: {{subStores.subGroupType}}</h5>
+                        </div>
+                      </div>
+                      <div class="row mx-2">
+                        <table class="table table-striped table-lg">
+                          <thead>
+                            <tr>
+                              <th scope="col" class="w-75">Co-Owner</th>
+                              <th scope="col">Percentage</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngIf="subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''">
+                              <td>{{subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''}}</td>
+                              <td>{{subStores.coOwnerPercentage1 != null ? subStores.coOwnerPercentage1 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName2">
+                              <td>{{subStores.coOwnerName2}}</td>
+                              <td>{{subStores.coOwnerPercentage2 != null ? subStores.coOwnerPercentage2 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName3">
+                              <td>{{subStores.coOwnerName3}}</td>
+                              <td>{{subStores.coOwnerPercentage3 != null ? subStores.coOwnerPercentage3 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName4">
+                              <td>{{subStores.coOwnerName4}}</td>
+                              <td>{{subStores.coOwnerPercentage4 != null ? subStores.coOwnerPercentage4 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName5">
+                              <td>{{subStores.coOwnerName5}}</td>
+                              <td>{{subStores.coOwnerPercentage5 != null ? subStores.coOwnerPercentage5 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName6">
+                              <td>{{subStores.coOwnerName6}}</td>
+                              <td>{{subStores.coOwnerPercentage6 != null ? subStores.coOwnerPercentage6 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName7">
+                              <td>{{subStores.coOwnerName7}}</td>
+                              <td>{{subStores.coOwnerPercentage7 != null ? subStores.coOwnerPercentage7 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName8">
+                              <td>{{subStores.coOwnerName8}}</td>
+                              <td>{{subStores.coOwnerPercentage8 != null ? subStores.coOwnerPercentage8 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName9">
+                              <td>{{subStores.coOwnerName9}}</td>
+                              <td>{{subStores.coOwnerPercentage9 != null ? subStores.coOwnerPercentage9 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName10">
+                              <td>{{subStores.coOwnerName10}}</td>
+                              <td>{{subStores.coOwnerPercentage10 != null ? subStores.coOwnerPercentage10 : ''}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="card-header p-1 px-4 bg-light">
-                <div class="d-flex flex-column">
-                  <h5 class="mb-0">Group Type ID: {{subStores.groupType}}</h5>
-                  <h5 class="mb-0">Sub Group Type ID: {{subStores.subGroupType}}</h5>
-                </div>
-              </div>
-                <div class="row mx-2">
-                  <table class="table table-striped table-lg">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="w-75">Co-Owner</th>
-                        <th scope="col">Percentage</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngIf="subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''">
-                        <td>{{subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''}}</td>
-                        <td>{{subStores.coOwnerPercentage1 != null ? subStores.coOwnerPercentage1 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName2">
-                        <td>{{subStores.coOwnerName2}}</td>
-                        <td>{{subStores.coOwnerPercentage2 != null ? subStores.coOwnerPercentage2 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName3">
-                        <td>{{subStores.coOwnerName3}}</td>
-                        <td>{{subStores.coOwnerPercentage3 != null ? subStores.coOwnerPercentage3 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName4">
-                        <td>{{subStores.coOwnerName4}}</td>
-                        <td>{{subStores.coOwnerPercentage4 != null ? subStores.coOwnerPercentage4 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName5">
-                        <td>{{subStores.coOwnerName5}}</td>
-                        <td>{{subStores.coOwnerPercentage5 != null ? subStores.coOwnerPercentage5 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName6">
-                        <td>{{subStores.coOwnerName6}}</td>
-                        <td>{{subStores.coOwnerPercentage6 != null ? subStores.coOwnerPercentage6 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName7">
-                        <td>{{subStores.coOwnerName7}}</td>
-                        <td>{{subStores.coOwnerPercentage7 != null ? subStores.coOwnerPercentage7 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName8">
-                        <td>{{subStores.coOwnerName8}}</td>
-                        <td>{{subStores.coOwnerPercentage8 != null ? subStores.coOwnerPercentage8 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName9">
-                        <td>{{subStores.coOwnerName9}}</td>
-                        <td>{{subStores.coOwnerPercentage9 != null ? subStores.coOwnerPercentage9 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName10">
-                        <td>{{subStores.coOwnerName10}}</td>
-                        <td>{{subStores.coOwnerPercentage10 != null ? subStores.coOwnerPercentage10 : ''}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              </mat-expansion-panel>
             </div>
-          </div>
-        </mat-expansion-panel>
-        <h3 class="my-2 font-weight-bold">Matched Result</h3>
-        <p class="my-2 text-muted" *ngIf="this.result3.length <= 0">No records Found</p>
-        <mat-expansion-panel #panel hideToggle *ngFor="let element of result3; let j = index">
-          <mat-expansion-panel-header class="border-bottom padding-space border-top">
-            <mat-panel-title class="d-flex text-blue font-weight-bold justify-content-start align-items-center mr-2"
-              style="font-size: 1rem;">
-              <mat-radio-button ngDefaultControl [(ngModel)]="selectedValue" *ngIf="this.js.pageflow != 'Display'"
-                (ngModelChange)="groupIdSelectedRadio($event, 'like')" type="radio" [value]="element.groupId"
-                class="mr-3">
-              </mat-radio-button>
-              <!-- {{element.groupId}} - {{element.groupName}} -->
-              <div class="d-flex flex-column">
-                <h4 class="my-1">Group ID: {{element.groupId}}</h4>
-                <h4 class="my-1">Group Name: {{element.groupName}}</h4>
-              </div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="row">
-            <div class="col-12" *ngFor="let subStores of element.stores; let j = index">
-              <div class="card shadow hvr-float-shadow mx-1 my-2">
-                <div class="card-header p-1 px-4"
-                  [ngClass]="this.js.line.storeId == subStores.storeId ? 'textLightGreen bgDarkGreen' : 'textLightBlue bgDarkBlue' ">
-                  <!-- <p class="mt-2 font-weight-bold">{{subStores.storeName}}</p> -->
-                  <div class="d-flex flex-column">
-                    <h4 class="mb-0">Store ID: {{subStores.storeId}}</h4>
-                    <h4 class="mb-0">Store Name: {{subStores.storeName}}</h4>
+          </mat-tab>
+          <mat-tab label="Matched Result">
+            <div class="scrollMain">
+              <p class="my-2 text-muted" *ngIf="this.result3.length <= 0">No records Found</p>
+              <mat-expansion-panel #panel hideToggle *ngFor="let element of result3; let j = index">
+                <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                  <mat-panel-title
+                    class="d-flex text-blue font-weight-bold justify-content-start align-items-center mr-2"
+                    style="font-size: 1rem;">
+                    <mat-radio-button ngDefaultControl [(ngModel)]="selectedValue" *ngIf="this.js.pageflow != 'Display'"
+                      (ngModelChange)="groupIdSelectedRadio($event, 'like')" type="radio" [value]="element.groupId"
+                      class="mr-3">
+                    </mat-radio-button>
+                    <!-- {{element.groupId}} - {{element.groupName}} -->
+                    <div class="d-flex flex-column">
+                      <h4 class="my-1">Group ID: {{element.groupId}}</h4>
+                      <h4 class="my-1">Group Name: {{element.groupName}}</h4>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                  <div class="col-12" *ngFor="let subStores of element.stores; let j = index">
+                    <div class="card shadow hvr-float-shadow mx-1 my-2">
+                      <div class="card-header p-1 px-4"
+                        [ngClass]="this.js.line.storeId == subStores.storeId ? 'textLightGreen bgDarkGreen' : 'textLightBlue bgDarkBlue' ">
+                        <!-- <p class="mt-2 font-weight-bold">{{subStores.storeName}}</p> -->
+                        <div class="d-flex flex-column">
+                          <h4 class="mb-0">Store ID: {{subStores.storeId}}</h4>
+                          <h4 class="mb-0">Store Name: {{subStores.storeName}}</h4>
+                        </div>
+                      </div>
+                      <div class="card-header p-1 px-4 bg-light">
+                        <div class="d-flex flex-column">
+                          <h5 class="mb-0">Group Type ID: {{subStores.groupType}}</h5>
+                          <h5 class="mb-0">Sub Group Type ID: {{subStores.subGroupType}}</h5>
+                        </div>
+                      </div>
+                      <div class="row mx-2">
+                        <table class="table table-striped table-lg">
+                          <thead>
+                            <tr>
+                              <th scope="col" class="w-75">Co-Owner</th>
+                              <th scope="col">Percentage</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngIf="subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''">
+                              <td>{{subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''}}</td>
+                              <td>{{subStores.coOwnerPercentage1 != null ? subStores.coOwnerPercentage1 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName2">
+                              <td>{{subStores.coOwnerName2}}</td>
+                              <td>{{subStores.coOwnerPercentage2 != null ? subStores.coOwnerPercentage2 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName3">
+                              <td>{{subStores.coOwnerName3}}</td>
+                              <td>{{subStores.coOwnerPercentage3 != null ? subStores.coOwnerPercentage3 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName4">
+                              <td>{{subStores.coOwnerName4}}</td>
+                              <td>{{subStores.coOwnerPercentage4 != null ? subStores.coOwnerPercentage4 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName5">
+                              <td>{{subStores.coOwnerName5}}</td>
+                              <td>{{subStores.coOwnerPercentage5 != null ? subStores.coOwnerPercentage5 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName6">
+                              <td>{{subStores.coOwnerName6}}</td>
+                              <td>{{subStores.coOwnerPercentage6 != null ? subStores.coOwnerPercentage6 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName7">
+                              <td>{{subStores.coOwnerName7}}</td>
+                              <td>{{subStores.coOwnerPercentage7 != null ? subStores.coOwnerPercentage7 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName8">
+                              <td>{{subStores.coOwnerName8}}</td>
+                              <td>{{subStores.coOwnerPercentage8 != null ? subStores.coOwnerPercentage8 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName9">
+                              <td>{{subStores.coOwnerName9}}</td>
+                              <td>{{subStores.coOwnerPercentage9 != null ? subStores.coOwnerPercentage9 : ''}}</td>
+                            </tr>
+                            <tr *ngIf="subStores.coOwnerName10">
+                              <td>{{subStores.coOwnerName10}}</td>
+                              <td>{{subStores.coOwnerPercentage10 != null ? subStores.coOwnerPercentage10 : ''}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="card-header p-1 px-4 bg-light">
-                  <div class="d-flex flex-column">
-                    <h5 class="mb-0">Group Type ID: {{subStores.groupType}}</h5>
-                    <h5 class="mb-0">Sub Group Type ID: {{subStores.subGroupType}}</h5>
-                  </div>
-                </div>
-                <div class="row mx-2">
-                  <table class="table table-striped table-lg">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="w-75">Co-Owner</th>
-                        <th scope="col">Percentage</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngIf="subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''">
-                        <td>{{subStores.coOwnerName1 != null ? subStores.coOwnerName1 : ''}}</td>
-                        <td>{{subStores.coOwnerPercentage1 != null ? subStores.coOwnerPercentage1 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName2">
-                        <td>{{subStores.coOwnerName2}}</td>
-                        <td>{{subStores.coOwnerPercentage2 != null ? subStores.coOwnerPercentage2 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName3">
-                        <td>{{subStores.coOwnerName3}}</td>
-                        <td>{{subStores.coOwnerPercentage3 != null ? subStores.coOwnerPercentage3 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName4">
-                        <td>{{subStores.coOwnerName4}}</td>
-                        <td>{{subStores.coOwnerPercentage4 != null ? subStores.coOwnerPercentage4 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName5">
-                        <td>{{subStores.coOwnerName5}}</td>
-                        <td>{{subStores.coOwnerPercentage5 != null ? subStores.coOwnerPercentage5 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName6">
-                        <td>{{subStores.coOwnerName6}}</td>
-                        <td>{{subStores.coOwnerPercentage6 != null ? subStores.coOwnerPercentage6 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName7">
-                        <td>{{subStores.coOwnerName7}}</td>
-                        <td>{{subStores.coOwnerPercentage7 != null ? subStores.coOwnerPercentage7 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName8">
-                        <td>{{subStores.coOwnerName8}}</td>
-                        <td>{{subStores.coOwnerPercentage8 != null ? subStores.coOwnerPercentage8 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName9">
-                        <td>{{subStores.coOwnerName9}}</td>
-                        <td>{{subStores.coOwnerPercentage9 != null ? subStores.coOwnerPercentage9 : ''}}</td>
-                      </tr>
-                      <tr *ngIf="subStores.coOwnerName10">
-                        <td>{{subStores.coOwnerName10}}</td>
-                        <td>{{subStores.coOwnerPercentage10 != null ? subStores.coOwnerPercentage10 : ''}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              </mat-expansion-panel>
             </div>
-          </div>
-        </mat-expansion-panel>
+          </mat-tab>
+        </mat-tab-group>
       </div>
       <div class="col-6">
         <h3 class="text-primary mx-3 my-2">Requested Partnership</h3>
@@ -424,14 +435,17 @@
           <div class="row">
             <div class="col-6 mt-2">
               <p class="mb-0 py-0">Group Type ID </p>
-              <p-dropdown placeholder="Select" appendTo="body" class="w-100 my-1 mb-1" 
-              [(ngModel)]="this.js.line.groupTypeId" (onChange)="onGroupChange($event)" [options]="dropdownSelectgroupTypeID"  [style]="{'width': '100%'}"  [panelStyle]="{'width': '25%'}"> </p-dropdown>
+              <p-dropdown placeholder="Select" appendTo="body" class="w-100 my-1 mb-1"
+                [(ngModel)]="this.js.line.groupTypeId" (onChange)="onGroupChange($event)"
+                [options]="dropdownSelectgroupTypeID" [style]="{'width': '100%'}" [panelStyle]="{'width': '25%'}">
+              </p-dropdown>
             </div>
-            <div class="col-6 mt-2">
+           <!-- <div class="col-6 mt-2">
               <p class="mb-0 py-0">Sub Group ID </p>
-              <p-dropdown placeholder="Select"  appendTo="body" class="w-100 my-1 mb-2" 
-              [(ngModel)]="this.js.line.subGroupId"  [options]="dropdownSelectsubgroupID"  [style]="{'width': '100%'}"></p-dropdown>
-            </div>
+              <p-dropdown placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+                [(ngModel)]="this.js.line.subGroupId" [options]="dropdownSelectsubgroupID"
+                [style]="{'width': '100%'}"></p-dropdown>
+            </div>-->
           </div>
           <h3 class="text-primary mx-3 my-2">Requested Partnership</h3>
           <div class="col-12 ">
@@ -673,9 +687,9 @@
   <div class="row mx-0" *ngIf="showProposed != '1'">
     <div class="col-6 row mx-0" *ngIf="groupIdSelected1 != true;">
       <div class="col-6">
-        <p class="mb-0 py-0  ">Select Overwrite</p>
+        <p class="mb-0 py-0  ">Select Custom</p>
         <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
-          <mat-select placeholder="select">
+          <mat-select placeholder="select" [(ngModel)]="selectedOption">
             <mat-option value="New" (click)="openDialog('TransactionCreate')">Create New Group ID</mat-option>
             <mat-option value="Existing" (click)="existingGroup()">Existing Group ID </mat-option>
             <mat-option value="Independent" (click)="independent()">Independent </mat-option>
@@ -766,7 +780,7 @@
   </div>
   <mat-accordion>
     <mat-expansion-panel #panel hideToggle *ngFor="let element of overwriteResult; let j = index"
-      [ngClass]="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true ? '' : 'd-none'">
+      [ngClass]="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true || this.showSelected == true  ? '' : 'd-none'">
       <mat-expansion-panel-header class="border-bottom padding-space border-top">
         <mat-panel-title class="d-flex text-blue font-weight-bold justify-content-start align-items-center mr-2"
           style="font-size: 1rem;">
@@ -850,21 +864,23 @@
         </div>
       </div>
     </mat-expansion-panel>
-    <h3 class="my-2 font-weight-bold" *ngIf="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true;">
+    <h3 class="my-2 font-weight-bold" *ngIf="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true && this.showSelected != true;">
       Selected Group</h3>
     <mat-expansion-panel #panel hideToggle *ngFor="let element of overwriteGroupResult; let j = index"
-      [ngClass]="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true ? '' : 'd-none'">
+      [ngClass]="this.overwriteGroupResult.length > 0 && this.groupIdSelected1 == true  ? '' : 'd-none'">
       <mat-expansion-panel-header class="border-bottom padding-space border-top">
-        <mat-panel-title class="d-flex text-success font-weight-bold justify-content-start align-items-center mr-2"
+        <mat-panel-title class="d-flex text-success font-weight-bold justify-content-between align-items-center mr-2"
           style="font-size: 1rem;">
+
           <!-- {{element.groupId}} - {{element.groupIdName}} -->
           <div class="d-flex flex-column">
-            <h4 class="my-1">Group ID: {{element.groupId}}</h4>
-            <h4 class="my-1">Group Name: {{element.groupName}}</h4>
+            <h4 class="my-1">Selected Group ID: {{element.groupId}}</h4>
+            <h4 class="my-1">Selected Group Name: {{element.groupName}}</h4>
           </div>
+          
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="row scrollMain2">
+      <div class="row scrollMain2 d-none">
         <div class="col-6 ">
 
           <h3 class="text-success mx-3 my-2">Existing Partnership</h3>
@@ -1021,20 +1037,22 @@
 
 </div>
 <div class="d-flex justify-content-center align-items-center py-2 fixed-bottom ">
-  <button [hidden]="this.js.pageflow1 != 'Approve' " mat-raised-button color="warn"  mat-dialog-close class="mx-2" routerLink="/main/controlgroup/transaction/approvalAdmin"  *ngIf="showsavebutton"> <i
+  <button [hidden]="this.js.pageflow2 != 'Approval1' " mat-raised-button color="warn" mat-dialog-close class="mx-2"
+    routerLink="/main/controlgroup/transaction/approvalAdmin" *ngIf="showsavebutton"> <i
       class="bi bi-arrow-left me-1 font-size-1_5rem"></i>Back</button>
-      <button [hidden]="this.js.pageflow1 == 'Approve' " mat-raised-button color="warn"  mat-dialog-close class="mx-2" (click)="back();"  *ngIf="showsavebutton"> <i
-        class="bi bi-arrow-left me-1 font-size-1_5rem"></i>Back</button>
-  <button mat-raised-button class="mx-2 bg-blue text-white" (click)="submit()" *ngIf="this.js.pageflow != 'Display' && showsavebutton">
+  <button  [hidden]="this.js.pageflow2 =='Approval1'" mat-raised-button color="warn" mat-dialog-close class="mx-2"
+  routerLink="/main/controlgroup/transaction/summary" *ngIf="showsavebutton"> <i class="bi bi-arrow-left me-1 font-size-1_5rem"></i>Back</button>
+  <button mat-raised-button class="mx-2 bg-blue text-white" (click)="submit()"
+    *ngIf="this.js.pageflow != 'Display' && showsavebutton">
     <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
     Save</button>
 
 
-  <button mat-raised-button class="mx-2 bg-warning text-white px-4" (click)="ApproveAdmin(this.js.line, 'Reject')"
+  <button mat-raised-button class="mx-2 bg-warning text-white px-4" (click)="ApproveAdmin(this.js.code, 'Reject')"
     *ngIf="this.js.pageflow1 == 'Approve'"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
     Reject</button>
 
-  <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="ApproveAdmin(this.js.line, 'Approve')"
+  <button mat-raised-button class="mx-2 bg-blue text-white px-4" (click)="ApproveAdmin(this.js.code, 'Approve')"
     *ngIf="this.js.pageflow1 == 'Approve'"> <i class="bi bi-check2 me-1 font-size-1_5rem"></i>
     Approve</button>
 </div>

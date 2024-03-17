@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.outbound.pickup.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)
@@ -82,4 +84,7 @@ public class PickupLineV2 extends PickupLine {
 
 	@Column(name = "TARGET_BRANCH_CODE", columnDefinition = "nvarchar(50)")
 	private String targetBranchCode;
+
+	@Column(name = "VAR_QTY")
+	private Double varianceQuantity;
 }

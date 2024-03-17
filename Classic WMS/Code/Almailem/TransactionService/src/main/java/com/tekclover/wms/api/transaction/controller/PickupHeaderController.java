@@ -177,7 +177,7 @@ public class PickupHeaderController {
                                                  @RequestParam String preOutboundNo, @RequestParam String refDocNumber, @RequestParam String partnerCode,
                                                  @RequestParam Long lineNumber, @RequestParam String itemCode, @Valid @RequestBody PickupHeaderV2 updatePickupHeader,
                                                  @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, ParseException {
         PickupHeaderV2 createdPickupHeader =
                 pickupheaderService.updatePickupHeaderV2(companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, partnerCode,
                         pickupNumber, lineNumber, itemCode, loginUserID, updatePickupHeader);

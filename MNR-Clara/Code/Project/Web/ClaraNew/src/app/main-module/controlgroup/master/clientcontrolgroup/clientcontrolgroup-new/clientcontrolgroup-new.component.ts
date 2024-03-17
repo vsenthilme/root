@@ -91,7 +91,7 @@ export class ClientcontrolgroupNewComponent implements OnInit {
     referenceField9: [],
     relationship: [, [Validators.required]],
     statusId: [],
-    subGroupTypeId: [, [Validators.required]],
+    subGroupTypeId: [],
     subGroupTypeName: [],
     updatedBy: [],
     updatedOn: [],
@@ -404,14 +404,14 @@ this.form.controls.companyId.patchValue("1000");
   }
   fill() {
     this.spin.show();
-    this.sub.add(this.service.Get(this.data.code, this.data.languageId, this.data.companyId, this.data.groupTypeId, this.data.subGroupTypeId, this.data.versionNumber).subscribe(res => {
+    this.sub.add(this.service.Get(this.data.code, this.data.languageId, this.data.companyId, this.data.groupTypeId, this.data.versionNumber).subscribe(res => {
       this.form.patchValue(res, {
         emitEvent: false
       });
       console.log(res);
       this.data.relationship=res.relationship;
       console.log(this.data.relationship);
-      this.form.controls.relationship.patchValue(res.relationship);
+      this.form.controls.relationship.patchValue(res.relationship.Number());
       this.form.controls.statusId.patchValue(res.statusId != null ? res.statusId.toString() : '');
       this.form.controls.createdOn.patchValue(this.cs.dateapi(this.form.controls.createdOn.value));
       this.form.controls.updatedOn.patchValue(this.cs.dateapi(this.form.controls.updatedOn.value));
@@ -448,7 +448,7 @@ this.form.controls.companyId.patchValue("1000");
     });
 
     if (this.data.code) {
-      this.sub.add(this.service.Update(this.form.getRawValue(), this.data.code, this.data.languageId, this.data.companyId, this.data.groupTypeId, this.data.subGroupTypeId, this.data.versionNumber).subscribe(res => {
+      this.sub.add(this.service.Update(this.form.getRawValue(), this.data.code, this.data.languageId, this.data.companyId, this.data.groupTypeId, this.data.versionNumber).subscribe(res => {
         this.toastr.success(this.data.code + "Co-OwnerId Mapping Updated successfully!", "Notification", {
           timeOut: 2000,
           progressBar: false,

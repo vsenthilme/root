@@ -136,7 +136,7 @@ export class ProposalComponent implements OnInit {
     public toastr: ToastrService,
     private cas: CommonApiService, public dialog: MatDialog, private storePartner: OwnershipService, private router: Router,
     private spin: NgxSpinnerService,
-    private auth: AuthService, 
+    private auth: AuthService,
     private setupService: SetupServiceService,
     private cs: CommonService, private location: Location,
     private service: SetupServiceService,
@@ -150,7 +150,7 @@ export class ProposalComponent implements OnInit {
   showProposed = "1";
   groupIdSelected = false;
   groupIdSelected1 = false;
-
+  showExact = true;
   form = this.fb.group({
     showProposed1: [1,],
   })
@@ -179,21 +179,34 @@ export class ProposalComponent implements OnInit {
   overwriteGroupResult: any[] = [];
 
 
-
+showSelected=false;
   ngOnInit(): void {
     let code = this.route.snapshot.params.code;
     this.js = this.cs.decrypt(code);
+    console.log(this.js)
     this.findGroupId();
     this.js.line.groupId = null;
     this.js.line.groupIdName = null;
-
     this.dropdownlist();
+    if((this.js.pageflow1 == "Approve")) {
+      if(this.js.pageflow == "Display"){
+        if(this.js.line.groupTypeId == 1003){
+      this.groupIdSelected1=true;
+       this.overwriteGroupResult.push(this.js.code);
+       this.showSelected=true;
+       this.showExact=false;
+        }
+      }
+    }
+   
   }
 
-
+  selectedOption:any;
   result2: any[] = [];
   TableResult: any;
+  
   findGroupId() {
+    this.spin.show();
     let searchObj: any = {};
     if (this.js.line.coOwnerId1 != null)
       searchObj.coOwnerId1 = this.js.line.coOwnerId1;
@@ -219,28 +232,94 @@ export class ProposalComponent implements OnInit {
       searchObj.coOwnerId9 = this.js.line.coOwnerId9;
     if (this.js.line.coOwnerId10 != null)
       searchObj.coOwnerId10 = this.js.line.coOwnerId10;
+    this.validationService.findGroupNew(searchObj).subscribe(res => {
+     // this.validationService.findGroup(searchObj).subscribe((res: any) => {
+        if (res.exactMatchGroups.length > 0) {
+          this.result1 = res.exactMatchGroups;
 
-    this.validationService.findGroup(searchObj).subscribe((res: any) => {
-      if (res.likeMatchGroup.length > 0) {
-        this.result1 = res.exactMatchGroups;
-      }
-      if (res.likeMatchGroup.length > 0) {
-        this.result3 = res.likeMatchGroup;
-
-        if (this.js.pageflow == 'Display') {
-          this.Display = this.result3.filter(x => x.groupId == this.js.line.groupId);
+       
         }
-      }
-      else {
-        this.toastr.warning("No group id found for the selected co-owners!", "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        });
-      }
-    }, err => {
-      this.cs.commonerrorNew(err);
-      this.spin.hide();
-    })
+        if(res.exactMatchGroups.length == 0 && this.js.pageflow1 != 'Approve' && this.js.pageflow != "Display"){
+          const dialogRef = this.dialog.open(ConfirmComponent, {
+            disableClose: true,
+            width: '40%',
+            maxWidth: '60%',
+            position: { top: '6.5%' },
+            data: { title: "Confirm", message: "No Exact Match Found, we recommend 'Independent' as the default group. Would you like to Confirm?" }
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result == "Yes") {
+              this.spin.show();
+              this.service.searchControlGroup({ groupTypeId: ["1003"] }).subscribe(res => {
+                this.js.line.groupId = res[0].groupId;
+                this.js.line.groupName = res[0].groupName;
+      
+                this.js.line.groupTypeId = 1003; //res[0].groupTypeId;
+                this.js.line.groupTypeName = 'Independent';//res[0].groupTypeName;
+      
+                this.js.line.subGroupId = 2041;
+                this.js.line.subGroupName = 'Independent';
+      
+                this.validationService.findGroup({ groupId: res[0].groupId }).subscribe((res: any) => {
+                  this.overwriteResult = res.likeMatchGroup;
+                  this.overwriteGroupResult.push(this.js.line);
+                  this.groupIdSelected1 = true;
+                
+                                })
+      
+                this.toastr.success(
+                  this.js.line.groupId + "Group ID selected successfully",
+                  "Notification", {
+                  timeOut: 2000,
+                  progressBar: false,
+                }
+                );
+                this.selectedOption = 'Independent';
+                console.log(this.selectedOption);
+                console.log(this.groupIdSelected1);
+                this.spin.hide();
+              }, err => {
+                this.spin.hide();
+                this.cs.commonerror(err);
+              })
+            }
+          });
+        }
+       
+        // if (newResult.exactMatchGroups.length > 0) {
+        //   this.result1 =  this.result1.concat(newResult.exactMatchGroups);
+        // }
+        if (res.likeMatchGroup.length > 0) {
+          this.result3 = res.likeMatchGroup;
+
+          if (this.js.pageflow == 'Display') {
+            this.Display = res.exactMatchGroups.filter(x => x.groupId == this.js.line.groupId);
+          }
+
+          if (this.js.pageflow1 == 'Approve') {
+            this.Display = res.exactMatchGroups.filter(x => x.groupId == this.js.code.groupId);
+          }
+        
+        }
+      
+        // if (newResult.likeMatchGroup.length > 0) {
+        //   this.result3 =  this.result3.concat(newResult.likeMatchGroup);
+        // }
+        else {
+         
+          this.toastr.warning("No group id found for the selected co-owners!", "Notification", {
+            timeOut: 2000,
+            progressBar: false,
+          });
+       
+        }
+        this.spin.hide();
+      }, err => {
+        this.cs.commonerrorNew(err);
+        this.spin.hide();
+    //  })
+   })
   }
   submit() {
 
@@ -329,11 +408,10 @@ export class ProposalComponent implements OnInit {
     // });
 
     this.showExistingGroup = true;
-
     let obj: any = {};
     obj.languageId = [this.js.line.languageId];
     obj.companyId = [this.js.line.companyId];
-    obj.groupTypeId = [this.js.line.groupTypeId];
+   // obj.groupTypeId = [this.js.line.groupTypeId]; commented on 04/03/2024 for facilitating results of all group Ids.
     obj.statusId = [0];
     this.existingGroupService.search(obj).subscribe(res => {
       res.forEach((x: { groupId: string; groupName: string; }) => this.multiGroupList.push({ value: x.groupId, label: x.groupId + '- ' + x.groupName, description: x.groupName }))
@@ -390,15 +468,15 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spin.show();
-        this.service.searchControlGroup({ groupTypeId: ["3"] }).subscribe(res => {
+        this.service.searchControlGroup({ groupTypeId: ["1003"] }).subscribe(res => {
           this.js.line.groupId = res[0].groupId;
           this.js.line.groupName = res[0].groupName;
 
-          this.js.line.groupTypeId =  1003; //res[0].groupTypeId;
+          this.js.line.groupTypeId = 1003; //res[0].groupTypeId;
           this.js.line.groupTypeName = 'Independent';//res[0].groupTypeName;
 
           this.js.line.subGroupId = 2041;
-          this.js.line.groupName = 'Independent';
+          this.js.line.subGroupName = 'Independent';
 
           this.validationService.findGroup({ groupId: res[0].groupId }).subscribe((res: any) => {
             this.overwriteResult = res.likeMatchGroup;
@@ -430,7 +508,7 @@ export class ProposalComponent implements OnInit {
 
       let groupNAme = this.result2[0].stores[0].groupType.split('-');
       let subGroupNAme = this.result2[0].stores[0].subGroupType.split('-');
-      
+
       this.js.line.groupTypeName = groupNAme[1];
       this.js.line.groupTypeId = this.result2[0].stores[0].groupTypeId;
       this.js.line.subGroupId = this.result2[0].stores[0].subGroupTypeId;
@@ -486,6 +564,7 @@ export class ProposalComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result && action == "Approve") {
         this.spin.show();
+        console.log(element)
         element.statusId = 5;
         this.storePartnerListring.Create(element).subscribe(res => {
           this.toastr.success(element.requestId + " approved successfully!", "Notification", {
@@ -575,8 +654,8 @@ export class ProposalComponent implements OnInit {
 
   onGroupChange(value) {
     this.setupService.searchSubGroupType({
-      languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
+      languageId: ["EN"],
+      companyId: ["1000"],
       groupTypeId: [value.value],
       statusId: [0]
     }).subscribe(res => {

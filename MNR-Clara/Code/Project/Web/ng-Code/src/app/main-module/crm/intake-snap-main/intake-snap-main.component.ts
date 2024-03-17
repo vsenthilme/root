@@ -216,7 +216,7 @@ export class IntakeSnapMainComponent implements OnInit {
     this.cas.getalldropdownlist([this.cas.dropdownlist.setup.statusId.url,
     this.cas.dropdownlist.setup.intakeFormId.url,
     ]).subscribe((results) => {
-      this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 7, 67, 8, 9, 10, 25].includes(s.key));    //PC rejected - is not showing up in the CRM Intake Form window  30/10/2023
+      this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [5, 6, 7, 67, 8, 9, 10, 25,70,71,72,73,74].includes(s.key));    //PC rejected - is not showing up in the CRM Intake Form window  30/10/2023
       this.statuslist.forEach((x: { key: string; value: string; }) => this.multistatusList.push({value: x.key, label:  x.value}))
       this.multiselectstatusList = this.multistatusList;
 

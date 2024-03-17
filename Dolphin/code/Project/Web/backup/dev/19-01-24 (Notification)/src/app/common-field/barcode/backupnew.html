@@ -1,0 +1,136 @@
+<!-- <p>barcode works!</p> -->
+<div *ngFor="let element of barcodeValueList">
+
+    <div class="barcodelayout" id="barcode" *ngIf="lable =='barcode'">
+      <!-- [id]="element.case_no"  -->
+      <div style="margin-top: 3%;margin-left: 3%;">
+        <div class="row">
+          <div class="col-8">
+            <div class="d-flex align-items-center-justify-content-start">
+              <h6 class="my-1 ">INV #&nbsp;</h6>
+              <h6 class="my-1  ">{{element.invoiceNo}}</h6>
+            </div>
+  
+            <div class="d-flex align-items-center-justify-content-start">
+              <h6 class="my-1 ">Sku:&nbsp;</h6>
+              <h6 class="my-1  ">{{element.itemCode}}</h6>
+  
+            </div>
+            <div class="row">
+              <div class=" col-6 px-2 pr-3 d-flex align-items-center-justify-content-start">
+                <h6 class="my-1 mx-1">Date: </h6>
+                <h6 class="my-1 "></h6>
+                <h6 class="my-1  ">{{date}}</h6>
+              </div>
+              <div class=" col-6 px-2 pr-3 d-flex align-items-center-justify-content-start">
+                <h6 class="my-1 ">User</h6>
+                <h6 class="my-1 ">:</h6>
+  
+                <h6 class="my-1  ">{{user}}</h6>
+              </div>
+            </div>
+  
+          </div>
+          <div class="col-4">
+            <!-- <h6 class="my-1 "
+                          style="font-weight: 900 !important; font-size: 12px   !important;font-style: italic;">
+                          Classic WMS</h6> -->
+            <img class="logwh" [src]="element.warehouseId" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-7">
+            <div class="">
+              <h6 class="my-1">Pallet No &nbsp;</h6>
+              <h6 class="my-1 font-weight-bold">{{element.packBarcodes}}</h6>
+            </div>
+            <div class="">
+              <h6 class="my-1">Qty &nbsp;</h6>
+              <h6 class="my-1 font-weight-bold">{{element.Qty}}</h6>
+            </div>
+          </div>
+          <div class="col-5 d-flex align-items-center-justify-content-end">
+            <ngx-barcode [bc-value]="element.packBarcodes" [bc-display-value]="false" [bc-font-size]='8'
+              bc-format='CODE128' [bc-height]="40" [bc-width]="1.5" bc-element-type='svg'>
+            </ngx-barcode>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <h6 class="my-1">SKU Description &nbsp;</h6>
+            <h6 class="my-1">{{element.itemDescription}}</h6>
+          </div>
+          <div class="col-12">
+            <h6 class="my-1">Mfg Code &nbsp;</h6>
+            <h6 class="my-1">{{element.manufacturerPartNo}}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="barcodelayout" id="barcode" *ngIf="lable =='case'">
+      <!-- [id]="element.case_no"  -->
+      <div style="margin-top: 3%;margin-left: 3%;">
+        <div style="margin-top: 3%;margin-left: 3%;">
+          <div class="row">
+            <div class="col-7">
+              <div class="d-flex align-items-center-justify-content-start">
+                <h6 class=" my-1 ">ASN #: </h6>
+                <h6 class=" my-1 ">{{element.asn}}</h6>
+              </div>
+              <div class="d-flex align-items-center-justify-content-start">
+                <h6 class=" my-1">INV #</h6>
+                <h6 class=" my-1">:</h6>
+  
+                <h6 class=" my-1 ">{{element.inv}}</h6>
+  
+              </div>
+  
+              <div class="d-flex align-items-center-justify-content-start">
+                <h6 class=" my-1">Container NO #</h6>
+                <h6 class=" my-1">:</h6>
+                <h6 class=" my-1">{{element.container_no}}</h6>
+              </div>
+  
+              <div class="d-flex align-items-center-justify-content-start">
+  
+                <h6 class=" my-1">Date</h6>
+                <h6 class=" my-1">:</h6>
+  
+                <h6 class=" my-1">{{date}}</h6>
+  
+              </div>
+              <div class="d-flex align-items-center-justify-content-start">
+                <h6 class=" my-1" style="font-size: 12px;">Case No.</h6>
+                <h6 class=" my-1" style="font-size: 12px;">:</h6>
+  
+              </div>
+  
+            </div>
+            <div class="col-5">
+              <img class="logwh" [src]="element.warehouseId" />
+            </div>
+          </div>
+          <!-- <div class="rowb">
+                      <div class="rowb">
+                          <div class=" barcodeimgcase">
+                              <ngx-barcode [bc-value]="element.case_no" [bc-display-value]="true" [bc-font-size]="13"
+                                  bc-format='CODE128' [bc-height]="60" [bc-width]="1.6" bc-element-type='svg'
+                                  bc-text-position="top">
+                              </ngx-barcode>
+                          </div>
+                      </div>
+                  </div> -->
+          <div class="row">
+            <div class="col-8">
+              <ngx-barcode [bc-value]="element.case_no" [bc-display-value]="true" [bc-font-size]="13" bc-format='CODE128'
+                [bc-height]="60" [bc-width]="2.6" bc-element-type='svg' bc-text-position="top">
+              </ngx-barcode>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  

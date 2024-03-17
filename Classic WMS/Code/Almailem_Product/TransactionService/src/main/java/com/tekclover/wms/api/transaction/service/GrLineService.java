@@ -1,9 +1,11 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.*;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.AddGrLineV2;
@@ -12,6 +14,7 @@ import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.SearchGrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.InventoryMovement;
+import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.IInventoryImpl;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.v2.InventoryV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.putaway.PutAwayHeader;
@@ -34,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -119,6 +123,13 @@ public class GrLineService extends BaseService {
     private PickupLineService pickupLineService;
 
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
+
     //----------------------------------------------------------------------------------------------------
 
 
@@ -907,7 +918,7 @@ public class GrLineService extends BaseService {
      */
     public GrLineV2 getGrLineV2(String companyCode, String languageId, String plantId,
                                 String warehouseId, String preInboundNo, String refDocNumber, String goodsReceiptNo,
-                                String palletCode, String caseCode, String packBarcodes, Long lineNo, String itemCode) {
+                                String palletCode, String caseCode, String packBarcodes, Long lineNo, String itemCode) throws CsvException, IOException {
         Optional<GrLineV2> grLine = grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndGoodsReceiptNoAndPalletCodeAndCaseCodeAndPackBarcodesAndLineNoAndItemCodeAndDeletionIndicator(
                 languageId,
                 companyCode,
@@ -923,6 +934,10 @@ public class GrLineService extends BaseService {
                 itemCode,
                 0L);
         if (grLine.isEmpty()) {
+            //Exception Log 
+            createGrLineLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, goodsReceiptNo, palletCode,
+                    caseCode, packBarcodes, lineNo, itemCode, "GrLine with goodsReceiptNo - " + goodsReceiptNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -949,7 +964,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineV2(String companyCode, String languageId, String plantId,
-                                      String preInboundNo, String refDocNumber, String packBarcodes, Long lineNo, String itemCode) {
+                                      String preInboundNo, String refDocNumber, String packBarcodes, Long lineNo, String itemCode) throws CsvException, IOException {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndPreInboundNoAndRefDocNumberAndPackBarcodesAndLineNoAndItemCodeAndDeletionIndicator(
                         languageId,
@@ -962,6 +977,10 @@ public class GrLineService extends BaseService {
                         itemCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog1(languageId, companyCode, plantId, refDocNumber, preInboundNo, packBarcodes, lineNo,
+                    itemCode, "GrLine with given values and lineNo - " + lineNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -983,7 +1002,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineV2(String companyCode, String languageId, String plantId,
-                                      String refDocNumber, String packBarcodes, String warehouseId, String preInboundNo, String caseCode) {
+                                      String refDocNumber, String packBarcodes, String warehouseId, String preInboundNo, String caseCode) throws Exception {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndDeletionIndicator(
                         languageId,
@@ -996,6 +1015,10 @@ public class GrLineService extends BaseService {
                         caseCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog2(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, packBarcodes, caseCode,
+                    "GrLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1066,7 +1089,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineV2(String companyCode, String languageId, String plantId,
-                                      String refDocNumber, String packBarcodes) {
+                                      String refDocNumber, String packBarcodes) throws Exception {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndDeletionIndicator(
                         languageId,
@@ -1076,6 +1099,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog3(languageId, companyCode, plantId, refDocNumber, packBarcodes,
+                    "GrLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1096,7 +1123,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineForPutAwayLineCreateV2(String companyCode, String languageId, String plantId, String warehouseId,
-                                                          String refDocNumber, String preInboundNumber, String packBarcodes) {
+                                                          String refDocNumber, String preInboundNumber, String packBarcodes) throws Exception {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndPackBarcodesAndDeletionIndicator(
                         languageId,
@@ -1108,6 +1135,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog4(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNumber,
+                    packBarcodes, "GrLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1123,7 +1154,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineV2(String companyCode, String languageId, String plantId,
-                                      String warehouseId, String refDocNumber, String packBarcodes) {
+                                      String warehouseId, String refDocNumber, String packBarcodes) throws Exception {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPackBarcodesAndDeletionIndicator(
                         languageId,
@@ -1134,6 +1165,10 @@ public class GrLineService extends BaseService {
                         packBarcodes,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog5(languageId, companyCode, plantId, warehouseId, refDocNumber, packBarcodes,
+                    "GrLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -1175,7 +1210,14 @@ public class GrLineService extends BaseService {
      * @return
      * @throws ParseException
      */
-    public Stream<GrLineV2> findGrLineV2(SearchGrLineV2 searchGrLine) throws ParseException {
+    public Stream<GrLineV2> findGrLineV2(SearchGrLineV2 searchGrLine) throws ParseException, java.text.ParseException {
+        if (searchGrLine.getStartCreatedOn() != null
+                && searchGrLine.getEndCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrLine.getStartCreatedOn(),
+                    searchGrLine.getEndCreatedOn());
+            searchGrLine.setStartCreatedOn(dates[0]);
+            searchGrLine.setEndCreatedOn(dates[1]);
+        }
         GrLineV2Specification spec = new GrLineV2Specification(searchGrLine);
         Stream<GrLineV2> results = grLineV2Repository.stream(spec, GrLineV2.class);
         return results;
@@ -1190,7 +1232,7 @@ public class GrLineService extends BaseService {
      * @return
      */
     public List<GrLineV2> getGrLineForUpdateV2(String companyCode, String languageId, String plantId,
-                                               String warehouseId, String preInboundNo, String refDocNumber, Long lineNo, String itemCode) {
+                                               String warehouseId, String preInboundNo, String refDocNumber, Long lineNo, String itemCode) throws Exception {
         List<GrLineV2> grLine =
                 grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndDeletionIndicator(
                         languageId,
@@ -1203,6 +1245,10 @@ public class GrLineService extends BaseService {
                         itemCode,
                         0L);
         if (grLine.isEmpty()) {
+            //Exception Log
+            createGrLineLog6(languageId, companyCode, plantId, refDocNumber, preInboundNo, lineNo, itemCode,
+                    "GrLine with given values and lineNo - " + lineNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: " +
                     ",warehouseId: " + warehouseId +
                     ",refDocNumber: " + refDocNumber +
@@ -1247,6 +1293,710 @@ public class GrLineService extends BaseService {
         return packBarcodes;
     }
 
+    @Transactional
+    public List<GrLineV2> createGrLineNonCBMV2(@Valid List<AddGrLineV2> newGrLines, String loginUserID)
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException, CsvException, IOException {
+        List<GrLineV2> createdGRLines = new ArrayList<>();
+        try {
+
+            // Inserting multiple records
+            for (AddGrLineV2 newGrLine : newGrLines) {
+                if(newGrLine.getPackBarcodes() == null || newGrLine.getPackBarcodes().isEmpty()) {
+                    // Error Log
+                    createGrLineLog11(newGrLine, "Enter either Accept Qty or Damage Qty.");
+                    throw new BadRequestException("Enter either Accept Qty or Damage Qty");
+                }
+                /*------------Inserting based on the PackBarcodes -----------*/
+                for (PackBarcode packBarcode : newGrLine.getPackBarcodes()) {
+                    GrLineV2 dbGrLine = new GrLineV2();
+                    log.info("newGrLine : " + newGrLine);
+                    BeanUtils.copyProperties(newGrLine, dbGrLine, CommonUtils.getNullPropertyNames(newGrLine));
+                    dbGrLine.setCompanyCode(newGrLine.getCompanyCode());
+
+                    // GR_QTY
+                    if (packBarcode.getQuantityType().equalsIgnoreCase("A")) {
+                        Double grQty = newGrLine.getAcceptedQty();
+                        dbGrLine.setGoodReceiptQty(grQty);
+                        dbGrLine.setAcceptedQty(grQty);
+                        dbGrLine.setDamageQty(0D);
+                        log.info("A-------->: " + dbGrLine);
+                    } else if (packBarcode.getQuantityType().equalsIgnoreCase("D")) {
+                        Double grQty = newGrLine.getDamageQty();
+                        dbGrLine.setGoodReceiptQty(grQty);
+                        dbGrLine.setDamageQty(newGrLine.getDamageQty());
+                        dbGrLine.setAcceptedQty(0D);
+                        log.info("D-------->: " + dbGrLine);
+                    }
+
+                    dbGrLine.setQuantityType(packBarcode.getQuantityType());
+                    dbGrLine.setPackBarcodes(packBarcode.getBarcode());
+                    dbGrLine.setStatusId(14L);
+
+                    //GoodReceipt Qty should be less than or equal to ordered qty---> if GrQty > OrdQty throw Exception
+                    Double dbGrQty = grLineV2Repository.getGrLineQuantity(
+                            newGrLine.getCompanyCode(), newGrLine.getPlantId(), newGrLine.getLanguageId(), newGrLine.getWarehouseId(),
+                            newGrLine.getRefDocNumber(), newGrLine.getPreInboundNo(), newGrLine.getGoodsReceiptNo(), newGrLine.getPalletCode(),
+                            newGrLine.getCaseCode(), newGrLine.getItemCode(), newGrLine.getManufacturerName(), newGrLine.getLineNo());
+                    log.info("dbGrQty, newGrQty, OrdQty: " + dbGrQty + ", " + dbGrLine.getGoodReceiptQty() + ", " + newGrLine.getOrderQty());
+                    if(dbGrQty != null) {
+                        Double totalGrQty = dbGrQty + dbGrLine.getGoodReceiptQty();
+                        if (newGrLine.getOrderQty() < totalGrQty){
+                            // Error Log
+                            createGrLineLog11(newGrLine, "Total Gr Qty is greater than Order Qty.");
+                            throw new BadRequestException("Total Gr Qty is greater than Order Qty ");
+                        }
+                    }
+
+                    //V2 Code
+                    IKeyValuePair description = stagingLineV2Repository.getDescription(newGrLine.getCompanyCode(),
+                            newGrLine.getLanguageId(),
+                            newGrLine.getPlantId(),
+                            newGrLine.getWarehouseId());
+
+                    statusDescription = stagingLineV2Repository.getStatusDescription(dbGrLine.getStatusId(), newGrLine.getLanguageId());
+                    dbGrLine.setStatusDescription(statusDescription);
+
+                    if (description != null) {
+                        dbGrLine.setCompanyDescription(description.getCompanyDesc());
+                        dbGrLine.setPlantDescription(description.getPlantDesc());
+                        dbGrLine.setWarehouseDescription(description.getWarehouseDesc());
+                    }
+
+                    dbGrLine.setMiddlewareId(newGrLine.getMiddlewareId());
+                    dbGrLine.setMiddlewareHeaderId(newGrLine.getMiddlewareHeaderId());
+                    dbGrLine.setMiddlewareTable(newGrLine.getMiddlewareTable());
+                    dbGrLine.setManufacturerFullName(newGrLine.getManufacturerFullName());
+                    dbGrLine.setReferenceDocumentType(newGrLine.getReferenceDocumentType());
+                    dbGrLine.setPurchaseOrderNumber(newGrLine.getPurchaseOrderNumber());
+
+                    Double recAcceptQty = 0D;
+                    Double recDamageQty = 0D;
+                    Double variance = 0D;
+                    Double invoiceQty = 0D;
+                    Double acceptQty = 0D;
+                    Double damageQty = 0D;
+
+                    if (newGrLine.getOrderQty() != null) {
+                        invoiceQty = newGrLine.getOrderQty();
+                    }
+                    if (newGrLine.getAcceptedQty() != null) {
+                        acceptQty = newGrLine.getAcceptedQty();
+                    }
+                    if (newGrLine.getDamageQty() != null) {
+                        damageQty = newGrLine.getDamageQty();
+                    }
+
+                    StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForPutAwayLineV2(newGrLine.getCompanyCode(),
+                            newGrLine.getPlantId(),
+                            newGrLine.getLanguageId(),
+                            newGrLine.getWarehouseId(),
+                            newGrLine.getPreInboundNo(),
+                            newGrLine.getRefDocNumber(),
+                            newGrLine.getLineNo(),
+                            newGrLine.getItemCode(),
+                            newGrLine.getManufacturerName());
+                    log.info("StagingLine: " + dbStagingLineEntity);
+
+                    if (dbStagingLineEntity != null) {
+                        if (dbStagingLineEntity.getRec_accept_qty() != null) {
+                            recAcceptQty = dbStagingLineEntity.getRec_accept_qty();
+                        }
+                        if (dbStagingLineEntity.getRec_damage_qty() != null) {
+                            recDamageQty = dbStagingLineEntity.getRec_damage_qty();
+                        }
+                        dbGrLine.setOrderUom(dbStagingLineEntity.getOrderUom());
+                        dbGrLine.setGrUom(dbStagingLineEntity.getOrderUom());
+                    }
+
+                    variance = invoiceQty - (acceptQty + damageQty + recAcceptQty + recDamageQty);
+                    log.info("Variance: " + variance);
+
+                    if (variance == 0D) {
+                        dbGrLine.setStatusId(17L);
+                        statusDescription = stagingLineV2Repository.getStatusDescription(17L, newGrLine.getLanguageId());
+                        dbGrLine.setStatusDescription(statusDescription);
+                    }
+
+                    if (variance < 0D) {
+                        throw new BadRequestException("Variance Qty cannot be Less than 0");
+                    }
+
+                    dbGrLine.setBranchCode(newGrLine.getBranchCode());
+                    dbGrLine.setTransferOrderNo(newGrLine.getTransferOrderNo());
+                    dbGrLine.setIsCompleted(newGrLine.getIsCompleted());
+
+                    dbGrLine.setBarcodeId(newGrLine.getBarcodeId());
+                    dbGrLine.setDeletionIndicator(0L);
+                    dbGrLine.setCreatedBy(loginUserID);
+                    dbGrLine.setUpdatedBy(loginUserID);
+                    dbGrLine.setConfirmedBy(loginUserID);
+                    dbGrLine.setCreatedOn(new Date());
+                    dbGrLine.setUpdatedOn(new Date());
+                    dbGrLine.setConfirmedOn(new Date());
+
+                    List<GrLineV2> oldGrLine = grLineV2Repository.findByGoodsReceiptNoAndItemCodeAndLineNoAndLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndCreatedOnAndDeletionIndicator(
+                            dbGrLine.getGoodsReceiptNo(), dbGrLine.getItemCode(), dbGrLine.getLineNo(),
+                            dbGrLine.getLanguageId(), dbGrLine.getCompanyCode(), dbGrLine.getPlantId(),
+                            dbGrLine.getRefDocNumber(), dbGrLine.getPackBarcodes(), dbGrLine.getWarehouseId(),
+                            dbGrLine.getPreInboundNo(), dbGrLine.getCaseCode(), dbGrLine.getCreatedOn(), 0L);
+                    GrLineV2 createdGRLine = null;
+                    boolean createGrLineError = false;
+                    //validate to check if grline is already exists
+                    if (oldGrLine == null || oldGrLine.isEmpty()) {
+                        try {
+                            createdGRLine = grLineV2Repository.save(dbGrLine);
+                        } catch (Exception e) {
+                            createGrLineError = true;
+
+                            //Exception Log
+                            createGrLineLog7(dbGrLine, e.toString());
+
+                            throw e;
+                        }
+                        log.info("createdGRLine : " + createdGRLine);
+                        createdGRLines.add(createdGRLine);
+
+                        if (createdGRLine != null && !createGrLineError) {
+                            // Record Insertion in PUTAWAYHEADER table
+                            createPutAwayHeaderNonCBMV2(createdGRLine, loginUserID);
+                        }
+                    }
+                }
+                log.info("Records were inserted successfully...");
+            }
+
+            // STATUS updates
+            /*
+             * Pass WH_ID/PRE_IB_NO/REF_DOC_NO/GR_NO/IB_LINE_NO/ITM_CODE in GRLINE table and
+             * validate STATUS_ID of the all the filtered line items = 17 , if yes
+             */
+//            List<StagingLineEntityV2> stagingLineList =
+//                    stagingLineService.getStagingLineForGrConfirmV2(
+//                            createdGRLines.get(0).getCompanyCode(),
+//                            createdGRLines.get(0).getPlantId(),
+//                            createdGRLines.get(0).getLanguageId(),
+//                            createdGRLines.get(0).getWarehouseId(),
+//                            createdGRLines.get(0).getRefDocNumber(),
+//                            createdGRLines.get(0).getPreInboundNo());
+//
+//            Long createdStagingLinesCount = 0L;
+//            Long createdGRLinesStatusId17Count = 0L;
+//
+//            if (stagingLineList != null) {
+//                createdStagingLinesCount = stagingLineList.stream().count();
+//            }
+//            createdGRLinesStatusId17Count = grLineV2Repository.getGrLineStatus17Count(createdGRLines.get(0).getCompanyCode(),
+//                    createdGRLines.get(0).getPlantId(),
+//                    createdGRLines.get(0).getLanguageId(),
+//                    createdGRLines.get(0).getWarehouseId(),
+//                    createdGRLines.get(0).getRefDocNumber(),
+//                    createdGRLines.get(0).getPreInboundNo(), 17L);
+//            log.info("createdGRLinesStatusId17Count: " + createdGRLinesStatusId17Count);
+
+//            log.info("createdStagingLinesCount, createdGRLinesStatusId17Count: " + createdStagingLinesCount + ", " + createdGRLinesStatusId17Count);
+            statusDescription = stagingLineV2Repository.getStatusDescription(17L, createdGRLines.get(0).getLanguageId());
+            grHeaderV2Repository.updateGrheaderStatusUpdateProc(
+                    createdGRLines.get(0).getCompanyCode(),
+                    createdGRLines.get(0).getPlantId(),
+                    createdGRLines.get(0).getLanguageId(),
+                    createdGRLines.get(0).getWarehouseId(),
+                    createdGRLines.get(0).getRefDocNumber(),
+                    createdGRLines.get(0).getPreInboundNo(),
+                    createdGRLines.get(0).getGoodsReceiptNo(),
+                    17L,
+                    statusDescription,
+                    new Date());
+            log.info("GrHeader Status 17 Updating Using Stored Procedure when condition met");
+            for (GrLineV2 grLine : createdGRLines) {
+                /*
+                 * 1. Update GRHEADER table with STATUS_ID=17 by Passing WH_ID/GR_NO/CASE_CODE/REF_DOC_NO and
+                 * GR_CNF_BY with USR_ID and GR_CNF_ON with Server time
+                 */
+//                if (createdStagingLinesCount.equals(createdGRLinesStatusId17Count)) {
+//                    log.info("Updating GrHeader with StatusId 17 Initiated");
+//                    GrHeaderV2 grHeader = grHeaderService.getGrHeaderV2(
+//                            grLine.getWarehouseId(),
+//                            grLine.getGoodsReceiptNo(),
+//                            grLine.getCaseCode(),
+//                            grLine.getCompanyCode(),
+//                            grLine.getLanguageId(),
+//                            grLine.getPlantId(),
+//                            grLine.getRefDocNumber());
+//                    if(grHeader != null) {
+//                        if (grHeader.getCompanyCode() == null) {
+//                            grHeader.setCompanyCode(grLine.getCompanyCode());
+//                        }
+//                        grHeader.setStatusId(17L);
+//                        statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
+//                        grHeader.setStatusDescription(statusDescription);
+//                        grHeader.setCreatedBy(loginUserID);
+//                        grHeader.setUpdatedOn(new Date());
+//                        grHeader.setConfirmedOn(new Date());
+//                        grHeader = grHeaderV2Repository.save(grHeader);
+//                        log.info("grHeader updated: " + grHeader);
+//                    }
+//                }
+                /*
+                 * '2. 'Pass WH_ID/PRE_IB_NO/REF_DOC_NO/IB_LINE_NO/ITM_CODE/CASECODE in STAGINIGLINE table and
+                 * update STATUS_ID as 17
+                 */
+
+                log.info("Updating StagingLine and InboundLine with StatusId 17 Initiated");
+                if (grLine.getAcceptedQty() == null) {
+                    grLine.setAcceptedQty(0D);
+                }
+                if (grLine.getDamageQty() == null) {
+                    grLine.setDamageQty(0D);
+                }
+                stagingLineV2Repository.updateStagingLineUpdateProc(
+                                grLine.getCompanyCode(),
+                                grLine.getPlantId(),
+                                grLine.getLanguageId(),
+                                grLine.getWarehouseId(),
+                                grLine.getRefDocNumber(),
+                                grLine.getPreInboundNo(),
+                                grLine.getItemCode(),
+                                grLine.getManufacturerName(),
+                                grLine.getLineNo(),
+                                new Date(),
+                                grLine.getAcceptedQty(),
+                                grLine.getDamageQty());
+                log.info("stagingLineEntity updated through Stored Procedure: ");
+//                List<StagingLineEntityV2> stagingLineEntityList =
+//                        stagingLineService.getStagingLineV2(
+//                                grLine.getCompanyCode(),
+//                                grLine.getPlantId(),
+//                                grLine.getLanguageId(),
+//                                grLine.getWarehouseId(),
+//                                grLine.getRefDocNumber(),
+//                                grLine.getPreInboundNo(),
+//                                grLine.getLineNo(),
+//                                grLine.getItemCode(),
+//                                grLine.getCaseCode());
+//                for (StagingLineEntityV2 stagingLineEntity : stagingLineEntityList) {
+//
+//                    //v2 code
+//                    if (stagingLineEntity.getRec_accept_qty() == null) {
+//                        stagingLineEntity.setRec_accept_qty(0D);
+//                    }
+//                    if (grLine.getAcceptedQty() == null) {
+//                        grLine.setAcceptedQty(0D);
+//                    }
+//                    if (stagingLineEntity.getRec_damage_qty() == null) {
+//                        stagingLineEntity.setRec_damage_qty(0D);
+//                    }
+//                    if (grLine.getDamageQty() == null) {
+//                        grLine.setDamageQty(0D);
+//                    }
+//
+//                    Double rec_accept_qty = stagingLineEntity.getRec_accept_qty() + grLine.getAcceptedQty();
+//                    Double rec_damage_qty = stagingLineEntity.getRec_damage_qty() + grLine.getDamageQty();
+//
+//                    stagingLineEntity.setRec_accept_qty(rec_accept_qty);
+//                    stagingLineEntity.setRec_damage_qty(rec_damage_qty);
+//
+//                    if (grLine.getStatusId() == 17L) {
+//                        stagingLineEntity.setStatusId(17L);
+//                        statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
+//                        stagingLineEntity.setStatusDescription(statusDescription);
+//                    }
+//                    stagingLineEntity = stagingLineV2Repository.save(stagingLineEntity);
+//                    log.info("stagingLineEntity updated: " + stagingLineEntity);
+//                }
+
+                /*
+                 * 3. Then Pass WH_ID/PRE_IB_NO/REF_DOC_NO/IB_LINE_NO/ITM_CODE in INBOUNDLINE table and
+                 * updated STATUS_ID as 17
+                 */
+                if (grLine.getStatusId() == 17L) {
+                    inboundLineV2Repository.updateInboundLineStatusUpdateProc(
+                            grLine.getCompanyCode(),
+                            grLine.getPlantId(),
+                            grLine.getLanguageId(),
+                            grLine.getWarehouseId(),
+                            grLine.getRefDocNumber(),
+                            grLine.getPreInboundNo(),
+                            grLine.getItemCode(),
+                            grLine.getManufacturerName(),
+                            grLine.getLineNo(),
+                            17L,
+                            statusDescription,
+                            new Date()
+                    );
+                    log.info("inboundLine Status updated : ");
+//                    InboundLineV2 inboundLine = inboundLineV2Repository.getInboundLineV2(grLine.getWarehouseId(),
+//                            grLine.getLineNo(),
+//                            grLine.getPreInboundNo(),
+//                            grLine.getItemCode(),
+//                            grLine.getCompanyCode(),
+//                            grLine.getPlantId(),
+//                            grLine.getLanguageId(),
+//                            grLine.getRefDocNumber());
+//                    inboundLine.setStatusId(17L);
+//                    inboundLine.setStatusDescription(statusDescription);
+//                    inboundLine = inboundLineV2Repository.save(inboundLine);
+//                    log.info("inboundLine updated : " + inboundLine);
+                }
+            }
+            return createdGRLines;
+        } catch (Exception e) {
+            // Error Log
+            createGrLineLog10(newGrLines, e.toString());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    /**
+     * @param createdGRLine
+     * @param loginUserID
+     */
+    private void createPutAwayHeaderNonCBMV2(GrLineV2 createdGRLine, String loginUserID) throws java.text.ParseException, CsvException, IOException {
+        String itemCode = createdGRLine.getItemCode();
+        String companyCode = createdGRLine.getCompanyCode();
+        String plantId = createdGRLine.getPlantId();
+        String languageId = createdGRLine.getLanguageId();
+        String warehouseId = createdGRLine.getWarehouseId();
+        String proposedStorageBin = createdGRLine.getInterimStorageBin();
+
+        StorageBinPutAway storageBinPutAway = new StorageBinPutAway();
+        storageBinPutAway.setCompanyCodeId(companyCode);
+        storageBinPutAway.setPlantId(plantId);
+        storageBinPutAway.setLanguageId(languageId);
+        storageBinPutAway.setWarehouseId(warehouseId);
+
+        Double cbm = 0D;
+
+        AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
+        AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+
+        if (createdGRLine.getCbm() != null) {
+            cbm = createdGRLine.getCbm();
+            log.info("cbm, createdGrLine.getCbm: " + cbm + ", " + createdGRLine.getCbm());
+        }
+        outerloop:
+//        while (true) {
+            //  ASS_HE_NO
+            if (createdGRLine != null) {
+                // Insert record into PutAwayHeader
+                PutAwayHeaderV2 putAwayHeader = new PutAwayHeaderV2();
+                BeanUtils.copyProperties(createdGRLine, putAwayHeader, CommonUtils.getNullPropertyNames(createdGRLine));
+                putAwayHeader.setCompanyCodeId(companyCode);
+                putAwayHeader.setReferenceField5(itemCode);
+
+                // PA_NO
+                long NUM_RAN_CODE = 7;
+                String nextPANumber = getNextRangeNumber(NUM_RAN_CODE, companyCode, plantId, languageId, warehouseId, authTokenForIDMasterService.getAccess_token());
+                putAwayHeader.setPutAwayNumber(nextPANumber);                           //PutAway Number
+                log.info("PutAwayNumber Generated: " + nextPANumber);
+
+                putAwayHeader.setPutAwayUom(createdGRLine.getOrderUom());
+
+                //set bar code id for packbarcode
+                putAwayHeader.setBarcodeId(createdGRLine.getBarcodeId());
+
+                //set pack bar code for actual packbarcode
+                putAwayHeader.setPackBarcodes(createdGRLine.getPackBarcodes());
+
+                putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
+
+                //-----------------PROP_ST_BIN---------------------------------------------
+
+                //V2 Code
+                Long binClassId = 0L;                   //actual code follows
+                if (createdGRLine.getInboundOrderTypeId() == 1 || createdGRLine.getInboundOrderTypeId() == 3 || createdGRLine.getInboundOrderTypeId() == 4 || createdGRLine.getInboundOrderTypeId() == 5) {
+                    binClassId = 1L;
+                }
+                if (createdGRLine.getInboundOrderTypeId() == 2) {
+                    binClassId = 7L;
+                }
+                log.info("BinClassId : " + binClassId);
+
+                List<IInventoryImpl> stBinInventoryList = inventoryService.getInventoryForPutAwayCreate(companyCode, plantId, languageId, warehouseId,
+                        itemCode, createdGRLine.getManufacturerName(), binClassId);
+                log.info("stBinInventoryList -----------> : " + stBinInventoryList.size());
+
+                List<String> inventoryStorageBinList = null;
+                if (stBinInventoryList != null && !stBinInventoryList.isEmpty()) {
+                    inventoryStorageBinList = stBinInventoryList.stream().map(IInventoryImpl::getStorageBin).collect(Collectors.toList());
+                }
+                log.info("Inventory StorageBin List: " + inventoryStorageBinList);
+
+                if (createdGRLine.getInterimStorageBin() != null) {                         //Direct Stock Receipt - Fixed Bin - Inbound OrderTypeId - 5
+                    storageBinPutAway.setBinClassId(binClassId);
+                    storageBinPutAway.setBin(proposedStorageBin);
+                    StorageBinV2 storageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                    log.info("InterimStorageBin: " + storageBin);
+                    if (storageBin != null) {
+                        putAwayHeader.setProposedStorageBin(createdGRLine.getInterimStorageBin());
+                        putAwayHeader.setLevelId(String.valueOf(storageBin.getFloorId()));
+                        cbm = 0D;               //to break the loop
+                    }
+                }
+                //BinClassId - 7 - Return Order(Sale Return)
+                if (createdGRLine.getInboundOrderTypeId() == 2) {
+
+                    storageBinPutAway.setBinClassId(binClassId);
+                    log.info("BinClassId : " + binClassId);
+
+                    StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                    if (proposedBinClass7Bin != null) {
+                        String proposedStBin = proposedBinClass7Bin.getStorageBin();
+                        putAwayHeader.setProposedStorageBin(proposedStBin);
+                        putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
+                        log.info("Return Order --> BinClassId7 Proposed Bin: " + proposedStBin);
+                        cbm = 0D;   //break the loop
+                    }
+                    if (proposedBinClass7Bin == null) {
+                        binClassId = 2L;
+                        log.info("BinClassId : " + binClassId);
+                        StorageBinV2 stBin = mastersService.getStorageBin(
+                                companyCode, plantId, languageId, warehouseId, binClassId, authTokenForMastersService.getAccess_token());
+                        log.info("Return Order --> reserveBin: " + stBin.getStorageBin());
+                        putAwayHeader.setProposedStorageBin(stBin.getStorageBin());
+                        putAwayHeader.setLevelId(String.valueOf(stBin.getFloorId()));
+                        cbm = 0D;   //break the loop
+                    }
+                }
+
+                if (createdGRLine.getInterimStorageBin() == null && putAwayHeader.getProposedStorageBin() == null) {
+                    if (stBinInventoryList != null) {
+                        log.info("BinClassId : " + binClassId);
+                        if (inventoryStorageBinList != null && !inventoryStorageBinList.isEmpty()) {
+                            if(createdGRLine.getQuantityType().equalsIgnoreCase("A")) {
+                                storageBinPutAway.setBinClassId(binClassId);
+                                storageBinPutAway.setStorageBin(inventoryStorageBinList);
+
+                                StorageBinV2 proposedExistingBin = mastersService.getExistingStorageBinNonCbm(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                                if (proposedExistingBin != null) {
+                                    proposedStorageBin = proposedExistingBin.getStorageBin();
+                                    log.info("Existing NON-CBM ProposedBin: " + proposedExistingBin);
+
+                                    putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                                    putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
+                                }
+                                log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
+                                cbm = 0D;   //break the loop
+                            }
+                            if (createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
+                                storageBinPutAway.setBinClassId(7L);
+                                StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                                if (proposedBinClass7Bin != null) {
+                                    String proposedStBin = proposedBinClass7Bin.getStorageBin();
+                                    putAwayHeader.setProposedStorageBin(proposedStBin);
+                                    putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
+                                    log.info("Damage Qty --> BinClassId7 Proposed Bin: " + proposedStBin);
+                                    cbm = 0D;   //break the loop
+                                }
+                                if (proposedBinClass7Bin == null) {
+                                    binClassId = 2L;
+                                    log.info("BinClassId : " + binClassId);
+                                    StorageBinV2 stBin = mastersService.getStorageBin(
+                                            companyCode, plantId, languageId, warehouseId, binClassId, authTokenForMastersService.getAccess_token());
+                                    log.info("Return Order --> reserveBin: " + stBin.getStorageBin());
+                                    putAwayHeader.setProposedStorageBin(stBin.getStorageBin());
+                                    putAwayHeader.setLevelId(String.valueOf(stBin.getFloorId()));
+                                    cbm = 0D;   //break the loop
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Last Picked Bin as Proposed Bin If it is empty
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (putAwayHeader.getProposedStorageBin() == null && (stBinInventoryList == null || stBinInventoryList.isEmpty())) {
+
+                    List<PickupLineV2> pickupLineList = pickupLineService.getPickupLineForLastBinCheckV2(companyCode, plantId, languageId, warehouseId, itemCode, createdGRLine.getManufacturerName());
+                    log.info("PickupLineForLastBinCheckV2: " + pickupLineList);
+                    List<String> lastPickedStorageBinList = null;
+                    if (pickupLineList != null) {
+                        lastPickedStorageBinList = pickupLineList.stream().map(PickupLineV2::getPickedStorageBin).collect(Collectors.toList());
+                    }
+                    log.info("LastPickedStorageBinList: " + lastPickedStorageBinList);
+
+                    if (lastPickedStorageBinList != null && !lastPickedStorageBinList.isEmpty()) {
+                        log.info("BinClassId : " + binClassId);
+
+                        storageBinPutAway.setStatusId(0L);
+                        storageBinPutAway.setBinClassId(1L);
+                        storageBinPutAway.setStorageBin(lastPickedStorageBinList);
+
+                        StorageBinV2 proposedNonCbmLastPickStorageBin = mastersService.getStorageBinNonCbmLastPicked(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                        log.info("proposedNonCbmLastPickStorageBin: " + proposedNonCbmLastPickStorageBin);
+                        if (proposedNonCbmLastPickStorageBin != null) {
+                            putAwayHeader.setProposedStorageBin(proposedNonCbmLastPickStorageBin.getStorageBin());
+                            putAwayHeader.setLevelId(String.valueOf(proposedNonCbmLastPickStorageBin.getFloorId()));
+                            log.info("LastPick NonCBM Bin: " + proposedNonCbmLastPickStorageBin.getStorageBin());
+                            log.info("LastPick NonCBM PutawayQty: " + createdGRLine.getGoodReceiptQty());
+                            cbm = 0D;   //break the loop
+                        }
+                    }
+                }
+
+                //Propose Empty Bin if Last picked bin is unavailable
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (putAwayHeader.getProposedStorageBin() == null && (stBinInventoryList == null || stBinInventoryList.isEmpty())) {
+                    // If ST_BIN value is null
+                    // Validate if ACCEPT_QTY is not null and DAMAGE_QTY is NULL,
+                    // then pass WH_ID in STORAGEBIN table and fetch ST_BIN values for STATUS_ID=EMPTY.
+                    log.info("QuantityType : " + createdGRLine.getQuantityType());
+                    log.info("BinClassId : " + binClassId);
+
+                    storageBinPutAway.setStatusId(0L);
+                    StorageBinV2 proposedNonCbmStorageBin = null;
+
+                    if (createdGRLine.getQuantityType().equalsIgnoreCase("A")) {
+                        storageBinPutAway.setBinClassId(binClassId);
+                        List<PutAwayHeaderV2> existingBinItemCheck = putAwayHeaderService.getPutawayHeaderExistingBinItemCheckV2(companyCode, plantId, languageId, warehouseId,
+                                itemCode, createdGRLine.getManufacturerName());
+                        log.info("existingBinItemCheck: " + existingBinItemCheck);
+                        if (existingBinItemCheck != null && !existingBinItemCheck.isEmpty()) {
+                            proposedStorageBin = existingBinItemCheck.get(0).getProposedStorageBin();
+                            putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                            putAwayHeader.setLevelId(String.valueOf(existingBinItemCheck.get(0).getLevelId()));
+                            log.info("Existing PutawayCreate ProposedStorageBin -->A : " + proposedStorageBin);
+                            cbm = 0D;   //break the loop
+                        }
+                        List<String> existingBinCheck = putAwayHeaderService.getPutawayHeaderExistingBinCheckV2(companyCode, plantId, languageId, warehouseId);
+                        log.info("existingBinCheck: " + existingBinCheck);
+                        if (putAwayHeader.getProposedStorageBin() == null && (existingBinCheck != null && !existingBinCheck.isEmpty())) {
+                            storageBinPutAway.setStorageBin(existingBinCheck);
+                            proposedNonCbmStorageBin = mastersService.getStorageBinNonCbm(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                            if (proposedNonCbmStorageBin != null) {
+                                proposedStorageBin = proposedNonCbmStorageBin.getStorageBin();
+                                log.info("proposedNonCbmStorageBin: " + proposedNonCbmStorageBin.getStorageBin());
+                                putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                                putAwayHeader.setLevelId(String.valueOf(proposedNonCbmStorageBin.getFloorId()));
+                                log.info("Existing PutawayCreate ProposedStorageBin -->A : " + proposedStorageBin);
+                                cbm = 0D;   //break the loop
+                            }
+                        }
+                        if (putAwayHeader.getProposedStorageBin() == null && (existingBinCheck == null || existingBinCheck.isEmpty() || existingBinCheck.size() == 0)) {
+                            List<String> existingProposedPutawayStorageBin = putAwayHeaderService.getPutawayHeaderExistingBinCheckV2(companyCode, plantId, languageId, warehouseId);
+                            log.info("existingProposedPutawayStorageBin: " + existingProposedPutawayStorageBin);
+                            log.info("BinClassId: " + binClassId);
+                            storageBinPutAway.setStorageBin(existingProposedPutawayStorageBin);
+                            proposedNonCbmStorageBin = mastersService.getStorageBinNonCbm(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                            log.info("proposedNonCbmStorageBin: " + proposedNonCbmStorageBin);
+                            if (proposedNonCbmStorageBin != null) {
+                                proposedStorageBin = proposedNonCbmStorageBin.getStorageBin();
+                                log.info("proposedNonCbmStorageBin: " + proposedNonCbmStorageBin.getStorageBin());
+                                putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                                putAwayHeader.setLevelId(String.valueOf(proposedNonCbmStorageBin.getFloorId()));
+
+                                cbm = 0D;   //break the loop
+                            }
+                            if (proposedNonCbmStorageBin == null) {
+                                binClassId = 2L;
+                                log.info("BinClassId : " + binClassId);
+                                StorageBinV2 stBin = mastersService.getStorageBin(
+                                        companyCode, plantId, languageId, warehouseId, binClassId, authTokenForMastersService.getAccess_token());
+                                log.info("A --> NonCBM reserveBin: " + stBin.getStorageBin());
+                                putAwayHeader.setProposedStorageBin(stBin.getStorageBin());
+                                putAwayHeader.setLevelId(String.valueOf(stBin.getFloorId()));
+                                cbm = 0D;   //break the loop
+                            }
+                        }
+                    }
+
+                    /*
+                     * Validate if ACCEPT_QTY is null and DAMAGE_QTY is not NULL , then pass WH_ID in STORAGEBIN table and
+                     * fetch ST_BIN values for STATUS_ID=EMPTY.
+                     */
+                    if (createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
+                        binClassId = 7L;
+                        storageBinPutAway.setBinClassId(binClassId);
+                        log.info("BinClassId : " + binClassId);
+                        StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                        if (proposedBinClass7Bin != null) {
+                            proposedStorageBin = proposedBinClass7Bin.getStorageBin();
+                            putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                            putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
+                            log.info("D --> BinClassId7 Proposed Bin: " + proposedStorageBin);
+                            cbm = 0D;   //break the loop
+                        }
+                        if (proposedBinClass7Bin == null) {
+                            binClassId = 2L;
+                            log.info("BinClassId : " + binClassId);
+                            StorageBinV2 stBin = mastersService.getStorageBin(
+                                    companyCode, plantId, languageId, warehouseId, binClassId, authTokenForMastersService.getAccess_token());
+                            log.info("D --> reserveBin: " + stBin.getStorageBin());
+                            putAwayHeader.setProposedStorageBin(stBin.getStorageBin());
+                            putAwayHeader.setLevelId(String.valueOf(stBin.getFloorId()));
+                            cbm = 0D;   //break the loop
+                        }
+                    }
+                }
+                /////////////////////////////////////////////////////////////////////////////////////////////////////
+                log.info("Proposed Storage Bin: " + putAwayHeader.getProposedStorageBin());
+                log.info("Proposed Storage Bin level/Floor Id: " + putAwayHeader.getLevelId());
+                //PROP_HE_NO	<- PAWAY_HE_NO
+                if (createdGRLine.getReferenceDocumentType() != null) {
+                    putAwayHeader.setReferenceDocumentType(createdGRLine.getReferenceDocumentType());
+                } else {
+                    putAwayHeader.setReferenceDocumentType(getInboundOrderTypeDesc(createdGRLine.getInboundOrderTypeId()));
+                }
+                putAwayHeader.setProposedHandlingEquipment(createdGRLine.getPutAwayHandlingEquipment());
+                putAwayHeader.setCbmQuantity(createdGRLine.getCbmQuantity());
+
+                IKeyValuePair description = stagingLineV2Repository.getDescription(companyCode,
+                        languageId,
+                        plantId,
+                        warehouseId);
+
+                if (description != null) {
+                putAwayHeader.setCompanyDescription(description.getCompanyDesc());
+                putAwayHeader.setPlantDescription(description.getPlantDesc());
+                putAwayHeader.setWarehouseDescription(description.getWarehouseDesc());
+                }
+
+                PreInboundHeaderV2 dbPreInboundHeader = preInboundHeaderService.getPreInboundHeaderV2(companyCode, plantId, languageId, warehouseId,
+                        createdGRLine.getPreInboundNo(), createdGRLine.getRefDocNumber());
+
+                putAwayHeader.setMiddlewareId(dbPreInboundHeader.getMiddlewareId());
+                putAwayHeader.setMiddlewareTable(dbPreInboundHeader.getMiddlewareTable());
+                putAwayHeader.setReferenceDocumentType(dbPreInboundHeader.getReferenceDocumentType());
+                putAwayHeader.setManufacturerFullName(dbPreInboundHeader.getManufacturerFullName());
+
+                putAwayHeader.setTransferOrderDate(dbPreInboundHeader.getTransferOrderDate());
+                putAwayHeader.setSourceBranchCode(dbPreInboundHeader.getSourceBranchCode());
+                putAwayHeader.setSourceCompanyCode(dbPreInboundHeader.getSourceCompanyCode());
+                putAwayHeader.setIsCompleted(dbPreInboundHeader.getIsCompleted());
+                putAwayHeader.setIsCancelled(dbPreInboundHeader.getIsCancelled());
+                putAwayHeader.setMUpdatedOn(dbPreInboundHeader.getMUpdatedOn());
+
+                putAwayHeader.setReferenceField5(createdGRLine.getItemCode());
+                putAwayHeader.setReferenceField6(createdGRLine.getManufacturerName());
+                putAwayHeader.setReferenceField7(createdGRLine.getBarcodeId());
+                putAwayHeader.setReferenceField8(createdGRLine.getItemDescription());
+                putAwayHeader.setReferenceField9(String.valueOf(createdGRLine.getLineNo()));
+
+                putAwayHeader.setStatusId(19L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(19L, createdGRLine.getLanguageId());
+                putAwayHeader.setStatusDescription(statusDescription);
+
+                putAwayHeader.setDeletionIndicator(0L);
+                putAwayHeader.setCreatedBy(loginUserID);
+                putAwayHeader.setUpdatedBy(loginUserID);
+                putAwayHeader.setCreatedOn(new Date());
+                putAwayHeader.setUpdatedOn(new Date());
+                putAwayHeader.setConfirmedOn(new Date());
+                putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
+                log.info("putAwayHeader : " + putAwayHeader);
+
+                /*----------------Inventory tables Create---------------------------------------------*/
+                InventoryV2 createdinventory = createInventoryNonCBMV2(createdGRLine);
+
+                /*----------------INVENTORYMOVEMENT table Update---------------------------------------------*/
+                createInventoryMovementV2(createdGRLine, createdinventory.getStorageBin());
+            }
+//            if (cbm == 0D) {
+//                break outerloop;
+//            }
+//        }
+    }
 
     /**
      * createGrLine
@@ -1259,7 +2009,7 @@ public class GrLineService extends BaseService {
      */
     @Transactional
     public List<GrLineV2> createGrLineV2(@Valid List<AddGrLineV2> newGrLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException, CsvException, IOException {
         List<GrLineV2> createdGRLines = new ArrayList<>();
         try {
             AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
@@ -1292,6 +2042,29 @@ public class GrLineService extends BaseService {
                     dbGrLine.setPackBarcodes(packBarcode.getBarcode());
                     dbGrLine.setStatusId(14L);
 
+                    //GoodReceipt Qty should be less than or equal to ordered qty---> if GrQty > OrdQty throw Exception
+                    Double dbGrQty = grLineV2Repository.getGrLineQuantity(
+                            newGrLine.getCompanyCode(),
+                            newGrLine.getPlantId(),
+                            newGrLine.getLanguageId(),
+                            newGrLine.getWarehouseId(),
+                            newGrLine.getRefDocNumber(),
+                            newGrLine.getPreInboundNo(),
+                            newGrLine.getGoodsReceiptNo(),
+                            newGrLine.getPalletCode(),
+                            newGrLine.getCaseCode(),
+                            newGrLine.getItemCode(),
+                            newGrLine.getManufacturerName(),
+                            newGrLine.getLineNo()
+                    );
+                    log.info("dbGrQty, newGrQty, OrdQty: " + dbGrQty + ", " + dbGrLine.getGoodReceiptQty() + ", " + newGrLine.getOrderQty());
+                    if(dbGrQty != null) {
+                        Double totalGrQty = dbGrLine.getGoodReceiptQty() + dbGrQty;
+                        if (newGrLine.getOrderQty() < totalGrQty){
+                            throw new BadRequestException("Gr Qty is greater than Order Qty ");
+                        }
+                    }
+
                     //V2 Code
                     IKeyValuePair description = stagingLineV2Repository.getDescription(newGrLine.getCompanyCode(),
                             newGrLine.getLanguageId(),
@@ -1300,9 +2073,12 @@ public class GrLineService extends BaseService {
 
                     statusDescription = stagingLineV2Repository.getStatusDescription(dbGrLine.getStatusId(), newGrLine.getLanguageId());
                     dbGrLine.setStatusDescription(statusDescription);
-                    dbGrLine.setCompanyDescription(description.getCompanyDesc());
-                    dbGrLine.setPlantDescription(description.getPlantDesc());
-                    dbGrLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                    if (description != null) {
+                        dbGrLine.setCompanyDescription(description.getCompanyDesc());
+                        dbGrLine.setPlantDescription(description.getPlantDesc());
+                        dbGrLine.setWarehouseDescription(description.getWarehouseDesc());
+                    }
 
                     dbGrLine.setMiddlewareId(newGrLine.getMiddlewareId());
                     dbGrLine.setMiddlewareHeaderId(newGrLine.getMiddlewareHeaderId());
@@ -1391,12 +2167,16 @@ public class GrLineService extends BaseService {
                     }
 
                     variance = invoiceQty - (acceptQty + damageQty + recAcceptQty + recDamageQty);
+                    log.info("Variance: " + variance);
 
                     if (variance == 0D) {
-                        log.info("Variance: " + variance);
                         dbGrLine.setStatusId(17L);
                         statusDescription = stagingLineV2Repository.getStatusDescription(17L, newGrLine.getLanguageId());
                         dbGrLine.setStatusDescription(statusDescription);
+                    }
+
+                    if (variance < 0D) {
+                        throw new BadRequestException("Variance Qty cannot be Less than 0");
                     }
 
                     dbGrLine.setCbm(cbm);
@@ -1410,10 +2190,10 @@ public class GrLineService extends BaseService {
                     dbGrLine.setDeletionIndicator(0L);
                     dbGrLine.setCreatedBy(loginUserID);
                     dbGrLine.setUpdatedBy(loginUserID);
-//                    dbGrLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                    dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                    dbGrLine.setConfirmedBy(loginUserID);
                     dbGrLine.setCreatedOn(new Date());
                     dbGrLine.setUpdatedOn(new Date());
+                    dbGrLine.setConfirmedOn(new Date());
 
                     List<GrLineV2> oldGrLine = grLineV2Repository.findByGoodsReceiptNoAndItemCodeAndLineNoAndLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndCreatedOnAndDeletionIndicator(
                             dbGrLine.getGoodsReceiptNo(), dbGrLine.getItemCode(), dbGrLine.getLineNo(),
@@ -1428,6 +2208,10 @@ public class GrLineService extends BaseService {
                             createdGRLine = grLineV2Repository.save(dbGrLine);
                         } catch (Exception e) {
                             createGrLineError = true;
+
+                            //Exception Log
+                            createGrLineLog7(dbGrLine, e.toString());
+
                             throw new RuntimeException(e);
                         }
                         log.info("createdGRLine : " + createdGRLine);
@@ -1478,7 +2262,7 @@ public class GrLineService extends BaseService {
                  * 1. Update GRHEADER table with STATUS_ID=17 by Passing WH_ID/GR_NO/CASE_CODE/REF_DOC_NO and
                  * GR_CNF_BY with USR_ID and GR_CNF_ON with Server time
                  */
-                if (createdStagingLinesCount == createdGRLinesStatusId17Count) {
+                if (createdStagingLinesCount.equals(createdGRLinesStatusId17Count)) {
                     log.info("Updating GrHeader with StatusId 17 Initiated");
                     List<GrHeaderV2> grHeaders = grHeaderV2Repository.getGrHeaderV2(
                             grLine.getWarehouseId(),
@@ -1496,8 +2280,8 @@ public class GrLineService extends BaseService {
                         statusDescription = stagingLineV2Repository.getStatusDescription(17L, grLine.getLanguageId());
                         grHeader.setStatusDescription(statusDescription);
                         grHeader.setCreatedBy(loginUserID);
-//                        grHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-                        grHeader.setCreatedOn(new Date());
+                        grHeader.setUpdatedOn(new Date());
+                        grHeader.setConfirmedOn(new Date());
                         grHeader = grHeaderV2Repository.save(grHeader);
                         log.info("grHeader updated: " + grHeader);
                     }
@@ -1571,6 +2355,8 @@ public class GrLineService extends BaseService {
             }
             return createdGRLines;
         } catch (Exception e) {
+            // Error Log
+            createGrLineLog10(newGrLines, e.toString());
             e.printStackTrace();
             throw e;
         }
@@ -1897,7 +2683,7 @@ public class GrLineService extends BaseService {
      * @param createdGRLine
      * @param loginUserID
      */
-    private void createPutAwayHeaderV2(GrLineV2 createdGRLine, String loginUserID) throws java.text.ParseException {
+    private void createPutAwayHeaderV2(GrLineV2 createdGRLine, String loginUserID) throws java.text.ParseException, CsvException, IOException {
         String itemCode = createdGRLine.getItemCode();
         String companyCode = createdGRLine.getCompanyCode();
         String plantId = createdGRLine.getPlantId();
@@ -2000,11 +2786,11 @@ public class GrLineService extends BaseService {
 
                     StorageBinV2 storageBin = mastersService.getStorageBinV2(proposedStorageBin, warehouseId, companyCode, plantId, languageId, authTokenForMastersService.getAccess_token());
                     log.info("InterimStorageBin: " + storageBin);
-                    if(storageBin != null) {
+                    if (storageBin != null) {
                         if (storageBin.isCapacityCheck()) {
                             storageBinCapacityCheck = storageBin.isCapacityCheck();
                         }
-                    }
+
                     log.info("storageBinCapacityCheck -----------> : " + storageBinCapacityCheck);
 
                     if (storageBinCapacityCheck && capacityCheck) {
@@ -2012,18 +2798,18 @@ public class GrLineService extends BaseService {
                             cbmPerQuantity = createdGRLine.getCbmQuantity();
                         }
 
-                        if (storageBin.getRemainingVolume() != null && storageBin.getRemainingVolume() != "") {
+                        if (storageBin.getRemainingVolume() != null && !storageBin.getRemainingVolume().equals("")) {
                             remainingVolume = Double.valueOf(storageBin.getRemainingVolume());
                         }
 
                         if (storageBinCapacityCheck && cbmPerQuantity < remainingVolume) {
-                            if (storageBin.getTotalVolume() != null && storageBin.getTotalVolume() != "") {
+                            if (storageBin.getTotalVolume() != null && !storageBin.getTotalVolume().equals("")) {
                                 totalVolume = Double.valueOf(storageBin.getTotalVolume());
                             }
-                            if (storageBin.getOccupiedVolume() != null && storageBin.getOccupiedVolume() != "") {
+                            if (storageBin.getOccupiedVolume() != null && !storageBin.getOccupiedVolume().equals("")) {
                                 occupiedVolume = Double.valueOf(storageBin.getOccupiedVolume());
                             }
-                            if (storageBin.getRemainingVolume() != null && storageBin.getRemainingVolume() != "") {
+                            if (storageBin.getRemainingVolume() != null && !storageBin.getRemainingVolume().equals("")) {
                                 remainingVolume = Double.valueOf(storageBin.getRemainingVolume());
                             }
                             if (createdGRLine.getCbm() != null) {
@@ -2060,9 +2846,15 @@ public class GrLineService extends BaseService {
                     }
 
                     if (!capacityCheck && storageBinCapacityCheck) {
+                        // Error Log
+                        createGrLineLog9(storageBin, createdGRLine.getRefDocNumber(), createdGRLine.getItemCode(),
+                                createdGRLine.getManufacturerName(), "Storage Bin Capacity Check is enabled whereas item capacity check is disabled.");
                         throw new RuntimeException("Storage Bin Capacity Check is enabled whereas item capacity check is disabled ");
                     }
                     if (capacityCheck && !storageBinCapacityCheck) {
+                        // Error Log
+                        createGrLineLog8(itemCodeCapacityCheck, createdGRLine.getRefDocNumber(), createdGRLine.getItemCode(),
+                                createdGRLine.getManufacturerName(), "Item Capacity Check is enabled whereas Storage Bin capacity check is disabled.");
                         throw new RuntimeException("item Capacity Check is enabled whereas Storage Bin capacity check is disabled ");
                     }
 
@@ -2079,7 +2871,7 @@ public class GrLineService extends BaseService {
                         cbm = 0D;               //to break the loop
                     }
                 }
-
+            }
                 //BinClassId - 7 - Return Order(Sale Return)
                 if (createdGRLine.getInboundOrderTypeId() == 2) {
 
@@ -2154,27 +2946,27 @@ public class GrLineService extends BaseService {
                                             proposedStorageBin = proposedExistingBin.getStorageBin();
                                             log.info("Existing NON-CBM ProposedBin: " + proposedExistingBin);
 
-                                            putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                                        putAwayHeader.setProposedStorageBin(proposedStorageBin);
+                                        putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
                                         }
                                         putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
-                                        putAwayHeader.setLevelId(String.valueOf(proposedExistingBin.getFloorId()));
-                                        log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
+                                    log.info("Existing NON-CBM ProposedBin, GrQty: " + proposedStorageBin + ", " + createdGRLine.getGoodReceiptQty());
+                                    cbm = 0D;   //break the loop
+                                }
+                                if (createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
+                                    storageBinPutAway.setBinClassId(7L);
+                                    StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                                    if (proposedBinClass7Bin != null) {
+                                        String proposedStBin = proposedBinClass7Bin.getStorageBin();
+                                        putAwayHeader.setProposedStorageBin(proposedStBin);
+                                        putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
+                                        putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
+                                        log.info("Damage Qty --> BinClassId7 Proposed Bin: " + proposedStBin);
                                         cbm = 0D;   //break the loop
-                                    }
-                                    if(createdGRLine.getQuantityType().equalsIgnoreCase("D")) {
-                                        storageBinPutAway.setBinClassId(7L);
-                                        StorageBinV2 proposedBinClass7Bin = mastersService.getStorageBinBinClassId7(storageBinPutAway, authTokenForMastersService.getAccess_token());
-                                        if (proposedBinClass7Bin != null) {
-                                            String proposedStBin = proposedBinClass7Bin.getStorageBin();
-                                            putAwayHeader.setProposedStorageBin(proposedStBin);
-                                            putAwayHeader.setPutAwayQuantity(createdGRLine.getGoodReceiptQty());
-                                            putAwayHeader.setLevelId(String.valueOf(proposedBinClass7Bin.getFloorId()));
-                                            log.info("Damage Qty --> BinClassId7 Proposed Bin: " + proposedStBin);
-                                            cbm = 0D;   //break the loop
-                                        }
                                     }
                                 }
                             }
+                        }
 
                         if (capacityCheck) {
 
@@ -2182,7 +2974,7 @@ public class GrLineService extends BaseService {
 
                             for (StorageBinV2 storageBinV2 : stBinList) {                   //filter capacity enabled bin
                                 storageBinCapacityCheck = storageBinV2.isCapacityCheck();
-                                if (storageBinV2.getRemainingVolume() != null && storageBinV2.getRemainingVolume() != "") {
+                                if (storageBinV2.getRemainingVolume() != null && !storageBinV2.getRemainingVolume().equals("")) {
                                     remainingVolume = Double.valueOf(storageBinV2.getRemainingVolume());
                                 }
                                 if (storageBinCapacityCheck && cbmPerQuantity < remainingVolume) {
@@ -2196,13 +2988,13 @@ public class GrLineService extends BaseService {
                                 StorageBinV2 proposedBin = filterStorageBinList.get(0);
                                 proposedStorageBin = proposedBin.getStorageBin();
 
-                                if (proposedBin.getTotalVolume() != null && proposedBin.getTotalVolume() != "") {
+                                if (proposedBin.getTotalVolume() != null && !proposedBin.getTotalVolume().equals("")) {
                                     totalVolume = Double.valueOf(proposedBin.getTotalVolume());
                                 }
-                                if (proposedBin.getOccupiedVolume() != null && proposedBin.getOccupiedVolume() != "") {
+                                if (proposedBin.getOccupiedVolume() != null && !proposedBin.getOccupiedVolume().equals("")) {
                                     occupiedVolume = Double.valueOf(proposedBin.getOccupiedVolume());
                                 }
-                                if (proposedBin.getRemainingVolume() != null && proposedBin.getRemainingVolume() != "") {
+                                if (proposedBin.getRemainingVolume() != null && !proposedBin.getRemainingVolume().equals("")) {
                                     remainingVolume = Double.valueOf(proposedBin.getRemainingVolume());
                                 }
 
@@ -2422,7 +3214,7 @@ public class GrLineService extends BaseService {
                     List<PickupLineV2> pickupLineList = pickupLineService.getPickupLineForLastBinCheckV2(companyCode, plantId, languageId, warehouseId, itemCode, createdGRLine.getManufacturerName());
                     log.info("PickupLineForLastBinCheckV2: " + pickupLineList);
                     List<String> lastPickedStorageBinList = null;
-                    if(pickupLineList != null){
+                    if (pickupLineList != null) {
                         lastPickedStorageBinList = pickupLineList.stream().map(PickupLineV2::getPickedStorageBin).collect(Collectors.toList());
                     }
                     log.info("LastPickedStorageBinList: " + lastPickedStorageBinList);
@@ -2595,7 +3387,7 @@ public class GrLineService extends BaseService {
                             }
                             List<String> existingBinCheck = putAwayHeaderService.getPutawayHeaderExistingBinCheckV2(companyCode, plantId, languageId, warehouseId);
                             log.info("existingBinCheck: " + existingBinCheck);
-                            if (existingBinCheck != null && !existingBinCheck.isEmpty()) {
+                            if (putAwayHeader.getProposedStorageBin() == null && (existingBinCheck != null && !existingBinCheck.isEmpty())) {
                                 storageBinPutAway.setStorageBin(existingBinCheck);
                                 proposedNonCbmStorageBin = mastersService.getStorageBinNonCbm(storageBinPutAway, authTokenForMastersService.getAccess_token());
                                 if (proposedNonCbmStorageBin != null) {
@@ -2607,7 +3399,7 @@ public class GrLineService extends BaseService {
                                     cbm = 0D;   //break the loop
                                 }
                             }
-                            if (existingBinCheck == null || existingBinCheck.isEmpty() || existingBinCheck.size() == 0) {
+                            if (putAwayHeader.getProposedStorageBin() == null && (existingBinCheck == null || existingBinCheck.isEmpty() || existingBinCheck.size() == 0)) {
                                 List<String> existingProposedPutawayStorageBin = putAwayHeaderService.getPutawayHeaderExistingBinCheckV2(companyCode, plantId, languageId, warehouseId);
                                 log.info("existingProposedPutawayStorageBin: " + existingProposedPutawayStorageBin);
                                 log.info("BinClassId: " + binClassId);
@@ -2768,9 +3560,11 @@ public class GrLineService extends BaseService {
                         plantId,
                         warehouseId);
 
+                if (description != null) {
                 putAwayHeader.setCompanyDescription(description.getCompanyDesc());
                 putAwayHeader.setPlantDescription(description.getPlantDesc());
                 putAwayHeader.setWarehouseDescription(description.getWarehouseDesc());
+                }
 
                 PreInboundHeaderV2 dbPreInboundHeader = preInboundHeaderService.getPreInboundHeaderV2(companyCode, plantId, languageId, warehouseId,
                         createdGRLine.getPreInboundNo(), createdGRLine.getRefDocNumber());
@@ -2800,9 +3594,6 @@ public class GrLineService extends BaseService {
                 putAwayHeader.setDeletionIndicator(0L);
                 putAwayHeader.setCreatedBy(loginUserID);
                 putAwayHeader.setUpdatedBy(loginUserID);
-//                putAwayHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                putAwayHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//                putAwayHeader.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 putAwayHeader.setCreatedOn(new Date());
                 putAwayHeader.setUpdatedOn(new Date());
                 putAwayHeader.setConfirmedOn(new Date());
@@ -2813,7 +3604,7 @@ public class GrLineService extends BaseService {
                 InventoryV2 createdinventory = createInventoryV2(createdGRLine);
 
                 /*----------------INVENTORYMOVEMENT table Update---------------------------------------------*/
-                createInventoryMovementV2(createdGRLine, createdinventory);
+                createInventoryMovementV2(createdGRLine, createdinventory.getStorageBin());
             }
             if (cbm == 0D) {
                 break outerloop;
@@ -2900,13 +3691,13 @@ public class GrLineService extends BaseService {
         Double remainingVolume = 0D;
         Double totalVolume = 0D;
 
-        if (storageBin.getOccupiedVolume() != null && storageBin.getOccupiedVolume() != "") {
+        if (storageBin.getOccupiedVolume() != null && !storageBin.getOccupiedVolume().equals("")) {
             occupiedVolume = Double.valueOf(storageBin.getOccupiedVolume());
         }
-        if (storageBin.getTotalVolume() != null && storageBin.getTotalVolume() != "") {
+        if (storageBin.getTotalVolume() != null && !storageBin.getTotalVolume().equals("")) {
             totalVolume = Double.valueOf(storageBin.getTotalVolume());
         }
-        if (storageBin.getRemainingVolume() != null && storageBin.getRemainingVolume() != "") {
+        if (storageBin.getRemainingVolume() != null && !storageBin.getRemainingVolume().equals("")) {
             remainingVolume = Double.valueOf(storageBin.getRemainingVolume());
         }
 
@@ -2937,13 +3728,13 @@ public class GrLineService extends BaseService {
         Double remainingVolume = 0D;
         Double totalVolume = 0D;
 
-        if (storageBin.getOccupiedVolume() != null && storageBin.getOccupiedVolume() != "") {
+        if (storageBin.getOccupiedVolume() != null && !storageBin.getOccupiedVolume().equals("")) {
             occupiedVolume = Double.valueOf(storageBin.getOccupiedVolume());
         }
-        if (storageBin.getTotalVolume() != null && storageBin.getTotalVolume() != "") {
+        if (storageBin.getTotalVolume() != null && !storageBin.getTotalVolume().equals("")) {
             totalVolume = Double.valueOf(storageBin.getTotalVolume());
         }
-        if (storageBin.getRemainingVolume() != null && storageBin.getRemainingVolume() != "") {
+        if (storageBin.getRemainingVolume() != null && !storageBin.getRemainingVolume().equals("")) {
             remainingVolume = Double.valueOf(storageBin.getRemainingVolume());
         }
 
@@ -2986,7 +3777,7 @@ public class GrLineService extends BaseService {
         if (capacityCheck) {
             Double finalCbm = cbm;
             Double finalCbmPerQty = cbmPerQuantity;
-            stBinList = Arrays.stream(storageBin).filter(n -> n.getRemainingVolume() != null && n.getRemainingVolume() != "" && n.isCapacityCheck() == true).collect(Collectors.toList());
+            stBinList = Arrays.stream(storageBin).filter(n -> n.getRemainingVolume() != null && !n.getRemainingVolume().equals("") && n.isCapacityCheck() == true).collect(Collectors.toList());
             log.info("Capacity - Empty Storage Bin: " + stBinList);
             if (stBinList != null && !stBinList.isEmpty()) {
                 filterStorageBinList = stBinList.stream().filter(n -> Double.valueOf(n.getRemainingVolume()) >= finalCbm).sorted(Comparator.comparing(StorageBinV2::getRemainingVolume)).collect(Collectors.toList());
@@ -3078,10 +3869,11 @@ public class GrLineService extends BaseService {
     }
 
     /**
+     *
      * @param createdGRLine
-     * @param createdinventory
+     * @param storageBin
      */
-    private void createInventoryMovementV2(GrLineV2 createdGRLine, InventoryV2 createdinventory) {
+    private void createInventoryMovementV2(GrLineV2 createdGRLine, String storageBin) {
         InventoryMovement inventoryMovement = new InventoryMovement();
         BeanUtils.copyProperties(createdGRLine, inventoryMovement, CommonUtils.getNullPropertyNames(createdGRLine));
         inventoryMovement.setCompanyCodeId(createdGRLine.getCompanyCode());
@@ -3110,7 +3902,7 @@ public class GrLineService extends BaseService {
         inventoryMovement.setMovementDocumentNo(createdGRLine.getGoodsReceiptNo());
 
         // ST_BIN
-        inventoryMovement.setStorageBin(createdinventory.getStorageBin());
+        inventoryMovement.setStorageBin(storageBin);
 
         // MVT_QTY
         inventoryMovement.setMovementQty(createdGRLine.getGoodReceiptQty());
@@ -3139,7 +3931,7 @@ public class GrLineService extends BaseService {
      * @param createdGRLine
      * @return
      */
-    private InventoryV2 createInventoryV2(GrLineV2 createdGRLine) {
+    private InventoryV2 createInventoryNonCBMV2(GrLineV2 createdGRLine) throws CsvException, IOException {
 
         try {
             InventoryV2 dbInventory = inventoryV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPackBarcodesAndBinClassIdAndDeletionIndicatorOrderByInventoryIdDesc(
@@ -3153,32 +3945,37 @@ public class GrLineService extends BaseService {
 
             InventoryV2 createdinventory = null;
 
-            if(dbInventory != null) {
+            if (dbInventory != null) {
                 InventoryV2 inventory = new InventoryV2();
                 BeanUtils.copyProperties(dbInventory, inventory, CommonUtils.getNullPropertyNames(dbInventory));
                 inventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + createdGRLine.getGoodReceiptQty());
                 log.info("Inventory Qty = inv_qty + gr_qty: " + dbInventory.getInventoryQuantity() + ", " + createdGRLine.getGoodReceiptQty());
                 Double totalQty = 0D;
-                if(inventory.getReferenceField4() != null) {
+                if (inventory.getReferenceField4() != null) {
                     totalQty = inventory.getReferenceField4() + createdGRLine.getGoodReceiptQty();
                 }
-                if(inventory.getReferenceField4() == null) {
+                if (inventory.getReferenceField4() == null) {
                     totalQty = createdGRLine.getGoodReceiptQty();
                 }
                 inventory.setReferenceField4(totalQty);
                 log.info("Total Inventory Qty : " + totalQty);
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
                 inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
                 inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
+                inventory.setCreatedOn(dbInventory.getCreatedOn());
+                inventory.setUpdatedOn(new Date());
                 inventory.setInventoryId(System.currentTimeMillis());
                 createdinventory = inventoryV2Repository.save(inventory);
                 log.info("created inventory[Existing] : " + createdinventory);
             }
 
-            if(dbInventory == null) {
+            if (dbInventory == null) {
 
                 InventoryV2 inventory = new InventoryV2();
                 BeanUtils.copyProperties(createdGRLine, inventory, CommonUtils.getNullPropertyNames(createdGRLine));
-                inventory.setInventoryId(System.currentTimeMillis());
+
                 inventory.setCompanyCodeId(createdGRLine.getCompanyCode());
 
                 // VAR_ID, VAR_SUB_ID, STR_MTD, STR_NO ---> Hard coded as '1'
@@ -3191,6 +3988,10 @@ public class GrLineService extends BaseService {
                 inventory.setDeletionIndicator(0L);
                 inventory.setManufacturerCode(createdGRLine.getManufacturerName());
                 inventory.setManufacturerName(createdGRLine.getManufacturerName());
+
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
 
                 // ST_BIN ---Pass WH_ID/BIN_CL_ID=3 in STORAGEBIN table and fetch ST_BIN value and update
                 AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
@@ -3212,7 +4013,6 @@ public class GrLineService extends BaseService {
                 ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
                 log.info("ImbasicData1 : " + itemCodeCapacityCheck);
 
-//            List<IImbasicData1> imbasicdata1 = imbasicdata1Repository.findByItemCode(inventory.getItemCode());
                 if (itemCodeCapacityCheck != null) {
                     inventory.setReferenceField8(itemCodeCapacityCheck.getDescription());
                     inventory.setReferenceField9(itemCodeCapacityCheck.getManufacturerPartNo());
@@ -3258,7 +4058,109 @@ public class GrLineService extends BaseService {
                 // INV_UOM
                 inventory.setInventoryUom(createdGRLine.getOrderUom());
                 inventory.setCreatedBy(createdGRLine.getCreatedBy());
-                inventory.setCreatedOn(createdGRLine.getCreatedOn());
+
+                //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
+                inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
+                inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
+
+                inventory.setCreatedOn(new Date());
+                inventory.setUpdatedOn(new Date());
+                inventory.setInventoryId(System.currentTimeMillis());
+                createdinventory = inventoryV2Repository.save(inventory);
+                log.info("created inventory : " + createdinventory);
+            }
+
+            return createdinventory;
+        } catch (Exception e) {
+            // Exception Log
+            createGrLineLog7(createdGRLine, e.toString());
+
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private InventoryV2 createInventoryV2(GrLineV2 createdGRLine) throws CsvException, IOException {
+
+        try {
+            InventoryV2 dbInventory = inventoryV2Repository.findTopByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndItemCodeAndManufacturerNameAndPackBarcodesAndBinClassIdAndDeletionIndicatorOrderByInventoryIdDesc(
+                    createdGRLine.getCompanyCode(),
+                    createdGRLine.getPlantId(),
+                    createdGRLine.getLanguageId(),
+                    createdGRLine.getWarehouseId(),
+                    createdGRLine.getItemCode(),
+                    createdGRLine.getManufacturerName(),
+                    "99999", 3L, 0L);
+
+            InventoryV2 createdinventory = null;
+
+            if (dbInventory != null) {
+                InventoryV2 inventory = new InventoryV2();
+                BeanUtils.copyProperties(dbInventory, inventory, CommonUtils.getNullPropertyNames(dbInventory));
+                inventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + createdGRLine.getGoodReceiptQty());
+                log.info("Inventory Qty = inv_qty + gr_qty: " + dbInventory.getInventoryQuantity() + ", " + createdGRLine.getGoodReceiptQty());
+                Double totalQty = 0D;
+                if (inventory.getReferenceField4() != null) {
+                    totalQty = inventory.getReferenceField4() + createdGRLine.getGoodReceiptQty();
+                }
+                if (inventory.getReferenceField4() == null) {
+                    totalQty = createdGRLine.getGoodReceiptQty();
+                }
+                inventory.setReferenceField4(totalQty);
+                log.info("Total Inventory Qty : " + totalQty);
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
+                inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
+                inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
+                inventory.setCreatedOn(dbInventory.getCreatedOn());
+                inventory.setUpdatedOn(new Date());
+                inventory.setInventoryId(System.currentTimeMillis());
+                createdinventory = inventoryV2Repository.save(inventory);
+                log.info("created inventory[Existing] : " + createdinventory);
+            }
+
+            if (dbInventory == null) {
+
+                InventoryV2 inventory = new InventoryV2();
+                BeanUtils.copyProperties(createdGRLine, inventory, CommonUtils.getNullPropertyNames(createdGRLine));
+
+                inventory.setCompanyCodeId(createdGRLine.getCompanyCode());
+
+                // VAR_ID, VAR_SUB_ID, STR_MTD, STR_NO ---> Hard coded as '1'
+                inventory.setVariantCode(1L);
+                inventory.setVariantSubCode("1");
+                inventory.setStorageMethod("1");
+                inventory.setBatchSerialNumber("1");
+                inventory.setBatchSerialNumber(createdGRLine.getBatchSerialNumber());
+                inventory.setBinClassId(3L);
+                inventory.setDeletionIndicator(0L);
+                inventory.setManufacturerCode(createdGRLine.getManufacturerName());
+                inventory.setManufacturerName(createdGRLine.getManufacturerName());
+
+                if(createdGRLine.getBarcodeId() != null) {
+                    inventory.setBarcodeId(createdGRLine.getBarcodeId());
+                }
+
+                // ST_BIN ---Pass WH_ID/BIN_CL_ID=3 in STORAGEBIN table and fetch ST_BIN value and update
+                AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
+                StorageBin storageBin = mastersService.getStorageBin(
+                        createdGRLine.getCompanyCode(),
+                        createdGRLine.getPlantId(),
+                        createdGRLine.getLanguageId(),
+                        createdGRLine.getWarehouseId(), 3L, authTokenForMastersService.getAccess_token());
+                log.info("storageBin: " + storageBin);
+                inventory.setStorageBin(storageBin.getStorageBin());
+
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(createdGRLine.getCompanyCode());
+                imBasicData.setPlantId(createdGRLine.getPlantId());
+                imBasicData.setLanguageId(createdGRLine.getLanguageId());
+                imBasicData.setWarehouseId(createdGRLine.getWarehouseId());
+                imBasicData.setItemCode(createdGRLine.getItemCode());
+                imBasicData.setManufacturerName(createdGRLine.getManufacturerName());
+                ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImbasicData1 : " + itemCodeCapacityCheck);
 
                 //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
                 boolean capacityCheck = false;
@@ -3266,11 +4168,57 @@ public class GrLineService extends BaseService {
                 Double cbm = 0D;
                 Double cbmPerQty = 0D;
                 Double invCbm = 0D;
+//            List<IImbasicData1> imbasicdata1 = imbasicdata1Repository.findByItemCode(inventory.getItemCode());
+                if (itemCodeCapacityCheck != null) {
+                    inventory.setReferenceField8(itemCodeCapacityCheck.getDescription());
+                    inventory.setReferenceField9(itemCodeCapacityCheck.getManufacturerPartNo());
+                    inventory.setDescription(itemCodeCapacityCheck.getDescription());
 
-                if (itemCodeCapacityCheck.getCapacityCheck() != null) {
-                    capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+                    if (itemCodeCapacityCheck.getCapacityCheck() != null) {
+                        capacityCheck = itemCodeCapacityCheck.getCapacityCheck();               //Capacity Check for putaway item
+                    }
+                    log.info("CapacityCheck -----------> : " + capacityCheck);
                 }
-                log.info("CapacityCheck -----------> : " + capacityCheck);
+                if (storageBin != null) {
+                    inventory.setReferenceField10(storageBin.getStorageSectionId());
+                    inventory.setReferenceField5(storageBin.getAisleNumber());
+                    inventory.setReferenceField6(storageBin.getShelfId());
+                    inventory.setReferenceField7(storageBin.getRowId());
+                    inventory.setLevelId(String.valueOf(storageBin.getFloorId()));
+                }
+
+                // STCK_TYP_ID
+                inventory.setStockTypeId(1L);
+                String stockTypeDesc = getStockTypeDesc(createdGRLine.getCompanyCode(), createdGRLine.getPlantId(), createdGRLine.getLanguageId(), createdGRLine.getWarehouseId(), 1L);
+                inventory.setStockTypeDescription(stockTypeDesc);
+
+                // SP_ST_IND_ID
+                inventory.setSpecialStockIndicatorId(1L);
+
+                // INV_QTY
+                if (dbInventory != null) {
+                    inventory.setInventoryQuantity(dbInventory.getInventoryQuantity() + createdGRLine.getGoodReceiptQty());
+                    log.info("Inventory Qty = inv_qty + gr_qty: " + dbInventory.getInventoryQuantity() + ", " + createdGRLine.getGoodReceiptQty());
+                    inventory.setReferenceField4(inventory.getInventoryQuantity());
+                    log.info("Inventory Total Qty: " + inventory.getInventoryQuantity());   //Allocated Qty is always 0 for BinClassId 3
+                }
+                if (dbInventory == null) {
+                    inventory.setInventoryQuantity(createdGRLine.getGoodReceiptQty());
+                    log.info("Inventory Qty = gr_qty: " + createdGRLine.getGoodReceiptQty());
+                    inventory.setReferenceField4(inventory.getInventoryQuantity());
+                    log.info("Inventory Total Qty: " + inventory.getInventoryQuantity());   //Allocated Qty is always 0 for BinClassId 3
+                }
+                //packbarcode
+                /*
+                 * Hardcoding Packbarcode as 99999
+                 */
+//            inventory.setPackBarcodes(createdGRLine.getPackBarcodes());
+                inventory.setPackBarcodes("99999");
+                inventory.setReferenceField1(createdGRLine.getPackBarcodes());
+
+                // INV_UOM
+                inventory.setInventoryUom(createdGRLine.getOrderUom());
+                inventory.setCreatedBy(createdGRLine.getCreatedBy());
 
                 if (capacityCheck) {
                     if (createdGRLine.getCbmQuantity() != null) {
@@ -3299,12 +4247,18 @@ public class GrLineService extends BaseService {
                 inventory.setReferenceDocumentNo(createdGRLine.getRefDocNumber());
                 inventory.setReferenceOrderNo(createdGRLine.getRefDocNumber());
 
+                inventory.setCreatedOn(new Date());
+                inventory.setUpdatedOn(new Date());
+                inventory.setInventoryId(System.currentTimeMillis());
                 createdinventory = inventoryV2Repository.save(inventory);
                 log.info("created inventory : " + createdinventory);
             }
 
             return createdinventory;
         } catch (Exception e) {
+            // Exception Log
+            createGrLineLog7(createdGRLine, e.toString());
+
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -3334,13 +4288,12 @@ public class GrLineService extends BaseService {
                                    String goodsReceiptNo, String palletCode, String caseCode,
                                    String packBarcodes, Long lineNo, String itemCode,
                                    String loginUserID, GrLineV2 updateGrLine)
-            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException, CsvException, IOException {
         GrLineV2 dbGrLine = getGrLineV2(companyCodeId, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
                 goodsReceiptNo, palletCode, caseCode,
                 packBarcodes, lineNo, itemCode);
         BeanUtils.copyProperties(updateGrLine, dbGrLine, CommonUtils.getNullPropertyNames(updateGrLine));
         dbGrLine.setUpdatedBy(loginUserID);
-//        dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbGrLine.setUpdatedOn(new Date());
         GrLineV2 updatedGrLine = grLineV2Repository.save(dbGrLine);
         return updatedGrLine;
@@ -3376,16 +4329,19 @@ public class GrLineService extends BaseService {
                                String warehouseId, String preInboundNo, String refDocNumber,
                                String goodsReceiptNo, String palletCode, String caseCode,
                                String packBarcodes, Long lineNo, String itemCode, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
-        GrLineV2 grLine = getGrLineV2(companyCodeId, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+            throws IllegalAccessException, InvocationTargetException, java.text.ParseException, CsvException, IOException {
+        GrLineV2 grLine = getGrLineV2(companyCodeId, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
                 goodsReceiptNo, palletCode, caseCode, packBarcodes, lineNo, itemCode);
         if (grLine != null) {
             grLine.setDeletionIndicator(1L);
             grLine.setUpdatedBy(loginUserID);
-//            grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grLine.setUpdatedOn(new Date());
             grLineV2Repository.save(grLine);
         } else {
+            // Exception Log
+            createGrLineLog(languageId, companyCodeId, plantId, warehouseId, refDocNumber, preInboundNo, goodsReceiptNo, palletCode,
+                    caseCode, packBarcodes, lineNo, itemCode, "Error in deleting GrLine with goodsReceiptNo - " + goodsReceiptNo);
+
             throw new EntityNotFoundException("Error in deleting Id: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -3400,7 +4356,6 @@ public class GrLineService extends BaseService {
     }
 
     /**
-     *
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -3422,12 +4377,287 @@ public class GrLineService extends BaseService {
             for (GrLineV2 grLine : dbGrLineList) {
                 grLine.setDeletionIndicator(1L);
                 grLine.setUpdatedBy(loginUserID);
-                grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                grLine.setUpdatedOn(new Date());
                 GrLineV2 grLineV2 = grLineV2Repository.save(grLine);
                 grLineV2s.add(grLineV2);
             }
         }
         return grLineV2s;
+    }
+
+    //==============================================GrLine_ErrorLog====================================================
+    private void createGrLineLog(String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+                                 String preInboundNo, String goodsReceiptNo, String palletCode, String caseCode,
+                                 String packBarcodes, Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(goodsReceiptNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(palletCode);
+        errorLog.setReferenceField3(caseCode);
+        errorLog.setReferenceField4(packBarcodes);
+        errorLog.setReferenceField6(String.valueOf(lineNo));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog1(String languageId, String companyCode, String plantId, String refDocNumber,
+                                  String preInboundNo, String packBarcodes, Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(String.valueOf(lineNo));
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog2(String languageId, String companyCode, String plantId, String warehouseId,
+                                  String refDocNumber, String preInboundNo, String packBarcodes, String caseCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField4(caseCode);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog3(String languageId, String companyCode, String plantId,
+                                  String refDocNumber, String packBarcodes, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog4(String languageId, String companyCode, String plantId, String warehouseId,
+                                  String refDocNumber, String preInboundNo, String packBarcodes, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField5(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog5(String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
+                                  String packBarcodes, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog6(String languageId, String companyCode, String plantId, String refDocNumber, String preInboundNo,
+                                  Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(String.valueOf(lineNo));
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog7(GrLineV2 grLineV2, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(grLineV2.getGoodsReceiptNo());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(grLineV2.getLanguageId());
+        errorLog.setCompanyCodeId(grLineV2.getCompanyCode());
+        errorLog.setPlantId(grLineV2.getPlantId());
+        errorLog.setWarehouseId(grLineV2.getWarehouseId());
+        errorLog.setRefDocNumber(grLineV2.getRefDocNumber());
+        errorLog.setItemCode(grLineV2.getItemCode());
+        errorLog.setManufacturerName(grLineV2.getManufacturerName());
+        errorLog.setReferenceField1(grLineV2.getPreInboundNo());
+        errorLog.setReferenceField2(String.valueOf(grLineV2.getLineNo()));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog8(ImBasicData1 imBasicData1, String refDocNo, String itemCode,
+                                  String mfrName, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(imBasicData1.getUomId());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(imBasicData1.getLanguageId());
+        errorLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        errorLog.setPlantId(imBasicData1.getPlantId());
+        errorLog.setWarehouseId(imBasicData1.getWarehouseId());
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setItemCode(itemCode);
+        errorLog.setManufacturerName(mfrName);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog9(StorageBinV2 storageBinV2, String refDocNo, String itemCode,
+                                  String mfrName, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(storageBinV2.getStorageBin());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(storageBinV2.getLanguageId());
+        errorLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
+        errorLog.setPlantId(storageBinV2.getPlantId());
+        errorLog.setWarehouseId(storageBinV2.getWarehouseId());
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setItemCode(itemCode);
+        errorLog.setManufacturerName(mfrName);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog10(List<AddGrLineV2> grLineV2List, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        for (AddGrLineV2 addGrLineV2 : grLineV2List) {
+            ErrorLog errorLog = new ErrorLog();
+
+            errorLog.setOrderTypeId(addGrLineV2.getGoodsReceiptNo());
+            errorLog.setOrderDate(new Date());
+            errorLog.setLanguageId(addGrLineV2.getLanguageId());
+            errorLog.setCompanyCodeId(addGrLineV2.getCompanyCode());
+            errorLog.setPlantId(addGrLineV2.getPlantId());
+            errorLog.setWarehouseId(addGrLineV2.getWarehouseId());
+            errorLog.setRefDocNumber(addGrLineV2.getRefDocNumber());
+            errorLog.setItemCode(addGrLineV2.getItemCode());
+            errorLog.setManufacturerName(addGrLineV2.getManufacturerName());
+            errorLog.setReferenceField1(addGrLineV2.getPreInboundNo());
+            errorLog.setReferenceField2(String.valueOf(addGrLineV2.getLineNo()));
+            errorLog.setErrorMessage(error);
+            errorLog.setCreatedBy("MSD_API");
+            errorLog.setCreatedOn(new Date());
+            errorLogRepository.save(errorLog);
+            errorLogList.add(errorLog);
+        }
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createGrLineLog11(AddGrLineV2 addGrLineV2, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(addGrLineV2.getGoodsReceiptNo());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(addGrLineV2.getLanguageId());
+        errorLog.setCompanyCodeId(addGrLineV2.getCompanyCode());
+        errorLog.setPlantId(addGrLineV2.getPlantId());
+        errorLog.setWarehouseId(addGrLineV2.getWarehouseId());
+        errorLog.setRefDocNumber(addGrLineV2.getRefDocNumber());
+        errorLog.setItemCode(addGrLineV2.getItemCode());
+        errorLog.setManufacturerName(addGrLineV2.getManufacturerName());
+        errorLog.setReferenceField1(addGrLineV2.getPreInboundNo());
+        errorLog.setReferenceField2(addGrLineV2.getPalletCode());
+        errorLog.setReferenceField3(addGrLineV2.getCaseCode());
+        errorLog.setReferenceField4(String.valueOf(addGrLineV2.getLineNo()));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
     }
 
 }

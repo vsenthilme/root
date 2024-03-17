@@ -3,6 +3,7 @@ package com.mnrclara.wrapper.core.service;
 import com.mnrclara.wrapper.core.config.PropertiesConfig;
 import com.mnrclara.wrapper.core.model.auth.AuthToken;
 import com.mnrclara.wrapper.core.model.cgsetup.*;
+import com.mnrclara.wrapper.core.model.cgtransaction.StoreDropDown;
 import com.mnrclara.wrapper.core.model.crm.EMail;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.HttpClient;
@@ -823,6 +824,24 @@ public class CGSetupService {
         }
     }
 
+    public StoreDropDown[] getStoreDropDown(String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getCgSetupServiceApiUrl() + "store/storeDropDown");
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<StoreDropDown[]> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, StoreDropDown[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 
     /* ------------------------ControlGroupType-----------------------------------------------------------------------------------------*/
 
@@ -1385,7 +1404,7 @@ public class CGSetupService {
     /* ------------------------ClientControlGroup-----------------------------------------------------------------------------------------*/
 
     // GET
-    public ClientControlGroup getClientControlGroup(Long subGroupTypeId, Long groupTypeId, Long clientId, String companyId,
+    public ClientControlGroup getClientControlGroup(Long groupTypeId, Long clientId, String companyId,
                                                     String languageId, Long versionNumber, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -1397,7 +1416,6 @@ public class CGSetupService {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getCgSetupServiceApiUrl() + "clientcontrolgroup/" + clientId)
                     .queryParam("companyId", companyId)
                     .queryParam("groupTypeId", groupTypeId)
-                    .queryParam("subGroupTypeId", subGroupTypeId)
                     .queryParam("versionNumber", versionNumber)
                     .queryParam("languageId", languageId);
             ResponseEntity<ClientControlGroup> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, ClientControlGroup.class);
@@ -1451,7 +1469,7 @@ public class CGSetupService {
     }
 
     // UPDATE
-    public ClientControlGroup updateClientControlGroup(Long subGroupTypeId, Long groupTypeId, Long clientId, String languageId,
+    public ClientControlGroup updateClientControlGroup(Long groupTypeId, Long clientId, String languageId,
                                                        String loginUserID, String companyId, ClientControlGroup modifiedClientControlGroup,
                                                        Long versionNumber, String authToken) {
         try {
@@ -1470,7 +1488,6 @@ public class CGSetupService {
                     .queryParam("languageId", languageId)
                     .queryParam("companyId", companyId)
                     .queryParam("groupTypeId", groupTypeId)
-                    .queryParam("subGroupTypeId", subGroupTypeId)
                     .queryParam("versionNumber", versionNumber)
                     .queryParam("loginUserID", loginUserID);
             ResponseEntity<ClientControlGroup> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, ClientControlGroup.class);
@@ -1483,7 +1500,7 @@ public class CGSetupService {
     }
 
     // DELETE
-    public boolean deleteClientControlGroup(Long subGroupTypeId, Long groupTypeId, Long clientId, String loginUserID,
+    public boolean deleteClientControlGroup(Long groupTypeId, Long clientId, String loginUserID,
                                             String companyId, String languageId, Long versionNumber, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -1495,7 +1512,6 @@ public class CGSetupService {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getCgSetupServiceApiUrl() + "clientcontrolgroup/" + clientId)
                     .queryParam("companyId", companyId)
                     .queryParam("loginUserID", loginUserID)
-                    .queryParam("subGroupTypeId", subGroupTypeId)
                     .queryParam("groupTypeId", groupTypeId)
                     .queryParam("versionNumber", versionNumber)
                     .queryParam("languageId", languageId);

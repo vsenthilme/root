@@ -37,4 +37,5 @@ public class ExactMatchResultV2 {
     private String coOwnerName10;
     private String storeId;
     private String storeName;
+    private String groupId;
 }

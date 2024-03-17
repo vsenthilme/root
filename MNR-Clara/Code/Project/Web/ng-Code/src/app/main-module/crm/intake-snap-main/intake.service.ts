@@ -53,9 +53,9 @@ export class IntakeService {
   Getall() {
     return this.http.get<any>(this.url);
   }
-  // Get(code: string) {
-  //   return this.http.get<any>(this.url + `/` + code);
-  // }
+  GetIntake(code: string) {
+    return this.http.get<any>(this.url + `/` + code);
+  }
   // Create(obj: any) {
   //   return this.http.post<any>(this.url, obj);
   // }

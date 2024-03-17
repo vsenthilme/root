@@ -54,7 +54,7 @@
               <mat-error *ngIf="errorHandling('groupTypeId')">{{getErrorMessage()}}</mat-error>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6 mt-2">
+        <!--  <div class="col-lg-6 col-md-6 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 required">Sub Group Type ID</p>
               <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectgroupID"
@@ -63,7 +63,7 @@
                 [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
               <mat-error *ngIf="errorHandling('subGroupTypeId')">{{getErrorMessage()}}</mat-error>
             </div>
-          </div>
+          </div>-->
           <div class="col-lg-6 col-md-6 mt-2">
             <div class="d-flex flex-column">
               <p class="mb-0 py-0 required">Relationship</p>
@@ -84,6 +84,13 @@
                 </mat-select>
               </mat-form-field>
             </div>
+          </div>
+          <div class="col-sm-12 mt-2 mb-2">
+            <p class="mb-0 py-0   ">Notes:</p>
+            <mat-form-field class="form-group input_field mb-0 w-100" appearance="outline">
+              <textarea matInput rows="5" placeholder="Enter" formControlName="referenceField1"></textarea>
+            </mat-form-field>
+            
           </div>
         </div>
       </mat-expansion-panel>

@@ -51,8 +51,10 @@ public interface PreInboundHeaderRepository extends JpaRepository<PreInboundHead
                                                                @Param("delete") Long delete);
 
     /**
-     * @param rssFeedEntryId
-     * @param isRead
+     *
+     * @param warehouseId
+     * @param refDocNumber
+     * @param statusId
      */
     @Modifying(clearAutomatically = true)
     @Query("UPDATE PreInboundHeaderEntity ib SET ib.statusId = :statusId WHERE ib.warehouseId = :warehouseId AND ib.refDocNumber = :refDocNumber")

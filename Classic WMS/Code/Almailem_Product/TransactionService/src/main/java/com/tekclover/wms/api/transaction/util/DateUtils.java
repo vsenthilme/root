@@ -363,6 +363,14 @@ public class DateUtils {
 		System.out.println(strDate);
 		return strDate;
 	}
+
+	public static String convertDatetoString(Date date) {
+		DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String strDate = simpleDateFormat.format(date);
+		System.out.println(strDate);
+		log.info("strDate --> " + strDate);
+		return strDate;
+	}
 	
 	public static String date2String_MMDDYYYY (Date date) {
 		DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");  

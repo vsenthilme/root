@@ -309,6 +309,39 @@ public interface StorePartnerListingRepository extends JpaRepository<StorePartne
                                                  @Param("coOwnerId10") Long coOwnerId10,
                                                  @Param("groupId") String groupId);
 
+    @Query(value = "select version_no as versionNumber, co_owner_id_1 as coOwnerId1, co_owner_id_2 as coOwnerId2, co_owner_id_3 as coOwnerId3, \n"
+            + " co_owner_id_4 as coOwnerId4, co_owner_id_5 as coOwnerId5, co_owner_id_6 as coOwnerId6, co_owner_id_7 as coOwnerId7, co_owner_id_8 as coOwnerId8, \n"
+            + " co_owner_id_9 as coOwnerId9, co_owner_id_10 as coOwnerId10, co_owner_name_1 as coOwnerName1, co_owner_name_2 as coOwnerName2, co_owner_name_3 as coOwnerName3, \n"
+            + " co_owner_name_4 as coOwnerName4, co_owner_name_5 as coOwnerName5, co_owner_name_6 as coOwnerName6, co_owner_name_7 as coOwnerName7, co_owner_name_8 as coOwnerName8,\n"
+            + " co_owner_name_9 as coOwnerName9, co_owner_name_10 as coOwnerName10, co_owner_per_1 as coOwnerPercentage1, co_owner_per_2 as coOwnerPercentage2, \n"
+            + " co_owner_per_3 as coOwnerPercentage3, co_owner_per_4 as coOwnerPercentage4, co_owner_per_5 as coOwnerPercentage5, co_owner_per_6 as coOwnerPercentage6, \n"
+            + " co_owner_per_7 as coOwnerPercentage7, co_owner_per_8 as coOwnerPercentage8, co_owner_per_9 as coOwnerPercentage9, \n"
+            + " co_owner_per_10 as coOwnerPercentage10, store_nm as storeName, group_id as groupId, grp_nm as groupName, grp_id as groupTypeId, sub_grp_id as subGroupTypeId, store_id as storeId, \n "
+            + " grp_typ_nm as groupTypeName, sub_grp_nm as subGroupTypeName from tblstorepartnerlisting \n "
+            + " where \n"
+            + " ((:coOwnerId1 is null or :coOwnerId1 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId2 is null or :coOwnerId2 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId3 is null or :coOwnerId3 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId4 is null or :coOwnerId4 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId5 is null or :coOwnerId5 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId6 is null or :coOwnerId6 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId7 is null or :coOwnerId7 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId8 is null or :coOwnerId8 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId9 is null or :coOwnerId9 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:coOwnerId10 is null or :coOwnerId10 in (co_owner_id_1, co_owner_id_2, co_owner_id_3, co_owner_id_4, co_owner_id_5, co_owner_id_6, co_owner_id_7, co_owner_id_8, co_owner_id_9, co_owner_id_10)) or \n "
+            + " (:groupId is null or :groupId in (group_id)) and \n "
+            + " (is_deleted = 0) and (status_id_2 = 0))", nativeQuery = true)
+    List<IkeyValuePair> getLikeMatchResult(@Param("coOwnerId1") Long coOwnerId1,
+                                           @Param("coOwnerId2") Long coOwnerId2,
+                                           @Param("coOwnerId3") Long coOwnerId3,
+                                           @Param("coOwnerId4") Long coOwnerId4,
+                                           @Param("coOwnerId5") Long coOwnerId5,
+                                           @Param("coOwnerId6") Long coOwnerId6,
+                                           @Param("coOwnerId7") Long coOwnerId7,
+                                           @Param("coOwnerId8") Long coOwnerId8,
+                                           @Param("coOwnerId9") Long coOwnerId9,
+                                           @Param("coOwnerId10") Long coOwnerId10,
+                                           @Param("groupId") String groupId);
 
 //    @Query(value = "select * from tblstorepartnerlisting \n" +
 //            "where \n" +
@@ -436,8 +469,51 @@ public interface StorePartnerListingRepository extends JpaRepository<StorePartne
                                              @Param("coOwnerId4") Long coOwnerId4,
                                              @Param("coOwnerId5") Long coOwnerId5);
 
-    @Query(value = "SELECT entity_id AS entityId FROM tblentity WHERE client_id = :coOwnerIds AND is_deleted = 0 ", nativeQuery = true)
-    List<IkeyValuePair> getEntityIds(@Param("coOwnerIds") List<Long> coOwnerIds);
+    @Query(value = "select tl.version_no versionNumber, tl.CO_OWNER_ID_1 AS coOwnerId1 ,tl.CO_OWNER_ID_2 AS coOwnerId2, \n" +
+            "tl.CO_OWNER_ID_3 AS coOwnerId3,tl.CO_OWNER_ID_4 AS coOwnerId4,tl.CO_OWNER_ID_5 AS coOwnerId5, \n" +
+            "tl.CO_OWNER_ID_6 AS coOwnerId6,tl.CO_OWNER_ID_7 AS coOwnerId7,tl.CO_OWNER_ID_8 AS coOwnerId8, \n" +
+            "tl.CO_OWNER_ID_9 AS coOwnerId9,tl.CO_OWNER_ID_10 AS coOwnerId10, \n" +
+            "tl.CO_OWNER_NAME_1 AS coOwnerName1,tl.CO_OWNER_NAME_2 AS coOwnerName2,tl.CO_OWNER_NAME_3 AS coOwnerName3, \n" +
+            "tl.CO_OWNER_NAME_4 AS coOwnerName4,tl.CO_OWNER_NAME_5 AS coOwnerName5,\n " +
+            "tl.CO_OWNER_NAME_6 AS coOwnerName6,tl.CO_OWNER_NAME_7 AS coOwnerName7,tl.CO_OWNER_NAME_8 AS coOwnerName8, \n" +
+            "tl.CO_OWNER_NAME_9 AS coOwnerName9,tl.CO_OWNER_NAME_10 AS coOwnerName10,\n " +
+            "tl.CO_OWNER_PER_1 AS coOwnerPercentage1,tl.CO_OWNER_PER_2 AS coOwnerPercentage2,tl.CO_OWNER_PER_3 AS coOwnerPercentage3,\n" +
+            "tl.CO_OWNER_PER_4 AS coOwnerPercentage4,tl.CO_OWNER_PER_5 AS coOwnerPercentage5,  \n" +
+            "tl.CO_OWNER_PER_6 AS coOwnerPercentage6,tl.CO_OWNER_PER_7 AS coOwnerPercentage7,tl.CO_OWNER_PER_8 AS coOwnerPercentage8,\n" +
+            "tl.CO_OWNER_PER_9 AS coOwnerPercentage9,tl.CO_OWNER_PER_10 AS coOwnerPercentage10, tl.STORE_NM AS storeName, \n" +
+            "tl.GROUP_ID AS groupId,tl.GRP_NM AS groupName,tl.GRP_ID AS groupTypeId,tl.SUB_GRP_ID AS subGroupTypeId,\n" +
+            "tl.STORE_ID AS storeId,tl.GRP_TYP_NM AS groupTypeName,tl.SUB_GRP_NM AS subGroupTypeName \n" +
+            "from tblstorepartnerlisting tl \n " +
+            "WHERE \n" +
+            "(tl.CO_OWNER_ID_1 IN (:coOwnerId1) OR \n" +
+            "tl.CO_OWNER_ID_2 IN (:coOwnerId2) OR \n" +
+            "tl.CO_OWNER_ID_3 IN (:coOwnerId3) OR \n" +
+            "tl.CO_OWNER_ID_4 IN (:coOwnerId4) OR \n" +
+            "tl.CO_OWNER_ID_5 IN (:coOwnerId5) OR \n" +
+            "tl.CO_OWNER_ID_6 IN (:coOwnerId6) OR \n" +
+            "tl.CO_OWNER_ID_7 IN (:coOwnerId7) OR \n" +
+            "tl.CO_OWNER_ID_8 IN (:coOwnerId8) OR \n" +
+            "tl.CO_OWNER_ID_9 IN (:coOwnerId9) OR \n" +
+            "tl.CO_OWNER_ID_10 IN (:coOwnerId10) OR \n" +
+            "tl.GROUP_ID IN (:groupId)) AND \n" +
+            "tl.IS_DELETED = 0 AND tl.STATUS_ID_2=0 ", nativeQuery = true)
+    public List<IkeyValuePair> getLikeMatchGroupEntity(@Param("coOwnerId1") Long coOwnerId1,
+                                                       @Param("coOwnerId2") Long coOwnerId2,
+                                                       @Param("coOwnerId3") Long coOwnerId3,
+                                                       @Param("coOwnerId4") Long coOwnerId4,
+                                                       @Param("coOwnerId5") Long coOwnerId5,
+                                                       @Param("coOwnerId6") Long coOwnerId6,
+                                                       @Param("coOwnerId7") Long coOwnerId7,
+                                                       @Param("coOwnerId8") Long coOwnerId8,
+                                                       @Param("coOwnerId9") Long coOwnerId9,
+                                                       @Param("coOwnerId10") Long coOwnerId10,
+                                                       @Param("groupId") String groupId);
+
+//    @Query(value = "SELECT entity_id AS entityId FROM tblentity WHERE client_id = :coOwnerIds AND is_deleted = 0 ", nativeQuery = true)
+//    List<IkeyValuePair> getEntityIds(@Param("coOwnerIds") Long coOwnerIds);
+
+    @Query(value = "SELECT REF_FIELD_1 as refField1 FROM tblentity WHERE client_id = :coOwnerIds AND is_deleted = 0 ", nativeQuery = true)
+    List<String> getEntityIds(@Param("coOwnerIds") Long coOwnerIds);
 
 
 

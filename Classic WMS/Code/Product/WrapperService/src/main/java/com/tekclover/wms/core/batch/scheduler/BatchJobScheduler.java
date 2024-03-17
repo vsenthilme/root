@@ -58,6 +58,31 @@ public class BatchJobScheduler {
 	@Autowired
 	private Job periodicJob;
 
+	@Autowired
+	private Job jobPreInboundHeader;
+
+	@Autowired
+	private Job jobPreInboundLine;
+
+	@Autowired
+	private Job jobPreInboundLinePatch;
+
+	@Autowired
+	private Job jobPreInboundHeaderPatch;
+
+	@Autowired
+	private Job jobPreOutboundHeader;
+
+	@Autowired
+	private Job jobPreOutboundLine;
+
+	@Autowired
+	private Job jobPreOutboundHeaderPatch;
+
+	@Autowired
+	private Job jobPreOutboundLinePatch;
+
+
 	/**
 	 * jobBomHeader
 	 * @throws Exception 
@@ -222,6 +247,126 @@ public class BatchJobScheduler {
 				.toJobParameters();
 		try {
 			jobLauncher.run(periodicJob, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreInboundHeader() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreInboundHeader, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreInboundLine() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreInboundLine, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreInboundHeaderPatch() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreInboundHeaderPatch, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreInboundLinePatch() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreInboundLinePatch, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreOutboundHeader() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreOutboundHeader, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreOutboundLine() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreOutboundLine, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreOutboundHeaderPatch() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreOutboundHeaderPatch, params);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	/**
+	 *
+	 * @throws Exception
+	 */
+	public void runJobPreOutboundLinePatch() throws Exception {
+		JobParameters params = new JobParametersBuilder().addLong("jobId", System.currentTimeMillis())
+				.toJobParameters();
+		try {
+			jobLauncher.run(jobPreOutboundLinePatch, params);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

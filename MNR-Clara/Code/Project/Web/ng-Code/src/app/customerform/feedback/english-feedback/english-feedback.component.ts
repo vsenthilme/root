@@ -97,7 +97,7 @@ export class EnglishFeedbackComponent implements OnInit {
 
     console.log(this.js);
     this.sub.add(
-      this.http.get < any > (`/mnr-setup-service/login?userId=` + 'RS' + `&password=` + 'MR@2022').subscribe(
+      this.http.get < any > (`/mnr-setup-service/login?userId=` + 'RS' + `&password=` + 'TCMR@2024').subscribe(
         (res) => {
           this.spin.hide();
           //   let menu = [1000, 1001, 1004, 2101, 2102, 2202, 2203];

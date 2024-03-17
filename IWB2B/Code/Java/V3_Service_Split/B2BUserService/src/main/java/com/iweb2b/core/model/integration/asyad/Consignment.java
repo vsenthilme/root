@@ -98,6 +98,7 @@ public class Consignment {
     private String scanType;
     private String hubCode;
     private String action_time;
+    private String action_name;
     private String qpWebhookStatus;
     private String orderType;
     private String jntPushStatus;
@@ -117,4 +118,7 @@ public class Consignment {
     
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "softDataUploadId",fetch = FetchType.EAGER)
     private Set<Pieces_Details> pieces_detail;
+
+
+    private String hsn_code;
 }

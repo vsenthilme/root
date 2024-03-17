@@ -68,6 +68,11 @@ Run -> M&R Cloud RDP.exe (first)
 Username: MONTYLAW\murugavel
 Password: pULouZZ1984!
 
+Sharepoint Credentials
+----------------------------
+email id:ClaraITadmin@montyramirezlaw.com
+pwd: Mrc1@r@2022
+
 QBServer
 ------------
 Username: montylaw\qbweb
@@ -89,8 +94,8 @@ pwd: Mrc1@r@2022
 jiyengar@montyramirezlaw.com (prod other user)
 Claradocket@2022
 
-Docusign
-----------
+Docusign (prod)
+-------------------
 email id: ClaraITadmin@montyramirezlaw.com
 pwd: Mrc1@r@2022
 
@@ -107,14 +112,22 @@ https://account.docusign.com/oauth/auth?
    &scope=signature
    &client_id=f283dc93-4159-4f4e-9f1a-4ec6249112b4
    &redirect_uri=https://mrclara.com/mnrclara/callback
+   
+   https://account.docusign.com/oauth/auth?response_type=code&scope=signature&client_id=f283dc93-4159-4f4e-9f1a-4ec6249112b4&redirect_uri=https://mrclara.com/mnrclara/callback
 
-https://mrclara.com/mnrclara/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiOGFlYzFjZjQtYmE4NS00MDM5LWE1MmItYzVhODAxMjA3N2EyIn0.AQoAAAABAAYABwCATV6Do1baSAgAgNnkyqNW2kgCAKcqCgOxWeJGhnWeqO8Apo0VAAcAAAAYAAEAAAAFAAAADQAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0IgAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0NwDbrcjtPxvQQ71ac18UToe1MACANqlWoVbaSA.K-FWLW9a1MsRvlOMERK641H33P9-6qS6oZ6_JzhOb_ds8RGX5QCVjIgitKpTGnr2ceLDG7hvzKIBIq2wGY89gKiKkLtmVDrepYSjg2zx0H8xrtpJ8YZi349Kkk2frBLBU_D7etDBetDAhV4HQzCd28kgnfd94_s3i32RKGppeBN1YHKIQvyRBZkg6gxWnfbU0AGJwT4HGyi2Cb6EPNcq-dmwNnHeL9jRW_xDYM_sixnDolONbEWl1p5-NkNKy15H5HSueI9X8XjJXpVXGb3JvJ6nXCYHA5RWDw5ZHrZtmMFDqzVN76ypTXoN0hAsdNMMnDQmdUO_Ag2zqR6rui1pJg
+https://mrclara.com/mnrclara/callback?code=eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiOGFlYzFjZjQtYmE4NS00MDM5LWE1MmItYzVhODAxMjA3N2EyIn0.AQsAAAABAAYABwAAoMYoaDfcSAgAACxNcGg33EgCAKcqCgOxWeJGhnWeqO8Apo0VAAcAAAAYAAEAAAAFAAAADQAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0IgAkAAAAZjI4M2RjOTMtNDE1OS00ZjRlLTlmMWEtNGVjNjI0OTExMmI0MAAAoMYoaDfcSBIAAQAAAAsAAABpbnRlcmFjdGl2ZTcA263I7T8b0EO9WnNfFE6HtQ.oT5vQWz2J7YPtEEpBN8ZztqhEhrlfVx5GfQYrbYIhcpt_SP6qR0oBvf4LW_Z7uOO9-JCPqIZqtn4KhcUYMtcEoOogpkhXpUp4ApFfnhUw92TTOaePOTAlVMI1TGC4luMZnbz2ljMHlfB1zHKR4SRNEgiowfiZVswF5X-5NgJUjFcp9-1iUsXX4KfxN69vY5_i90CnWveSATKx6HOLOjSN5PTAv59oi2YHUKQWqSo3150hVvacrSorcWHBsq2qyh1jNJ9BeDF1gTBcVwM-DlYEv3OX66dVtziG6ZoZ7zhU-ge_J7wU1wm8mXLIXoaq1ITX5a-mgmYk-1qIuWcxHiaHw
 
 Use /mnr-crm-service/agreement/docusign/token -> service for paste this generated code and generate OAUTH Token for new Docusign.x
 
 Step3: Once Code is generated use the below api for generate Access Token and insert into Table
 
 /mnr-crm-service/agreement/docusign/token - DocuSign
+
+
+
+select * from tbldocusigntoken;
+
+########################################################################################################################################################
 
 QuickBooks
 ----------------
@@ -129,7 +142,7 @@ GIT:
 -----------------------
 username: mnrclara
 password: c1@r@2022
-token: << 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 >>
+token: <<<<<<<<<< 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 >>>>>>
 
 https://github.com/mnrclara/root.git
 https://github.com/mnrclara/main.git
@@ -1152,8 +1165,8 @@ sudha.govi@gmail.com
   "clientId": "pixeltrice",
   "clientSecretKey": "pixeltrice-secret-key",
   "grantType": "password",
-  "oauthPassword": "test",
-  "oauthUserName": "test",
+  "oauthPassword": "IWMVP",
+  "oauthUserName": "IWMVP",
   "apiName": "b2b-portal-service"
 }
 
@@ -1208,8 +1221,7 @@ sudo mount -t cifs //10.0.85.13/Data /home/admini/mrclara/desktop/ydrive -o user
 
 - mongo find - brings all records.
 
-
-   Order mgt line, pick up header and line, quality header and line, Outbound Header and Line
+/etc/logrotate.conf
 
 /home/ubuntu/classicwms/root/Code/Project/TransactionService/nohup.out {
     maxsize 200M
@@ -1239,6 +1251,28 @@ sudo mount -t cifs //10.0.85.13/Data /home/admini/mrclara/desktop/ydrive -o user
     maxage 100
 }
 
+/home/ubuntu/project/root/Code/Almailem/TransactionService
+
+/home/ubuntu/project/root/Code/Almailem/TransactionService/nohup.out {
+    maxsize 200M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+/home/ubuntu/project/root/Code/Almailem/MasterSetupService/nohup.out {
+    maxsize 200M
+    copytruncate
+    rotate 100
+    maxage 100
+}
+
+/home/ubuntu/project/root/Code/Almailem/TransactionService/nohup.out {
+    maxsize 100M
+    copytruncate
+    rotate 100
+    maxage 100
+}
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1255,9 +1289,3 @@ Database
 	- Mongo DB
 	- MSSQLServer developer version
 	
-
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-1. Elastic search api (imbasicdata1 - itemcode, itemdec)
-2. timeticket api - with time
-

@@ -126,9 +126,9 @@ export class QuotationsComponent implements OnInit {
     res.forEach((x) => {
       x.statusId = this.multistatusList.find(z => z.id == x.statusId)?.itemName;
     })
-    this.ELEMENT_DATA = res;
-    console.log(this.ELEMENT_DATA);
-    this.dataSource = new MatTableDataSource<any>(res);
+    let result = res.filter(x => x.referenceField10 == "Sent");
+    this.ELEMENT_DATA = result;
+    this.dataSource = new MatTableDataSource<any>(result);
     this.selection = new SelectionModel<any>(true, []);
     this.dataSource.sort = this.sort;
    this.dataSource.paginator = this.paginator;

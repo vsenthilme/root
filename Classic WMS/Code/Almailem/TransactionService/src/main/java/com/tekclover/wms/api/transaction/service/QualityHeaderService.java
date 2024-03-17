@@ -16,7 +16,6 @@ import com.tekclover.wms.api.transaction.model.outbound.quality.v2.QualityHeader
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.SearchQualityHeaderV2;
 import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.QualityHeaderV2Specification;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
@@ -64,7 +63,6 @@ public class QualityHeaderService {
      * getQualityHeader
      *
      * @param actualHeNo
-     * @param qualityInspectionNo2
      * @param refDocNumber
      * @param preOutboundNo
      * @return
@@ -146,8 +144,6 @@ public class QualityHeaderService {
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber
-     * @param pickupNumber
-     * @param partnerCode
      * @return
      */
     public List<QualityHeader> getQualityHeaderForReversal(String warehouseId, String preOutboundNo, String refDocNumber,
@@ -230,7 +226,6 @@ public class QualityHeaderService {
     /**
      * updateQualityHeader
      *
-     * @param loginUserId
      * @param qualityInspectionNo
      * @param updateQualityHeader
      * @return
@@ -371,6 +366,27 @@ public class QualityHeaderService {
             return qualityHeader;
         }
         log.info("The given QualityHeader ID : " + qualityInspectionNo + " doesn't exist.");
+        return null;
+    }
+
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    public List<QualityHeaderV2> getQualityHeaderForPickListCancellationV2(String companyCodeId, String plantId, String languageId, String warehouseId, String refDocNumber) {
+        List<QualityHeaderV2> qualityHeader =
+                qualityHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
+        if (qualityHeader != null && !qualityHeader.isEmpty()) {
+            log.info("Quality Header: " + qualityHeader);
+            return qualityHeader;
+        }
+        log.info("The given picklist ID : " + refDocNumber + " doesn't exist.");
         return null;
     }
 
@@ -547,8 +563,8 @@ public class QualityHeaderService {
         dbQualityHeader.setDeletionIndicator(0L);
         dbQualityHeader.setQualityCreatedBy(loginUserID);
         dbQualityHeader.setQualityUpdatedBy(loginUserID);
-        dbQualityHeader.setQualityCreatedOn(DateUtils.getCurrentKWTDateTime());
-        dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+        dbQualityHeader.setQualityCreatedOn(new Date());
+        dbQualityHeader.setQualityUpdatedOn(new Date());
         return qualityHeaderV2Repository.save(dbQualityHeader);
     }
 
@@ -574,7 +590,7 @@ public class QualityHeaderService {
         if (dbQualityHeader != null) {
             BeanUtils.copyProperties(updateQualityHeader, dbQualityHeader, CommonUtils.getNullPropertyNames(updateQualityHeader));
             dbQualityHeader.setQualityUpdatedBy(loginUserID);
-            dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(dbQualityHeader);
         }
         return null;
@@ -601,7 +617,7 @@ public class QualityHeaderService {
         if (dbQualityHeader != null) {
             BeanUtils.copyProperties(updateQualityHeader, dbQualityHeader, CommonUtils.getNullPropertyNames(updateQualityHeader));
             dbQualityHeader.setQualityUpdatedBy(loginUserID);
-            dbQualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(dbQualityHeader);
         }
         return null;
@@ -620,7 +636,7 @@ public class QualityHeaderService {
         if (qualityHeader != null) {
             qualityHeader.setDeletionIndicator(1L);
             qualityHeader.setQualityUpdatedBy(loginUserID);
-            qualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            qualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(qualityHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + qualityInspectionNo);
@@ -648,12 +664,7 @@ public class QualityHeaderService {
             qualityHeader.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
                 toUpdate.add(data);
             });
             return qualityHeaderV2Repository.saveAll(toUpdate);
@@ -681,27 +692,41 @@ public class QualityHeaderService {
         if (qualityHeader != null) {
             qualityHeader.setDeletionIndicator(1L);
             qualityHeader.setQualityUpdatedBy(loginUserID);
-            qualityHeader.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            qualityHeader.setQualityUpdatedOn(new Date());
             return qualityHeaderV2Repository.save(qualityHeader);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + qualityInspectionNo);
         }
     }
 
-
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //Delete QualityHeaderV2
-    public QualityHeaderV2 deleteQualityHeaderV2(String companyCodeId, String plantId, String languageId,
-                                               String warehouseId, String refDocNumber, String loginUserID)throws Exception {
+    public List<QualityHeaderV2> deleteQualityHeaderV2(String companyCodeId, String plantId, String languageId,
+                                                 String warehouseId, String refDocNumber, String loginUserID)throws Exception {
 
-        QualityHeaderV2 qualityHeaderV2 = qualityHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<QualityHeaderV2> qualityHeaderList = qualityHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, 0L);
-
-        if (qualityHeaderV2 != null) {
-            qualityHeaderV2.setDeletionIndicator(1L);
-            qualityHeaderV2.setQualityUpdatedBy(loginUserID);
-            qualityHeaderV2.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-            return qualityHeaderV2Repository.save(qualityHeaderV2);
+        log.info("PickList Cancellation - QualityHeader : " + qualityHeaderList);
+        List<QualityHeaderV2> qualityHeaders = new ArrayList<>();
+        if (qualityHeaderList != null && !qualityHeaderList.isEmpty()) {
+            for (QualityHeaderV2 qualityHeaderV2 : qualityHeaderList) {
+                qualityHeaderV2.setDeletionIndicator(1L);
+                qualityHeaderV2.setQualityUpdatedBy(loginUserID);
+                qualityHeaderV2.setQualityUpdatedOn(new Date());
+                qualityHeaderV2Repository.save(qualityHeaderV2);
+                qualityHeaders.add(qualityHeaderV2);
+            }
         }
-        return qualityHeaderV2;
+        return qualityHeaders;
     }
 }

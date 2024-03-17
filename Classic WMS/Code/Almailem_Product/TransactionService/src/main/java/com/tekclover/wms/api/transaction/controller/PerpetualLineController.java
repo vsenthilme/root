@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualUpdateResponseV2;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -71,7 +73,7 @@ public class PerpetualLineController {
 
     @ApiOperation(response = PerpetualLineV2.class, value = "SearchPerpetualLine") // label for swagger
     @PostMapping("/v2/findPerpetualLine")
-    public Stream<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
+    public List<PerpetualLineV2> findPerpetualLineV2(@RequestBody SearchPerpetualLineV2 searchPerpetualLine)
             throws Exception {
         return perpetualLineService.findPerpetualLineV2(searchPerpetualLine);
     }
@@ -88,7 +90,7 @@ public class PerpetualLineController {
     @PatchMapping("/v2/{cycleCountNo}")
     public ResponseEntity<?> patchPerpetualLineV2(@PathVariable String cycleCountNo,
                                                   @RequestBody List<PerpetualLineV2> updatePerpetualLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         PerpetualUpdateResponseV2 createdPerpetualLine =
                 perpetualLineService.updatePerpetualLineV2(cycleCountNo, updatePerpetualLine, loginUserID);
         return new ResponseEntity<>(createdPerpetualLine, HttpStatus.OK);

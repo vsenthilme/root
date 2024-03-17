@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.staging.*;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.SearchStagingLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.staging.v2.StagingLineEntityV2;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -144,7 +146,7 @@ public class StagingLineController {
     public ResponseEntity<?> getStagingLineV2(@PathVariable Long lineNo, @RequestParam String companyCode,
                                               @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
                                               @RequestParam String refDocNumber, @RequestParam String stagingNo, @RequestParam String palletCode,
-                                              @RequestParam String caseCode, @RequestParam String preInboundNo, @RequestParam String itemCode) {
+                                              @RequestParam String caseCode, @RequestParam String preInboundNo, @RequestParam String itemCode) throws IOException, CsvException {
         StagingLineEntityV2 stagingline =
                 staginglineService.getStagingLineV2(companyCode, plantId, languageId, warehouseId,
                         preInboundNo, refDocNumber, stagingNo, palletCode,
@@ -158,7 +160,7 @@ public class StagingLineController {
     public ResponseEntity<?> getStagingLineForInboundLineV2(@PathVariable Long lineNo, @RequestParam String companyCode,
                                                             @RequestParam String plantId, @RequestParam String languageId,
                                                             @RequestParam String warehouseId, @RequestParam String refDocNumber,
-                                                            @RequestParam String preInboundNo, @RequestParam String itemCode) {
+                                                            @RequestParam String preInboundNo, @RequestParam String itemCode) throws IOException, CsvException {
         List<StagingLineEntityV2> stagingline =
                 staginglineService.getStagingLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, lineNo, itemCode);
         log.info("StagingLine : " + stagingline);
@@ -178,11 +180,21 @@ public class StagingLineController {
                                                 @RequestParam String stagingNo, @RequestParam String palletCode, @RequestParam String caseCode,
                                                 @RequestParam String preInboundNo, @RequestParam String itemCode,
                                                 @Valid @RequestBody StagingLineEntityV2 updateStagingLine, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         StagingLineEntityV2 createdStagingLine =
                 staginglineService.updateStagingLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo, palletCode,
                         caseCode, lineNo, itemCode, loginUserID, updateStagingLine);
         return new ResponseEntity<>(createdStagingLine, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = StagingLineEntityV2.class, value = "Update StagingLine BarcodeId V2") // label for swagger
+    @PatchMapping("/v2/barcodeId")
+    public ResponseEntity<?> patchStagingLineBarcodeIdV2(@RequestParam String warehouseId, @RequestParam String companyCode, @RequestParam String plantId,
+                                                         @RequestParam String languageId, @RequestParam String manufacturerName, @RequestParam String barcodeId,
+                                                         @RequestParam String itemCode, @RequestParam String loginUserID) {
+        List<StagingLineEntityV2> updateBarCodeId =
+                staginglineService.updateStagingLineForBarcodeV2(companyCode, plantId, languageId, warehouseId, itemCode, manufacturerName, barcodeId, loginUserID);
+        return new ResponseEntity<>(updateBarCodeId, HttpStatus.OK);
     }
 
     @ApiOperation(response = StagingLineEntityV2.class, value = "AssignHHTUser StagingLine") // label for swagger
@@ -190,7 +202,7 @@ public class StagingLineController {
     public ResponseEntity<?> assignHHTUserV2(@RequestBody List<AssignHHTUser> assignHHTUsers, @RequestParam String companyCode,
                                              @RequestParam String plantId, @RequestParam String languageId,
                                              @RequestParam String assignedUserId, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         log.info("Assign HHtUSer Requested: " + assignHHTUsers);
         List<StagingLineEntityV2> updatedStagingLine =
                 staginglineService.assignHHTUserV2(assignHHTUsers, companyCode, plantId, languageId, assignedUserId, loginUserID);
@@ -202,7 +214,7 @@ public class StagingLineController {
     public ResponseEntity<?> patchStagingLineForCaseConfirmationV2(@RequestBody List<CaseConfirmation> caseConfirmations, @RequestParam String companyCode,
                                                                    @RequestParam String plantId, @RequestParam String languageId,
                                                                    @RequestParam String caseCode, @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, Exception {
         List<StagingLineEntityV2> createdStagingLine =
                 staginglineService.caseConfirmationV2(caseConfirmations, caseCode, companyCode, plantId, languageId, loginUserID);
         return new ResponseEntity<>(createdStagingLine, HttpStatus.OK);
@@ -215,7 +227,7 @@ public class StagingLineController {
                                                  @RequestParam String warehouseId, @RequestParam String refDocNumber,
                                                  @RequestParam String stagingNo, @RequestParam String palletCode,
                                                  @RequestParam String caseCode, @RequestParam String preInboundNo,
-                                                 @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
+                                                 @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
         staginglineService.deleteStagingLineV2(companyCode, plantId, languageId, warehouseId,
                 preInboundNo, refDocNumber, stagingNo, palletCode,
                 caseCode, lineNo, itemCode, loginUserID);
@@ -227,7 +239,7 @@ public class StagingLineController {
     public ResponseEntity<?> deleteCasesV2(@PathVariable Long lineNo, @RequestParam String preInboundNo,
                                            @RequestParam String caseCode, @RequestParam String companyCode,
                                            @RequestParam String plantId, @RequestParam String languageId,
-                                           @RequestParam String itemCode, @RequestParam String loginUserID) {
+                                           @RequestParam String itemCode, @RequestParam String loginUserID) throws IOException, CsvException {
         staginglineService.deleteCasesV2(companyCode, plantId, languageId, preInboundNo, lineNo, itemCode, caseCode, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.outbound.quality.v2;
 
 import com.tekclover.wms.api.transaction.model.outbound.quality.QualityLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)

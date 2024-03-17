@@ -94,7 +94,7 @@ public class SparkOutBoundReversalService {
                 "PARTNER_ITEM_BARCODE as barcodeId " +
                 " FROM tbloutboundreversalv2 WHERE IS_DELETED = 0 ");
 
-        imOutBoundReversalrQuery.cache();
+//        imOutBoundReversalrQuery.cache();
 
         if (findOutBoundReversal.getOutboundReversalNo() != null && !findOutBoundReversal.getOutboundReversalNo().isEmpty()) {
             imOutBoundReversalrQuery = imOutBoundReversalrQuery.filter(col("OB_REVERSAL_NO").isin(findOutBoundReversal.getOutboundReversalNo().toArray()));

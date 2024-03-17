@@ -106,6 +106,30 @@ public class PropertiesConfig {
 	
 	@Value("${file.impartner_111}")
 	private String impartner111FileName;
+
+	@Value("${file.preinboundheader}")
+	private String preInboundHeaderFileName;
+
+	@Value("${file.preinboundline}")
+	private String preInboundLineFileName;
+
+	@Value("${file.preinboundheaderpatch}")
+	private String preInboundHeaderPatchFileName;
+
+	@Value("${file.preinboundlinepatch}")
+	private String preInboundLinePatchFileName;
+
+	@Value("${file.preoutboundheader}")
+	private String preOutBoundHeaderFileName;
+
+	@Value("${file.preoutboundline}")
+	private String preOutboundLineFileName;
+
+	@Value("${file.preoutboundheaderpatch}")
+	private String preOutboundHeaderPatchFileName;
+
+	@Value("${file.preoutboundlinepatch}")
+	private String preOutboundLinePatchFileName;
 	
 	/*-----------------Report-Path------------------------*/
 	@Value("${report.path}")

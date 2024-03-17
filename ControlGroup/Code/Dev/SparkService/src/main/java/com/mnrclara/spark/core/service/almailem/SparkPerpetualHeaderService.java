@@ -83,7 +83,7 @@ public class SparkPerpetualHeaderService {
                 "REF_CC_NO as referenceCycleCountNo " +
                 "FROM tblperpetualheader2 WHERE IS_DELETED = 0 ");
 
-        perpetualheaderQuery.cache();
+//        perpetualheaderQuery.cache();
 
         if (searchPerpetualHeaderV2.getLanguageId() != null && !searchPerpetualHeaderV2.getLanguageId().isEmpty()) {
             perpetualheaderQuery = perpetualheaderQuery.filter(col("LANG_ID").isin(searchPerpetualHeaderV2.getLanguageId().toArray()));

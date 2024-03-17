@@ -1,10 +1,12 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2.*;
+import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.PerpetualLineV2;
 import com.tekclover.wms.api.transaction.model.dto.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -30,6 +32,7 @@ import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -40,6 +43,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class PeriodicHeaderService extends BaseService {
+    @Autowired
+    private PeriodicZeroStkLineRepository periodicZeroStkLineRepository;
 
     @Autowired
     private WarehouseRepository warehouseRepository;
@@ -1350,11 +1355,12 @@ public class PeriodicHeaderService extends BaseService {
      * @param cycleCountHeader
      * @return
      */
-    public PeriodicHeaderEntityV2 processStockCountReceived(CycleCountHeader cycleCountHeader) {
+    public PeriodicHeaderEntityV2 processStockCountReceived(CycleCountHeader cycleCountHeader) throws IOException, CsvException {
 
         PeriodicHeaderEntityV2 periodicHeaderEntityV2 = new PeriodicHeaderEntityV2();
         PeriodicHeaderV2 newPeriodicHeaderV2 = new PeriodicHeaderV2();
         List<PeriodicLineV2> periodicLineV2s = new ArrayList<>();
+        List<PeriodicZeroStockLine> periodicZeroStockLines = new ArrayList<>();
 
         // Get Warehouse
         Optional<Warehouse> dbWarehouse =
@@ -1390,9 +1396,6 @@ public class PeriodicHeaderService extends BaseService {
         // CC_TYP_ID
         newPeriodicHeaderV2.setCycleCountTypeId(1L);
 
-//        newPeriodicHeaderV2.setMovementTypeId(1L);
-//        newPeriodicHeaderV2.setSubMovementTypeId(2L);
-
         // STATUS_ID - HardCoded Value "70"
         newPeriodicHeaderV2.setStatusId(70L);
         statusDescription = stagingLineV2Repository.getStatusDescription(70L, newPeriodicHeaderV2.getLanguageId());
@@ -1407,8 +1410,8 @@ public class PeriodicHeaderService extends BaseService {
         newPeriodicHeaderV2.setWarehouseDescription(description.getWarehouseDesc());
 
         newPeriodicHeaderV2.setDeletionIndicator(0L);
-        newPeriodicHeaderV2.setCreatedBy("MSD_INT");
-        newPeriodicHeaderV2.setCountedBy("MSD_INT");
+        newPeriodicHeaderV2.setCreatedBy("MW_AMS");
+        newPeriodicHeaderV2.setCountedBy("MW_AMS");
         newPeriodicHeaderV2.setCreatedOn(new Date());
         newPeriodicHeaderV2.setCountedOn(new Date());
         PeriodicHeaderV2 createdPeriodicHeaderV2 = periodicHeaderV2Repository.save(newPeriodicHeaderV2);
@@ -1491,15 +1494,76 @@ public class PeriodicHeaderService extends BaseService {
                     }
 
                     periodicLineV2.setDeletionIndicator(0L);
-                    periodicLineV2.setCreatedBy("MSD_INT");
+                    periodicLineV2.setCreatedBy("MW_AMS");
                     periodicLineV2.setCreatedOn(new Date());
                     periodicLineV2s.add(periodicLineV2);
                 }
+            }
+
+            //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
+            if(dbInventoryList == null){
+                PeriodicZeroStockLine dbPeriodicLine = new PeriodicZeroStockLine();
+                dbPeriodicLine.setCompanyCode(newPeriodicHeaderV2.getCompanyCode());
+                dbPeriodicLine.setPlantId(newPeriodicHeaderV2.getPlantId());
+                dbPeriodicLine.setWarehouseId(newPeriodicHeaderV2.getWarehouseId());
+                dbPeriodicLine.setLanguageId(newPeriodicHeaderV2.getLanguageId());
+                dbPeriodicLine.setItemCode(cycleCountLine.getItemCode());
+                dbPeriodicLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
+                dbPeriodicLine.setManufacturerName(cycleCountLine.getManufacturerName());
+                dbPeriodicLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+
+                dbPeriodicLine.setCycleCountNo(nextRangeNumber);
+                dbPeriodicLine.setReferenceNo(cycleCountLine.getCycleCountNo());
+
+                //Get Item Description
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(newPeriodicHeaderV2.getCompanyCode());
+                imBasicData.setPlantId(newPeriodicHeaderV2.getPlantId());
+                imBasicData.setLanguageId(newPeriodicHeaderV2.getLanguageId());
+                imBasicData.setWarehouseId(newPeriodicHeaderV2.getWarehouseId());
+                imBasicData.setItemCode(cycleCountLine.getItemCode());
+                imBasicData.setManufacturerName(cycleCountLine.getManufacturerName());
+                ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImBasicData1 : " + imBasicData1);
+
+                if(imBasicData1 != null) {
+                    dbPeriodicLine.setItemDesc(imBasicData1.getDescription());
+                }
+                dbPeriodicLine.setInventoryQuantity(0D);                              //Total Qty
+                dbPeriodicLine.setInventoryUom(cycleCountLine.getUom());
+                dbPeriodicLine.setFrozenQty(cycleCountLine.getFrozenQty());
+
+                dbPeriodicLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, newPeriodicHeaderV2.getLanguageId());
+                dbPeriodicLine.setStatusDescription(statusDescription);
+
+                dbPeriodicLine.setCompanyDescription(description.getCompanyDesc());
+                dbPeriodicLine.setPlantDescription(description.getPlantDesc());
+                dbPeriodicLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                List<String> barcode = stagingLineV2Repository.getPartnerItemBarcode(cycleCountLine.getItemCode(),
+                        newPeriodicHeaderV2.getCompanyCode(),
+                        newPeriodicHeaderV2.getPlantId(),
+                        newPeriodicHeaderV2.getWarehouseId(),
+                        cycleCountLine.getManufacturerName(),
+                        newPeriodicHeaderV2.getLanguageId());
+                log.info("Barcode : " + barcode);
+                if (barcode != null && !barcode.isEmpty()) {
+                    dbPeriodicLine.setBarcodeId(barcode.get(0));
+                }
+
+
+                dbPeriodicLine.setDeletionIndicator(0L);
+                dbPeriodicLine.setCreatedBy("MW_AMS");
+                dbPeriodicLine.setCreatedOn(new Date());
+                periodicZeroStockLines.add(dbPeriodicLine);
             }
         }
 
         List<PeriodicLineV2> createdPeriodicLine = periodicLineV2Repository.saveAll(periodicLineV2s);
         log.info("createdPeriodicLine: " + createdPeriodicLine);
+        List<PeriodicZeroStockLine> createdPeriodicZeroStockLine = periodicZeroStkLineRepository.saveAll(periodicZeroStockLines);
+        log.info("createdPeriodicZeroStockLine: " + createdPeriodicZeroStockLine);
 
         BeanUtils.copyProperties(createdPeriodicHeaderV2, periodicHeaderEntityV2, CommonUtils.getNullPropertyNames(createdPeriodicHeaderV2));
         periodicHeaderEntityV2.setPeriodicLine(periodicLineV2s);

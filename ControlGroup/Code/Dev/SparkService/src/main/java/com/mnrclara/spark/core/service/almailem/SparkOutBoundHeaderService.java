@@ -115,7 +115,7 @@ public class SparkOutBoundHeaderService {
                 + "SUM_PICK_QTY as sumOfPickedQty "
                 + "FROM tbloutboundheaderv2 WHERE IS_DELETED = 0 ");
 
-        imOutBoundHeaderQuery.cache();
+//        imOutBoundHeaderQuery.cache();
 
 
         if (findOutBoundHeaderV2.getWarehouseId() != null && !findOutBoundHeaderV2.getWarehouseId().isEmpty()) {

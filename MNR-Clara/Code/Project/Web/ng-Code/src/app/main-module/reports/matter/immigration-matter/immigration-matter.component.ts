@@ -161,7 +161,8 @@ export class ImmigrationMatterComponent implements OnInit {
     legalAssistant: ['',],
     legalAssistantFE: [,],
     lawClerks: ['',],
-    lawClerksFE: [,]
+    lawClerksFE: [,],
+    paralegal:[],
   });
 
   constructor(
@@ -319,7 +320,11 @@ export class ImmigrationMatterComponent implements OnInit {
       this.form.controls.responsibleTimeKeeper.value.forEach((a: any) => data.push(a))
       obj.searchMatterAssignmentIMMReport.responsibleTimeKeeper = data;
     }
-
+    if (this.form.controls.paralegal.value && this.form.controls.paralegal.value.length > 0) {
+      let data: any[] = []
+      this.form.controls.paralegal.value.forEach((a: any) => data.push(a))
+      obj.searchMatterAssignmentIMMReport.paralegal = data;
+    }
 
     this.spin.show();
     this.sub.add(this.service.getMatterImmReport(obj).subscribe(res => {
@@ -368,7 +373,7 @@ export class ImmigrationMatterComponent implements OnInit {
       }
     })
   }
-
+  ParalegalList:any[]=[];
   getAllDropDown() {
     this.spin.show;
     this.cas.getalldropdownlist([
@@ -489,6 +494,13 @@ console.log(this.matterIdList)
             break;
           }
         }
+          //paralegal
+          for (let i = 0; i < this.matterAssignmentIdList.length; i++) {
+            if (user.key == this.matterAssignmentIdList[i].referenceField2) {
+              this.ParalegalList.push({ value: user.key, label: user.value })
+              break;
+            }
+          } 
         //mainAttorney
         for (let i = 0; i < this.matterAssignmentIdList.length; i++) {
           if (user.key == this.matterAssignmentIdList[i].responsibleTimeKeeper) {

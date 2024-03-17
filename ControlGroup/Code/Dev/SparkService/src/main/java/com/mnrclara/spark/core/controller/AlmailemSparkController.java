@@ -2,8 +2,11 @@ package com.mnrclara.spark.core.controller;
 
 
 import com.mnrclara.spark.core.model.Almailem.*;
-import com.mnrclara.spark.core.model.FindImBasicData1;
+import com.mnrclara.spark.core.model.Almailem.joinspark.InboundHeaderV3;
+import com.mnrclara.spark.core.model.Almailem.joinspark.InboundLineV3;
 import com.mnrclara.spark.core.service.almailem.*;
+import com.mnrclara.spark.core.service.almailem.joinspark.IBHeaderJoinService;
+import com.mnrclara.spark.core.service.almailem.joinspark.IBLineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.SwaggerDefinition;
@@ -122,6 +125,15 @@ public class AlmailemSparkController {
 
     @Autowired
     SparkImBasicData1V5Service sparkImBasicData1V5Service;
+
+    @Autowired
+    SparkBusinessPartnerService sparkBusinessPartnerService;
+
+    @Autowired
+    IBHeaderJoinService ibHeaderJoinService;
+
+    @Autowired
+    IBLineService ibLineService;
 
     //=======================================================================================================================
 
@@ -386,5 +398,25 @@ public class AlmailemSparkController {
         return new ResponseEntity<>(imBasicData1V3s, HttpStatus.OK);
     }
 
+    //Find BusinessPartnerService
+    @ApiOperation(response = BusinessPartnerV2.class, value = "Spark BusinessPartner")
+    @PostMapping("/businessPartner")
+    public ResponseEntity<?> businessPartner(@RequestBody FindBusinessPartner findBusinessPartner) throws Exception {
+        List<BusinessPartnerV2> businessPartnerV2s = sparkBusinessPartnerService.findBusinessPartner(findBusinessPartner);
+        return new ResponseEntity<>(businessPartnerV2s, HttpStatus.OK);
+    }
 
+    @ApiOperation(response = InboundHeaderV3.class, value = "Spark InboundHeader Join")
+    @PostMapping("/inboundOrderV3")
+    public ResponseEntity<?> inboundHeader(@RequestBody FindInboundHeaderV2 findInboundHeaderV2) throws Exception {
+        List<InboundHeaderV3> inboundHeaderV3s = ibHeaderJoinService.findInboundHeader(findInboundHeaderV2);
+        return new ResponseEntity<>(inboundHeaderV3s, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InboundLineV3.class, value = "Spark InboundLine Join")
+    @PostMapping("/inboundLineV3")
+    public ResponseEntity<?> inboundLine(@RequestBody FindInboundLineV2 findInboundLineV2) throws Exception {
+        List<InboundLineV3> inboundHeaderV3s = ibLineService.findInboundLine(findInboundLineV2);
+        return new ResponseEntity<>(inboundHeaderV3s, HttpStatus.OK);
+    }
 }

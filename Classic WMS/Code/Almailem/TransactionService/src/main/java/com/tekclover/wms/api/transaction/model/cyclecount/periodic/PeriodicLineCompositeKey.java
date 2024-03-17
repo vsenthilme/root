@@ -20,4 +20,6 @@ public class PeriodicLineCompositeKey implements Serializable {
 	private String storageBin;
 	private String itemCode;
 	private String packBarcodes;
+	private String manufacturerName;
+	private Long lineNo;
 }

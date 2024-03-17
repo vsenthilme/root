@@ -398,6 +398,22 @@ public class WrapperServiceController {
             return ResponseEntity.status(500).body("Failed to upload StorageBin." + e.getMessage());
         }
     }
+
+    /*========================================Error Log==================================================*/
+
+    @ApiOperation(response = Optional.class, value = "Error Log - Write to db") // label for swagger
+    @PostMapping("/errorLog/toDb")
+//    public ResponseEntity<String> errorLogToDataBase(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<String> errorLogToDataBase() throws Exception {
+
+        try {
+//            Map<String, String> response = fileStorageService.storeFile(file);
+            batchJobScheduler.runErrorLogJob();
+            return ResponseEntity.ok("Success");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to write in db" + e.getMessage());
+        }
+    }
     
     /*------------------------------------------------------------------------------------------------------*/
     @ApiOperation(response = Optional.class, value = "Document Storage Download") // label for swagger

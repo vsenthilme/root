@@ -1,0 +1,172 @@
+<form [formGroup]="form" >
+    <div class="card bg-white " style="overflow-x: hidden;">
+      <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+        class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+        <h6 class="my-auto">Preinbound-Lines </h6>
+        <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+      </div>
+      <div class="mt-2 px-4">
+        <div class="row scroll2 p-1">
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Branch Code</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="branchCode">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0">Company Code</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="companyCode">
+              </mat-form-field>
+            </div>
+          </div>
+        
+          <div class="col-lg-6 col-md-6 mt-1" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black ">Manufacturer Full Name</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput  formControlName="manufacturerFullName" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('manufacturerFullName')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1" >
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black ">Manufacturer Name</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput  formControlName="manufacturerShortName" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('manufacturerShortName')">{{getErrorMessage()}}</mat-error>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Manufacturer PartNo</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput   formControlName="manufacturerCode" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('manufacturerCode')">{{getErrorMessage()}}</mat-error>
+          </div>    
+         <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Item Code</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput   formControlName="itemCode" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('itemCode')">{{getErrorMessage()}}</mat-error>
+          </div>       
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Item Description</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput   formControlName="itemDescription" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('itemDescription')">{{getErrorMessage()}}</mat-error>
+          </div>     
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Line Number</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput type="number"  formControlName="lineNoForEachItem" >
+              </mat-form-field>
+            </div>
+          </div>  
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Supplier Code</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput   formControlName="supplierCode" >
+              </mat-form-field>
+            </div>
+          </div>  
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">Receipt Date</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput [matDatepicker]="picker"  placeholder="Choose Date" formControlName="receiptDate" >
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="errorHandling('receiptDate')">{{getErrorMessage()}}</mat-error>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Receipt No</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="receiptNo" >
+              </mat-form-field>
+            </div>
+          </div> 
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Receipt Qty</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput type="number" formControlName="receiptQty" >
+              </mat-form-field>
+            </div>
+
+          </div> 
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Origin</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="origin" >
+              </mat-form-field>
+            </div>
+          </div> 
+
+       <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Supplier Name</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="supplierName" >
+              </mat-form-field>
+            </div>
+          </div>  
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black">Supplier PartNo</p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput formControlName="supplierPartNo" >
+              </mat-form-field>
+            </div>
+          </div> 
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black required">UOM </p>
+              <mat-form-field class="mb-0 w-100 " appearance="outline">
+                <input matInput   formControlName="unitOfMeasure" >
+              </mat-form-field>
+            </div>
+            <mat-error *ngIf="errorHandling('unitOfMeasure')">{{getErrorMessage()}}</mat-error>
+          </div>  
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center py-2">
+        <button mat-raised-button class="text-white mx-1 px-3" color="warn" (click)="cancel()">
+          <mat-icon class="">close</mat-icon>Cancel
+        </button>
+        <button mat-raised-button class="bg-darkblue  text-white mx-1" (click)="submit()">
+                  <mat-icon class="">done</mat-icon> Save
+                </button>
+      </div>
+  
+  
+    </div>
+  </form>
+  
+  
+  
+  
+  
+  
+
+
+

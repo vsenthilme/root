@@ -32,22 +32,35 @@ public interface ConsignmentRepository extends JpaRepository<ConsignmentEntity, 
 	public String findConsigmentByBillCode(@Param("jnt_billcode") String jnt_billcode);
 	
 	@Query(value = "SELECT REFERENCE_NUMBER FROM tblconsignment where CUSTOMER_REFERENCE_NUMBER=:customerReferenceNumber", nativeQuery = true)
-	public String findConsigmentByWayBillNumber(@Param("customerReferenceNumber") String customerReferenceNumber);
-
+	public String findConsigmentByCustomerReferenceNumberV2(@Param("customerReferenceNumber") String customerReferenceNumber);
+	
+	@Query(value = "SELECT REFERENCE_NUMBER, CUSTOMER_CODE\r\n"
+			+ "  FROM tblconsignment\r\n"
+			+ "  WHERE CUSTOMER_REFERENCE_NUMBER = :customerReferenceNumber \r\n"
+			+ "  AND (IS_CANCELLED is null or IS_CANCELLED <> 1)", nativeQuery = true)
+	public List<String[]> findConsigmentByCustomerReferenceNumber(@Param("customerReferenceNumber") String customerReferenceNumber);
+	
+	@Query(value ="select tc.REFERENCE_NUMBER, tc.CREATED_AT \n"+
+			"from tblconsignment tc\n" +
+			"join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER \n" +
+			"WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER, tc.CREATED_AT",nativeQuery = true)
+	public List<String[]> getByHubcode(@Param(value="hubCode") String hubCode);
+	
 	@Query(value ="select tc.REFERENCE_NUMBER \n"+
 			"from tblconsignment tc\n" +
 			"join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER \n" +
 			"WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER",nativeQuery = true)
-	public List<String> getByHubcode(@Param(value="hubCode") String hubCode);
+	public List<String> getOrdersByHubcode(@Param(value="hubCode") String hubCode);
 	
-	@Query(value = "SELECT distinct c.REFERENCE_NUMBER AS referenceNumber, c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
-			+ "c.STATUS_DESCRIPTION AS statusDescription, c.AWB_3RD_PARTY AS awb3rdParty, c.CREATED_AT AS createdAt, \r\n"
-			+ "c.IS_AWB_PRINTED AS isAwbPrinted, j.scan_type AS scanType, c.ORDER_TYPE AS orderType, c.CUSTOMER_CODE AS customerCode \r\n"
-			+ "from tblconsignment c \r\n"
-			+ "left outer join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY\r\n"
-			+ "WHERE c.REFERENCE_NUMBER IN (select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER) \r\n"
-			+ "ORDER BY c.CREATED_AT", nativeQuery = true)
-	public List<IConsignmentEntity> findConsigmentByReferenceNumber (@Param("hubCode") String hubCode);
+    @Query(value = "SELECT distinct c.REFERENCE_NUMBER AS referenceNumber, c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
+            + "c.STATUS_DESCRIPTION AS statusDescription, c.AWB_3RD_PARTY AS awb3rdParty, c.CREATED_AT AS createdAt, \r\n"
+            + "c.IS_AWB_PRINTED AS isAwbPrinted, j.scan_type AS scanType, c.ORDER_TYPE AS orderType, c.CUSTOMER_CODE AS customerCode, \r\n"
+            + "j.SCAN_TIME AS eventTime "
+            + "from tblconsignment c \r\n"
+            + "left outer join tbljntwebhook j on j.BILL_CODE = c.AWB_3RD_PARTY\r\n"
+            + "WHERE c.REFERENCE_NUMBER IN (select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER) \r\n"
+            + "ORDER BY c.CREATED_AT", nativeQuery = true)
+    public List<IConsignmentEntity> findConsigmentByReferenceNumber (@Param("hubCode") String hubCode);
 
 	@Query(value = "SELECT TOP 1 * \r\n" +
 			"FROM tblconsignment WHERE REFERENCE_NUMBER IN (:reference_number) ORDER BY CREATED_AT DESC", nativeQuery = true)

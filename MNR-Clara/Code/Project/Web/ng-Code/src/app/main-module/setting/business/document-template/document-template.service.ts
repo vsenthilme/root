@@ -98,9 +98,18 @@ export class documentTemplateService {
       .toPromise();
   }
 
-  download(fileName: any, clientId: any, matterNumber: any, location: any): Promise<File> {
+  download(fileName: any, matterExpenseId: any, location: any): Promise<File> {
     return this.http
-      .get<any>(`/doc-storage/download?fileName=${fileName}&location=${location}/${clientId}/${matterNumber}`, {
+      .get<any>(`/doc-storage/download?fileName=${fileName}&location=${location}/${matterExpenseId}`, {
+        responseType: 'blob' as 'json',
+      })
+      .toPromise();
+  }
+
+  
+  download1(fileName: any, matterExpenseId: any, classId:any, location: any): Promise<File> {
+    return this.http
+      .get<any>(`/doc-storage/download?fileName=${fileName}&classId=${classId}&location=${location}/${matterExpenseId}`, {
         responseType: 'blob' as 'json',
       })
       .toPromise();

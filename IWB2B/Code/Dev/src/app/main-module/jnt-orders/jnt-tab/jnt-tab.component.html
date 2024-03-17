@@ -1,0 +1,5 @@
+<nav mat-tab-nav-bar class="scroll2 d-flex justify-content-start ">
+    <a mat-tab-link *ngFor=" let link of link" [ngClass]="link.class" (click)="activeLink = link.url" 
+      [active]="activeLink == link.url" [routerLink]="link.url" >
+      <i [ngClass]="link.icon"></i>     {{link.title | uppercase}}</a>
+  </nav>

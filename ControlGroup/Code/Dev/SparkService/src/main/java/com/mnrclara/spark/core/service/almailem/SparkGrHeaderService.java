@@ -95,7 +95,7 @@ public class SparkGrHeaderService {
                 + "REF_DOC_TYPE as referenceDocumentType "
                 + "FROM tblgrheaderV2 WHERE IS_DELETED = 0");
 
-        imgrHeaderQueryV2.cache();
+//        imgrHeaderQueryV2.cache();
 
 
         if (searchGrHeaderV2.getInboundOrderTypeId() != null && !searchGrHeaderV2.getInboundOrderTypeId().isEmpty()) {

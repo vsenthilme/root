@@ -23,7 +23,7 @@ export class IdmasterlistComponent implements OnInit {
     { url: "/main/controlgroup/idmaster/relationship", title: "Relationship",  icon: "fas fa-handshake mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
     { url: "/main/controlgroup/idmaster/entity", title: "Entity",  icon: "fas fa-users-cog mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
     { url: "/main/controlgroup/idmaster/controlgrouptype", title: "Group Type ",  icon: "fas fa-users mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
-    { url: "/main/controlgroup/idmaster/subgroup", title: "Sub Group Type",  icon: "fas fa-user-friends mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
+    //{ url: "/main/controlgroup/idmaster/subgroup", title: "Sub Group Type",  icon: "fas fa-user-friends mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
     { url: "/main/controlgroup/master/controlgroup", title: "Group",  icon: "fas fa-people-carry mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
     { url: "/main/controlgroup/master/clientcontrolgroup", title: "Group Mapping",  icon: "fas fa-tasks mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },
    // { url: "/main/controlgroup/master/cliententityassignment", title: "Client Store Assignment ",  icon: "fas fa-chalkboard-teacher mx-2 mr-3 font_1-5", class: "blue-text bg-white nav-border fw-bold mx-1  mb-0 px-4 blue " },

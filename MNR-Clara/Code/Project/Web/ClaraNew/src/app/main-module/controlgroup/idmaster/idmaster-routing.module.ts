@@ -26,7 +26,7 @@ const routes: Routes = [{
   { path: 'status', component: StatusComponent, pathMatch: 'full', data: { title: 'Status', module: 'Status' } },
   { path: 'store', component: StoreComponent, pathMatch: 'full', data: { title: 'Store', module: 'Store' } },
   { path: 'controlgrouptype', component: ControlgrouptypeComponent, pathMatch: 'full', data: { title: 'Controlled Groups Type', module: 'Controlled Groups Type' } },
-  { path: 'subgroup', component: SubgroupComponent, pathMatch: 'full', data: { title: 'Sub Group', module: 'Sub Group' } },
+ // { path: 'subgroup', component: SubgroupComponent, pathMatch: 'full', data: { title: 'Sub Group', module: 'Sub Group' } },
   { path: 'relationship', component: RelationshipComponent, pathMatch: 'full', data: { title: 'Relationship', module: 'Relationship' } },
   { path: 'numberrange', component: NumberrangecodeComponent, pathMatch: 'full', data: { title: 'Number Range Code', module: 'Number Range Code' } },
   { path: 'entity', component: EntityComponent, pathMatch: 'full', data: { title: 'Entity', module: 'Entity' } },

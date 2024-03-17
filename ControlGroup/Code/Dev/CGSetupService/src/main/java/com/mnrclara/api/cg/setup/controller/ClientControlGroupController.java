@@ -22,8 +22,9 @@ import java.util.List;
 
 @Slf4j
 @Validated
-@Api(tags = {" ClientControlGroup "}, value = " ClientControlGroup Operations related to ClientControlGroupController ") // label for swagger
-@SwaggerDefinition(tags = {@Tag(name = " ClientControlGroup ",description = "Operations related to ClientControlGroup ")})
+@Api(tags = {" ClientControlGroup "}, value = " ClientControlGroup Operations related to ClientControlGroupController ")
+// label for swagger
+@SwaggerDefinition(tags = {@Tag(name = " ClientControlGroup ", description = "Operations related to ClientControlGroup ")})
 @RequestMapping("/clientcontrolgroup")
 @RestController
 public class ClientControlGroupController {
@@ -32,7 +33,8 @@ public class ClientControlGroupController {
     ClientControlGroupService clientControlGroupService;
 
     // GET ALL
-    @ApiOperation(response = ClientControlGroup.class, value = "Get all ClientControlGroup details") // label for swagger
+    @ApiOperation(response = ClientControlGroup.class, value = "Get all ClientControlGroup details")
+    // label for swagger
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         List<ClientControlGroup> clientControlGroupList = clientControlGroupService.getAllClientControlGroup();
@@ -43,12 +45,10 @@ public class ClientControlGroupController {
     @ApiOperation(response = ClientControlGroup.class, value = "Get a ClientControlGroup") // label for swagger
     @GetMapping("/{clientId}")
     public ResponseEntity<?> getClient(@PathVariable Long clientId, @RequestParam String languageId,
-                                       @RequestParam String companyId, @RequestParam Long subGroupTypeId,
-                                       @RequestParam Long groupTypeId, @RequestParam Long versionNumber) {
+                                       @RequestParam String companyId, @RequestParam Long groupTypeId, @RequestParam Long versionNumber) {
 
         ClientControlGroup clientControlGroup =
-                clientControlGroupService.getCLientControlGroup(companyId,languageId,clientId,
-                        subGroupTypeId,groupTypeId,versionNumber);
+                clientControlGroupService.getCLientControlGroup(companyId, languageId, clientId, groupTypeId, versionNumber);
         log.info("ClientControlGroup : " + clientControlGroup);
         return new ResponseEntity<>(clientControlGroup, HttpStatus.OK);
     }
@@ -70,27 +70,25 @@ public class ClientControlGroupController {
     @PatchMapping("/{clientId}")
     public ResponseEntity<?> patchClientControlGroup(@PathVariable Long clientId, @RequestParam String languageId,
                                                      @RequestParam String loginUserID, @RequestParam String companyId,
-                                                     @RequestParam Long subGroupTypeId, @RequestParam Long groupTypeId,
+                                                     @RequestParam Long groupTypeId,
                                                      @RequestBody UpdateClientControlGroup updateClientControlGroup,
                                                      @RequestParam Long versionNumber)
             throws IllegalAccessException, InvocationTargetException {
 
         ClientControlGroup updatedClientControlGroup =
-                clientControlGroupService.updateClientControlGroup(companyId,languageId,clientId,versionNumber,subGroupTypeId,
-                        groupTypeId,loginUserID,updateClientControlGroup);
+                clientControlGroupService.updateClientControlGroup(companyId, languageId, clientId, versionNumber,
+                        groupTypeId, loginUserID, updateClientControlGroup);
 
-        return new ResponseEntity<>(updatedClientControlGroup , HttpStatus.OK);
+        return new ResponseEntity<>(updatedClientControlGroup, HttpStatus.OK);
     }
 
     // DELETE
     @ApiOperation(response = ClientControlGroup.class, value = "Delete ClientControlGroup") // label for swagger
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<?> deleteControlGroup(@PathVariable Long clientId, @RequestParam String companyId,@RequestParam Long versionNumber,
-                                                @RequestParam String languageId, @RequestParam Long subGroupTypeId,
-                                                @RequestParam Long groupTypeId, @RequestParam String loginUserID) {
+    public ResponseEntity<?> deleteControlGroup(@PathVariable Long clientId, @RequestParam String companyId, @RequestParam Long versionNumber,
+                                                @RequestParam String languageId, @RequestParam Long groupTypeId, @RequestParam String loginUserID) {
 
-        clientControlGroupService.deleteClientControlGroup(companyId, languageId, clientId,versionNumber,
-                subGroupTypeId, groupTypeId, loginUserID);
+        clientControlGroupService.deleteClientControlGroup(companyId, languageId, clientId, versionNumber, groupTypeId, loginUserID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

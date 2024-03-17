@@ -1,12 +1,14 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
 
-import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,7 +101,7 @@ public class PreInboundLineController {
 
 	@ApiOperation(response = PreInboundLineEntityV2.class, value = "Get a PreInboundLine V2") // label for swagger
 	@GetMapping("/v2/{preInboundNo}")
-	public ResponseEntity<?> getPreInboundLineV2(@PathVariable String preInboundNo) {
+	public ResponseEntity<?> getPreInboundLineV2(@PathVariable String preInboundNo) throws IOException, CsvException {
 		List<PreInboundLineEntityV2> preinboundline = preinboundlineService.getPreInboundLineV2(preInboundNo);
 //    	log.info("PreInboundLine : " + preinboundline);
 		return new ResponseEntity<>(preinboundline, HttpStatus.OK);
@@ -110,7 +112,7 @@ public class PreInboundLineController {
 	public ResponseEntity<?> getPreInboundLineV2(@PathVariable String preInboundNo, @RequestParam String companyCode,
 												 @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
 												 @RequestParam String refDocNumber, @RequestParam String itemCode,
-												 @RequestParam Long lineNo) {
+												 @RequestParam Long lineNo) throws IOException, CsvException {
 		PreInboundLineEntityV2 preinboundline = preinboundlineService.getPreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode);
 //    	log.info("PreInboundLine : " + preinboundline);
 		return new ResponseEntity<>(preinboundline, HttpStatus.OK);
@@ -130,7 +132,7 @@ public class PreInboundLineController {
 													 @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
 													 @RequestParam String refDocNumber, @RequestParam String itemCode,
 													 @RequestParam Long lineNo, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		List<PreInboundLineEntityV2> createdPreInboundLine =
 				preinboundlineService.createPreInboundLineV2(companyCode, plantId, languageId,
 						preInboundNo, warehouseId, refDocNumber,
@@ -144,7 +146,7 @@ public class PreInboundLineController {
 												   @RequestParam String plantId, @RequestParam String languageId,
 												   @RequestParam String refDocNumber, @RequestParam Long lineNo, @RequestParam String itemCode,
 												   @Valid @RequestBody PreInboundLineEntityV2 updatePreInboundLine, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		PreInboundLineEntityV2 createdPreInboundLine =
 				preinboundlineService.updatePreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId,
 						refDocNumber, lineNo, itemCode, updatePreInboundLine, loginUserID);
@@ -155,8 +157,15 @@ public class PreInboundLineController {
 	@DeleteMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> deletePreInboundLineV2(@PathVariable String preInboundNo, @RequestParam String warehouseId, @RequestParam String companyCode,
 													@RequestParam String plantId, @RequestParam String languageId, @RequestParam String refDocNumber,
-													@RequestParam Long lineNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException {
+													@RequestParam Long lineNo, @RequestParam String itemCode, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
 		preinboundlineService.deletePreInboundLineV2(companyCode, plantId, languageId, preInboundNo, warehouseId, refDocNumber, lineNo, itemCode, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@ApiOperation(response = PreInboundLineOutputV2.class, value = "Search PreInboundLine V2") // label for swagger
+	@PostMapping("/findPreInboundLine/v2")
+	public List<PreInboundLineOutputV2> findPreInboundLineV2(@RequestBody SearchPreInboundLineV2 searchPreInboundLine)
+			throws Exception {
+		return preinboundlineService.findPreInboundLineV2(searchPreInboundLine);
 	}
 }

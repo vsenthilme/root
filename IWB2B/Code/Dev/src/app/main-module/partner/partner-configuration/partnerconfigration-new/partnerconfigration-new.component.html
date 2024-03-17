@@ -1,0 +1,125 @@
+
+    <div class="card bg-white " style="overflow-x: hidden;">
+        <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+          class="d-flex  border-botton align-items-center text-secondary fontBold text-center p-2">
+          <h6 class="my-auto mx-auto">Configuration - New </h6>
+          <mat-icon class="text-secondary " mat-dialog-close>close</mat-icon>
+        </div>
+          <mat-accordion>
+            <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont  text-secondary fw-bold align-items-center">
+                  General
+                  <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+          <div class="row text-secondary fw-bold desc  p-1">
+            <div class="col-lg-6 col-md-6 mt-1">
+              <div class="d-flex flex-column">
+                <p class="mb-0 py-0 desc">Partner Code</p>
+                <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                    <input matInput placeholder="Enter">
+                  </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Partner Name</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Partner Type</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Source System</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Target System</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Sync Active</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">Access Type</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 mt-1">
+              <p class="mb-0 py-0">User Profile</p>
+              <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                <input matInput placeholder="Enter">
+              </mat-form-field>
+            </div>
+            
+          </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel #panel2 hideToggle class="d-none"> 
+              <mat-expansion-panel-header class="border-bottom padding-space border-top">
+                <mat-panel-title class="d-flex justify-content-between collapsefont text-secondary fw-bold align-items-center">
+                  Admin
+                  <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="row p-1 text-secondary fw-bold px-3  mt-2">
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable" >
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Created On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated By</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mt-2">
+                  <div class="d-flex flex-column">
+                    <p class="mb-0 py-0">Updated On</p>
+                    <mat-form-field class="form-group input_field mb-0" appearance="outline">
+                      <input matInput placeholder="AP-Editable" >
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel> 
+          </mat-accordion>
+          <div class="d-flex justify-content-center border-top align-items-center py-2">
+            <button mat-flat-button mat-dialog-close class="mx-2 cancelcolor"> <i
+                class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+            <button mat-flat-button class="mx-2 saveColor px-4"> <i
+                class="bi bi-check2 me-1 font-size-1_5rem"></i>
+              
+                Save</button>
+          </div>
+    
+    
+      </div>
+    
+   

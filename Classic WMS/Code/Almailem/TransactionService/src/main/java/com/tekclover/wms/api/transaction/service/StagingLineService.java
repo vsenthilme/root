@@ -3,10 +3,8 @@ package com.tekclover.wms.api.transaction.service;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
-import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
-import com.tekclover.wms.api.transaction.model.dto.StatusId;
-import com.tekclover.wms.api.transaction.model.dto.Warehouse;
+import com.tekclover.wms.api.transaction.model.dto.*;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.UpdateInboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.AddGrHeader;
@@ -28,7 +26,6 @@ import com.tekclover.wms.api.transaction.repository.*;
 import com.tekclover.wms.api.transaction.repository.specification.StagingLineSpecification;
 import com.tekclover.wms.api.transaction.repository.specification.StagingLineV2Specification;
 import com.tekclover.wms.api.transaction.util.CommonUtils;
-import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +93,13 @@ public class StagingLineService extends BaseService {
     @Autowired
     private InboundHeaderService inboundHeaderService;
 
+    @Autowired
+    private ImPartnerService imPartnerService;
+
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository exceptionLogRepo;
     //----------------------------------------------------------------------------------------
 
     /**
@@ -880,6 +883,9 @@ public class StagingLineService extends BaseService {
                         caseCode,
                         0L);
         if (StagingLineEntity.isEmpty()) {
+            // Exception Log
+            createStagingLineLog3(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber, lineNo, itemCode,
+                    caseCode, "StagingLine with given values and refDocNumber-" + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -1017,19 +1023,18 @@ public class StagingLineService extends BaseService {
                 dbStagingLineEntity.setReferenceDocumentType(newStagingLine.getReferenceDocumentType());
                 dbStagingLineEntity.setManufacturerFullName(newStagingLine.getManufacturerFullName());
 
-                dbStagingLineEntity.setManufacturerCode(newStagingLine.getManufacturerCode());
+                dbStagingLineEntity.setManufacturerCode(newStagingLine.getManufacturerName());
                 dbStagingLineEntity.setManufacturerName(newStagingLine.getManufacturerName());
                 dbStagingLineEntity.setManufacturerPartNo(newStagingLine.getManufacturerPartNo());
 
                 dbStagingLineEntity.setBranchCode(newStagingLine.getBranchCode());
                 dbStagingLineEntity.setTransferOrderNo(newStagingLine.getTransferOrderNo());
                 dbStagingLineEntity.setIsCompleted(newStagingLine.getIsCompleted());
+                dbStagingLineEntity.setBusinessPartnerCode(newStagingLine.getBusinessPartnerCode());
 
                 dbStagingLineEntity.setDeletionIndicator(0L);
                 dbStagingLineEntity.setCreatedBy(loginUserID);
                 dbStagingLineEntity.setUpdatedBy(loginUserID);
-//                dbStagingLineEntity.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 dbStagingLineEntity.setCreatedOn(new Date());
                 dbStagingLineEntity.setUpdatedOn(new Date());
                 stagingLineEntityList.add(dbStagingLineEntity);
@@ -1053,7 +1058,7 @@ public class StagingLineService extends BaseService {
                 caseConfirmation.setCaseCode(caseCode);
                 caseConfirmation.setLineNo(dbStagingLineEntity.getLineNo());
                 caseConfirmation.setItemCode(dbStagingLineEntity.getItemCode());
-                caseConfirmation.setManufactureCode(dbStagingLineEntity.getManufacturerCode());
+                caseConfirmation.setManufactureCode(manufactureCode);
                 caseConfirmationList.add(caseConfirmation);
             }
         }
@@ -1105,11 +1110,108 @@ public class StagingLineService extends BaseService {
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         StagingLineEntityV2 dbStagingLineEntity = getStagingLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, stagingNo, palletCode,
                 caseCode, lineNo, itemCode);
+        List<StagingLineEntityV2> stagingLineEntityV2List = getStagingLineForGrConfirmV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
+        log.info("Staging Lines List for respective ref_doc_no: " + stagingLineEntityV2List);
+
+        //Throw exception updating ImPartner - barcode with itemCode and ManufacturerName when barcode associated with another ItemCode
+        if(updateStagingLine.getPartner_item_barcode() != null) {
+            List<ImPartner> imPartnerList = imPartnerService.getImpartnerBarcodeList(companyCode, plantId, languageId, warehouseId, updateStagingLine.getPartner_item_barcode());
+            if (imPartnerList != null && !imPartnerList.isEmpty()) {
+                for(ImPartner imPartner : imPartnerList) {
+                    String itemCodeMfrName = imPartner.getItemCode()+imPartner.getManufacturerName();
+                    String updateItemCodeMfrName = itemCode+dbStagingLineEntity.getManufacturerName();
+                    if (!itemCodeMfrName.equalsIgnoreCase(updateItemCodeMfrName)) {
+                        log.info("Barcode Already Assigned");
+                        throw new BadRequestException("Barcode already Assigned for : "
+                                + updateStagingLine.getPartner_item_barcode()
+                                + ", " + imPartner.getItemCode()
+                                + ", " + imPartner.getManufacturerName()
+                        );
+                    }
+                }
+            }
+        }
+
+        //Throw exception updating stagingLine - barcode with itemCode and ManufacturerName when barcode associated with another ItemCode
+//        if(stagingLineEntityV2List != null && !stagingLineEntityV2List.isEmpty()){
+//            if(updateStagingLine.getPartner_item_barcode() != null) {
+//                List<StagingLineEntityV2> stagingLineBarcodeFilteredList = stagingLineEntityV2List.stream()
+//                        .filter(a -> a.getPartner_item_barcode() != null && a.getPartner_item_barcode().equalsIgnoreCase(updateStagingLine.getPartner_item_barcode())).collect(Collectors.toList());
+//                log.info("Staging Line same BarcodeId: " + stagingLineBarcodeFilteredList);
+//                if(stagingLineBarcodeFilteredList != null && !stagingLineBarcodeFilteredList.isEmpty()){
+//                    for(StagingLineEntityV2 stagingLineEntityV2 : stagingLineBarcodeFilteredList) {
+//                        String itemCodeMfrName = stagingLineEntityV2.getItemCode()+stagingLineEntityV2.getManufacturerName();
+//                        String updateItemCodeMfrName = itemCode+dbStagingLineEntity.getManufacturerName();
+//                        if(!itemCodeMfrName.equalsIgnoreCase(updateItemCodeMfrName)) {
+//                                throw new BadRequestException("Barcode Assigned for Another ItemCode - Manufacturer Name: "
+//                                        + updateStagingLine.getPartner_item_barcode()
+//                                        + ", " + stagingLineEntityV2.getItemCode()
+//                                        + ", " + stagingLineEntityV2.getManufacturerName());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
         BeanUtils.copyProperties(updateStagingLine, dbStagingLineEntity, CommonUtils.getNullPropertyNames(updateStagingLine));
+
+        //Update Barcode if more than one same item & mfr_name present in same order
+        if(stagingLineEntityV2List != null && !stagingLineEntityV2List.isEmpty()){
+            if(updateStagingLine.getPartner_item_barcode() != null) {
+                log.info("Update Barcode: " + updateStagingLine.getPartner_item_barcode());
+                List<StagingLineEntityV2> stagingLineFilteredList = stagingLineEntityV2List.stream()
+                        .filter(a -> a.getItemCode().equalsIgnoreCase(itemCode) &&
+                                     a.getManufacturerName().equalsIgnoreCase(dbStagingLineEntity.getManufacturerName()))
+                        .collect(Collectors.toList());
+                log.info("Staging Line same ItemCode and MfrName: " + stagingLineFilteredList);
+                if(stagingLineFilteredList != null && !stagingLineFilteredList.isEmpty()){
+                    for(StagingLineEntityV2 stagingLineEntity : stagingLineFilteredList){
+                        log.info("StagingLine: " + stagingLineEntity);
+                        stagingLineEntity.setPartner_item_barcode(updateStagingLine.getPartner_item_barcode());
+                        stagingLineEntity.setUpdatedBy(loginUserID);
+                        stagingLineEntity.setUpdatedOn(new Date());
+                        stagingLineV2Repository.save(stagingLineEntity);
+                        log.info("Staging Line Barcode Updated: " + stagingLineEntity);
+                    }
+                }
+            }
+        }
+
         dbStagingLineEntity.setUpdatedBy(loginUserID);
-//        dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbStagingLineEntity.setUpdatedOn(new Date());
         return stagingLineV2Repository.save(dbStagingLineEntity);
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param itemCode
+     * @param manufacturerName
+     * @param barcodeId
+     * @param loginUserID
+     * @return
+     */
+    public List<StagingLineEntityV2> updateStagingLineForBarcodeV2(String companyCode, String plantId, String languageId, String warehouseId,
+                                                                   String itemCode, String manufacturerName, String barcodeId, String loginUserID) {
+        List<StagingLineEntityV2> barcodeUpdatedList = new ArrayList<>();
+        List<StagingLineEntityV2> stagingLineEntityV2List =
+                stagingLineV2Repository.findAllByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndItemCodeAndManufacturerNameAndDeletionIndicator(
+                        languageId, companyCode, plantId, warehouseId, itemCode, manufacturerName, 0L);
+        log.info("Staging Lines List for respective itemCode, ManufacturerName: " + stagingLineEntityV2List);
+
+        if(stagingLineEntityV2List != null && !stagingLineEntityV2List.isEmpty()) {
+            for(StagingLineEntityV2 dbStagingLineEntity : stagingLineEntityV2List) {
+                dbStagingLineEntity.setPartner_item_barcode(barcodeId);
+                dbStagingLineEntity.setUpdatedBy(loginUserID);
+                dbStagingLineEntity.setUpdatedOn(new Date());
+                stagingLineV2Repository.save(dbStagingLineEntity);
+                barcodeUpdatedList.add(dbStagingLineEntity);
+            }
+        }
+        return barcodeUpdatedList;
     }
 
     /**
@@ -1144,7 +1246,6 @@ public class StagingLineService extends BaseService {
                     assignHHTUser.getItemCode());
             dbStagingLineEntity.setAssignedUserId(assignedUserId);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
-//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
             log.info("StagingLine: " + dbStagingLineEntity);
 
@@ -1204,7 +1305,6 @@ public class StagingLineService extends BaseService {
             dbStagingLineEntity.setStatusDescription(statusDescription);
             dbStagingLineEntity.setCaseCode(caseCode);
             dbStagingLineEntity.setUpdatedBy(loginUserID);
-//            dbStagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbStagingLineEntity.setUpdatedOn(new Date());
             StagingLineEntityV2 updatedStagingLineEntity = stagingLineV2Repository.save(dbStagingLineEntity);
 
@@ -1440,17 +1540,19 @@ public class StagingLineService extends BaseService {
             if (hhtUserOutputList == null || hhtUserOutputList.isEmpty() || hhtUserOutputList.size() == 0) {
                 List<String> hhtUserList = stagingLineV2Repository.getHhtUser(
                         grHeader.getCompanyCode(), grHeader.getLanguageId(), grHeader.getPlantId(), grHeader.getWarehouseId());
-                if (hhtUserList != null) {
+                if (hhtUserList != null && !hhtUserList.isEmpty()) {
                     hhtUser = hhtUserList.get(0);
                 }
             }
             newGrLine.setAssignedUserId(hhtUser);
 
             newGrLine.setPackBarcodes(packBarcodeList);
+            newGrLine.setInterimStorageBin("REC-AL-B2");
 
             newGrLineList.add(newGrLine);
         }
-        List<GrLineV2> createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+//        List<GrLineV2> createGrLine = grLineService.createGrLineV2(newGrLineList, grHeader.getCreatedBy());
+        List<GrLineV2> createGrLine = grLineService.createGrLineNonCBMV2(newGrLineList, grHeader.getCreatedBy());
         log.info("GrLine Created Successfully: " + createGrLine);
 
         List<PutAwayLineV2> createdPutawayLine = null;
@@ -1472,7 +1574,7 @@ public class StagingLineService extends BaseService {
                     for (PutAwayHeaderV2 dbPutawayHeader : dbPutawayHeaderList) {
                         PutAwayLineV2 putAwayLine = new PutAwayLineV2();
 
-                        List<GrLineV2> grLine = createGrLine.stream().filter(n->n.getPackBarcodes() == dbPutawayHeader.getPackBarcodes()).collect(Collectors.toList());
+                        List<GrLineV2> grLine = createGrLine.stream().filter(n->n.getPackBarcodes().equalsIgnoreCase(dbPutawayHeader.getPackBarcodes())).collect(Collectors.toList());
 
                         BeanUtils.copyProperties(grLine.get(0), putAwayLine, CommonUtils.getNullPropertyNames(grLine.get(0)));
                         putAwayLine.setProposedStorageBin(dbPutawayHeader.getProposedStorageBin());
@@ -1515,7 +1617,6 @@ public class StagingLineService extends BaseService {
         if (StagingLineEntity != null) {
             StagingLineEntity.setDeletionIndicator(1L);
             StagingLineEntity.setUpdatedBy(loginUserID);
-//            StagingLineEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             StagingLineEntity.setUpdatedOn(new Date());
             stagingLineV2Repository.save(StagingLineEntity);
         } else {
@@ -1592,28 +1693,44 @@ public class StagingLineService extends BaseService {
      * @param loginUserID
      */
     public List<StagingLineEntityV2> deleteStagingLineV2(String companyCode, String plantId, String languageId,
-                                    String warehouseId, String refDocNumber, String loginUserID) throws java.text.ParseException {
+                                                         String warehouseId, String refDocNumber, String loginUserID) throws java.text.ParseException {
        List<StagingLineEntityV2> stagingLineEntityV2s = new ArrayList<>();
-
-       List<StagingLineEntityV2> dbStagingLine =
+       List<StagingLineEntityV2> dbStagingLineList =
                 stagingLineV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                         companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
-
-        if (dbStagingLine != null) {
-            for (StagingLineEntityV2 stagingLineEntityV2 : dbStagingLine) {
-                stagingLineEntityV2.setDeletionIndicator(0L);
+        log.info("StagingLineList - cancellation : " + dbStagingLineList);
+        if (dbStagingLineList != null && !dbStagingLineList.isEmpty()) {
+            for (StagingLineEntityV2 stagingLineEntityV2 : dbStagingLineList) {
+                stagingLineEntityV2.setDeletionIndicator(1L);
                 stagingLineEntityV2.setUpdatedBy(loginUserID);
-//                stagingLineEntityV2.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
                 stagingLineEntityV2.setUpdatedOn(new Date());
                 StagingLineEntityV2 stagingLineEntityV21 = stagingLineV2Repository.save(stagingLineEntityV2);
                 stagingLineEntityV2s.add(stagingLineEntityV21);
             }
         }
-//        else {
-//            throw new BadRequestException("Error in deleting Id:  warehouseId:" + warehouseId +
-//                    ",refDocNumber: " + refDocNumber + "," +
-//                    " doesn't exist.");
-//        }
         return stagingLineEntityV2s;
     }
+
+    //===========================================StagingLine_ExceptionLog==============================================
+    private void createStagingLineLog3(String languageId, String companyCode, String plantId, String warehouseId, String preInboundNo,
+                                       String refDocNumber, Long lineNo, String itemCode, String caseCode, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setReferenceField2(String.valueOf(lineNo));
+        dbErrorLog.setReferenceField3(itemCode);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
 }

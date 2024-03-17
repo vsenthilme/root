@@ -74,9 +74,19 @@ export class MatterExpensesService {
   }
 
 
-  public uploadfile(file: File, location, emailId, checkRequestCreatedBy) {
+  // public uploadfile(file: File, location, emailId, checkRequestCreatedBy) {
+  //   let formParams = new FormData();
+  //   formParams.append('file', file)
+  //   return this.http.post('/doc-storage/upload?' + `location=${location}&emailId=${emailId}&userName=${checkRequestCreatedBy}`, formParams)
+  // }
+
+  public uploadfile(file: File, location) {
     let formParams = new FormData();
     formParams.append('file', file)
-    return this.http.post('/doc-storage/upload?' + `location=${location}&emailId=${emailId}&userName=${checkRequestCreatedBy}`, formParams)
+    return this.http.post('/doc-storage/upload?' + `location=${location}`, formParams)
+  }
+
+  public sendEmail(location, emailId, userName) {
+    return this.http.post('/check-request/sendmail?' + `emailId=${emailId}&location=${location}&userName=${userName}`, {})
   }
 }

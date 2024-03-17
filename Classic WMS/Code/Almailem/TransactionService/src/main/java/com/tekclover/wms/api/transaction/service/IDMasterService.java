@@ -175,8 +175,7 @@ public class IDMasterService {
 	 * 
 	 * @param auditLog
 	 * @param authToken
-	 * @param authToken2
-	 */
+     */
 	private void createAuditLog(AuditLog auditLog, String loginUserID, String authToken) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
@@ -199,13 +198,11 @@ public class IDMasterService {
 	 * createAuditLogRecord
 	 * 
 	 * @param loginUserID
-	 * @param pkField
 	 * @param tableName
 	 * @param modifiedField
 	 * @param oldValue
 	 * @param newValue
-	 * @param authToken
-	 */
+     */
 	public void createAuditLogRecord(String warehouseId, String tableName, Integer screenNo, Integer subScreenNo, 
 			String modifiedField, String oldValue, String newValue, String loginUserID) {
 		AuditLog auditLog = new AuditLog();
@@ -268,8 +265,7 @@ public class IDMasterService {
 	 * 
 	 * @param statusId
 	 * @param warehouseId
-	 * @param access_token
-	 */
+     */
 	public StatusId getStatus(Long statusId, String warehouseId, String authToken) {
 		try {
 			HttpHeaders headers = new HttpHeaders();

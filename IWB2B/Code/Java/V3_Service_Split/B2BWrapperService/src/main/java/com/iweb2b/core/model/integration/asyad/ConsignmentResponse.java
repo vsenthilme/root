@@ -20,4 +20,11 @@ public class ConsignmentResponse {
 	private String courier_account;
 	private String courier_partner_reference_number;
 	private String customer_reference_number;
+	
+	/*
+	 * AJIX Response
+	 */
+	private String labelUrl;
+	private String codAmount;
+	private String codCuurency;
 }

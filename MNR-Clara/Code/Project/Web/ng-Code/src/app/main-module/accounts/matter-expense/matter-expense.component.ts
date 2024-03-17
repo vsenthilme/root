@@ -218,8 +218,6 @@ export class MatterExpenseComponent implements OnInit {
       results[2].clientNameList.forEach((x: any) => {
         this.clientList.push({ value: x.key, label: x.key + '-' + x.value });
       })
-      this.spin.hide();
-      this.spin.show();
       this.sub.add(this.service.SearchNew({statusId: [38]}).subscribe((res: any[]) => {
         console.log(res)
         res.forEach((x) => {
@@ -330,8 +328,7 @@ export class MatterExpenseComponent implements OnInit {
         res.forEach((x) => {
           // x.expenseCode = this.expenseCodelist.find(y => y.key == x.noteTypeId)?.value;
           x.statusIddes = this.statuslist.find(y => y.key == x.statusId)?.value;
-          x.clientname = this.clientList.find(y => y.key == x.clientId)?.value;
-
+                    x.clientname = this.clientList.find(y => y.value == x.clientId)?.label;
           if(x.referenceField1 != null && x.referenceField1.startsWith(null)){
            x.referenceField1 = ''
           }

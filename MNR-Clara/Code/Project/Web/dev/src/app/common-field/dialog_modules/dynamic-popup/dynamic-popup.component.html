@@ -1,0 +1,16 @@
+<div class="card bg-white " style="overflow-x: hidden;">
+    <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+      class="d-flex justify-content-between align-items-center header_colour text-white p-2">
+      <h2 class="my-auto headertext">{{data.title}}</h2>
+      <i mat-dialog-close class="bi bi-x-lg px-3"></i>
+    </div>
+
+  <div class="row mx-0 ">
+    <div class="col-sm-12 mt-3 mb-2 mh-100">
+      <!-- <p class="mb-0 py-0 ">Notes</p> -->
+      <mat-form-field class="form-group input_field w-100 mb-0" appearance="outline">
+        <textarea disabled="disabled" matInput rows="10" placeholder="Enter" [(ngModel)]="this.data.content"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  </div>

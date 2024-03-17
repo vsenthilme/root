@@ -1,5 +1,6 @@
 	package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundLineEntityV2;
@@ -146,7 +148,7 @@ public class PreInboundHeaderController {
 	@PostMapping("/{refDocNumber}/processInboundReceived/v2")
 	public ResponseEntity<?> processInboundReceivedV2(@PathVariable String refDocNumber,
 													  @RequestBody InboundIntegrationHeader inboundIntegrationHeader)
-			throws BadRequestException, Exception {
+			throws IOException, CsvException, ParseException, InvocationTargetException, IllegalAccessException {
 		preinboundheaderService.processInboundReceivedV2(refDocNumber, inboundIntegrationHeader);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -154,7 +156,7 @@ public class PreInboundHeaderController {
 	@ApiOperation(response = PreInboundHeader.class, value = "Process ASN") // label for swagger
 	@PostMapping("/processASN/v2")
 	public ResponseEntity<?> processASNV2(@RequestBody List<PreInboundLineEntityV2> newPreInboundLine, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException {
+			throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
 		StagingHeaderV2 createdStagingHeader = preinboundheaderService.processASNV2(newPreInboundLine, loginUserID);
 		return new ResponseEntity<>(createdStagingHeader, HttpStatus.OK);
 	}
@@ -163,7 +165,7 @@ public class PreInboundHeaderController {
 	@GetMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> getPreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 												   @RequestParam String companyCode, @RequestParam String plantId,
-												   @RequestParam String languageId) {
+												   @RequestParam String languageId) throws IOException, CsvException {
 		PreInboundHeaderV2 preinboundheader = preinboundheaderService.getPreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId, languageId);
 //    	log.info("PreInboundHeader : " + preinboundheader);
 		return new ResponseEntity<>(preinboundheader, HttpStatus.OK);
@@ -172,7 +174,7 @@ public class PreInboundHeaderController {
 	@ApiOperation(response = PreInboundHeaderEntityV2.class, value = "Get a PreInboundHeader V2") // label for swagger
 	@GetMapping("/inboundconfirm/v2")
 	public ResponseEntity<?> getPreInboundHeaderV2(@RequestParam String warehouseId, @RequestParam String companyCode,
-												   @RequestParam String plantId, @RequestParam String languageId) {
+												   @RequestParam String plantId, @RequestParam String languageId) throws IOException, CsvException {
 		List<PreInboundHeaderV2> preinboundheader = preinboundheaderService.getPreInboundHeaderWithStatusIdV2(warehouseId, companyCode, plantId, languageId);
 //       	log.info("PreInboundHeader : " + preinboundheader);
 		return new ResponseEntity<>(preinboundheader, HttpStatus.OK);
@@ -199,7 +201,7 @@ public class PreInboundHeaderController {
 	public ResponseEntity<?> patchPreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 													 @RequestParam String companyCode, @RequestParam String plantId, @RequestParam String languageId,
 													 @Valid @RequestBody PreInboundHeaderV2 updatePreInboundHeader, @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException, ParseException {
+			throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
 		PreInboundHeaderV2 createdPreInboundHeader =
 				preinboundheaderService.updatePreInboundHeaderV2(companyCode, plantId,
 						languageId, preInboundNo, warehouseId, updatePreInboundHeader, loginUserID);
@@ -210,7 +212,7 @@ public class PreInboundHeaderController {
 	@DeleteMapping("/v2/{preInboundNo}")
 	public ResponseEntity<?> deletePreInboundHeaderV2(@PathVariable String preInboundNo, @RequestParam String warehouseId,
 													  @RequestParam String companyCode, @RequestParam String plantId,
-													  @RequestParam String languageId, @RequestParam String loginUserID) throws ParseException {
+													  @RequestParam String languageId, @RequestParam String loginUserID) throws ParseException, IOException, CsvException {
 		preinboundheaderService.deletePreInboundHeaderV2(companyCode, plantId, languageId, preInboundNo, warehouseId, loginUserID);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

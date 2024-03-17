@@ -25,32 +25,45 @@ export interface DialogData {
   styleUrls: ['./send-intake.component.scss']
 })
 export class SendIntakeComponent implements OnInit, OnDestroy {
-  subjectenglish = " introduction to initial Consultation with Monty & Ramirez"
-  subjectsapanish = "Introduccion para consulta inicial con Monty & Ramirez"
+  subjectenglish = "Monty & Ramirez LLP – Consultation – "+(this.data.inquiryNumber)
+  subjectsapanish = "Monty & Ramirez LLP – Consulta – "
   test = "Dear (Field 1) Thank you for contacting our law firm. The following are the details for our consultation scheduled for         at        .  Our offices are located at Houston & Dallas.  Please complete the following information prior to the consultation.  If you have any problems completing this form, please let us know.  Once you complete this form, submit it for our review";
   email = new FormControl('', [Validators.required, Validators.email]);
   input: any;
   datetday = this.cs.today();
   sub = new Subscription();
 
-  englishBodyText = 'The following are the details for our consultation scheduled for _______ at _______. Our offices are located at Houston &amp; Dallas. Please complete the following information prior to the consultation. If you have any problems completing this form, please let us know. Once you complete this form, submit it for our review.'
-  spanishBodyText = 'Los siguientes son los detalles de nuestra consulta programada para _______ a las _______. Nuestras oficinas están ubicadas en Houston &amp; Dallas. Por favor complete la siguiente información antes de la consulta. Si tiene algún problema para completar este formulario, por favor háganoslo saber. Una vez que complete este formulario, envíelo para que lo revisemos.'
+  englishBodyText = 'Your appointment is scheduled for ___________________at ____. '
+  englishBodyText3 = 'We are located on the <b>4th floor</b> of the Torre Latina at 150 W. Parker Rd. Houston, TX 77076.'
+  englishBodyText4 = 'Please arrive 15 minutes prior to your appointment.'
+  englishBodyText5 = 'In preparation for your appointment, please fill out a questionnaire using the following link:'
+  englishBodyText6 = 'The cost of the consultation is $_____ ___ .'
+  englishBodyText7 = 'We accept debit or credit cards and cash.  '
+  englishBodyText8 = 'If you have any questions feel free to call us at 713.289.4546, our office hours are 8:30 a.m. to 5:30 p.m. Monday through Friday.  '
+  englishBodyText1="Please bring the requested documents _____________________or send them to customerservice@montyramirezlaw.com."
+  spanishBodyText = 'Su cita está programada para el ___________________ a las _________ con la abogada, ____<b>ATTORNEY NAME</b>____ '
+  spanishBodyText3 = 'Nos ubicamos en el <b>4to piso</b> de la Torre Latina en 150 W. Parker Rd. Houston, TX 77076.'
+  spanishBodyText4 = 'Por favor llegue 15 minutos antes de su cita.'
+  spanishBodyText5 = 'En preparación a su cita favor de llenar el cuestionario usando el siguiente enlace:'
+  spanishBodyText6 = 'El costo de la consulta es de $_______ .'
+  spanishBodyText7 = 'Aceptamos tarjetas de débito o crédito y en efectivo.   '
+  spanishBodyText8 = 'Si tiene alguna pregunta no dude llamarnos al 713.289.4546, nuestro horario de oficina es de 8:30 a.m. a 5:30 p.m. de Lunes a Viernes.  '
+  spanishBodyText1="Favor de traer documentos en relación con su caso, como copias de _____________________."
+  englishHeader = 'Thank you for contacting Monty & Ramirez LLP.'
+  spanishHeader = 'Gracias por contactar a Monty & Ramirez LLP.'
   
-  englishHeader = 'Thank you for contacting our law firm'
-  spanishHeader = 'Gracias por ponerse en contacto con nuestro bufete de abogados.'
-
   englishClick = 'Click here to open Intake Form'
   spanishClick = 'Haga clic aquí para abrir el formulario de admisión'
-  englishThanks = 'Thanks &amp; Regards';
-  spanishThanks = 'Gracias &amp; Saludos';
-
+  englishThanks = 'Thank you';
+  spanishThanks = 'Gracias';
+   
   form = this.fb.group(
     {
-      bodyText: ['<p><font size="2">Dear Field_1</font></p><p><font size="2">header&#160;</font></p><p><font size="2">bodyText</font></p><p><a href="linkurlform" target="_blank"><font size="2">clickhere</font></a><br></p><p><font size="2">thanks,</font></p><p><font size="2">M&amp;R Clara</font></p>',
+      bodyText: ['<p><b><font size="2">Field_1,</font></b></p><p><font size="2">header&#160;</font></p><p><font size="2">bodyText</font></p><p><font size="2">bodyText3</font></p><p><font size="2">bodyText4</font></p><p><font size="2">bodyText5</font></p><p><a href="linkurlform" target="_blank"><font size="2">clickhere</font></a></p><p><font size="2">bodyText1</font></p><p><font size="2">bodyText6</font></p><p><font size="2">bodyText7</font></p><p><font size="2">bodyText8</font></p><p><font size="2">thanks,</font></p><p><b><font size="2">USER</font></b></p><p><font size="2">Monty &amp; Ramirez</font></p>',
       ],
       ccAddress: ['intake@montyramirezlaw.com'],
       fromAddress: ['intake@montyramirezlaw.com'],
-      subject: ['Introduction to initial Consultation with Monty & Ramirez'],
+      subject: ['Monty & Ramirez LLP –Consultation –'+(this.data.inquiryNumber)],
       toAddress: [, [Validators.required, Validators.pattern("[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}")]],
     });
   //
@@ -99,6 +112,7 @@ this.form.controls.fromAddress.disable();
   ngOnDestroy(): void {
 
   }
+  inq:any;
   fill() {
     console.log(this.data)
     this.form.controls.toAddress.patchValue(this.data.email);
@@ -112,10 +126,12 @@ this.form.controls.fromAddress.disable();
 
     if(this.data.intakeFormId == 3 ){
       console.log('spanish')
-    this.form.controls.bodyText.patchValue(this.form.controls.bodyText.value.replace('bodyText', this.spanishBodyText).replace('header', this.spanishHeader).replace('clickhere', this.spanishClick).replace('thanks',this.spanishThanks));
+      this.form.controls.bodyText.patchValue(this.form.controls.bodyText.value.replace('bodyText', this.spanishBodyText).replace('bodyText3', this.spanishBodyText3).replace('bodyText4', this.spanishBodyText4).replace('bodyText5', this.spanishBodyText5).replace('header', this.spanishHeader).replace('clickhere', this.spanishClick).replace('bodyText1',this.spanishBodyText1).replace('bodyText6',this.spanishBodyText6).replace('bodyText7',this.spanishBodyText7).replace('bodyText8',this.spanishBodyText8).replace('USER',this.auth.userfullName).replace('thanks',this.spanishThanks));
+   this.form.controls.subject.patchValue('Monty & Ramirez LLP – Consulta-'+this.data.inquiryNumber)
     }else{
       console.log('english')
-      this.form.controls.bodyText.patchValue(this.form.controls.bodyText.value.replace('bodyText', this.englishBodyText).replace('header', this.englishHeader).replace('clickhere', this.englishClick).replace('thanks',this.englishThanks));
+      this.form.controls.bodyText.patchValue(this.form.controls.bodyText.value.replace('bodyText', this.englishBodyText).replace('bodyText3', this.englishBodyText3).replace('bodyText4', this.englishBodyText4).replace('bodyText5', this.englishBodyText5).replace('header', this.englishHeader).replace('clickhere', this.englishClick).replace('bodyText1',this.englishBodyText1).replace('bodyText6',this.englishBodyText6).replace('bodyText7',this.englishBodyText7).replace('bodyText8',this.englishBodyText8).replace('USER',this.auth.userfullName).replace('thanks',this.englishThanks));
+    
     }
     // this.form.controls.bodyText.patchValue('hello');
     // this.form.controls.subject.patchValue('hello');

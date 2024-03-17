@@ -136,7 +136,7 @@ public class SparkPutAwayLineService {
                 + "IS_COMPLETED as isCompleted "
                 + "From tblputawaylinev2 Where IS_DELETED = 0 "
         );
-        putAwayLineV2Query.cache();
+//        putAwayLineV2Query.cache();
 
         if (findPutAwayLineV2.getWarehouseId() != null && !findPutAwayLineV2.getWarehouseId().isEmpty()) {
             putAwayLineV2Query = putAwayLineV2Query.filter(col("WH_ID").isin(findPutAwayLineV2.getWarehouseId().toArray()));
@@ -175,13 +175,13 @@ public class SparkPutAwayLineService {
         }
         if (findPutAwayLineV2.getFromConfirmedDate() != null) {
             Date startDate = findPutAwayLineV2.getFromConfirmedDate();
-            startDate = org.apache.commons.lang3.time.DateUtils.ceiling(startDate, Calendar.DAY_OF_MONTH);
+            startDate = org.apache.commons.lang3.time.DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
             putAwayLineV2Query = putAwayLineV2Query.filter(col("PA_CNF_ON").$greater$eq(dateFormat.format(startDate)));
         }
         if (findPutAwayLineV2.getToConfirmedDate() != null) {
             Date endDate = findPutAwayLineV2.getToConfirmedDate();
             endDate = org.apache.commons.lang3.time.DateUtils.ceiling(endDate, Calendar.DAY_OF_MONTH);
-            putAwayLineV2Query = putAwayLineV2Query.filter(col("PA_CNF_ON").$greater$eq(dateFormat.format(endDate)));
+            putAwayLineV2Query = putAwayLineV2Query.filter(col("PA_CNF_ON").$less$eq(dateFormat.format(endDate)));
         }
         if (findPutAwayLineV2.getFromCreatedDate() != null) {
             Date startDate = findPutAwayLineV2.getFromCreatedDate();
@@ -191,7 +191,7 @@ public class SparkPutAwayLineService {
         if (findPutAwayLineV2.getToCreatedDate() != null) {
             Date endDate = findPutAwayLineV2.getToCreatedDate();
             endDate = org.apache.commons.lang3.time.DateUtils.ceiling(endDate, Calendar.DAY_OF_MONTH);
-            putAwayLineV2Query = putAwayLineV2Query.filter(col("PA_CTD_ON").$greater$eq(dateFormat.format(endDate)));
+            putAwayLineV2Query = putAwayLineV2Query.filter(col("PA_CTD_ON").$less$eq(dateFormat.format(endDate)));
         }
 
         // V2 fields

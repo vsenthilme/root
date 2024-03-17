@@ -197,6 +197,13 @@ export class ExpensesComponent implements OnInit {
         });
         return;
       }
+     if(this.selection.selected[0].statusId == 46 || this.selection.selected[0].statusId == 45 || this.selection.selected[0].statusId == 51 ||this.selection.selected[0].statusId == 56) {
+      this.toastr.error("Selected Expense Cannot be Edited", "Notification", {
+        timeOut: 2000,
+        progressBar: false,
+      });
+      return;
+     }
     const dialogRef = this.dialog.open(ExpensesNewComponent, {
       disableClose: true,
       width: '50%',
@@ -466,7 +473,7 @@ export class ExpensesComponent implements OnInit {
   async download(element) {
     this.spin.show()
     console.log(element);
-    const blob = await this.downloadApi.download(element.documentName,element.clientId,element.matterNumber,'check')
+    const blob = await this.downloadApi.download(element.documentName,element.matterExpenseId,'expensecheckrequest')
       .catch((err: HttpErrorResponse) => {
         this.cs.commonerror(err);
       });

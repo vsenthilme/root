@@ -207,8 +207,14 @@
         </div>
       </div>
       <div class="col-lg-3 col-md-4">
+        <p class="mb-0 py-0">Legal Assistant 1</p>
+        <p-multiSelect placeholder="Select" appendTo="body" class="w-100 my-1 mb-2"
+          [options]="ParalegalList" formControlName="paralegal" [style]="{'width': '100%'}" [panelStyle]="{'width':'20%'}">
+        </p-multiSelect>
+      </div>
+      <div class="col-lg-3 col-md-4">
         <div class="d-flex flex-column">
-          <p class="mb-0 py-0">Legal Assistant</p>
+          <p class="mb-0 py-0">Legal Assistant 2</p>
           <!-- <angular2-multiselect class="mb-2" [data]="multiSelectLegalAssistantIdList"
             [(ngModel)]="selectedLegalAssistantId" [settings]="dropdownSettings" formControlName="legalAssistantFE">
           </angular2-multiselect> -->

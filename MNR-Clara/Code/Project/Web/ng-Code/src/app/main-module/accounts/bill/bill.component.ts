@@ -55,7 +55,7 @@ export class BillComponent implements OnInit {
   isShowDiv = false;
   showFloatingButtons: any;
   toggle = true;
-  displayedColumns: string[] = ['select', 'invoiceNumber', 'preBillNumber', 'matterNumber', 'invoiceDate', 'partnerAssigned', 'remainderdate', 'textFile', 'invoiceAmount', 'totalPaidAmount', 'remainingBalance', 'paymentlink', 'statusIddes'];
+  displayedColumns: string[] = ['select','action', 'invoiceNumber', 'preBillNumber', 'matterNumber', 'invoiceDate', 'partnerAssigned', 'remainderdate', 'textFile', 'invoiceAmount', 'totalPaidAmount', 'remainingBalance', 'paymentlink', 'statusIddes'];
   dataSource = new MatTableDataSource<any>([]);
   selection = new SelectionModel<any>(true, []);
   showFiller = false;
@@ -242,6 +242,21 @@ export class BillComponent implements OnInit {
       }
     });
   }
+  sendtoClient(data: any) {
+    this.spin.show();
+    data.referenceField10 = "Sent";
+    this.sub.add(this.service.Update(data, data.invoiceNumber).subscribe(res => {
+      this.toastr.success(data.invoiceNumber + " sent successfully!", "Notification", {
+        timeOut: 2000,
+        progressBar: false,
+      });
+      this.spin.hide();
+    }, err => {
+      this.cs.commonerror(err);
+      this.spin.hide();
+    }));
+  }
+
   openDialog(data: any = 'new'): void {
     if (data != 'New') {
       if (this.selection.selected.length === 0) {
@@ -454,7 +469,6 @@ export class BillComponent implements OnInit {
   }
 
   generatePdf(element: any) {
-    console.log(element)
     let currentDate = this.datePipe.transform(new Date, 'MM-dd-yyyy');
     this.sub.add(this.service.getInvoicePdfData(element.invoiceNumber).subscribe((res: any) => {
       console.log(res)
@@ -745,21 +759,20 @@ export class BillComponent implements OnInit {
               let positiveExpenseAmount = (expense.expenseAmount)
               total = total + (expense.expenseAmount != null ? expense.expenseAmount : 0.00);
               total1 = total + (res.reportHeader.administrativeCost != null ? res.reportHeader.administrativeCost : 0.00);
-              let positiveTotal = (total1)
+              let positiveTotal = (total)
               //   let positiveTotal = (total1 < 0 ? total1 * -1 : total1)
               bodyArray.push([
                 { text: this.datePipe.transform(expense.createdOn, 'MM-dd-yyyy'), fontSize: 10, border: [false, false, false, false] },
                 { text: expense.expenseDescription != null ? expense.expenseDescription : '', fontSize: 10, border: [false, false, false, false] },
                 { text: positiveExpenseAmount != null ? '$ ' + this.decimalPipe.transform(positiveExpenseAmount, "1.2-2") : '$ 0.00', fontSize: 10, alignment: 'right', border: [false, false, false, false] }
               ])
-              if (res.reportHeader.administrativeCost && (i + 1) == res.expenseEntry.length) {
-                console.log(res)
-                bodyArray.push([
-                  { text: this.datePipe.transform(res.reportHeader.caseOpenedDate, 'MM-dd-yyyy'), fontSize: 10, border: [false, false, false, false] },
-                  { text: 'Administrative Cost', fontSize: 10, border: [false, false, false, false] },
-                  { text: res.reportHeader.administrativeCost != null ? '$ ' + this.decimalPipe.transform(res.reportHeader.administrativeCost, "1.2-2") : '$ 0.00', fontSize: 10, alignment: 'right', border: [false, false, false, false] }
-                ])
-              }
+              // if (res.reportHeader.administrativeCost && (i + 1) == res.expenseEntry.length) {
+              //   bodyArray.push([
+              //     { text: this.datePipe.transform(res.reportHeader.caseOpenedDate, 'MM-dd-yyyy'), fontSize: 10, border: [false, false, false, false] },
+              //     { text: 'Administrative Cost', fontSize: 10, border: [false, false, false, false] },
+              //     { text: res.reportHeader.administrativeCost != null ? '$ ' + this.decimalPipe.transform(res.reportHeader.administrativeCost, "1.2-2") : '$ 0.00', fontSize: 10, alignment: 'right', border: [false, false, false, false] }
+              //   ])
+              // }
               if ((i + 1) == res.expenseEntry.length) {
                 bodyArray.push([
                   { text: '', fontSize: 10, border: [false, false, false, false] },

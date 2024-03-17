@@ -238,46 +238,47 @@ export class ClientNewComponent implements OnInit {
     this.RA = this.auth.getRoleAccess(this.screenid);
     this.ngdropdown();
     console.log(this.form)
-    this.form.controls.isMailingAddressSame.valueChanges.subscribe(val => {
-      if (val == true) {
-        this.form.controls.referenceField5.patchValue(this.form.controls.suiteDoorNo.value);
-        this.form.controls.mailingAddress.patchValue(this.form.controls.addressLine1.value);
-        this.form.controls.referenceField6.patchValue(this.form.controls.city.value);
-        this.form.controls.referenceField7.patchValue(this.form.controls.state.value);
-        this.form.controls.referenceField8.patchValue(this.form.controls.zipCode.value);
-        this.form.controls.referenceField10.patchValue(this.form.controls.country.value);
-      } else {
-        this.form.controls.mailingAddress.patchValue('');
-        this.form.controls.referenceField5.patchValue('');
-        this.form.controls.referenceField6.patchValue('');
-        this.form.controls.referenceField7.patchValue('');
-        this.form.controls.referenceField8.patchValue('');
-        this.form.controls.referenceField10.patchValue('');
-      }
+        //address logic
+    // this.form.controls.isMailingAddressSame.valueChanges.subscribe(val => {
+    //   if (val == true) {
+    //     this.form.controls.referenceField5.patchValue(this.form.controls.suiteDoorNo.value);
+    //     this.form.controls.mailingAddress.patchValue(this.form.controls.addressLine1.value);
+    //     this.form.controls.referenceField6.patchValue(this.form.controls.city.value);
+    //     this.form.controls.referenceField7.patchValue(this.form.controls.state.value);
+    //     this.form.controls.referenceField8.patchValue(this.form.controls.zipCode.value);
+    //     this.form.controls.referenceField10.patchValue(this.form.controls.country.value);
+    //   } else {
+    //     this.form.controls.mailingAddress.patchValue('');
+    //     this.form.controls.referenceField5.patchValue('');
+    //     this.form.controls.referenceField6.patchValue('');
+    //     this.form.controls.referenceField7.patchValue('');
+    //     this.form.controls.referenceField8.patchValue('');
+    //     this.form.controls.referenceField10.patchValue('');
+    //   }
 
 
-    });
+    // });
 
     
-    this.form.controls.referenceField15.valueChanges.subscribe(val => {
-      if (val == true) {
-        this.form.controls.referenceField16.patchValue(this.form.controls.suiteDoorNo.value);
-        this.form.controls.addressLine3.patchValue(this.form.controls.addressLine1.value);
-        this.form.controls.referenceField17.patchValue(this.form.controls.city.value);
-        this.form.controls.referenceField18.patchValue(this.form.controls.state.value);
-        this.form.controls.referenceField19.patchValue(this.form.controls.zipCode.value);
-        this.form.controls.referenceField20.patchValue(this.form.controls.country.value);
-      } else {
-        this.form.controls.referenceField16.patchValue('');
-        this.form.controls.addressLine3.patchValue('');
-        this.form.controls.referenceField17.patchValue('');
-        this.form.controls.referenceField18.patchValue('');
-        this.form.controls.referenceField19.patchValue('');
-        this.form.controls.referenceField20.patchValue('');
-      }
+    // this.form.controls.referenceField15.valueChanges.subscribe(val => {
+    //   if (val == true) {
+    //     this.form.controls.referenceField16.patchValue(this.form.controls.suiteDoorNo.value);
+    //     this.form.controls.addressLine3.patchValue(this.form.controls.addressLine1.value);
+    //     this.form.controls.referenceField17.patchValue(this.form.controls.city.value);
+    //     this.form.controls.referenceField18.patchValue(this.form.controls.state.value);
+    //     this.form.controls.referenceField19.patchValue(this.form.controls.zipCode.value);
+    //     this.form.controls.referenceField20.patchValue(this.form.controls.country.value);
+    //   } else {
+    //     this.form.controls.referenceField16.patchValue('');
+    //     this.form.controls.addressLine3.patchValue('');
+    //     this.form.controls.referenceField17.patchValue('');
+    //     this.form.controls.referenceField18.patchValue('');
+    //     this.form.controls.referenceField19.patchValue('');
+    //     this.form.controls.referenceField20.patchValue('');
+    //   }
 
 
-    });
+    // });
 
 
     // this.form.controls.addressLine1.valueChanges.subscribe(x => {
@@ -321,6 +322,42 @@ export class ClientNewComponent implements OnInit {
 
 
 
+  }
+
+  billingChange(e){
+    if (e.value == true) {
+      this.form.controls.referenceField16.patchValue(this.form.controls.suiteDoorNo.value);
+      this.form.controls.addressLine3.patchValue(this.form.controls.addressLine1.value);
+      this.form.controls.referenceField17.patchValue(this.form.controls.city.value);
+      this.form.controls.referenceField18.patchValue(this.form.controls.state.value);
+      this.form.controls.referenceField19.patchValue(this.form.controls.zipCode.value);
+      this.form.controls.referenceField20.patchValue(this.form.controls.country.value);
+    } else {
+      this.form.controls.referenceField16.patchValue('');
+      this.form.controls.addressLine3.patchValue('');
+      this.form.controls.referenceField17.patchValue('');
+      this.form.controls.referenceField18.patchValue('');
+      this.form.controls.referenceField19.patchValue('');
+      this.form.controls.referenceField20.patchValue('');
+    }
+  }
+
+  mailingAddressChange(e){
+    if (e.value == true) {
+        this.form.controls.referenceField5.patchValue(this.form.controls.suiteDoorNo.value);
+        this.form.controls.mailingAddress.patchValue(this.form.controls.addressLine1.value);
+        this.form.controls.referenceField6.patchValue(this.form.controls.city.value);
+        this.form.controls.referenceField7.patchValue(this.form.controls.state.value);
+        this.form.controls.referenceField8.patchValue(this.form.controls.zipCode.value);
+        this.form.controls.referenceField10.patchValue(this.form.controls.country.value);
+      } else {
+        this.form.controls.mailingAddress.patchValue('');
+        this.form.controls.referenceField5.patchValue('');
+        this.form.controls.referenceField6.patchValue('');
+        this.form.controls.referenceField7.patchValue('');
+        this.form.controls.referenceField8.patchValue('');
+        this.form.controls.referenceField10.patchValue('');
+      }
   }
   addressPatch() {
     // alert(2)
@@ -541,22 +578,22 @@ export class ClientNewComponent implements OnInit {
             this.multiselectreferralList.push(x)
           }
         })
-        console.log(this.multiselectreferralList)
 
-        this.form.controls.mailingAddress.patchValue(res.addressLine1);
-        this.form.controls.referenceField5.patchValue(res.addressLine2);
-        this.form.controls.referenceField6.patchValue(res.city);
-        this.form.controls.referenceField7.patchValue(res.state);
-        this.form.controls.referenceField8.patchValue(res.zipCode);
-        this.form.controls.referenceField10.patchValue(res.country);
+        //address logic
+        // this.form.controls.mailingAddress.patchValue(res.addressLine1);
+        // this.form.controls.referenceField5.patchValue(res.addressLine2);
+        // this.form.controls.referenceField6.patchValue(res.city);
+        // this.form.controls.referenceField7.patchValue(res.state);
+        // this.form.controls.referenceField8.patchValue(res.zipCode);
+        // this.form.controls.referenceField10.patchValue(res.country);
 
 
-        this.form.controls.referenceField16.patchValue(res.addressLine2);
-        this.form.controls.addressLine3.patchValue(res.addressLine1);
-        this.form.controls.referenceField17.patchValue(res.city);
-        this.form.controls.referenceField18.patchValue(res.state);
-        this.form.controls.referenceField19.patchValue(res.zipCode);
-        this.form.controls.referenceField20.patchValue(res.country);
+        // this.form.controls.referenceField16.patchValue(res.addressLine2);
+        // this.form.controls.addressLine3.patchValue(res.addressLine1);
+        // this.form.controls.referenceField17.patchValue(res.city);
+        // this.form.controls.referenceField18.patchValue(res.state);
+        // this.form.controls.referenceField19.patchValue(res.zipCode);
+        // this.form.controls.referenceField20.patchValue(res.country);
 
 
 

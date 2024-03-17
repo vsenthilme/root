@@ -1,9 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
-import com.tekclover.wms.api.transaction.model.deliveryline.AddDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.DeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.SearchDeliveryLine;
-import com.tekclover.wms.api.transaction.model.deliveryline.UpdateDeliveryLine;
+import com.tekclover.wms.api.transaction.model.deliveryline.*;
 import com.tekclover.wms.api.transaction.repository.DeliveryLineRepository;
 import com.tekclover.wms.api.transaction.service.DeliveryLineService;
 import io.swagger.annotations.Api;
@@ -105,6 +102,28 @@ public class DeliveryLineController {
         List<DeliveryLine> createdDeliveryLine =
                 deliveryLineService.findDeliveryLine(searchDeliveryLine);
         return new ResponseEntity<>(createdDeliveryLine, HttpStatus.OK);
+    }
 
+
+    // Get DeliveryLine Count
+    @ApiOperation(response = DeliveryLineCount.class, value = "Get a DeliveryLine Count") // label for swagger
+    @GetMapping("/count")
+    public ResponseEntity<?> getDeliveryLineCount(@RequestParam String companyCodeId, @RequestParam String languageId,
+                                                  @RequestParam String plantId, @RequestParam String warehouseId,
+                                                  @RequestParam String driverId) {
+
+        DeliveryLineCount deliveryLine =
+                deliveryLineService.getDeliveryLineCount(companyCodeId, languageId, plantId, warehouseId, driverId);
+        return new ResponseEntity<>(deliveryLine, HttpStatus.OK);
+    }
+
+    // Search DeliveryLine
+    @ApiOperation(response = DeliveryLineCount.class, value = "Find DeliveryLineCount") // label for swagger
+    @PostMapping("/findDeliveryLineCount")
+    public ResponseEntity<?> findDeliveryLineCount(@Valid @RequestBody FindDeliveryLineCount findDeliveryLineCount) throws Exception {
+
+        DeliveryLineCount createdDeliveryLine =
+                deliveryLineService.findDeliveryLineCount(findDeliveryLineCount);
+        return new ResponseEntity<>(createdDeliveryLine, HttpStatus.OK);
     }
 }

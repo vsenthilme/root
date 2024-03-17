@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.inbound.putaway.v2.InboundReversalInput;
 import com.tekclover.wms.api.transaction.model.outbound.outboundreversal.v2.OutboundReversalV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineOutput;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundLineV2;
@@ -251,9 +254,18 @@ public class OutboundLineController {
     @ApiOperation(response = OutboundLineV2.class, value = "Get Delivery Lines") // label for swagger
    	@GetMapping("/v2/reversal/new")
    	public ResponseEntity<?> doReversalV2(@RequestParam String refDocNumber, @RequestParam String itemCode, @RequestParam String manufacturerName,
-   			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+   			@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
        	List<OutboundReversalV2> deliveryLines = outboundlineService.doReversalV2(refDocNumber, itemCode, manufacturerName, loginUserID);
        	log.info("deliveryLines : " + deliveryLines);
    		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
    	}
+
+	@ApiOperation(response = OutboundLineV2.class, value = "Reversal Batch") // label for swagger
+	@PostMapping("/v2/reversal/batch")
+	public ResponseEntity<?> doReversalBatchV2(@RequestBody List<InboundReversalInput> outboundReversalInput,
+											   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
+		List<OutboundReversalV2> deliveryLines = outboundlineService.batchOutboundReversal(outboundReversalInput, loginUserID);
+		log.info("deliveryLines : " + deliveryLines);
+		return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
+	}
 }

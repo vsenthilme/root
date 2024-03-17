@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,29 +26,9 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
             String warehouseId, String preInboundNo, String refDocNumber,
             String stagingNo, String goodsReceiptNo, String palletCode, String caseCode, Long deletionIndicator);
 
-    List<GrHeaderV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
-            String languageId, String companyCode, String plantId,
-            String warehouseId, String goodsReceiptNo, String caseCode, String refDocNumber, Long deletionIndicator);
-
-//    @Query(value = "select \n" +
-//            "* \n" +
-//            "from \n" +
-//            "tblgrheader \n" +
-//            "where \n" +
-//            "c_id IN (:companyCode) and \n" +
-//            "lang_id IN (:languageId) and \n" +
-//            "plant_id IN(:plantId) and \n" +
-//            "wh_id IN (:warehouseId) and \n" +
-//            "ref_doc_no IN (:refDocNumber) and \n" +
-//            "is_deleted = 0", nativeQuery = true)
-//    List<GrHeaderV2> getGrHeaderV2(
-//            @Param(value = "warehouseId") String warehouseId,
-//            @Param(value = "companyCode") String companyCode,
-//            @Param(value = "plantId") String plantId,
-//            @Param(value = "languageId") String languageId,
-//            @Param(value = "refDocNumber") String refDocNumber
-//    );
-
+    GrHeaderV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
+            String languageId, String companyCode, String plantId, String warehouseId,
+            String goodsReceiptNo, String caseCode, String refDocNumber, Long deletionIndicator);
 
     @Query(value = "select \n" +
             "* \n" +
@@ -93,4 +75,19 @@ public interface GrHeaderV2Repository extends JpaRepository<GrHeaderV2, Long>, J
                               @Param("refDocNumber") String refDocNumber,
                               @Param("statusId") Long statusId,
                               @Param("statusDescription") String statusDescription);
+
+    @Transactional
+    @Procedure(procedureName = "grheader_status_update_proc")
+    public void updateGrheaderStatusUpdateProc(
+            @Param("companyCodeId") String companyCodeId,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("goodsReceiptNo") String goodsReceiptNo,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedOn") Date updatedOn
+    );
 }

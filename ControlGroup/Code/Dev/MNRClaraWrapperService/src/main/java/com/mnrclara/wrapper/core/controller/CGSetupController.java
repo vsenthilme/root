@@ -1,6 +1,7 @@
 package com.mnrclara.wrapper.core.controller;
 
 import com.mnrclara.wrapper.core.model.cgsetup.*;
+import com.mnrclara.wrapper.core.model.cgtransaction.StoreDropDown;
 import com.mnrclara.wrapper.core.model.crm.EMail;
 import com.mnrclara.wrapper.core.service.CGSetupService;
 import io.swagger.annotations.Api;
@@ -381,6 +382,13 @@ public class CGSetupController {
         return cgSetupService.findStoreId(findStoreId, authToken);
     }
 
+    @ApiOperation(response = StoreDropDown[].class, value = "Get All StoreDropDown ")
+    @GetMapping("/getAllStoreGroupDown")
+    public ResponseEntity<?> getAllStoreDropDown(@RequestParam String authToken){
+        StoreDropDown[] dbStoreDropDown = cgSetupService.getStoreDropDown(authToken);
+        return new ResponseEntity<>(dbStoreDropDown, HttpStatus.OK);
+    }
+
     /* --------------------------------ControlGroupType-------------------------------------------------------------------------*/
 
     @ApiOperation(response = Optional.class, value = "Get All ControlGroupType") // label for swagger
@@ -662,11 +670,10 @@ public class CGSetupController {
     @RequestMapping(value = "/clientcontrolgroup/{clientId}", method = RequestMethod.GET)
     public ResponseEntity<?> getClientControlGroup(@PathVariable Long clientId, @RequestParam Long groupTypeId,
                                                    @RequestParam String companyId, @RequestParam String languageId,
-                                                   @RequestParam Long subGroupTypeId, @RequestParam Long versionNumber,
-                                                   @RequestParam String authToken) {
+                                                   @RequestParam Long versionNumber, @RequestParam String authToken) {
 
         ClientControlGroup dbControlGroup =
-                cgSetupService.getClientControlGroup(subGroupTypeId, groupTypeId, clientId, companyId, languageId, versionNumber, authToken);
+                cgSetupService.getClientControlGroup(groupTypeId, clientId, companyId, languageId, versionNumber, authToken);
         log.info("getClientControlGroup::: " + dbControlGroup);
         return new ResponseEntity<>(dbControlGroup, HttpStatus.OK);
     }
@@ -688,11 +695,11 @@ public class CGSetupController {
     @RequestMapping(value = "/clientcontrolgroup/{clientId}", method = RequestMethod.PATCH)
     public ResponseEntity<?> updateClientControlGroup(@PathVariable Long clientId, @RequestParam String languageId,
                                                       @RequestParam Long groupTypeId, @RequestParam String loginUserID,
-                                                      @RequestBody ClientControlGroup updateControlGroup, @RequestParam Long subGroupTypeId,
+                                                      @RequestBody ClientControlGroup updateControlGroup,
                                                       @RequestParam String companyId, @RequestParam Long versionNumber,
                                                       @RequestParam String authToken) {
         ClientControlGroup dbClientControl =
-                cgSetupService.updateClientControlGroup(subGroupTypeId, groupTypeId, clientId, languageId,
+                cgSetupService.updateClientControlGroup(groupTypeId, clientId, languageId,
                         loginUserID, companyId, updateControlGroup, versionNumber, authToken);
 
         log.info("updateClientControlGroup::: " + dbClientControl);
@@ -703,11 +710,11 @@ public class CGSetupController {
     @ApiOperation(response = Optional.class, value = "Delete ClientControlGroup") // label for swagger
     @RequestMapping(value = "/clientcontrolgroup/{clientId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteClientControlGroup(@PathVariable Long clientId, @RequestParam String companyId,
-                                                      @RequestParam Long subGroupTypeId, @RequestParam String languageId,
-                                                      @RequestParam Long groupTypeId, @RequestParam String authToken,
-                                                      @RequestParam Long versionNumber, @RequestParam String loginUserID) {
+                                                      @RequestParam String languageId, @RequestParam Long groupTypeId,
+                                                      @RequestParam String authToken, @RequestParam Long versionNumber,
+                                                      @RequestParam String loginUserID) {
         boolean isClientControlGroupDeleted =
-                cgSetupService.deleteClientControlGroup(subGroupTypeId, groupTypeId, clientId, loginUserID,
+                cgSetupService.deleteClientControlGroup(groupTypeId, clientId, loginUserID,
                         companyId, languageId, versionNumber, authToken);
 
         log.info("isClientControlGroupDeleted::: " + isClientControlGroupDeleted);

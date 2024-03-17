@@ -4,11 +4,13 @@ import com.mnrclara.api.cg.setup.model.IKeyValuePair;
 import com.mnrclara.api.cg.setup.model.store.StoreId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -57,4 +59,15 @@ public interface StoreIdRepository extends JpaRepository<StoreId, Long>, JpaSpec
                                         @Param(value = "stateId") String stateId,
                                         @Param(value = "cityId") String cityId);
 
+    @Query(value = "select store_id as storeId, store_name as description from tblstoreid where is_deleted = 0 ", nativeQuery = true)
+    List<IKeyValuePair> getStoreDropDown();
+    @Modifying
+    @Query(value = "update tblstorepartnerlisting set store_nm = :storeName where store_id = :storeId", nativeQuery = true)
+    public void updateStorePartnerList(@Param("storeId") Long storeId,
+                                       @Param("storeName") String storeName);
+
+    @Modifying
+    @Query(value = "update tblownershiprequest set STORE_NM = :storeName where STORE_ID = :storeId", nativeQuery = true)
+    public void updateOwnershipRequest(@Param("storeId") Long storeId,
+                                       @Param("storeName") String storeName);
 }

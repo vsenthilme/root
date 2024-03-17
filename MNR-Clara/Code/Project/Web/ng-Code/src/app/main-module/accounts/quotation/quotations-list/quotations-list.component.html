@@ -255,6 +255,6 @@
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-aliasMenuItems="element">
 
-    <button mat-menu-item [disabled]="!RA.createUpdate" (click)="sendtoClient(aliasMenuItems)">Approve</button>
+    <button mat-menu-item [disabled]="aliasMenuItems.referenceField10 != null" (click)="sendtoClient(aliasMenuItems)">Send to Client Portal</button>
   </ng-template>
 </mat-menu>

@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.config.PropertiesConfig;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.auth.AXAuthToken;
@@ -7,6 +8,7 @@ import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
 import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 public class InboundHeaderService extends BaseService {
+    @Autowired
+    private PutAwayHeaderV2Repository putAwayHeaderV2Repository;
     @Autowired
     private PutAwayLineV2Repository putAwayLineV2Repository;
     @Autowired
@@ -138,6 +143,12 @@ public class InboundHeaderService extends BaseService {
     private MastersService mastersService;
 
     String statusDescription = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
     //----------------------------------------------------------------------------------------------
 
     /**
@@ -1116,7 +1127,7 @@ public class InboundHeaderService extends BaseService {
      * @return
      */
     public InboundHeaderEntityV2 getInboundHeaderV2(String companyCode, String plantId, String languageId,
-                                                    String warehouseId, String refDocNumber, String preInboundNo) {
+                                                    String warehouseId, String refDocNumber, String preInboundNo) throws IOException, CsvException {
         Optional<InboundHeaderV2> optInboundHeader =
                 inboundHeaderV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                         languageId,
@@ -1127,6 +1138,9 @@ public class InboundHeaderService extends BaseService {
                         preInboundNo,
                         0L);
         if (optInboundHeader.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "InboundHeader with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -1156,7 +1170,7 @@ public class InboundHeaderService extends BaseService {
      * @return
      */
     public InboundHeaderV2 getInboundHeaderByEntityV2(String companyCode, String plantId, String languageId,
-                                                      String warehouseId, String refDocNumber, String preInboundNo) {
+                                                      String warehouseId, String refDocNumber, String preInboundNo) throws IOException, CsvException {
         Optional<InboundHeaderV2> optInboundHeader =
                 inboundHeaderV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                         languageId,
@@ -1167,6 +1181,9 @@ public class InboundHeaderService extends BaseService {
                         preInboundNo,
                         0L);
         if (optInboundHeader.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "InboundHeader with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -1247,7 +1264,6 @@ public class InboundHeaderService extends BaseService {
         InboundHeaderV2 dbInboundHeader = optInboundHeader.get();
         BeanUtils.copyProperties(updateInboundHeader, dbInboundHeader, CommonUtils.getNullPropertyNames(updateInboundHeader));
         dbInboundHeader.setUpdatedBy(loginUserID);
-//        dbInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundHeader.setUpdatedOn(new Date());
         return inboundHeaderV2Repository.save(dbInboundHeader);
     }
@@ -1262,15 +1278,17 @@ public class InboundHeaderService extends BaseService {
      * @param loginUserID
      */
     public void deleteInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId,
-                                      String refDocNumber, String preInboundNo, String loginUserID) throws ParseException {
+                                      String refDocNumber, String preInboundNo, String loginUserID) throws ParseException, IOException, CsvException {
         InboundHeaderV2 inboundHeader = getInboundHeaderByEntityV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
         if (inboundHeader != null) {
             inboundHeader.setDeletionIndicator(1L);
             inboundHeader.setUpdatedBy(loginUserID);
-//            inboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             inboundHeader.setUpdatedOn(new Date());
             inboundHeaderV2Repository.save(inboundHeader);
         } else {
+            // Error Log
+            createInboundHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "Error in deleting InboundHeader with refDocNo - " + refDocNumber);
             throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
     }
@@ -1339,18 +1357,18 @@ public class InboundHeaderService extends BaseService {
     @Transactional
     public AXApiResponse updateInboundHeaderConfirmV2(String companyCode, String plantId, String languageId,
                                                       String warehouseId, String preInboundNo, String refDocNumber, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
 //		List<InboundLine> dbInboundLines = inboundLineService.getInboundLine (warehouseId, refDocNumber, preInboundNo);
         List<Boolean> validationStatusList = new ArrayList<>();
 
         // PutawayLine Validation
-        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
-        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
-
-        if (putAwayLineStatusIdCount == 0) {
-            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
-        }
-        validationStatusList.add(true);
+//        long putAwayLineStatusIdCount = putAwayLineService.getPutAwayLineByStatusIdV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
+//        log.info("PutAwayLine status----> : " + putAwayLineStatusIdCount);
+//
+//        if (putAwayLineStatusIdCount == 0) {
+//            throw new BadRequestException("Error on Inbound Confirmation: PutAwayLines are NOT processed completely.");
+//        }
+//        validationStatusList.add(true);
 
         // PutawayHeader Validation
         long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
@@ -1359,6 +1377,9 @@ public class InboundHeaderService extends BaseService {
         log.info("PutAwayHeader status----> : " + putAwayHeaderStatusIdCount);
 
         if (putAwayHeaderStatusIdCount != 0) {
+            // Error Log
+            createInboundHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, putAwayHeaderStatusIdCount,
+                    "Error on Inbound Confirmation: PutAwayHeader are NOT processed completely.");
             throw new BadRequestException("Error on Inbound Confirmation: PutAwayHeader are NOT processed completely.");
         }
         validationStatusList.add(true);
@@ -1368,6 +1389,9 @@ public class InboundHeaderService extends BaseService {
 //        log.info("stagingLineStatusIdCount status----> : " + stagingLineStatusIdCount);
 
 //        if (stagingLineStatusIdCount == 0) {
+//            // Error Log
+//            createInboundHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+//                    "Error on Inbound Confirmation: StagingLine are NOT processed completely.");
 //            throw new BadRequestException("Error on Inbound Confirmation: StagingLine are NOT processed completely.");
 //        }
 //        validationStatusList.add(true);
@@ -1381,6 +1405,9 @@ public class InboundHeaderService extends BaseService {
 
         log.info("sendConfirmationToAX ----> : " + sendConfirmationToAX);
         if (!sendConfirmationToAX) {
+            // Error Log
+            createInboundHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "Order is NOT completely processed for OrderNumber - " + refDocNumber);
             throw new BadRequestException("Order is NOT completely processed for OrderNumber : " + refDocNumber);
         }
 
@@ -1448,11 +1475,9 @@ public class InboundHeaderService extends BaseService {
 
         List<InboundLineV2> inboundLineV2List = inboundLineService.getInboundLineForInboundConfirmWithStatusIdV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
         statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
-//        inboundLineRepository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundLineV2Repository.updateInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundLine updated");
 
-//        inboundHeaderRepository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, DateUtils.getCurrentKWTDateTime());
         inboundHeaderV2Repository.updateInboundHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription, loginUserID, new Date());
         log.info("InboundHeader updated");
 
@@ -1466,8 +1491,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PreInboundLine updated");
             }
         }
-//        preInboundLineV2Repository.updatePreInboundLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
-//        log.info("PreInboundLine updated");
 
         grHeaderV2Repository.updateGrHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("grHeader updated");
@@ -1477,6 +1500,9 @@ public class InboundHeaderService extends BaseService {
 
         putAwayLineV2Repository.updatePutawayLineStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
         log.info("putAwayLine updated");
+
+        putAwayHeaderV2Repository.updatePutAwayHeaderStatus(warehouseId, companyCode, plantId, languageId, refDocNumber, 24L, statusDescription);
+        log.info("PutAwayHeader Updated");
 
         axapiResponse.setStatusCode("200");                         //HardCode for Testing
         axapiResponse.setMessage("Success");                        //HardCode for Testing
@@ -1488,7 +1514,7 @@ public class InboundHeaderService extends BaseService {
      * @param putAwayLine
      * @return
      */
-    private InventoryV2 createInventoryV2(PutAwayLineV2 putAwayLine, String quantityType) {
+    private InventoryV2 createInventoryV2(PutAwayLineV2 putAwayLine, String quantityType) throws IOException, CsvException {
 
         String palletCode = null;
         String caseCode = null;
@@ -1516,16 +1542,20 @@ public class InboundHeaderService extends BaseService {
                     inventory2.setInventoryQuantity(INV_QTY);
                     inventory2.setReferenceField4(INV_QTY);         //Allocated Qty is always 0 for BinClassId 3
                     log.info("INV_QTY---->TOT_QTY---->: " + INV_QTY + ", " + INV_QTY);
-                    inventory2.setInventoryId(System.currentTimeMillis());
 
                     palletCode = existinginventory.getPalletCode();
                     caseCode = existinginventory.getCaseCode();
 
+                    inventory2.setCreatedOn(existinginventory.getCreatedOn());
+                    inventory2.setUpdatedOn(new Date());
+                    inventory2.setInventoryId(System.currentTimeMillis());
                     InventoryV2 createdInventoryV2 = inventoryV2Repository.save(inventory2);
                     log.info("----existinginventory--createdInventoryV2--------> : " + createdInventoryV2);
                 }
             }
         } catch (Exception e) {
+            // Error Log
+            createInboundHeaderLog3(putAwayLine, e.toString());
             e.printStackTrace();
             log.info("Existing Inventory---Error-----> : " + e.toString());
         }
@@ -1619,17 +1649,6 @@ public class InboundHeaderService extends BaseService {
             // SP_ST_IND_ID
             inventory.setSpecialStockIndicatorId(1L);
 
-//            IInventoryImpl existingInventory = inventoryService.getInventoryForCreateInvInboundConfirm(
-//                    putAwayLine.getCompanyCode(),
-//                    putAwayLine.getPlantId(),
-//                    putAwayLine.getLanguageId(),
-//                    putAwayLine.getWarehouseId(),
-//                    putAwayLine.getItemCode(),
-//                    binClassId,
-//                    1L,
-//                    putAwayLine.getManufacturerName(),
-//                    putAwayLine.getConfirmedStorageBin());
-
             InventoryV2 existingInventory = inventoryService.getInventoryForInhouseTransferV2(
                     putAwayLine.getCompanyCode(),
                     putAwayLine.getPlantId(),
@@ -1681,8 +1700,6 @@ public class InboundHeaderService extends BaseService {
                 log.info("PA UOM: " + putAwayLine.getPutAwayUom());
             }
             inventory.setCreatedBy(putAwayLine.getCreatedBy());
-//            inventory.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-            inventory.setCreatedOn(new Date());
 
             //V2 Code (remaining all fields copied already using beanUtils.copyProperties)
             boolean capacityCheck = false;
@@ -1724,13 +1741,20 @@ public class InboundHeaderService extends BaseService {
             inventory.setReferenceDocumentNo(putAwayLine.getRefDocNumber());
             inventory.setReferenceOrderNo(putAwayLine.getRefDocNumber());
 
-//            inventory.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            if(existingInventory != null) {
+                inventory.setCreatedOn(existingInventory.getCreatedOn());
+            }
+            if(existingInventory == null) {
+                inventory.setCreatedOn(new Date());
+            }
             inventory.setUpdatedOn(new Date());
             inventory.setInventoryId(System.currentTimeMillis());
             InventoryV2 createdinventory = inventoryV2Repository.save(inventory);
             log.info("created inventory : " + createdinventory);
             return createdinventory;
         } catch (Exception e) {
+            // Error Log
+            createInboundHeaderLog3(putAwayLine, "Error while creating Inventory - " + e.toString());
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -1743,7 +1767,7 @@ public class InboundHeaderService extends BaseService {
      * @param confirmedInboundLines
      * @return
      */
-    private AXApiResponse postASNV2(InboundHeaderV2 confirmedInboundHeader, List<InboundLineV2> confirmedInboundLines) throws ParseException {
+    private AXApiResponse postASNV2(InboundHeaderV2 confirmedInboundHeader, List<InboundLineV2> confirmedInboundLines) throws ParseException, IOException, CsvException {
         ASNHeaderV2 asnHeader = new ASNHeaderV2();
         asnHeader.setAsnNumber(confirmedInboundHeader.getRefDocNumber());    // REF_DOC_NO
 
@@ -1758,7 +1782,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
 
                 ASNLineV2 asnLine = new ASNLineV2();
@@ -1818,6 +1841,8 @@ public class InboundHeaderService extends BaseService {
         }
 
         if (asnLines.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog4(confirmedInboundLines, "ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
             throw new BadRequestException("ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
         }
 
@@ -1841,7 +1866,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceAsnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1856,7 +1880,7 @@ public class InboundHeaderService extends BaseService {
      * @return
      */
     private AXApiResponse postStoreReturnV2(InboundHeaderV2 confirmedInboundHeader,
-                                            List<InboundLineV2> confirmedInboundLines) throws ParseException {
+                                            List<InboundLineV2> confirmedInboundLines) throws ParseException, IOException, CsvException {
         StoreReturnHeader storeReturnHeader = new StoreReturnHeader();
         storeReturnHeader.setTransferOrderNumber(confirmedInboundHeader.getRefDocNumber());    // REF_DOC_NO
         List<StoreReturnLine> storeReturnLines = new ArrayList<>();
@@ -1868,7 +1892,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 StoreReturnLine storeReturnLine = new StoreReturnLine();
 
@@ -1919,6 +1942,8 @@ public class InboundHeaderService extends BaseService {
         }
 
         if (storeReturnLines.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog4(confirmedInboundLines, "ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
             throw new BadRequestException("ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
         }
 
@@ -1942,7 +1967,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceStoreReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -1956,7 +1980,7 @@ public class InboundHeaderService extends BaseService {
      * @param confirmedInboundLines
      * @return
      */
-    private AXApiResponse postSOReturnV2(InboundHeaderV2 confirmedInboundHeader, List<InboundLineV2> confirmedInboundLines) throws ParseException {
+    private AXApiResponse postSOReturnV2(InboundHeaderV2 confirmedInboundHeader, List<InboundLineV2> confirmedInboundLines) throws ParseException, IOException, CsvException {
         SOReturnHeader soReturnHeader = new SOReturnHeader();
         soReturnHeader.setReturnOrderReference(confirmedInboundHeader.getRefDocNumber());    // REF_DOC_NO
 
@@ -1969,7 +1993,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 SOReturnLine soReturnLine = new SOReturnLine();
 
@@ -2010,6 +2033,8 @@ public class InboundHeaderService extends BaseService {
         }
 
         if (soReturnLines.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog4(confirmedInboundLines, "ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
             throw new BadRequestException("ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
         }
 
@@ -2033,7 +2058,6 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceSOReturnUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
@@ -2048,7 +2072,7 @@ public class InboundHeaderService extends BaseService {
      * @return
      */
     private AXApiResponse postInterWarehouseV2(InboundHeaderV2 confirmedInboundHeader,
-                                               List<InboundLineV2> confirmedInboundLines) throws ParseException {
+                                               List<InboundLineV2> confirmedInboundLines) throws ParseException, IOException, CsvException {
         InterWarehouseTransferInHeaderV2 toHeader = new InterWarehouseTransferInHeaderV2();
         toHeader.setTransferOrderNumber(confirmedInboundHeader.getRefDocNumber());    // REF_DOC_NO
 
@@ -2061,7 +2085,6 @@ public class InboundHeaderService extends BaseService {
              */
             if ((inboundLine.getAcceptedQty() != null && inboundLine.getAcceptedQty() > 0)
                     || (inboundLine.getDamageQty() != null && inboundLine.getDamageQty() > 0)) {
-//                inboundLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
                 inboundLine.setConfirmedOn(new Date());
                 InterWarehouseTransferInLineV2 iwhTransferLine = new InterWarehouseTransferInLineV2();
 
@@ -2118,6 +2141,8 @@ public class InboundHeaderService extends BaseService {
         }
 
         if (toLines.isEmpty()) {
+            // Error Log
+            createInboundHeaderLog4(confirmedInboundLines, "ConfirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
             throw new BadRequestException("confirmedInboundLines had neither AcceptQty nor DamageQty. Please check the data.");
         }
 
@@ -2141,11 +2166,29 @@ public class InboundHeaderService extends BaseService {
         response.setResponseCode(apiResponse.getStatusCode());
         response.setResponseText(apiResponse.getMessage());
         response.setApiUrl(propertiesConfig.getAxapiServiceInterwareHouseUrl());
-//        response.setTransDate(DateUtils.getCurrentKWTDateTime());
         response.setTransDate(new Date());
 
         integrationApiResponseRepository.save(response);
         return apiResponse;
+    }
+
+    /**
+     *
+     * @param companyCode
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @return
+     */
+    //Get InboundHeader
+    public InboundHeaderV2 getInboundHeaderForInvoiceCancellationV2(String companyCode, String plantId, String languageId,
+                                                                    String warehouseId, String refDocNumber) {
+
+        InboundHeaderV2 inboundHeader = inboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+                companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
+        log.info("InboundHeaderV2 - cancellation : " + inboundHeader);
+        return inboundHeader;
     }
 
     /**
@@ -2161,7 +2204,7 @@ public class InboundHeaderService extends BaseService {
      */
     //Delete InboundHeader
     public InboundHeaderV2 deleteInboundHeaderV2(String companyCode, String plantId, String languageId,
-                                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+                                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException, IOException, CsvException {
 
         InboundHeaderV2 inboundHeader = inboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
@@ -2171,8 +2214,126 @@ public class InboundHeaderService extends BaseService {
             inboundHeader.setUpdatedBy(loginUserID);
             inboundHeader.setUpdatedOn(new Date());
             inboundHeaderV2Repository.save(inboundHeader);
+        }  else {
+            // Error Log
+            createInboundHeaderLog5(languageId, companyCode, plantId, warehouseId, refDocNumber,
+                    "Error in deleting InboundHeader with refDocNumber - " + refDocNumber);
+            throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
         }
         return inboundHeader;
+    }
+
+    //=======================================InboundHeader_ExceptionLog================================================
+    private void createInboundHeaderLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                        String refDocNumber, String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                         String refDocNumber, String preInboundNo, long statusIdCount, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2("statusIdCount-" + statusIdCount);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundHeaderLog3(PutAwayLineV2 putAwayLineV2, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(putAwayLineV2.getPutAwayNumber());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(putAwayLineV2.getLanguageId());
+        errorLog.setCompanyCodeId(putAwayLineV2.getCompanyCode());
+        errorLog.setPlantId(putAwayLineV2.getPlantId());
+        errorLog.setWarehouseId(putAwayLineV2.getWarehouseId());
+        errorLog.setRefDocNumber(putAwayLineV2.getRefDocNumber());
+        errorLog.setItemCode(putAwayLineV2.getItemCode());
+        errorLog.setManufacturerName(putAwayLineV2.getManufacturerName());
+        errorLog.setReferenceField1(putAwayLineV2.getPackBarcodes());
+        errorLog.setReferenceField2(String.valueOf(putAwayLineV2.getLineNo()));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundHeaderLog4(List<InboundLineV2> inboundLineV2List, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        for (InboundLineV2 inboundLineV2 : inboundLineV2List) {
+            ErrorLog errorLog = new ErrorLog();
+
+            errorLog.setOrderTypeId(inboundLineV2.getRefDocNumber());
+            errorLog.setOrderDate(new Date());
+            errorLog.setLanguageId(inboundLineV2.getLanguageId());
+            errorLog.setCompanyCodeId(inboundLineV2.getLanguageId());
+            errorLog.setPlantId(inboundLineV2.getPlantId());
+            errorLog.setWarehouseId(inboundLineV2.getWarehouseId());
+            errorLog.setRefDocNumber(inboundLineV2.getRefDocNumber());
+            errorLog.setItemCode(inboundLineV2.getItemCode());
+            errorLog.setManufacturerName(inboundLineV2.getManufacturerName());
+            errorLog.setReferenceField1(inboundLineV2.getPreInboundNo());
+            errorLog.setReferenceField2(String.valueOf(inboundLineV2.getLineNo()));
+            errorLog.setErrorMessage(error);
+            errorLog.setCreatedBy("MSD_API");
+            errorLog.setCreatedOn(new Date());
+            errorLogRepository.save(errorLog);
+            errorLogList.add(errorLog);
+        }
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createInboundHeaderLog5(String languageId, String companyCode, String plantId,
+                                         String warehouseId, String refDocNumber, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
     }
 
 }

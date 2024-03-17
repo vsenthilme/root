@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -901,6 +900,7 @@ public class IntegrationService {
                             consignment.setOrderType(c.getOrderType());
                             consignment.setCustomer_code(c.getCustomerCode());
                             consignment.setAction_time(c.getActionTime());
+                            consignment.setAction_name(c.getActionName());                      
                             consignment.setQpWebhookStatus(c.getQpWebhookStatus());
                             consignmentList.add(consignment);
                         }
@@ -1212,7 +1212,7 @@ public class IntegrationService {
      * @return
      * @throws Exception
      */
-    @Scheduled(fixedDelay = 60 * 60 * 1000)
+//    @Scheduled(fixedDelay = 60 * 60 * 1000)
     public QPTrackingResponse scheduleQPWebhook() throws Exception {
         try {
             log.info("------------Calling----QP----TRACKING------API-----------");

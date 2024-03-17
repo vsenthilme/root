@@ -1,7 +1,6 @@
 package com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLineCompositeKey;
-import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.PerpetualLineCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,43 +21,51 @@ import java.util.Date;
 				@UniqueConstraint (
 						name = "unique_key_periodictempline",
 						columnNames = {"LANG_ID", "C_ID", "PLANT_ID", "WH_ID", "CC_NO", "ST_BIN", "ITM_CODE", 
-								"PACK_BARCODE"})
+								"PACK_BARCODE", "MFR_NAME", "SC_LINE_NO"})
 				}
 		)
 @IdClass(PeriodicLineCompositeKey.class)
 public class PeriodicLineTempV2 {
 
 	@Id
-	@Column(name = "LANG_ID")
+	@Column(name = "LANG_ID", columnDefinition = "nvarchar(25)")
 	private String languageId;
 
 	@Id
-	@Column(name = "C_ID")
+	@Column(name = "C_ID", columnDefinition = "nvarchar(25)")
 	private String companyCode;
 
 	@Id
-	@Column(name = "PLANT_ID")
+	@Column(name = "PLANT_ID", columnDefinition = "nvarchar(25)")
 	private String plantId;
 
 	@Id
-	@Column(name = "WH_ID")
+	@Column(name = "WH_ID", columnDefinition = "nvarchar(25)")
 	private String warehouseId;
 
 	@Id
-	@Column(name = "CC_NO")
+	@Column(name = "CC_NO", columnDefinition = "nvarchar(50)")
 	private String cycleCountNo;
 
 	@Id
-	@Column(name = "ST_BIN")
+	@Column(name = "ST_BIN", columnDefinition = "nvarchar(50)")
 	private String storageBin;
 
 	@Id
-	@Column(name = "ITM_CODE")
+	@Column(name = "ITM_CODE", columnDefinition = "nvarchar(100)")
 	private String itemCode;
 
 	@Id
-	@Column(name = "PACK_BARCODE")
+	@Column(name = "PACK_BARCODE", columnDefinition = "nvarchar(25)")
 	private String packBarcodes;
+
+	@Id
+	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(25)")
+	private String manufacturerName;
+
+	@Id
+	@Column(name = "SC_LINE_NO")
+	private Long lineNo;
 
 	@Column(name = "VAR_ID")
 	private Long variantCode;
@@ -180,9 +187,6 @@ public class PeriodicLineTempV2 {
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
 
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
-
 	@Column(name = "ITM_TEXT", columnDefinition = "nvarchar(255)")
 	private String itemDesc;
 
@@ -191,9 +195,6 @@ public class PeriodicLineTempV2 {
 
 	@Column(name = "MFR_PART", columnDefinition = "nvarchar(255)")
 	private String manufacturerPartNo;
-
-//	@Column(name = "SP_ST_IND_ID")
-//	private Long specialStockIndicator;
 
 	@Column(name = "MIDDLEWARE_ID", columnDefinition = "nvarchar(50)")
 	private String middlewareId;

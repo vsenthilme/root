@@ -14,6 +14,7 @@ import { TimerComponent } from './timer/timer.component';
 import { LogoutPopupComponent } from './dialog_modules/logout-popup/logout-popup.component';
 import { DownloadComponent } from './dialog_modules/download/download.component';
 import { TimeticketNotificationComponent } from './dialog_modules/timeTickets/timeticket-notification/timeticket-notification.component';
+import { DynamicPopupComponent } from './dialog_modules/dynamic-popup/dynamic-popup.component';
 
 
 @NgModule({
@@ -22,7 +23,7 @@ import { TimeticketNotificationComponent } from './dialog_modules/timeTickets/ti
     CommonModule, SharedModule, NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
-    DialogExampleComponent, NotesComponent, CancelComponent, DeleteComponent, ScrollButtonComponent, NgMultiselectDropdownComponent,AddStringArrayPopupComponent,ShowStringPopupComponent, TimerComponent, LogoutPopupComponent, DownloadComponent, TimeticketNotificationComponent
+    DialogExampleComponent, NotesComponent, CancelComponent, DeleteComponent, ScrollButtonComponent, NgMultiselectDropdownComponent,AddStringArrayPopupComponent,ShowStringPopupComponent, TimerComponent, LogoutPopupComponent, DownloadComponent, TimeticketNotificationComponent, DynamicPopupComponent
   ],
   exports: [
     DialogExampleComponent, NotesComponent, CancelComponent, DeleteComponent, ScrollButtonComponent

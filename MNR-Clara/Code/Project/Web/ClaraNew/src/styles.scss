@@ -408,3 +408,49 @@ h2.my-auto.headertext {
 // .disable-backdrop-click .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
 //   pointer-events: none;
 // }
+
+
+.p-datatable-scrollable .p-datatable-tfoot {
+  position: sticky;
+  bottom: -1.5rem !important;
+  z-index: 1;
+}
+
+.p-component {
+  font-family: 'Roboto Slab' !important;
+}
+.p-datatable .p-datatable-thead > tr > th {
+  font-size: 14px !important;
+} 
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  font-size: 0.7rem !important;
+}
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th {       //  headerColor
+  background-color: #e2edf7  !important;
+}
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+  color: #afafaf !important;
+  margin-left: 0.5rem;
+}
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.2rem 0.5rem !important;
+  height: 1.8rem !important;
+}
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.7rem !important;
+}
+.p-paginator {
+  padding: 0.1rem 1rem !important;
+}
+.p-paginator .p-paginator-current {
+  height: 1.357rem !important;
+  font-size: 0.7rem !important;
+}
+.p-paginator .p-paginator-pages .p-paginator-page {
+  height: 1.357rem !important;
+}
+.p-column-filter{
+  padding: 0.1rem 0.5rem !important;
+  font-size: 0.7rem !important;
+}

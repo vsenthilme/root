@@ -72,7 +72,7 @@ public class SparkOrderStatusReportService {
         orderStatusReportQuery = orderStatusReportQuery.withColumn("percentageOfDelivered",
                 functions.expr("(DLV_QTY / ORD_QTY) * 100"));
 
-        orderStatusReportQuery.cache();
+//        orderStatusReportQuery.cache();
 
         if (searchOrderStatusReport.getStatusId() != null && !searchOrderStatusReport.getStatusId().isEmpty()) {
             List<String> inboundOrderIdStrings = searchOrderStatusReport.getStatusId().stream().map(String::valueOf).collect(Collectors.toList());

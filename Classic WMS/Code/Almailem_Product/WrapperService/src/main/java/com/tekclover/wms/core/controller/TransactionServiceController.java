@@ -1,6 +1,7 @@
 package com.tekclover.wms.core.controller;
 
 import com.tekclover.wms.core.batch.scheduler.BatchJobScheduler;
+import com.tekclover.wms.core.model.masters.ImPartner;
 import com.tekclover.wms.core.model.transaction.*;
 import com.tekclover.wms.core.model.warehouse.cyclecount.periodic.Periodic;
 import com.tekclover.wms.core.model.warehouse.cyclecount.perpetual.Perpetual;
@@ -756,14 +757,13 @@ public class TransactionServiceController {
 
     @ApiOperation(response = PutAwayHeader.class, value = "Update PutAwayHeader Bulk") // label for swagger
     @RequestMapping(value = "/putawayheader/bulkupdate", method = RequestMethod.PATCH)
-    public ResponseEntity<?> patchPutAwayHeader( @Valid @RequestBody List<PutAwayHeaderV2> updatePutAwayHeader, @RequestParam String loginUserID,
+    public ResponseEntity<?> patchPutAwayHeader(@Valid @RequestBody List<PutAwayHeaderV2> updatePutAwayHeader, @RequestParam String loginUserID,
                                                 @RequestParam String authToken)
             throws IllegalAccessException, InvocationTargetException {
         PutAwayHeader[] updatedPutAwayHeader =
                 transactionService.updatePutAwayHeaderV2(updatePutAwayHeader, loginUserID, authToken);
         return new ResponseEntity<>(updatedPutAwayHeader, HttpStatus.OK);
     }
-
 
 
     @ApiOperation(response = PutAwayHeader.class, value = "Update PutAwayHeader") // label for swagger
@@ -1224,7 +1224,7 @@ public class TransactionServiceController {
     @ApiOperation(response = PickUpHeaderReport.class, value = "Search PickupHeader With StatusId") // label for swagger
     @PostMapping("/pickupheader/findPickupHeader/v2/status")
     public PickUpHeaderReport findPickUpHeaderWithStatus(@RequestBody FindPickUpHeader searchPickupHeader,
-                                              @RequestParam String authToken) throws Exception {
+                                                         @RequestParam String authToken) throws Exception {
         return transactionService.findPickUpHeaderWithStatusId(searchPickupHeader, authToken);
     }
 
@@ -1479,14 +1479,16 @@ public class TransactionServiceController {
         return transactionService.findOutboundLineNew(searchOutboundLine, authToken);
     }
 
-    @ApiOperation(response = OutboundLine.class, value = "Search OutboundLine for Stock movement report")    // label for swagger
+    @ApiOperation(response = OutboundLine.class, value = "Search OutboundLine for Stock movement report")
+    // label for swagger
     @PostMapping("/outboundline/stock-movement-report/findOutboundLine")
     public StockMovementReport[] findOutboundLineForStockMovement(@RequestBody SearchOutboundLine searchOutboundLine, @RequestParam String authToken)
             throws Exception {
         return transactionService.findOutboundLineForStockMovement(searchOutboundLine, authToken);
     }
 
-    @ApiOperation(response = StockMovementReport.class, value = "Search OutboundLine for Stock movement report V2")    // label for swagger
+    @ApiOperation(response = StockMovementReport.class, value = "Search OutboundLine for Stock movement report V2")
+    // label for swagger
     @PostMapping("/outboundline/stock-movement-report/v2/findOutboundLine")
     public StockMovementReport[] findOutboundLineForStockMovementV2(@RequestBody SearchOutboundLineV2 searchOutboundLine, @RequestParam String authToken)
             throws Exception {
@@ -1614,6 +1616,14 @@ public class TransactionServiceController {
         return new ResponseEntity<>(stockReportList, HttpStatus.OK);
     }
 
+    // Get All Stock Reports
+    @ApiOperation(response = StockReport.class, value = "Get All Stock Reports v2") // label for swagger
+    @PostMapping("/reports/v2/stockReport-all")
+    public ResponseEntity<?> getAllStockReportV2(@Valid @RequestBody SearchStockReport searchStockReport, @RequestParam String authToken) {
+        StockReport[] stockReportList = transactionService.getAllStockReportsV2(searchStockReport, authToken);
+        return new ResponseEntity<>(stockReportList, HttpStatus.OK);
+    }
+
 
     /*
      * Inventory Report
@@ -1677,10 +1687,10 @@ public class TransactionServiceController {
         return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
     }
 
-    @ApiOperation(response = ShipmentDeliveryReport.class, value = "Get ShipmentDelivery Report v2") // label for swagger
+    @ApiOperation(response = ShipmentDeliveryReport.class, value = "Get ShipmentDelivery Report v2")    // label for swagger
     @GetMapping("/reports/v2/shipmentDelivery")
-    public ResponseEntity<?> getShipmentDeliveryReport(@RequestParam String companyCodeId,@RequestParam String plantId,
-                                                       @RequestParam String languageId,@RequestParam String warehouseId,
+    public ResponseEntity<?> getShipmentDeliveryReport(@RequestParam String companyCodeId, @RequestParam String plantId,
+                                                       @RequestParam String languageId, @RequestParam String warehouseId,
                                                        @RequestParam(required = false) String fromDeliveryDate,
                                                        @RequestParam(required = false) String toDeliveryDate,
                                                        @RequestParam(required = false) String storeCode,
@@ -1693,8 +1703,7 @@ public class TransactionServiceController {
         return new ResponseEntity<>(shipmentDeliveryList, HttpStatus.OK);
     }
 
-    @ApiOperation(response = ShipmentDeliverySummaryReport.class, value = "Get ShipmentDeliverySummary Report")
-    // label for swagger
+    @ApiOperation(response = ShipmentDeliverySummaryReport.class, value = "Get ShipmentDeliverySummary Report")    // label for swagger
     @GetMapping("/reports/shipmentDeliverySummary1")
     public ResponseEntity<?> getShipmentDeliveryReport1(@RequestParam String fromDeliveryDate,
                                                         @RequestParam String toDeliveryDate, @RequestParam(required = false) List<String> customerCode,
@@ -1750,11 +1759,20 @@ public class TransactionServiceController {
      */
     @ApiOperation(response = MobileDashboard.class, value = "Get MobileDashboard Report") // label for swagger
     @GetMapping("/reports/dashboard/mobile")
-    public ResponseEntity<?> getMobileDashboard(@RequestParam String warehouseId,@RequestParam String companyCode,
+    public ResponseEntity<?> getMobileDashboard(@RequestParam String warehouseId, @RequestParam String companyCode,
                                                 @RequestParam String plantId, @RequestParam String languageId, @RequestParam String loginUserID,
                                                 @RequestParam String authToken) throws Exception {
-        MobileDashboard dashboard = transactionService.getMobileDashboard(companyCode,plantId, languageId, warehouseId,loginUserID, authToken);
+        MobileDashboard dashboard = transactionService.getMobileDashboard(companyCode, plantId, languageId, warehouseId, loginUserID, authToken);
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
+    }
+
+
+    //FIND
+    @ApiOperation(response = MobileDashboard.class, value = "Find MobileDashBoard")//label for swagger
+    @PostMapping("/reports/dashboard/mobile/find")
+    public MobileDashboard findMobileDashBoard(@RequestBody FindMobileDashBoard findMobileDashBoard,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findMobileDashBoard(findMobileDashBoard, authToken);
     }
 
     ///*
@@ -2364,6 +2382,14 @@ public class TransactionServiceController {
         return new ResponseEntity<>(preinboundline, HttpStatus.OK);
     }
 
+    //Find
+    @ApiOperation(response = PreInboundLineOutputV2.class, value = "Search PreInboundLine v2") // label for swagger
+    @PostMapping("/preinboundline/v2/findPreInboundLine")
+    public PreInboundLineOutputV2[] findPreInboundLineV2(@RequestBody SearchPreInboundLineV2 searchPreInboundLine,
+                                                         @RequestParam String authToken) throws Exception {
+        return transactionService.findPreInboundLineV2(searchPreInboundLine, authToken);
+    }
+
     //Patch
     @ApiOperation(response = PreInboundLineV2.class, value = "Patch PreInboundLine V2") // label for swagger
     @PatchMapping("/preinboundline/{preInboundNo}/V2")
@@ -2909,6 +2935,15 @@ public class TransactionServiceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //Update
+    @ApiOperation(response = PutAwayHeaderV2.class, value = "batch PutAwayHeaderV2 Reversal") // label for swagger
+    @PatchMapping("/putawayheader/reverse/batch/v2")
+    public ResponseEntity<?> batchPutAwayHeaderReversalV2(@RequestBody List<InboundReversalInput> inboundReversalInput,
+                                                          @RequestParam String loginUserID, @RequestParam String authToken) {
+        transactionService.batchPutAwayHeaderReversalV2(inboundReversalInput, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //Delete
     @ApiOperation(response = PutAwayHeaderV2.class, value = "Delete PutAwayHeader V2") // label for swagger
     @DeleteMapping("/putawayheader/{putAwayNumber}/v2")
@@ -3010,6 +3045,39 @@ public class TransactionServiceController {
         return transactionService.findInventoryV2(searchInventory, authToken);
     }
 
+    @ApiOperation(response = InventoryV2.class, value = "Create Inventory V2") // label for swagger
+    @PostMapping("/v2/inventory")
+    public ResponseEntity<?> postInventoryV2(@Valid @RequestBody InventoryV2 newInventory, @RequestParam String loginUserID,
+                                           @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
+        InventoryV2 createdInventory = transactionService.createInventoryV2(newInventory, loginUserID, authToken);
+        return new ResponseEntity<>(createdInventory, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InventoryV2.class, value = "Update Inventory V2") // label for swagger
+    @RequestMapping(value = "/inventory/v2/{stockTypeId}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> patchInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                              @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String packBarcodes,
+                                              @RequestParam String itemCode, @RequestParam String manufacturerName, @RequestParam String storageBin,
+                                              @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID,
+                                              @RequestParam String authToken, @Valid @RequestBody InventoryV2 updateInventory)
+            throws IllegalAccessException, InvocationTargetException {
+        InventoryV2 updatedInventory =
+                transactionService.updateInventoryV2(companyCodeId, plantId, languageId, warehouseId, packBarcodes, itemCode,
+                        manufacturerName, storageBin, stockTypeId, specialStockIndicatorId, updateInventory, loginUserID, authToken);
+        return new ResponseEntity<>(updatedInventory, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InventoryV2.class, value = "Delete Inventory V2") // label for swagger
+    @DeleteMapping("/inventory/v2/{stockTypeId}")
+    public ResponseEntity<?> deleteInventoryV2(@PathVariable Long stockTypeId, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                               @RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String packBarcodes,
+                                               @RequestParam String itemCode, @RequestParam String manufacturerName, @RequestParam String storageBin,
+                                               @RequestParam Long specialStockIndicatorId, @RequestParam String loginUserID, @RequestParam String authToken) {
+        transactionService.deleteInventoryV2(companyCodeId, plantId, languageId, warehouseId, manufacturerName,
+                packBarcodes, itemCode, storageBin, stockTypeId, specialStockIndicatorId, loginUserID, authToken);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     //--------------------Almailem--Orders------------------------------------------------------------------
 
     @ApiOperation(response = ASNV2.class, value = "Create ASNV2 Order") // label for swagger
@@ -3022,27 +3090,27 @@ public class TransactionServiceController {
 
     @ApiOperation(response = StockReceiptHeader.class, value = "Create StockReceipt Order") // label for swagger
     @PostMapping("/warehouse/inbound/stockReceipt")
-    public ResponseEntity<?> postStockReceipt(@Valid @RequestBody StockReceiptHeader stockReceipt, @RequestParam String authToken)
+    public ResponseEntity<?> postStockReceipt(@Valid @RequestBody StockReceipt stockReceipt, @RequestParam String authToken)
             throws IllegalAccessException, InvocationTargetException {
         WarehouseApiResponse createdStockReceipt = transactionService.postStockReceipt(stockReceipt, authToken);
         return new ResponseEntity<>(createdStockReceipt, HttpStatus.OK);
     }
 
-    // File Upload - Orders
-    @ApiOperation(response = ASNV2.class, value = "ASN V2") // label for swagger
-    @PostMapping("/warehouse/inbound/asn/upload/v2")
-    public ResponseEntity<?> postWarehouseInboundAsnUploadV2(@RequestParam("file") MultipartFile file) throws Exception {
-        Map<String, String> response = fileStorageService.processAsnOrders(file);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    // File Upload - Orders
+//    @ApiOperation(response = ASNV2.class, value = "ASN V2") // label for swagger
+//    @PostMapping("/warehouse/inbound/asn/upload/v2")
+//    public ResponseEntity<?> postWarehouseInboundAsnUploadV2(@RequestParam("file") MultipartFile file) throws Exception {
+//        Map<String, String> response = fileStorageService.processAsnOrders(file);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     // File Upload - Orders
-    @ApiOperation(response = ShipmentOrder.class, value = "Inter Warehouse Transfer V2") // label for swagger
-    @PostMapping("/warehouse/inbound/interWarehouseTransferIn/upload/v2")
-    public ResponseEntity<?> postinterWarehouseTransferInUpload(@RequestParam("file") MultipartFile file) throws Exception {
-        Map<String, String> response = fileStorageService.processInterWarehouseTransferInOrders(file);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @ApiOperation(response = ShipmentOrder.class, value = "Inter Warehouse Transfer V2") // label for swagger
+//    @PostMapping("/warehouse/inbound/interWarehouseTransferIn/upload/v2")
+//    public ResponseEntity<?> postinterWarehouseTransferInUpload(@RequestParam("file") MultipartFile file) throws Exception {
+//        Map<String, String> response = fileStorageService.processInterWarehouseTransferInOrders(file);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     // SO ReturnV2
     @ApiOperation(response = SaleOrderReturnV2.class, value = "Sales Order Return V2") // label for swagger
@@ -3229,6 +3297,24 @@ public class TransactionServiceController {
         return transactionService.findDeliveryLine(searchDeliveryLine, authToken);
     }
 
+    // GET
+    @ApiOperation(response = DeliveryLineCount.class, value = "Get a DeliveryLine Count") // label for swagger
+    @GetMapping("/deliveryline/count")
+    public ResponseEntity<?> getDeliveryLineCount( @RequestParam String companyCodeId, @RequestParam String languageId,
+                                                   @RequestParam String plantId, @RequestParam String warehouseId,
+                                                   @RequestParam String driverId, @RequestParam String authToken) {
+
+        DeliveryLineCount dbDeliveryLine = transactionService.getDeliveryLineCount(companyCodeId, plantId, languageId, warehouseId, driverId, authToken);
+        return new ResponseEntity<>(dbDeliveryLine, HttpStatus.OK);
+    }
+
+    //FIND
+    @ApiOperation(response = DeliveryLineCount.class, value = "Find DeliveryLineCount")//label for swagger
+    @PostMapping("/deliveryline/findDeliveryLineCount")
+    public DeliveryLineCount findDeliveryLineCount(@RequestBody FindDeliveryLineCount findDeliveryLineCount,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findDeliveryLineCount(findDeliveryLineCount, authToken);
+    }
 
     /*-----------------------------CycleCountOrder------------------------------------------------*/
 
@@ -3468,6 +3554,13 @@ public class TransactionServiceController {
         return new ResponseEntity<>(createdPickupLine, HttpStatus.OK);
     }
 
+    @ApiOperation(response = ImPartner.class, value = "Update BarcodeId") // label for swagger
+    @PatchMapping("/pickupline/v2/barcodeId")
+    public ResponseEntity<?> patchPickupLineBarcodeIdV2(@Valid @RequestBody UpdateBarcodeInput updateBarcodeInput, @RequestParam String authToken) {
+        ImPartner results = transactionService.updatePickupLineForBarcodeId(updateBarcodeInput, authToken);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
     @ApiOperation(response = PickupLineV2.class, value = "Delete PickupLine V2") // label for swagger
     @DeleteMapping("/pickupline/v2/{actualHeNo}")
     public ResponseEntity<?> deletePickupLineV2(@PathVariable String actualHeNo, @RequestParam String companyCodeId, @RequestParam String plantId,
@@ -3585,7 +3678,7 @@ public class TransactionServiceController {
     @ApiOperation(response = OutboundHeaderV2.class, value = "Search OutboundHeader V2") // label for swagger
     @PostMapping("/outboundheader/v2/findOutboundHeader/rfd")
     public OutboundHeaderV2[] findOutboundHeaderV2Rfd(@RequestBody SearchOutboundHeaderV2 searchOutboundHeader,
-                                                   @RequestParam String authToken) throws Exception {
+                                                      @RequestParam String authToken) throws Exception {
         return transactionService.findOutboundHeaderRfd(searchOutboundHeader, authToken);
     }
 
@@ -3679,6 +3772,17 @@ public class TransactionServiceController {
         return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
     }
 
+    /*--------------------Shipping Reversal Batch-----------------------------------------------------------*/
+    @ApiOperation(response = OutboundLineV2.class, value = "Batch Reversal Delivery Lines V2") // label for swagger
+    @PostMapping("/outboundreversal/v2/reversal/batch")
+    public ResponseEntity<?> doReversalBatchV2(@RequestBody List<InboundReversalInput> outboundReversalInput,
+                                               @RequestParam String loginUserID, @RequestParam String authToken)
+            throws IllegalAccessException, InvocationTargetException {
+        OutboundReversalV2[] deliveryLines = transactionService.doReversalBatchV2(outboundReversalInput, loginUserID, authToken);
+        log.info("deliveryLines : " + deliveryLines);
+        return new ResponseEntity<>(deliveryLines, HttpStatus.OK);
+    }
+
     //----------------------Orders-V2-----------------------------------------------------------------
 
     //ShipmentOrder V2
@@ -3754,7 +3858,7 @@ public class TransactionServiceController {
         return new ResponseEntity<>(perpetualheader, HttpStatus.OK);
     }
 
-//    @ApiOperation(response = PerpetualHeaderV2[].class, value = "Search PerpetualHeader V2") // label for swagger
+    //    @ApiOperation(response = PerpetualHeaderV2[].class, value = "Search PerpetualHeader V2") // label for swagger
 //    @PostMapping("/perpetualheader/v2/findPerpetualHeader")
 //    public PerpetualHeaderV2[] findPerpetualHeaderV2(@RequestBody SearchPerpetualHeaderV2 searchPerpetualHeader,
 //                                                     @RequestParam String authToken) throws Exception {
@@ -3763,14 +3867,14 @@ public class TransactionServiceController {
     @ApiOperation(response = PerpetualHeaderEntityV2[].class, value = "Search PerpetualHeader V2") // label for swagger
     @PostMapping("/perpetualheader/v2/findPerpetualHeader")
     public PerpetualHeaderEntityV2[] findPerpetualHeaderV2(@RequestBody SearchPerpetualHeaderV2 searchPerpetualHeader,
-                                                     @RequestParam String authToken) throws Exception {
+                                                           @RequestParam String authToken) throws Exception {
         return transactionService.findPerpetualHeaderV2(searchPerpetualHeader, authToken);
     }
 
     @ApiOperation(response = PerpetualHeaderV2[].class, value = "Search PerpetualHeader New V2") // label for swagger
     @PostMapping("/perpetualheader/v2/findPerpetualHeaderNew")
     public PerpetualHeaderV2[] findPerpetualHeaderNewV2(@RequestBody SearchPerpetualHeaderV2 searchPerpetualHeader,
-                                                                 @RequestParam String authToken) throws Exception {
+                                                        @RequestParam String authToken) throws Exception {
         return transactionService.findPerpetualHeaderEntityV2(searchPerpetualHeader, authToken);
     }
 
@@ -3895,7 +3999,7 @@ public class TransactionServiceController {
     @ApiOperation(response = PeriodicHeaderEntityV2[].class, value = "Search PeriodicHeader V2") // label for swagger
     @PostMapping("/periodicheader/v2/findPeriodicHeader")
     public PeriodicHeaderEntityV2[] findPeriodicHeaderV2(@RequestBody SearchPeriodicHeader searchPeriodicHeader,
-                                                   @RequestParam String authToken) throws Exception {
+                                                         @RequestParam String authToken) throws Exception {
         return transactionService.findPeriodicHeaderV2(searchPeriodicHeader, authToken);
     }
 
@@ -4038,11 +4142,152 @@ public class TransactionServiceController {
     @ApiOperation(response = InboundHeader.class, value = "SupplierInvoice Replace") // label for swagger
     @GetMapping("/SalesInvoice/replace")
     public ResponseEntity<?> patchSalesInvoiceReplace(@RequestParam String companyCode, @RequestParam String languageId, @RequestParam String plantId,
-                                                      @RequestParam String warehouseId,@RequestParam String oldInvoiceNumber, @RequestParam String newInvoiceNumber,
+                                                      @RequestParam String warehouseId, @RequestParam String oldInvoiceNumber, @RequestParam String newInvoiceNumber,
                                                       @RequestParam String loginUserID, @RequestParam String authToken) throws IllegalAccessException, InvocationTargetException {
 
-                transactionService.replaceInvoice(companyCode, plantId, languageId, warehouseId, newInvoiceNumber,oldInvoiceNumber, loginUserID, authToken);
-        return ResponseEntity.ok("Invoice replacement successful.");
+      WarehouseApiResponse result = transactionService.replaceInvoice(companyCode, plantId, languageId, warehouseId, newInvoiceNumber,oldInvoiceNumber, loginUserID, authToken);
+      return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //=============================================ErrorLog============================================================
+    // Get All Error Logs
+    @ApiOperation(response = ExceptionLog.class, value = "Get All Error Log Details")
+    @GetMapping("/errorLog/all")
+    public ResponseEntity<?> getAllExceptionLogDetails(@RequestParam String authToken) {
+        ExceptionLog[] exceptionLogs = transactionService.getAllErrorLogs(authToken);
+        return new ResponseEntity<>(exceptionLogs, HttpStatus.OK);
+    }
+
+    // Find ErrorLog
+    @ApiOperation(response = ExceptionLog.class, value = "Find Error Log")
+    @PostMapping("/errorLog/find")
+    public ResponseEntity<?> findErrorLog(@RequestBody FindErrorLog findErrorLog, @RequestParam String authToken) {
+        ExceptionLog[] exceptionLogList = transactionService.findErrorLogs(findErrorLog, authToken);
+        return new ResponseEntity<>(exceptionLogList, HttpStatus.OK);
+    }
+
+    //===============================================Find Order Details=================================================
+
+    //Find InBoundOrder
+    @ApiOperation(response = InboundOrderV2[].class, value = "Find InboundOrderV2")//label for swagger
+    @PostMapping("/findInboundOrderV2")
+    public ResponseEntity<?> findInboundOrderV2(@RequestBody FindInboundOrderV2 findInboundOrderV2,
+                                                @RequestParam String authToken) {
+        InboundOrderV2[] inboundOrderV2 = transactionService.findInboundOrderV2(findInboundOrderV2, authToken);
+        return new ResponseEntity<>(inboundOrderV2, HttpStatus.OK);
+    }
+
+    //Find InBoundOrderLine
+    @ApiOperation(response = InboundOrderLinesV2[].class, value = "Find InboundOrderLinesV2")//label for swagger
+    @PostMapping("/findInboundOrderLineV2")
+    public ResponseEntity<?> findInboundOrderLineV2(@RequestBody FindInboundOrderLineV2 findInboundOrderLineV2,
+                                                @RequestParam String authToken) {
+        InboundOrderLinesV2[] inboundOrderLinesV2 = transactionService.findInboundOrderLinesV2(findInboundOrderLineV2, authToken);
+        return new ResponseEntity<>(inboundOrderLinesV2, HttpStatus.OK);
+    }
+
+    //Find OutBoundOrder
+    @ApiOperation(response = OutboundOrderV2[].class, value = "Find OutboundOrderV2")//label for swagger
+    @PostMapping("/findOutboundOrderV2")
+    public ResponseEntity<?> findOutboundOrderV2(@RequestBody FindOutboundOrderV2 findOutboundOrderV2,
+                                                    @RequestParam String authToken) {
+        OutboundOrderV2[] outboundOrderV2 = transactionService.findOutboundOrderV2(findOutboundOrderV2, authToken);
+        return new ResponseEntity<>(outboundOrderV2, HttpStatus.OK);
+    }
+
+    //Find OutBoundOrderLine
+    @ApiOperation(response = OutboundOrderLineV2[].class, value = "Find OutboundOrderLineV2")//label for swagger
+    @PostMapping("/findOutboundOrderLineV2")
+    public ResponseEntity<?> findOutboundOrderLineV2(@RequestBody FindOutboundOrderLineV2 findOutboundOrderLineV2,
+                                                 @RequestParam String authToken) {
+        OutboundOrderLineV2[] outboundOrderLineV2 = transactionService.findOutboundOrderLineV2(findOutboundOrderLineV2, authToken);
+        return new ResponseEntity<>(outboundOrderLineV2, HttpStatus.OK);
+    }
+
+    //findPickListHeader - Pick List Cancellation
+    @ApiOperation(response = PickListHeader.class, value = "Search PickListHeader Cancellation") // label for swagger
+    @PostMapping("/pickListCancellation/v2/findPickListHeader")
+    public PickListHeader[] findPickListHeader(@RequestBody SearchPickListHeader searchPickListHeader,
+                                               @RequestParam String authToken) throws Exception {
+        return transactionService.findPickListHeader(searchPickListHeader, authToken);
+    }
+
+    //findSupplierInvoiceHeader - Supplier invoice Cancellation
+    @ApiOperation(response = SupplierInvoiceHeader.class, value = "Search SupplierInvoiceHeader Cancellation") // label for swagger
+    @PostMapping("/supplierInvoiceCancellation/v2/findSupplierInvoiceHeader")
+    public SupplierInvoiceHeader[] findSupplierInvoiceHeader(@RequestBody SearchSupplierInvoiceHeader searchSupplierInvoiceHeader,
+                                                             @RequestParam String authToken) throws Exception {
+        return transactionService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader, authToken);
+    }
+
+    /*=======================================Orders - Upload===========================================================*/
+
+    //==========================================InBound============================================================
+
+    ///ASN - Upload
+    @ApiOperation(response = ASNV2.class, value = "Create ASN V2 Upload") // label for swagger
+    @PostMapping("/warehouse/inbound/asn/upload/v2")
+    public ResponseEntity<?> postWarehouseInboundAsnUploadV2(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processAsnOrders(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // StockReceipt Order - Upload
+    @ApiOperation(response = StockReceiptHeader.class, value = "Create StockReceipt Order Upload") // label for swagger
+    @PostMapping("/warehouse/inbound/stockReceipt/upload")
+    public ResponseEntity<?> postStockReceiptUpload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processStockReceiptUpload(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // InterWarehouseTransferInV2 - Upload
+    @ApiOperation(response = ShipmentOrder.class, value = "Create Inter Warehouse TransferIn Upload") // label for swagger
+    @PostMapping("/warehouse/inbound/interWarehouseTransferIn/upload/v2")
+    public ResponseEntity<?> postInterWarehouseTransferInUpload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processInterWarehouseTransferInOrders(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // SalesOrderReturnV2 - Upload
+    @ApiOperation(response = SaleOrderReturnV2.class, value = "Create Sales Order Return V2 Upload") // label for swagger
+    @PostMapping("/warehouse/inbound/soReturn/upload/v2")
+    public ResponseEntity<?> postSoReturnV2Upload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processSalesOrderReturnV2Orders(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // B2B TransferIn - Upload
+    @ApiOperation(response = B2bTransferIn.class, value = "Create B2BTransferIn Order Upload") // label for swagger
+    @PostMapping("/warehouse/inbound/b2bTransferIn/upload")
+    public ResponseEntity<?> postB2bTransferInUpload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processB2bTransferInOrders(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //===================================Outbound - Upload============================================================
+
+    //InterWarehouseTransferOutV2 upload
+    @ApiOperation(response = InterWarehouseTransferOutV2.class, value = "Create InterWarehouseTransferOutV2 Upload")
+    @PostMapping("/warehouse/outbound/interWarehouseTransferOut/v2/upload")
+    public ResponseEntity<?> createIWhTransferOutV2Upload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processInterWarehouseTransferOutfOrders(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //ShipmentOrder V2 Upload
+    @ApiOperation(response = ShipmentOrderV2.class, value = "Create ShipmentOrderOut Upload")
+    @PostMapping("/warehouse/outbound/shipmentOrder/v2/upload")
+    public ResponseEntity<?> createShipmentOrderUpload(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processShipmentOrderUpload(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //ReturnPo V2 Upload
+    @ApiOperation(response = ReturnPOV2.class, value = "Create ReturnPo V2 Upload")
+    @PostMapping("/warehouse/outbound/returnPo/v2/upload")
+    public ResponseEntity<?> createReturnPoV2(@RequestParam("file") MultipartFile file) throws Exception {
+        Map<String, String> response = fileStorageService.processReturnPoV2Upload(file);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

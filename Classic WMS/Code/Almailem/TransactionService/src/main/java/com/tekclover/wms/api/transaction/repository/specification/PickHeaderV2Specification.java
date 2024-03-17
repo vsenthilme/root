@@ -1,8 +1,5 @@
 package com.tekclover.wms.api.transaction.repository.specification;
 
-
-import com.tekclover.wms.api.transaction.model.outbound.pickup.PickupHeader;
-import com.tekclover.wms.api.transaction.model.outbound.pickup.SearchPickupHeader;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.FindPickUpHeader;
 import com.tekclover.wms.api.transaction.model.outbound.pickup.v2.PickupHeaderV2;
 import org.springframework.context.annotation.DeferredImportSelector;

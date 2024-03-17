@@ -25,7 +25,6 @@ public interface StagingLineRepository extends JpaRepository<StagingLineEntity, 
 
     /**
      * @param languageId
-     * @param companyCodeId
      * @param plantId
      * @param warehouseId
      * @param preInboundNo
@@ -58,7 +57,6 @@ public interface StagingLineRepository extends JpaRepository<StagingLineEntity, 
      * @param lineNo
      * @param itemCode
      * @param statusIds
-     * @param l
      * @return
      */
     public List<StagingLineEntity> findByLanguageIdAndCompanyCodeAndPlantIdAndPreInboundNoAndLineNoAndItemCodeAndStatusIdInAndDeletionIndicator(
@@ -74,7 +72,6 @@ public interface StagingLineRepository extends JpaRepository<StagingLineEntity, 
      * @param refDocNumber
      * @param lineNo
      * @param itemCode
-     * @param l
      * @return
      */
     public List<StagingLineEntity>

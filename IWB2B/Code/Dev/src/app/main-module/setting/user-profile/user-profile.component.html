@@ -1,0 +1,111 @@
+<div class="bgblue text-white pathname" style="padding-bottom: 0.3rem; padding-top: 0.3rem;">
+    <nav aria-label="breadcrumb" class="d-flex align-items-center">
+      <ol class="breadcrumb mb-0 text-white d-flex align-items-center">
+        <li class="breadcrumb-item text-white fontBold whs-fontsize-1-2rem  my-auto">
+          <mat-icon class="text-white align-middle">home</mat-icon>
+        </li>
+        <li class="breadcrumb-item text-white fontBold  whs-fontsize-1-2rem  my-auto">JNT Order</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="mt-1 mx-3 d-flex justify-content-between">
+    <app-setting-tab></app-setting-tab>
+    <div class="div d-flex justify-content-between align-self-end">
+      <input matInput class="mx-3 border-bottom border " (input)="applyFilterGlobal($event, 'contains')"
+          placeholder="Search" style="width:90%; background-color: transparent !important;">
+
+
+   <div class="btn-group">
+        <button  (click)="openDialog('New')" class="btn bgblue text-white btn-sm d-flex align-items-center"  type="button">
+          <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" class="btn btn-sm bgblue text-white dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu py-3 px-2">
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" (click)="openDialog('Edit')" type="button">
+              <mat-icon class="mr-3">edit</mat-icon>Edit
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" type="button"  (click)="openDialog('Display')">
+              <mat-icon class="mr-3">search</mat-icon>Display
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1"  type="button" (click)="deleteDialog()">
+              <mat-icon class="mr-3">delete</mat-icon>Delete
+            </a></li>
+          <li><a class="dropdown-item hvr-wobble-horizontal d-flex align-items-center text-muted my-1" type="button" (click)="downloadExcel()">
+              <mat-icon class="mr-3">download</mat-icon>Download
+            </a></li>
+        </ul>
+      </div> 
+    </div>
+  </div>
+  <div class="mx-3 mt-2 bg-white">
+    <div class=" bg-white">
+          <p-table #userProfile [globalFilterFields]="['languageId', 'companyCode', 'firstName', 'userName', 'createdBy', 'createdOn' ]" [value]="userProfileTable"
+        styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="single" 
+        scrollHeight="calc(100vh - 13.1rem)" [paginator]="true" [rows]="100" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[100, 150, 200, 250]" [resizableColumns]="true" sortField="userName" [sortOrder]="-1">
+  
+        <ng-template pTemplate="header">
+          <tr>
+              <th style="max-width:4%; justify-content: center;">
+              <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+            </th>  
+            <th style="max-width: 10%;"pSortableColumn="languageId"  pResizableColumn>Language ID <p-sortIcon field="languageId"></p-sortIcon></th>
+            <th style="max-width: 10%;"pSortableColumn="companyCode"  pResizableColumn>Company<p-sortIcon field="companyCode"></p-sortIcon></th>
+            <th style="max-width: 10%;"pSortableColumn="firstName"  pResizableColumn>First Name<p-sortIcon field="firstName"></p-sortIcon></th>
+            <th style="max-width: 11%;"pSortableColumn="userName"  pResizableColumn>User Name <p-sortIcon field="userName"></p-sortIcon></th>
+            <th style="max-width: 13%;"pSortableColumn="createdBy"  pResizableColumn>Created By <p-sortIcon field="createdBy"></p-sortIcon></th>
+            <th pSortableColumn="createdOn"  pResizableColumn>Created On<p-sortIcon field="createdOn"></p-sortIcon></th>
+          </tr>
+          <tr > 
+          <th style="max-width: 3.5rem; justify-content: center;">
+            </th>  
+            <th style="max-width: 10%">
+                 <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'languageId', 'contains')" 
+                [value]="$any(userProfile.filters['languageId'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+              </th>
+              <th style="max-width: 10%">
+                  <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'companyCode', 'contains')" 
+                  [value]="$any(userProfile.filters['companyCode'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                </th>
+                <th style="max-width: 10%">
+                    <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'firstName', 'contains')" 
+                    [value]="$any(userProfile.filters['firstName'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                  </th>
+                  <th style="max-width: 10%">
+                    <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'userName', 'contains')" 
+                      [value]="$any(userProfile.filters['userName'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                    
+                    </th>
+                    
+                    <th style="max-width: 13%">
+                        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'createdBy', 'contains')" 
+                        [value]="$any(userProfile.filters['createdBy'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                      </th>
+                      <th>
+                        <input pInputText  type="text" (input)="userProfile.filter($any($event.target)?.value, 'createdOn', 'contains')" 
+                        [value]="$any(userProfile.filters['createdOn'])?.value" placeholder="Search " class=" w-100 p-column-filter">
+                      </th>
+          </tr>
+        </ng-template>
+            <ng-template pTemplate="body" let-userProfile let-rowIndex="rowIndex">
+                <tr>
+           <td style="max-width:3.5rem;  justify-content: center;">
+                <p-checkbox (onChange)="onChange()" [(ngModel)]="selecteduserProfile"  [value]="userProfile"></p-checkbox>
+            </td> 
+            <td style="max-width:10%">{{userProfile.languageId}}</td>
+            <td style="max-width:10%">{{userProfile.companyCode}}</td>
+            <td style="max-width:10%">{{userProfile.firstName}}</td>
+            <td style="max-width:11%">{{userProfile.userName}}</td>
+            <td style="max-width:13%">{{userProfile.createdBy}}</td>
+            <td >{{userProfile.createdOn | date : 'dd-MM-yyyy HH:mm' :'GMT'}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+  </div>
+  

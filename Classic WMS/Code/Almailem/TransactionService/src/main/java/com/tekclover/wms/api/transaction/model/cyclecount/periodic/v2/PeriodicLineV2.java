@@ -2,10 +2,12 @@ package com.tekclover.wms.api.transaction.model.cyclecount.periodic.v2;
 
 import com.tekclover.wms.api.transaction.model.cyclecount.periodic.PeriodicLine;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @ToString(callSuper = true)
@@ -22,9 +24,6 @@ public class PeriodicLineV2 extends PeriodicLine {
 
 	@Column(name = "STATUS_TEXT", columnDefinition = "nvarchar(150)")
 	private String statusDescription;
-
-	@Column(name = "MFR_NAME", columnDefinition = "nvarchar(255)")
-	private String manufacturerName;
 
 	@Column(name = "PARTNER_ITEM_BARCODE", columnDefinition = "nvarchar(255)")
 	private String barcodeId;
@@ -76,4 +75,7 @@ public class PeriodicLineV2 extends PeriodicLine {
 
 	@Column(name = "LEVEL_ID", columnDefinition = "nvarchar(255)")
 	private String levelId;
+
+	@Column(name = "AMS_VAR_QTY")
+	private Double amsVarianceQty;
 }

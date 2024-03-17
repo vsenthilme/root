@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.model.warehouse.outbound.v2;
 
 import com.tekclover.wms.api.transaction.model.warehouse.outbound.OutboundOrder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @ToString(callSuper = true)
@@ -48,6 +50,7 @@ public class OutboundOrderV2 extends OutboundOrder {
     private Date updatedOn;
     private Long middlewareId;
     private String middlewareTable;
+    private String customerType;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId", fetch = FetchType.EAGER)
     private Set<OutboundOrderLineV2> line;

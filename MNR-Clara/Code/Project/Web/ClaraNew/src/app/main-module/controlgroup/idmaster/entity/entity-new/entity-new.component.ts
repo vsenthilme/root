@@ -36,30 +36,56 @@ export class EntityNewComponent implements OnInit {
 
   form = this.fb.group({
     clientId: [],
-  clientName: [],
-  companyId: ["1000"],
-  createdBy: [],
-  createdOn: [],
-  deletionIndicator:[],
-  entityId: [],
-  companyIdAndDescription:["Monty & Ramirez LLP"],
-  entityName: [],
-  languageId: [this.auth.languageId],
-  referenceField1: [],
-  referenceField10: [],
-  referenceField2: [],
-  referenceField3: [],
-  referenceField4: [],
-  referenceField5: [],
-  referenceField6: [],
-  referenceField7: [],
-  referenceField8: [],
-  referenceField9: [],
-  statusId: [0,],
-  updatedBy: [],
-  updatedOn: [],
+    clientName: [],
+    companyId: ["1000"],
+    createdBy: [],
+    createdOn: [],
+    deletionIndicator: [],
+    entityId: [],
+    companyIdAndDescription: ["Monty & Ramirez LLP"],
+    entityName: [],
+    languageId: [this.auth.languageId],
+    referenceField1: [],
+    referenceField10: [],
+    referenceField2: [],
+    referenceField3: [],
+    referenceField4: [],
+    referenceField5: [],
+    referenceField6: [],
+    referenceField7: [],
+    referenceField8: [],
+    referenceField9: [],
+    statusId: [0,],
+    updatedBy: [],
+    updatedOn: [],
   });
 
+
+  clientForm = this.fb.group({
+    clientId: [],
+    clientName: [, [Validators.required]],
+    companyId: ["1000"],
+    companyIdAndDescription: [],
+    createdBy: [],
+    createdOn: [],
+    deletionIndicator: [],
+    languageId: [this.auth.languageId],
+    referenceField1: [],
+    referenceField10: [],
+    referenceField2: [],
+    referenceField3: [],
+    referenceField4: [],
+    referenceField5: [],
+    referenceField6: [],
+    referenceField7: [],
+    referenceField8: [],
+    referenceField9: [],
+    statusId: ["0",],
+    updatedBy: [],
+    updatedOn: [],
+    createdOn_to: [],
+    createdOn_from: [],
+  });
 
   submitted = false;
   public errorHandling = (control: string, error: string = "required") => {
@@ -86,16 +112,17 @@ export class EntityNewComponent implements OnInit {
 
   panelOpenState = false;
   constructor(public dialog: MatDialog,
-    public dialogRef: MatDialogRef < DialogExampleComponent > ,
+    public dialogRef: MatDialogRef<DialogExampleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private service: EntityService,
+    private clientService: ClientService,
     public toastr: ToastrService,
     private cas: CommonApiService,
     private spin: NgxSpinnerService,
     private auth: AuthService, private fb: FormBuilder,
     private setupService: SetupServiceService,
     private cs: CommonService,
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.form.controls.createdBy.disable();
     this.form.controls.createdOn.disable();
@@ -128,7 +155,7 @@ export class EntityNewComponent implements OnInit {
     ]).subscribe((results) => {
       this.languageIdList = this.cas.foreachlist(results[0], this.cas.dropdownlist.cgsetup.language.key);
       this.languageIdList.forEach((x: {
-        key: string;value: string;
+        key: string; value: string;
       }) => this.dropdownSelectLanguageID.push({
         value: x.key,
         label: x.value
@@ -147,7 +174,7 @@ export class EntityNewComponent implements OnInit {
       });
       this.setupService.searchClient({
         languageId: [this.auth.languageId],
-        companyId:["1000"]
+        companyId: ["1000"]
       }).subscribe(res => {
         this.dropdownSelectclientID = [];
         res.forEach(element => {
@@ -157,26 +184,26 @@ export class EntityNewComponent implements OnInit {
           });
         });
       });
-this.form.controls.languageId.patchValue(this.auth.languageId);
-this.form.controls.companyId.patchValue("1000")
+      this.form.controls.languageId.patchValue(this.auth.languageId);
+      this.form.controls.companyId.patchValue("1000")
       this.spin.hide();
     }, (err) => {
       this.toastr.error(err, "");
       this.spin.hide();
     });
   }
-  dropdownSelectclientID:any[]=[];
- 
- 
+  dropdownSelectclientID: any[] = [];
+
+
   multilanguageList: any[] = [];
   multicompanyList: any[] = [];
   fill() {
     this.spin.show();
-    this.sub.add(this.service.Get(this.data.code, this.data.languageId, this.data.companyId,this.data.clientId).subscribe(res => {
+    this.sub.add(this.service.Get(this.data.code, this.data.languageId, this.data.companyId, this.data.clientId).subscribe(res => {
       this.form.patchValue(res, {
         emitEvent: false
       });
-      this.form.controls.statusId.patchValue(res.statusId != null ? res.statusId.toString() : '');
+      this.form.controls.statusId.patchValue(res.statusId != null ? res.statusId.toString() : '');
       this.form.controls.createdOn.patchValue(this.cs.dateapi(this.form.controls.createdOn.value));
       this.form.controls.updatedOn.patchValue(this.cs.dateapi(this.form.controls.updatedOn.value));
       this.dropdownlist();
@@ -193,9 +220,9 @@ this.form.controls.companyId.patchValue("1000")
       this.toastr.error(
         "Please fill the required fields to continue",
         "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+        timeOut: 2000,
+        progressBar: false,
+      }
       );
 
       this.cs.notifyOther(true);
@@ -211,7 +238,7 @@ this.form.controls.companyId.patchValue("1000")
     });
 
     if (this.data.code) {
-      this.sub.add(this.service.Update(this.form.getRawValue(), this.data.code, this.data.languageId, this.data.companyId,this.data.clientId).subscribe(res => {
+      this.sub.add(this.service.Update(this.form.getRawValue(), this.data.code, this.data.languageId, this.data.companyId, this.data.clientId).subscribe(res => {
         this.toastr.success(this.data.code + " Entity Id updated successfully!", "Notification", {
           timeOut: 2000,
           progressBar: false,
@@ -227,10 +254,31 @@ this.form.controls.companyId.patchValue("1000")
 
       }));
     } else {
+
       this.sub.add(this.service.Create(this.form.getRawValue()).subscribe(res => {
-        this.toastr.success(res.clientId + " Entity Id saved successfully!", "Notification", {
-          timeOut: 2000,
-          progressBar: false,
+        this.clientForm.controls.clientName.patchValue(this.form.controls.entityName.value);
+        this.clientService.Create(this.clientForm.getRawValue()).subscribe(clientcreatedRes => {
+          this.form.patchValue(res, {
+            emitEvent: false
+          });
+          this.form.controls.referenceField1.patchValue(clientcreatedRes.clientId);
+          this.service.Update(this.form.getRawValue(), res.entityId, res.languageId, res.companyId, res.clientId).subscribe(clientcreatedRes => {
+        
+            this.toastr.success(res.clientId + " Entity Id saved successfully!", "Notification", {
+              timeOut: 2000,
+              progressBar: false,
+            });
+
+          }, err => {
+            this.cs.commonerror(err);
+            this.spin.hide();
+
+          });
+
+        }, err => {
+          this.cs.commonerror(err);
+          this.spin.hide();
+
         });
         this.spin.hide();
         this.dialogRef.close();

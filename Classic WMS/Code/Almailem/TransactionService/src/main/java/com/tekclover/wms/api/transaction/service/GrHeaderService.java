@@ -2,6 +2,7 @@ package com.tekclover.wms.api.transaction.service;
 
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.gr.*;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
@@ -46,6 +47,9 @@ public class GrHeaderService extends BaseService {
 
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+
+    @Autowired
+    ErrorLogRepository exceptionLogRepo;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------
@@ -197,7 +201,7 @@ public class GrHeaderService extends BaseService {
      */
     public List<GrHeader> findGrHeader(SearchGrHeader searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);
@@ -215,7 +219,7 @@ public class GrHeaderService extends BaseService {
      */
     public Stream<GrHeader> findGrHeaderNew(SearchGrHeader searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);
@@ -269,7 +273,6 @@ public class GrHeaderService extends BaseService {
     /**
      * updateGrHeader
      *
-     * @param loginUserId
      * @param goodsReceiptNo
      * @param updateGrHeader
      * @return
@@ -445,6 +448,10 @@ public class GrHeaderService extends BaseService {
                         caseCode,
                         0L);
         if (grHeader.isEmpty()) {
+            // Exception Log
+            createGrHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, stagingNo, goodsReceiptNo,
+                    palletCode, caseCode, "GrHeaderV2 with goodsReceiptNo - " + goodsReceiptNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -468,10 +475,9 @@ public class GrHeaderService extends BaseService {
      * @param refDocNumber
      * @return
      */
-    public List<GrHeaderV2> getGrHeaderV2(String warehouseId, String goodsReceiptNo, String caseCode,
-                                          String companyCode, String languageId, String plantId,
-                                          String refDocNumber) {
-        List<GrHeaderV2> grHeader =
+    public GrHeaderV2 getGrHeaderV2(String warehouseId, String goodsReceiptNo, String caseCode, String companyCode,
+                                    String languageId, String plantId, String refDocNumber) {
+        GrHeaderV2 grHeader =
                 grHeaderV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndCaseCodeAndRefDocNumberAndDeletionIndicator(
                         languageId,
                         companyCode,
@@ -481,7 +487,11 @@ public class GrHeaderService extends BaseService {
                         caseCode,
                         refDocNumber,
                         0L);
-        if (grHeader.isEmpty()) {
+        if (grHeader == null) {
+            // Exception Log
+            createGrHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, goodsReceiptNo,
+                    caseCode, "The given values of GrheaderV2 with goodsReceiptNo - " + goodsReceiptNo + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",goodsReceiptNo: " + goodsReceiptNo + "," +
@@ -512,6 +522,10 @@ public class GrHeaderService extends BaseService {
                         refDocNumber,
                         0L);
         if (grHeader.isEmpty()) {
+            // Exception Log
+            createGrHeaderLog2(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber,
+                    "The given values of GrHeaderV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ", refDocNumber: " + refDocNumber +
                     ", preInboundNo: " + preInboundNo +
@@ -564,6 +578,10 @@ public class GrHeaderService extends BaseService {
                         caseCode,
                         0L);
         if (grHeader.isEmpty()) {
+            // Exception Log
+            createGrHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    caseCode, "The given values of GrHeaderV2 with refDocNumber - " + refDocNumber + " doesn't exists.");
+
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",preInboundNo: " + preInboundNo +
@@ -580,7 +598,7 @@ public class GrHeaderService extends BaseService {
      */
     public Stream<GrHeaderV2> findGrHeaderV2(SearchGrHeaderV2 searchGrHeader) throws Exception {
         searchGrHeader.setDeletionIndicator(0L);
-        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getStartCreatedOn() != null) {
+        if (searchGrHeader.getStartCreatedOn() != null && searchGrHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchGrHeader.getStartCreatedOn(), searchGrHeader.getEndCreatedOn());
             searchGrHeader.setStartCreatedOn(dates[0]);
             searchGrHeader.setEndCreatedOn(dates[1]);
@@ -613,6 +631,9 @@ public class GrHeaderService extends BaseService {
                         newGrHeader.getCaseCode(),
                         0L);
         if (!grheader.isEmpty()) {
+            // Exception Log
+            createGrHeaderLog4(newGrHeader, "Record is getting duplicated with the given values.");
+
             throw new BadRequestException("Record is getting duplicated with the given values");
         }
 
@@ -636,8 +657,6 @@ public class GrHeaderService extends BaseService {
         newGrHeader.setDeletionIndicator(0L);
         newGrHeader.setCreatedBy(loginUserID);
         newGrHeader.setUpdatedBy(loginUserID);
-//        newGrHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        newGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         newGrHeader.setCreatedOn(new Date());
         newGrHeader.setUpdatedOn(new Date());
         return grHeaderV2Repository.save(newGrHeader);
@@ -671,7 +690,6 @@ public class GrHeaderService extends BaseService {
                 palletCode, caseCode);
         BeanUtils.copyProperties(updateGrHeader, dbGrHeader, CommonUtils.getNullPropertyNames(updateGrHeader));
         dbGrHeader.setUpdatedBy(loginUserID);
-//        dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbGrHeader.setUpdatedOn(new Date());
         return grHeaderV2Repository.save(dbGrHeader);
     }
@@ -696,7 +714,6 @@ public class GrHeaderService extends BaseService {
             dbGrHeader.setStatusDescription(statusDescription);
 
             dbGrHeader.setUpdatedBy(loginUserID);
-//            dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrHeader.setUpdatedOn(new Date());
             grHeaderV2Repository.save(dbGrHeader);
         }
@@ -708,7 +725,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
             grLine.setStatusDescription(statusDescription);
             grLine.setUpdatedBy(loginUserID);
-//            grLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grLine.setUpdatedOn(new Date());
             grLineV2Repository.save(grLine);
         }
@@ -735,7 +751,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
             dbGrHeader.setStatusDescription(statusDescription);
             dbGrHeader.setUpdatedBy(loginUserID);
-//            dbGrHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrHeader.setUpdatedOn(new Date());
             dbGrHeader = grHeaderV2Repository.save(dbGrHeader);
             log.info("dbGrHeader updated : " + dbGrHeader);
@@ -747,7 +762,6 @@ public class GrHeaderService extends BaseService {
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
             dbGrLine.setStatusDescription(statusDescription);
             dbGrLine.setUpdatedBy(loginUserID);
-//            dbGrLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbGrLine.setUpdatedOn(new Date());
             dbGrLine = grLineV2Repository.save(dbGrLine);
             log.info("dbGrLine updated : " + dbGrLine);
@@ -783,10 +797,13 @@ public class GrHeaderService extends BaseService {
         if (grHeader != null) {
             grHeader.setDeletionIndicator(1L);
             grHeader.setUpdatedBy(loginUserID);
-//            grHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grHeader.setUpdatedOn(new Date());
             grHeaderV2Repository.save(grHeader);
         } else {
+            // Exception Log
+            createGrHeaderLog(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo, stagingNo, goodsReceiptNo,
+                    palletCode, caseCode, "Error in deleting GrHeaderV2 with goodsReceiptNo - " + goodsReceiptNo);
+
             throw new EntityNotFoundException("Error in deleting Id: " + goodsReceiptNo);
         }
     }
@@ -797,17 +814,112 @@ public class GrHeaderService extends BaseService {
 
         GrHeaderV2 grHeader = grHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCode, plantId, languageId, warehouseId, refDocNumber, 0L);
-
+        log.info("GrHeader - Cancellation : " + grHeader);
         if (grHeader != null) {
             grHeader.setDeletionIndicator(1L);
             grHeader.setUpdatedBy(loginUserID);
-//            grHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             grHeader.setUpdatedOn(new Date());
             grHeaderV2Repository.save(grHeader);
         }
-//        else {
-//            throw new EntityNotFoundException("Error in deleting Id: " + refDocNumber);
-//        }
         return grHeader;
     }
+
+    //===========================================GrHeader_ExceptionLog=================================================
+    private void createGrHeaderLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                   String refDocNumber, String preInboundNo, String stagingNo,
+                                   String goodsReceiptNo, String palletCode, String caseCode, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(goodsReceiptNo);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setReferenceField2(stagingNo);
+        dbErrorLog.setReferenceField3(palletCode);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
+    private void createGrHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                    String refDocNumber, String goodsReceiptNo, String caseCode, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(goodsReceiptNo);
+        dbErrorLog.setReferenceField4(caseCode);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
+    private void createGrHeaderLog2(String languageId, String companyCode, String plantId, String warehouseId,
+                                    String preInboundNo, String refDocNumber, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setReferenceField1(preInboundNo);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
+    private void createGrHeaderLog3(String languageId, String companyCode, String plantId,
+                                    String warehouseId, String refDocNumber, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(refDocNumber);
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(languageId);
+        dbErrorLog.setCompanyCodeId(companyCode);
+        dbErrorLog.setPlantId(plantId);
+        dbErrorLog.setWarehouseId(warehouseId);
+        dbErrorLog.setRefDocNumber(refDocNumber);
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
+    private void createGrHeaderLog4(GrHeaderV2 grHeaderV2, String error) {
+
+        ErrorLog dbErrorLog = new ErrorLog();
+        dbErrorLog.setOrderTypeId(grHeaderV2.getRefDocNumber());
+        dbErrorLog.setOrderDate(new Date());
+        dbErrorLog.setLanguageId(grHeaderV2.getLanguageId());
+        dbErrorLog.setCompanyCodeId(grHeaderV2.getCompanyCode());
+        dbErrorLog.setPlantId(grHeaderV2.getPlantId());
+        dbErrorLog.setWarehouseId(grHeaderV2.getWarehouseId());
+        dbErrorLog.setRefDocNumber(grHeaderV2.getRefDocNumber());
+        dbErrorLog.setReferenceField1(grHeaderV2.getPreInboundNo());
+        dbErrorLog.setReferenceField2(grHeaderV2.getGoodsReceiptNo());
+        dbErrorLog.setReferenceField3(grHeaderV2.getStagingNo());
+        dbErrorLog.setReferenceField4(grHeaderV2.getPalletCode());
+        dbErrorLog.setReferenceField5(grHeaderV2.getCaseCode());
+        dbErrorLog.setErrorMessage(error);
+        dbErrorLog.setCreatedBy("MSD_API");
+        dbErrorLog.setCreatedOn(new Date());
+        exceptionLogRepo.save(dbErrorLog);
+    }
+
 }

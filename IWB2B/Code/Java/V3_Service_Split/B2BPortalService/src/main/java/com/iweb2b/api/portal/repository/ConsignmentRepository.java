@@ -48,21 +48,22 @@ public interface ConsignmentRepository extends JpaRepository<ConsignmentEntity, 
 			+ "ORDER BY c.CREATED_AT", nativeQuery = true)
 	public List<IConsignmentEntity> findConsigmentByReferenceNumber (@Param("hubCode") String hubCode);
 	
-	@Query(value = "SELECT distinct c.REFERENCE_NUMBER AS referenceNumber, \r\n"
-			+ "	c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
-			+ "	c.STATUS_DESCRIPTION AS statusDescription, \r\n"
-			+ "	c.CREATED_AT AS createdAt, \r\n"
-			+ "	c.IS_AWB_PRINTED AS isAwbPrinted, \r\n"
-			+ "	j.ACTION_TIME AS actionTime, \r\n"
-			+ "	c.ORDER_TYPE AS orderType, \r\n"
-			+ "	c.CUSTOMER_CODE AS customerCode, \r\n"
-			+ "	c.QP_WH_STATUS AS qpWebhookStatus\r\n"
-			+ "	from tblconsignment c \r\n"
-			+ "	left outer join tblqpwebhook j on j.TRACKING_NO = c.REFERENCE_NUMBER\r\n"
-			+ "	WHERE c.REFERENCE_NUMBER IN \r\n"
-			+ "	(select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw \r\n"
-			+ "	on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = :hubCode GROUP BY tc.REFERENCE_NUMBER) \r\n"
-			+ "	ORDER BY c.CREATED_AT", nativeQuery = true)
+	@Query(value = "SELECT c.REFERENCE_NUMBER AS referenceNumber, \r\n"
+			+ "c.CUSTOMER_REFERENCE_NUMBER AS customerReferenceNumber, \r\n"
+			+ "c.STATUS_DESCRIPTION AS statusDescription, \r\n"
+			+ "c.CREATED_AT AS createdAt, \r\n"
+			+ "c.IS_AWB_PRINTED AS isAwbPrinted, \r\n"
+			+ "j.ACTION_TIME AS actionTime, \r\n"
+			+ "c.ORDER_TYPE AS orderType, \r\n"
+			+ "c.CUSTOMER_CODE AS customerCode, \r\n"
+			+ "c.QP_WH_STATUS AS qpWebhookStatus,\r\n"
+			+ "j.item_action_name AS actionName\r\n"
+			+ "from tblconsignment c \r\n"
+			+ "left outer join tblqpwebhook j on j.TRACKING_NO = c.REFERENCE_NUMBER\r\n"
+			+ "WHERE c.REFERENCE_NUMBER IN \r\n"
+			+ "(select tc.REFERENCE_NUMBER from tblconsignment tc join tblconsignmentwebhook tcw \r\n"
+			+ "on tcw.REFERENCE_NUMBER = tc.REFERENCE_NUMBER WHERE tcw.hub_code = 'QATARPOST' GROUP BY tc.REFERENCE_NUMBER) \r\n"
+			+ "ORDER BY c.REFERENCE_NUMBER, j.ACTION_TIME", nativeQuery = true)
 	public List<IConsignmentEntity> findQPConsigmentByReferenceNumber (@Param("hubCode") String hubCode);
 
 	@Query(value = "SELECT TOP 1 * \r\n" +

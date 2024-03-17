@@ -10,4 +10,7 @@ export class SummaryService {
   reportPdf(){
     return this.http.get<any>('/mnr-cg-transaction-service/storepartnerlisting/findGroupStore');
   }
+  reportstorepartner(obj:any){
+    return this.http.post<any>('/mnr-cg-transaction-service/storepartnerlisting/findStorePartnerListing',obj);
+  }
 }

@@ -29,76 +29,81 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Component
 public class BatchJobScheduler {
-    @Autowired
-    private OutboundOrderV2Repository outboundOrderV2Repository;
+//    @Autowired
+//    private OutboundOrderV2Repository outboundOrderV2Repository;
+//
+//    @Autowired
+//    PreInboundHeaderService preinboundheaderService;
+//
+//    @Autowired
+//    PreOutboundHeaderService preOutboundHeaderService;
+//
+//    @Autowired
+//    ReportsService reportsService;
+//
+//    @Autowired
+//    OrderService orderService;
+//
+//    @Autowired
+//    PerpetualHeaderService perpetualHeaderService;
+//
+//    @Autowired
+//    PeriodicHeaderService periodicHeaderService;
+//
+//    @Autowired
+//    StockAdjustmentMiddlewareService stockAdjustmentMiddlewareService;
+//
+//    @Autowired
+//    StockAdjustmentService stockAdjustmentService;
 
     @Autowired
-    PreInboundHeaderService preinboundheaderService;
+    ScheduleAsyncService scheduleAsyncService;
 
     @Autowired
-    PreOutboundHeaderService preOutboundHeaderService;
-
-    @Autowired
-    ReportsService reportsService;
-
-    @Autowired
-    OrderService orderService;
-
-    @Autowired
-    PerpetualHeaderService perpetualHeaderService;
-
-    @Autowired
-    PeriodicHeaderService periodicHeaderService;
-
-    @Autowired
-    StockAdjustmentMiddlewareService stockAdjustmentMiddlewareService;
-
-    @Autowired
-    StockAdjustmentService stockAdjustmentService;
+    private WrapperService wrapperService;
 
     //-------------------------------------------------------------------------------------------
 
-    @Autowired
-    InboundOrderRepository inboundOrderRepository;
-
-    @Autowired
-    OutboundOrderRepository outboundOrderRepository;
-
-    @Autowired
-    StockAdjustmentMiddlewareRepository stockAdjustmentRepository;
+//    @Autowired
+//    InboundOrderRepository inboundOrderRepository;
+//
+//    @Autowired
+//    OutboundOrderRepository outboundOrderRepository;
+//
+//    @Autowired
+//    StockAdjustmentMiddlewareRepository stockAdjustmentRepository;
 
     //-------------------------------------------------------------------------------------------
 
-    @Autowired
-    InboundOrderV2Repository inboundOrderV2Repository;
-
-    @Autowired
-    InboundOrderLinesV2Repository inboundOrderLinesV2Repository;
-
-    @Autowired
-    CycleCountHeaderRepository cycleCountHeaderRepository;
-
-    @Autowired
-    CycleCountService cycleCountService;
+//    @Autowired
+//    InboundOrderV2Repository inboundOrderV2Repository;
+//
+//    @Autowired
+//    InboundOrderLinesV2Repository inboundOrderLinesV2Repository;
+//
+//    @Autowired
+//    CycleCountHeaderRepository cycleCountHeaderRepository;
+//
+//    @Autowired
+//    CycleCountService cycleCountService;
     //-------------------------------------------------------------------------------------------
 
-    List<InboundIntegrationHeader> inboundList = null;
-    //    List<OutboundIntegrationHeader> outboundList = null;
-    List<OutboundIntegrationHeaderV2> outboundList = null;
-    List<CycleCountHeader> stockCountPerpetualList = null;
-    List<CycleCountHeader> stockCountPeriodicList = null;
-    List<StockAdjustment> stockAdjustmentList = null;
-    static CopyOnWriteArrayList<InboundIntegrationHeader> spList = null;            // Inbound List
-    //    static CopyOnWriteArrayList<OutboundIntegrationHeader> spOutboundList = null;    // Outbound List
-    static CopyOnWriteArrayList<OutboundIntegrationHeaderV2> spOutboundList = null;    // Outbound List
-    static CopyOnWriteArrayList<CycleCountHeader> scPerpetualList = null;    // StockCount List
-    static CopyOnWriteArrayList<CycleCountHeader> scPeriodicList = null;    // StockCount List
-    static CopyOnWriteArrayList<StockAdjustment> stockAdjustments = null;    // StockAdjustment List
+//    List<InboundIntegrationHeader> inboundList = null;
+//    List<OutboundIntegrationHeaderV2> outboundList = null;
+//    List<CycleCountHeader> stockCountPerpetualList = null;
+//    List<CycleCountHeader> stockCountPeriodicList = null;
+//    List<StockAdjustment> stockAdjustmentList = null;
+//    static CopyOnWriteArrayList<InboundIntegrationHeader> spList = null;            // Inbound List
+//    static CopyOnWriteArrayList<OutboundIntegrationHeaderV2> spOutboundList = null;    // Outbound List
+//    static CopyOnWriteArrayList<CycleCountHeader> scPerpetualList = null;    // StockCount List
+//    static CopyOnWriteArrayList<CycleCountHeader> scPeriodicList = null;    // StockCount List
+//    static CopyOnWriteArrayList<StockAdjustment> stockAdjustments = null;    // StockAdjustment List
 
     // Schedule Report
 //	@Scheduled(cron = "0 0/5 6 * * *") // 0 0 */2 * * ?
@@ -199,281 +204,304 @@ public class BatchJobScheduler {
 //        }
 //    }
     //=============================================================================================================================
-    @Scheduled(fixedDelay = 30000)
-    public synchronized void processInboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
-        if (inboundList == null || inboundList.isEmpty()) {
-            List<InboundOrderV2> sqlInboundList = inboundOrderV2Repository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
-            inboundList = new ArrayList<>();
-            for (InboundOrderV2 dbOBOrder : sqlInboundList) {
-                InboundIntegrationHeader inboundIntegrationHeader = new InboundIntegrationHeader();
-                BeanUtils.copyProperties(dbOBOrder, inboundIntegrationHeader, CommonUtils.getNullPropertyNames(dbOBOrder));
-                inboundIntegrationHeader.setId(dbOBOrder.getOrderId());
-                inboundIntegrationHeader.setMiddlewareId(String.valueOf(dbOBOrder.getMiddlewareId()));
-                inboundIntegrationHeader.setMiddlewareTable(dbOBOrder.getMiddlewareTable());
-
-                List<InboundOrderLinesV2> sqlInboundLineList = inboundOrderLinesV2Repository.getOrderLines(dbOBOrder.getOrderId());
-                log.info("line list: " + sqlInboundLineList);
-                List<InboundIntegrationLine> inboundIntegrationLineList = new ArrayList<>();
-                for (InboundOrderLinesV2 line : sqlInboundLineList) {
-                    InboundIntegrationLine inboundIntegrationLine = new InboundIntegrationLine();
-                    BeanUtils.copyProperties(line, inboundIntegrationLine, CommonUtils.getNullPropertyNames(line));
-
-                    inboundIntegrationLine.setLineReference(line.getLineReference());
-                    inboundIntegrationLine.setItemCode(line.getItemCode());
-                    inboundIntegrationLine.setItemText(line.getItemText());
-                    inboundIntegrationLine.setInvoiceNumber(line.getInvoiceNumber());
-                    inboundIntegrationLine.setContainerNumber(line.getContainerNumber());
-                    inboundIntegrationLine.setSupplierCode(line.getSupplierCode());
-                    inboundIntegrationLine.setSupplierPartNumber(line.getSupplierPartNumber());
-                    inboundIntegrationLine.setManufacturerName(line.getManufacturerName());
-                    inboundIntegrationLine.setManufacturerPartNo(line.getManufacturerPartNo());
-                    inboundIntegrationLine.setExpectedDate(line.getExpectedDate());
-                    inboundIntegrationLine.setOrderedQty(line.getExpectedQty());
-                    inboundIntegrationLine.setUom(line.getUom());
-                    inboundIntegrationLine.setItemCaseQty(line.getItemCaseQty());
-                    inboundIntegrationLine.setSalesOrderReference(line.getSalesOrderReference());
-                    inboundIntegrationLine.setManufacturerCode(line.getManufacturerCode());
-                    inboundIntegrationLine.setOrigin(line.getOrigin());
-                    inboundIntegrationLine.setBrand(line.getBrand());
-
-                    inboundIntegrationLine.setSupplierName(line.getSupplierName());
-
-                    inboundIntegrationLine.setMiddlewareId(String.valueOf(line.getMiddlewareId()));
-                    inboundIntegrationLine.setMiddlewareHeaderId(String.valueOf(line.getMiddlewareHeaderId()));
-                    inboundIntegrationLine.setMiddlewareTable(line.getMiddlewareTable());
-                    inboundIntegrationLine.setManufacturerFullName(line.getManufacturerFullName());
-                    inboundIntegrationLine.setPurchaseOrderNumber(line.getPurchaseOrderNumber());
-                    inboundIntegrationLine.setContainerNumber(line.getContainerNumber());
-                    inboundIntegrationHeader.setContainerNo(line.getContainerNumber());
-
-                    inboundIntegrationLineList.add(inboundIntegrationLine);
-                }
-                inboundIntegrationHeader.setInboundIntegrationLine(inboundIntegrationLineList);
-                inboundList.add(inboundIntegrationHeader);
-            }
-            spList = new CopyOnWriteArrayList<InboundIntegrationHeader>(inboundList);
-            log.info("There is no record found to process (sql) ...Waiting..");
-        }
-
-        if (inboundList != null) {
-            log.info("Latest InboundOrder found: " + inboundList);
-            for (InboundIntegrationHeader inbound : spList) {
-                try {
-                    log.info("InboundOrder ID : " + inbound.getRefDocumentNo());
-                    InboundHeaderV2 inboundHeader = preinboundheaderService.processInboundReceivedV2(inbound.getRefDocumentNo(), inbound);
-                    if (inboundHeader != null) {
-                        // Updating the Processed Status
-                        orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo());
-                        inboundList.remove(inbound);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error on inbound processing : " + e.toString());
-                    // Updating the Processed Status
-                    orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo());
-                    preinboundheaderService.createInboundIntegrationLog(inbound);
-                    inboundList.remove(inbound);
-                }
-            }
-        }
-    }
+//    @Scheduled(fixedDelay = 30000)
+//    public synchronized void processInboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
+//        if (inboundList == null || inboundList.isEmpty()) {
+//            List<InboundOrderV2> sqlInboundList = inboundOrderV2Repository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
+//            inboundList = new ArrayList<>();
+//            for (InboundOrderV2 dbOBOrder : sqlInboundList) {
+//                InboundIntegrationHeader inboundIntegrationHeader = new InboundIntegrationHeader();
+//                BeanUtils.copyProperties(dbOBOrder, inboundIntegrationHeader, CommonUtils.getNullPropertyNames(dbOBOrder));
+//                inboundIntegrationHeader.setId(dbOBOrder.getOrderId());
+//                inboundIntegrationHeader.setMiddlewareId(String.valueOf(dbOBOrder.getMiddlewareId()));
+//                inboundIntegrationHeader.setMiddlewareTable(dbOBOrder.getMiddlewareTable());
+//
+//                List<InboundOrderLinesV2> sqlInboundLineList = inboundOrderLinesV2Repository.getOrderLines(dbOBOrder.getOrderId());
+//                log.info("line list: " + sqlInboundLineList);
+//                List<InboundIntegrationLine> inboundIntegrationLineList = new ArrayList<>();
+//                for (InboundOrderLinesV2 line : sqlInboundLineList) {
+//                    InboundIntegrationLine inboundIntegrationLine = new InboundIntegrationLine();
+//                    BeanUtils.copyProperties(line, inboundIntegrationLine, CommonUtils.getNullPropertyNames(line));
+//
+//                    inboundIntegrationLine.setLineReference(line.getLineReference());
+//                    inboundIntegrationLine.setItemCode(line.getItemCode());
+//                    inboundIntegrationLine.setItemText(line.getItemText());
+//                    inboundIntegrationLine.setInvoiceNumber(line.getInvoiceNumber());
+//                    inboundIntegrationLine.setContainerNumber(line.getContainerNumber());
+//                    inboundIntegrationLine.setSupplierCode(line.getSupplierCode());
+//                    inboundIntegrationLine.setSupplierPartNumber(line.getSupplierPartNumber());
+//                    inboundIntegrationLine.setManufacturerName(line.getManufacturerName());
+//                    inboundIntegrationLine.setManufacturerPartNo(line.getManufacturerPartNo());
+//                    inboundIntegrationLine.setExpectedDate(line.getExpectedDate());
+//                    inboundIntegrationLine.setOrderedQty(line.getExpectedQty());
+//                    inboundIntegrationLine.setUom(line.getUom());
+//                    inboundIntegrationLine.setItemCaseQty(line.getItemCaseQty());
+//                    inboundIntegrationLine.setSalesOrderReference(line.getSalesOrderReference());
+//                    inboundIntegrationLine.setManufacturerCode(line.getManufacturerCode());
+//                    inboundIntegrationLine.setOrigin(line.getOrigin());
+//                    inboundIntegrationLine.setBrand(line.getBrand());
+//
+//                    inboundIntegrationLine.setSupplierName(line.getSupplierName());
+//
+//                    inboundIntegrationLine.setMiddlewareId(String.valueOf(line.getMiddlewareId()));
+//                    inboundIntegrationLine.setMiddlewareHeaderId(String.valueOf(line.getMiddlewareHeaderId()));
+//                    inboundIntegrationLine.setMiddlewareTable(line.getMiddlewareTable());
+//                    inboundIntegrationLine.setManufacturerFullName(line.getManufacturerFullName());
+//                    inboundIntegrationLine.setPurchaseOrderNumber(line.getPurchaseOrderNumber());
+//                    inboundIntegrationLine.setContainerNumber(line.getContainerNumber());
+//                    inboundIntegrationHeader.setContainerNo(line.getContainerNumber());
+//
+//                    inboundIntegrationLineList.add(inboundIntegrationLine);
+//                }
+//                inboundIntegrationHeader.setInboundIntegrationLine(inboundIntegrationLineList);
+//                inboundList.add(inboundIntegrationHeader);
+//            }
+//            spList = new CopyOnWriteArrayList<InboundIntegrationHeader>(inboundList);
+//            log.info("There is no record found to process (sql) ...Waiting..");
+//        }
+//
+//        if (inboundList != null) {
+//            log.info("Latest InboundOrder found: " + inboundList);
+//            for (InboundIntegrationHeader inbound : spList) {
+//                try {
+//                    log.info("InboundOrder ID : " + inbound.getRefDocumentNo());
+//                    InboundHeaderV2 inboundHeader = preinboundheaderService.processInboundReceivedV2(inbound.getRefDocumentNo(), inbound);
+//                    if (inboundHeader != null) {
+//                        // Updating the Processed Status
+//                        orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo());
+//                        inboundList.remove(inbound);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("Error on inbound processing : " + e.toString());
+//                    // Updating the Processed Status
+//                    orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo());
+//                    preinboundheaderService.createInboundIntegrationLog(inbound);
+//                    inboundList.remove(inbound);
+//                }
+//            }
+//        }
+//    }
 
     //=====================================================================V2=============================================================================
     // OutboundRecord
-    @Scheduled(fixedDelay = 30000)
-    public synchronized void processOutboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
-        if (outboundList == null || outboundList.isEmpty()) {
-            List<OutboundOrderV2> sqlOutboundList = outboundOrderV2Repository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
-            outboundList = new ArrayList<>();
-            for (OutboundOrderV2 dbOBOrder : sqlOutboundList) {
-                OutboundIntegrationHeaderV2 outboundIntegrationHeader = new OutboundIntegrationHeaderV2();
-                BeanUtils.copyProperties(dbOBOrder, outboundIntegrationHeader, CommonUtils.getNullPropertyNames(dbOBOrder));
-                outboundIntegrationHeader.setId(dbOBOrder.getOrderId());
-                outboundIntegrationHeader.setCompanyCode(dbOBOrder.getCompanyCode());
-                outboundIntegrationHeader.setBranchCode(dbOBOrder.getBranchCode());
-                outboundIntegrationHeader.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
-                outboundIntegrationHeader.setMiddlewareId(dbOBOrder.getMiddlewareId());
-                outboundIntegrationHeader.setMiddlewareTable(dbOBOrder.getMiddlewareTable());
-                outboundIntegrationHeader.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
-                outboundIntegrationHeader.setSalesOrderNumber(dbOBOrder.getSalesOrderNumber());
-                outboundIntegrationHeader.setPickListNumber(dbOBOrder.getPickListNumber());
-                outboundIntegrationHeader.setTokenNumber(dbOBOrder.getTokenNumber());
-                outboundIntegrationHeader.setTargetCompanyCode(dbOBOrder.getTargetCompanyCode());
-                outboundIntegrationHeader.setTargetBranchCode(dbOBOrder.getTargetBranchCode());
-                if(dbOBOrder.getOutboundOrderTypeID() == 3L) {
-                    outboundIntegrationHeader.setStatus(dbOBOrder.getPickListStatus());
-                    outboundIntegrationHeader.setRequiredDeliveryDate(dbOBOrder.getRequiredDeliveryDate());
-                }
-                if (dbOBOrder.getOutboundOrderTypeID() != 3L) {
-                    outboundIntegrationHeader.setStatus(dbOBOrder.getStatus());
-                }
-
-
-                if (outboundIntegrationHeader.getOutboundOrderTypeID() == 4) {
-                    outboundIntegrationHeader.setSalesInvoiceNumber(dbOBOrder.getSalesInvoiceNumber());
-                    outboundIntegrationHeader.setSalesOrderNumber(dbOBOrder.getSalesOrderNumber());
-                    outboundIntegrationHeader.setRequiredDeliveryDate(dbOBOrder.getSalesInvoiceDate());
-                    outboundIntegrationHeader.setDeliveryType(dbOBOrder.getDeliveryType());
-                    outboundIntegrationHeader.setCustomerId(dbOBOrder.getCustomerId());
-                    outboundIntegrationHeader.setCustomerName(dbOBOrder.getCustomerName());
-                    outboundIntegrationHeader.setAddress(dbOBOrder.getAddress());
-                    outboundIntegrationHeader.setPhoneNumber(dbOBOrder.getPhoneNumber());
-                    outboundIntegrationHeader.setAlternateNo(dbOBOrder.getAlternateNo());
-                    outboundIntegrationHeader.setStatus(dbOBOrder.getStatus());
-                }
-
-                List<OutboundIntegrationLineV2> outboundIntegrationLineList = new ArrayList<>();
-                for (OutboundOrderLineV2 line : dbOBOrder.getLine()) {
-                    OutboundIntegrationLineV2 outboundIntegrationLine = new OutboundIntegrationLineV2();
-                    BeanUtils.copyProperties(line, outboundIntegrationLine, CommonUtils.getNullPropertyNames(line));
-                    outboundIntegrationLine.setCompanyCode(line.getFromCompanyCode());
-                    outboundIntegrationLine.setBranchCode(line.getSourceBranchCode());
-                    outboundIntegrationLine.setManufacturerName(line.getManufacturerName());
-                    outboundIntegrationLine.setManufacturerCode(line.getManufacturerName());
-                    outboundIntegrationLine.setMiddlewareId(line.getMiddlewareId());
-                    outboundIntegrationLine.setMiddlewareHeaderId(line.getMiddlewareHeaderId());
-                    outboundIntegrationLine.setMiddlewareTable(line.getMiddlewareTable());
-                    outboundIntegrationLine.setSalesInvoiceNo(line.getSalesInvoiceNo());
-                    outboundIntegrationLine.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
-                    outboundIntegrationLine.setRefField1ForOrderType(line.getRefField1ForOrderType());
-                    outboundIntegrationLine.setSalesOrderNumber(line.getSalesOrderNo());
-                    outboundIntegrationLine.setSupplierInvoiceNo(line.getSupplierInvoiceNo());
-                    outboundIntegrationLine.setPickListNo(line.getPickListNo());
-                    outboundIntegrationLine.setManufacturerFullName(line.getManufacturerFullName());
-                    outboundIntegrationLineList.add(outboundIntegrationLine);
-                }
-                outboundIntegrationHeader.setOutboundIntegrationLines(outboundIntegrationLineList);
-                outboundList.add(outboundIntegrationHeader);
-            }
-            spOutboundList = new CopyOnWriteArrayList<OutboundIntegrationHeaderV2>(outboundList);
-            log.info("There is no record found to process (sql) ...Waiting..");
-        }
-
-        if (outboundList != null) {
-            log.info("Latest OutboundOrder found: " + outboundList);
-            for (OutboundIntegrationHeaderV2 outbound : spOutboundList) {
-                try {
-                    log.info("OutboundOrder ID : " + outbound.getRefDocumentNo());
-                    OutboundHeaderV2 outboundHeader = preOutboundHeaderService.processOutboundReceivedV2(outbound);
-                    if (outboundHeader != null) {
-                        // Updating the Processed Status
-                        orderService.updateProcessedOrderV2(outbound.getRefDocumentNo());
-                        outboundList.remove(outbound);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error on outbound processing : " + e.toString());
-                    // Updating the Processed Status
-                    orderService.updateProcessedOrderV2(outbound.getRefDocumentNo());
-                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
-                    outboundList.remove(outbound);
-                }
-            }
-        }
-    }
-
-    //=====================================================================StockCount=============================================================================
-    // PerpetualCount
-    @Scheduled(fixedDelay = 30000)
-    public synchronized void processPerpetualStockCountOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
-        if (stockCountPerpetualList == null || stockCountPerpetualList.isEmpty()) {
-            List<CycleCountHeader> scpList = cycleCountHeaderRepository.findTopByProcessedStatusIdAndStockCountTypeOrderByOrderReceivedOn(0L, "PERPETUAL");
-//            stockCountPerpetualList = new ArrayList<>();
-            stockCountPerpetualList = new CopyOnWriteArrayList<CycleCountHeader>(scpList);
-            scPerpetualList = new CopyOnWriteArrayList<CycleCountHeader>(stockCountPerpetualList);
-            log.info("stockCountPerpetualList : " + stockCountPerpetualList);
-            log.info("There is no stock count record found to process (sql) ...Waiting..");
-        }
-
-        if (stockCountPerpetualList != null) {
-            log.info("Latest Perpetual StockCount found: " + stockCountPerpetualList);
-            for (CycleCountHeader stockCount : scPerpetualList) {
-                try {
-                    log.info("Perpetual StockCount CycleCountNo : " + stockCount.getCycleCountNo());
-                    PerpetualHeaderEntityV2 perpetualStockCount = perpetualHeaderService.processStockCountReceived(stockCount);
-                    if (perpetualStockCount != null) {
-                        // Updating the Processed Status
-                        cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
-                        stockCountPerpetualList.remove(stockCount);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error on PerpetualStockCount processing : " + e.toString());
-                    // Updating the Processed Status
-                    cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
+//    @Scheduled(fixedDelay = 30000)
+//    public synchronized void processOutboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
+//        if (outboundList == null || outboundList.isEmpty()) {
+//            List<OutboundOrderV2> sqlOutboundList = outboundOrderV2Repository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
+//            outboundList = new ArrayList<>();
+//            for (OutboundOrderV2 dbOBOrder : sqlOutboundList) {
+//                OutboundIntegrationHeaderV2 outboundIntegrationHeader = new OutboundIntegrationHeaderV2();
+//                BeanUtils.copyProperties(dbOBOrder, outboundIntegrationHeader, CommonUtils.getNullPropertyNames(dbOBOrder));
+//                outboundIntegrationHeader.setId(dbOBOrder.getOrderId());
+//                outboundIntegrationHeader.setCompanyCode(dbOBOrder.getCompanyCode());
+//                outboundIntegrationHeader.setBranchCode(dbOBOrder.getBranchCode());
+//                outboundIntegrationHeader.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
+//                outboundIntegrationHeader.setMiddlewareId(dbOBOrder.getMiddlewareId());
+//                outboundIntegrationHeader.setMiddlewareTable(dbOBOrder.getMiddlewareTable());
+//                outboundIntegrationHeader.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
+//                outboundIntegrationHeader.setSalesOrderNumber(dbOBOrder.getSalesOrderNumber());
+//                outboundIntegrationHeader.setPickListNumber(dbOBOrder.getPickListNumber());
+//                outboundIntegrationHeader.setTokenNumber(dbOBOrder.getTokenNumber());
+//                outboundIntegrationHeader.setTargetCompanyCode(dbOBOrder.getTargetCompanyCode());
+//                outboundIntegrationHeader.setTargetBranchCode(dbOBOrder.getTargetBranchCode());
+//                if(dbOBOrder.getOutboundOrderTypeID() == 3L) {
+//                    outboundIntegrationHeader.setStatus(dbOBOrder.getPickListStatus());
+//                    outboundIntegrationHeader.setRequiredDeliveryDate(dbOBOrder.getRequiredDeliveryDate());
+//                }
+//                if (dbOBOrder.getOutboundOrderTypeID() != 3L) {
+//                    outboundIntegrationHeader.setStatus(dbOBOrder.getStatus());
+//                }
+//
+//
+//                if (outboundIntegrationHeader.getOutboundOrderTypeID() == 4) {
+//                    outboundIntegrationHeader.setSalesInvoiceNumber(dbOBOrder.getSalesInvoiceNumber());
+//                    outboundIntegrationHeader.setSalesOrderNumber(dbOBOrder.getSalesOrderNumber());
+//                    outboundIntegrationHeader.setRequiredDeliveryDate(dbOBOrder.getSalesInvoiceDate());
+//                    outboundIntegrationHeader.setDeliveryType(dbOBOrder.getDeliveryType());
+//                    outboundIntegrationHeader.setCustomerId(dbOBOrder.getCustomerId());
+//                    outboundIntegrationHeader.setCustomerName(dbOBOrder.getCustomerName());
+//                    outboundIntegrationHeader.setAddress(dbOBOrder.getAddress());
+//                    outboundIntegrationHeader.setPhoneNumber(dbOBOrder.getPhoneNumber());
+//                    outboundIntegrationHeader.setAlternateNo(dbOBOrder.getAlternateNo());
+//                    outboundIntegrationHeader.setStatus(dbOBOrder.getStatus());
+//                }
+//
+//                List<OutboundIntegrationLineV2> outboundIntegrationLineList = new ArrayList<>();
+//                for (OutboundOrderLineV2 line : dbOBOrder.getLine()) {
+//                    OutboundIntegrationLineV2 outboundIntegrationLine = new OutboundIntegrationLineV2();
+//                    BeanUtils.copyProperties(line, outboundIntegrationLine, CommonUtils.getNullPropertyNames(line));
+//                    outboundIntegrationLine.setCompanyCode(line.getFromCompanyCode());
+//                    outboundIntegrationLine.setBranchCode(line.getSourceBranchCode());
+//                    outboundIntegrationLine.setManufacturerName(line.getManufacturerName());
+//                    outboundIntegrationLine.setManufacturerCode(line.getManufacturerName());
+//                    outboundIntegrationLine.setMiddlewareId(line.getMiddlewareId());
+//                    outboundIntegrationLine.setMiddlewareHeaderId(line.getMiddlewareHeaderId());
+//                    outboundIntegrationLine.setMiddlewareTable(line.getMiddlewareTable());
+//                    outboundIntegrationLine.setSalesInvoiceNo(line.getSalesInvoiceNo());
+//                    outboundIntegrationLine.setReferenceDocumentType(dbOBOrder.getRefDocumentType());
+//                    outboundIntegrationLine.setRefField1ForOrderType(line.getRefField1ForOrderType());
+//                    outboundIntegrationLine.setSalesOrderNumber(line.getSalesOrderNo());
+//                    outboundIntegrationLine.setSupplierInvoiceNo(line.getSupplierInvoiceNo());
+//                    outboundIntegrationLine.setPickListNo(line.getPickListNo());
+//                    outboundIntegrationLine.setManufacturerFullName(line.getManufacturerFullName());
+//                    outboundIntegrationLineList.add(outboundIntegrationLine);
+//                }
+//                outboundIntegrationHeader.setOutboundIntegrationLines(outboundIntegrationLineList);
+//                outboundList.add(outboundIntegrationHeader);
+//            }
+//            spOutboundList = new CopyOnWriteArrayList<OutboundIntegrationHeaderV2>(outboundList);
+//            log.info("There is no record found to process (sql) ...Waiting..");
+//        }
+//
+//        if (outboundList != null) {
+//            log.info("Latest OutboundOrder found: " + outboundList);
+//            for (OutboundIntegrationHeaderV2 outbound : spOutboundList) {
+//                try {
+//                    log.info("OutboundOrder ID : " + outbound.getRefDocumentNo());
+//                    OutboundHeaderV2 outboundHeader = preOutboundHeaderService.processOutboundReceivedV2(outbound);
+//                    if (outboundHeader != null) {
+//                        // Updating the Processed Status
+//                        orderService.updateProcessedOrderV2(outbound.getRefDocumentNo());
+//                        outboundList.remove(outbound);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("Error on outbound processing : " + e.toString());
+//                    // Updating the Processed Status
+//                    orderService.updateProcessedOrderV2(outbound.getRefDocumentNo());
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
-                    stockCountPerpetualList.remove(stockCount);
-                }
-            }
-        }
-    }
+//                    outboundList.remove(outbound);
+//                }
+//            }
+//        }
+//    }
+//
+//    //=====================================================================StockCount=============================================================================
+//    // PerpetualCount
+//    @Scheduled(fixedDelay = 30000)
+//    public synchronized void processPerpetualStockCountOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
+//        if (stockCountPerpetualList == null || stockCountPerpetualList.isEmpty()) {
+//            List<CycleCountHeader> scpList = cycleCountHeaderRepository.findTopByProcessedStatusIdAndStockCountTypeOrderByOrderReceivedOn(0L, "PERPETUAL");
+////            stockCountPerpetualList = new ArrayList<>();
+//            stockCountPerpetualList = new CopyOnWriteArrayList<CycleCountHeader>(scpList);
+//            scPerpetualList = new CopyOnWriteArrayList<CycleCountHeader>(stockCountPerpetualList);
+//            log.info("stockCountPerpetualList : " + stockCountPerpetualList);
+//            log.info("There is no stock count record found to process (sql) ...Waiting..");
+//        }
+//
+//        if (stockCountPerpetualList != null) {
+//            log.info("Latest Perpetual StockCount found: " + stockCountPerpetualList);
+//            for (CycleCountHeader stockCount : scPerpetualList) {
+//                try {
+//                    log.info("Perpetual StockCount CycleCountNo : " + stockCount.getCycleCountNo());
+//                    PerpetualHeaderEntityV2 perpetualStockCount = perpetualHeaderService.processStockCountReceived(stockCount);
+//                    if (perpetualStockCount != null) {
+//                        // Updating the Processed Status
+//                        cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
+//                        stockCountPerpetualList.remove(stockCount);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("Error on PerpetualStockCount processing : " + e.toString());
+//                    // Updating the Processed Status
+//                    cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
+////                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
+//                    stockCountPerpetualList.remove(stockCount);
+//                }
+//            }
+//        }
+//    }
+//
+//    // PeriodicCount
+//    @Scheduled(fixedDelay = 30000)
+//    public synchronized void processPeriodicStockCountOrder() throws IllegalAccessException, InvocationTargetException, ParseException {if (stockCountPeriodicList == null || stockCountPeriodicList.isEmpty()) {
+//            List<CycleCountHeader> scpList = cycleCountHeaderRepository.findTopByProcessedStatusIdAndStockCountTypeOrderByOrderReceivedOn(0L, "PERIODIC");
+//            stockCountPeriodicList = new CopyOnWriteArrayList<CycleCountHeader>(scpList);
+//            scPeriodicList = new CopyOnWriteArrayList<CycleCountHeader>(stockCountPeriodicList);
+//            log.info("stockCountPeriodicList : " + stockCountPeriodicList);
+//            log.info("There is no Periodic stock count record found to process (sql) ...Waiting..");
+//        }
+//
+//        if (stockCountPeriodicList != null) {
+//            log.info("Latest Periodic StockCount found: " + stockCountPeriodicList);
+//            for (CycleCountHeader stockCount : scPeriodicList) {
+//                try {
+//                    log.info("Periodic StockCount CycleCountNo : " + stockCount.getCycleCountNo());
+//                    PeriodicHeaderEntityV2 periodicHeaderV2 = periodicHeaderService.processStockCountReceived(stockCount);
+//                    if (periodicHeaderV2 != null) {
+//                        // Updating the Processed Status
+//                        cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
+//                        stockCountPeriodicList.remove(stockCount);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("Error on PeriodicStockCount processing : " + e.toString());
+//                    // Updating the Processed Status
+//                    cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
+////                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
+//                    stockCountPeriodicList.remove(stockCount);
+//                }
+//            }
+//        }
+//    }
+//
+//    //=====================================================================StockAdjustment=============================================================================
+//    // PerpetualCount
+//    @Scheduled(fixedDelay = 30000)
+//    public synchronized void processStockAdjustmentOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
+//        if (stockAdjustmentList == null || stockAdjustmentList.isEmpty()) {
+//            List<StockAdjustment> saList = stockAdjustmentRepository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
+////            stockCountPerpetualList = new ArrayList<>();
+//            stockAdjustmentList = new CopyOnWriteArrayList<StockAdjustment>(saList);
+//            stockAdjustments = new CopyOnWriteArrayList<StockAdjustment>(stockAdjustmentList);
+//            log.info("stockAdjustmentList : " + stockAdjustmentList);
+//            log.info("There is no stock adjustment record found to process (sql) ...Waiting..");
+//        }
+//
+//        if (stockAdjustmentList != null) {
+//            log.info("Latest StockAdjustment found: " + stockAdjustmentList);
+//            for (StockAdjustment stockAdjustment : stockAdjustments) {
+//                try {
+//                    log.info("StockAdjustment Id : " + stockAdjustment.getStockAdjustmentId());
+//                    WarehouseApiResponse dbStockAdjustment = stockAdjustmentService.processStockAdjustment(stockAdjustment);
+//                    if (dbStockAdjustment != null) {
+//                        // Updating the Processed Status
+//                        stockAdjustmentMiddlewareService.updateProcessedOrderV2(stockAdjustment.getStockAdjustmentId());
+//                        stockAdjustmentList.remove(stockAdjustment);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("Error on StockAdjustment processing : " + e.toString());
+//                    // Updating the Processed Status
+//                    stockAdjustmentMiddlewareService.updateProcessedOrderV2(stockAdjustment.getStockAdjustmentId());
+////                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
+//                    stockAdjustmentList.remove(stockAdjustment);
+//                }
+//            }
+//        }
+//    }
 
-    // PeriodicCount
+    //-------------------------------------------------------------------------------------------
+
     @Scheduled(fixedDelay = 30000)
-    public synchronized void processPeriodicStockCountOrder() throws IllegalAccessException, InvocationTargetException, ParseException {if (stockCountPeriodicList == null || stockCountPeriodicList.isEmpty()) {
-            List<CycleCountHeader> scpList = cycleCountHeaderRepository.findTopByProcessedStatusIdAndStockCountTypeOrderByOrderReceivedOn(0L, "PERIODIC");
-            stockCountPeriodicList = new CopyOnWriteArrayList<CycleCountHeader>(scpList);
-            scPeriodicList = new CopyOnWriteArrayList<CycleCountHeader>(stockCountPeriodicList);
-            log.info("stockCountPeriodicList : " + stockCountPeriodicList);
-            log.info("There is no Periodic stock count record found to process (sql) ...Waiting..");
-        }
+    public void scheduleJob() throws InterruptedException, InvocationTargetException, IllegalAccessException, ParseException {
 
-        if (stockCountPeriodicList != null) {
-            log.info("Latest Periodic StockCount found: " + stockCountPeriodicList);
-            for (CycleCountHeader stockCount : scPeriodicList) {
-                try {
-                    log.info("Periodic StockCount CycleCountNo : " + stockCount.getCycleCountNo());
-                    PeriodicHeaderEntityV2 periodicHeaderV2 = periodicHeaderService.processStockCountReceived(stockCount);
-                    if (periodicHeaderV2 != null) {
-                        // Updating the Processed Status
-                        cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
-                        stockCountPeriodicList.remove(stockCount);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error on PeriodicStockCount processing : " + e.toString());
-                    // Updating the Processed Status
-                    cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo());
-//                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
-                    stockCountPeriodicList.remove(stockCount);
-                }
-            }
-        }
+        CompletableFuture<WarehouseApiResponse> inboundOrder = scheduleAsyncService.processInboundOrder();
+        CompletableFuture<WarehouseApiResponse> outboundOrder = scheduleAsyncService.processOutboundOrder();
+        CompletableFuture<WarehouseApiResponse> perpetualStockCountOrder = scheduleAsyncService.processPerpetualStockCountOrder();
+        CompletableFuture<WarehouseApiResponse> periodicStockCountOrder = scheduleAsyncService.processPeriodicStockCountOrder();
+        CompletableFuture<WarehouseApiResponse> stockAdjustmentOrder = scheduleAsyncService.processStockAdjustmentOrder();
+
+//        CompletableFuture.allOf(inboundOrder,outboundOrder,perpetualStockCountOrder,periodicStockCountOrder,stockAdjustmentOrder).join();
+
     }
 
-    //=====================================================================StockAdjustment=============================================================================
-    // PerpetualCount
-    @Scheduled(fixedDelay = 30000)
-    public synchronized void processStockAdjustmentOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
-        if (stockAdjustmentList == null || stockAdjustmentList.isEmpty()) {
-            List<StockAdjustment> saList = stockAdjustmentRepository.findTopByProcessedStatusIdOrderByOrderReceivedOn(0L);
-//            stockCountPerpetualList = new ArrayList<>();
-            stockAdjustmentList = new CopyOnWriteArrayList<StockAdjustment>(saList);
-            stockAdjustments = new CopyOnWriteArrayList<StockAdjustment>(stockAdjustmentList);
-            log.info("stockAdjustmentList : " + stockAdjustmentList);
-            log.info("There is no stock adjustment record found to process (sql) ...Waiting..");
-        }
+//    @Scheduled(fixedDelay = 60000)
+    @Scheduled(cron = "0 0 20 * * ?")
+    public synchronized void processErrorLog() {
+        wrapperService.createErrorLog();
 
-        if (stockAdjustmentList != null) {
-            log.info("Latest StockAdjustment found: " + stockAdjustmentList);
-            for (StockAdjustment stockAdjustment : stockAdjustments) {
-                try {
-                    log.info("StockAdjustment Id : " + stockAdjustment.getStockAdjustmentId());
-                    WarehouseApiResponse dbStockAdjustment = stockAdjustmentService.processStockAdjustment(stockAdjustment);
-                    if (dbStockAdjustment != null) {
-                        // Updating the Processed Status
-                        stockAdjustmentMiddlewareService.updateProcessedOrderV2(stockAdjustment.getStockAdjustmentId());
-                        stockAdjustmentList.remove(stockAdjustment);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("Error on StockAdjustment processing : " + e.toString());
-                    // Updating the Processed Status
-                    stockAdjustmentMiddlewareService.updateProcessedOrderV2(stockAdjustment.getStockAdjustmentId());
-//                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
-                    stockAdjustmentList.remove(stockAdjustment);
-                }
-            }
-        }
     }
+
 }

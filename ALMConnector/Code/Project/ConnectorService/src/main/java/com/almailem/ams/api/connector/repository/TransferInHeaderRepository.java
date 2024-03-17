@@ -47,4 +47,6 @@ public interface TransferInHeaderRepository extends JpaRepository<TransferInHead
     @Query(value = "select * \n" +
             "from TRANSFERINHEADER where Transferinheaderid = :transferInHeaderId ",nativeQuery = true)
     public TransferInHeader getTransferInHeader(@Param(value = "transferInHeaderId") Long transferInHeaderId);
+
+    List<TransferInHeader> findByProcessedStatusIdOrderByOrderReceivedOn(long l);
 }

@@ -124,4 +124,17 @@ public class PropertiesConfig {
 
 	@Value("${qp.tracking}")
 	private String qpTracking;
+	
+	//========================================================================================
+	//-------------------ALI_ALGHANIM_APIs----------------------------------------------------
+	
+	/*
+	 * gnm.auth.token=a3b48c6d8e9f1023g4h56789j0k123lmnop45qr6stu78vwxyz90ab1c2d3e4f5gh
+	 * gnm.api.order.status.update=https://tlb-stage.lrweb.co/wp-json/iwx_api/v1/update-order-status/
+	 */
+	@Value("${gnm.auth.token}")
+	private String alialgmAuthToken;
+	
+	@Value("${gnm.api.order.status.update}")
+	private String alialgmApiOrderStatusUpdate;
 }

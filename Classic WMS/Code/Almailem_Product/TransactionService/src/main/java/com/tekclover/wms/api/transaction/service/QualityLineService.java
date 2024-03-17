@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -372,7 +374,7 @@ public class QualityLineService extends BaseService {
      * @throws InvocationTargetException
      */
     public List<QualityLine> createQualityLine(List<AddQualityLine> newQualityLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         try {
             log.info("-------createQualityLine--------called-------> " + new Date());
 
@@ -719,7 +721,7 @@ public class QualityLineService extends BaseService {
      */
     private InventoryMovement createInventoryMovement(QualityLine dbQualityLine, Long subMvtTypeId,
                                                       String movementDocumentNo, String storageBin, String movementQtyValue, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         AddInventoryMovement inventoryMovement = new AddInventoryMovement();
         BeanUtils.copyProperties(dbQualityLine, inventoryMovement, CommonUtils.getNullPropertyNames(dbQualityLine));
 
@@ -1224,7 +1226,7 @@ public class QualityLineService extends BaseService {
     public List<QualityLineV2> createQualityLineV2(List<AddQualityLineV2> newQualityLines, String loginUserID)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
         try {
-            log.info("-------createQualityLine--------called-------> " + DateUtils.getCurrentKWTDateTime());
+            log.info("-------createQualityLine--------called-------> " + newQualityLines);
 
             List<AddQualityLineV2> dupQualityLines = getDuplicatesV2(newQualityLines);
             log.info("-------dupQualityLines--------> " + dupQualityLines);
@@ -1286,15 +1288,16 @@ public class QualityLineService extends BaseService {
                     dbQualityLine.setDescription(dbOrderManagementLine.getDescription());
                     dbQualityLine.setSupplierInvoiceNo(dbOrderManagementLine.getSupplierInvoiceNo());
                     dbQualityLine.setTokenNumber(dbOrderManagementLine.getTokenNumber());
-                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
+//                    dbQualityLine.setBarcodeId(dbOrderManagementLine.getBarcodeId());
                     dbQualityLine.setTargetBranchCode(dbOrderManagementLine.getTargetBranchCode());
                 }
 
+                dbQualityLine.setBarcodeId(newQualityLine.getBarcodeId());
                 dbQualityLine.setDeletionIndicator(0L);
                 dbQualityLine.setQualityCreatedBy(loginUserID);
                 dbQualityLine.setQualityUpdatedBy(loginUserID);
-                dbQualityLine.setQualityCreatedOn(DateUtils.getCurrentKWTDateTime());
-                dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                dbQualityLine.setQualityCreatedOn(new Date());
+                dbQualityLine.setQualityUpdatedOn(new Date());
 
                 /*
                  * String warehouseId, String preOutboundNo, String refDocNumber, String
@@ -1707,7 +1710,7 @@ public class QualityLineService extends BaseService {
         outboundLineInterim.setDeletionIndicator(0L);
         outboundLineInterim.setDeliveryQty(dbQualityLine.getQualityQty());
         outboundLineInterim.setCreatedBy(dbQualityLine.getQualityCreatedBy());
-        outboundLineInterim.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        outboundLineInterim.setCreatedOn(new Date());
 
         OutboundLineInterim createdOutboundLine = outboundLineInterimRepository.saveAndFlush(outboundLineInterim);
         log.info("outboundLineInterim created ----------->: " + createdOutboundLine);
@@ -1879,6 +1882,7 @@ public class QualityLineService extends BaseService {
 
                 long count_57 = 0;
                 if (outboundLineV2List != null) {
+                    List<Long> statusIdsToBeChecked = Arrays.asList(57L, 47L, 51L);
                     count_57 = outboundLineService.getOutboundLineV2(dbQualityLines.get(0).getCompanyCodeId(),
                             dbQualityLines.get(0).getPlantId(),
                             dbQualityLines.get(0).getLanguageId(),
@@ -1886,7 +1890,7 @@ public class QualityLineService extends BaseService {
                             dbQualityLines.get(0).getPreOutboundNo(),
                             dbQualityLines.get(0).getRefDocNumber(),
                             dbQualityLines.get(0).getPartnerCode(),
-                            Collections.singletonList(57L));
+                            statusIdsToBeChecked);
                 }
                 log.info("Count_57, OutboundLineList Size: " + count_57 + ", " + outboundLineV2List.size());
 
@@ -2166,12 +2170,7 @@ public class QualityLineService extends BaseService {
             dbQualityLine.forEach(data -> {
                 BeanUtils.copyProperties(updateQualityLine, data, CommonUtils.getNullPropertyNames(updateQualityLine));
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
             });
             return qualityLineV2Repository.saveAll(dbQualityLine);
         }
@@ -2200,7 +2199,7 @@ public class QualityLineService extends BaseService {
             BeanUtils.copyProperties(updateQualityLine, dbQualityLine,
                     CommonUtils.getNullPropertyNames(updateQualityLine));
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         }
         return null;
@@ -2229,7 +2228,7 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
@@ -2259,12 +2258,7 @@ public class QualityLineService extends BaseService {
             dbQualityLine.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setQualityUpdatedBy(loginUserID);
-                try {
-                    data.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setQualityUpdatedOn(new Date());
                 qualityLineList.add(data);
             });
             return qualityLineV2Repository.saveAll(qualityLineList);
@@ -2296,12 +2290,7 @@ public class QualityLineService extends BaseService {
             listOutboundLineInterim.forEach(data -> {
                 data.setDeletionIndicator(1L);
                 data.setUpdatedBy(loginUserID);
-                try {
-                    data.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
+                data.setUpdatedOn(new Date());
             });
             return outboundLineInterimRepository.saveAll(listOutboundLineInterim);
         }
@@ -2329,7 +2318,7 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             return qualityLineV2Repository.save(dbQualityLine);
         } else {
             return null;
@@ -2355,27 +2344,37 @@ public class QualityLineService extends BaseService {
         if (dbQualityLine != null) {
             dbQualityLine.setDeletionIndicator(1L);
             dbQualityLine.setQualityUpdatedBy(loginUserID);
-            dbQualityLine.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+            dbQualityLine.setQualityUpdatedOn(new Date());
             qualityLineV2Repository.save(dbQualityLine);
         } else {
             throw new EntityNotFoundException("Error in deleting Id: " + lineNumber);
         }
     }
 
-
+    /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param loginUserID
+     * @return
+     * @throws Exception
+     */
     //DeleteQualityHeaderV2
-    public List<QualityLineV2> deleteQualityLine(String companyCodeId, String plantId,
-                                                 String languageId, String warehouseId, String refDocNumber, String loginUserID) throws Exception {
+    public List<QualityLineV2> deleteQualityLine(String companyCodeId, String plantId, String languageId,
+                                                 String warehouseId, String refDocNumber, String loginUserID) throws Exception {
 
         List<QualityLineV2> qualityLineV2List = new ArrayList<>();
-        List<QualityLineV2> dbQualityLine = qualityLineV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
+        List<QualityLineV2> dbQualityLineList = qualityLineV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
                 companyCodeId, languageId, plantId, warehouseId, refDocNumber, 0L);
-
-        if (dbQualityLine != null) {
-            for (QualityLineV2 qualityLineV2 : dbQualityLine) {
+        log.info("PickList Cancellation - QualityLine : " + dbQualityLineList);
+        if (dbQualityLineList != null && !dbQualityLineList.isEmpty()) {
+            for (QualityLineV2 qualityLineV2 : dbQualityLineList) {
                 qualityLineV2.setDeletionIndicator(1L);
                 qualityLineV2.setQualityUpdatedBy(loginUserID);
-                qualityLineV2.setQualityUpdatedOn(DateUtils.getCurrentKWTDateTime());
+                qualityLineV2.setQualityUpdatedOn(new Date());
                 QualityLineV2 saveQualityLine = qualityLineV2Repository.save(qualityLineV2);
                 qualityLineV2List.add(saveQualityLine);
             }

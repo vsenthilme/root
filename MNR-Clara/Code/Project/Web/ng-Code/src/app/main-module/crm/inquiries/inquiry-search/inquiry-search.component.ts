@@ -96,7 +96,7 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
   name: string | undefined;
 
 
-  displayedColumns: string[] = ['select', 'action', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'firstName', 'lastName', 'assignedUserId', 'screatedOn', 'classIddes', 'email', 'referenceField4', 'contactNumber', 'notes', 'sms', 'referenceField2', 'referenceField3', 'statusIddesc',];
+  displayedColumns: string[] = ['select', 'action', 'inquiryNumber', 'sinquiryDate',  'inquiryModeId', 'firstName', 'lastName', 'assignedUserId', 'screatedOn', 'classIddes', 'email', 'referenceField4', 'contactNumber', 'hearAboutUs','notes', 'sms', 'referenceField2', 'referenceField3', 'statusIddesc',];
 
   dataSource = new MatTableDataSource<inquiryElement>();
   selection = new SelectionModel<inquiryElement>(true, []);
@@ -156,13 +156,12 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
     });
   }
   open_new_update(data: any = null): void {
-
     const dialogRef = this.dialog.open(InquiryUpdate3Component, {
       disableClose: true,
       width: '50%',
       maxWidth: '80%',
       position: { top: '6.5%' },
-      data: { code: data, pageflow: this.pageflow }
+      data: { code: data, pageflow: data != null ?  'Inquiry Validation' : 'Inquiry Assign'}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -184,32 +183,14 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
     });
     // debugger
     this.field = false;
-    if (this.pageflow == 'Inquiry Assign') {
-      this.RA = this.auth.getRoleAccess(1062);
-      this.field = true;
-      this.searchStatusList = {
-        statusId: [1, 2, 3]
-      };
-      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'firstName', 'lastName', 'assignedUserId', 'classIddes', 'email', 'notes', 'sms', 'referenceField4'];
-      this.Update = 'Assign';
-      this.isnew = false;
-    }
-    else if (this.pageflow == 'Inquiry New') {
-      this.RA = this.auth.getRoleAccess(1060);
-
-      this.searchStatusList = {
-        statusId: [1, 2]
-      };
-      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'firstName', 'lastName', 'email', 'contactNumber', 'notes', 'sms', 'referenceField4'];
-    } else if (this.pageflow == 'Inquiry Validation') {
+    if (this.pageflow == 'Inquiry Validation') {
       this.field = true;
       this.RA = this.auth.getRoleAccess(1064);
-      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'lastName', 'email', 'contactNumber', 'assignedUserId', 'notes', 'sms',];
+      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'lastName', 'email', 'contactNumber', 'assignedUserId', 'hearAboutUs', 'notes', 'sms',];
       this.Update = 'Assign';
-      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate', 'inquiryModeId', 'firstName', 'lastName', 'email', 'contactNumber', 'assignedUserId', 'notes', 'sms', 'referenceField4'];
+      this.columnsToDisplay = ['select', 'action', 'statusIddesc', 'inquiryNumber', 'sinquiryDate','inquiryModeId', 'firstName', 'lastName', 'email', 'contactNumber', 'assignedUserId', 'hearAboutUs', 'notes', 'sms', 'referenceField4'];
       this.Update = 'Validate & Reassign';
       this.isnew = false;
-
     }
     this.getallationslist();
   }
@@ -240,6 +221,7 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
         'Class': x.classIddes,
         'Email': x.email,
         'Phone': x.contactNumber,
+        'Hear About Us ': x.howDidYouHearAboutUs == 'other' ? x.others : x.howDidYouHearAboutUs,
         'Inquiry Status': x.statusIddesc,
         'Communications': x.referenceField2,
         'Service Type': x.referenceField3,
@@ -289,20 +271,8 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
     this.cas.dropdownlist.setup.inquiryModeId.url,
     this.cas.dropdownlist.setup.classId.url,
     this.cas.dropdownlist.crm.inquiryNumber.url]).subscribe((results) => {
-      if (this.pageflow == 'Inquiry New') {
-        this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [1, 2].includes(s.key));
-        this.statuslist.forEach((x: { key: string; value: string; }) => this.multistatusList.push({ value: x.key, label: x.value }))
-        this.multiselectstatusList = this.multistatusList;
-        console.log(this.multiselectstatusList)
-      }
-      if (this.pageflow == 'Inquiry Assign') {
-        this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [1, 2, 3, 4].includes(s.key));
-        this.statuslist.forEach((x: { key: string; value: string; }) => this.multistatusList.push({ value: x.key, label: x.value }))
-        this.multiselectstatusList = this.multistatusList;
-        console.log(this.multiselectstatusList)
-      }
       if (this.pageflow == 'Inquiry Validation') {
-        this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [3, 4, 5, 6, 7, 25, 63, 64, 65].includes(s.key));
+        this.statuslist = this.cas.foreachlist_searchpage(results[0], this.cas.dropdownlist.setup.statusId.key).filter(s => [1, 2, 3, 4, 5, 6, 7, 25, 63, 64, 65].includes(s.key));
         this.statuslist.forEach((x: { key: string; value: string; }) => this.multistatusList.push({ value: x.key, label: x.value }))
         this.multiselectstatusList = this.multistatusList;
         console.log(this.multiselectstatusList)
@@ -322,27 +292,13 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
       this.multiselectInquirynoList = this.multiInquirynoList;
 
       let initalStatus: number[] = [];
-      if (this.pageflow == 'Inquiry New')
-      initalStatus = [1, 2];
-
-    else if (this.pageflow == 'Inquiry Assign')
-    initalStatus = [1, 2];
-
-    else if (this.pageflow == 'Inquiry Validation')
-    initalStatus = [3, 4, 5, 7, 25, 63, 65];
+    initalStatus = [1, 2, 3, 4, 5, 7, 25, 63, 64, 65];
 
 
       this.sub.add(this.service.Search({statusId: initalStatus}).subscribe((res: inquiryElement[]) => {
         let statuslistf: number[] = [];
 
-        if (this.pageflow == 'Inquiry New')
-          statuslistf = [1, 2];
-
-        else if (this.pageflow == 'Inquiry Assign')
-          statuslistf = [1, 2, 3, 4];
-
-        else if (this.pageflow == 'Inquiry Validation')
-          statuslistf = [3, 4, 5, 6, 7, 25, 63, 65];
+          statuslistf = [1, 2, 3, 4, 5, 6, 7, 25, 63, 64, 65];
 
 
         this.ELEMENT_DATA = res.filter(x => statuslistf.includes(x.statusId) && x.deletionIndicator == 0)
@@ -401,7 +357,7 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
       disableClose: true,
       width: '50%',
       maxWidth: '80%',
-      position: { top: '6.5%' },
+     // position: { top: '6.5%' },
       data: code
     });
 
@@ -538,7 +494,7 @@ export class InquirySearchComponent implements OnInit, OnDestroy, AfterViewInit 
           statuslistf = [1, 2, 3, 4];
 
         else if (this.pageflow == 'Inquiry Validation')
-          statuslistf = [3, 4, 5, 7, 25, 63, 64, 65];
+          statuslistf = [3, 4, 5, 6, 7, 25];
 
 
         this.ELEMENT_DATA = res.filter(x => statuslistf.includes(x.statusId) && x.deletionIndicator == 0)

@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.AddGrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.GrLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.v2.SearchGrLineV2;
@@ -134,8 +136,8 @@ public class GrLineController {
 										 @RequestParam String plantId, @RequestParam String languageId, @RequestParam String warehouseId,
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										 @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
-										 @RequestParam String itemCode) {
-		GrLineV2 grline = grlineService.getGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
+										 @RequestParam String itemCode) throws IOException, CsvException {
+		GrLineV2 grline = grlineService.getGrLineV2(companyCode, languageId, plantId, warehouseId, preInboundNo, refDocNumber,
 				goodsReceiptNo, palletCode, caseCode, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
@@ -147,8 +149,8 @@ public class GrLineController {
 	public ResponseEntity<?> getGrLineV2(@PathVariable Long lineNo, @RequestParam String companyCode,
 										 @RequestParam String plantId, @RequestParam String languageId,
 										 @RequestParam String preInboundNo, @RequestParam String refDocNumber,
-										 @RequestParam String packBarcodes, @RequestParam String itemCode) {
-		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, plantId, languageId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
+										 @RequestParam String packBarcodes, @RequestParam String itemCode) throws IOException, CsvException {
+		List<GrLineV2> grline = grlineService.getGrLineV2(companyCode, languageId, plantId, preInboundNo, refDocNumber, packBarcodes, lineNo, itemCode );
 		log.info("GrLine : " + grline);
 		return new ResponseEntity<>(grline, HttpStatus.OK);
 	}
@@ -164,8 +166,9 @@ public class GrLineController {
 	@PostMapping("/v2")
 	public ResponseEntity<?> postGrLineV2(@Valid @RequestBody List<AddGrLineV2> newGrLine,
 										  @RequestParam String loginUserID)
-			throws IllegalAccessException, InvocationTargetException, ParseException {
-		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+			throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
+//		List<GrLineV2> createdGrLine = grlineService.createGrLineV2(newGrLine, loginUserID);
+		List<GrLineV2> createdGrLine = grlineService.createGrLineNonCBMV2(newGrLine, loginUserID);
 		return new ResponseEntity<>(createdGrLine, HttpStatus.OK);
 	}
 
@@ -177,7 +180,7 @@ public class GrLineController {
 										   @RequestParam String refDocNumber, @RequestParam String goodsReceiptNo,
 										   @RequestParam String palletCode, @RequestParam String caseCode, @RequestParam String packBarcodes,
 										   @RequestParam String itemCode, @Valid @RequestBody GrLineV2 updateGrLine,
-										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+										   @RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, CsvException, IOException {
 		GrLineV2 createdGrLine =
 				grlineService.updateGrLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber,
 						goodsReceiptNo, palletCode, caseCode,
@@ -191,7 +194,7 @@ public class GrLineController {
 											@RequestParam String languageId, @RequestParam String warehouseId, @RequestParam String preInboundNo,
 											@RequestParam String refDocNumber, @RequestParam String goodsReceiptNo, @RequestParam String palletCode,
 											@RequestParam String caseCode, @RequestParam String packBarcodes, @RequestParam String itemCode,
-											@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException {
+											@RequestParam String loginUserID) throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
 		grlineService.deleteGrLineV2(companyCode, plantId, languageId, warehouseId,
 				preInboundNo, refDocNumber, goodsReceiptNo, palletCode,
 				caseCode, packBarcodes, lineNo, itemCode, loginUserID);

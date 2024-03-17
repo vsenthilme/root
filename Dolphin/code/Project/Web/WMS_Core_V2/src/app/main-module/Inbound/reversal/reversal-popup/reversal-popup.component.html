@@ -1,0 +1,167 @@
+
+
+
+
+
+
+
+  <div class="card bg-white " style="overflow-x: hidden;">
+      <div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
+        class="d-flex justify-content-between align-items-center whs-bg-grey text-white p-2">
+        <h6 class="my-auto"> Reversal - New </h6>
+        <mat-icon class="text-white" mat-dialog-close>close</mat-icon>
+      </div>
+        <mat-accordion>
+          <mat-expansion-panel #panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+            <mat-expansion-panel-header class="border-bottom padding-space border-top">
+              <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                General
+                <mat-icon class="text-secondary">{{panel.expanded? 'remove' : 'add'}}</mat-icon>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+        <div class="row  p-1">
+          <div class="col-lg-6 col-md-6 mt-1">
+            <div class="d-flex flex-column">
+              <p class="mb-0 py-0 text-black mb-1">Order No</p>
+              <div class="form-group input_field" appearance="outline">
+                       <p-dropdown placeholder="Select" (onChange)="onItemchnage()" [filter]="true" class="w-100" [options]="multiSelectorderList" [panelStyle]="{'width':'20%'}" appendTo="body"
+                    [(ngModel)]="refDocNumber" [style]="{'width': '100%'}" >
+                  </p-dropdown>
+              </div>
+              <mat-error class="error-message" *ngIf=" submitted && !refDocNumber">
+                ASN Required</mat-error>
+    
+            </div>
+          </div>
+        </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel #panel2 [expanded]="panelOpenState1" hideToggle> 
+            <mat-expansion-panel-header class="border-bottom padding-space border-top"  >
+              <mat-panel-title class="d-flex justify-content-between collapsefont align-items-center">
+                Order Details
+                <mat-icon class="text-secondary">{{panel2.expanded? 'remove' : 'add'}}</mat-icon>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="row " style="padding-right: 15px !important;">
+              <p-table #putawayTag [value]="putaway" [(selection)]="selectedputaway"
+                styleClass="p-datatable-gridlines p-datatable-sm" [scrollable]="true" selectionMode="multiple"
+                scrollHeight="calc(100vh - 25.8rem)" sortField="proposedStorageBin" [sortOrder]="-1" [paginator]="true" [rows]="100"
+              
+                [resizableColumns]="true" style="width: 100%;margin-left: 10px;background-color:white">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="max-width: 3.5rem; justify-content: center;">
+                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                
+                          
+                    <th  pSortableColumn="manufacturerName" pResizableColumn>Mfr Name<p-sortIcon
+                      field="manufacturerName"></p-sortIcon></th>
+                    <th  pSortableColumn="referenceField5" pResizableColumn>Part No<p-sortIcon
+                        field="referenceField5"></p-sortIcon></th>
+                    <th  pSortableColumn="refDocNumber" pResizableColumn> Order No<p-sortIcon
+                        field="refDocNumber"></p-sortIcon></th>
+                    <th  pSortableColumn="barcodeId" pResizableColumn>Barcode<p-sortIcon field="barcodeId"></p-sortIcon></th>
+                    <th  pSortableColumn="barcodeId" pResizableColumn>Line<p-sortIcon field="barcodeId"></p-sortIcon></th>
+                 
+                  </tr>
+      
+      
+                  <tr>
+                    <th style="max-width: 3.5rem; justify-content: center;">
+                      <p-tableHeaderCheckbox [disabled]="true"></p-tableHeaderCheckbox>
+                    </th>
+                    <th >
+                      <input  pInputText type="text"
+                        (input)="putawayTag.filter($any($event.target)?.value, 'manufacturerName', 'contains')"
+                        [value]="$any(putawayTag.filters['manufacturerName'])?.value" placeholder="Search"
+                        class=" w-100 p-column-filter">
+                    </th>
+                    <th >
+                      <input  pInputText type="text"
+                        (input)="putawayTag.filter($any($event.target)?.value, 'referenceField5', 'contains')"
+                        [value]="$any(putawayTag.filters['referenceField5'])?.value" placeholder="Search"
+                        class=" w-100 p-column-filter">
+                    </th>
+                    <th >
+                      <input  pInputText type="text"
+                        (input)="putawayTag.filter($any($event.target)?.value, 'refDocNumber', 'contains')"
+                        [value]="$any(putawayTag.filters['refDocNumber'])?.value" placeholder="Search"
+                        class=" w-100 p-column-filter">
+                    </th>
+                   
+                    <th >
+                      <input  pInputText type="text"
+                        (input)="putawayTag.filter($any($event.target)?.value, 'barcodeId', 'contains')"
+                        [value]="$any(putawayTag.filters['barcodeId'])?.value" placeholder="Search"
+                        class=" w-100 p-column-filter">
+                    </th>    
+                    <th >
+                      <input  pInputText type="text"
+                        (input)="putawayTag.filter($any($event.target)?.value, 'barcodeId', 'contains')"
+                        [value]="$any(putawayTag.filters['barcodeId'])?.value" placeholder="Search"
+                        class=" w-100 p-column-filter">
+                    </th>
+                 
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-putaway let-rowIndex="rowIndex">
+                  <tr >
+                    <!-- <td style="max-width:3.5rem;  justify-content: center;">
+                        <p-checkbox (onChange)="onChange()" [(ngModel)]="selectedputaway"   [value]="putaway"></p-checkbox>
+                      </td> -->
+                    <td style="max-width: 3.5rem; justify-content: center;">
+                      <p-tableCheckbox [value]="putaway"></p-tableCheckbox>
+                    </td>
+                    <td  >{{putaway.manufacturerName}}</td>
+                    <td  >{{putaway.referenceField5}}</td>
+                    <td >
+                      {{putaway.refDocNumber}}</td>
+                  
+                    <td >{{putaway.barcodeId}}</td>
+                    <td style="text-decoration-line: underline;" class="text-primary" type="button" (click)="op1.toggle($event); putawayLine(putaway)" >Lines</td>
+               
+                </ng-template>
+              </p-table>
+      
+            </div>
+          </mat-expansion-panel> 
+        </mat-accordion>
+        <div class="d-flex justify-content-center align-items-center py-2">
+          <button mat-raised-button color="warn" mat-dialog-close class="mx-2"> <i
+              class="bi bi-x me-1 font-size-1_5rem"></i>Cancel</button>
+              <button mat-raised-button (click)="reverse()" class="mx-2 bg-darkblue px-4 text-white"> <i
+                class="bi bi-check2 mr-1 font-size-1_5rem"></i>
+    
+              Reverse</button>
+        </div>
+  
+  
+    </div>
+
+
+
+    <p-overlayPanel #op1>
+      <ng-template pTemplate>
+        <div *ngFor="let element of putawayLines">
+
+          <table class="table table-striped table-sm">
+            <thead style="font-size: 12px;" class="text-secondary">
+              <tr>
+                <th scope="col" class="py-2">Storage Bin</th>
+                <th scope="col" class="py-2">Qty</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 12px;">
+              <tr >
+                <td>{{element.confirmedStorageBin}}</td>
+                <td>{{element.putawayConfirmedQty}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+    </p-overlayPanel>
+  
+
+

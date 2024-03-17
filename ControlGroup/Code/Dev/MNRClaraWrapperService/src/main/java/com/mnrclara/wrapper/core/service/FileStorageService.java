@@ -1,22 +1,25 @@
 package com.mnrclara.wrapper.core.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.mnrclara.wrapper.core.model.cgtransaction.WarehouseApiResponse;
 import com.mnrclara.wrapper.core.model.setup.EMail;
 import com.mnrclara.wrapper.core.model.setup.UserProfile;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -68,7 +71,10 @@ public class FileStorageService {
 
     @Autowired
     SetupService setupService;
-    
+
+    @Autowired
+    CGTransactionService cgTransactionService;
+
     @Autowired
     SharePointService sharePointService;
 
@@ -863,4 +869,280 @@ public class FileStorageService {
 //            e.printStackTrace();
 //        }
 //    }
+
+    private List<List<String>> readExcelData(File file) {
+        try {
+            Workbook workbook = new XSSFWorkbook(file);
+            workbook.setMissingCellPolicy(Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(0);
+
+            List<List<String>> allRowsList = new ArrayList<>();
+            DataFormatter fmt = new DataFormatter();
+            for (int rn = sheet.getFirstRowNum(); rn <= sheet.getLastRowNum(); rn++) {
+                List<String> listUploadData = new ArrayList<String>();
+                Row row = sheet.getRow(rn);
+                log.info("Row:  " + row.getRowNum());
+                if (row == null) {
+                    // There is no data in this row, handle as needed
+                } else if (row.getRowNum() != 0) {
+                    for (int cn = 0; cn <= row.getLastCellNum(); cn++) {
+                        Cell cell = row.getCell(cn);
+                        if (cell == null) {
+                            log.info("cell empty: " + cell);
+                            listUploadData.add("");
+                        } else {
+                            String cellStr = fmt.formatCellValue(cell);
+                            log.info("cellStr: " + cellStr);
+                            listUploadData.add(cellStr);
+                        }
+                    }
+                    allRowsList.add(listUploadData);
+                }
+            }
+
+            log.info("list data: " + allRowsList);
+            return allRowsList;
+        } catch (Exception ioe) {
+            ioe.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private List<com.mnrclara.wrapper.core.batch.dto.StorePartnerListing> prepStorePartnerListing(List<List<String>> allRowsList) {
+        List<com.mnrclara.wrapper.core.batch.dto.StorePartnerListing> orderList = new ArrayList<>();
+//        Map<String, StorePartnerListing> v2Map = new HashMap<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        for (List<String> listUploadedData : allRowsList) {
+
+            String validityDateFromString = null;
+            String validityDateToString = null;
+            com.mnrclara.wrapper.core.batch.dto.StorePartnerListing storePartnerListing = new com.mnrclara.wrapper.core.batch.dto.StorePartnerListing();
+            storePartnerListing.setLanguageId(listUploadedData.get(0));
+            storePartnerListing.setCompanyId(listUploadedData.get(1));
+            storePartnerListing.setStoreId(listUploadedData.get(2));
+            storePartnerListing.setStoreName(listUploadedData.get(3));
+            if(!listUploadedData.get(4).isEmpty()) {
+                validityDateFromString = listUploadedData.get(4);
+            }
+            if(!listUploadedData.get(5).isEmpty()) {
+                validityDateToString = listUploadedData.get(5);
+            }
+            if(!listUploadedData.get(6).isEmpty()) {
+                storePartnerListing.setGroupTypeId(Long.valueOf(listUploadedData.get(6)));
+            }
+            storePartnerListing.setGroupTypeName(listUploadedData.get(7));
+            if(!listUploadedData.get(8).isEmpty()) {
+                storePartnerListing.setSubGroupId(Long.valueOf(listUploadedData.get(8)));
+            }
+            storePartnerListing.setSubGroupName(listUploadedData.get(9));
+            if(!listUploadedData.get(10).isEmpty()) {
+                storePartnerListing.setGroupId(Long.valueOf(listUploadedData.get(10)));
+            }
+            storePartnerListing.setGroupName(listUploadedData.get(11));
+
+            if(!listUploadedData.get(12).isEmpty()) {
+                storePartnerListing.setCoOwnerId1(Long.valueOf(listUploadedData.get(12)));
+            }
+            if(!listUploadedData.get(13).isEmpty()) {
+                storePartnerListing.setCoOwnerId2(Long.valueOf(listUploadedData.get(13)));
+            }
+            if(!listUploadedData.get(14).isEmpty()) {
+                storePartnerListing.setCoOwnerId3(Long.valueOf(listUploadedData.get(14)));
+            }
+//            storePartnerListing.setCoOwnerId4(Long.valueOf(listUploadedData.get(15)));
+            if (!listUploadedData.get(15).isEmpty()) {
+                storePartnerListing.setCoOwnerId4(Long.valueOf(listUploadedData.get(15)));
+            }
+            if (!listUploadedData.get(16).isEmpty()) {
+                storePartnerListing.setCoOwnerId5(Long.valueOf(listUploadedData.get(16)));
+            }
+            if (!listUploadedData.get(17).isEmpty()) {
+                storePartnerListing.setCoOwnerId6(Long.valueOf(listUploadedData.get(17)));
+            }
+            if(!listUploadedData.get(18).isEmpty()) {
+                storePartnerListing.setCoOwnerId7(Long.valueOf(listUploadedData.get(18)));
+            }
+            if(!listUploadedData.get(19).isEmpty()) {
+                storePartnerListing.setCoOwnerId8(Long.valueOf(listUploadedData.get(19)));
+            }
+            if(!listUploadedData.get(20).isEmpty()) {
+                storePartnerListing.setCoOwnerId9(Long.valueOf(listUploadedData.get(20)));
+            }
+            if(!listUploadedData.get(21).isEmpty()) {
+                storePartnerListing.setCoOwnerId10(Long.valueOf(listUploadedData.get(21)));
+            }
+            storePartnerListing.setCoOwnerName1(listUploadedData.get(22));
+            storePartnerListing.setCoOwnerName2(listUploadedData.get(23));
+            storePartnerListing.setCoOwnerName3(listUploadedData.get(24));
+            storePartnerListing.setCoOwnerName4(listUploadedData.get(25));
+            storePartnerListing.setCoOwnerName5(listUploadedData.get(26));
+            storePartnerListing.setCoOwnerName6(listUploadedData.get(27));
+            storePartnerListing.setCoOwnerName7(listUploadedData.get(28));
+            storePartnerListing.setCoOwnerName8(listUploadedData.get(29));
+            storePartnerListing.setCoOwnerName9(listUploadedData.get(30));
+            storePartnerListing.setCoOwnerName10(listUploadedData.get(31));
+            if(!listUploadedData.get(32).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage1(Double.valueOf(listUploadedData.get(32)));
+            }
+            if(!listUploadedData.get(33).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage2(Double.valueOf(listUploadedData.get(33)));
+            }
+            if(!listUploadedData.get(34).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage3(Double.valueOf(listUploadedData.get(34)));
+            }
+            if(!listUploadedData.get(35).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage4(Double.valueOf(listUploadedData.get(35)));
+            }
+            if(!listUploadedData.get(36).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage5(Double.valueOf(listUploadedData.get(36)));
+            }
+            if(!listUploadedData.get(37).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage6(Double.valueOf(listUploadedData.get(37)));
+            }
+            if(!listUploadedData.get(38).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage7(Double.valueOf(listUploadedData.get(38)));
+            }
+            if(!listUploadedData.get(39).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage8(Double.valueOf(listUploadedData.get(39)));
+            }
+            if(!listUploadedData.get(40).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage9(Double.valueOf(listUploadedData.get(40)));
+            }
+            if(!listUploadedData.get(41).isEmpty()) {
+                storePartnerListing.setCoOwnerPercentage10(Double.valueOf(listUploadedData.get(41)));
+            }
+            if(!listUploadedData.get(42).isEmpty()) {
+                storePartnerListing.setRelationShipId1(Long.valueOf(listUploadedData.get(42)));
+            }
+            if(!listUploadedData.get(43).isEmpty()) {
+                storePartnerListing.setRelationShipId2(Long.valueOf(listUploadedData.get(43)));
+            }
+            if(!listUploadedData.get(44).isEmpty()) {
+                storePartnerListing.setRelationShipId3(Long.valueOf(listUploadedData.get(44)));
+            }
+            if(!listUploadedData.get(45).isEmpty()) {
+                storePartnerListing.setRelationShipId4(Long.valueOf(listUploadedData.get(45)));
+            }
+            if(!listUploadedData.get(46).isEmpty()) {
+                storePartnerListing.setRelationShipId5(Long.valueOf(listUploadedData.get(46)));
+            }
+            if(!listUploadedData.get(47).isEmpty()) {
+                storePartnerListing.setRelationShipId6(Long.valueOf(listUploadedData.get(47)));
+            }
+            if(!listUploadedData.get(48).isEmpty()) {
+                storePartnerListing.setRelationShipId7(Long.valueOf(listUploadedData.get(48)));
+            }
+            if(!listUploadedData.get(49).isEmpty()) {
+                storePartnerListing.setRelationShipId8(Long.valueOf(listUploadedData.get(49)));
+            }
+            if(!listUploadedData.get(50).isEmpty()) {
+                storePartnerListing.setRelationShipId9(Long.valueOf(listUploadedData.get(50)));
+            }
+            if(!listUploadedData.get(51).isEmpty()) {
+                storePartnerListing.setRelationShipId10(Long.valueOf(listUploadedData.get(51)));
+            }
+
+            storePartnerListing.setRelationShipName1(listUploadedData.get(52));
+            storePartnerListing.setRelationShipName2(listUploadedData.get(53));
+            storePartnerListing.setRelationShipName3(listUploadedData.get(54));
+            storePartnerListing.setRelationShipName4(listUploadedData.get(55));
+            storePartnerListing.setRelationShipName5(listUploadedData.get(56));
+            storePartnerListing.setRelationShipName6(listUploadedData.get(57));
+            storePartnerListing.setRelationShipName7(listUploadedData.get(58));
+            storePartnerListing.setRelationShipName8(listUploadedData.get(59));
+            storePartnerListing.setRelationShipName9(listUploadedData.get(60));
+            storePartnerListing.setRelationShipName10(listUploadedData.get(61));
+            if(!listUploadedData.get(62).isEmpty()) {
+                storePartnerListing.setStatusId(Long.valueOf(listUploadedData.get(62)));
+            }
+            storePartnerListing.setReferenceField1(listUploadedData.get(63));
+            storePartnerListing.setReferenceField2(listUploadedData.get(64));
+            storePartnerListing.setReferenceField3(listUploadedData.get(65));
+            storePartnerListing.setReferenceField4(listUploadedData.get(66));
+            storePartnerListing.setReferenceField5(listUploadedData.get(67));
+            storePartnerListing.setReferenceField6(listUploadedData.get(68));
+            storePartnerListing.setReferenceField7(listUploadedData.get(69));
+            storePartnerListing.setReferenceField8(listUploadedData.get(70));
+            storePartnerListing.setReferenceField9(listUploadedData.get(71));
+            storePartnerListing.setReferenceField10(listUploadedData.get(72));
+            if (listUploadedData.get(73).trim().length() > 0) {
+                storePartnerListing.setCreatedBy(listUploadedData.get(73));
+            }
+
+            try {
+                if(validityDateFromString != null && validityDateToString != null) {
+                    Date validityDateFrom = dateFormat.parse(validityDateFromString);
+                    Date validityDateTo = dateFormat.parse(validityDateToString);
+
+                    if (validityDateFrom != null && validityDateTo != null) {
+                        storePartnerListing.setValidityDateFrom(validityDateFrom);
+                        storePartnerListing.setValidityDateTo(validityDateTo);
+                    }
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            orderList.add(storePartnerListing);
+        }
+        return orderList;
+    }
+
+
+    /**
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public Map<String, String> processStorePartnerListProcess(MultipartFile file) throws Exception {
+        this.fileStorageLocation = Paths.get(propertiesConfig.getFileUploadDir()).toAbsolutePath().normalize();
+        if (!Files.exists(fileStorageLocation)) {
+            try {
+                Files.createDirectories(this.fileStorageLocation);
+            } catch (Exception ex) {
+                throw new BadRequestException(
+                        "Could not create the directory where the uploaded files will be stored.");
+            }
+        }
+
+        log.info("loca : " + fileStorageLocation);
+
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        log.info("filename before: " + fileName);
+        fileName = fileName.replace(" ", "_");
+        log.info("filename after: " + fileName);
+        try {
+            // Check if the file's name contains invalid characters
+            if (fileName.contains("..")) {
+                throw new BadRequestException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            log.info("Copied : " + targetLocation);
+
+            List<List<String>> allRowsList = readExcelData(targetLocation.toFile());
+            List<com.mnrclara.wrapper.core.batch.dto.StorePartnerListing> listings = prepStorePartnerListing(allRowsList);
+            log.info("asnOrders : " + listings);
+
+            // Uploading Orders
+            WarehouseApiResponse[] dbWarehouseApiResponse = new WarehouseApiResponse[0];
+            AuthToken authToken = authTokenService.getCGTransactionServiceAuthToken();
+            dbWarehouseApiResponse = cgTransactionService.postStorePartnerListing(listings, "Uploaded", authToken.getAccess_token());
+
+            if (dbWarehouseApiResponse != null) {
+                Map<String, String> mapFileProps = new HashMap<>();
+                mapFileProps.put("file", fileName);
+                mapFileProps.put("status", "UPLOADED SUCCESSFULLY");
+                return mapFileProps;
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new BadRequestException("Could not store file " + fileName + ". Please try again!");
+        }
+        return null;
+    }
 }

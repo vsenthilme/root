@@ -4,14 +4,6 @@ import lombok.Data;
 
 @Data
 public class CancelShipmentRequest {
-	/*
-	 * {
-		  "AWBNo": [
-		    "G12340262"
-		  ],
-		  "customerCode": "XYZ"
-		}
-	 */
-	private String[] AWBNo;
-    private String customerCode;
+
+    private String customerReferenceNo;
 }

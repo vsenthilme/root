@@ -88,7 +88,7 @@
                 <div class="col-lg-3 col-md-4 mt-2">
                   <div class="d-flex flex-column">
                     <p class="mb-0 py-0 required">Store ID</p>
-                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectstoreID"
+                    <p-dropdown placeholder="Select" class="w-100" [filter]="true" [options]="dropdownSelectstoreID"  
                       #storeId (onChange)="onstoreChange(storeId.selectedOption)" formControlName="storeId"
                       [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem'}"
                       [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
@@ -135,10 +135,10 @@
                     <table class="table table table-striped" style="border:#0000001f!important;">
                       <thead>
                         <tr style="height:48px">
-                          <td
+                          <!-- <td
                             style="text-align:center; vertical-align: middle;min-width:50px;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
                             <mat-checkbox></mat-checkbox>
-                          </td>
+                          </td> -->
                           <td
                             style="width:15%;background-color: #e2edf7;font-size: 14px;font-weight: 600;filter: drop-shadow(0px 3px 0px rgba(0,0,0,.15));">
                             Co-Owner ID</td>
@@ -164,9 +164,9 @@
                       </thead>
                       <tbody>
                         <tr *ngIf="showfirstRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                          <!-- <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName1' ,$event)"></mat-checkbox>
-                          </td>
+                          </td> -->
                           <td style="width:5%;">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID" #clientId
@@ -177,13 +177,17 @@
                           <td style="width:5%;">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName1">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
-                            [options]="dropdownSelectRealtionship1" #relationShipId
-                            (onChange)="OnrealtionShipChange1(relationShipId.selectedOption)"
-                            formControlName="relationShipId1"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          <td style="width: 5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
+                                        [options]="dropdownSelectRealtionship1" #relationShipId
+                                        (onChange)="OnrealtionShipChange1(relationShipId.selectedOption)"
+                                        formControlName="relationShipId1"
+                                        [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
+                                        [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                          
+                            <button class="mx-2" *ngIf="this.js.pageflow != 'Display' " (click)="refresh('clientName1' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName1">
@@ -200,9 +204,9 @@
                           </td>
                         </tr>
                         <tr *ngIf="showsecondRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                          <!-- <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName2' ,$event)"></mat-checkbox>
-                          </td>
+                          </td> -->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID2" #clientId
@@ -214,13 +218,17 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName2">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
-                            [options]="dropdownSelectRealtionship2" #relationShipId
-                            (onChange)="OnrealtionShipChange2(relationShipId.selectedOption)"
-                            formControlName="relationShipId2"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                          <td style="width: 5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
+                                        [options]="dropdownSelectRealtionship2" #relationShipId
+                                        (onChange)="OnrealtionShipChange2(relationShipId.selectedOption)"
+                                        formControlName="relationShipId2"
+                                        [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                                        [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                          
+                            <button class="mx-2"  *ngIf="this.js.pageflow != 'Display' "  (click)="refresh('clientName2' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName2">
@@ -238,9 +246,9 @@
                         
                         </tr>
                         <tr *ngIf="showthirdRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                        <!--  <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName3' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID3" #clientId formControlName="coOwnerId3"
@@ -251,13 +259,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName3">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship3"  #relationShipId
                             (onChange)="OnrealtionShipChange3(relationShipId.selectedOption)"
                             formControlName="relationShipId3"
                             [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2" *ngIf="this.js.pageflow != 'Display' "   (click)="refresh('clientName3' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName3">
@@ -273,11 +284,11 @@
                          
                         </tr>
                         <tr *ngIf="showFourthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                          <!--<td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName4' ,$event)"></mat-checkbox>
-                          </td>
-                          <td style="width:5%">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          </td>-->
+                          <td style="width:5%;" >
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                               [options]="dropdownSelectclientID4" #clientId formControlName="coOwnerId4"
                               (onChange)="onClientChange4(clientId.selectedOption)"
                               [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
@@ -286,13 +297,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName4">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship4"  #relationShipId
                             (onChange)="OnrealtionShipChange4(relationShipId.selectedOption)"
                             formControlName="relationShipId4"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2"  *ngIf="this.js.pageflow != 'Display' "  (click)="refresh('clientName4' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName4">
@@ -310,9 +324,9 @@
                        
                         </tr>
                         <tr *ngIf="showFifthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                         <!-- <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName5' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID5" #clientId formControlName="coOwnerId5"
@@ -325,13 +339,16 @@
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName5">
                           </td>
                          
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship5"  #relationShipId
                             (onChange)="OnrealtionShipChange5(relationShipId.selectedOption)"
                             formControlName="relationShipId5"
                             [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2" *ngIf="this.js.pageflow != 'Display' "   (click)="refresh('clientName5' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName5">
@@ -350,9 +367,9 @@
                          
                         </tr>
                         <tr *ngIf="showSixthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                         <!-- <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName6' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID6" #clientId
@@ -364,13 +381,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName6">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship6"  #relationShipId
                             (onChange)="OnrealtionShipChange6(relationShipId.selectedOption)"
                             formControlName="relationShipId6"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2"  *ngIf="this.js.pageflow != 'Display' "  (click)="refresh('clientName6' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName6">
@@ -389,9 +409,9 @@
                        
                         </tr>
                         <tr *ngIf="showSeventhRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                          <!--<td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName7' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID7" #clientId
@@ -403,13 +423,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName7">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship7"  #relationShipId
                             (onChange)="OnrealtionShipChange7(relationShipId.selectedOption)"
                             formControlName="relationShipId7"
                             [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2"  *ngIf="this.js.pageflow != 'Display' "   (click)="refresh('clientName7' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName7">
@@ -427,9 +450,9 @@
                          
                         </tr>
                         <tr *ngIf="showEigthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                       <!--   <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName8' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID81" #clientId
@@ -441,13 +464,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName8">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship8"  #relationShipId
                             (onChange)="OnrealtionShipChange8(relationShipId.selectedOption)"
                             formControlName="relationShipId8"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2" *ngIf="this.js.pageflow != 'Display' "   (click)="refresh('clientName8' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName8">
@@ -465,9 +491,9 @@
                          
                         </tr>
                         <tr *ngIf="showNinthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                         <!-- <td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName9' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID9" #clientId
@@ -480,13 +506,16 @@
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName9">
                           </td>
                        
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship9" 
                             formControlName="relationShipId9" #relationShipId
                             (onChange)="OnrealtionShipChange9(relationShipId.selectedOption)"
                             [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2" *ngIf="this.js.pageflow != 'Display' "   (click)="refresh('clientName9' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName9">
@@ -505,9 +534,9 @@
                         
                         </tr>
                         <tr *ngIf="showTenthRow" style="height:48px">
-                          <td style="text-align: center; vertical-align: middle;width:50px">
+                          <!--<td style="text-align: center; vertical-align: middle;width:50px">
                             <mat-checkbox (change)="onChange('clientName10' ,$event)"></mat-checkbox>
-                          </td>
+                          </td>-->
                           <td style="width:5%">
                             <p-dropdown placeholder="Select" class="w-100" [filter]="true"
                               [options]="dropdownSelectclientID10" #clientId
@@ -518,13 +547,16 @@
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="coOwnerName10">
                           </td>
-                          <td style="width:5%;">
-                            <p-dropdown placeholder="Select" class="w-100" [filter]="true"
+                          <td style="width:5%; display: flex; align-items: center;">
+                            <p-dropdown placeholder="Select" class="w-80" [filter]="true"
                             [options]="dropdownSelectRealtionship10"  #relationShipId
                             (onChange)="OnrealtionShipChange10(relationShipId.selectedOption)"
                             formControlName="relationShipId10"
-                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','height':'100%','border': '0px solid #fff'}"
-                            [panelStyle]="{'width':'20%'}" appendTo="body"> </p-dropdown>
+                            [style]="{'width': '100%', 'margin-top': '0.3rem', 'margin-bottom': '0.3rem','border': '0px solid #f7f7f7','background':'#f7f7f7'}"
+                            [panelStyle]="{'width':'15%'}" appendTo="body"> </p-dropdown>
+                            <button class="mx-2"  *ngIf="this.js.pageflow != 'Display' "  (click)="refresh('clientName10' ,$event)" mat-icon-button>
+                              <mat-icon class="text-danger">refresh</mat-icon>
+                            </button>
                           </td>
                           <td style="width:5%">
                             <input matInput style="border:none;" placeholder="Enter" formControlName="relationShipName10">
@@ -544,7 +576,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td style="width:2%"></td>
+                          <!--<td style="width:2%"></td>-->
                           <td style="width:1%"></td>
                           <td style="width:5%"></td>
                           <td style="width:5%"></td>

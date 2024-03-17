@@ -66,19 +66,45 @@ import {
 import {
   SetupServiceService
 } from 'src/app/common-service/setup-service.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { OwnershippopComponent } from './ownershippop/ownershippop.component';
-import { MatDialog } from '@angular/material/dialog';
-import { Ownershipop2Component } from './ownershipop2/ownershipop2.component';
-import { StoreNewComponent } from '../../../idmaster/store/store-new/store-new.component';
-import { ClientNewComponent } from '../../../master/client/client-new/client-new.component';
-import { SubgroupNewComponent } from '../../../idmaster/subgroup/subgroup-new/subgroup-new.component';
-import { UploadFilesComponent } from './upload-files/upload-files.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ConfirmComponent } from 'src/app/common-field/dialog_modules/confirm/confirm.component';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Location } from '@angular/common';
-import { ValidationService } from '../../validation/validation.service';
+import {
+  MatTableDataSource
+} from '@angular/material/table';
+import {
+  OwnershippopComponent
+} from './ownershippop/ownershippop.component';
+import {
+  MatDialog
+} from '@angular/material/dialog';
+import {
+  Ownershipop2Component
+} from './ownershipop2/ownershipop2.component';
+import {
+  StoreNewComponent
+} from '../../../idmaster/store/store-new/store-new.component';
+import {
+  ClientNewComponent
+} from '../../../master/client/client-new/client-new.component';
+import {
+  SubgroupNewComponent
+} from '../../../idmaster/subgroup/subgroup-new/subgroup-new.component';
+import {
+  UploadFilesComponent
+} from './upload-files/upload-files.component';
+import {
+  HttpErrorResponse
+} from '@angular/common/http';
+import {
+  ConfirmComponent
+} from 'src/app/common-field/dialog_modules/confirm/confirm.component';
+import {
+  DomSanitizer
+} from '@angular/platform-browser';
+import {
+  Location
+} from '@angular/common';
+import {
+  ValidationService
+} from '../../validation/validation.service';
 
 
 @Component({
@@ -92,8 +118,8 @@ import { ValidationService } from '../../validation/validation.service';
 export class OwnershipNewComponent implements OnInit {
   screenid: 1135 | undefined;
   displayedColumns = ['chooseFile', 'fileName', 'status'];
-  displayedColumns2 = ['groupId','groupName'];
-  dataSource1 = new BehaviorSubject<AbstractControl[]>([]);
+  displayedColumns2 = ['groupId', 'groupName'];
+  dataSource1 = new BehaviorSubject < AbstractControl[] > ([]);
   public icon = 'expand_more';
   isShowDiv = false;
   showFloatingButtons: any;
@@ -104,11 +130,11 @@ export class OwnershipNewComponent implements OnInit {
 
 
 
-  addRow(d?: any, noUpdate?: boolean) {
+  addRow(d ? : any, noUpdate ? : boolean) {
     const row = this.fb.group({
       requestId: [],
       file: [],
-      id: [0,],
+      id: [0, ],
       fileName: [],
       statusId: [],
       uploadedBy: [],
@@ -119,13 +145,14 @@ export class OwnershipNewComponent implements OnInit {
       row.patchValue(d);
 
     this.rows.push(row);
-    if (!noUpdate) { this.updateView(); }
+    if (!noUpdate) {
+      this.updateView();
+    }
   }
 
 
 
-  remove(element: any) {
-  }
+  remove(element: any) {}
 
 
 
@@ -139,7 +166,10 @@ export class OwnershipNewComponent implements OnInit {
       position: {
         top: '6.5%'
       },
-      data: { title: "Confirm", message: "Are you sure you want to upload this " + event.target.files[0].name + " ?" }
+      data: {
+        title: "Confirm",
+        message: "Are you sure you want to upload this " + event.target.files[0].name + " ?"
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.file = event.target.files[0];
@@ -213,7 +243,9 @@ export class OwnershipNewComponent implements OnInit {
   reset() {
     let i = 0;
 
-    this.rows.value.forEach((ro: any) => { ro.id = ++i });
+    this.rows.value.forEach((ro: any) => {
+      ro.id = ++i
+    });
     this.rows.patchValue(this.rows.value);
   }
   FormLine = this.fb.group({
@@ -232,8 +264,8 @@ export class OwnershipNewComponent implements OnInit {
     formLine: this.rows,
   });
   form2 = this.fb.group({
-    groupId:[],
-    groupName:[],
+    groupId: [],
+    groupName: [],
   });
   toggleFloat() {
 
@@ -251,14 +283,14 @@ export class OwnershipNewComponent implements OnInit {
 
   myControl = new FormControl();
   options: string[] = ['10008-01', '10009-01', '10010-01', '10011-01', '10012-01', '10013-01', '10014-01', '10015-01', '10016-01', '10017-01', '10018-01'];
-  filteredOptions: Observable<string[]>;
+  filteredOptions: Observable < string[] > ;
 
 
   ELEMENT_DATA: any[] = [];
-  dataSource = new MatTableDataSource<any>(this.ELEMENT_DATA);
-  selection = new SelectionModel<any>(true, []);
-  dataSource3 = new MatTableDataSource<any>(this.ELEMENT_DATA);
-  
+  dataSource = new MatTableDataSource < any > (this.ELEMENT_DATA);
+  selection = new SelectionModel < any > (true, []);
+  dataSource3 = new MatTableDataSource < any > (this.ELEMENT_DATA);
+
   selectedIndex = 0;
   input: any;
   isbtntext = true;
@@ -342,7 +374,7 @@ export class OwnershipNewComponent implements OnInit {
     relationShipId9: [],
     relationShipId10: [],
     requestId: [],
-    statusId: [,],
+    statusId: [, ],
     storeId: [, [Validators.required]],
     storeName: [],
     subGroupId: [],
@@ -418,6 +450,59 @@ export class OwnershipNewComponent implements OnInit {
       }
     }
   }
+  refresh(row,event){
+    if(row == "clientName1")
+    {
+    this.form.controls.relationShipId1.patchValue(null);
+    this.form.controls.relationShipName1.patchValue("");
+    }
+    if(row == "clientName2")
+    {
+      this.form.controls.relationShipId2.setValue(null);
+    this.form.controls.relationShipName2.patchValue("");
+    }
+    if(row == "clientName3")
+    {
+    this.form.controls.relationShipId3.patchValue(null);
+    this.form.controls.relationShipName3.patchValue("");
+    }
+    if(row == "clientName4")
+    {
+    this.form.controls.relationShipId4.patchValue(null);
+    this.form.controls.relationShipName4.patchValue("");
+    }
+    if(row == "clientName5")
+    {
+    this.form.controls.relationShipId5.reset();
+    this.form.controls.relationShipName5.patchValue("");
+    }
+    if(row == "clientName6")
+    {
+    this.form.controls.relationShipId6.reset();
+    this.form.controls.relationShipName6.patchValue("");
+    }
+    if(row == "clientName7")
+    {
+    this.form.controls.relationShipId7.reset();
+    this.form.controls.relationShipName7.patchValue("");
+    }
+    if(row == "clientName8")
+    {
+    this.form.controls.relationShipId8.reset();
+    this.form.controls.relationShipName8.patchValue("");
+    }
+    if(row == "clientName9")
+    {
+    this.form.controls.relationShipId9.reset();
+    this.form.controls.relationShipName9.patchValue("");
+    }
+    if(row == "clientName10")
+    {
+    this.form.controls.relationShipId10.reset();
+    this.form.controls.relationShipName10.patchValue("");
+    }
+   
+  }
   calculateTotal() {
     const percentage1 = +this.form.controls.coOwnerPercentage1.value || 0;
     const percentage2 = +this.form.controls.coOwnerPercentage2.value || 0;
@@ -430,8 +515,8 @@ export class OwnershipNewComponent implements OnInit {
     const percentage9 = +this.form.controls.coOwnerPercentage9.value || 0;
     const percentage10 = +this.form.controls.coOwnerPercentage10.value || 0;
 
-    let total = percentage1 + percentage2 + percentage3 + percentage4 + percentage5 + percentage6 + percentage7 + percentage8 + percentage9 + percentage10;
-
+    let total = (percentage1 + percentage2 + percentage3 + percentage4 + percentage5 + percentage6 + percentage7 + percentage8 + percentage9 + percentage10).toFixed(2);
+    
     return total;
   }
 
@@ -467,10 +552,10 @@ export class OwnershipNewComponent implements OnInit {
     private location: Location,
     private cs: CommonService,
 
-    private ValidationService: ValidationService) { }
+    private ValidationService: ValidationService) {}
   js: any = {}
   ngOnInit(): void {
-console.log(this.dropdownSelectstoreID);
+    console.log(this.dropdownSelectstoreID);
     let code = this.route.snapshot.params.code;
     this.js = this.cs.decrypt(code);
     this.form.controls.createdBy.disable();
@@ -480,7 +565,7 @@ console.log(this.dropdownSelectstoreID);
     this.form.controls.languageId.patchValue(this.form.controls.languageId.value);
     this.form.controls.companyId.patchValue(this.form.controls.companyId.value);
     this.form.controls.companyId.disable();
-console.log(this.dropdownSelectstoreID);
+    console.log(this.dropdownSelectstoreID);
     this.form.controls.languageId.disable();
     this.form.controls.coOwnerName1.disable();
     this.form.controls.coOwnerName2.disable();
@@ -505,12 +590,7 @@ console.log(this.dropdownSelectstoreID);
 
     this.dropdownlist();
 
-    if (this.js.pageflow == 'New') {
-      this.toastr.warning("Kindly select a Store", "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      });
-    }
+
     if (this.js.pageflow !== 'New') {
       if (this.js.pageflow === 'Display') {
         this.form.disable();
@@ -570,27 +650,30 @@ console.log(this.dropdownSelectstoreID);
       disableClose: true,
       width: '50%',
       maxWidth: '80%',
-      position: { top: '6.5%' },
-      data: { pageflow: 'New', pageflow1: 'TransactionCreate', code: data != 'TransactionCreate' ? this.selection.selected[0].storeId : null, languageId: data != 'TransactionCreate' ? this.selection.selected[0].languageId : null, companyId: data != 'TransactionCreate' ? this.selection.selected[0].companyId : null, countryId: data != 'TransactionCreate' ? this.selection.selected[0].countryId : null, element: this.form.getRawValue() }
+      position: {
+        top: '6.5%'
+      },
+      data: {
+        pageflow: 'New',
+        pageflow1: 'TransactionCreate',
+        code: data != 'TransactionCreate' ? this.selection.selected[0].storeId : null,
+        languageId: data != 'TransactionCreate' ? this.selection.selected[0].languageId : null,
+        companyId: data != 'TransactionCreate' ? this.selection.selected[0].companyId : null,
+        countryId: data != 'TransactionCreate' ? this.selection.selected[0].countryId : null,
+        element: this.form.getRawValue()
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.setupService.searchStore({
-        languageId: [this.form.controls.languageId.value],
-        companyId: [this.form.controls.companyId.value],
-        status: [0],
-      }).subscribe(res => {
+      this.setupService.searchStoredropdown().subscribe(res => {
         this.dropdownSelectstoreID = [];
-          res.forEach(element => {
-            this.dropdownSelectstoreID.push({
-              value: element.storeId,
-              label: element.storeId + '-' + element.storeName,
-              storeName: element.storeName,
-              groupTypeId:element.groupTypeId,
-              subGroupId:element.subGroupTypeId,
-              groupTypeName:element.groupTypeName,
-              subGroupTypeName:element.subGroupTypeName,
-            });
+        res.forEach(element => {
+          this.dropdownSelectstoreID.push({
+            value: element.storeId,
+            label: element.storeId + '-' + element.storeName,
+            storeName: element.storeName,
+          
+          });
         });
       });
 
@@ -670,9 +753,7 @@ console.log(this.dropdownSelectstoreID);
   //   });
   //   this.dropdownSelectsubgrouptypeID = this.cas.removeDuplicatesFromArray(this.dropdownSelectsubgrouptypeID);
   // }
-  onsubgroupTypechange(value) {
-    this.form.controls.subGroupName.patchValue(value.subGroupName);
-  }
+  
   openDialog5(data: any = 'new', element: any = null): void {
     const dialogRef6 = this.dialog.open(Ownershipop2Component, {
       disableClose: true,
@@ -690,16 +771,16 @@ console.log(this.dropdownSelectstoreID);
     });
 
   }
-  dropdownSelectRealtionship1:any[]=[];
-  dropdownSelectRealtionship2:any[]=[];
-  dropdownSelectRealtionship3:any[]=[];
-  dropdownSelectRealtionship4:any[]=[];
-  dropdownSelectRealtionship5:any[]=[];
-  dropdownSelectRealtionship6:any[]=[];
-  dropdownSelectRealtionship7:any[]=[];
-  dropdownSelectRealtionship8:any[]=[];
-  dropdownSelectRealtionship9:any[]=[];
-  dropdownSelectRealtionship10:any[]=[];
+  dropdownSelectRealtionship1: any[] = [];
+  dropdownSelectRealtionship2: any[] = [];
+  dropdownSelectRealtionship3: any[] = [];
+  dropdownSelectRealtionship4: any[] = [];
+  dropdownSelectRealtionship5: any[] = [];
+  dropdownSelectRealtionship6: any[] = [];
+  dropdownSelectRealtionship7: any[] = [];
+  dropdownSelectRealtionship8: any[] = [];
+  dropdownSelectRealtionship9: any[] = [];
+  dropdownSelectRealtionship10: any[] = [];
   dropdownSelectclientID2: any[] = [];
   dropdownSelectclientID3: any[] = [];
   dropdownSelectclientID9: any[] = [];
@@ -778,20 +859,42 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId1.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship1 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship1.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship1=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship1);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship1=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId1.value];
+   
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+  
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+     
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship1 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship1.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        }) 
+        if (res.length == 1) {
+          this.form.controls.relationShipId1.patchValue(res[0].relationship);
+          this.form.controls.relationShipName1.patchValue(res[0].relationshipDescription);
+        }
+
+        this.dropdownSelectRealtionship1 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship1);
+
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId1.patchValue("");
+        this.form.controls.relationShipName1.patchValue("");
+        this.dropdownSelectRealtionship1 = this.dropdownSelectRealtionship;
+      }
+    });
   }
 
   onClientChange2(value) {
@@ -863,20 +966,48 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId2.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship2 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship2.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship2=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship2);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship2=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId2.value];
+   
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+    
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship2 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship2.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId2.patchValue(res[0].relationship);
+          this.form.controls.relationShipName2.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship2 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship2);
+
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId2.patchValue("");
+        this.form.controls.relationShipName2.patchValue("");
+        this.dropdownSelectRealtionship2 = this.dropdownSelectRealtionship;
+      }
+
+    });
+  
+  
   }
   dropdownSelectclientID4: any[] = [];
   onClientChange3(value) {
@@ -949,20 +1080,47 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId3.value],}).subscribe(res => {
-        if(res.length > 0){
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId3.value];
+   
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+    
+      if (res.length > 0) {
         this.dropdownSelectRealtionship3 = [];
         res.forEach(element => {
-            this.dropdownSelectRealtionship3.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-          })
-          this.dropdownSelectRealtionship3=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship3);
+          this.dropdownSelectRealtionship3.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
+          });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId3.patchValue(res[0].relationship);
+          this.form.controls.relationShipName3.patchValue(res[0].relationshipDescription);
+          console.log(this.form.controls.relationShipId3.value)
         }
-        if(res.length == 0){
-          this.dropdownSelectRealtionship3=this.dropdownSelectRealtionship;
-        }
-        });
+        this.dropdownSelectRealtionship3 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship3);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId3.patchValue("");
+        this.form.controls.relationShipName3.patchValue("");
+        this.dropdownSelectRealtionship3 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   data: any;
   SelectclientID5: any[] = [];
@@ -1037,21 +1195,48 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId4.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship4 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship4.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship4=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship4);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship4=this.dropdownSelectRealtionship;
-          }
-          });
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId4.value];
+
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
       
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship4 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship4.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
+          });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId4.patchValue(res[0].relationship);
+          this.form.controls.relationShipName4.patchValue(res[0].relationshipDescription);
+  
+        }
+        this.dropdownSelectRealtionship4 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship4);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId4.patchValue("");
+        this.form.controls.relationShipName4.patchValue("");
+        this.dropdownSelectRealtionship4 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
+
   }
   onClientChange5(value) {
     this.form.controls.coOwnerName5.patchValue(value.clientName);
@@ -1124,20 +1309,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId5.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship5 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship5.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship5=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship5);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship5=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId5.value];
+   
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+    
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship5 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship5.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId5.patchValue(res[0].relationship);
+          this.form.controls.relationShipName5.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship5 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship5);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId5.patchValue("");
+        this.form.controls.relationShipName5.patchValue("");
+        this.dropdownSelectRealtionship5 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   onClientChange6(value) {
     this.form.controls.coOwnerName6.patchValue(value.clientName);
@@ -1212,20 +1423,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId6.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship6 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship6.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship6=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship6);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship6=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId6.value];
+    
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+     
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship6 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship6.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId6.patchValue(res[0].relationship);
+          this.form.controls.relationShipName6.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship6 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship6);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId6.patchValue("");
+        this.form.controls.relationShipName6.patchValue("");
+        this.dropdownSelectRealtionship6 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   onClientChange7(value) {
     this.form.controls.coOwnerName7.patchValue(value.clientName);
@@ -1300,20 +1537,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId7.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship7 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship7.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship7=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship7);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship7=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId7.value];
+    
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+    
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship7 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship7.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId7.patchValue(res[0].relationship);
+          this.form.controls.relationShipName7.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship7 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship7);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId7.patchValue("");
+        this.form.controls.relationShipName7.patchValue("");
+        this.dropdownSelectRealtionship7 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+  
   }
   dropdownSelectclientID81: any[] = [];
   onClientChange8(value) {
@@ -1388,20 +1651,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId8.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship8 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship8.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship8=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship8);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship8=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId8.value];
+  
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship8 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship8.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId8.patchValue(res[0].relationship);
+          this.form.controls.relationShipName8.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship8 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship8);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId8.patchValue("");
+        this.form.controls.relationShipName8.patchValue("");
+        this.dropdownSelectRealtionship8 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   dropdownSelectclientID10: any[] = [];
   onClientChange9(value) {
@@ -1476,20 +1765,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId9.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship9 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship9.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship9=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship9);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship9=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId9.value];
+   
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+     
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship9 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship9.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId9.patchValue(res[0].relationship);
+          this.form.controls.relationShipName9.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship9 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship9);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId9.patchValue("");
+        this.form.controls.relationShipName9.patchValue("");
+        this.dropdownSelectRealtionship9 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   onClientChange10(value) {
     this.form.controls.coOwnerName10.patchValue(value.clientName);
@@ -1559,20 +1874,46 @@ console.log(this.dropdownSelectstoreID);
       this.form.controls.coOwnerPercentage10.reset();
       this.form.controls.coOwnerName10.reset();
     }
-    this.setupService.searchgroupmapping({  languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      clientId: [this.form.controls.coOwnerId10.value],}).subscribe(res => {
-        if(res.length > 0){
-          this.dropdownSelectRealtionship10 = [];
-          res.forEach(element => {
-              this.dropdownSelectRealtionship10.push({value: element.relationship, label: element.relationship + '-' + element.relationshipDescription,  description: element.relationshipDescription});
-            })
-            this.dropdownSelectRealtionship10=this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship10);
-          }
-          if(res.length == 0){
-            this.dropdownSelectRealtionship10=this.dropdownSelectRealtionship;
-          }
+    let obj: any = {};
+    obj.languageId = ["EN"];
+    obj.companyId = ["1000"];
+    obj.clientId = [this.form.controls.coOwnerId10.value];
+    
+    if (this.form.controls.groupTypeId.value != null) {
+      obj.groupTypeId = [this.form.controls.groupTypeId.value];
+    } else {
+      obj.groupTypeId = null;
+    }
+    if (this.form.controls.subGroupId.value != null) {
+      obj.subGroupTypeId = [this.form.controls.subGroupId.value];
+    } else {
+      obj.subGroupTypeId = null;
+    }
+    this.setupService.searchgroupmapping(obj).subscribe(res => {
+    
+      if (res.length > 0) {
+        this.dropdownSelectRealtionship10 = [];
+        res.forEach(element => {
+          this.dropdownSelectRealtionship10.push({
+            value: element.relationship,
+            label: element.relationship + '-' + element.relationshipDescription,
+            description: element.relationshipDescription
           });
+        })
+        if (res.length == 1) {
+          this.form.controls.relationShipId10.patchValue(res[0].relationship);
+          this.form.controls.relationShipName10.patchValue(res[0].relationshipDescription);
+        }
+        this.dropdownSelectRealtionship10 = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectRealtionship10);
+      }
+      if (res.length == 0) {
+        this.form.controls.relationShipId10.patchValue("");
+        this.form.controls.relationShipName10.patchValue("");
+        this.dropdownSelectRealtionship10 = this.dropdownSelectRealtionship;
+      }
+    });
+  
+ 
   }
   OnrealtionShipChange1(value) {
     this.form.controls.relationShipName1.patchValue(value.description);
@@ -1605,68 +1946,58 @@ console.log(this.dropdownSelectstoreID);
     this.form.controls.relationShipName10.patchValue(value.description);
   }
 
-  //    if((selectedvalue6 == this.form.controls.coOwnerId1.value)){
-  //     this.form.controls.coOwnerId1.reset();
-  //     this.form.controls.coOwnerPercentage1.reset();
-  //   this.form.controls.coOwnerName1.reset();
-  //    }
-  //    if((selectedvalue6 == this.form.controls.coOwnerId2.value)){
-  //      this.form.controls.coOwnerId2.reset();
-  //     this.form.controls.coOwnerPercentage2.reset();
-  //   this.form.controls.coOwnerName2.reset();
-  //       }
-  //    if((selectedvalue6 == this.form.controls.coOwnerId3.value)){
-  //      this.form.controls.coOwnerId3.reset();
-  //      this.form.controls.coOwnerPercentage3.reset();
-  //   this.form.controls.coOwnerName3.reset();
-  //     }  
-  //     if((selectedvalue6 == this.form.controls.coOwnerId4.value)){
-  //      this.form.controls.coOwnerId4.reset();
-  //      this.form.controls.coOwnerPercentage4.reset();
-  //   this.form.controls.coOwnerName4.reset();
-  //   }  
-  //   if((selectedvalue6 == this.form.controls.coOwnerId5.value)){
-  //     this.form.controls.coOwnerId5.reset();
-  //     this.form.controls.coOwnerPercentage5.reset();
-  //  this.form.controls.coOwnerName5.reset();
-  //  } 
+ 
   showClient() {
     this.setupService.searchClientNew({
       languageId: [this.form.controls.languageId.value],
       companyId: [this.form.controls.companyId.value],
-     
+
 
     }).subscribe(res => {
-      res=this.cas.removeDuplicatesFromArrayList(res, 'groupId')
-    this.dataSource3=res;
-   
+      res = this.cas.removeDuplicatesFromArrayList(res, 'groupId')
+      this.dataSource3 = res;
+
     });
-  
+
   }
   
   onstoreChange(value, data: any = 'New') {
+    console.log(value);
+    if(this.js.pageflow == "New"){
+    if (value) {
+      this.setupService.getStore(value.value, 'EN', '1000').subscribe(
+        (getStoreRes) => {
+          console.log(getStoreRes);
+          this.form.controls.groupTypeId.patchValue(getStoreRes.groupTypeId);
+          this.form.controls.groupTypeName.patchValue(getStoreRes.groupTypeName);
+          console.log(this.form.controls.groupTypeId.value);
+        },
+        (getStoreErr) => {
+  
+        }
+        
+      );
+    
+    }
+  }
     if (this.js.pageflow == 'TransEdit') {
       let storeId2 = this.js.code;
       this.js.pageflow = "New";
       this.form.controls.storeId.patchValue(storeId2);
 
     }
-   
-    this.form.controls.groupTypeId.patchValue(value.groupTypeId);
-    this.form.controls.subGroupId.patchValue(value.subGroupId);
-    this.form.controls.subGroupName.patchValue(value.subGroupTypeName);
-    this.form.controls.groupTypeName.patchValue(value.groupTypeName);
-    this.form.controls.storeName.patchValue(value.storeName);
     
-    console.log(this.form.controls.groupTypeId.value);
-    console.log(this.form.controls.subGroupId.value);
+    //this.form.controls.groupTypeId.patchValue(value.groupTypeId);
+    this.form.controls.subGroupName.patchValue(value.subGroupTypeName);
+    //this.form.controls.groupTypeName.patchValue(value.groupTypeName);
+    this.form.controls.storeName.patchValue(value.storeName);
     let store1 = this.form.controls.storeId.value;
     let storeName1 = this.form.controls.storeName.value;
-    let groupTypeId1=this.form.controls.groupTypeId.value;
-    let subGroupId2=this.form.controls.subGroupId.value;
-    let groupTypeName1=this.form.controls.groupTypeName.value;
-    let subGroupTypeName1=this.form.controls.subGroupName.value;
-console.log(value);
+  
+    let subGroupId2 = this.form.controls.subGroupId.value;
+  
+    let subGroupTypeName1 = this.form.controls.subGroupName.value;
+    console.log(value);
     this.setupService.searchClientNew({
       languageId: [this.form.controls.languageId.value],
       companyId: [this.form.controls.companyId.value],
@@ -1692,25 +2023,25 @@ console.log(value);
         this.form.controls.createdOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.createdOn.value));
         this.form.controls.updatedOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.updatedOn.value));
         this.form.controls.storeId.patchValue(store1);
-      
+
         this.form.controls.storeName.patchValue(storeName1);
-        if(this.js.pageflow == "TransEdit"){
-        this.setupService.searchSubGroupType({
-          languageId: [this.form.controls.languageId.value],
-          companyId: [this.form.controls.companyId.value],
-          groupTypeId: [this.form.controls.groupTypeId.value],
-        }).subscribe(res => {
-          this.dropdownSelectsubgrouptypeID = [];
-          res.forEach(element => {
-            this.dropdownSelectsubgrouptypeID.push({
-              value: element.subGroupTypeId,
-              label: element.subGroupTypeId + '-' + element.subGroupTypeName,
-              subGroupName: element.subGroupTypeName,
+        if (this.js.pageflow == "TransEdit") {
+          this.setupService.searchSubGroupType({
+            languageId: [this.form.controls.languageId.value],
+            companyId: [this.form.controls.companyId.value],
+            groupTypeId: [this.form.controls.groupTypeId.value],
+          }).subscribe(res => {
+            this.dropdownSelectsubgrouptypeID = [];
+            res.forEach(element => {
+              this.dropdownSelectsubgrouptypeID.push({
+                value: element.subGroupTypeId,
+                label: element.subGroupTypeId + '-' + element.subGroupTypeName,
+                subGroupName: element.subGroupTypeName,
+              });
+
             });
-          
-          });
-        })
-      }
+          })
+        }
         if (this.form.controls.coOwnerPercentage1.value == 0) {
           this.form.controls.coOwnerPercentage1.patchValue(null);
         }
@@ -1755,10 +2086,25 @@ console.log(value);
           if (res != null) {
             this.js.pageflow = "New";
             this.form.reset();
-            this.form.controls.groupTypeId.patchValue(groupTypeId1);
-            this.form.controls.subGroupId.patchValue(subGroupId2);
-            this.form.controls.groupTypeName.patchValue(groupTypeName1);
-            this.form.controls.subGroupName.patchValue(subGroupTypeName1);
+            if (value) {
+              this.setupService.getStore(value.value, 'EN', '1000').subscribe(
+                (getStoreRes) => {
+                  console.log(getStoreRes);
+                  this.form.controls.groupTypeId.patchValue(getStoreRes.groupTypeId);
+                  this.form.controls.groupTypeName.patchValue(getStoreRes.groupTypeName);
+                  console.log(this.form.controls.groupTypeId.value);
+                },
+                (getStoreErr) => {
+          
+                }
+                
+              );
+              console.log(this.form.controls.groupTypeId.value);
+            }
+           // this.form.controls.groupTypeId.patchValue(groupTypeId1);
+           
+            //this.form.controls.groupTypeName.patchValue(groupTypeName1);
+    
           }
           if (res != null) {
             this.dropdownSelectclientID = [];
@@ -1772,7 +2118,7 @@ console.log(value);
               this.form.controls.companyId.patchValue("1000")
               this.form.controls.storeId.patchValue(store1);
               this.form.controls.storeName.patchValue(storeName1);
-            
+
             });
 
           }
@@ -1798,7 +2144,7 @@ console.log(value);
     ]).subscribe((results) => {
       this.languageIdList = this.cas.foreachlist(results[0], this.cas.dropdownlist.cgsetup.language.key);
       this.languageIdList.forEach((x: {
-        key: string; value: string;
+        key: string;value: string;
       }) => this.dropdownSelectLanguageID.push({
         value: x.key,
         label: x.value
@@ -1830,7 +2176,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship1 = [];
         res.forEach(element => {
@@ -1839,7 +2185,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship2 = [];
         res.forEach(element => {
@@ -1848,7 +2194,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship3 = [];
         res.forEach(element => {
@@ -1857,7 +2203,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship4 = [];
         res.forEach(element => {
@@ -1866,7 +2212,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship5 = [];
         res.forEach(element => {
@@ -1875,7 +2221,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship6 = [];
         res.forEach(element => {
@@ -1884,7 +2230,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship7 = [];
         res.forEach(element => {
@@ -1893,7 +2239,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship8 = [];
         res.forEach(element => {
@@ -1902,7 +2248,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship9 = [];
         res.forEach(element => {
@@ -1911,7 +2257,7 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
         this.dropdownSelectRealtionship10 = [];
         res.forEach(element => {
@@ -1920,34 +2266,27 @@ console.log(value);
             label: element.relationShipId + '-' + element.description,
             description: element.description
           });
-          
+
         });
       }, (err) => {
         this.spin.hide();
         this.cs.commonerror(err);
       });
       this.spin.show();
-      this.setupService.searchStore({
-        languageId: [this.auth.languageId],
-        companyId: ["1000"],
-        status: [0],
-
-      }).subscribe(res => {
+      this.setupService.searchStoredropdown().subscribe(res => {
         this.dropdownSelectstoreID = [];
         res.forEach(element => {
           this.dropdownSelectstoreID.push({
             value: element.storeId,
-              label: element.storeId + '-' + element.storeName,
-              storeName: element.storeName,
-              groupTypeId:element.groupTypeId,
-              subGroupId:element.subGroupTypeId,
-              groupTypeName:element.groupTypeName,
-              subGroupTypeName:element.subGroupTypeName,
+            label: element.storeId + '-' + element.storeName,
+            storeName: element.storeName,
+        
           });
+         
         });
         if (this.js.pageflow !== 'New') {
           let storeIdAsInt: number = parseInt(this.js.storeId);
-          this.form.controls.storeId.patchValue(storeIdAsInt);
+          this.form.controls.storeId.patchValue(this.js.storeId);
         }
 
         if (this.js.pageflow == 'TransEdit') {
@@ -1961,51 +2300,51 @@ console.log(value);
             storeId: [this.form.controls.storeId.value],
 
           }).subscribe(res => {
-            if (res.length > 0) {
-              this.showsecondRow = true;
-              this.showthirdRow = true;
-              this.showFourthRow = true;
-              this.showFifthRow = true;
-              this.showSixthRow = true;
-              this.showSeventhRow = true;
-              this.showEigthRow = true;
-              this.showNinthRow = true;
-              this.showTenthRow = true;
-              this.js.pageflow = "New"
-              this.form.patchValue(res[0], {
-                emitEvent: false
-              });
-              let storeIdAsInt: number = parseInt(this.js.code);
-              this.form.controls.storeId.patchValue(storeIdAsInt);
-
-             
-              this.form.controls.createdOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.createdOn.value));
-              this.form.controls.updatedOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.updatedOn.value));
-
-             
-              let storeId2 = this.form.controls.storeId.value;
-
-              this.setupService.searchSubGroupType({
-                languageId: [this.form.controls.languageId.value],
-                companyId: [this.form.controls.companyId.value],
-                groupTypeId: [this.form.controls.groupTypeId.value],
-              }).subscribe(res => {
-                this.dropdownSelectsubgrouptypeID = [];
-                res.forEach(element => {
-                  this.dropdownSelectsubgrouptypeID.push({
-                    value: element.subGroupTypeId,
-                    label: element.subGroupTypeId + '-' + element.subGroupTypeName,
-                    subGroupName: element.subGroupTypeName,
-                  });
-                  // if (this.js.pageflow !='New') {
-                  // this.form.controls.storeId.patchValue(this.form.controls.storeId.value);
-                  //   this.form.controls.subGroupId.patchValue(this.form.controls.subGroupId.value);
-
-                  // }
+              if (res.length > 0) {
+                this.showsecondRow = true;
+                this.showthirdRow = true;
+                this.showFourthRow = true;
+                this.showFifthRow = true;
+                this.showSixthRow = true;
+                this.showSeventhRow = true;
+                this.showEigthRow = true;
+                this.showNinthRow = true;
+                this.showTenthRow = true;
+                this.js.pageflow = "New"
+                this.form.patchValue(res[0], {
+                  emitEvent: false
                 });
-              })
+                let storeIdAsInt: number = parseInt(this.js.code);
+                this.form.controls.storeId.patchValue(storeIdAsInt);
+
+
+                this.form.controls.createdOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.createdOn.value));
+                this.form.controls.updatedOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.updatedOn.value));
+
+
+              
+
+                this.setupService.searchSubGroupType({
+                  languageId: [this.form.controls.languageId.value],
+                  companyId: [this.form.controls.companyId.value],
+                  groupTypeId: [this.form.controls.groupTypeId.value],
+                }).subscribe(res => {
+                  this.dropdownSelectsubgrouptypeID = [];
+                  res.forEach(element => {
+                    this.dropdownSelectsubgrouptypeID.push({
+                      value: element.subGroupTypeId,
+                      label: element.subGroupTypeId + '-' + element.subGroupTypeName,
+                      subGroupName: element.subGroupTypeName,
+                    });
+                    // if (this.js.pageflow !='New') {
+                    // this.form.controls.storeId.patchValue(this.form.controls.storeId.value);
+                    //   this.form.controls.subGroupId.patchValue(this.form.controls.subGroupId.value);
+
+                    // }
+                  });
+                })
+              }
             }
-          }
 
           )
           //this.form.controls.storeId.disable();
@@ -2168,7 +2507,7 @@ console.log(value);
       //   }
       // });
       this.clientList2.forEach((x: {
-        key: string; value: string;
+        key: string;value: string;
       }) => this.dropdownSelectclientID1.push({
         value: x.key,
         label: x.value
@@ -2192,41 +2531,36 @@ console.log(value);
         this.showsecondRow = true;
         this.showFourthRow = false;
         this.showFifthRow = false;
-        this.showthirdRow = false;// Ensure only one row is shown at a time
+        this.showthirdRow = false; // Ensure only one row is shown at a time
       } else if (this.count === 2) {
         this.showsecondRow = true;
         this.showFourthRow = false;
         this.showFifthRow = false;
         this.showthirdRow = true;
-      }
-      else if (this.count == 3) {
+      } else if (this.count == 3) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = false;
         this.showthirdRow = true;
-      }
-      else if (this.count == 4) {
+      } else if (this.count == 4) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
         this.showthirdRow = true;
-      }
-      else if (this.count == 5) {
+      } else if (this.count == 5) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
         this.showthirdRow = true;
         this.showSixthRow = true;
-      }
-      else if (this.count == 6) {
+      } else if (this.count == 6) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
         this.showthirdRow = true;
         this.showSixthRow = true;
         this.showSeventhRow = true;
-      }
-      else if (this.count == 7) {
+      } else if (this.count == 7) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
@@ -2234,8 +2568,7 @@ console.log(value);
         this.showSixthRow = true;
         this.showSeventhRow = true;
         this.showEigthRow = true;
-      }
-      else if (this.count == 8) {
+      } else if (this.count == 8) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
@@ -2244,8 +2577,7 @@ console.log(value);
         this.showSeventhRow = true;
         this.showEigthRow = true;
         this.showNinthRow = true;
-      }
-      else if (this.count == 9) {
+      } else if (this.count == 9) {
         this.showsecondRow = true;
         this.showFourthRow = true;
         this.showFifthRow = true;
@@ -2264,8 +2596,15 @@ console.log(value);
       disableClose: true,
       width: '50%',
       maxWidth: '80%',
-      position: { top: '6.5%' },
-      data: { pageflow: data, code: data != 'New' ? this.selection.selected[0].clientId : null, languageId: data != 'New' ? this.selection.selected[0].languageId : null, companyId: data != 'New' ? this.selection.selected[0].companyId : null }
+      position: {
+        top: '6.5%'
+      },
+      data: {
+        pageflow: data,
+        code: data != 'New' ? this.selection.selected[0].clientId : null,
+        languageId: data != 'New' ? this.selection.selected[0].languageId : null,
+        companyId: data != 'New' ? this.selection.selected[0].companyId : null
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -2396,42 +2735,41 @@ console.log(value);
     const percentage10 = +this.form.controls.coOwnerPercentage10.value || 0;
 
     let total = percentage1 + percentage2 + percentage3 + percentage4 + percentage5 + percentage6 + percentage7 + percentage8 + percentage9 + percentage10;
-    if (total > 100) {
-      this.toastr.error(
-        "Total Exceeds 100 !,Kindly recheck the Percentages",
-        "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
-      );
+    // if (total > 100) {
+    //   this.toastr.error(
+    //     "Total Exceeds 100 !,Kindly recheck the Percentages",
+    //     "Notification", {
+    //       timeOut: 2000,
+    //       progressBar: false,
+    //     }
+    //   );
 
-      this.cs.notifyOther(true);
-      return;
+    //   this.cs.notifyOther(true);
+    //   return;
 
-    }
-    console.log(this.FormLine.value);
+    // }
 
-    if (total < 100) {
-      this.toastr.error(
-        "Total is less than 100 !,Kindly recheck the Percentages",
-        "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
-      );
+    // if (total < 100) {
+    //   this.toastr.error(
+    //     "Total is less than 100 !,Kindly recheck the Percentages",
+    //     "Notification", {
+    //       timeOut: 2000,
+    //       progressBar: false,
+    //     }
+    //   );
 
-      this.cs.notifyOther(true);
-      return;
-    }
+    //   this.cs.notifyOther(true);
+    //   return;
+    // }
 
 
     if (this.form.controls.storeId.value == "") {
       this.toastr.error(
         "Please Select StoreId field to continue",
         "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
+          timeOut: 2000,
+          progressBar: false,
+        }
       );
 
       this.cs.notifyOther(true);
@@ -2441,9 +2779,9 @@ console.log(value);
       this.toastr.error(
         "Please fill the Co-Owner1 field to continue",
         "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
+          timeOut: 2000,
+          progressBar: false,
+        }
       );
 
       this.cs.notifyOther(true);
@@ -2453,9 +2791,9 @@ console.log(value);
       this.toastr.error(
         "Please fill the Co-Owner1 field to continue",
         "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
+          timeOut: 2000,
+          progressBar: false,
+        }
       );
 
       this.cs.notifyOther(true);
@@ -2466,9 +2804,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner2 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2479,9 +2817,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner3 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2491,9 +2829,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner4 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2503,9 +2841,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner7 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2515,9 +2853,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner8 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2527,9 +2865,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner9 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2539,9 +2877,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner10 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2551,9 +2889,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner6 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
         this.cs.notifyOther(true);
@@ -2563,9 +2901,9 @@ console.log(value);
         this.toastr.error(
           "Please fill the Co-Owner5 field to continue",
           "Notification", {
-          timeOut: 2000,
-          progressBar: false,
-        }
+            timeOut: 2000,
+            progressBar: false,
+          }
         );
 
 
@@ -2577,9 +2915,9 @@ console.log(value);
       this.toastr.error(
         "Please fill the required fields to continue",
         "Notification", {
-        timeOut: 2000,
-        progressBar: false,
-      }
+          timeOut: 2000,
+          progressBar: false,
+        }
       );
 
       this.cs.notifyOther(true);
@@ -2594,6 +2932,46 @@ console.log(value);
     this.form.controls.statusId.patchValue(1);
     if (this.js.code && this.js.pageflow != "New") {
       if (this.js.pageflow == "Edit") {
+        if (this.form.controls.relationShipName1.value == "") {
+          this.form.controls.relationShipId1.patchValue(null);
+          this.form.controls.relationShipName1.patchValue(null);
+        }
+        if (this.form.controls.relationShipName2.value == "") {
+          this.form.controls.relationShipId2.patchValue(null);
+          this.form.controls.relationShipName2.patchValue(null);
+        }
+        if (this.form.controls.relationShipName3.value == "") {
+          this.form.controls.relationShipId3.patchValue(null);
+          this.form.controls.relationShipName3.patchValue(null);
+        }
+        if (this.form.controls.relationShipName4.value == "") {
+          this.form.controls.relationShipId4.patchValue(null);
+          this.form.controls.relationShipName4.patchValue(null);
+        }
+        if (this.form.controls.relationShipName5.value == "") {
+          this.form.controls.relationShipId5.patchValue(null);
+          this.form.controls.relationShipName5.patchValue(null);
+        }
+        if (this.form.controls.relationShipName6.value == "") {
+          this.form.controls.relationShipId6.patchValue(null);
+          this.form.controls.relationShipName6.patchValue(null);
+        }
+        if (this.form.controls.relationShipName7.value == "") {
+          this.form.controls.relationShipId7.patchValue(null);
+          this.form.controls.relationShipName7.patchValue(null);
+        }
+        if (this.form.controls.relationShipName8.value == "") {
+          this.form.controls.relationShipId8.patchValue(null);
+          this.form.controls.relationShipName8.patchValue(null);
+        }
+        if (this.form.controls.relationShipName9.value == "") {
+          this.form.controls.relationShipId9.patchValue(null);
+          this.form.controls.relationShipName9.patchValue(null);
+        }
+        if (this.form.controls.relationShipName10.value == "") {
+          this.form.controls.relationShipId10.patchValue(null);
+          this.form.controls.relationShipName10.patchValue(null);
+        }
         if (this.form.controls.coOwnerName4.value == "") {
           this.form.controls.coOwnerId4.patchValue(null);
           this.form.controls.coOwnerPercentage4.patchValue(null);
@@ -2629,7 +3007,8 @@ console.log(value);
         if (this.form.controls.coOwnerId4.value == "") {
           this.form.controls.coOwnerId4.patchValue(null);
 
-        } if (this.form.controls.coOwnerId6.value == "") {
+        }
+        if (this.form.controls.coOwnerId6.value == "") {
           this.form.controls.coOwnerId6.patchValue(null);
           this.form.controls.coOwnerPercentage6.patchValue(null);
         }
@@ -2649,8 +3028,10 @@ console.log(value);
           this.form.controls.coOwnerId10.patchValue(null);
           this.form.controls.coOwnerPercentage10.patchValue(null);
         }
+      
       }
       if (this.js.pageflow != "New") {
+        console.log(this.form.value);
         this.spin.show();
         this.sub.add(this.service.Update(this.form.getRawValue(), this.js.code, this.js.languageId, this.js.companyId).subscribe(res => {
           this.toastr.success(res.requestId + " Request Id updated successfully!", "Notification", {
@@ -2660,11 +3041,15 @@ console.log(value);
           this.rows.value.forEach(x => {
             x.requestId = res.requestId;
           })
-          this.sub.add(this.service.search1({ requestId: [this.form.controls.requestId.value] }).subscribe(ress => {
+          this.sub.add(this.service.search1({
+            requestId: [this.form.controls.requestId.value]
+          }).subscribe(ress => {
             if (res.length > 0) {
               this.service.Update1(this.rows.value, this.js.code).subscribe(resp => {
                 let paramdata = '';
-                paramdata = this.cs.encrypt({ line: res });
+                paramdata = this.cs.encrypt({
+                  line: res
+                });
                 this.router.navigate(['/main/controlgroup/transaction/ownership/' + paramdata])
                 this.spin.hide();
               }, err => {
@@ -2674,10 +3059,14 @@ console.log(value);
             } else {
               this.service.Create1(this.rows.value).subscribe(resp => {
                 let paramdata1 = "";
-                paramdata1 = this.cs.encrypt({ line: res });
+                paramdata1 = this.cs.encrypt({
+                  line: res
+                });
                 sessionStorage.setItem('controlGroupsSummary', paramdata1);
                 let paramdata = '';
-                paramdata = this.cs.encrypt({ line: res });
+                paramdata = this.cs.encrypt({
+                  line: res
+                });
                 this.router.navigate(['/main/controlgroup/transaction/ownership/' + paramdata])
                 this.spin.hide();
               }, err => {
@@ -2699,8 +3088,7 @@ console.log(value);
 
 
       }
-    }
-    else {
+    } else {
       this.spin.show();
       this.sub.add(this.service.Create(this.form.getRawValue()).subscribe(res => {
         this.toastr.success(res.requestId + " Request Id saved successfully!", "Notification", {
@@ -2712,10 +3100,14 @@ console.log(value);
         })
         this.service.Create1(this.rows.value).subscribe(resp => {
           let paramdata1 = "";
-          paramdata1 = this.cs.encrypt({ line: res });
+          paramdata1 = this.cs.encrypt({
+            line: res
+          });
           sessionStorage.setItem('controlGroupsSummary', paramdata1);
           let paramdata = '';
-          paramdata = this.cs.encrypt({ line: res });
+          paramdata = this.cs.encrypt({
+            line: res
+          });
           this.router.navigate(['/main/controlgroup/transaction/ownership/' + paramdata])
           this.spin.hide();
         }, err => {
@@ -3568,7 +3960,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -3777,7 +4170,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -3974,7 +4368,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -4163,7 +4558,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -4360,7 +4756,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -4561,7 +4958,8 @@ console.log(value);
       if (this.js.pageflow == "New") {
         if ((this.form.controls.coOwnerName4.value != null) && (this.form.controls.coOwnerId4 == null)) {
           this.form.controls.coOwnerName4.value.patchValue("");
-        } if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
+        }
+        if ((this.form.controls.coOwnerName3.value != null) && (this.form.controls.coOwnerId3 == null)) {
           this.form.controls.coOwnerName3.value.patchValue("");
         }
         if ((this.form.controls.coOwnerName2.value != null) && (this.form.controls.coOwnerId2 == null)) {
@@ -4618,10 +5016,7 @@ console.log(value);
             this.dropdownSelectcontrolgroupID = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectcontrolgroupID);
           });
 
-          if (this.js.pageflow != 'New') {
-            let GroupIdint: number = parseInt(this.js.groupTypeId);
-            this.form.controls.groupTypeId.patchValue(GroupIdint);
-          }
+       
         })
       }
     });
@@ -4648,6 +5043,7 @@ console.log(value);
         this.form.controls.createdOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.createdOn.value));
         this.form.controls.updatedOnFE.patchValue(this.cs.dateNewFormat1(this.form.controls.updatedOn.value));
         this.dropdownlist();
+        
         console.log(this.rows.value);
         this.sub.add(this.service.Get1(this.form.controls.requestId.value).subscribe(res => {
           this.rows.clear();
@@ -4784,19 +5180,19 @@ console.log(value);
 
   clearGroupType() {
     this.setupService.searchControlType({
-      languageId: [this.form.controls.languageId.value],
-      companyId: [this.form.controls.companyId.value],
-      statusId: [0],
-    }).subscribe(res => {
-      this.dropdownSelectcontrolgroupID = [];
-      res.forEach(element => {
-        this.dropdownSelectcontrolgroupID.push({
-          value: element.groupTypeId,
-          label: element.groupTypeId + '-' + element.groupTypeName,
-          groupTypeName: element.groupTypeName,
+        languageId: [this.form.controls.languageId.value],
+        companyId: [this.form.controls.companyId.value],
+        statusId: [0],
+      }).subscribe(res => {
+        this.dropdownSelectcontrolgroupID = [];
+        res.forEach(element => {
+          this.dropdownSelectcontrolgroupID.push({
+            value: element.groupTypeId,
+            label: element.groupTypeId + '-' + element.groupTypeName,
+            groupTypeName: element.groupTypeName,
+          });
         });
-      });
-    }),
+      }),
 
       this.dropdownSelectcontrolgroupID = this.cas.removeDuplicatesFromArrayNew(this.dropdownSelectcontrolgroupID);
   }

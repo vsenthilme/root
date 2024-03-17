@@ -1,5 +1,24 @@
 package com.tekclover.wms.api.transaction.service;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.persistence.EntityNotFoundException;
+
+import com.opencsv.exceptions.CsvException;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
@@ -24,20 +43,6 @@ import com.tekclover.wms.api.transaction.repository.specification.PreInboundHead
 import com.tekclover.wms.api.transaction.util.CommonUtils;
 import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -119,6 +124,12 @@ public class PreInboundHeaderService extends BaseService {
 
     @Autowired
     private InboundLineV2Repository inboundLineV2Repository;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
 
     String statusDescription = null;
     //--------------------------------------------------------------------------------------------------------------
@@ -499,7 +510,7 @@ public class PreInboundHeaderService extends BaseService {
                 imBasicData1.setManufacturerPartNo(inboundIntegrationLine.getManufacturerPartNo());        // MFR_PART
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -639,7 +650,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -714,7 +725,7 @@ public class PreInboundHeaderService extends BaseService {
         // STATUS_ID
         preInboundLine.setStatusId(6L);
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -744,7 +755,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setRefDocDate(inboundIntegrationHeader.getOrderReceivedOn());                // REF_DOC_DATE
         preInboundHeader.setStatusId(6L);
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntity createdPreInboundHeader = preInboundHeaderRepository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1052,11 +1063,14 @@ public class PreInboundHeaderService extends BaseService {
      * @param refDocNumner
      * @return
      */
-    public PreInboundHeaderV2 getPreInboundHeaderV2(String warehouseId, String preInboundNo, String refDocNumner) {
+    public PreInboundHeaderV2 getPreInboundHeaderV2(String warehouseId, String preInboundNo, String refDocNumner) throws IOException, CsvException {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(warehouseId, preInboundNo, refDocNumner, 0L);
 
         if (preInboundHeaderEntity.isEmpty()) {
+            // Error Log
+            createPreInboundHeaderLog(warehouseId, refDocNumner, preInboundNo,
+                    "PreInboundHeader with given values and preInboundNo - " + preInboundNo + " doesn't exists.");
             throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
                     ", warehouseId: " + warehouseId + " doesn't exist.");
         }
@@ -1074,12 +1088,15 @@ public class PreInboundHeaderService extends BaseService {
      * @param refDocNumber
      * @return
      */
-    public PreInboundHeaderV2 getPreInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId, String preInboundNo, String refDocNumber) {
+    public PreInboundHeaderV2 getPreInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId, String preInboundNo, String refDocNumber) throws IOException, CsvException {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndDeletionIndicator(
                         companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, 0L);
 
         if (preInboundHeaderEntity.isEmpty()) {
+            // Error log
+            createPreInboundHeaderLog1(languageId, companyCode, plantId, warehouseId, refDocNumber, preInboundNo,
+                    "PreInboundHeader with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
                     ", warehouseId: " + warehouseId + " doesn't exist.");
         }
@@ -1115,11 +1132,14 @@ public class PreInboundHeaderService extends BaseService {
      * @return
      */
     public PreInboundHeaderV2 getPreInboundHeaderV2(String preInboundNo, String warehouseId,
-                                                    String companyCode, String plantId, String languageId) {
+                                                    String companyCode, String plantId, String languageId) throws IOException, CsvException {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByPreInboundNoAndWarehouseIdAndCompanyCodeAndPlantIdAndLanguageIdAndDeletionIndicator(
                         preInboundNo, warehouseId, companyCode, plantId, languageId, 0L);
         if (preInboundHeaderEntity.isEmpty()) {
+            // Error Log
+            createPreInboundHeaderLog2(languageId, companyCode, plantId, warehouseId, preInboundNo,
+                    "PreInboundHeader with given values and preInboundNo - " + preInboundNo + " doesn't exists.");
             throw new BadRequestException("The given PreInboundHeader ID : preInboundNo : " + preInboundNo +
                     ", warehouseId: " + warehouseId +
                     " doesn't exist.");
@@ -1188,11 +1208,14 @@ public class PreInboundHeaderService extends BaseService {
      * @param languageId
      * @return
      */
-    public List<PreInboundHeaderV2> getPreInboundHeaderWithStatusIdV2(String warehouseId, String companyCode, String plantId, String languageId) {
+    public List<PreInboundHeaderV2> getPreInboundHeaderWithStatusIdV2(String warehouseId, String companyCode, String plantId, String languageId) throws IOException, CsvException {
         List<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByWarehouseIdAndCompanyCodeAndPlantIdAndLanguageIdAndStatusIdAndDeletionIndicator(
                         warehouseId, companyCode, plantId, languageId, 24L, 0L);
         if (preInboundHeaderEntity.isEmpty()) {
+            // Error Log
+            createPreInboundHeaderLog6(languageId, companyCode, plantId, warehouseId,
+                    "PreInboundHeader with warehouseId - " + warehouseId + " and statusId - 24 doesn't exists.");
             throw new BadRequestException("The given PreInboundHeader with StatusID=24 & " +
                     " warehouseId: " + warehouseId +
                     " doesn't exist.");
@@ -1298,8 +1321,6 @@ public class PreInboundHeaderService extends BaseService {
         dbPreInboundHeader.setDeletionIndicator(0L);
         dbPreInboundHeader.setCreatedBy(loginUserID);
         dbPreInboundHeader.setUpdatedBy(loginUserID);
-//        dbPreInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPreInboundHeader.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPreInboundHeader.setCreatedOn(new Date());
         dbPreInboundHeader.setUpdatedOn(new Date());
         return preInboundHeaderV2Repository.save(dbPreInboundHeader);
@@ -1317,7 +1338,7 @@ public class PreInboundHeaderService extends BaseService {
     public PreInboundHeaderV2 updatePreInboundHeaderV2(String companyCode, String plantId, String languageId,
                                                        String preInboundNo, String warehouseId,
                                                        PreInboundHeaderV2 updatePreInboundHeader, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         Optional<PreInboundHeaderEntityV2> preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndPreInboundNoAndWarehouseIdAndDeletionIndicator(
                         companyCode, plantId, languageId, preInboundNo, warehouseId, 0L);
@@ -1326,7 +1347,6 @@ public class PreInboundHeaderService extends BaseService {
             dbEntity.setStatusId(7L); // Hardcoded as 7 during update
         }
         dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
 
@@ -1367,14 +1387,13 @@ public class PreInboundHeaderService extends BaseService {
      */
     public PreInboundHeaderV2 updatePreInboundHeaderV2(String companyCode, String plantId, String languageId,
                                                        String preInboundNo, String warehousId, String refDocNumner, Long statusId, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, IOException, CsvException {
         PreInboundHeaderV2 dbPreInboundHeader = getPreInboundHeaderV2(companyCode, plantId, languageId, warehousId, preInboundNo, refDocNumner);
         PreInboundHeaderEntityV2 dbEntity = copyBeanToHeaderEntity(dbPreInboundHeader);
         dbEntity.setStatusId(statusId);
         statusDescription = stagingLineV2Repository.getStatusDescription(statusId, languageId);
         dbEntity.setStatusDescription(statusDescription);
         dbEntity.setUpdatedBy(loginUserID);
-//        dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbEntity.setUpdatedOn(new Date());
         dbEntity = preInboundHeaderV2Repository.save(dbEntity);
         dbPreInboundHeader = copyHeaderEntityToBean(dbEntity);
@@ -1390,16 +1409,18 @@ public class PreInboundHeaderService extends BaseService {
      * @param loginUserID
      */
     public void deletePreInboundHeaderV2(String companyCode, String plantId, String languageId,
-                                         String preInboundNo, String warehousId, String loginUserID) throws ParseException {
+                                         String preInboundNo, String warehousId, String loginUserID) throws ParseException, IOException, CsvException {
         PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehousId, companyCode, plantId, languageId);
         PreInboundHeaderEntityV2 dbEntity = copyBeanToHeaderEntity(preInboundHeader);
         if (dbEntity != null) {
             dbEntity.setDeletionIndicator(1L);
             dbEntity.setUpdatedBy(loginUserID);
-//            dbEntity.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             dbEntity.setUpdatedOn(new Date());
             preInboundHeaderV2Repository.save(dbEntity);
         } else {
+            // Error Log
+            createPreInboundHeaderLog2(languageId, companyCode, plantId, warehousId, preInboundNo,
+                    "Error in deleting PreInboundHeader with preInboundNo - " + preInboundNo);
             throw new EntityNotFoundException("Error in deleting Id: " + preInboundNo);
         }
     }
@@ -1411,15 +1432,17 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public InboundHeaderV2 processInboundReceivedV2(String refDocNumber, InboundIntegrationHeader inboundIntegrationHeader)
-            throws IllegalAccessException, InvocationTargetException, BadRequestException, Exception {
+            throws CsvException, IOException, ParseException, InvocationTargetException, IllegalAccessException {
         /*
          * Checking whether received refDocNumber processed already.
          */
         Optional<PreInboundHeaderEntityV2> orderProcessedStatus = preInboundHeaderV2Repository.findByRefDocNumberAndDeletionIndicator(refDocNumber, 0L);
         if (!orderProcessedStatus.isEmpty()) {
-            orderService.updateProcessedInboundOrderV2(refDocNumber);
+            // Error Log
+            createPreInboundHeaderLog9(inboundIntegrationHeader, "Order Id - " + refDocNumber + " was already Processed. Reprocessing can't be allowed.");
+//            orderService.updateProcessedInboundOrderV2(refDocNumber, 100L);
             throw new BadRequestException("Order :" + refDocNumber + " already processed. Reprocessing can't be allowed.");
         }
 
@@ -1445,6 +1468,9 @@ public class PreInboundHeaderService extends BaseService {
             log.info("dbWarehouse : " + optWarehouse);
 
             if (optWarehouse != null && optWarehouse.isEmpty()) {
+                // Error Log
+                createPreInboundHeaderLog7("EN", inboundOrder.getCompanyCode(), inboundOrder.getBranchCode(), inboundOrder.getRefDocumentNo(),
+                        "Warehouse with given values - companyCode: " + inboundOrder.getCompanyCode() + " and branchCode: " + inboundOrder.getBranchCode() + " doesn't exists.");
                 log.info("warehouse not found.");
                 throw new BadRequestException("Warehouse cannot be null.");
             }
@@ -1452,12 +1478,14 @@ public class PreInboundHeaderService extends BaseService {
             warehouse = optWarehouse.get();
 
         } catch (Exception e) {
+            // Error Log
+            createPreInboundHeaderLog7("EN", inboundOrder.getCompanyCode(), inboundOrder.getBranchCode(), inboundOrder.getRefDocumentNo(), e.toString());
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw e;
         }
 
         // Getting PreInboundNo from NumberRangeTable
-        String preInboundNo = getPreInboundNo(warehouseId, warehouse.getCompanyCodeId(), warehouse.getPlantId(), warehouse.getLanguageId());
+        String preInboundNo = getPreInboundNo(warehouseId, inboundOrder.getCompanyCode(), inboundOrder.getBranchCode(), warehouse.getLanguageId());
 
         List<PreInboundLineEntityV2> overallCreatedPreInboundLineList = new ArrayList<>();
         for (InboundIntegrationLine inboundIntegrationLine : inboundIntegrationHeader.getInboundIntegrationLine()) {
@@ -1498,7 +1526,7 @@ public class PreInboundHeaderService extends BaseService {
 //                }
                 imBasicData1.setStatusId(1L);                                                // STATUS_ID
                 ImBasicData1 createdImBasicData1 =
-                        mastersService.createImBasicData1V2(imBasicData1, "MSD_INT", authTokenForMastersService.getAccess_token());
+                        mastersService.createImBasicData1V2(imBasicData1, "MW_AMS", authTokenForMastersService.getAccess_token());
                 log.info("ImBasicData1 created: " + createdImBasicData1);
             }
 
@@ -1514,8 +1542,8 @@ public class PreInboundHeaderService extends BaseService {
                     authTokenForMastersService.getAccess_token());
             log.info("bomHeader [BOM] : " + bomHeader);
             if (bomHeader != null) {
-                BomLine[] bomLine = mastersService.getBomLine(bomHeader.getBomNumber(), bomHeader.getWarehouseId(),
-                        authTokenForMastersService.getAccess_token());
+                BomLine[] bomLine = mastersService.getBomLine(bomHeader.getBomNumber(), bomHeader.getCompanyCodeId(), bomHeader.getPlantId(),
+                        bomHeader.getLanguageId(), bomHeader.getWarehouseId(), authTokenForMastersService.getAccess_token());
                 List<PreInboundLineEntityV2> toBeCreatedPreInboundLineList = new ArrayList<>();
                 for (BomLine dbBomLine : bomLine) {
                     PreInboundLineEntityV2 preInboundLineEntity = createPreInboundLineBOMBasedV2(warehouse, preInboundNo, inboundIntegrationHeader, dbBomLine, inboundIntegrationLine);
@@ -1649,13 +1677,15 @@ public class PreInboundHeaderService extends BaseService {
                 warehouse.getPlantId(),
                 warehouse.getWarehouseId());
 
+        if (description != null) {
         preInboundLine.setCompanyDescription(description.getCompanyDesc());
         preInboundLine.setPlantDescription(description.getPlantDesc());
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
+        }
 
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1671,6 +1701,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setBranchCode(inboundIntegrationLine.getBranchCode());
         preInboundLine.setTransferOrderNo(inboundIntegrationLine.getTransferOrderNo());
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
+        preInboundLine.setBusinessPartnerCode(inboundIntegrationLine.getSupplierCode());
 
         // REF_FIELD_1
         preInboundLine.setReferenceField1("CHILD ITEM");
@@ -1682,8 +1713,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setReferenceField4(inboundIntegrationLine.getSalesOrderReference());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
         return preInboundLine;
     }
@@ -1768,12 +1798,14 @@ public class PreInboundHeaderService extends BaseService {
                 warehouse.getPlantId(),
                 warehouse.getWarehouseId());
 
+        if (description != null) {
         preInboundLine.setCompanyDescription(description.getCompanyDesc());
         preInboundLine.setPlantDescription(description.getPlantDesc());
         preInboundLine.setWarehouseDescription(description.getWarehouseDesc());
+        }
         preInboundLine.setOrigin(inboundIntegrationLine.getOrigin());
         preInboundLine.setBrandName(inboundIntegrationLine.getBrand());
-        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerCode());
+        preInboundLine.setManufacturerCode(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setManufacturerName(inboundIntegrationLine.getManufacturerName());
         preInboundLine.setPartnerItemNo(inboundIntegrationLine.getSupplierCode());
         preInboundLine.setContainerNo(inboundIntegrationLine.getContainerNumber());
@@ -1791,8 +1823,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundLine.setIsCompleted(inboundIntegrationLine.getIsCompleted());
 
         preInboundLine.setDeletionIndicator(0L);
-        preInboundLine.setCreatedBy("MSD_INT");
-//        preInboundLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundLine.setCreatedBy("MW_AMS");
         preInboundLine.setCreatedOn(new Date());
 
         log.info("preInboundLine : " + preInboundLine);
@@ -1827,9 +1858,11 @@ public class PreInboundHeaderService extends BaseService {
                 warehouse.getPlantId(),
                 warehouse.getWarehouseId());
 
+        if (description != null) {
         preInboundHeader.setCompanyDescription(description.getCompanyDesc());
         preInboundHeader.setPlantDescription(description.getPlantDesc());
         preInboundHeader.setWarehouseDescription(description.getWarehouseDesc());
+        }
 
         preInboundHeader.setMiddlewareId(inboundIntegrationHeader.getMiddlewareId());
         preInboundHeader.setMiddlewareTable(inboundIntegrationHeader.getMiddlewareTable());
@@ -1844,8 +1877,7 @@ public class PreInboundHeaderService extends BaseService {
         preInboundHeader.setMUpdatedOn(inboundIntegrationHeader.getUpdatedOn());
 
         preInboundHeader.setDeletionIndicator(0L);
-        preInboundHeader.setCreatedBy("MSD_INT");
-//        preInboundHeader.setCreatedOn(DateUtils.getCurrentKWTDateTime());
+        preInboundHeader.setCreatedBy("MW_AMS");
         preInboundHeader.setCreatedOn(new Date());
         PreInboundHeaderEntityV2 createdPreInboundHeader = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("createdPreInboundHeader : " + createdPreInboundHeader);
@@ -1871,9 +1903,11 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundHeader.getPlantId(),
                 preInboundHeader.getWarehouseId());
 
+        if (description != null) {
         inboundHeader.setCompanyDescription(description.getCompanyDesc());
         inboundHeader.setPlantDescription(description.getPlantDesc());
         inboundHeader.setWarehouseDescription(description.getWarehouseDesc());
+        }
 
         inboundHeader.setMiddlewareId(preInboundHeader.getMiddlewareId());
         inboundHeader.setMiddlewareTable(preInboundHeader.getMiddlewareTable());
@@ -1908,9 +1942,11 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setReferenceField4(createdPreInboundLine.getReferenceField4());
 
+            if (description != null) {
             inboundLine.setCompanyDescription(description.getCompanyDesc());
             inboundLine.setPlantDescription(description.getPlantDesc());
             inboundLine.setWarehouseDescription(description.getWarehouseDesc());
+            }
             inboundLine.setStatusDescription(statusDescription);
             inboundLine.setContainerNo(createdPreInboundLine.getContainerNo());
             inboundLine.setSupplierName(createdPreInboundLine.getSupplierName());
@@ -1922,13 +1958,13 @@ public class PreInboundHeaderService extends BaseService {
             inboundLine.setManufacturerFullName(createdPreInboundLine.getManufacturerFullName());
             inboundLine.setPurchaseOrderNumber(createdPreInboundLine.getPurchaseOrderNumber());
 
-            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerCode());
+            inboundLine.setManufacturerCode(createdPreInboundLine.getManufacturerName());
             inboundLine.setManufacturerName(createdPreInboundLine.getManufacturerName());
             inboundLine.setExpectedArrivalDate(createdPreInboundLine.getExpectedArrivalDate());
             inboundLine.setOrderQty(createdPreInboundLine.getOrderQty());
             inboundLine.setOrderUom(createdPreInboundLine.getOrderUom());
 
-            inboundLine.setVendorCode(createdPreInboundLine.getPartnerItemNo());
+            inboundLine.setVendorCode(createdPreInboundLine.getBusinessPartnerCode());
             inboundLine.setManufacturerPartNo(createdPreInboundLine.getManufacturerPartNo());
 
             inboundLine.setBranchCode(createdPreInboundLine.getBranchCode());
@@ -1957,7 +1993,7 @@ public class PreInboundHeaderService extends BaseService {
      * @throws InvocationTargetException
      */
     public StagingHeaderV2 processASNV2(List<PreInboundLineEntityV2> inputPreInboundLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         boolean isPreInboundHeaderUpdated = false;
         boolean isPreInboundLineUpdated = false;
 
@@ -1966,6 +2002,9 @@ public class PreInboundHeaderService extends BaseService {
         String preInboundNo = null;
         String containerNo = null;
         String warehouseId = null;
+        String companyCode = null;
+        String plantId = null;
+        String languageId = null;
         for (PreInboundLineEntityV2 objUpdatePreInboundLine : inputPreInboundLines) {
             objUpdatePreInboundLine.setStatusId(5L);
             statusDescription = stagingLineV2Repository.getStatusDescription(5L, objUpdatePreInboundLine.getLanguageId());
@@ -1979,11 +2018,15 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundNo = updatedPreInboundLine.getPreInboundNo();
                 containerNo = updatedPreInboundLine.getContainerNo();
                 warehouseId = updatedPreInboundLine.getWarehouseId();
+                companyCode = updatedPreInboundLine.getCompanyCode();
+                plantId = updatedPreInboundLine.getPlantId();
+                languageId = updatedPreInboundLine.getLanguageId();
             }
         }
 
         // PREINBOUNDHEADER Update
-        PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+        // PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId);
+           PreInboundHeaderV2 preInboundHeader = getPreInboundHeaderV2(preInboundNo, warehouseId, companyCode, plantId, languageId);
         log.info("preInboundHeader---found-------> : " + preInboundHeader);
 
         PreInboundHeaderEntityV2 preInboundHeaderEntity = copyBeanToHeaderEntity(preInboundHeader);
@@ -2064,9 +2107,11 @@ public class PreInboundHeaderService extends BaseService {
                 preInboundHeader.getPlantId(),
                 warehouseId);
 
+        if (description != null) {
         stagingHeader.setCompanyDescription(description.getCompanyDesc());
         stagingHeader.setPlantDescription(description.getPlantDesc());
         stagingHeader.setWarehouseDescription(description.getWarehouseDesc());
+        }
 
         stagingHeader.setContainerNo(preInboundHeader.getContainerNo());
         stagingHeader.setMiddlewareId(preInboundHeader.getMiddlewareId());
@@ -2099,7 +2144,7 @@ public class PreInboundHeaderService extends BaseService {
     /**
      * @return
      */
-    private String getPreInboundNo(String warehouseId, String companyCodeId, String plantId, String languageId) {
+    private String getPreInboundNo(String warehouseId, String companyCodeId, String plantId, String languageId) throws IOException, CsvException {
         /*
          * Pass WH_ID - User logged in WH_ID and NUM_RAN_CODE = 2 values in NUMBERRANGE table and
          * fetch NUM_RAN_CURRENT value of FISCALYEAR = CURRENT YEAR and add +1and then
@@ -2110,6 +2155,8 @@ public class PreInboundHeaderService extends BaseService {
             String nextRangeNumber = getNextRangeNumber(2L, companyCodeId, plantId, languageId, warehouseId, authTokenForIDMasterService.getAccess_token());
             return nextRangeNumber;
         } catch (Exception e) {
+            // Error Log
+            createPreInboundHeaderLog8(languageId, companyCodeId, plantId, warehouseId, "Error on Number generation " + e.toString());
             throw new BadRequestException("Error on Number generation." + e.toString());
         }
     }
@@ -2134,7 +2181,6 @@ public class PreInboundHeaderService extends BaseService {
         dbInboundIntegrationLog.setOrderReceiptDate(createdPreInboundHeader.getCreatedOn());
         dbInboundIntegrationLog.setDeletionIndicator(0L);
         dbInboundIntegrationLog.setCreatedBy(createdPreInboundHeader.getCreatedBy());
-//        dbInboundIntegrationLog.setCreatedOn(DateUtils.getCurrentKWTDateTime());
         dbInboundIntegrationLog.setCreatedOn(new Date());
         dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
         log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
@@ -2180,6 +2226,43 @@ public class PreInboundHeaderService extends BaseService {
 
     /**
      *
+     * @param inbound
+     * @param errorDesc
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public InboundIntegrationLog createInboundIntegrationLogV2(InboundIntegrationHeader inbound, String errorDesc)
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
+        com.tekclover.wms.api.transaction.model.warehouse.Warehouse warehouse =
+                getWarehouse(inbound.getCompanyCode(), inbound.getBranchCode());
+        if (warehouse == null) {
+            // Exception Log
+            createPreInboundHeaderLog7("EN", inbound.getCompanyCode(), inbound.getBranchCode(),
+                    inbound.getRefDocumentNo(), "Warehouse not found for the given values.");
+            throw new BadRequestException("Warehouse not found : " + inbound.getWarehouseID());
+        }
+        InboundIntegrationLog dbInboundIntegrationLog = new InboundIntegrationLog();
+        dbInboundIntegrationLog.setLanguageId("EN");
+        dbInboundIntegrationLog.setCompanyCodeId(warehouse.getCompanyCodeId());
+        dbInboundIntegrationLog.setPlantId(warehouse.getPlantId());
+        dbInboundIntegrationLog.setWarehouseId(warehouse.getWarehouseId());
+        dbInboundIntegrationLog.setIntegrationLogNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setRefDocNumber(inbound.getRefDocumentNo());
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setIntegrationStatus("FAILED");
+        dbInboundIntegrationLog.setOrderReceiptDate(inbound.getOrderProcessedOn());
+        dbInboundIntegrationLog.setDeletionIndicator(0L);
+        dbInboundIntegrationLog.setCreatedBy("MSD_API");
+
+        dbInboundIntegrationLog.setCreatedOn(new Date());
+        dbInboundIntegrationLog = inboundIntegrationLogRepository.save(dbInboundIntegrationLog);
+        log.info("dbInboundIntegrationLog : " + dbInboundIntegrationLog);
+        return dbInboundIntegrationLog;
+    }
+
+    /**
+     *
      * @param companyCode
      * @param plantId
      * @param languageId
@@ -2202,4 +2285,186 @@ public class PreInboundHeaderService extends BaseService {
             }
         return preInboundHeaderEntity;
     }
+
+    //=========================================PreInboundHeader_ExceptionLog===========================================
+    private void createPreInboundHeaderLog(String warehouseId, String refDocNumber, String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog1(String languageId, String companyCode, String plantId, String warehouseId,
+                                            String refDocNumber, String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog2(String languageId, String companyCode, String plantId, String warehouseId,
+                                            String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(preInboundNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog3(String warehouseId, String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(preInboundNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog4(String preInboundNo, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(preInboundNo);
+        errorLog.setOrderDate(new Date());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog5(String warehouseId, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(warehouseId);
+        errorLog.setOrderDate(new Date());
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog6(String languageId, String companyCode, String plantId,
+                                            String warehouseId, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(warehouseId);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog7(String languageId, String companyCode, String plantId, String refDocNo,
+                                            String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(plantId);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog8(String languageId, String companyCode, String plantId,
+                                            String warehouseId, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(warehouseId);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPreInboundHeaderLog9(InboundIntegrationHeader inbound, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(inbound.getRefDocumentNo());
+        errorLog.setOrderDate(new Date());
+        errorLog.setCompanyCodeId(inbound.getCompanyCode());
+        errorLog.setPlantId(inbound.getBranchCode());
+        errorLog.setWarehouseId(inbound.getWarehouseID());
+        errorLog.setRefDocNumber(inbound.getRefDocumentNo());
+        errorLog.setReferenceField1("InboundOrderTypeId-" + inbound.getInboundOrderTypeId());
+        errorLog.setReferenceField2(inbound.getRefDocumentType());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
 }

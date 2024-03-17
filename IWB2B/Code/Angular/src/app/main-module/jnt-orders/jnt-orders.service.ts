@@ -8,13 +8,13 @@ export class JntOrdersService {
 
   constructor(private http: HttpClient) { }
   getAll(){
-    return this.http.get<any>('/iwe-integration-service/softdata/JT/orders'); // + '?referenceNumber=' + referenceNumber
+    return this.http.get<any>('/iwe-user-service/softdata/JT/orders'); // + '?referenceNumber=' + referenceNumber
   }
   getAll1(){
     return this.http.get<any>('/iwe-integration-service/softdata'); // + '?referenceNumber=' + referenceNumber
   }
   getLabel(billCode: any){
-    return this.http.get<any>('/iwe-integration-service/softdata/jnt/' + billCode + '/printLabel');
+    return this.http.get<any>('/iwe-user-service/softdata/jnt/' + billCode + '/printLabel');
   }
 
   // getBulkLabel(billCode: any){
@@ -23,7 +23,7 @@ export class JntOrdersService {
 
   getBulkLabel(billCode: any): Promise<File> {
     return this.http
-      .post<any>(`/iwe-integration-service/softdata/jnt/bulk/printLabel`, billCode, {
+      .post<any>(`/iwe-user-service/softdata/jnt/bulk/printLabel`, billCode, {
         responseType: 'blob' as 'json',
       })
       .toPromise();
@@ -36,6 +36,6 @@ export class JntOrdersService {
 
 
   findConsignment(obj: any) {
-    return this.http.post<any>('/iwe-integration-service/softdata/findConsignment', obj);
+    return this.http.post<any>('/iwe-user-service/softdata/findConsignment', obj);
   }
 }

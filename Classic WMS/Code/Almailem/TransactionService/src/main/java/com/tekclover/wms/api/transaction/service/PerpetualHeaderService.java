@@ -5,6 +5,8 @@ import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.*;
 import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.*;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData;
+import com.tekclover.wms.api.transaction.model.dto.ImBasicData1;
 import com.tekclover.wms.api.transaction.model.dto.StorageBinV2;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -41,6 +43,8 @@ import java.util.stream.Stream;
 @Service
 public class PerpetualHeaderService extends BaseService {
     @Autowired
+    private PerpetualZeroStkLineRepository perpetualZeroStkLineRepository;
+    @Autowired
     private WarehouseRepository warehouseRepository;
     @Autowired
     private PerpetualLineV2Repository perpetualLineV2Repository;
@@ -74,6 +78,9 @@ public class PerpetualHeaderService extends BaseService {
     //=======================================================================================================================
     @Autowired
     private StagingLineV2Repository stagingLineV2Repository;
+
+    @Autowired
+    private PerpetualZeroStkLineService perpetualZeroStkLineService;
 
     String statusDescription = null;
     //=======================================================================================================================
@@ -183,7 +190,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public List<PerpetualHeader> findPerpetualHeader(SearchPerpetualHeader searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -201,7 +208,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public List<PerpetualLineEntity> runPerpetualHeader(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -300,7 +307,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderNew(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -341,7 +348,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     @Transactional
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderStream(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -925,7 +932,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public Stream<PerpetualHeaderV2> findPerpetualHeaderV2(SearchPerpetualHeaderV2 searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -945,7 +952,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     public List<PerpetualHeaderEntityV2> findPerpetualHeaderEntityV2(SearchPerpetualHeaderV2 searchPerpetualHeader)
             throws ParseException, java.text.ParseException {
-        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getStartCreatedOn() != null) {
+        if (searchPerpetualHeader.getStartCreatedOn() != null && searchPerpetualHeader.getEndCreatedOn() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(searchPerpetualHeader.getStartCreatedOn(),
                     searchPerpetualHeader.getEndCreatedOn());
             searchPerpetualHeader.setStartCreatedOn(dates[0]);
@@ -957,7 +964,7 @@ public class PerpetualHeaderService extends BaseService {
         PerpetualHeaderV2Specification spec = new PerpetualHeaderV2Specification(searchPerpetualHeader);
         List<PerpetualHeaderV2> perpetualHeaderResults = perpetualHeaderV2Repository.stream(spec, PerpetualHeaderV2.class).collect(Collectors.toList());
         log.info("searchPerpetualHeader results: " + perpetualHeaderResults);
-        List<PerpetualHeaderEntityV2> results = convertToEntityForFindV2(perpetualHeaderResults, searchPerpetualHeader);
+        List<PerpetualHeaderEntityV2> results = convertToEntityV2(perpetualHeaderResults, searchPerpetualHeader);
 
         return results;
     }
@@ -968,7 +975,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public List<PerpetualLineV2> runPerpetualHeaderV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -1071,7 +1078,7 @@ public class PerpetualHeaderService extends BaseService {
      * @throws java.text.ParseException
      */
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderNewV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -1116,7 +1123,7 @@ public class PerpetualHeaderService extends BaseService {
      */
     @Transactional
     public Set<PerpetualLineEntityImpl> runPerpetualHeaderStreamV2(@Valid RunPerpetualHeader runPerpetualHeader) throws java.text.ParseException {
-        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateFrom() != null) {
+        if (runPerpetualHeader.getDateFrom() != null && runPerpetualHeader.getDateTo() != null) {
             Date[] dates = DateUtils.addTimeToDatesForSearch(runPerpetualHeader.getDateFrom(), runPerpetualHeader.getDateTo());
             runPerpetualHeader.setDateFrom(dates[0]);
             runPerpetualHeader.setDateTo(dates[1]);
@@ -1301,10 +1308,13 @@ public class PerpetualHeaderService extends BaseService {
             List<PerpetualLineV2> perpetualLines = perpetualLineService.getPerpetualLineV2(companyCodeId, plantId, languageId, warehouseId, cycleCountNo);
             long count_78 = perpetualLines.stream().filter(a -> a.getStatusId() == 78L).count();
             long count_74 = perpetualLines.stream().filter(a -> a.getStatusId() == 74L).count();
+            long count_47 = perpetualLines.stream().filter(a -> a.getStatusId() == 47L).count();
+            long totalCount78 = count_78 + count_47;
+            long totalCount74 = count_74 + count_47;
 
-            if (perpetualLines.size() == count_78) {
+            if (perpetualLines.size() == totalCount78) {
                 dbPerpetualHeader.setStatusId(78L);
-            } else if (perpetualLines.size() == count_74) {
+            } else if (perpetualLines.size() == totalCount74) {
                 dbPerpetualHeader.setStatusId(74L);
             } else {
                 dbPerpetualHeader.setStatusId(73L);
@@ -1341,10 +1351,13 @@ public class PerpetualHeaderService extends BaseService {
         List<PerpetualLineV2> perpetualLines = perpetualLineService.getPerpetualLineV2(companyCodeId, plantId, languageId, warehouseId, cycleCountNo);
         long count_78 = perpetualLines.stream().filter(a -> a.getStatusId() == 78L).count();
         long count_74 = perpetualLines.stream().filter(a -> a.getStatusId() == 74L).count();
+        long count_47 = perpetualLines.stream().filter(a -> a.getStatusId() == 47L).count();
+        long totalCount78 = count_78 + count_47;
+        long totalCount74 = count_74 + count_47;
 
-        if (perpetualLines.size() == count_78) {
+        if (perpetualLines.size() == totalCount78) {
             dbPerpetualHeader.setStatusId(78L);
-        } else if (perpetualLines.size() == count_74) {
+        } else if (perpetualLines.size() == totalCount74) {
             dbPerpetualHeader.setStatusId(74L);
         } else {
             dbPerpetualHeader.setStatusId(73L);
@@ -1448,7 +1461,20 @@ public class PerpetualHeaderService extends BaseService {
                 perpetualHeader.getLanguageId(),
                 perpetualHeader.getWarehouseId(),
                 perpetualHeader.getCycleCountNo());
-
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = perpetualZeroStkLineService.getPerpetualZeroStockLine(
+                perpetualHeader.getCompanyCodeId(),
+                perpetualHeader.getPlantId(),
+                perpetualHeader.getLanguageId(),
+                perpetualHeader.getWarehouseId(),
+                perpetualHeader.getCycleCountNo());
+        if(perpetualZeroStockLineList != null && !perpetualZeroStockLineList.isEmpty()){
+            log.info("perpetualZeroStockLineList : " + perpetualZeroStockLineList.size());
+            for(PerpetualZeroStockLine perpetualZeroStockLine : perpetualZeroStockLineList){
+                PerpetualLineV2 dbPerpetualLineV2 = new PerpetualLineV2();
+                BeanUtils.copyProperties(perpetualZeroStockLine, dbPerpetualLineV2, CommonUtils.getNullPropertyNames(perpetualZeroStockLine));
+                perpetualLineList.add(dbPerpetualLineV2);
+            }
+        }
         PerpetualHeaderEntityV2 perpetualHeaderEntityV2 = new PerpetualHeaderEntityV2();
         BeanUtils.copyProperties(perpetualHeader, perpetualHeaderEntityV2, CommonUtils.getNullPropertyNames(perpetualHeader));
         perpetualHeaderEntityV2.setPerpetualLine(perpetualLineList);
@@ -1464,6 +1490,7 @@ public class PerpetualHeaderService extends BaseService {
         PerpetualHeaderEntityV2 perpetualHeaderEntity = new PerpetualHeaderEntityV2();
         PerpetualHeaderV2 newPerpetualHeader = new PerpetualHeaderV2();
         List<PerpetualLineV2> perpetualLines = new ArrayList<>();
+        List<PerpetualZeroStockLine> perpetualZeroStockLineList = new ArrayList<>();
 
         // Get Warehouse
         Optional<com.tekclover.wms.api.transaction.model.warehouse.Warehouse> dbWarehouse =
@@ -1516,8 +1543,8 @@ public class PerpetualHeaderService extends BaseService {
         newPerpetualHeader.setWarehouseDescription(description.getWarehouseDesc());
 
         newPerpetualHeader.setDeletionIndicator(0L);
-        newPerpetualHeader.setCreatedBy("MSD_INT");
-        newPerpetualHeader.setCountedBy("MSD_INT");
+        newPerpetualHeader.setCreatedBy("MW_AMS");
+        newPerpetualHeader.setCountedBy("MW_AMS");
         newPerpetualHeader.setCreatedOn(new Date());
         newPerpetualHeader.setCountedOn(new Date());
         PerpetualHeaderV2 createdPerpetualHeader = perpetualHeaderV2Repository.save(newPerpetualHeader);
@@ -1545,7 +1572,12 @@ public class PerpetualHeaderService extends BaseService {
                     storageBinPutAway.setWarehouseId(dbInventory.getWarehouseId());
                     storageBinPutAway.setBin(dbInventory.getStorageBin());
 
-                    StorageBinV2 dbStorageBin = mastersService.getaStorageBinV2(storageBinPutAway,authTokenForMastersService.getAccess_token());
+                    StorageBinV2 dbStorageBin = null;
+                    try {
+                        dbStorageBin = mastersService.getaStorageBinV2(storageBinPutAway, authTokenForMastersService.getAccess_token());
+                    } catch (Exception e) {
+                        throw new BadRequestException("Invalid StorageBin");
+                    }
                     if(dbStorageBin != null) {
                         dbPerpetualLine.setStorageSectionId(dbStorageBin.getStorageSectionId());
                         dbPerpetualLine.setLevelId(String.valueOf(dbStorageBin.getFloorId()));
@@ -1561,6 +1593,7 @@ public class PerpetualHeaderService extends BaseService {
                     dbPerpetualLine.setManufacturerPartNo(dbInventory.getManufacturerCode());
                     dbPerpetualLine.setManufacturerName(dbInventory.getManufacturerName());
                     dbPerpetualLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                    dbPerpetualLine.setLineNo(cycleCountLine.getLineOfEachItemCode());
 
                     dbPerpetualLine.setCycleCountNo(nextRangeNumber);
                     dbPerpetualLine.setReferenceNo(cycleCountLine.getCycleCountNo());
@@ -1600,15 +1633,77 @@ public class PerpetualHeaderService extends BaseService {
                     }
 
                     dbPerpetualLine.setDeletionIndicator(0L);
-                    dbPerpetualLine.setCreatedBy("MSD_INT");
+                    dbPerpetualLine.setCreatedBy("MW_AMS");
                     dbPerpetualLine.setCreatedOn(new Date());
                     perpetualLines.add(dbPerpetualLine);
                 }
+            }
+            //Item Not present in Inventory ---> Lines Insert as Inv_qty '0'
+            if(dbInventoryList == null){
+                PerpetualZeroStockLine dbPerpetualLine = new PerpetualZeroStockLine();
+
+                dbPerpetualLine.setCompanyCodeId(newPerpetualHeader.getCompanyCodeId());
+                dbPerpetualLine.setPlantId(newPerpetualHeader.getPlantId());
+                dbPerpetualLine.setWarehouseId(newPerpetualHeader.getWarehouseId());
+                dbPerpetualLine.setLanguageId(newPerpetualHeader.getLanguageId());
+                dbPerpetualLine.setItemCode(cycleCountLine.getItemCode());
+                dbPerpetualLine.setManufacturerPartNo(cycleCountLine.getManufacturerName());
+                dbPerpetualLine.setManufacturerName(cycleCountLine.getManufacturerName());
+                dbPerpetualLine.setManufacturerCode(cycleCountLine.getManufacturerCode());
+                dbPerpetualLine.setLineNo(cycleCountLine.getLineOfEachItemCode());
+
+                dbPerpetualLine.setCycleCountNo(nextRangeNumber);
+                dbPerpetualLine.setReferenceNo(cycleCountLine.getCycleCountNo());
+
+                //Get Item Description
+                ImBasicData imBasicData = new ImBasicData();
+                imBasicData.setCompanyCodeId(newPerpetualHeader.getCompanyCodeId());
+                imBasicData.setPlantId(newPerpetualHeader.getPlantId());
+                imBasicData.setLanguageId(newPerpetualHeader.getLanguageId());
+                imBasicData.setWarehouseId(newPerpetualHeader.getWarehouseId());
+                imBasicData.setItemCode(cycleCountLine.getItemCode());
+                imBasicData.setManufacturerName(cycleCountLine.getManufacturerName());
+                ImBasicData1 imBasicData1 = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
+                log.info("ImBasicData1 : " + imBasicData1);
+
+                if(imBasicData1 != null) {
+                    dbPerpetualLine.setItemDesc(imBasicData1.getDescription());
+                }
+                dbPerpetualLine.setInventoryQuantity(0D);                              //Total Qty
+                dbPerpetualLine.setInventoryUom(cycleCountLine.getUom());
+                dbPerpetualLine.setFrozenQty(cycleCountLine.getFrozenQty());
+
+                dbPerpetualLine.setStatusId(47L);
+                statusDescription = stagingLineV2Repository.getStatusDescription(47L, newPerpetualHeader.getLanguageId());
+                dbPerpetualLine.setStatusDescription(statusDescription);
+
+                dbPerpetualLine.setCompanyDescription(description.getCompanyDesc());
+                dbPerpetualLine.setPlantDescription(description.getPlantDesc());
+                dbPerpetualLine.setWarehouseDescription(description.getWarehouseDesc());
+
+                List<String> barcode = stagingLineV2Repository.getPartnerItemBarcode(cycleCountLine.getItemCode(),
+                        newPerpetualHeader.getCompanyCodeId(),
+                        newPerpetualHeader.getPlantId(),
+                        newPerpetualHeader.getWarehouseId(),
+                        cycleCountLine.getManufacturerName(),
+                        newPerpetualHeader.getLanguageId());
+                    log.info("Barcode : " + barcode);
+                    if (barcode != null && !barcode.isEmpty()) {
+                        dbPerpetualLine.setBarcodeId(barcode.get(0));
+                    }
+
+
+                dbPerpetualLine.setDeletionIndicator(0L);
+                dbPerpetualLine.setCreatedBy("MW_AMS");
+                dbPerpetualLine.setCreatedOn(new Date());
+                perpetualZeroStockLineList.add(dbPerpetualLine);
             }
         }
 
         List<PerpetualLineV2> createdPerpetualLines = perpetualLineV2Repository.saveAll(perpetualLines);
         log.info("createdPerpetualLine : " + createdPerpetualLines);
+        List<PerpetualZeroStockLine> createdPerpetualZeroStkLines = perpetualZeroStkLineRepository.saveAll(perpetualZeroStockLineList);
+        log.info("createdPerpetualZeroStkLines : " + createdPerpetualZeroStkLines);
 
         BeanUtils.copyProperties(createdPerpetualHeader, perpetualHeaderEntity, CommonUtils.getNullPropertyNames(createdPerpetualHeader));
         perpetualHeaderEntity.setPerpetualLine(perpetualLines);
@@ -1772,6 +1867,7 @@ public class PerpetualHeaderService extends BaseService {
         List<PerpetualHeaderEntityV2> listPerpetualHeaderEntity = new ArrayList<>();
         for (PerpetualHeaderV2 perpetualHeader : perpetualHeaderList) {
             SearchPerpetualLineV2 searchPerpetualLine = new SearchPerpetualLineV2();
+
             searchPerpetualLine.setCycleCountNo(Collections.singletonList(perpetualHeader.getCycleCountNo()));
             if (searchPerpetualHeader.getCompanyCodeId() != null) {
                 searchPerpetualLine.setCompanyCodeId(searchPerpetualHeader.getCompanyCodeId());
@@ -1781,27 +1877,36 @@ public class PerpetualHeaderService extends BaseService {
             }
 
             if (searchPerpetualHeader.getCycleCounterId() != null) {
-                searchPerpetualLine.setCycleCounterId(searchPerpetualHeader.getCycleCounterId().toString());
+                searchPerpetualLine.setCycleCounterId(searchPerpetualHeader.getCycleCounterId().get(0));
             }
 
             if (searchPerpetualHeader.getLineStatusId() != null) {
                 searchPerpetualLine.setLineStatusId(searchPerpetualHeader.getLineStatusId());
             }
+            searchPerpetualLine.setWarehouseId(perpetualHeader.getWarehouseId());
 
+            log.info("SearchPerpetualLine Input: " + searchPerpetualLine);
             PerpetualLineV2Specification spec = new PerpetualLineV2Specification(searchPerpetualLine);
             List<PerpetualLineV2> perpetualLineList = perpetualLineV2Repository.stream(spec, PerpetualLineV2.class).collect(Collectors.toList());
             log.info("searchPerpetualLine result: " + perpetualLineList);
-            if (perpetualLineList == null || perpetualLineList.isEmpty()) {
-                log.info("searchPerpetualHeader: line null");
-                return listPerpetualHeaderEntity;
+//            if (perpetualLineList == null || perpetualLineList.isEmpty()) {
+//                log.info("searchPerpetualHeader: line null");
+//                return listPerpetualHeaderEntity;
+//            }
+
+            if (!perpetualLineList.isEmpty()) {
+                PerpetualHeaderEntityV2 perpetualHeaderEntity = new PerpetualHeaderEntityV2();
+                BeanUtils.copyProperties(perpetualHeader, perpetualHeaderEntity, CommonUtils.getNullPropertyNames(perpetualHeader));
+                perpetualHeaderEntity.setPerpetualLine(perpetualLineList);
+                listPerpetualHeaderEntity.add(perpetualHeaderEntity);
             }
 
-            PerpetualHeaderEntityV2 perpetualHeaderEntity = new PerpetualHeaderEntityV2();
-            BeanUtils.copyProperties(perpetualHeader, perpetualHeaderEntity, CommonUtils.getNullPropertyNames(perpetualHeader));
-            perpetualHeaderEntity.setPerpetualLine(perpetualLineList);
-            listPerpetualHeaderEntity.add(perpetualHeaderEntity);
+//            PerpetualHeaderEntityV2 perpetualHeaderEntity = new PerpetualHeaderEntityV2();
+//            BeanUtils.copyProperties(perpetualHeader, perpetualHeaderEntity, CommonUtils.getNullPropertyNames(perpetualHeader));
+//            perpetualHeaderEntity.setPerpetualLine(perpetualLineList);
+//            listPerpetualHeaderEntity.add(perpetualHeaderEntity);
         }
-        log.info("searchPerpetualHeader: " + searchPerpetualHeader.getLineStatusId());
+        log.info("searchPerpetualHeader output: " + listPerpetualHeaderEntity);
         return listPerpetualHeaderEntity;
     }
 }

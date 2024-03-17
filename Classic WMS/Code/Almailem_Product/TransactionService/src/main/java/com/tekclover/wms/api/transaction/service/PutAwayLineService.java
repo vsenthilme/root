@@ -1,9 +1,11 @@
 package com.tekclover.wms.api.transaction.service;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.controller.exception.BadRequestException;
 import com.tekclover.wms.api.transaction.model.IKeyValuePair;
 import com.tekclover.wms.api.transaction.model.auth.AuthToken;
 import com.tekclover.wms.api.transaction.model.dto.*;
+import com.tekclover.wms.api.transaction.model.errorlog.ErrorLog;
 import com.tekclover.wms.api.transaction.model.inbound.InboundLine;
 import com.tekclover.wms.api.transaction.model.inbound.gr.StorageBinPutAway;
 import com.tekclover.wms.api.transaction.model.inbound.inventory.Inventory;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.*;
@@ -98,6 +101,12 @@ public class PutAwayLineService extends BaseService {
 
     String statusDescription = null;
     String stockTypeDesc = null;
+
+    @Autowired
+    private ErrorLogRepository errorLogRepository;
+
+    @Autowired
+    private ErrorLogService errorLogService;
 
     //--------------------------------------------------------------------------------------------
 
@@ -764,7 +773,7 @@ public class PutAwayLineService extends BaseService {
 
     public List<PutAwayLineV2> getPutAwayLineV2(String companyCode, String plantId, String languageId,
                                                 String warehouseId, String preInboundNo, String refDocNumber,
-                                                Long lineNo, String itemCode) {
+                                                Long lineNo, String itemCode) throws IOException, CsvException {
         List<PutAwayLineV2> putAwayLine =
                 putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndPreInboundNoAndRefDocNumberAndLineNoAndItemCodeAndDeletionIndicator(
                         languageId,
@@ -777,6 +786,9 @@ public class PutAwayLineService extends BaseService {
                         itemCode,
                         0L);
         if (putAwayLine.isEmpty()) {
+            // Error Log
+            createPutAwayLineLog(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber, lineNo, itemCode,
+                    "PutAwayLine with given values and lineNo - " + lineNo + " doesn't exists.");
             throw new BadRequestException("The given values in PutAwayLine: warehouseId:" + warehouseId +
                     ",preInboundNo: " + preInboundNo +
                     ",lineNo: " + lineNo +
@@ -791,7 +803,7 @@ public class PutAwayLineService extends BaseService {
     public PutAwayLineV2 getPutAwayLineV2(String companyCode, String plantId, String languageId,
                                           String warehouseId, String goodsReceiptNo, String preInboundNo,
                                           String refDocNumber, String putAwayNumber, Long lineNo,
-                                          String itemCode, String proposedStorageBin, List<String> confirmedStorageBin) {
+                                          String itemCode, String proposedStorageBin, List<String> confirmedStorageBin) throws IOException, CsvException {
         Optional<PutAwayLineV2> putAwayLine =
                 putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndPreInboundNoAndRefDocNumberAndPutAwayNumberAndLineNoAndItemCodeAndProposedStorageBinAndConfirmedStorageBinInAndDeletionIndicator(
                         languageId,
@@ -808,6 +820,10 @@ public class PutAwayLineService extends BaseService {
                         confirmedStorageBin,
                         0L);
         if (putAwayLine.isEmpty()) {
+            // Error Log
+            createPutAwayLineLog1(languageId, companyCode, plantId, warehouseId, preInboundNo, refDocNumber,
+                    lineNo, itemCode, goodsReceiptNo, proposedStorageBin, confirmedStorageBin,
+                    "PutAwayLine with given values and confirmedStorageBin - " + confirmedStorageBin + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",goodsReceiptNo: " + goodsReceiptNo + "," +
                     ",preInboundNo: " + preInboundNo + "," +
@@ -832,7 +848,7 @@ public class PutAwayLineService extends BaseService {
      * @return
      */
     public List<PutAwayLineV2> getPutAwayLineV2(String companyCode, String plantId, String languageId,
-                                                String warehouseId, String refDocNumber, String putAwayNumber) {
+                                                String warehouseId, String refDocNumber, String putAwayNumber) throws IOException, CsvException {
         List<PutAwayLineV2> putAwayLine =
                 putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPutAwayNumberAndDeletionIndicator(
                         languageId,
@@ -843,6 +859,9 @@ public class PutAwayLineService extends BaseService {
                         putAwayNumber,
                         0L);
         if (putAwayLine.isEmpty()) {
+            // Error Log
+            createPutAwayLineLog2(languageId, companyCode, plantId, warehouseId, refDocNumber, putAwayNumber,
+                    "PutAwayLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: warehouseId:" + warehouseId +
                     ",refDocNumber: " + refDocNumber +
                     ",putAwayNumber: " + putAwayNumber +
@@ -909,7 +928,7 @@ public class PutAwayLineService extends BaseService {
      * @return
      */
     public List<PutAwayLineV2> getPutAwayLineV2(String companyCode, String plantId, String languageId,
-                                                String refDocNumber, String packBarcodes) {
+                                                String refDocNumber, String packBarcodes) throws IOException, CsvException {
         List<PutAwayLineV2> putAwayLine =
                 putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndDeletionIndicator(
                         languageId,
@@ -920,6 +939,9 @@ public class PutAwayLineService extends BaseService {
                         0L
                 );
         if (putAwayLine.isEmpty()) {
+            // Error Log
+            createPutAwayLineLog3(languageId, companyCode, plantId, refDocNumber, packBarcodes,
+                    "PutAwayLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: " +
                     ",refDocNumber: " + refDocNumber + "," +
                     ",packBarcodes: " + packBarcodes + "," +
@@ -929,7 +951,7 @@ public class PutAwayLineService extends BaseService {
     }
 
     public List<PutAwayLineV2> getPutAwayLineV2(String companyCode, String plantId,
-                                                String languageId, String refDocNumber) {
+                                                String languageId, String refDocNumber) throws IOException, CsvException {
         List<PutAwayLineV2> putAwayLine =
                 putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndDeletionIndicator(
                         languageId,
@@ -938,6 +960,9 @@ public class PutAwayLineService extends BaseService {
                         refDocNumber,
                         0L);
         if (putAwayLine.isEmpty()) {
+            // Error Log
+            createPutAwayLineLog4(languageId, companyCode, plantId, refDocNumber,
+                    "PutAwayLine with given values and refDocNumber - " + refDocNumber + " doesn't exists.");
             throw new BadRequestException("The given values: " +
                     "refDocNumber: " + refDocNumber +
                     " doesn't exist.");
@@ -1033,9 +1058,9 @@ public class PutAwayLineService extends BaseService {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public List<PutAwayLineV2> putAwayLineConfirmV2(@Valid List<PutAwayLineV2> newPutAwayLines, String loginUserID)
-            throws IllegalAccessException, InvocationTargetException, ParseException {
+            throws IllegalAccessException, InvocationTargetException, ParseException, CsvException, IOException {
         List<PutAwayLineV2> createdPutAwayLines = new ArrayList<>();
         log.info("newPutAwayLines to confirm : " + newPutAwayLines);
 
@@ -1124,9 +1149,15 @@ public class PutAwayLineService extends BaseService {
                 }
 
                 if (capacityCheck && !storageBinCapacityCheck) {
+                    // Error Log
+                    createPutAwayLineLog5(itemCodeCapacityCheck, newPutAwayLine.getRefDocNumber(), newPutAwayLine.getItemCode(), newPutAwayLine.getManufacturerName(),
+                            "Selected Bin is not under Capacity Check. Kindly Select a Capacity Enabled Bin!");
                     throw new BadRequestException("Selected Bin is not under Capacity Check. Kindly Select a Capacity Enabled Bin!");
                 }
                 if (!capacityCheck && storageBinCapacityCheck) {
+                    // Error Log
+                    createPutAwayLineLog6(storageBin, newPutAwayLine.getRefDocNumber(), newPutAwayLine.getItemCode(), newPutAwayLine.getManufacturerName(),
+                            "Selected ItemCode is not under Capacity Check. Kindly Select a Capacity Enabled Item!");
                     throw new BadRequestException("Selected ItemCode is not under Capacity Check. Kindly Select a Capacity Enabled Item!");
                 }
 //                if (!confirmedStorageBin.equalsIgnoreCase(proposedStorageBin)) {
@@ -1168,12 +1199,18 @@ public class PutAwayLineService extends BaseService {
                         }
 
                         if (remainingVolume <= 0) {
+                            // Error Log
+                            createPutAwayLineLog7(storageBin, remainingVolume, newPutAwayLine.getRefDocNumber(), newPutAwayLine.getItemCode(), newPutAwayLine.getManufacturerName(),
+                                    "Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin!");
                             throw new BadRequestException("Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin!");
                         }
 
                         allocateQty = newPutAwayLine.getPutawayConfirmedQty();
 
                         if (remainingVolume < cbmPerQuantity) {
+                            // Error Log
+                            createPutAwayLineLog7(storageBin, remainingVolume, newPutAwayLine.getRefDocNumber(), newPutAwayLine.getItemCode(), newPutAwayLine.getManufacturerName(),
+                                    "Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin.");
                             throw new BadRequestException("Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin!");
                         }
 
@@ -1181,6 +1218,9 @@ public class PutAwayLineService extends BaseService {
                         if (allocatedVolume <= remainingVolume) {
                             allocatedVolume = allocateQty * cbmPerQuantity;
                         } else {
+                            // Error Log
+                            createPutAwayLineLog7(storageBin, allocatedVolume, newPutAwayLine.getRefDocNumber(), newPutAwayLine.getItemCode(), newPutAwayLine.getManufacturerName(),
+                                    "Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin!");
                             throw new BadRequestException("Selected Bin doesn't have required space to store the selected quantity. Kindly Select a different Bin!");
                         }
                         if (totalVolume >= remainingVolume) {
@@ -1320,9 +1360,11 @@ public class PutAwayLineService extends BaseService {
                         plantId,
                         warehouseId);
 
+                if (description != null) {
                 newPutAwayLine.setCompanyDescription(description.getCompanyDesc());
                 newPutAwayLine.setPlantDescription(description.getPlantDesc());
                 newPutAwayLine.setWarehouseDescription(description.getWarehouseDesc());
+                }
 
                 StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForPutAwayLineV2(companyCode, plantId, languageId, warehouseId,
                         newPutAwayLine.getPreInboundNo(), newPutAwayLine.getRefDocNumber(), newPutAwayLine.getLineNo(), itemCode, newPutAwayLine.getManufacturerName());
@@ -1386,13 +1428,16 @@ public class PutAwayLineService extends BaseService {
                 dbPutAwayLine.setCreatedBy(loginUserID);
                 dbPutAwayLine.setUpdatedBy(loginUserID);
                 dbPutAwayLine.setConfirmedBy(loginUserID);
-//                dbPutAwayLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
-//                dbPutAwayLine.setConfirmedOn(DateUtils.getCurrentKWTDateTime());
-                dbPutAwayLine.setCreatedOn(new Date());
+
+                dbPutAwayHeader = putAwayHeaderService.getPutawayHeaderV2(companyCode, plantId, languageId, warehouseId, newPutAwayLine.getPutAwayNumber());
+                log.info("putawayHeader: " + dbPutAwayHeader);
+                if(dbPutAwayHeader != null) {
+                    dbPutAwayLine.setCreatedOn(dbPutAwayHeader.getCreatedOn());
+                } else {
+                    dbPutAwayLine.setCreatedOn(new Date());
+                }
                 dbPutAwayLine.setUpdatedOn(new Date());
                 dbPutAwayLine.setConfirmedOn(new Date());
-
 
                 Optional<PutAwayLineV2> existingPutAwayLine = putAwayLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndGoodsReceiptNoAndPreInboundNoAndRefDocNumberAndPutAwayNumberAndLineNoAndItemCodeAndProposedStorageBinAndConfirmedStorageBinInAndDeletionIndicator(
                         newPutAwayLine.getLanguageId(), newPutAwayLine.getCompanyCode(), newPutAwayLine.getPlantId(),
@@ -1407,6 +1452,16 @@ public class PutAwayLineService extends BaseService {
 
                 if (existingPutAwayLine.isEmpty()) {
 
+                    try {
+                        String leadTime = putAwayLineV2Repository.getleadtime(companyCode, plantId, languageId, warehouseId, newPutAwayLine.getPutAwayNumber(), new Date());
+                        dbPutAwayLine.setReferenceField1(leadTime);
+                        log.info("LeadTime: " + leadTime);
+                    } catch (Exception e) {
+                        // Error Log
+                        createPutAwayLineLog10(dbPutAwayLine, e.toString());
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                     PutAwayLineV2 createdPutAwayLine = putAwayLineV2Repository.save(dbPutAwayLine);
 
                     log.info("---------->createdPutAwayLine created: " + createdPutAwayLine);
@@ -1593,7 +1648,7 @@ public class PutAwayLineService extends BaseService {
                         mastersService.updateStorageBinV2(dbPutAwayLine.getConfirmedStorageBin(), dbStorageBin,
                                 dbPutAwayLine.getCompanyCode(), dbPutAwayLine.getPlantId(), dbPutAwayLine.getLanguageId(), dbPutAwayLine.getWarehouseId(),
                                 loginUserID, authTokenForMastersService.getAccess_token());
-
+                        AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
 //                        if (isInventoryCreated && isInventoryMovemoentCreated) {
                         if (isInventoryMovemoentCreated) {
                             List<PutAwayHeaderV2> headers = putAwayHeaderService.getPutAwayHeaderV2(createdPutAwayLine.getWarehouseId(),
@@ -1603,12 +1658,37 @@ public class PutAwayLineService extends BaseService {
                                     createdPutAwayLine.getCompanyCode(),
                                     createdPutAwayLine.getPlantId(),
                                     createdPutAwayLine.getLanguageId());
-                            statusDescription = stagingLineV2Repository.getStatusDescription(20L, createdPutAwayLine.getLanguageId());
                             for (PutAwayHeaderV2 putAwayHeader : headers) {
-                                putAwayHeader.setStatusId(20L);
-                                putAwayHeader.setStatusDescription(statusDescription);
-                                putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
-                                log.info("putAwayHeader updated: " + putAwayHeader);
+                                log.info("putawayConfirmQty, putawayQty: " + createdPutAwayLine.getPutawayConfirmedQty() + ", " + putAwayHeader.getPutAwayQuantity());
+
+                                    putAwayHeader.setStatusId(20L);
+                                    log.info("PutawayHeader StatusId : 20");
+                                    statusDescription = stagingLineV2Repository.getStatusDescription(putAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
+                                    putAwayHeader.setStatusDescription(statusDescription);
+                                    putAwayHeader = putAwayHeaderV2Repository.save(putAwayHeader);
+                                    log.info("putAwayHeader updated: " + putAwayHeader);
+
+                                if(createdPutAwayLine.getPutawayConfirmedQty() < putAwayHeader.getPutAwayQuantity()){
+                                    log.info("New PutawayHeader Creation: ");
+                                    PutAwayHeaderV2 newPutAwayHeader = new PutAwayHeaderV2();
+                                    BeanUtils.copyProperties(putAwayHeader, newPutAwayHeader, CommonUtils.getNullPropertyNames(putAwayHeader));
+
+                                    // PA_NO
+                                    long NUM_RAN_CODE = 7;
+                                    String nextPANumber = getNextRangeNumber(NUM_RAN_CODE, companyCode, plantId, languageId, warehouseId, authTokenForIDMasterService.getAccess_token());
+                                    newPutAwayHeader.setPutAwayNumber(nextPANumber);                           //PutAway Number
+
+                                    newPutAwayHeader.setReferenceField1(String.valueOf(putAwayHeader.getPutAwayQuantity()));
+                                    Double PUTAWAY_QTY = (putAwayHeader.getPutAwayQuantity() != null ? putAwayHeader.getPutAwayQuantity() : 0) - (createdPutAwayLine.getPutawayConfirmedQty() != null ? createdPutAwayLine.getPutawayConfirmedQty() : 0);
+                                    newPutAwayHeader.setPutAwayQuantity(PUTAWAY_QTY);
+                                    log.info("OrderQty ReCalcuated/Changed : " + PUTAWAY_QTY);
+                                    newPutAwayHeader.setStatusId(19L);
+                                    log.info("PutawayHeader StatusId : 19");
+                                    statusDescription = stagingLineV2Repository.getStatusDescription(newPutAwayHeader.getStatusId(), createdPutAwayLine.getLanguageId());
+                                    newPutAwayHeader.setStatusDescription(statusDescription);
+                                    newPutAwayHeader = putAwayHeaderV2Repository.save(newPutAwayHeader);
+                                    log.info("putAwayHeader created: " + newPutAwayHeader);
+                                }
                             }
 
                             /*--------------------- INBOUNDTABLE Updates ------------------------------------------*/
@@ -1663,6 +1743,8 @@ public class PutAwayLineService extends BaseService {
             return createdPutAwayLines;
 
         } catch (Exception e) {
+            // Error Log
+            createPutAwayLineLog9(newPutAwayLines, e.toString());
             e.printStackTrace();
             throw e;
         }
@@ -1741,8 +1823,6 @@ public class PutAwayLineService extends BaseService {
         dbPutAwayLine.setDeletionIndicator(0L);
         dbPutAwayLine.setCreatedBy(loginUserID);
         dbPutAwayLine.setUpdatedBy(loginUserID);
-//        dbPutAwayLine.setCreatedOn(DateUtils.getCurrentKWTDateTime());
-//        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayLine.setCreatedOn(new Date());
         dbPutAwayLine.setUpdatedOn(new Date());
         PutAwayLineV2 createdPutAwayLine = putAwayLineRepository.save(dbPutAwayLine);
@@ -1846,7 +1926,7 @@ public class PutAwayLineService extends BaseService {
                                              String refDocNumber, String putAwayNumber, Long lineNo, String itemCode,
                                              String proposedStorageBin, String confirmedStorageBin,
                                              String loginUserID, PutAwayLineV2 updatePutAwayLine)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         PutAwayLineV2 dbPutAwayLine = getPutAwayLineV2(companyCode, plantId, languageId, warehouseId,
                 goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber,
                 lineNo, itemCode, proposedStorageBin, Arrays.asList(confirmedStorageBin));
@@ -1866,7 +1946,6 @@ public class PutAwayLineService extends BaseService {
         PutAwayLineV2 dbPutAwayLine = new PutAwayLineV2();
         BeanUtils.copyProperties(updatePutAwayLine, dbPutAwayLine, CommonUtils.getNullPropertyNames(updatePutAwayLine));
         dbPutAwayLine.setUpdatedBy(loginUserID);
-//        dbPutAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
         dbPutAwayLine.setUpdatedOn(new Date());
         return putAwayLineV2Repository.save(dbPutAwayLine);
     }
@@ -1888,17 +1967,19 @@ public class PutAwayLineService extends BaseService {
      */
     public void deletePutAwayLineV2(String languageId, String companyCodeId, String plantId, String warehouseId,
                                     String goodsReceiptNo, String preInboundNo, String refDocNumber, String putAwayNumber, Long lineNo,
-                                    String itemCode, String proposedStorageBin, String confirmedStorageBin, String loginUserID) throws ParseException {
+                                    String itemCode, String proposedStorageBin, String confirmedStorageBin, String loginUserID) throws ParseException, IOException, CsvException {
         PutAwayLineV2 putAwayLine = getPutAwayLineV2(companyCodeId, plantId, languageId, warehouseId,
                 goodsReceiptNo, preInboundNo, refDocNumber, putAwayNumber,
                 lineNo, itemCode, proposedStorageBin, Arrays.asList(confirmedStorageBin));
         if (putAwayLine != null) {
             putAwayLine.setDeletionIndicator(1L);
             putAwayLine.setUpdatedBy(loginUserID);
-//            putAwayLine.setUpdatedOn(DateUtils.getCurrentKWTDateTime());
             putAwayLine.setUpdatedOn(new Date());
             putAwayLineRepository.save(putAwayLine);
         } else {
+            // Exception Log
+            createPutAwayLineLog8(languageId, companyCodeId, plantId, warehouseId, preInboundNo, refDocNumber, lineNo, itemCode,
+                    goodsReceiptNo, putAwayNumber, proposedStorageBin, confirmedStorageBin, "Error in deleting PutAwayLine with Id - " + confirmedStorageBin);
             throw new EntityNotFoundException("Error in deleting Id: " + confirmedStorageBin);
         }
     }
@@ -1925,7 +2006,7 @@ public class PutAwayLineService extends BaseService {
      * @param dbPutAwayLine
      * @return
      */
-    private InventoryMovement createInventoryMovementV2(PutAwayLineV2 dbPutAwayLine) {
+    private InventoryMovement createInventoryMovementV2(PutAwayLineV2 dbPutAwayLine) throws IOException, CsvException {
         InventoryMovement inventoryMovement = new InventoryMovement();
         BeanUtils.copyProperties(dbPutAwayLine, inventoryMovement, CommonUtils.getNullPropertyNames(dbPutAwayLine));
         inventoryMovement.setCompanyCodeId(dbPutAwayLine.getCompanyCode());
@@ -2065,4 +2146,266 @@ public class PutAwayLineService extends BaseService {
         }
         return putAwayLineV2List;
     }
+
+    //==========================================PutAwayLine_ErrorLog===================================================
+    private void createPutAwayLineLog(String languageId, String companyCode, String plantId, String warehouseId,
+                                      String preInboundNo, String refDocNumber, Long lineNo, String itemCode, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(String.valueOf(lineNo));
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog1(String languageId, String companyCode, String plantId, String warehouseId, String preInboundNo,
+                                       String refDocNumber, Long lineNo, String itemCode, String goodsReceiptNo,
+                                       String proposedStorageBin, List<String> confirmedStorageBin, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        for (String dbConfirmedStorageBin : confirmedStorageBin) {
+            ErrorLog errorLog = new ErrorLog();
+
+            errorLog.setOrderTypeId(dbConfirmedStorageBin);
+            errorLog.setOrderDate(new Date());
+            errorLog.setLanguageId(languageId);
+            errorLog.setCompanyCodeId(companyCode);
+            errorLog.setPlantId(plantId);
+            errorLog.setWarehouseId(warehouseId);
+            errorLog.setRefDocNumber(refDocNumber);
+            errorLog.setItemCode(itemCode);
+            errorLog.setReferenceField1(preInboundNo);
+            errorLog.setReferenceField2(String.valueOf(lineNo));
+            errorLog.setReferenceField4(goodsReceiptNo);
+            errorLog.setReferenceField5(proposedStorageBin);
+            errorLog.setReferenceField6(dbConfirmedStorageBin);
+            errorLog.setErrorMessage(error);
+            errorLog.setCreatedBy("MSD_API");
+            errorLog.setCreatedOn(new Date());
+            errorLogRepository.save(errorLog);
+            errorLogList.add(errorLog);
+        }
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog2(String languageId, String companyCode, String plantId, String warehouseId,
+                                       String refDocNumber, String putAwayNumber, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(putAwayNumber);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog3(String languageId, String companyCode, String plantId,
+                                       String refDocNumber, String packBarcodes, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setReferenceField1(packBarcodes);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog4(String languageId, String companyCode, String plantId,
+                                       String refDocNumber, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(refDocNumber);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog5(ImBasicData1 imBasicData1, String refDocNo, String itemCode, String manufacturerName, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(imBasicData1.getUomId());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(imBasicData1.getLanguageId());
+        errorLog.setCompanyCodeId(imBasicData1.getCompanyCodeId());
+        errorLog.setPlantId(imBasicData1.getPlantId());
+        errorLog.setWarehouseId(imBasicData1.getWarehouseId());
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setItemCode(itemCode);
+        errorLog.setManufacturerName(manufacturerName);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog6(StorageBinV2 storageBinV2, String refDocNo, String itemCode, String manufacturerName, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(storageBinV2.getStorageBin());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(storageBinV2.getLanguageId());
+        errorLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
+        errorLog.setPlantId(storageBinV2.getPlantId());
+        errorLog.setWarehouseId(storageBinV2.getWarehouseId());
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setItemCode(itemCode);
+        errorLog.setManufacturerName(manufacturerName);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog7(StorageBinV2 storageBinV2, Double volume, String refDocNo, String itemCode, String manufacturerName, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(storageBinV2.getStorageBin());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(storageBinV2.getLanguageId());
+        errorLog.setCompanyCodeId(storageBinV2.getCompanyCodeId());
+        errorLog.setPlantId(storageBinV2.getPlantId());
+        errorLog.setWarehouseId(storageBinV2.getWarehouseId());
+        errorLog.setRefDocNumber(refDocNo);
+        errorLog.setItemCode(itemCode);
+        errorLog.setManufacturerName(manufacturerName);
+        errorLog.setReferenceField1("volume - " + volume);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog8(String languageId, String companyCode, String plantId, String warehouseId, String preInboundNo,
+                                       String refDocNumber, Long lineNo, String itemCode, String goodsReceiptNo, String putAwayNumber,
+                                       String proposedStorageBin, String confirmedStorageBin, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(confirmedStorageBin);
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(languageId);
+        errorLog.setCompanyCodeId(companyCode);
+        errorLog.setPlantId(plantId);
+        errorLog.setWarehouseId(warehouseId);
+        errorLog.setRefDocNumber(refDocNumber);
+        errorLog.setItemCode(itemCode);
+        errorLog.setReferenceField1(preInboundNo);
+        errorLog.setReferenceField2(String.valueOf(lineNo));
+        errorLog.setReferenceField3(putAwayNumber);
+        errorLog.setReferenceField4(goodsReceiptNo);
+        errorLog.setReferenceField5(proposedStorageBin);
+        errorLog.setReferenceField6(confirmedStorageBin);
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog9(List<PutAwayLineV2> putAwayLineV2List, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        for (PutAwayLineV2 putAwayLineV2 : putAwayLineV2List) {
+            ErrorLog errorLog = new ErrorLog();
+
+            errorLog.setOrderTypeId(putAwayLineV2.getPutAwayNumber());
+            errorLog.setOrderDate(new Date());
+            errorLog.setLanguageId(putAwayLineV2.getLanguageId());
+            errorLog.setCompanyCodeId(putAwayLineV2.getCompanyCode());
+            errorLog.setPlantId(putAwayLineV2.getPlantId());
+            errorLog.setWarehouseId(putAwayLineV2.getWarehouseId());
+            errorLog.setRefDocNumber(putAwayLineV2.getRefDocNumber());
+            errorLog.setItemCode(putAwayLineV2.getItemCode());
+            errorLog.setManufacturerName(putAwayLineV2.getManufacturerName());
+            errorLog.setReferenceField1(putAwayLineV2.getGoodsReceiptNo());
+            errorLog.setReferenceField2(putAwayLineV2.getPreInboundNo());
+            errorLog.setReferenceField3(String.valueOf(putAwayLineV2.getLineNo()));
+            errorLog.setReferenceField4(putAwayLineV2.getProposedStorageBin());
+            errorLog.setReferenceField5(putAwayLineV2.getConfirmedStorageBin());
+            errorLog.setErrorMessage(error);
+            errorLog.setCreatedBy("MSD_API");
+            errorLog.setCreatedOn(new Date());
+            errorLogRepository.save(errorLog);
+            errorLogList.add(errorLog);
+        }
+        errorLogService.writeLog(errorLogList);
+    }
+
+    private void createPutAwayLineLog10(PutAwayLineV2 putAwayLine, String error) throws IOException, CsvException {
+
+        List<ErrorLog> errorLogList = new ArrayList<>();
+        ErrorLog errorLog = new ErrorLog();
+        errorLog.setOrderTypeId(putAwayLine.getPutAwayNumber());
+        errorLog.setOrderDate(new Date());
+        errorLog.setLanguageId(putAwayLine.getLanguageId());
+        errorLog.setCompanyCodeId(putAwayLine.getCompanyCode());
+        errorLog.setPlantId(putAwayLine.getPlantId());
+        errorLog.setWarehouseId(putAwayLine.getWarehouseId());
+        errorLog.setRefDocNumber(putAwayLine.getRefDocNumber());
+        errorLog.setItemCode(putAwayLine.getItemCode());
+        errorLog.setManufacturerName(putAwayLine.getManufacturerName());
+        errorLog.setReferenceField1(putAwayLine.getGoodsReceiptNo());
+        errorLog.setReferenceField2(putAwayLine.getPreInboundNo());
+        errorLog.setReferenceField3(String.valueOf(putAwayLine.getLineNo()));
+        errorLog.setReferenceField4(putAwayLine.getProposedStorageBin());
+        errorLog.setReferenceField5(putAwayLine.getConfirmedStorageBin());
+        errorLog.setErrorMessage(error);
+        errorLog.setCreatedBy("MSD_API");
+        errorLog.setCreatedOn(new Date());
+        errorLogRepository.save(errorLog);
+        errorLogList.add(errorLog);
+        errorLogService.writeLog(errorLogList);
+    }
+
 }

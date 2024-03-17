@@ -1,5 +1,6 @@
 package com.tekclover.wms.api.transaction.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
+import com.opencsv.exceptions.CsvException;
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.AddQualityLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.QualityLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.quality.v2.SearchQualityLineV2;
@@ -65,7 +67,7 @@ public class QualityLineController {
     @PostMapping("")
     public ResponseEntity<?> postQualityLine(@Valid @RequestBody List<AddQualityLine> newQualityLine,
                                              @RequestParam String loginUserID)
-            throws IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException, IOException, CsvException {
         List<QualityLine> createdQualityLine = qualitylineService.createQualityLine(newQualityLine, loginUserID);
         return new ResponseEntity<>(createdQualityLine, HttpStatus.OK);
     }

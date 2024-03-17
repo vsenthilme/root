@@ -102,4 +102,14 @@ export class InquiresService {
     return this.http.post<any>(this.url + '/findInquiry', obj);
   }
 
+
+
+  getfile(url: any, code: any): Promise<File> {
+    return this.http
+      .get<any>('/doc-storage/download?fileName=' + url + '&location=' + code, {
+        responseType: 'blob' as 'json',
+      })
+      .toPromise();
+  }
+  
 }

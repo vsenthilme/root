@@ -57,12 +57,12 @@ public class ClientControlGroupService {
             IKeyValuePair iKeyValuePair =
                     clientControlGroupRepository.getDescription(clientControlGroup.getCompanyId(),
                             clientControlGroup.getLanguageId(), clientControlGroup.getClientId(),
-                            clientControlGroup.getGroupTypeId(), clientControlGroup.getSubGroupTypeId());
+                            clientControlGroup.getGroupTypeId());
 
             if (iKeyValuePair != null) {
                 clientControlGroup.setCompanyIdAndDescription(iKeyValuePair.getCompanyDescription());
                 clientControlGroup.setClientName(iKeyValuePair.getClientName());
-                clientControlGroup.setSubGroupTypeName(iKeyValuePair.getSubGroupTypeName());
+//                clientControlGroup.setSubGroupTypeName(iKeyValuePair.getSubGroupTypeName());
                 clientControlGroup.setGroupTypeName(iKeyValuePair.getGroupTypeName());
             }
             controlGroupList.add(clientControlGroup);
@@ -75,24 +75,21 @@ public class ClientControlGroupService {
      * @param companyId
      * @param languageId
      * @param clientId
-     * @param subGroupTypeId
      * @param groupTypeId
      * @param versionNumber
      * @return
      */
-    public ClientControlGroup getCLientControlGroup(String companyId, String languageId, Long clientId,
-                                                    Long subGroupTypeId, Long groupTypeId, Long versionNumber) {
+    public ClientControlGroup getCLientControlGroup(String companyId, String languageId, Long clientId, Long groupTypeId, Long versionNumber) {
 
         Optional<ClientControlGroup> dbClientControlGroupId =
-                clientControlGroupRepository.findByCompanyIdAndLanguageIdAndClientIdAndSubGroupTypeIdAndGroupTypeIdAndVersionNumberAndDeletionIndicator(
-                        companyId, languageId, clientId, subGroupTypeId, groupTypeId, versionNumber, 0L);
+                clientControlGroupRepository.findByCompanyIdAndLanguageIdAndClientIdAndGroupTypeIdAndVersionNumberAndDeletionIndicator(
+                        companyId, languageId, clientId, groupTypeId, versionNumber, 0L);
 
         if (dbClientControlGroupId.isEmpty()) {
             throw new BadRequestException("The given values : " +
                     " companyCodeId - " + companyId +
                     " languageId - " + languageId +
                     " clientId - " + clientId +
-                    " subGroupTypeId - " + subGroupTypeId +
                     " groupTypeId - " + groupTypeId +
                     " versionNumber - " + versionNumber +
                     " doesn't exist.");
@@ -102,11 +99,10 @@ public class ClientControlGroupService {
             BeanUtils.copyProperties(dbClientControlGroupId.get(), newClientControlGroupId, CommonUtils.getNullPropertyNames(dbClientControlGroupId));
 
             IKeyValuePair iKeyValuePair =
-                    clientControlGroupRepository.getDescription(companyId, languageId, clientId, groupTypeId, subGroupTypeId);
+                    clientControlGroupRepository.getDescription(companyId, languageId, clientId, groupTypeId);
             if (iKeyValuePair != null) {
                 newClientControlGroupId.setCompanyIdAndDescription(iKeyValuePair.getCompanyDescription());
                 newClientControlGroupId.setClientName(iKeyValuePair.getClientName());
-                newClientControlGroupId.setSubGroupTypeName(iKeyValuePair.getSubGroupTypeName());
                 newClientControlGroupId.setGroupTypeName(iKeyValuePair.getGroupTypeName());
             }
             return newClientControlGroupId;
@@ -141,12 +137,11 @@ public class ClientControlGroupService {
 
             IKeyValuePair iKeyValuePair = clientControlGroupRepository.getDescription(
                     clientControlGroup.getCompanyId(), clientControlGroup.getLanguageId(), clientControlGroup.getClientId(),
-                    clientControlGroup.getGroupTypeId(), clientControlGroup.getSubGroupTypeId());
+                    clientControlGroup.getGroupTypeId());
 
             if (iKeyValuePair != null) {
                 clientControlGroup.setCompanyIdAndDescription(iKeyValuePair.getCompanyDescription());
                 clientControlGroup.setClientName(iKeyValuePair.getClientName());
-                clientControlGroup.setSubGroupTypeName(iKeyValuePair.getSubGroupTypeName());
                 clientControlGroup.setGroupTypeName(iKeyValuePair.getGroupTypeName());
             }
             clientControlGroupList.add(clientControlGroup);
@@ -165,11 +160,10 @@ public class ClientControlGroupService {
             throws IllegalAccessException, InvocationTargetException {
 
         ClientControlGroup duplicateClientControlGroup =
-                clientControlGroupRepository.findByCompanyIdAndLanguageIdAndClientIdAndSubGroupTypeIdAndGroupTypeIdAndStatusIdAndDeletionIndicator(
+                clientControlGroupRepository.findByCompanyIdAndLanguageIdAndClientIdAndGroupTypeIdAndStatusIdAndDeletionIndicator(
                         newClientControlGroup.getCompanyId(),
                         newClientControlGroup.getLanguageId(),
                         newClientControlGroup.getClientId(),
-                        newClientControlGroup.getSubGroupTypeId(),
                         newClientControlGroup.getGroupTypeId(),
                         0L,
                         0L);
@@ -180,8 +174,7 @@ public class ClientControlGroupService {
         }
         IKeyValuePair iKeyValuePair = clientControlGroupRepository.getDescription(
                 newClientControlGroup.getCompanyId(), newClientControlGroup.getLanguageId(),
-                newClientControlGroup.getClientId(), newClientControlGroup.getGroupTypeId(),
-                newClientControlGroup.getSubGroupTypeId());
+                newClientControlGroup.getClientId(), newClientControlGroup.getGroupTypeId());
 
         ClientControlGroup dbClientControlGroup = new ClientControlGroup();
         BeanUtils.copyProperties(newClientControlGroup, dbClientControlGroup, CommonUtils.getNullPropertyNames(newClientControlGroup));
@@ -189,14 +182,12 @@ public class ClientControlGroupService {
         if (iKeyValuePair != null) {
             dbClientControlGroup.setCompanyIdAndDescription(iKeyValuePair.getCompanyDescription());
             dbClientControlGroup.setClientName(iKeyValuePair.getClientName());
-            dbClientControlGroup.setSubGroupTypeName(iKeyValuePair.getSubGroupTypeName());
             dbClientControlGroup.setGroupTypeName(iKeyValuePair.getGroupTypeName());
         } else {
             throw new EntityNotFoundException("The Given values of companyId - "
                     + newClientControlGroup.getCompanyId() + " languageId - "
                     + newClientControlGroup.getLanguageId() + " clientId - "
-                    + newClientControlGroup.getClientId() + " subGroupTypeId - "
-                    + newClientControlGroup.getSubGroupTypeId() + " groupTypeId - "
+                    + newClientControlGroup.getClientId() +  " groupTypeId - "
                     + newClientControlGroup.getGroupTypeId() + " doesn't exists ");
         }
 
@@ -224,7 +215,6 @@ public class ClientControlGroupService {
      * @param languageId
      * @param clientId
      * @param versionNumber
-     * @param subGroupTypeId
      * @param groupTypeId
      * @param loginUserID
      * @param updateClientControlGroup
@@ -233,11 +223,10 @@ public class ClientControlGroupService {
      * @throws InvocationTargetException
      */
     public ClientControlGroup updateClientControlGroup(String companyId, String languageId, Long clientId, Long versionNumber,
-                                                       Long subGroupTypeId, Long groupTypeId, String loginUserID,
-                                                       UpdateClientControlGroup updateClientControlGroup)
+                                                        Long groupTypeId, String loginUserID, UpdateClientControlGroup updateClientControlGroup)
             throws IllegalAccessException, InvocationTargetException {
         ClientControlGroup dbClientControlGroup =
-                getCLientControlGroup(companyId, languageId, clientId, subGroupTypeId, groupTypeId, versionNumber);
+                getCLientControlGroup(companyId, languageId, clientId, groupTypeId, versionNumber);
         BeanUtils.copyProperties(updateClientControlGroup, dbClientControlGroup, CommonUtils.getNullPropertyNames(updateClientControlGroup));
 
         if (updateClientControlGroup.getStatusId() != 0) {
@@ -253,14 +242,13 @@ public class ClientControlGroupService {
      * @param languageId
      * @param clientId
      * @param versionNumber
-     * @param subGroupTypeId
      * @param groupTypeId
      * @param loginUserID
      */
     public void deleteClientControlGroup(String companyId, String languageId, Long clientId, Long versionNumber,
-                                         Long subGroupTypeId, Long groupTypeId, String loginUserID) {
+                                         Long groupTypeId, String loginUserID) {
         ClientControlGroup dbClientControlGroup =
-                getCLientControlGroup(companyId, languageId, clientId, subGroupTypeId, groupTypeId, versionNumber);
+                getCLientControlGroup(companyId, languageId, clientId, groupTypeId, versionNumber);
 
         if (dbClientControlGroup != null) {
             dbClientControlGroup.setDeletionIndicator(1L);

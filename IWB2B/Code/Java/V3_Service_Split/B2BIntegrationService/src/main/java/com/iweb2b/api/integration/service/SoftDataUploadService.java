@@ -159,14 +159,127 @@ public class SoftDataUploadService {
 		}
 		return null;
 	}
-	
+
+	public ConsignmentResponse createConsignmentNew (Consignment newConsignment, String loginUserId) {
+		try {
+			ConsignmentEntity dbConsignmentEntity = new ConsignmentEntity();
+			BeanUtils.copyProperties(newConsignment, dbConsignmentEntity, CommonUtils.getNullPropertyNames(newConsignment));
+
+			OriginDetailsEntity dbOriginDetailsEntity = new OriginDetailsEntity();
+			Origin_Details newOriginDetail = newConsignment.getOrigin_details();
+			BeanUtils.copyProperties(newOriginDetail, dbOriginDetailsEntity, CommonUtils.getNullPropertyNames(newOriginDetail));
+
+			// State validation
+			log.info("dbOriginDetailsEntity.getState() : " + dbOriginDetailsEntity.getState());
+			if (dbOriginDetailsEntity.getState() == null) {
+				dbOriginDetailsEntity.setState("KUWAIT");
+			} else if (dbOriginDetailsEntity.getState() != null && dbOriginDetailsEntity.getState().trim().length() == 0) {
+				dbOriginDetailsEntity.setState("KUWAIT");
+			}
+
+			DestinationDetailEntity dbDestinationDetailEntity = new DestinationDetailEntity();
+			Destination_Details newDestinationDetail = newConsignment.getDestination_details();
+			BeanUtils.copyProperties(newDestinationDetail, dbDestinationDetailEntity, CommonUtils.getNullPropertyNames(newDestinationDetail));
+
+			// State validation
+			if (dbDestinationDetailEntity.getState() == null) {
+				dbDestinationDetailEntity.setState("KSA");
+			} else if (dbDestinationDetailEntity.getState() != null && dbDestinationDetailEntity.getState().trim().length() == 0) {
+				dbDestinationDetailEntity.setState("KSA");
+			}
+
+			dbConsignmentEntity.setCreated_at(new Date());
+
+			// Call Shipsy API
+			ConsignmentResponse response = integrationService.postClientSoftdataUpload (newConsignment);
+			log.info("Shipsy Response : " + response);
+
+			if (response != null) {
+				dbConsignmentEntity.setReference_number(response.getReference_number());
+
+				//hard code for success orders
+				dbConsignmentEntity.setBoutiqaatPushStatus("PASS");
+				dbConsignmentEntity.setOrderType("1");
+
+				Set<PiecesDetailsEntity> listPiecesDetailsEntity = new HashSet<>();
+
+				dbConsignmentEntity.setConsignmentId(System.currentTimeMillis());
+				dbOriginDetailsEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+				dbDestinationDetailEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+
+				if (newConsignment.getPieces_detail() != null) {
+					newConsignment.getPieces_detail().forEach(piece -> {
+						PiecesDetailsEntity dbPiecesDetailsEntity = new PiecesDetailsEntity();
+						BeanUtils.copyProperties(piece, dbPiecesDetailsEntity, CommonUtils.getNullPropertyNames(piece));
+						dbPiecesDetailsEntity.setDeclared_value(newConsignment.getDeclared_value());
+						dbPiecesDetailsEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+						listPiecesDetailsEntity.add(dbPiecesDetailsEntity);
+					});
+				}
+				dbConsignmentEntity.setOriginDetailsEntity(dbOriginDetailsEntity);
+				dbConsignmentEntity.setDestinationDetailEntity(dbDestinationDetailEntity);
+				dbConsignmentEntity.setPiecesDetailsEntities(listPiecesDetailsEntity);
+				ConsignmentEntity createdConsignmentEntity = consignmentRepository.save(dbConsignmentEntity);
+				log.info("Local createdConsignmentEntity ------->: " + createdConsignmentEntity);
+				return response;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return null;
+	}
+
+	// POST - CREATE ORDER LOCALLY
+	public ConsignmentEntity createConsignmentInLocalNew (Consignment newConsignment, String loginUserId) {
+		try {
+			ConsignmentEntity dbConsignmentEntity = new ConsignmentEntity();
+			BeanUtils.copyProperties(newConsignment, dbConsignmentEntity, CommonUtils.getNullPropertyNames(newConsignment));
+			
+			OriginDetailsEntity dbOriginDetailsEntity = new OriginDetailsEntity();
+			Origin_Details newOriginDetail = newConsignment.getOrigin_details();
+			BeanUtils.copyProperties(newOriginDetail, dbOriginDetailsEntity, CommonUtils.getNullPropertyNames(newOriginDetail));
+			
+			DestinationDetailEntity dbDestinationDetailEntity = new DestinationDetailEntity();
+			Destination_Details newDestinationDetail = newConsignment.getDestination_details();
+			BeanUtils.copyProperties(newDestinationDetail, dbDestinationDetailEntity, CommonUtils.getNullPropertyNames(newDestinationDetail));
+			
+			dbConsignmentEntity.setCreated_at(new Date());
+			
+			dbConsignmentEntity.setReference_number(newConsignment.getReference_number());
+
+			dbConsignmentEntity.setConsignmentId(System.currentTimeMillis());
+			dbOriginDetailsEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+			dbDestinationDetailEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+
+			Set<PiecesDetailsEntity> listPiecesDetailsEntity = new HashSet<>();
+			if (newConsignment.getPieces_detail() != null) {
+				newConsignment.getPieces_detail().forEach(piece -> {
+					PiecesDetailsEntity dbPiecesDetailsEntity = new PiecesDetailsEntity();
+					BeanUtils.copyProperties(piece, dbPiecesDetailsEntity, CommonUtils.getNullPropertyNames(piece));
+					dbPiecesDetailsEntity.setConsignmentId(dbConsignmentEntity.getConsignmentId());
+					listPiecesDetailsEntity.add(dbPiecesDetailsEntity);
+				});
+			}
+			dbConsignmentEntity.setOriginDetailsEntity(dbOriginDetailsEntity);
+			dbConsignmentEntity.setDestinationDetailEntity(dbDestinationDetailEntity);
+			dbConsignmentEntity.setPiecesDetailsEntities(listPiecesDetailsEntity);
+			ConsignmentEntity createdConsignmentEntity = consignmentRepository.save(dbConsignmentEntity);
+			log.info("createdConsignmentEntity ------->: " + createdConsignmentEntity);
+			return createdConsignmentEntity;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 	// POST - CREATE ORDER LOCALLY
 	public ConsignmentEntity createConsignmentInLocal (Consignment newConsignment, String loginUserId)
 			throws IllegalAccessException, InvocationTargetException, Exception {
 		try {
 			ConsignmentEntity dbConsignmentEntity = new ConsignmentEntity();
 			BeanUtils.copyProperties(newConsignment, dbConsignmentEntity, CommonUtils.getNullPropertyNames(newConsignment));
-			
+
 			OriginDetailsEntity dbOriginDetailsEntity = new OriginDetailsEntity();
 			Origin_Details newOriginDetail = newConsignment.getOrigin_details();
 			BeanUtils.copyProperties(newOriginDetail, dbOriginDetailsEntity, CommonUtils.getNullPropertyNames(newOriginDetail));
@@ -175,7 +288,7 @@ public class SoftDataUploadService {
 			} else {
 				dbOriginDetailsEntity.setOriginId(recordId);
 			}
-			
+
 			DestinationDetailEntity dbDestinationDetailEntity = new DestinationDetailEntity();
 			Destination_Details newDestinationDetail = newConsignment.getDestination_details();
 			BeanUtils.copyProperties(newDestinationDetail, dbDestinationDetailEntity, CommonUtils.getNullPropertyNames(newDestinationDetail));
@@ -184,21 +297,21 @@ public class SoftDataUploadService {
 			} else {
 				dbDestinationDetailEntity.setDestinationId(recordId);
 			}
-			
+
 			dbConsignmentEntity.setCreated_at(new Date());
-			
+
 			dbConsignmentEntity.setReference_number(newConsignment.getReference_number());
 			ConsignmentEntity createdConsignmentEntity = consignmentRepository.save(dbConsignmentEntity);
 			log.info("createdConsignmentEntity ------->: " + createdConsignmentEntity);
-			
+
 			dbOriginDetailsEntity.setConsignmentId(createdConsignmentEntity.getConsignmentId());
 			OriginDetailsEntity createdOriginDetailsEntity = originDetailRepository.save(dbOriginDetailsEntity);
 			log.info("createdOriginDetailsEntity ------->: " + createdOriginDetailsEntity);
-			
+
 			dbDestinationDetailEntity.setConsignmentId(createdConsignmentEntity.getConsignmentId());
 			DestinationDetailEntity createdDestinationDetail = destinationDetailRepository.save(dbDestinationDetailEntity);
 			log.info("createdDestinationDetail ------->: " + createdDestinationDetail);
-			
+
 			List<PiecesDetailsEntity> listPiecesDetailsEntity = new ArrayList<>();
 			if (newConsignment.getPieces_detail() != null) {
 				newConsignment.getPieces_detail().forEach(piece -> {

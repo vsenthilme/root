@@ -51,7 +51,7 @@ public class SoftDataUploadController {
 	@PostMapping("/order")
 	public ResponseEntity<?> postConsignment(@Valid @RequestBody Consignment newConsignment,
 			@RequestParam String loginUserID) throws Exception {
-		ConsignmentResponse response = softDataUploadService.createConsignment(newConsignment, loginUserID);
+		ConsignmentResponse response = softDataUploadService.createConsignmentNew(newConsignment, loginUserID);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

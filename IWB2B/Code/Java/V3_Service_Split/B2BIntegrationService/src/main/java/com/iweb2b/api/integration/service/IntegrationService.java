@@ -630,7 +630,8 @@ public class IntegrationService {
                         try {
                             Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
                             consignment.setScanType(INTRANSIT_TO_HUB);
-                            ConsignmentEntity response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+//                            ConsignmentEntity response = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+                            ConsignmentEntity response = softDataUploadService.createConsignmentInLocalNew(consignment, "From Shipsy");
                             log.info("created Consignment in  LocalDB : " + response);
                         } catch (Exception e) {
                             log.info("ERROR: Create Consignment in  LocalDB : " + e.toString());
@@ -668,7 +669,8 @@ public class IntegrationService {
 		                		if (consignmentEntity == null) {
 		                			Consignment consignment = softDataUploadService.getConsignmentFromShipsy(newConsignmentWebhook.getReference_number());
 			                        consignment.setScanType(INTRANSIT_TO_HUB);
-			                        ConsignmentEntity createdConsignmentEntity = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+//			                        ConsignmentEntity createdConsignmentEntity = softDataUploadService.createConsignmentInLocal(consignment, "From Shipsy");
+			                        ConsignmentEntity createdConsignmentEntity = softDataUploadService.createConsignmentInLocalNew(consignment, "From Shipsy");
 			                        log.info("--------created QP Consignment in B2B DB : " + createdConsignmentEntity);
 			                        
 			                        ConsignmentEntity newlyCreatedConsignmentEntity =
@@ -1702,7 +1704,7 @@ public class IntegrationService {
     }
 
     /**
-     * 
+     *
      * @param jntFailureResponseDesc
      * @return
      */

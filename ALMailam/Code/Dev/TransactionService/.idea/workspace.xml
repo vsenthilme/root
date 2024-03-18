@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b735f6fa-4d7c-4dab-9124-f1bb885b48ce" name="Changes" comment="inboundHeader_line_source_company_branch_field_added">
+    <list default="true" id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/controller/PreOutboundHeaderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/controller/PreOutboundHeaderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreOutboundHeaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreOutboundHeaderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreOutboundLineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreOutboundLineService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +23,12 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="TransactionService" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -38,23 +41,21 @@
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 3
-}</component>
-  <component name="ProjectId" id="2dp7XUPecZRrXeK6Y1ilOsk9eYl" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2dr4ScccFTfGKw8jKLYk1mOAd4D" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.TransactionService [:TransactionServiceApplication.main()].executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/localgit/root/ALMailam/Code/Dev/WrapperService"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -67,42 +68,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b735f6fa-4d7c-4dab-9124-f1bb885b48ce" name="Changes" comment="" />
-      <created>1710693207375</created>
+      <changelist id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="" />
+      <created>1710752863977</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1710693207375</updated>
+      <updated>1710752863977</updated>
     </task>
-    <task id="LOCAL-00001" summary="property_update">
-      <option name="closed" value="true" />
-      <created>1710693275625</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1710693275625</updated>
-    </task>
-    <task id="LOCAL-00002" summary="inboundHeader_line_source_company_branch_field_added">
-      <option name="closed" value="true" />
-      <created>1710741110306</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1710741110306</updated>
-    </task>
-    <task id="LOCAL-00003" summary="inboundHeader_line_source_company_branch_field_added">
-      <option name="closed" value="true" />
-      <created>1710741364122</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1710741364122</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="property_update" />
-    <MESSAGE value="inboundHeader_line_source_company_branch_field_added" />
-    <option name="LAST_COMMIT_MESSAGE" value="inboundHeader_line_source_company_branch_field_added" />
   </component>
 </project>

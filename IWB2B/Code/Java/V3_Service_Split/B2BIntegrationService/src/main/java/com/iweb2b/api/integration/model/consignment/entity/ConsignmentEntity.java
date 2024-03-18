@@ -2,13 +2,9 @@ package com.iweb2b.api.integration.model.consignment.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity (name = "ConsignmentEntity")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tblconsignment")
+@Table(name = "tblconsignment1")
 public class ConsignmentEntity implements Serializable {
 	
     @Id
@@ -127,10 +123,21 @@ public class ConsignmentEntity implements Serializable {
     
     @Column(name = "QP_WH_STATUS")
     private String qp_webhook_status;
-    
+
     @Column(name = "IS_CANCELLED")
     private Long cancelStatus;
-    
+
     @Column(name = "HSN_CODE", columnDefinition = "nvarchar(100)")
     private String hsn_code;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "consignmentId")
+    private OriginDetailsEntity originDetailsEntity;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "consignmentId")
+    private DestinationDetailEntity destinationDetailEntity;
+
+    @OneToMany(mappedBy = "consignmentId",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PiecesDetailsEntity> piecesDetailsEntities;
 }

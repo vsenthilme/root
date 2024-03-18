@@ -4271,5 +4271,13 @@ public class TransactionServiceController {
         return transactionService.findSupplierInvoiceHeader(searchSupplierInvoiceHeader, authToken);
     }
 
+    @ApiOperation(response = PickListHeader.class, value = "order Cancellation") // label for swagger
+    @DeleteMapping("/outbound/orderCancellation")
+    public ResponseEntity<?> orderCancellation(@RequestParam String languageId, @RequestParam String companyCodeId, @RequestParam String plantId,
+                                               @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String loginUserID,
+                                               @RequestParam String authToken) throws java.text.ParseException {
+        PreOutboundHeaderV2 orderCancelled = transactionService.orderCancellation(companyCodeId, plantId, languageId, warehouseId, refDocNumber, loginUserID, authToken);
+        return new ResponseEntity<>(orderCancelled, HttpStatus.OK);
+    }
 
 }

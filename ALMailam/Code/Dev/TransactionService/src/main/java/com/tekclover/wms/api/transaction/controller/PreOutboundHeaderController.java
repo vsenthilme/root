@@ -153,7 +153,7 @@ public class PreOutboundHeaderController {
     @GetMapping("/v2/orderCancellation")
     public ResponseEntity<?> orderCancellation(@RequestParam String languageId, @RequestParam String companyCodeId, @RequestParam String plantId,
                                                @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String loginUserID) throws Exception {
-        PickListHeader orderCancelled = preoutboundheaderService.orderCancellation(companyCodeId, plantId, languageId, warehouseId, refDocNumber, loginUserID);
+        PreOutboundHeaderV2 orderCancelled = preoutboundheaderService.orderCancellation(companyCodeId, plantId, languageId, warehouseId, refDocNumber, loginUserID);
         return new ResponseEntity<>(orderCancelled, HttpStatus.OK);
     }
 }

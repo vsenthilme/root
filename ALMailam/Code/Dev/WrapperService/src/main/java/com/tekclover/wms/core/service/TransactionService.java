@@ -13326,8 +13326,8 @@ public class TransactionService {
      * @return
      * @throws ParseException
      */
-    public PickListHeader orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                            String refDocNumber, String loginUserID, String authToken) throws ParseException {
+    public PreOutboundHeaderV2 orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                 String refDocNumber, String loginUserID, String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -13344,8 +13344,8 @@ public class TransactionService {
                     .queryParam("loginUserID", loginUserID);
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
-            ResponseEntity<PickListHeader> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
-                    entity, PickListHeader.class);
+            ResponseEntity<PreOutboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
+                    entity, PreOutboundHeaderV2.class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();
 

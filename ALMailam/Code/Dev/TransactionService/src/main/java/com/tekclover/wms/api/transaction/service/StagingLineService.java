@@ -1295,7 +1295,7 @@ public class StagingLineService extends BaseService {
                                                    String preInboundNo, String refDocNumber, String stagingNo, String palletCode, String caseCode, Long lineNo,
                                                    String itemCode, String loginUserID, StagingLineEntityV2 updateStagingLine)
             throws IllegalAccessException, InvocationTargetException, java.text.ParseException {
-
+        log.info("ItemCode, updateStagingline.getItemCode, Mfr_name : " + itemCode +", " + updateStagingLine.getItemCode() +", " + updateStagingLine.getManufacturerName());
         if(itemCode.contains("%20") && updateStagingLine.getItemCode() == null){
             StagingLineEntityV2 dbStagingLineEntity = getStagingLineV2(companyCode, plantId, languageId, warehouseId, preInboundNo,
                     refDocNumber, stagingNo, palletCode, caseCode, lineNo);

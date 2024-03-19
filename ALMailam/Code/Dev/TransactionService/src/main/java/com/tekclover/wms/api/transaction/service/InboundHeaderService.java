@@ -1499,6 +1499,7 @@ public class InboundHeaderService extends BaseService {
     public AXApiResponse updateInboundHeaderPartialConfirmV2(String companyCode, String plantId, String languageId, String warehouseId,
                                                              String preInboundNo, String refDocNumber, String loginUserID) {
 
+        log.info("Partial Confirmation Process Initiated Order Number -----> " + refDocNumber);
         // PutawayHeader Validation
         long putAwayHeaderStatusIdCount = putAwayHeaderService.getPutawayHeaderByStatusIdV2(companyCode, plantId, warehouseId, preInboundNo, refDocNumber);
         log.info("PutAwayHeader status----> : " + putAwayHeaderStatusIdCount);
@@ -1528,6 +1529,7 @@ public class InboundHeaderService extends BaseService {
                                     grLine.getLineNo(),
                                     grLine.getPreInboundNo(),
                                     grLine.getPackBarcodes());
+                    log.info("PutawayLine List: " + putAwayLineList.size());
                     if (putAwayLineList != null) {
                         for(PutAwayLineV2 putAwayLine : putAwayLineList) {
                             InventoryV2 createdInventory = createInventoryV2(putAwayLine, grLine.getQuantityType());
@@ -1603,7 +1605,7 @@ public class InboundHeaderService extends BaseService {
      * @return
      */
     private InventoryV2 createInventoryV2(PutAwayLineV2 putAwayLine, String quantityType) {
-
+        log.info("Create Inventory Initiated: " + new Date());
         String palletCode = null;
         String caseCode = null;
         try {
@@ -1617,6 +1619,7 @@ public class InboundHeaderService extends BaseService {
                     "99999", 3L,0L);
 
             if (existinginventory != null) {
+                log.info("Create Inventory bin Class Id 3 Initiated: " + new Date());
                 double INV_QTY = existinginventory.getInventoryQuantity() - putAwayLine.getPutawayConfirmedQty();
                 log.info("INV_QTY : " + INV_QTY);
 
@@ -1647,6 +1650,7 @@ public class InboundHeaderService extends BaseService {
         }
 
         try {
+            log.info("Create Inventory bin Class Id 1 Initiated: " + new Date());
             InventoryV2 inventory = new InventoryV2();
             BeanUtils.copyProperties(putAwayLine, inventory, CommonUtils.getNullPropertyNames(putAwayLine));
 

@@ -1228,6 +1228,37 @@ public class GrLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCode
+     * @param languageId
+     * @param plantId
+     * @param warehouseId
+     * @param refDocNumber
+     * @param packBarcodes
+     * @param itemCode
+     * @param manufacturerName
+     * @param lineNumber
+     * @return
+     */
+    public List<GrLineV2> getGrLineV2ForReversal(String companyCode, String languageId, String plantId, String warehouseId, String refDocNumber,
+                                                 String packBarcodes, String itemCode, String manufacturerName, Long lineNumber) {
+
+        List<GrLineV2> grLine =
+                grLineV2Repository.findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPackBarcodesAndItemCodeAndManufacturerNameAndLineNoAndDeletionIndicator(
+                        languageId,
+                        companyCode,
+                        plantId,
+                        warehouseId,
+                        refDocNumber,
+                        packBarcodes,
+                        itemCode,
+                        manufacturerName,
+                        lineNumber,
+                        0L);
+        return grLine;
+    }
+
+    /**
      * @param companyCode
      * @param languageId
      * @param plantId

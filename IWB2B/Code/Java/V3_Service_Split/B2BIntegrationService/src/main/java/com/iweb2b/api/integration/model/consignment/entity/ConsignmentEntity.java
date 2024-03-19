@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Entity (name = "ConsignmentEntity")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tblconsignment1")
+@Table(name = "tblconsignment3")
 public class ConsignmentEntity implements Serializable {
 	
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CONSIGNMENT_ID")
     private Long consignmentId = 0L;
     

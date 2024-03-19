@@ -1278,18 +1278,18 @@ public class PutAwayHeaderService extends BaseService {
          * 1. If STATUS_ID=20, then
          */
         List<PutAwayHeaderV2> putAwayHeaderList = getPutAwayHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber, putAwayNumber);
-        List<GrLineV2> grLineList = grLineService.getGrLineV2ForReversalWithStatusId(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
-//        List<IInventoryImpl> createInventoryMovement = null;
+//        List<GrLineV2> grLineList = grLineService.getGrLineV2ForReversal(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
+        List<GrLineV2> grLineList = null;
 
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();
 
         // Fetching Item Code
         String itemCode = null;
         String manufactureName = null;
-        if (grLineList != null && !grLineList.isEmpty()) {
-            itemCode = grLineList.get(0).getItemCode();
-            manufactureName = grLineList.get(0).getManufacturerName();
-        }
+//        if (grLineList != null && !grLineList.isEmpty()) {
+//            itemCode = grLineList.get(0).getItemCode();
+//            manufactureName = grLineList.get(0).getManufacturerName();
+//        }
 
         for (PutAwayHeaderV2 dbPutAwayHeader : putAwayHeaderList) {
             warehouseId = dbPutAwayHeader.getWarehouseId();
@@ -1331,6 +1331,7 @@ public class PutAwayHeaderService extends BaseService {
                         log.info("dbPutAwayLine---------> : " + dbPutAwayLine);
 
                         itemCode = dbPutAwayLine.getItemCode();
+                        manufactureName = dbPutAwayLine.getManufacturerName();
 
                         ImBasicData imBasicData = new ImBasicData();
                         imBasicData.setCompanyCodeId(companyCode);
@@ -1338,7 +1339,7 @@ public class PutAwayHeaderService extends BaseService {
                         imBasicData.setLanguageId(languageId);
                         imBasicData.setWarehouseId(warehouseId);
                         imBasicData.setItemCode(itemCode);
-                        imBasicData.setManufacturerName(dbPutAwayLine.getManufacturerName());
+                        imBasicData.setManufacturerName(manufactureName);
                         ImBasicData1 itemCodeCapacityCheck = mastersService.getImBasicData1ByItemCodeV2(imBasicData, authTokenForMastersService.getAccess_token());
                         log.info("ImbasicData1 : " + itemCodeCapacityCheck);
                         if (itemCodeCapacityCheck != null) {
@@ -1647,6 +1648,13 @@ public class PutAwayHeaderService extends BaseService {
             dbPutAwayHeader.setUpdatedOn(new Date());
             PutAwayHeaderV2 updatedPutAwayHeader = putAwayHeaderV2Repository.save(dbPutAwayHeader);
             log.info("updatedPutAwayHeader : " + updatedPutAwayHeader);
+
+            Long lineNumber = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
+            grLineList = grLineService.getGrLineV2ForReversal(companyCode, plantId, languageId, warehouseId, refDocNumber,
+                    packBarcodes, dbPutAwayHeader.getReferenceField5(), dbPutAwayHeader.getManufacturerName(), lineNumber);
+
+            //update the statusId to complete reversal process
+            reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
         }
 
         // Insert a record into INVENTORYMOVEMENT table as below
@@ -1656,8 +1664,9 @@ public class PutAwayHeaderService extends BaseService {
 //            }
 //        }
 
-        //update the statusId to complete reversal process
-        reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
+//        //update the statusId to complete reversal process
+//        reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
+        reversalProcessUpdateHeader(preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
 
         return putAwayHeaderList;
     }
@@ -2104,6 +2113,7 @@ public class PutAwayHeaderService extends BaseService {
 
         //update the statusId to complete reversal process
         reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
+        reversalProcessUpdateHeader(preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
 
         return putAwayHeaderList;
     }
@@ -2168,6 +2178,52 @@ public class PutAwayHeaderService extends BaseService {
             }
         }
 
+//        //Gr Header
+//        GrHeaderV2 updateGrHeaderStatus = grHeaderService.getGrHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
+//        log.info("GrHeader for Status Update: " + updateGrHeaderStatus);
+//        if (updateGrHeaderStatus != null) {
+//            updateGrHeaderStatus.setStatusId(16L);
+//            statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
+//            updateGrHeaderStatus.setStatusDescription(statusDescription);
+//            grHeaderV2Repository.save(updateGrHeaderStatus);
+//            log.info("GrHeader status updated successfully");
+//        }
+//
+//        // PREINBOUNDHEADER Update
+//        PreInboundHeaderEntityV2 preInboundHeader = preInboundHeaderService.
+//                getPreInboundHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
+//        log.info("preInboundHeader---found-------> : " + preInboundHeader);
+//
+//        preInboundHeader.setStatusId(5L);
+//        statusDescription = stagingLineV2Repository.getStatusDescription(5L, languageId);
+//        preInboundHeader.setStatusDescription(statusDescription);
+//        PreInboundHeaderEntity updatedPreInboundHeaderEntity = preInboundHeaderV2Repository.save(preInboundHeader);
+//        log.info("PreInboundHeader status updated---@------> : " + updatedPreInboundHeaderEntity);
+//
+//
+//        // Update INBOUNDHEADER
+//
+//        InboundHeaderV2 updateInboundHeader = inboundHeaderService.getInboundHeaderByEntityV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
+//        updateInboundHeader.setStatusId(5L);
+//        statusDescription = stagingLineV2Repository.getStatusDescription(5L, languageId);
+//        updateInboundHeader.setStatusDescription(statusDescription);
+//        inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
+//        log.info("optInboundHeader Status Updated: " + updateInboundHeader);
+//
+//
+//        StagingHeaderV2 stagingHeader = stagingHeaderService.getStagingHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber);
+//
+//        // STATUS_ID
+//        stagingHeader.setStatusId(14L);
+//        statusDescription = stagingLineV2Repository.getStatusDescription(14L, preInboundHeader.getLanguageId());
+//        stagingHeader.setStatusDescription(statusDescription);
+//        stagingHeaderV2Repository.save(stagingHeader);
+//        log.info("StagingHeader Status Updated: " + stagingHeader);
+    }
+
+    public void reversalProcessUpdateHeader(String preInboundNo, String companyCode, String plantId, String languageId,
+                                            String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
+        // Update PREINBOUNDHEADER and PREINBOUNDLINE table with STATUS_ID = 05 and update the other fields from UI
         //Gr Header
         GrHeaderV2 updateGrHeaderStatus = grHeaderService.getGrHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber);
         log.info("GrHeader for Status Update: " + updateGrHeaderStatus);
@@ -2175,6 +2231,7 @@ public class PutAwayHeaderService extends BaseService {
             updateGrHeaderStatus.setStatusId(16L);
             statusDescription = stagingLineV2Repository.getStatusDescription(16L, languageId);
             updateGrHeaderStatus.setStatusDescription(statusDescription);
+            updateGrHeaderStatus.setUpdatedBy(loginUserID);
             grHeaderV2Repository.save(updateGrHeaderStatus);
             log.info("GrHeader status updated successfully");
         }
@@ -2187,6 +2244,7 @@ public class PutAwayHeaderService extends BaseService {
         preInboundHeader.setStatusId(5L);
         statusDescription = stagingLineV2Repository.getStatusDescription(5L, languageId);
         preInboundHeader.setStatusDescription(statusDescription);
+        preInboundHeader.setUpdatedBy(loginUserID);
         PreInboundHeaderEntity updatedPreInboundHeaderEntity = preInboundHeaderV2Repository.save(preInboundHeader);
         log.info("PreInboundHeader status updated---@------> : " + updatedPreInboundHeaderEntity);
 
@@ -2197,6 +2255,7 @@ public class PutAwayHeaderService extends BaseService {
         updateInboundHeader.setStatusId(5L);
         statusDescription = stagingLineV2Repository.getStatusDescription(5L, languageId);
         updateInboundHeader.setStatusDescription(statusDescription);
+        updateInboundHeader.setUpdatedBy(loginUserID);
         inboundHeaderV2Repository.saveAndFlush(updateInboundHeader);
         log.info("optInboundHeader Status Updated: " + updateInboundHeader);
 
@@ -2207,6 +2266,7 @@ public class PutAwayHeaderService extends BaseService {
         stagingHeader.setStatusId(14L);
         statusDescription = stagingLineV2Repository.getStatusDescription(14L, preInboundHeader.getLanguageId());
         stagingHeader.setStatusDescription(statusDescription);
+        stagingHeader.setUpdatedBy(loginUserID);
         stagingHeaderV2Repository.save(stagingHeader);
         log.info("StagingHeader Status Updated: " + stagingHeader);
     }

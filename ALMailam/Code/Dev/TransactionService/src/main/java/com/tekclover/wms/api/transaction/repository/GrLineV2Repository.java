@@ -55,6 +55,10 @@ public interface GrLineV2Repository extends JpaRepository<GrLineV2, Long>, JpaSp
             String languageId, String companyCodeId, String plantId,
             String warehouseId, String refDocNumber, String packBarcodes, Long deletionIndicator);
 
+    List<GrLineV2> findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPackBarcodesAndStatusIdInAndDeletionIndicator(
+            String languageId, String companyCodeId, String plantId, String warehouseId,
+            String refDocNumber, String packBarcodes, List<Long> statusId, Long deletionIndicator);
+
     List<GrLineV2> findByGoodsReceiptNoAndItemCodeAndLineNoAndLanguageIdAndCompanyCodeAndPlantIdAndRefDocNumberAndPackBarcodesAndWarehouseIdAndPreInboundNoAndCaseCodeAndCreatedOnAndDeletionIndicator(
             String goodsReceiptNo, String itemCode, Long lineNo,
             String languageId, String companyCode, String plantId,

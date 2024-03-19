@@ -1278,7 +1278,7 @@ public class PutAwayHeaderService extends BaseService {
          * 1. If STATUS_ID=20, then
          */
         List<PutAwayHeaderV2> putAwayHeaderList = getPutAwayHeaderForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber, putAwayNumber);
-        List<GrLineV2> grLineList = grLineService.getGrLineV2ForReversal(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
+        List<GrLineV2> grLineList = grLineService.getGrLineV2ForReversalWithStatusId(companyCode, languageId, plantId, warehouseId, refDocNumber, packBarcodes);
 //        List<IInventoryImpl> createInventoryMovement = null;
 
         AuthToken authTokenForMastersService = authTokenService.getMastersServiceAuthToken();

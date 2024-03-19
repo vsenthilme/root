@@ -1968,7 +1968,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "iv.WH_TEXT warehouseDescription,\n" +
             "iv.STCK_TYP_TEXT stockTypeDescription,\n" +
             "iv.STATUS_TEXT statusDescription\n" +
-            "from tblinventory iv into #inventoryTempTable \n" +                //copy to temp table to avoid deadlock
+            "into #inventoryTempTable from tblinventory iv \n" +                //copy to temp table to avoid deadlock
             "where \n" +
             "iv.inv_id in (select inventoryId from #inv) and \n" +
             "(COALESCE(:companyCodeId, null) IS NULL OR (iv.c_id IN (:companyCodeId))) and \n" +

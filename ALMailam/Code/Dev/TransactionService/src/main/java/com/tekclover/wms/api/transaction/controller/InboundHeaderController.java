@@ -4,6 +4,7 @@ import com.tekclover.wms.api.transaction.model.inbound.*;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundLineV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SearchInboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.warehouse.inbound.confirmation.AXApiResponse;
 import com.tekclover.wms.api.transaction.service.InboundHeaderService;
@@ -166,6 +167,16 @@ public class InboundHeaderController {
                                                                  @RequestParam String loginUserID) {
         AXApiResponse createdInboundHeaderResponse =
                 inboundheaderService.updateInboundHeaderPartialConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
+        return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = InboundHeaderV2.class, value = "Inbound Header & Line Partial Confirm New") // label for swagger
+    @PostMapping("/v2/confirmIndividual/partial")
+    public ResponseEntity<?> updatePartialInboundHeaderConfirmNewV2(@RequestBody List<InboundLineV2> inboundLineList, @RequestParam String warehouseId,
+                                                                    @RequestParam String preInboundNo, @RequestParam String refDocNumber, @RequestParam String companyCode,
+                                                                    @RequestParam String plantId, @RequestParam String languageId, @RequestParam String loginUserID) {
+        AXApiResponse createdInboundHeaderResponse =
+                inboundheaderService.updateInboundHeaderPartialConfirmNewV2(inboundLineList, companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID);
         return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
     }
 

@@ -170,6 +170,24 @@ public interface InboundLineV2Repository extends JpaRepository<InboundLineV2, Lo
             @Param("updatedOn") Date updatedOn
     );
 
+    @Transactional
+    @Procedure(procedureName = "inboundline_status_update_ib_cnf_individual_proc")
+    public void updateInboundLineStatusUpdateInboundConfirmIndividualItemProc(
+            @Param("companyCodeId") String companyCode,
+            @Param("plantId") String plantId,
+            @Param("languageId") String languageId,
+            @Param("warehouseId") String warehouseId,
+            @Param("refDocNumber") String refDocNumber,
+            @Param("preInboundNo") String preInboundNo,
+            @Param("itemCode") String itemCode,
+            @Param("manufacturerName") String manufacturerName,
+            @Param("lineNumber") Long lineNumber,
+            @Param("statusId") Long statusId,
+            @Param("statusDescription") String statusDescription,
+            @Param("updatedBy") String updatedBy,
+            @Param("updatedOn") Date updatedOn
+    );
+
     InboundLineV2 findByLanguageIdAndCompanyCodeAndPlantIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndLineNoAndItemCodeAndManufacturerNameAndDeletionIndicator(
             String languageId, String companyCode, String plantId, String warehouseId, String refDocNumber,
             String preInboundNo, Long lineNo, String itemCode, String manufacturerName, Long deletionIndicator);

@@ -2465,6 +2465,16 @@ public class TransactionServiceController {
                 transactionService.updateInboundHeaderPartialConfirmV2(companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID, authToken);
         return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
     }
+    @ApiOperation(response = InboundHeaderV2.class, value = "Inbound Header & Line Partial Confirm with InboundLines Input") // label for swagger
+    @PostMapping("/inboundheader/v2/confirmIndividual/partial")
+    public ResponseEntity<?> patchInboundHeaderPartialWithInboundLinesConfirmV2(@RequestBody List<InboundLineV2> inboundLineList, @RequestParam String warehouseId,
+                                                                                @RequestParam String preInboundNo, @RequestParam String companyCode, @RequestParam String plantId,
+                                                                                @RequestParam String languageId, @RequestParam String refDocNumber,
+                                                                                @RequestParam String loginUserID, @RequestParam String authToken) {
+        AXApiResponse createdInboundHeaderResponse =
+                transactionService.updateInboundHeaderWithIbLinePartialConfirmV2(inboundLineList, companyCode, plantId, languageId, warehouseId, preInboundNo, refDocNumber, loginUserID, authToken);
+        return new ResponseEntity<>(createdInboundHeaderResponse, HttpStatus.OK);
+    }
 
     @ApiOperation(response = InboundHeaderV2.class, value = "Update InboundHeader V2") // label for swagger
     @RequestMapping(value = "/inboundheader/v2/{refDocNumber}", method = RequestMethod.PATCH)

@@ -8453,6 +8453,38 @@ public class TransactionService {
         }
     }
 
+    // PATCH - Partial Confirm - with InboundLines input
+    public AXApiResponse updateInboundHeaderWithIbLinePartialConfirmV2(List<InboundLineV2> inboundLineList, String companyCode, String plantId,
+                                                                       String languageId, String warehouseId, String preInboundNo, String refDocNumber,
+                                                                       String loginUserID, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            HttpEntity<?> entity = new HttpEntity<>(inboundLineList, headers);
+
+            HttpClient client = HttpClients.createDefault();
+            RestTemplate restTemplate = getRestTemplate();
+            restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "inboundheader/v2/partialConfirmIndividual")
+                    .queryParam("companyCode", companyCode)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("preInboundNo", preInboundNo)
+                    .queryParam("refDocNumber", refDocNumber)
+                    .queryParam("loginUserID", loginUserID);
+            ResponseEntity<AXApiResponse> result = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+                    AXApiResponse.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     // DELETE
     public boolean deleteInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId,
                                          String refDocNumber, String preInboundNo, String loginUserID, String authToken) {

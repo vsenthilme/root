@@ -1651,7 +1651,7 @@ public class PutAwayHeaderService extends BaseService {
             log.info("updatedPutAwayHeader : " + updatedPutAwayHeader);
 
             Long lineNumber = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
-            grLineList = grLineService.getGrLineV2ForReversal(companyCode, plantId, languageId, warehouseId, refDocNumber,
+            grLineList = grLineService.getGrLineV2ForReversal(companyCode, languageId, plantId, warehouseId, refDocNumber,
                     packBarcodes, dbPutAwayHeader.getReferenceField5(), dbPutAwayHeader.getManufacturerName(), lineNumber);
             log.info("Grline Reversal: " + grLineList);
 

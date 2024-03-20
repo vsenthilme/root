@@ -1256,6 +1256,7 @@ public class PutAwayHeaderService extends BaseService {
     public List<PutAwayHeaderV2> updatePutAwayHeaderReversalBatch(String companyCode, String plantId, String languageId, String warehouseId,
                                                                   String refDocNumber, String packBarcodes, String putAwayNumber, String loginUserID) throws ParseException {
 
+        log.info("Inbound Reversal Initiated : order Number, putaway Number ----> " + refDocNumber + ", " + putAwayNumber);
         String caseCode = null;
         String palletCode = null;
         String storageBin = null;
@@ -1652,6 +1653,7 @@ public class PutAwayHeaderService extends BaseService {
             Long lineNumber = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
             grLineList = grLineService.getGrLineV2ForReversal(companyCode, plantId, languageId, warehouseId, refDocNumber,
                     packBarcodes, dbPutAwayHeader.getReferenceField5(), dbPutAwayHeader.getManufacturerName(), lineNumber);
+            log.info("Grline Reversal: " + grLineList);
 
             //update the statusId to complete reversal process
             reversalProcess(grLineList, preInboundNo, companyCode, plantId, languageId, warehouseId, refDocNumber, loginUserID);
@@ -2133,6 +2135,8 @@ public class PutAwayHeaderService extends BaseService {
                                 String warehouseId, String refDocNumber, String loginUserID) throws ParseException {
         // Update PREINBOUNDHEADER and PREINBOUNDLINE table with STATUS_ID = 05 and update the other fields from UI
         // PREINBOUNDLINE Update
+        log.info("Line status revesal initiated ---> " );
+        log.info("GrLine : " + inputGrLineList);
         if (inputGrLineList != null && !inputGrLineList.isEmpty()) {
             for (GrLineV2 grLine : inputGrLineList) {
                 InboundLineV2 inboundLine = inboundLineService.getInboundLineV2(companyCode,

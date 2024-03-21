@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="reversal_get_inventory_fix">
+    <list default="true" id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="reversal_staging_line_fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PutAwayHeaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PutAwayHeaderService.java" afterDir="false" />
     </list>
@@ -51,7 +51,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Gradle.TransactionService [:TransactionServiceApplication.main()].executor": "Run",
+    "Gradle.TransactionService [:TransactionServiceApplication.main()].executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -152,7 +152,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710929857903</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="reversal_staging_line_fix">
+      <option name="closed" value="true" />
+      <created>1710939789160</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1710939789160</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -162,6 +170,7 @@
     <MESSAGE value="reversal_log_added_unallocate_tot_qty_code_added" />
     <MESSAGE value="reversal_get_grline_fix" />
     <MESSAGE value="reversal_get_inventory_fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="reversal_get_inventory_fix" />
+    <MESSAGE value="reversal_staging_line_fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="reversal_staging_line_fix" />
   </component>
 </project>

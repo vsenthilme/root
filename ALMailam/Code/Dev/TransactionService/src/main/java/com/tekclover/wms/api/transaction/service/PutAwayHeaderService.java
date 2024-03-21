@@ -2163,6 +2163,13 @@ public class PutAwayHeaderService extends BaseService {
         log.info("GrLine : " + inputGrLineList);
         if (inputGrLineList != null && !inputGrLineList.isEmpty()) {
             for (GrLineV2 grLine : inputGrLineList) {
+
+                List<PutAwayLineV2> putAwayLineList = putAwayLineService.getPutAwayLineForInboundConfirmV2(
+                        companyCode, plantId, languageId, warehouseId, refDocNumber,
+                        grLine.getItemCode(), grLine.getManufacturerName(), grLine.getLineNo(), preInboundNo);
+                log.info("PutawayLine List to check any partial Putaway done: " + putAwayLineList);
+
+                if(putAwayLineList == null) {
                 InboundLineV2 inboundLine = inboundLineService.getInboundLineV2(companyCode,
                         plantId, languageId, warehouseId, refDocNumber,
                         grLine.getPreInboundNo(), grLine.getLineNo(), grLine.getItemCode());
@@ -2173,6 +2180,7 @@ public class PutAwayHeaderService extends BaseService {
                 // warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, loginUserID, updateInboundLine
                 InboundLineV2 updatedInboundLine = inboundLineV2Repository.save(inboundLine);
                 log.info("InboundLine status updated: " + updatedInboundLine);
+                }
 
                 PreInboundLineEntityV2 preInboundLine = preInboundLineService.getPreInboundLineV2(
                         companyCode, plantId, languageId, grLine.getPreInboundNo(), warehouseId, refDocNumber, grLine.getLineNo(), grLine.getItemCode());

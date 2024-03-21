@@ -2180,6 +2180,11 @@ public class PutAwayHeaderService extends BaseService {
                 // warehouseId, refDocNumber, preInboundNo, lineNo, itemCode, loginUserID, updateInboundLine
                 InboundLineV2 updatedInboundLine = inboundLineV2Repository.save(inboundLine);
                 log.info("InboundLine status updated: " + updatedInboundLine);
+
+                //delete grline
+                grLine.setDeletionIndicator(1L);
+                grLineV2Repository.save(grLine);
+                log.info("grLine deleted successfully");
                 }
 
                 PreInboundLineEntityV2 preInboundLine = preInboundLineService.getPreInboundLineV2(
@@ -2207,10 +2212,6 @@ public class PutAwayHeaderService extends BaseService {
 //                    log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + stagingLineEntity);
 //                }
 
-                //delete grline
-                grLine.setDeletionIndicator(1L);
-                grLineV2Repository.save(grLine);
-                log.info("grLine deleted successfully");
             }
         }
 

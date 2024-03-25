@@ -4247,6 +4247,16 @@ public class TransactionServiceController {
       return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @ApiOperation(response = PreInboundHeaderV2.class, value = "Inbound Order Cancellation") // label for swagger
+    @GetMapping("/inboundOrder/cancellation")
+    public ResponseEntity<?> cancelInboundOrder(@RequestParam String companyCode, @RequestParam String languageId, @RequestParam String plantId,
+                                                @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String preInboundNo,
+                                                @RequestParam String loginUserID, @RequestParam String authToken) {
+
+        PreInboundHeaderV2 result = transactionService.inboundOrderCancellation(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserID, authToken);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     //==========================================Get All Exception Log Details==========================================
     @ApiOperation(response = ExceptionLog.class, value = "Get All Exception Log Details")
     @GetMapping("/exceptionlog/all")

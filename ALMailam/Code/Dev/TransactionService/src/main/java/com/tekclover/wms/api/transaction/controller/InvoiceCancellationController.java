@@ -1,6 +1,8 @@
 package com.tekclover.wms.api.transaction.controller;
 
 
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
+import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SearchSupplierInvoiceHeader;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SupplierInvoiceHeader;
@@ -44,10 +46,22 @@ public class InvoiceCancellationController {
                                                     @RequestParam String newInvoiceNo, @RequestParam String oldPreInboundNo,
                                                     @RequestParam String newPreInboundNo, @RequestParam String loginUserId) throws ParseException {
 
-           WarehouseApiResponse result = invoiceCancellationService.replaceSupplierInvoice(companyCode, languageId, plantId, warehouseId,
-                   oldPreInboundNo, oldInvoiceNo, newInvoiceNo, newPreInboundNo, loginUserId);
-           return new ResponseEntity<>(result, HttpStatus.OK);
-        }
+        WarehouseApiResponse result = invoiceCancellationService.replaceSupplierInvoice(companyCode, languageId, plantId, warehouseId,
+                oldPreInboundNo, oldInvoiceNo, newInvoiceNo, newPreInboundNo, loginUserId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation(response = PreInboundHeaderEntityV2.class, value = "Inbound Order Cancellation")
+    @GetMapping("/inboundOrderCancellation")
+    public ResponseEntity<?> cancelInboundOrder(@RequestParam String companyCode, @RequestParam String languageId,
+                                                @RequestParam String plantId, @RequestParam String warehouseId,
+                                                @RequestParam String refDocNumber, @RequestParam String preInboundNo,
+                                                @RequestParam String loginUserId) throws ParseException {
+
+        PreInboundHeaderEntityV2 result = invoiceCancellationService.inboundOrderCancellation(companyCode, languageId, plantId, warehouseId,
+                refDocNumber, preInboundNo, loginUserId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     @ApiOperation(response = PickListHeader.class, value = "Search PickListHeader") // label for swagger
 	@PostMapping("/findPickListHeader")

@@ -13294,6 +13294,36 @@ public class TransactionService {
         }
     }
 
+    //Inbound Order Cancellation
+    public PreInboundHeaderV2 inboundOrderCancellation(String companyCode, String plantId, String languageId, String warehouseId,
+                                                       String refDocNumber, String preInboundNo, String loginUserId, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "invoice/supplierInvoice/cancellation")
+                    .queryParam("companyCode", companyCode)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("refDocNumber", refDocNumber)
+                    .queryParam("preInboundNo", preInboundNo)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("loginUserId", loginUserId);
+
+            ResponseEntity<PreInboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity,
+                    PreInboundHeaderV2.class);
+            log.info("result : " + result.getBody());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     //==========================================Get All Exception Log Details==========================================
     public ExceptionLog[] getAllExceptionLogs(String authToken) {
         try {

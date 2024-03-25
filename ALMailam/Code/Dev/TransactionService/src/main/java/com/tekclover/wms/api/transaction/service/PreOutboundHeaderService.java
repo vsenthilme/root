@@ -4727,6 +4727,7 @@ public class PreOutboundHeaderService extends BaseService {
     private PickListCancellation pickListCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
                                                       String oldPickListNumber, String newPickListNumber, String oldPreOutboundNo, String loginUserID) throws Exception {
 
+        log.info("PickList Cancellation Initiated---> " + companyCodeId + "," + plantId + "," + languageId + "," + warehouseId + "," + oldPickListNumber + "," + oldPreOutboundNo);
         //Delete OutBoundHeader
         OutboundHeaderV2 outboundHeaderV2 = outboundHeaderService.deleteOutBoundHeader(companyCodeId, plantId, languageId, warehouseId, oldPickListNumber, oldPreOutboundNo, loginUserID);
         log.info("OutboundHeaderV2 Deleted SuccessFully" + outboundHeaderV2);

@@ -1010,7 +1010,8 @@ public class OutboundHeaderService {
     //Delete OutBoundHeaderV2
     public OutboundHeaderV2 deleteOutBoundHeader(String companyCodeId, String plantId, String languageId,
                                                  String warehouseId, String refDocNumber, String preOutboundNo,String loginUserID) throws Exception{
-
+        log.info("PickList Cancellation delete Outbound header Initiated---> "
+                + companyCodeId + "," + plantId + "," + languageId + "," + warehouseId + "," + refDocNumber + "," + preOutboundNo);
         OutboundHeaderV2 outboundHeaderV2 = outboundHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndDeletionIndicator(
                 companyCodeId, plantId, languageId, warehouseId, refDocNumber, preOutboundNo, 0L);
         log.info("PickList Cancellation - OutboundHeader : " + outboundHeaderV2);

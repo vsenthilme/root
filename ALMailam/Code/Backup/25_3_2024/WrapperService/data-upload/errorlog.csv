@@ -1,0 +1,2 @@
+orderId,orderTypeId,orderDate,errorMessage,languageId,companyCode,plantId,warehouseId,refDocNumber
+'4650','string',2024-02-24,"Connection refused: connect",'string','string','string','string','string'

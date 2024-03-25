@@ -1,0 +1,2 @@
+'orderId','orderTypeId','orderDate','errorMessage','languageId','companyCode','plantId','warehouseId','refDocNumber'
+,'string',,,'string','string','string','string','string'

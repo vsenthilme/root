@@ -1629,7 +1629,7 @@ public class PreOutboundHeaderService extends BaseService {
                                 oldPickListNumber.getPreOutboundNo()  + " Cancellation Initiated and followed by New PickList " + newPickListNo + " creation started");
 
                         //Delete old PickListData
-                        createPickListCancellation = pickListCancellation(companyCodeId, plantId, languageId, warehouseId, oldPickListNumber.getPickListNumber(), oldPickListNumber.getPreOutboundNo(), newPickListNo, loginUserID);
+                        createPickListCancellation = pickListCancellation(companyCodeId, plantId, languageId, warehouseId, oldPickListNumber.getPickListNumber(), newPickListNo, oldPickListNumber.getPreOutboundNo(), loginUserID);
                     }
                 }
             }

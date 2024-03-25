@@ -436,16 +436,45 @@ public class InvoiceCancellationService extends BaseService{
                     }
                     log.info("GrLine Present in cancelled SupplierInvoice : " + grLinePresent);
                     if (grLinePresent != null && !grLinePresent.isEmpty()) {
+                        List<GrLineV2> grLinePresentA = grLinePresent.stream().filter(n -> n.getQuantityType().equalsIgnoreCase("A")).collect(Collectors.toList());
+                        List<GrLineV2> grLinePresentD = grLinePresent.stream().filter(n -> n.getQuantityType().equalsIgnoreCase("D")).collect(Collectors.toList());
+                        Double grQtyA = 0D;
+                        Double acptQtyA = 0D;
+                        Double grQtyD = 0D;
+                        Double dmgQtyD = 0D;
+
                         List<PackBarcode> packBarcodeList = new ArrayList<>();
                         AddGrLineV2 newGrLine = new AddGrLineV2();
-                        PackBarcode newPackBarcode = new PackBarcode();
 
                         BeanUtils.copyProperties(dbStagingLine, newGrLine, CommonUtils.getNullPropertyNames(dbStagingLine));
 
                         AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
                         long NUM_RAN_ID = 6;
-                        String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
-                                dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
+
+                        if(grLinePresentA != null && !grLinePresentA.isEmpty()) {
+                            grQtyA = grLinePresentA.stream().mapToDouble(n -> n.getGoodReceiptQty()).sum();
+                            acptQtyA = grLinePresentA.stream().mapToDouble(n -> n.getAcceptedQty()).sum();
+                            PackBarcode newPackBarcode = new PackBarcode();
+                            String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
+                                    dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
+                            newPackBarcode.setQuantityType("A");
+                            newPackBarcode.setBarcode(nextRangeNumber);
+                            newPackBarcode.setCbmQuantity(0D);
+                            newPackBarcode.setCbm(0D);
+                            packBarcodeList.add(newPackBarcode);
+                        }
+                        if(grLinePresentD != null && !grLinePresentD.isEmpty()){
+                            grQtyD = grLinePresentD.stream().mapToDouble(n -> n.getGoodReceiptQty()).sum();
+                            dmgQtyD = grLinePresentD.stream().mapToDouble(n -> n.getDamageQty()).sum();
+                            PackBarcode newPackBarcode = new PackBarcode();
+                            String nextRangeNumber = getNextRangeNumber(NUM_RAN_ID, dbStagingLine.getCompanyCode(),
+                                    dbStagingLine.getPlantId(), dbStagingLine.getLanguageId(), dbStagingLine.getWarehouseId(), authTokenForIDMasterService.getAccess_token());
+                            newPackBarcode.setQuantityType("D");
+                            newPackBarcode.setBarcode(nextRangeNumber);
+                            newPackBarcode.setCbmQuantity(0D);
+                            newPackBarcode.setCbm(0D);
+                            packBarcodeList.add(newPackBarcode);
+                        }
 
 //                        boolean capacityCheck = false;
 //                        boolean storageBinCapacityCheck = false;
@@ -465,8 +494,8 @@ public class InvoiceCancellationService extends BaseService{
 //                        }
 
 //                        newPackBarcode.setQuantityType("A");
-                        newPackBarcode.setQuantityType(grLinePresent.get(0).getQuantityType());
-                        newPackBarcode.setBarcode(nextRangeNumber);
+//                        newPackBarcode.setQuantityType(grLinePresent.get(0).getQuantityType());
+//                        newPackBarcode.setBarcode(nextRangeNumber);
 
 //                        if (capacityCheck) {
 //
@@ -493,16 +522,16 @@ public class InvoiceCancellationService extends BaseService{
 //                        }
 //                        if (!capacityCheck) {
 
-                        newPackBarcode.setCbmQuantity(0D);
-                        newPackBarcode.setCbm(0D);
-//                        }
-
-                        packBarcodeList.add(newPackBarcode);
+//                        newPackBarcode.setCbmQuantity(0D);
+//                        newPackBarcode.setCbm(0D);
+////                        }
+//
+//                        packBarcodeList.add(newPackBarcode);
 
                         newGrLine.setOrderQty(dbStagingLine.getOrderQty());
-                        newGrLine.setGoodReceiptQty(grLinePresent.get(0).getGoodReceiptQty());
-                        newGrLine.setAcceptedQty(grLinePresent.get(0).getAcceptedQty());
-                        newGrLine.setDamageQty(grLinePresent.get(0).getDamageQty());
+                        newGrLine.setGoodReceiptQty(grQtyA);
+                        newGrLine.setAcceptedQty(acptQtyA);
+                        newGrLine.setDamageQty(dmgQtyD);
                         newGrLine.setGoodsReceiptNo(grHeader.getGoodsReceiptNo());
                         newGrLine.setManufacturerFullName(dbStagingLine.getManufacturerFullName());
                         newGrLine.setReferenceDocumentType(dbStagingLine.getReferenceDocumentType());

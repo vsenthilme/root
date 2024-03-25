@@ -5190,6 +5190,39 @@ public class TransactionService {
         }
     }
 
+    // GET - ShipmentDelivery
+    public ShipmentDeliveryReport[] getShipmentDeliveryReportV2(String companyCodeId, String plantId, String languageId, String warehouseId,
+                                                                String fromDeliveryDate, String toDeliveryDate, String storeCode, List<String> soType,
+                                                                String orderNumber, String preOutboundNo, String authToken)
+            throws Exception {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "reports/v2/shipmentDelivery/new")
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId)
+                    .queryParam("fromDeliveryDate", fromDeliveryDate)
+                    .queryParam("toDeliveryDate", toDeliveryDate).queryParam("storeCode", storeCode)
+                    .queryParam("orderNumber", orderNumber)
+                    .queryParam("preOutboundNo", preOutboundNo)
+                    .queryParam("soType", soType);
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<ShipmentDeliveryReport[]> result = getRestTemplate().exchange(builder.toUriString(),
+                    HttpMethod.GET, entity, ShipmentDeliveryReport[].class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 
     // GET - ShipmentDeliverySummary
     public ShipmentDeliverySummaryReport getShipmentDeliverySummaryReport(String fromDeliveryDate, String toDeliveryDate,
@@ -5277,6 +5310,35 @@ public class TransactionService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(getTransactionServiceApiUrl() + "reports/receiptConfirmation")
                     .queryParam("asnNumber", asnNumber);
+
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<ReceiptConfimationReport> result = getRestTemplate().exchange(builder.toUriString(),
+                    HttpMethod.GET, entity, ReceiptConfimationReport.class);
+            log.info("result : " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // GET - ReceiptConfimation-V2
+    public ReceiptConfimationReport getReceiptConfimationReportV2(String asnNumber, String preInboundNo, String companyCodeId, String plantId,
+                                                                  String languageId, String warehouseId, String authToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "ClassicWMS RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "reports/v2/receiptConfirmation")
+                    .queryParam("asnNumber", asnNumber)
+                    .queryParam("preInboundNo", preInboundNo)
+                    .queryParam("companyCodeId", companyCodeId)
+                    .queryParam("plantId", plantId)
+                    .queryParam("languageId", languageId)
+                    .queryParam("warehouseId", warehouseId);
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<ReceiptConfimationReport> result = getRestTemplate().exchange(builder.toUriString(),
@@ -8452,7 +8514,6 @@ public class TransactionService {
             throw e;
         }
     }
-
     // PATCH - Partial Confirm - with InboundLines input
     public AXApiResponse updateInboundHeaderWithIbLinePartialConfirmV2(List<InboundLineV2> inboundLineList, String companyCode, String plantId,
                                                                        String languageId, String warehouseId, String preInboundNo, String refDocNumber,
@@ -8484,7 +8545,6 @@ public class TransactionService {
             throw e;
         }
     }
-
     // DELETE
     public boolean deleteInboundHeaderV2(String companyCode, String plantId, String languageId, String warehouseId,
                                          String refDocNumber, String preInboundNo, String loginUserID, String authToken) {
@@ -13203,7 +13263,7 @@ public class TransactionService {
     /*-------------------------------Supplier Invoice Cancellation-------------------------------------*/
 
     public WarehouseApiResponse replaceInvoice(String companyCode, String plantId, String languageId, String warehouseId,
-                                               String newInvoiceNo, String oldInvoiceNo, String loginUserId, String authToken) {
+                                               String newInvoiceNo, String oldInvoiceNo, String newPreInboundNo, String oldPreInboundNo, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -13218,6 +13278,8 @@ public class TransactionService {
                     .queryParam("languageId", languageId)
                     .queryParam("oldInvoiceNo", oldInvoiceNo)
                     .queryParam("newInvoiceNo", newInvoiceNo)
+                    .queryParam("oldPreInboundNo", oldPreInboundNo)
+                    .queryParam("newPreInboundNo", newPreInboundNo)
                     .queryParam("warehouseId", warehouseId)
                     .queryParam("loginUserId", loginUserId);
 
@@ -13359,7 +13421,7 @@ public class TransactionService {
      * @throws ParseException
      */
     public PreOutboundHeaderV2 orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                 String refDocNumber, String loginUserID, String authToken) throws ParseException {
+                                                 String refDocNumber, String  preOutboundNo, String loginUserID, String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -13373,6 +13435,7 @@ public class TransactionService {
                     .queryParam("languageId", languageId)
                     .queryParam("warehouseId", warehouseId)
                     .queryParam("refDocNumber", refDocNumber)
+                    .queryParam("preOutboundNo", preOutboundNo)
                     .queryParam("loginUserID", loginUserID);
 
             HttpEntity<?> entity = new HttpEntity<>(headers);

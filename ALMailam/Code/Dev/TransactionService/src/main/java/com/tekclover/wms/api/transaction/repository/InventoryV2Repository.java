@@ -1287,7 +1287,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             + "AND C_ID = :companyCodeId and PLANT_ID = :plantId AND LANG_ID = :languageId \r\n"
             + "AND MFR_NAME = :manufacturerName AND IS_DELETED = 0 \r\n"
             + "AND INV_ID in (select inventoryId from #inv) \r\n"
-            + "GROUP BY LEVEL_ID, ITM_CODE, MFR_NAME \r\n"
+            + "GROUP BY LEVEL_ID, ITM_CODE, MFR_NAME, PLANT_ID, WH_ID, C_ID, LANG_ID \r\n"
             + "HAVING SUM(INV_QTY) > 0 \r\n"
             + "ORDER BY LEVEL_ID, SUM(INV_QTY)", nativeQuery = true)
     public List<IInventory> findInventoryGroupByLevelId (

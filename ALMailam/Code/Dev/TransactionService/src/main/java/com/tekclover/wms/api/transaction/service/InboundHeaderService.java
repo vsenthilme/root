@@ -28,8 +28,8 @@ import com.tekclover.wms.api.transaction.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+//import org.springframework.retry.annotation.Backoff;
+//import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -1623,8 +1623,8 @@ public class InboundHeaderService extends BaseService {
 
         AXApiResponse axapiResponse = new AXApiResponse();
         statusDescription = stagingLineV2Repository.getStatusDescription(24L, languageId);
-        log.info("InboundLine List: " + inboundLineList);
-        if (inboundLineList != null) {
+        log.info("InboundLine List: " + inboundLineList.size());
+        if (inboundLineList != null && !inboundLineList.isEmpty()) {
             for (InboundLineV2 inboundLine : inboundLineList) {
                 if(inboundLine.getStatusId() == 20L) {
                     List<PutAwayLineV2> putAwayLineList = putAwayLineService.
@@ -1642,11 +1642,11 @@ public class InboundHeaderService extends BaseService {
                         log.info("Inventory Created Successfully -----> for Inbound Line ----> " +
                                 inboundLine.getItemCode() + ", " + inboundLine.getManufacturerName() + ", " + inboundLine.getLineNo());
                     }
-                    inboundLineV2Repository.updateInboundLineStatusUpdateInboundConfirmIndividualItemProc(
-                            companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo,
-                            inboundLine.getItemCode(), inboundLine.getManufacturerName(), inboundLine.getLineNo(),   24L, statusDescription, loginUserID, new Date());
-                    log.info("InboundLine status updated" + inboundLine.getItemCode() + ", " + inboundLine.getManufacturerName() + ", " + inboundLine.getLineNo());
                 }
+                inboundLineV2Repository.updateInboundLineStatusUpdateInboundConfirmIndividualItemProc(
+                        companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo,
+                        inboundLine.getItemCode(), inboundLine.getManufacturerName(), inboundLine.getLineNo(),   24L, statusDescription, loginUserID, new Date());
+                log.info("InboundLine status updated: " + inboundLine.getItemCode() + ", " + inboundLine.getManufacturerName() + ", " + inboundLine.getLineNo());
             }
         }
 
@@ -1963,7 +1963,7 @@ public class InboundHeaderService extends BaseService {
      * @param putAwayLine
      * @return
      */
-    @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 2000))
+//    @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 2000))
     private InventoryV2 createInventoryNonCBMV2(PutAwayLineV2 putAwayLine) {
         log.info("Create Inventory Initiated: " + new Date());
         String palletCode = null;

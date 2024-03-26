@@ -4689,8 +4689,8 @@ public class PreOutboundHeaderService extends BaseService {
      * @throws Exception
      */
     //cancel order PreOutBoundHeader
-    public PreOutboundHeaderV2 cancelPreOutboundHeader(String companyCodeId, String languageId, String plantId,
-                                                       String warehouseId, String refDocNumber, String  preOutboundNo, String loginUserID) throws Exception {
+    public PreOutboundHeaderV2 cancelPreOutboundHeader(String companyCodeId, String languageId, String plantId, String warehouseId,
+                                                       String refDocNumber, String  preOutboundNo, String loginUserID, String remarks) throws Exception {
         PreOutboundHeaderV2 preOutboundHeaderV2 =
                 preOutboundHeaderV2Repository.findByCompanyCodeIdAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndDeletionIndicator(
                         companyCodeId, plantId, languageId, warehouseId, refDocNumber,  preOutboundNo,0L);
@@ -4700,6 +4700,9 @@ public class PreOutboundHeaderService extends BaseService {
             preOutboundHeaderV2.setUpdatedOn(new Date());
             preOutboundHeaderV2.setStatusId(96L);           //Order Cancelled
             statusDescription = stagingLineV2Repository.getStatusDescription(96L, languageId);
+            if(remarks != null) {
+                preOutboundHeaderV2.setReferenceField1(remarks);
+            }
             preOutboundHeaderV2.setStatusDescription(statusDescription);
             preOutboundHeaderV2Repository.save(preOutboundHeaderV2);
         }
@@ -5440,10 +5443,23 @@ public class PreOutboundHeaderService extends BaseService {
             log.info("Created PicklistHeader : " + createdPickListHeader);
         }
     }
-
+    //Order Cancellation
+    public PreOutboundHeaderV2 orderCancellation(OutboundOrderCancelInput outboundOrderCancelInput, String loginUserID) throws Exception {
+        PreOutboundHeaderV2 preOutboundHeaderV2 = orderCancellation(
+                outboundOrderCancelInput.getCompanyCodeId(),
+                outboundOrderCancelInput.getPlantId(),
+                outboundOrderCancelInput.getLanguageId(),
+                outboundOrderCancelInput.getWarehouseId(),
+                outboundOrderCancelInput.getRefDocNumber(),
+                outboundOrderCancelInput.getPreOutboundNo(),
+                loginUserID,
+                outboundOrderCancelInput.getRemarks()
+        );
+        return preOutboundHeaderV2;
+    }
     //Order Cancellation
     public PreOutboundHeaderV2 orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                 String oldPickListNumber, String preOutboundNo, String loginUserID) throws Exception {
+                                                 String oldPickListNumber, String preOutboundNo, String loginUserID, String remarks) throws Exception {
 
         OutboundHeaderV2 outboundOrderV2 =
                 outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndDeletionIndicator(
@@ -5467,7 +5483,7 @@ public class PreOutboundHeaderService extends BaseService {
         log.info("OutboundLine Interim deleted Successfully " + outboundLineInterimList);
 
         //Delete PreOutBoundHeaderV2
-        PreOutboundHeaderV2 preOutboundHeader = cancelPreOutboundHeader(companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, preOutboundNo, loginUserID);
+        PreOutboundHeaderV2 preOutboundHeader = cancelPreOutboundHeader(companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, preOutboundNo, loginUserID, remarks);
         log.info("PreOutBoundHeader Cancelled SuccessFully" + preOutboundHeader);
 
         //Delete PreOutboundLine

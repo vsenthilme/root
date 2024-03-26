@@ -2326,7 +2326,7 @@ public class PreInboundHeaderService extends BaseService {
      * @return
      */
     public PreInboundHeaderEntityV2 cancelPreInboundHeader(String companyCode, String plantId, String languageId, String warehouseId,
-                                                           String refDocNumber, String preInboundNo, String loginUserId) {
+                                                           String refDocNumber, String preInboundNo, String loginUserId, String remarks) {
         PreInboundHeaderEntityV2 preInboundHeaderEntity =
                 preInboundHeaderV2Repository.findByCompanyCodeAndPlantIdAndLanguageIdAndWarehouseIdAndRefDocNumberAndPreInboundNoAndDeletionIndicator(
                         companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 0L);
@@ -2335,6 +2335,9 @@ public class PreInboundHeaderService extends BaseService {
             preInboundHeaderEntity.setStatusId(96L);
             statusDescription = stagingLineV2Repository.getStatusDescription(96L, languageId);
             preInboundHeaderEntity.setStatusDescription(statusDescription);
+            if(remarks != null) {
+                preInboundHeaderEntity.setReferenceField1(remarks);
+            }
             preInboundHeaderEntity.setUpdatedBy(loginUserId);
             preInboundHeaderEntity.setUpdatedOn(new Date());
             preInboundHeaderV2Repository.save(preInboundHeaderEntity);

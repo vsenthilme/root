@@ -4,6 +4,7 @@ package com.tekclover.wms.api.transaction.controller;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.PreInboundHeaderEntity;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.v2.PreInboundHeaderEntityV2;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundOrderCancelInput;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SearchSupplierInvoiceHeader;
 import com.tekclover.wms.api.transaction.model.inbound.v2.SupplierInvoiceHeader;
 import com.tekclover.wms.api.transaction.model.outbound.v2.PickListHeader;
@@ -52,14 +53,11 @@ public class InvoiceCancellationController {
     }
 
     @ApiOperation(response = PreInboundHeaderEntityV2.class, value = "Inbound Order Cancellation")
-    @GetMapping("/inboundOrderCancellation")
-    public ResponseEntity<?> cancelInboundOrder(@RequestParam String companyCode, @RequestParam String languageId,
-                                                @RequestParam String plantId, @RequestParam String warehouseId,
-                                                @RequestParam String refDocNumber, @RequestParam String preInboundNo,
+    @PostMapping("/inboundOrderCancellation")
+    public ResponseEntity<?> cancelInboundOrder(@RequestBody InboundOrderCancelInput inboundOrderCancelInput,
                                                 @RequestParam String loginUserId) throws ParseException {
 
-        PreInboundHeaderEntityV2 result = invoiceCancellationService.inboundOrderCancellation(companyCode, languageId, plantId, warehouseId,
-                refDocNumber, preInboundNo, loginUserId);
+        PreInboundHeaderEntityV2 result = invoiceCancellationService.inboundOrderCancellation(inboundOrderCancelInput, loginUserId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

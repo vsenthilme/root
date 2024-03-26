@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.PreOutboundHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.SearchPreOutboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundOrderCancelInput;
 import com.tekclover.wms.api.transaction.model.outbound.v2.PickListHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -151,9 +152,8 @@ public class PreOutboundHeaderController {
     }
     @ApiOperation(response = PickListHeader.class, value = "Cancel Order") // label for swagger
     @GetMapping("/v2/orderCancellation")
-    public ResponseEntity<?> orderCancellation(@RequestParam String languageId, @RequestParam String companyCodeId, @RequestParam String plantId,
-                                               @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String  preOutboundNo, @RequestParam String loginUserID) throws Exception {
-        PreOutboundHeaderV2 orderCancelled = preoutboundheaderService.orderCancellation(companyCodeId, plantId, languageId, warehouseId, refDocNumber, preOutboundNo, loginUserID);
+    public ResponseEntity<?> orderCancellation(@RequestBody OutboundOrderCancelInput outboundOrderCancelInput, @RequestParam String loginUserID) throws Exception {
+        PreOutboundHeaderV2 orderCancelled = preoutboundheaderService.orderCancellation(outboundOrderCancelInput, loginUserID);
         return new ResponseEntity<>(orderCancelled, HttpStatus.OK);
     }
 }

@@ -4248,12 +4248,11 @@ public class TransactionServiceController {
     }
 
     @ApiOperation(response = PreInboundHeaderV2.class, value = "Inbound Order Cancellation") // label for swagger
-    @DeleteMapping("/inboundOrder/cancellation")
-    public ResponseEntity<?> cancelInboundOrder(@RequestParam String companyCode, @RequestParam String languageId, @RequestParam String plantId,
-                                                @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String preInboundNo,
+    @PostMapping("/inboundOrder/cancellation")
+    public ResponseEntity<?> cancelInboundOrder(@RequestBody InboundOrderCancelInput inboundOrderCancelInput,
                                                 @RequestParam String loginUserID, @RequestParam String authToken) {
 
-        PreInboundHeaderV2 result = transactionService.inboundOrderCancellation(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserID, authToken);
+        PreInboundHeaderV2 result = transactionService.inboundOrderCancellation(inboundOrderCancelInput, loginUserID, authToken);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -4320,11 +4319,10 @@ public class TransactionServiceController {
     }
 
     @ApiOperation(response = PickListHeader.class, value = "order Cancellation") // label for swagger
-    @DeleteMapping("/outbound/orderCancellation")
-    public ResponseEntity<?> orderCancellation(@RequestParam String languageId, @RequestParam String companyCodeId, @RequestParam String plantId,
-                                               @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String  preOutboundNo, @RequestParam String loginUserID,
+    @PostMapping("/outbound/orderCancellation")
+    public ResponseEntity<?> orderCancellation(@RequestBody OutboundOrderCancelInput outboundOrderCancelInput, @RequestParam String loginUserID,
                                                @RequestParam String authToken) throws java.text.ParseException {
-        PreOutboundHeaderV2 orderCancelled = transactionService.orderCancellation(companyCodeId, plantId, languageId, warehouseId, refDocNumber, preOutboundNo, loginUserID, authToken);
+        PreOutboundHeaderV2 orderCancelled = transactionService.orderCancellation(outboundOrderCancelInput, loginUserID, authToken);
         return new ResponseEntity<>(orderCancelled, HttpStatus.OK);
     }
 

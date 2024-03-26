@@ -1105,6 +1105,27 @@ public class InvoiceCancellationService extends BaseService{
 
     /**
      *
+     * @param inboundOrderCancelInput
+     * @param loginUserId
+     * @return
+     * @throws ParseException
+     */
+    public PreInboundHeaderEntityV2 inboundOrderCancellation(InboundOrderCancelInput inboundOrderCancelInput, String loginUserId) throws ParseException {
+        PreInboundHeaderEntityV2 preInboundHeaderEntityV2 = inboundOrderCancellation(
+                inboundOrderCancelInput.getCompanyCodeId(),
+                inboundOrderCancelInput.getLanguageId(),
+                inboundOrderCancelInput.getPlantId(),
+                inboundOrderCancelInput.getWarehouseId(),
+                inboundOrderCancelInput.getRefDocNumber(),
+                inboundOrderCancelInput.getPreInboundNo(),
+                loginUserId,
+                inboundOrderCancelInput.getRemarks()
+        );
+        return preInboundHeaderEntityV2;
+    }
+
+    /**
+     *
      * @param companyCode
      * @param languageId
      * @param plantId
@@ -1116,7 +1137,7 @@ public class InvoiceCancellationService extends BaseService{
      * @throws ParseException
      */
     public PreInboundHeaderEntityV2 inboundOrderCancellation(String companyCode, String languageId, String plantId, String warehouseId,
-                                                           String refDocNumber, String preInboundNo, String loginUserId) throws ParseException {
+                                                             String refDocNumber, String preInboundNo, String loginUserId, String remarks) throws ParseException {
 
         log.info("Inbound Order Cancellation Initiated ---> Inbound Order ----> : " + refDocNumber + ", " + preInboundNo);
 
@@ -1136,7 +1157,7 @@ public class InvoiceCancellationService extends BaseService{
         log.info("InboundLine Deleted Successfully" + inboundLineV2);
 
         //PreInboundHeader
-        PreInboundHeaderEntityV2 preInboundHeaderV2 = preInboundHeaderService.cancelPreInboundHeader(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserId);
+        PreInboundHeaderEntityV2 preInboundHeaderV2 = preInboundHeaderService.cancelPreInboundHeader(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, loginUserId, remarks);
         log.info("PreInboundHeader cancelled SuccessFully" + preInboundHeaderV2);
 
         //Delete PreInboundLine

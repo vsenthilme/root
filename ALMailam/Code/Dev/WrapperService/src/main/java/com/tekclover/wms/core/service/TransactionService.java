@@ -13295,26 +13295,19 @@ public class TransactionService {
     }
 
     //Inbound Order Cancellation
-    public PreInboundHeaderV2 inboundOrderCancellation(String companyCode, String plantId, String languageId, String warehouseId,
-                                                       String refDocNumber, String preInboundNo, String loginUserId, String authToken) {
+    public PreInboundHeaderV2 inboundOrderCancellation(InboundOrderCancelInput inboundOrderCancelInput, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
             headers.add("User-Agent", "ClassicWMS-Almailem RestTemplate");
             headers.add("Authorization", "Bearer " + authToken);
 
-            HttpEntity<?> entity = new HttpEntity<>(headers);
+            HttpEntity<?> entity = new HttpEntity<>(inboundOrderCancelInput, headers);
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(getTransactionServiceApiUrl() + "invoice/inboundOrderCancellation")
-                    .queryParam("companyCode", companyCode)
-                    .queryParam("plantId", plantId)
-                    .queryParam("languageId", languageId)
-                    .queryParam("refDocNumber", refDocNumber)
-                    .queryParam("preInboundNo", preInboundNo)
-                    .queryParam("warehouseId", warehouseId)
                     .queryParam("loginUserId", loginUserId);
 
-            ResponseEntity<PreInboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity,
+            ResponseEntity<PreInboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity,
                     PreInboundHeaderV2.class);
             log.info("result : " + result.getBody());
             return result.getBody();
@@ -13440,18 +13433,13 @@ public class TransactionService {
 
     /**
      *
-     * @param companyCodeId
-     * @param plantId
-     * @param languageId
-     * @param warehouseId
-     * @param refDocNumber
+     * @param outboundOrderCancelInput
      * @param loginUserID
      * @param authToken
      * @return
      * @throws ParseException
      */
-    public PreOutboundHeaderV2 orderCancellation(String companyCodeId, String plantId, String languageId, String warehouseId,
-                                                 String refDocNumber, String  preOutboundNo, String loginUserID, String authToken) throws ParseException {
+    public PreOutboundHeaderV2 orderCancellation(OutboundOrderCancelInput outboundOrderCancelInput, String loginUserID, String authToken) throws ParseException {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -13460,16 +13448,10 @@ public class TransactionService {
 
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(getTransactionServiceApiUrl() + "preoutboundheader/v2/orderCancellation")
-                    .queryParam("companyCodeId", companyCodeId)
-                    .queryParam("plantId", plantId)
-                    .queryParam("languageId", languageId)
-                    .queryParam("warehouseId", warehouseId)
-                    .queryParam("refDocNumber", refDocNumber)
-                    .queryParam("preOutboundNo", preOutboundNo)
                     .queryParam("loginUserID", loginUserID);
 
-            HttpEntity<?> entity = new HttpEntity<>(headers);
-            ResponseEntity<PreOutboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET,
+            HttpEntity<?> entity = new HttpEntity<>(outboundOrderCancelInput, headers);
+            ResponseEntity<PreOutboundHeaderV2> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST,
                     entity, PreOutboundHeaderV2.class);
             log.info("result : " + result.getStatusCode());
             return result.getBody();

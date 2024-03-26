@@ -787,8 +787,8 @@ public class InhouseTransferHeaderService extends BaseService {
             if(newInhouseTransferLine.getSourceStorageBin().equalsIgnoreCase(newInhouseTransferLine.getTargetStorageBin())){
                 throw new BadRequestException("Source Bin and Target Bin cannot be same");
             }
-            if(newInhouseTransferLine.getTransferOrderQty() == 0L || newInhouseTransferLine.getTransferConfirmedQty() == 0L){
-                throw new BadRequestException("Transfer Qty is zero");
+            if(newInhouseTransferLine.getTransferOrderQty() <= 0L || newInhouseTransferLine.getTransferConfirmedQty() <= 0L){
+                throw new BadRequestException("Transfer Qty must be greater than zero");
             }
 
             StorageBinPutAway storageBinPutAway = new StorageBinPutAway();

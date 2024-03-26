@@ -5446,8 +5446,8 @@ public class PreOutboundHeaderService extends BaseService {
                                                  String oldPickListNumber, String preOutboundNo, String loginUserID) throws Exception {
 
         OutboundHeaderV2 outboundOrderV2 =
-                outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndDeletionIndicator(
-                        companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, 0L);
+                outboundHeaderV2Repository.findByCompanyCodeIdAndLanguageIdAndPlantIdAndWarehouseIdAndRefDocNumberAndPreOutboundNoAndDeletionIndicator(
+                        companyCodeId, languageId, plantId, warehouseId, oldPickListNumber, preOutboundNo, 0L);
         log.info("Outbound Order status ---> Delivered for Picklist Number: " + outboundOrderV2 + ", " + oldPickListNumber);
 
         if (outboundOrderV2 == null) {

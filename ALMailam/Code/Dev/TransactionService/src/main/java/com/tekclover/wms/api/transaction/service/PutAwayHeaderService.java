@@ -1407,7 +1407,7 @@ public class PutAwayHeaderService extends BaseService {
                     log.info("deleteInventory deleted.." + isDeleted);
 
                     if (isDeleted) {
-                            StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 1L, updateStorageBin.getStorageBin());
+                            StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, updateStorageBin.getBinClassId(), updateStorageBin.getStorageBin());
                             log.info("dbStorageBin: " + dbstorageBin);
 
                             if (dbstorageBin != null) {

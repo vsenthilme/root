@@ -788,6 +788,24 @@ public class SparkService {
         }
     }
 
+    public Outbound[] findOutbounds(FindOutBoundHeader findOutBoundHeader) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", " RestTemplate");
+//        headers.add("Authorization", "Bearer " + authToken);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getSparkServiceUrl() + "almailem/spark/outboundHeaderTest");
+            HttpEntity<?> entity = new HttpEntity<>(findOutBoundHeader, headers);
+            ResponseEntity<Outbound[]> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, Outbound[].class);
+            log.info("result: " + result.getStatusCode());
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 
 }
 

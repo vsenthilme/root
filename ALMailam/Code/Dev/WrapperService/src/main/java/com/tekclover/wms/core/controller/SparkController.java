@@ -312,4 +312,11 @@ public class SparkController {
         InboundLineV3[] inboundLine = sparkService.findInboundLineJoin(findInboundLineV2);
         return new ResponseEntity<>(inboundLine, HttpStatus.OK);
     }
+
+    @ApiOperation(response = Outbound.class, value = "Spark Outbound")
+    @PostMapping("/outboundHeaderTest")
+    public ResponseEntity<?> findOutbounds(@RequestBody FindOutBoundHeader findOutBoundHeader) throws Exception {
+        Outbound[] outbounds = sparkService.findOutbounds(findOutBoundHeader);
+        return new ResponseEntity<>(outbounds, HttpStatus.OK);
+    }
 }

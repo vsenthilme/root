@@ -8529,7 +8529,7 @@ public class TransactionService {
             RestTemplate restTemplate = getRestTemplate();
             restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(client));
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(getTransactionServiceApiUrl() + "inboundheader/v2/partialConfirmIndividual")
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "inboundheader/v2/confirmIndividual/partial")
                     .queryParam("companyCode", companyCode)
                     .queryParam("plantId", plantId)
                     .queryParam("languageId", languageId)
@@ -13305,7 +13305,7 @@ public class TransactionService {
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(getTransactionServiceApiUrl() + "invoice/supplierInvoice/cancellation")
+                    .fromHttpUrl(getTransactionServiceApiUrl() + "invoice/inboundOrderCancellation")
                     .queryParam("companyCode", companyCode)
                     .queryParam("plantId", plantId)
                     .queryParam("languageId", languageId)

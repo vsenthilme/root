@@ -4248,7 +4248,7 @@ public class TransactionServiceController {
     }
 
     @ApiOperation(response = PreInboundHeaderV2.class, value = "Inbound Order Cancellation") // label for swagger
-    @GetMapping("/inboundOrder/cancellation")
+    @DeleteMapping("/inboundOrder/cancellation")
     public ResponseEntity<?> cancelInboundOrder(@RequestParam String companyCode, @RequestParam String languageId, @RequestParam String plantId,
                                                 @RequestParam String warehouseId, @RequestParam String refDocNumber, @RequestParam String preInboundNo,
                                                 @RequestParam String loginUserID, @RequestParam String authToken) {

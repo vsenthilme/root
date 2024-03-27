@@ -1845,6 +1845,7 @@ public class QualityLineService extends BaseService {
             searchPickupHeader.setWarehouseId(warehouseId);
 
             searchPickupHeader.setRefDocNumber(refDocNumber);
+            searchPickupHeader.setPreOutboundNo(preOutboundNo);
 
             List<PickupHeaderV2> pickupHeaderList = pickupHeaderService.findPickupHeaderV2(searchPickupHeader).collect(Collectors.toList());
             log.info("pickupHeaderList statusId [48]----------->: " + pickupHeaderList.stream().count());
@@ -1858,6 +1859,7 @@ public class QualityLineService extends BaseService {
             searchQualityHeader.setWarehouseId(warehouseId);
 
             searchQualityHeader.setRefDocNumber(refDocNumber);
+            searchQualityHeader.setPreOutboundNo(preOutboundNo);
 
             List<QualityHeaderV2> qualityHeaderList = qualityHeaderService.findQualityHeaderNewV2(searchQualityHeader).collect(Collectors.toList());
             log.info("qualityHeaderList statusId [54]----------->: " + qualityHeaderList.stream().count());
@@ -1900,6 +1902,7 @@ public class QualityLineService extends BaseService {
                         searchOutboundHeaderV2.setWarehouseId(warehouseId);
 
                         searchOutboundHeaderV2.setRefDocNumber(refDocNumber);
+                        searchOutboundHeaderV2.setPreOutboundNo(preOutboundNo);
 
                         List<OutboundHeaderV2Stream> outboundHeaderV2List = outboundHeaderService.findOutboundHeadernewV2(searchOutboundHeaderV2);
                         log.info("outboundHeaderV2List ----------->: " + outboundHeaderV2List.stream().count());

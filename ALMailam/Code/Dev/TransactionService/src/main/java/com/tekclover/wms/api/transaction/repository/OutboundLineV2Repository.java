@@ -179,12 +179,13 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE OutboundLineV2 ob SET ob.statusId = :statusId, ob.statusDescription = :statusDescription, ob.deliveryConfirmedOn = :deliveryConfirmedOn \r\n"
             + " WHERE C_ID = :companyCodeId AND PLANT_ID = :plantId AND LANG_ID = :languageId AND ob.warehouseId = :warehouseId AND \r\n "
-            + " ob.refDocNumber = :refDocNumber AND ob.lineNumber in :lineNumber")
+            + " ob.refDocNumber = :refDocNumber AND ob.preOutboundNo = :preOutboundNo AND ob.lineNumber in :lineNumber")
     public void updateOutboundLineStatusV2(@Param("companyCodeId") String companyCodeId,
                                            @Param("plantId") String plantId,
                                            @Param("languageId") String languageId,
                                            @Param("warehouseId") String warehouseId,
                                            @Param("refDocNumber") String refDocNumber,
+                                           @Param("preOutboundNo") String preOutboundNo,
                                            @Param("statusId") Long statusId,
                                            @Param("statusDescription") String statusDescription,
                                            @Param("lineNumber") List<Long> lineNumber,

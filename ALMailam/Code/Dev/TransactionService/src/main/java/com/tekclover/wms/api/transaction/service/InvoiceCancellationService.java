@@ -351,7 +351,15 @@ public class InvoiceCancellationService extends BaseService{
                 companyCode, plantId, languageId, warehouseId, oldInvoiceNo, oldPreInboundNo, 24L, 0L);
 
         if (dbInvoiceNumber.isPresent()) {
-            throw new BadRequestException("Invoice cannot be processed it has been already completed " + oldInvoiceNo);
+            throw new BadRequestException("Invoice cannot be processed it has been already completed " + oldInvoiceNo + ", " + oldPreInboundNo);
+        }
+
+        //InboundLine
+        List<InboundLineV2> inboundLineStatus24List = inboundLineService.cancelInboundLineV2(companyCode, plantId, languageId, warehouseId, oldInvoiceNo, oldPreInboundNo);
+        log.info("InboundLineStatus24List : " + inboundLineStatus24List);
+
+        if(inboundLineStatus24List != null && !inboundLineStatus24List.isEmpty()){
+            throw new BadRequestException("Inbound Order cannot be cancelled, it has been already confirmed " + oldInvoiceNo + ", " + oldPreInboundNo);
         }
 
         //InboundHeader
@@ -1145,7 +1153,15 @@ public class InvoiceCancellationService extends BaseService{
                 companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo, 24L, 0L);
 
         if (dbInvoiceNumber.isPresent()) {
-            throw new BadRequestException("Invoice cannot be processed it has been already completed " + refDocNumber);
+            throw new BadRequestException("Inbound Order cannot be cancelled, it has been already confirmed " + refDocNumber + ", " + preInboundNo);
+        }
+
+        //InboundLine
+        List<InboundLineV2> inboundLineStatus24List = inboundLineService.cancelInboundLineV2(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
+        log.info("InboundLineStatus24List : " + inboundLineStatus24List);
+
+        if(inboundLineStatus24List != null && !inboundLineStatus24List.isEmpty()){
+            throw new BadRequestException("Inbound Order cannot be cancelled, it has been already confirmed " + refDocNumber + ", " + preInboundNo);
         }
 
         //InboundHeader

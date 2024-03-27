@@ -2203,7 +2203,7 @@ public class PutAwayHeaderService extends BaseService {
                         grLine.getItemCode(), grLine.getManufacturerName(), grLine.getLineNo(), preInboundNo);
                 log.info("PutawayLine List to check any partial Putaway done: " + putAwayLineList);
 
-                if(putAwayLineList == null) {
+                if(putAwayLineList == null || putAwayLineList.isEmpty()) {
                 InboundLineV2 inboundLine = inboundLineService.getInboundLineV2(companyCode,
                         plantId, languageId, warehouseId, refDocNumber,
                         grLine.getPreInboundNo(), grLine.getLineNo(), grLine.getItemCode());

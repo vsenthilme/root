@@ -129,6 +129,13 @@ public class InboundHeaderController {
         return inboundheaderService.findInboundHeaderV2(searchInboundHeader);
     }
 
+    @ApiOperation(response = InboundHeaderV2.class, value = "Search InboundHeader Stream V2") // label for swagger
+    @PostMapping("/findInboundHeader/v2/stream")
+    public Stream<InboundHeaderV2> findInboundHeaderStreamV2(@RequestBody SearchInboundHeaderV2 searchInboundHeader)
+            throws Exception {
+        return inboundheaderService.findInboundHeaderStreamV2(searchInboundHeader);
+    }
+
     @ApiOperation(response = InboundHeaderV2.class, value = "Create InboundHeader V2") // label for swagger
     @GetMapping("/replaceASN/v2")
     public ResponseEntity<?> replaceASNV2(@RequestParam String refDocNumber, @RequestParam String preInboundNo,

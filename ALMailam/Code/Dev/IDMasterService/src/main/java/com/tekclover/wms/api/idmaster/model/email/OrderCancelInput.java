@@ -1,9 +1,9 @@
-package com.tekclover.wms.api.transaction.model.inbound.v2;
+package com.tekclover.wms.api.idmaster.model.email;
 
 import lombok.Data;
 
 @Data
-public class InboundOrderCancelInput {
+public class OrderCancelInput {
 
 	private String languageId;
 	private String companyCodeId;

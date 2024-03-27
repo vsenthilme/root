@@ -1223,6 +1223,29 @@ public class InboundHeaderService extends BaseService {
         return inboundHeaderV2List;
     }
 
+    /**
+     *
+     * @param searchInboundHeader
+     * @return
+     * @throws Exception
+     */
+    public Stream<InboundHeaderV2> findInboundHeaderStreamV2(SearchInboundHeaderV2 searchInboundHeader) throws Exception {
+        if (searchInboundHeader.getStartCreatedOn() != null && searchInboundHeader.getEndCreatedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartCreatedOn(), searchInboundHeader.getEndCreatedOn());
+            searchInboundHeader.setStartCreatedOn(dates[0]);
+            searchInboundHeader.setEndCreatedOn(dates[1]);
+        }
+
+        if (searchInboundHeader.getStartConfirmedOn() != null && searchInboundHeader.getEndConfirmedOn() != null) {
+            Date[] dates = DateUtils.addTimeToDatesForSearch(searchInboundHeader.getStartConfirmedOn(), searchInboundHeader.getEndConfirmedOn());
+            searchInboundHeader.setStartConfirmedOn(dates[0]);
+            searchInboundHeader.setEndConfirmedOn(dates[1]);
+        }
+        InboundHeaderV2Specification spec = new InboundHeaderV2Specification(searchInboundHeader);
+        Stream<InboundHeaderV2> results = inboundHeaderV2Repository.stream(spec, InboundHeaderV2.class);
+        return results;
+    }
+
 
     /**
      * @return

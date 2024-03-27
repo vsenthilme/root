@@ -2447,6 +2447,14 @@ public class TransactionServiceController {
         return transactionService.findInboundHeaderV2(searchInboundHeader, authToken);
     }
 
+    //Find-Stream
+    @ApiOperation(response = InboundHeaderEntityV2.class, value = "Search InboundHeader Stream V2") // label for swagger
+    @PostMapping("/inboundheader/findInboundHeader/v2/stream")
+    public InboundHeaderEntityV2[] findInboundHeaderstreamV2(@RequestBody SearchInboundHeaderV2 searchInboundHeader,
+                                                             @RequestParam String authToken) throws Exception {
+        return transactionService.findInboundHeaderStreamV2(searchInboundHeader, authToken);
+    }
+
     //replaceASN
     @ApiOperation(response = InboundHeaderEntityV2.class, value = "Replace ASN V2") // label for swagger
     @GetMapping("/inboundheader/replaceASN/v2")

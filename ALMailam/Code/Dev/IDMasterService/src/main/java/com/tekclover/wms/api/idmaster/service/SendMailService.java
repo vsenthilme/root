@@ -3,6 +3,7 @@ package com.tekclover.wms.api.idmaster.service;
 import com.tekclover.wms.api.idmaster.config.PropertiesConfig;
 import com.tekclover.wms.api.idmaster.controller.exception.BadRequestException;
 import com.tekclover.wms.api.idmaster.model.email.EMailDetails;
+import com.tekclover.wms.api.idmaster.model.email.OrderCancelInput;
 import com.tekclover.wms.api.idmaster.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class SendMailService {
     @Autowired
     private EMailDetailsService eMailDetailsService;
 
-    public void sendMail() throws MessagingException, IOException {
+    public void sendMail(OrderCancelInput orderCancelInput) throws MessagingException, IOException {
         //Send Email
         log.info("Send Mail Initiated " + new Date());
 
@@ -64,12 +65,18 @@ public class SendMailService {
             }
         }
         String localDate = DateUtils.getCurrentDateWithoutTimestamp();
+        String c_id = orderCancelInput.getCompanyCodeId();
+        String plant_id = orderCancelInput.getPlantId();
+        String lang_id = orderCancelInput.getLanguageId();
+        String wh_id = orderCancelInput.getWarehouseId();
+        String ref_doc_no = orderCancelInput.getRefDocNumber();
+        String pre_ib_ob_no = orderCancelInput.getPreInboundNo();
 
         EMailDetails email = new EMailDetails();
 
         email.setSenderName("Almailem-Support");
-        email.setSubject("Almailem - AutoLab / Amghara - Order Failed Status - " + localDate);
-        email.setBodyText("Dear Almailem Team,<br><br>" + "Please find the details report for your reference<br><br>Regards<br>Operations Team - Almailem");
+        email.setSubject("Almailem - AutoLab / Amghara - Order Failed Status - " + plant_id + ", " + localDate);
+        email.setBodyText("Dear Almailem Team,<br><br>" + "Please find the failed order details for your reference<br><br>Regards<br>Operations Team - Almailem");
         email.setToAddress(toAddress);
         email.setCcAddress(ccAddress);
         sendMail(email);

@@ -8361,6 +8361,22 @@ public class TransactionService {
 //        return inboundHeaderList.toArray(new InboundHeaderEntityV2[inboundHeaderList.size()]);
     }
 
+    // GET - findInboundHeader-V2
+    public InboundHeaderEntityV2[] findInboundHeaderStreamV2(SearchInboundHeaderV2 searchInboundHeader, String authToken) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("User-Agent", "ClassicWMS RestTemplate");
+        headers.add("Authorization", "Bearer " + authToken);
+
+        UriComponentsBuilder builder =
+                UriComponentsBuilder.fromHttpUrl(getTransactionServiceApiUrl() + "inboundheader/findInboundHeader/v2/stream");
+        HttpEntity<?> entity = new HttpEntity<>(searchInboundHeader, headers);
+        ResponseEntity<InboundHeaderEntityV2[]> result =
+                getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, InboundHeaderEntityV2[].class);
+        log.info("result : " + result.getStatusCode());
+        return result.getBody();
+    }
+
     // POST - replaceASN
     public Boolean replaceASNV2(String refDocNumber, String preInboundNo, String asnNumber, String authToken) {
         HttpHeaders headers = new HttpHeaders();

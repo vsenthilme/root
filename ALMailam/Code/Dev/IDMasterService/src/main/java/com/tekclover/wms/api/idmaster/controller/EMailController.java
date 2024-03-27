@@ -2,6 +2,7 @@ package com.tekclover.wms.api.idmaster.controller;
 
 import com.tekclover.wms.api.idmaster.model.email.EMailDetails;
 import com.tekclover.wms.api.idmaster.model.email.FindEmailDetails;
+import com.tekclover.wms.api.idmaster.model.email.OrderCancelInput;
 import com.tekclover.wms.api.idmaster.service.EMailDetailsService;
 import com.tekclover.wms.api.idmaster.service.SendMailService;
 import io.swagger.annotations.Api;
@@ -72,9 +73,9 @@ public class EMailController {
     //send Mail
     @ApiOperation(response = EMailDetails.class, value = "Send Email") // label for swagger
     @GetMapping("/sendMail")
-    public ResponseEntity<?> sendEmail()
+    public ResponseEntity<?> sendEmail(@Valid @RequestBody OrderCancelInput orderCancelInput)
             throws IOException, MessagingException {
-        sendMailService.sendMail();
+        sendMailService.sendMail(orderCancelInput);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -28,6 +28,10 @@ public interface OutboundLineV2Repository extends JpaRepository<OutboundLineV2, 
             String companyCodeId, String plantId, String languageId, String warehouseId,
             String preOutboundNo, String refDocNumber, String partnerCode, Long deletionIndicator);
 
+    List<OutboundLineV2> findByCompanyCodeIdInAndPlantIdInAndLanguageIdInAndWarehouseIdInAndPreOutboundNoInAndRefDocNumberInAndDeletionIndicator(
+            List<String> companyCodeId, List<String> plantId, List<String> languageId, List<String> warehouseId,
+            List<String> preOutboundNo, List<String> refDocNumber, Long deletionIndicator);
+
     @Query("Select count(ob) from OutboundLine ob where ob.companyCodeId=:companyCodeId and ob.plantId=:plantId and ob.languageId=:languageId and \r\n"
             + "ob.warehouseId=:warehouseId and ob.preOutboundNo=:preOutboundNo and \r\n"
             + " ob.refDocNumber=:refDocNumber and ob.partnerCode=:partnerCode and ob.statusId in :statusId and ob.deletionIndicator=:deletionIndicator")

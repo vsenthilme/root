@@ -2103,6 +2103,35 @@ public class OutboundLineService extends BaseService {
     }
 
     /**
+     *
+     * @param companyCodeId
+     * @param plantId
+     * @param languageId
+     * @param warehouseId
+     * @param preOutboundNo
+     * @param refDocNumber
+     * @return
+     */
+    public List<OutboundLineV2> getOutboundLineV2(List<String> companyCodeId, List<String> plantId, List<String> languageId,
+                                                  List<String> warehouseId, List<String> preOutboundNo, List<String> refDocNumber) {
+        List<OutboundLineV2> outboundLine =
+                outboundLineV2Repository.findByCompanyCodeIdInAndPlantIdInAndLanguageIdInAndWarehouseIdInAndPreOutboundNoInAndRefDocNumberInAndDeletionIndicator(
+                        companyCodeId, plantId, languageId, warehouseId, preOutboundNo, refDocNumber, 0L);
+        if (outboundLine != null) {
+            return outboundLine;
+        } else {
+            throw new BadRequestException("The given OutboundLine ID : "
+                    + "companyCodeId : " + companyCodeId
+                    + "plantId : " + plantId
+                    + "languageId : " + languageId
+                    + "warehouseId : " + warehouseId
+                    + ", preOutboundNo : " + preOutboundNo
+                    + ", refDocNumber : " + refDocNumber
+                    + " doesn't exist.");
+        }
+    }
+
+    /**
      * @param warehouseId
      * @param preOutboundNo
      * @param refDocNumber

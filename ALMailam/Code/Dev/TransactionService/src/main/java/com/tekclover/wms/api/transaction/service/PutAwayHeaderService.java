@@ -1406,33 +1406,34 @@ public class PutAwayHeaderService extends BaseService {
                     }
                     log.info("deleteInventory deleted.." + isDeleted);
 
+                    StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
+                            dbPutAwayLine.getPreInboundNo(), dbPutAwayLine.getItemCode(), dbPutAwayLine.getManufacturerName(), dbPutAwayLine.getLineNo());
+
+                    if (dbStagingLineEntity != null) {
+
+                        Double rec_accept_qty = 0D;
+                        Double rec_damage_qty = 0D;
+                        if(dbPutAwayLine.getQuantityType().equalsIgnoreCase("A")) {
+                            rec_accept_qty = (dbStagingLineEntity.getRec_accept_qty() != null ? dbStagingLineEntity.getRec_accept_qty() : 0) - (dbPutAwayLine.getPutawayConfirmedQty() != null ? dbPutAwayLine.getPutawayConfirmedQty() : 0);
+                        }
+                        if(dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
+                            rec_damage_qty = (dbStagingLineEntity.getRec_damage_qty() != null ? dbStagingLineEntity.getRec_damage_qty() : 0) - (dbPutAwayLine.getPutawayConfirmedQty() != null ? dbPutAwayLine.getPutawayConfirmedQty() : 0);
+                        }
+
+                        dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
+                        dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
+                        dbStagingLineEntity.setStatusId(14L);
+                        statusDescription = stagingLineV2Repository.getStatusDescription(14L, languageId);
+                        dbStagingLineEntity.setStatusDescription(statusDescription);
+                        stagingLineV2Repository.save(dbStagingLineEntity);
+                        log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + dbStagingLineEntity);
+                    }
+
                     if (isDeleted) {
-                            StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, updateStorageBin.getBinClassId(), updateStorageBin.getStorageBin());
+                            StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 3L, updateStorageBin.getStorageBin());
                             log.info("dbStorageBin: " + dbstorageBin);
 
                             if (dbstorageBin != null) {
-                                StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
-                                        dbPutAwayLine.getPreInboundNo(), dbPutAwayLine.getItemCode(), dbPutAwayLine.getManufacturerName(), dbPutAwayLine.getLineNo());
-
-                                if (dbStagingLineEntity != null) {
-
-                                    Double rec_accept_qty = 0D;
-                                    Double rec_damage_qty = 0D;
-                                    if(dbPutAwayLine.getQuantityType().equalsIgnoreCase("A")) {
-                                        rec_accept_qty = (dbStagingLineEntity.getRec_accept_qty() != null ? dbStagingLineEntity.getRec_accept_qty() : 0) - (dbPutAwayLine.getPutawayConfirmedQty() != null ? dbPutAwayLine.getPutawayConfirmedQty() : 0);
-                                    }
-                                    if(dbPutAwayLine.getQuantityType().equalsIgnoreCase("D")) {
-                                        rec_damage_qty = (dbStagingLineEntity.getRec_damage_qty() != null ? dbStagingLineEntity.getRec_damage_qty() : 0) - (dbPutAwayLine.getPutawayConfirmedQty() != null ? dbPutAwayLine.getPutawayConfirmedQty() : 0);
-                                    }
-
-                                    dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
-                                    dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
-                                    dbStagingLineEntity.setStatusId(14L);
-                                    statusDescription = stagingLineV2Repository.getStatusDescription(14L, languageId);
-                                    dbStagingLineEntity.setStatusDescription(statusDescription);
-                                    stagingLineV2Repository.save(dbStagingLineEntity);
-                                    log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + dbStagingLineEntity);
-                                }
 
                                 storageBinCapacityCheck = dbstorageBin.isCapacityCheck();
                                 log.info("storageBinCapacityCheck: " + storageBinCapacityCheck);
@@ -1598,6 +1599,30 @@ public class PutAwayHeaderService extends BaseService {
 
                 log.info("---#---deleteInventory deleted.." + isDeleted);
 
+                Long lineNo = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
+
+                StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
+                        dbPutAwayHeader.getPreInboundNo(), dbPutAwayHeader.getReferenceField5(), dbPutAwayHeader.getManufacturerName(), lineNo);
+
+                if (dbStagingLineEntity != null) {
+                    Double rec_accept_qty = 0D;
+                    Double rec_damage_qty = 0D;
+                    if(dbPutAwayHeader.getQuantityType().equalsIgnoreCase("A")) {
+                        rec_accept_qty = (dbStagingLineEntity.getRec_accept_qty() != null ? dbStagingLineEntity.getRec_accept_qty() : 0) - (dbPutAwayHeader.getPutAwayQuantity() != null ? dbPutAwayHeader.getPutAwayQuantity() : 0);
+                    }
+                    if(dbPutAwayHeader.getQuantityType().equalsIgnoreCase("D")) {
+                        rec_damage_qty = (dbStagingLineEntity.getRec_damage_qty() != null ? dbStagingLineEntity.getRec_damage_qty() : 0) - (dbPutAwayHeader.getPutAwayQuantity() != null ? dbPutAwayHeader.getPutAwayQuantity() : 0);
+                    }
+
+                    dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
+                    dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
+                    dbStagingLineEntity.setStatusId(14L);
+                    statusDescription = stagingLineV2Repository.getStatusDescription(14L, languageId);
+                    dbStagingLineEntity.setStatusDescription(statusDescription);
+                    stagingLineV2Repository.save(dbStagingLineEntity);
+                    log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + dbStagingLineEntity);
+                }
+
                 if (isDeleted) {
                         StorageBinV2 dbstorageBin = storageBinRepository.getStorageBinByBinClassId(companyCode, plantId, languageId, warehouseId, 1L, updateStorageBin.getStorageBin());
                         log.info("dbStorageBin: " + dbstorageBin);
@@ -1607,29 +1632,6 @@ public class PutAwayHeaderService extends BaseService {
                         }
 
                         if (dbstorageBin != null) {
-                            Long lineNo = dbPutAwayHeader.getReferenceField9() != null ? Long.valueOf(dbPutAwayHeader.getReferenceField9()) : 0;
-
-                            StagingLineEntityV2 dbStagingLineEntity = stagingLineService.getStagingLineForReversalV2(companyCode, plantId, languageId, warehouseId, refDocNumber,
-                                    dbPutAwayHeader.getPreInboundNo(), dbPutAwayHeader.getReferenceField5(), dbPutAwayHeader.getManufacturerName(), lineNo);
-
-                            if (dbStagingLineEntity != null) {
-                                Double rec_accept_qty = 0D;
-                                Double rec_damage_qty = 0D;
-                                if(dbPutAwayHeader.getQuantityType().equalsIgnoreCase("A")) {
-                                    rec_accept_qty = (dbStagingLineEntity.getRec_accept_qty() != null ? dbStagingLineEntity.getRec_accept_qty() : 0) - (dbPutAwayHeader.getPutAwayQuantity() != null ? dbPutAwayHeader.getPutAwayQuantity() : 0);
-                                }
-                                if(dbPutAwayHeader.getQuantityType().equalsIgnoreCase("D")) {
-                                    rec_damage_qty = (dbStagingLineEntity.getRec_damage_qty() != null ? dbStagingLineEntity.getRec_damage_qty() : 0) - (dbPutAwayHeader.getPutAwayQuantity() != null ? dbPutAwayHeader.getPutAwayQuantity() : 0);
-                                }
-
-                                dbStagingLineEntity.setRec_accept_qty(rec_accept_qty);
-                                dbStagingLineEntity.setRec_damage_qty(rec_damage_qty);
-                                dbStagingLineEntity.setStatusId(14L);
-                                statusDescription = stagingLineV2Repository.getStatusDescription(14L, languageId);
-                                dbStagingLineEntity.setStatusDescription(statusDescription);
-                                stagingLineV2Repository.save(dbStagingLineEntity);
-                                log.info("stagingLineEntity rec_accept_damage_qty and status updated: " + dbStagingLineEntity);
-                            }
 
                             storageBinCapacityCheck = dbstorageBin.isCapacityCheck();
                             log.info("storageBinCapacityCheck: " + storageBinCapacityCheck);

@@ -2,6 +2,7 @@ package com.tekclover.wms.api.masters.scheduler;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
 import com.tekclover.wms.api.masters.model.businesspartner.v2.BusinessPartnerV2;
+import com.tekclover.wms.api.masters.model.dto.InboundOrderCancelInput;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData1V2;
 import com.tekclover.wms.api.masters.model.masters.Customer;
 import com.tekclover.wms.api.masters.model.masters.Item;
@@ -10,6 +11,7 @@ import com.tekclover.wms.api.masters.repository.CustomerMasterRepository;
 import com.tekclover.wms.api.masters.repository.ItemMasterRepository;
 import com.tekclover.wms.api.masters.repository.WarehouseRepository;
 import com.tekclover.wms.api.masters.service.BusinessPartnerService;
+import com.tekclover.wms.api.masters.service.IDMasterService;
 import com.tekclover.wms.api.masters.service.MasterOrderService;
 import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +49,9 @@ public class BatchJobScheduler {
 
     @Autowired
     BusinessPartnerService businessService;
+
+    @Autowired
+    IDMasterService idMasterService;
 
     //-------------------------------------------------------------------------------------------
 
@@ -123,6 +128,19 @@ public class BatchJobScheduler {
                     log.error("Error on item master processing : " + e.toString());
                     // Updating the Processed Status
                     masterOrderService.updateProcessedItemMaster(inbound.getCompanyCodeId(), inbound.getPlantId(), inbound.getItemCode(), inbound.getManufacturerName(), 100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(inbound.getCompanyCodeId());
+                    inboundOrderCancelInput.setPlantId(inbound.getPlantId());
+                    inboundOrderCancelInput.setRefDocNumber(inbound.getItemCode());
+                    inboundOrderCancelInput.setReferenceField1(inbound.getManufacturerName());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
                     masterOrderService.createInboundIntegrationLog(inbound);
                     inboundItemList.remove(inbound);
                 }
@@ -198,6 +216,17 @@ public class BatchJobScheduler {
                     log.error("Error on customer master processing : " + e.toString());
                     // Updating the Processed Status
                     masterOrderService.updateProcessedCustomerMaster(inbound.getCompanyCodeId(), inbound.getPlantId(), inbound.getPartnerCode(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(inbound.getCompanyCodeId());
+                    inboundOrderCancelInput.setPlantId(inbound.getPlantId());
+                    inboundOrderCancelInput.setRefDocNumber(inbound.getPartnerCode());
+                    inboundOrderCancelInput.setReferenceField1(inbound.getPartnerName());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     masterOrderService.createInboundIntegrationLog(inbound);
                     inboundCustomerList.remove(inbound);
                 }

@@ -170,6 +170,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setRefDocNumber(inbound.getRefDocumentNo());
                     inboundOrderCancelInput.setReferenceField1(String.valueOf(inbound.getInboundOrderTypeId()));
                     inboundOrderCancelInput.setReferenceField2(inbound.getRefDocumentType());
+                    inboundOrderCancelInput.setRemarks(e.toString());
 
                     idMasterService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
@@ -292,6 +293,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setRefDocNumber(outbound.getRefDocumentNo());
                     inboundOrderCancelInput.setReferenceField1(String.valueOf(outbound.getOutboundOrderTypeID()));
                     inboundOrderCancelInput.setReferenceField2(outbound.getRefDocumentType());
+                    inboundOrderCancelInput.setRemarks(e.toString());
 
                     idMasterService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
@@ -349,6 +351,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setPlantId(stockCount.getBranchCode());
                     inboundOrderCancelInput.setRefDocNumber(stockCount.getCycleCountNo());
                     inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
+                    inboundOrderCancelInput.setRemarks(e.toString());
 
                     idMasterService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
@@ -400,6 +403,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setPlantId(stockCount.getBranchCode());
                     inboundOrderCancelInput.setRefDocNumber(stockCount.getCycleCountNo());
                     inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
+                    inboundOrderCancelInput.setRemarks(e.toString());
 
                     idMasterService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
@@ -452,6 +456,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setPlantId(stockAdjustment.getBranchCode());
                     inboundOrderCancelInput.setRefDocNumber(String.valueOf(stockAdjustment.getStockAdjustmentId()));
                     inboundOrderCancelInput.setReferenceField2("Stock Adjustment");
+                    inboundOrderCancelInput.setRemarks(e.toString());
 
                     idMasterService.sendMail(inboundOrderCancelInput);
                     //============================================================================================

@@ -76,6 +76,8 @@ public class SendMailService {
                 "<br> BranchCode    : " + plant_id +
                 "<br> Warehouse     : " + orderCancelInput.getWarehouseId() +
                 "<br> OrderType     : " + orderCancelInput.getReferenceField2() +
+                "<br> ErrorDesc     : " + orderCancelInput.getRemarks() +
+                "<br>" + orderCancelInput.getReferenceField1() +
                 "<br><br>Regards<br>Operations Team - Almailem";
 
         EMailDetails email = new EMailDetails();

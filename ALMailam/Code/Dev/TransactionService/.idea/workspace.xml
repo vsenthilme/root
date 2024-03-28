@@ -4,21 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="find_ibh_API_stream">
-      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/model/dto/InboundOrderCancelInput.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IDMasterService/src/main/java/com/tekclover/wms/api/idmaster/controller/EMailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../IDMasterService/src/main/java/com/tekclover/wms/api/idmaster/controller/EMailController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IDMasterService/src/main/java/com/tekclover/wms/api/idmaster/service/SendMailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../IDMasterService/src/main/java/com/tekclover/wms/api/idmaster/service/SendMailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/scheduler/BatchJobScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/scheduler/BatchJobScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/IDMasterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/IDMasterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/MasterOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/MasterOrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/MasterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/MasterService.java" afterDir="false" />
+    <list default="true" id="99b6ea69-7334-4902-b807-0e2593419345" name="Changes" comment="email_trigger_code_ibh_count_lines_rxd_lines_code">
+      <change afterPath="$PROJECT_DIR$/../../../../ALMConnector/Code/Project/ConnectorService/src/main/java/com/almailem/ams/api/connector/model/wms/OrderCancelInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/controller/EMailController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/model/email/EMailDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/model/email/FindEmailDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/model/email/OrderCancelInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/repository/EMailDetailsRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/repository/specification/EmailDetailsSpecification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/service/EMailDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../ALMConnector/Code/Project/ConnectorService/src/main/java/com/almailem/ams/api/connector/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../ALMConnector/Code/Project/ConnectorService/src/main/java/com/almailem/ams/api/connector/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IDMasterService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../IDMasterService/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/config/PropertiesConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/java/com/tekclover/wms/api/masters/config/PropertiesConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/resources/application-messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/resources/application-messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MasterSetupService/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MasterSetupService/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/repository/InventoryV2Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/repository/InventoryV2Repository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/repository/PutAwayLineV2Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/repository/PutAwayLineV2Repository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/IDMasterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/IDMasterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/InboundHeaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/InboundHeaderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreInboundHeaderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PreInboundHeaderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PutAwayLineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/PutAwayLineService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/MastersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/MastersService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tekclover/wms/api/transaction/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +71,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/localgit/root/ALMailam/Code/Dev/WrapperService",
+    "last_opened_file_path": "D:/localgit/root/ALMailam/Code/Dev/IDMasterService",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
@@ -324,11 +326,18 @@
       <option name="project" value="LOCAL" />
       <updated>1711537367454</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="email_trigger_code_ibh_count_lines_rxd_lines_code">
+      <option name="closed" value="true" />
+      <created>1711609658026</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1711609658026</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="putaway_reversal_grline_get_bug_fix" />
     <MESSAGE value="putaway_reversal_fix_update_staging_line_fix_b2b_tblconsignment_design_pa_create_inv_temp_approach_changed" />
     <MESSAGE value="inv_fix" />
     <MESSAGE value="reversal_log_added_unallocate_tot_qty_code_added" />
@@ -353,6 +362,7 @@
     <MESSAGE value="preOutboundNo_added_in_ql_ob_cnf" />
     <MESSAGE value="ql_auto_cnf_code_fix" />
     <MESSAGE value="find_ibh_API_stream" />
-    <option name="LAST_COMMIT_MESSAGE" value="find_ibh_API_stream" />
+    <MESSAGE value="email_trigger_code_ibh_count_lines_rxd_lines_code" />
+    <option name="LAST_COMMIT_MESSAGE" value="email_trigger_code_ibh_count_lines_rxd_lines_code" />
   </component>
 </project>

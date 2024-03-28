@@ -52,7 +52,7 @@ public class TransactionService {
     @Autowired
     CycleCountService cycleCountService;
     @Autowired
-    IDMasterService idMasterService;
+    MastersService mastersService;
     //-------------------------------------------------------------------------------------------
 
     @Autowired
@@ -172,7 +172,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setReferenceField2(inbound.getRefDocumentType());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    mastersService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
                     try {
@@ -295,7 +295,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setReferenceField2(outbound.getRefDocumentType());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    mastersService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
                     try {
@@ -353,7 +353,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    mastersService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
@@ -405,7 +405,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    mastersService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
@@ -458,7 +458,7 @@ public class TransactionService {
                     inboundOrderCancelInput.setReferenceField2("Stock Adjustment");
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    mastersService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);

@@ -1,11 +1,14 @@
 package com.almailem.ams.api.connector.service;
 
 import com.almailem.ams.api.connector.config.PropertiesConfig;
+import com.almailem.ams.api.connector.controller.exception.BadRequestException;
+import com.almailem.ams.api.connector.model.auth.AuthToken;
 import com.almailem.ams.api.connector.model.dto.AuditLog;
 import com.almailem.ams.api.connector.model.master.CustomerMaster;
 import com.almailem.ams.api.connector.model.master.ItemMaster;
 import com.almailem.ams.api.connector.model.wms.Customer;
 import com.almailem.ams.api.connector.model.wms.Item;
+import com.almailem.ams.api.connector.model.wms.OrderCancelInput;
 import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.CustomerMasterRepository;
 import com.almailem.ams.api.connector.repository.ItemMasterRepository;
@@ -53,6 +56,10 @@ public class MastersService {
     static CopyOnWriteArrayList<Customer> spCMList = null;                // Customer Master List
 
     //==========================================================================================================================
+
+    private String getMasterServiceApiUrl() {
+        return propertiesConfig.getMastersServiceUrl();
+    }
 
     private RestTemplate getRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
@@ -211,4 +218,28 @@ public class MastersService {
         }
         return null;
     }
+
+    //==========================================================Email===================================================
+    // Send EMail
+    public String sendMail(OrderCancelInput inboundOrderCancelInput) {
+        try {
+            AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
+            String authToken = authTokenForIDMasterService.getAccess_token();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("User-Agent", "Classic WMS's RestTemplate");
+            headers.add("Authorization", "Bearer " + authToken);
+            UriComponentsBuilder builder =
+                    UriComponentsBuilder.fromHttpUrl(getMasterServiceApiUrl() + "email/sendMail");
+            HttpEntity<?> entity = new HttpEntity<>(inboundOrderCancelInput, headers);
+            ResponseEntity<String> result =
+                    getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+            return result.getBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BadRequestException(e.getLocalizedMessage());
+        }
+    }
+
+
 }

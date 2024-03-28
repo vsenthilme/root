@@ -3,6 +3,7 @@ package com.tekclover.wms.api.masters.scheduler;
 import com.tekclover.wms.api.masters.exception.BadRequestException;
 import com.tekclover.wms.api.masters.model.businesspartner.v2.BusinessPartnerV2;
 import com.tekclover.wms.api.masters.model.dto.InboundOrderCancelInput;
+import com.tekclover.wms.api.masters.model.email.OrderCancelInput;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData1V2;
 import com.tekclover.wms.api.masters.model.masters.Customer;
 import com.tekclover.wms.api.masters.model.masters.Item;
@@ -10,15 +11,15 @@ import com.tekclover.wms.api.masters.repository.BusinessPartnerV2Repository;
 import com.tekclover.wms.api.masters.repository.CustomerMasterRepository;
 import com.tekclover.wms.api.masters.repository.ItemMasterRepository;
 import com.tekclover.wms.api.masters.repository.WarehouseRepository;
-import com.tekclover.wms.api.masters.service.BusinessPartnerService;
-import com.tekclover.wms.api.masters.service.IDMasterService;
-import com.tekclover.wms.api.masters.service.MasterOrderService;
+import com.tekclover.wms.api.masters.service.*;
 import com.tekclover.wms.api.masters.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class BatchJobScheduler {
     BusinessPartnerService businessService;
 
     @Autowired
-    IDMasterService idMasterService;
+    SendMailService sendMailService;
 
     //-------------------------------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ public class BatchJobScheduler {
     static CopyOnWriteArrayList<BusinessPartnerV2> spCustomerList = null;    // Customer List
 
     @Scheduled(fixedDelay = 30000)
-    public void processInboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException {
+    public void processInboundOrder() throws IllegalAccessException, InvocationTargetException, ParseException, MessagingException, IOException {
         if (inboundItemList == null || inboundItemList.isEmpty()) {
             List<Item> sqlInboundList = itemMasterRepository.findByProcessedStatusIdOrderByOrderReceivedOn(0L);
             inboundItemList = new ArrayList<>();
@@ -131,14 +132,14 @@ public class BatchJobScheduler {
 
                     //============================================================================================
                     //Sending Failed Details through Mail
-                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
                     inboundOrderCancelInput.setCompanyCodeId(inbound.getCompanyCodeId());
                     inboundOrderCancelInput.setPlantId(inbound.getPlantId());
                     inboundOrderCancelInput.setRefDocNumber(inbound.getItemCode());
                     inboundOrderCancelInput.setReferenceField1(inbound.getManufacturerName());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    sendMailService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
 
                     masterOrderService.createInboundIntegrationLog(inbound);
@@ -152,7 +153,7 @@ public class BatchJobScheduler {
 
     // CustomerMaster
     @Scheduled(fixedDelay = 50000)
-    public void processCustomerMaster() throws IllegalAccessException, InvocationTargetException, ParseException {
+    public void processCustomerMaster() throws IllegalAccessException, InvocationTargetException, ParseException, MessagingException, IOException {
         if (inboundCustomerList == null || inboundCustomerList.isEmpty()) {
             List<Customer> sqlInboundList = customerMasterRepository.findByProcessedStatusIdOrderByOrderReceivedOn(0L);
             inboundCustomerList = new ArrayList<>();
@@ -218,14 +219,14 @@ public class BatchJobScheduler {
                     masterOrderService.updateProcessedCustomerMaster(inbound.getCompanyCodeId(), inbound.getPlantId(), inbound.getPartnerCode(), 100L);
                     //============================================================================================
                     //Sending Failed Details through Mail
-                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
                     inboundOrderCancelInput.setCompanyCodeId(inbound.getCompanyCodeId());
                     inboundOrderCancelInput.setPlantId(inbound.getPlantId());
                     inboundOrderCancelInput.setRefDocNumber(inbound.getPartnerCode());
                     inboundOrderCancelInput.setReferenceField1(inbound.getPartnerName());
                     inboundOrderCancelInput.setRemarks(e.toString());
 
-                    idMasterService.sendMail(inboundOrderCancelInput);
+                    sendMailService.sendMail(inboundOrderCancelInput);
                     //============================================================================================
                     masterOrderService.createInboundIntegrationLog(inbound);
                     inboundCustomerList.remove(inbound);

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.almailem.ams.api.connector.model.wms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,38 +29,6 @@ import com.almailem.ams.api.connector.model.transferin.TransferInHeader;
 import com.almailem.ams.api.connector.model.transferin.TransferInLine;
 import com.almailem.ams.api.connector.model.transferout.TransferOutHeader;
 import com.almailem.ams.api.connector.model.transferout.TransferOutLine;
-import com.almailem.ams.api.connector.model.wms.ASN;
-import com.almailem.ams.api.connector.model.wms.ASNHeader;
-import com.almailem.ams.api.connector.model.wms.ASNLine;
-import com.almailem.ams.api.connector.model.wms.B2bTransferIn;
-import com.almailem.ams.api.connector.model.wms.B2bTransferInHeader;
-import com.almailem.ams.api.connector.model.wms.B2bTransferInLine;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferIn;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferInHeader;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferInLine;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferOut;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferOutHeader;
-import com.almailem.ams.api.connector.model.wms.InterWarehouseTransferOutLine;
-import com.almailem.ams.api.connector.model.wms.Periodic;
-import com.almailem.ams.api.connector.model.wms.PeriodicHeaderV1;
-import com.almailem.ams.api.connector.model.wms.PeriodicLineV1;
-import com.almailem.ams.api.connector.model.wms.Perpetual;
-import com.almailem.ams.api.connector.model.wms.PerpetualHeaderV1;
-import com.almailem.ams.api.connector.model.wms.PerpetualLineV1;
-import com.almailem.ams.api.connector.model.wms.ReturnPO;
-import com.almailem.ams.api.connector.model.wms.ReturnPOHeader;
-import com.almailem.ams.api.connector.model.wms.ReturnPOLine;
-import com.almailem.ams.api.connector.model.wms.SOHeader;
-import com.almailem.ams.api.connector.model.wms.SOLine;
-import com.almailem.ams.api.connector.model.wms.SOReturnHeader;
-import com.almailem.ams.api.connector.model.wms.SOReturnLine;
-import com.almailem.ams.api.connector.model.wms.SaleOrderReturn;
-import com.almailem.ams.api.connector.model.wms.SalesOrder;
-import com.almailem.ams.api.connector.model.wms.SalesOrderHeader;
-import com.almailem.ams.api.connector.model.wms.SalesOrderLine;
-import com.almailem.ams.api.connector.model.wms.ShipmentOrder;
-import com.almailem.ams.api.connector.model.wms.StockAdjustment;
-import com.almailem.ams.api.connector.model.wms.WarehouseApiResponse;
 import com.almailem.ams.api.connector.repository.PeriodicHeaderRepository;
 import com.almailem.ams.api.connector.repository.PerpetualHeaderRepository;
 import com.almailem.ams.api.connector.repository.PickListHeaderRepository;
@@ -115,7 +84,7 @@ public class TransactionService {
     PeriodicService periodicService;
 
     @Autowired
-    IDMasterService idMasterService;
+    MastersService mastersService;
 
     //-------------------------------------------------------------------------------------------
 
@@ -271,6 +240,16 @@ public class TransactionService {
                     supplierInvoiceService.updateProcessedInboundOrder(asn.getAsnHeader().getMiddlewareId(),
                     		asn.getAsnHeader().getCompanyCode(), asn.getAsnHeader().getBranchCode(),
                     		asn.getAsnHeader().getAsnNumber(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(asnHeader.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(asnHeader.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(asnHeader.getAsnNumber());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
                 
@@ -341,6 +320,16 @@ public class TransactionService {
                     // Updating the Processed Status = 100
                     stockReceiptService.updateProcessedInboundOrder(stockReceiptHeader.getMiddlewareId(), stockReceiptHeader.getCompanyCode(),
                     		stockReceiptHeader.getBranchCode(), stockReceiptHeader.getReceiptNo(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(stockReceiptHeader.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(stockReceiptHeader.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(stockReceiptHeader.getReceiptNo());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
 //                    stockReceiptService.createInboundIntegrationLog(inbound);
                     integrationLogService.createStockReceiptHeaderLog(stockReceiptHeader, e.toString());
                     throw new RuntimeException(e);
@@ -420,6 +409,17 @@ public class TransactionService {
                     salesReturnService.updateProcessedInboundOrder(saleOrderReturn.getSoReturnHeader().getMiddlewareId(),
                             saleOrderReturn.getSoReturnHeader().getCompanyCode(), saleOrderReturn.getSoReturnHeader().getBranchCode(),
                             saleOrderReturn.getSoReturnHeader().getTransferOrderNumber(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(salesReturnHeader.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(salesReturnHeader.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(salesReturnHeader.getTransferOrderNumber());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
                     throw new RuntimeException(e);
                 }
             }
@@ -513,6 +513,16 @@ public class TransactionService {
                         b2BTransferInService.updateProcessedInboundOrder(b2bTransferIn.getB2bTransferInHeader().getMiddlewareId(),
                                 b2bTransferIn.getB2bTransferInHeader().getCompanyCode(), b2bTransferIn.getB2bTransferInHeader().getBranchCode(),
                                 b2bTransferIn.getB2bTransferInHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(b2bTransferInHeader.getCompanyCode());
+                        inboundOrderCancelInput.setPlantId(b2bTransferInHeader.getBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(b2bTransferInHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -583,6 +593,16 @@ public class TransactionService {
                         b2BTransferInService.updateProcessedInboundOrder(b2bTransferIn.getB2bTransferInHeader().getMiddlewareId(),
                                 b2bTransferIn.getB2bTransferInHeader().getCompanyCode(), b2bTransferIn.getB2bTransferInHeader().getBranchCode(),
                                 b2bTransferIn.getB2bTransferInHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(b2bTransferInHeader.getCompanyCode());
+                        inboundOrderCancelInput.setPlantId(b2bTransferInHeader.getBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(b2bTransferInHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -649,6 +669,18 @@ public class TransactionService {
                         interWarehouseTransferInService.updateProcessedInboundOrder(interWarehouseTransferIn.getInterWarehouseTransferInHeader().getMiddlewareId(),
                                 interWarehouseTransferIn.getInterWarehouseTransferInHeader().getToCompanyCode(), interWarehouseTransferIn.getInterWarehouseTransferInHeader().getToBranchCode(),
                                 interWarehouseTransferIn.getInterWarehouseTransferInHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(interWarehouseTransferInHeader.getToCompanyCode());
+                        inboundOrderCancelInput.setPlantId(interWarehouseTransferInHeader.getToBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(interWarehouseTransferInHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setReferenceField1(interWarehouseTransferInHeader.getSourceCompanyCode());
+                        inboundOrderCancelInput.setReferenceField2(interWarehouseTransferInHeader.getSourceBranchCode());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -711,6 +743,18 @@ public class TransactionService {
                         interWarehouseTransferInService.updateProcessedInboundOrder(interWarehouseTransferIn.getInterWarehouseTransferInHeader().getMiddlewareId(),
                                 interWarehouseTransferIn.getInterWarehouseTransferInHeader().getToCompanyCode(), interWarehouseTransferIn.getInterWarehouseTransferInHeader().getToBranchCode(),
                                 interWarehouseTransferIn.getInterWarehouseTransferInHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(interWarehouseTransferInHeader.getToCompanyCode());
+                        inboundOrderCancelInput.setPlantId(interWarehouseTransferInHeader.getToBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(interWarehouseTransferInHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setReferenceField1(interWarehouseTransferInHeader.getSourceCompanyCode());
+                        inboundOrderCancelInput.setReferenceField2(interWarehouseTransferInHeader.getSourceBranchCode());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -784,6 +828,16 @@ public class TransactionService {
                     returnPOService.updateProcessedOutboundOrder(returnPO.getReturnPOHeader().getMiddlewareId(),
                             returnPO.getReturnPOHeader().getCompanyCode(), returnPO.getReturnPOHeader().getBranchCode(),
                             returnPO.getReturnPOHeader().getPoNumber(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(returnPOHeader.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(returnPOHeader.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(returnPOHeader.getPoNumber());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
             }
@@ -868,6 +922,16 @@ public class TransactionService {
                         // Updating the Processed Status = 100
                         shipmentOrderService.updateProcessedOutboundOrder(shipmentOrder.getSoHeader().getMiddlewareId(), shipmentOrder.getSoHeader().getCompanyCode(),
                                 shipmentOrder.getSoHeader().getBranchCode(), shipmentOrder.getSoHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(soHeader.getCompanyCode());
+                        inboundOrderCancelInput.setPlantId(soHeader.getBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(soHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -930,6 +994,18 @@ public class TransactionService {
                         interWarehouseTransferOutService.updateProcessedOutboundOrder(iWhTransferOut.getInterWarehouseTransferOutHeader().getMiddlewareId(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getFromCompanyCode(), iWhTransferOut.getInterWarehouseTransferOutHeader().getFromBranchCode(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(iWhtOutHeader.getFromCompanyCode());
+                        inboundOrderCancelInput.setPlantId(iWhtOutHeader.getFromBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(iWhtOutHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setReferenceField1(iWhtOutHeader.getCompanyCode());
+                        inboundOrderCancelInput.setReferenceField2(iWhtOutHeader.getBranchCode());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -992,6 +1068,18 @@ public class TransactionService {
                         interWarehouseTransferOutService.updateProcessedOutboundOrder(iWhTransferOut.getInterWarehouseTransferOutHeader().getMiddlewareId(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getFromCompanyCode(), iWhTransferOut.getInterWarehouseTransferOutHeader().getFromBranchCode(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(iWhtOutHeader.getFromCompanyCode());
+                        inboundOrderCancelInput.setPlantId(iWhtOutHeader.getFromBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(iWhtOutHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setReferenceField1(iWhtOutHeader.getCompanyCode());
+                        inboundOrderCancelInput.setReferenceField2(iWhtOutHeader.getBranchCode());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -1054,6 +1142,18 @@ public class TransactionService {
                         interWarehouseTransferOutService.updateProcessedOutboundOrder(iWhTransferOut.getInterWarehouseTransferOutHeader().getMiddlewareId(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getFromCompanyCode(), iWhTransferOut.getInterWarehouseTransferOutHeader().getFromBranchCode(),
                                 iWhTransferOut.getInterWarehouseTransferOutHeader().getTransferOrderNumber(), 100L);
+                        //============================================================================================
+                        //Sending Failed Details through Mail
+                        OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                        inboundOrderCancelInput.setCompanyCodeId(iWhtOutHeader.getFromCompanyCode());
+                        inboundOrderCancelInput.setPlantId(iWhtOutHeader.getFromBranchCode());
+                        inboundOrderCancelInput.setRefDocNumber(iWhtOutHeader.getTransferOrderNumber());
+                        inboundOrderCancelInput.setReferenceField1(iWhtOutHeader.getCompanyCode());
+                        inboundOrderCancelInput.setReferenceField2(iWhtOutHeader.getBranchCode());
+                        inboundOrderCancelInput.setRemarks(e.toString());
+
+                        mastersService.sendMail(inboundOrderCancelInput);
+                        //============================================================================================
                         throw new RuntimeException(e);
                     }
                 }
@@ -1127,6 +1227,17 @@ public class TransactionService {
                     salesOrderService.updateProcessedInboundOrder(salesOrder.getSalesOrderHeader().getMiddlewareId(),
                             salesOrder.getSalesOrderHeader().getCompanyCode(), salesOrder.getSalesOrderHeader().getBranchCode(),
                             salesOrder.getSalesOrderHeader().getPickListNumber(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(salesOrderHeader.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(salesOrderHeader.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(salesOrderHeader.getPickListNumber());
+                    inboundOrderCancelInput.setReferenceField1(salesOrderHeader.getSalesOrderNumber());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
                
@@ -1179,6 +1290,18 @@ public class TransactionService {
                     // Updating the Processed Status = 100
                     salesInvoiceService.updateProcessedOutboundOrder(salesInvoice.getMiddlewareId(), salesInvoice.getCompanyCode(),
                             salesInvoice.getBranchCode(), salesInvoice.getSalesInvoiceNumber(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(salesInvoice.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(salesInvoice.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(salesInvoice.getSalesInvoiceNumber());
+                    inboundOrderCancelInput.setReferenceField1(salesInvoice.getPickListNumber());
+                    inboundOrderCancelInput.setReferenceField2(salesInvoice.getSalesOrderNumber());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
             }
@@ -1253,6 +1376,17 @@ public class TransactionService {
                     perpetualService.updateProcessedPerpetualOrder(perpetual.getPerpetualHeaderV1().getMiddlewareId(),
                             perpetual.getPerpetualHeaderV1().getCompanyCode(), perpetual.getPerpetualHeaderV1().getBranchCode(),
                             perpetual.getPerpetualHeaderV1().getCycleCountNo(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(perpetualHeaderV1.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(perpetualHeaderV1.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(perpetualHeaderV1.getCycleCountNo());
+                    inboundOrderCancelInput.setReferenceField1("Perpetual");
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
             }
@@ -1326,6 +1460,17 @@ public class TransactionService {
                     periodicService.updateProcessedPeriodicOrder(periodic.getPeriodicHeaderV1().getMiddlewareId(),
                             periodic.getPeriodicHeaderV1().getCompanyCode(), periodic.getPeriodicHeaderV1().getBranchCode(),
                             periodic.getPeriodicHeaderV1().getCycleCountNo(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(periodicHeaderV1.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(periodicHeaderV1.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(periodicHeaderV1.getCycleCountNo());
+                    inboundOrderCancelInput.setReferenceField1("Periodic");
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
             }
@@ -1391,6 +1536,18 @@ public class TransactionService {
                     // Updating the Processed Status = 100
                     stockAdjustmentService.updateProcessedStockAdjustment(stockAdjustment.getStockAdjustmentId(),
                             stockAdjustment.getCompanyCode(), stockAdjustment.getBranchCode(), stockAdjustment.getItemCode(), 100L);
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    OrderCancelInput inboundOrderCancelInput = new OrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(stockAdjustment.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(stockAdjustment.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(String.valueOf(stockAdjustment.getStockAdjustmentId()));
+                    inboundOrderCancelInput.setReferenceField1(stockAdjustment.getItemCode());
+                    inboundOrderCancelInput.setReferenceField2(stockAdjustment.getManufacturerName());
+                    inboundOrderCancelInput.setRemarks(e.toString());
+
+                    mastersService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
                     throw new RuntimeException(e);
                 }
             }

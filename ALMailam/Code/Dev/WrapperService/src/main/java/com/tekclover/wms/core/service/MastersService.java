@@ -5378,7 +5378,7 @@ public class MastersService {
         }
     }
     // POST EMailDetails
-    public EMailDetails createEMailDetails(EMailDetails eMailDetails, String loginUserID, String authToken) {
+    public EMailDetails createEMailDetails(EMailDetails eMailDetails, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -5386,7 +5386,7 @@ public class MastersService {
             headers.add("Authorization", "Bearer " + authToken);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "email/")
-                    .queryParam("loginUserID", loginUserID);
+                    .queryParam("loginUserId", loginUserId);
 
             HttpEntity<?> entity = new HttpEntity<>(eMailDetails, headers);
             ResponseEntity<EMailDetails> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, EMailDetails.class);
@@ -5400,7 +5400,7 @@ public class MastersService {
 
 
     // Patch EmailDetails
-    public EMailDetails updateEMailDetails(Long emailId, EMailDetails eMailDetails, String loginUserID, String authToken) {
+    public EMailDetails updateEMailDetails(Long emailId, EMailDetails eMailDetails, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -5414,7 +5414,7 @@ public class MastersService {
 
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "email/" + emailId)
-                            .queryParam("loginUserID", loginUserID);
+                            .queryParam("loginUserId", loginUserId);
 
             ResponseEntity<EMailDetails> result = restTemplate.exchange(builder.toUriString(), HttpMethod.PATCH, entity, EMailDetails.class);
             log.info("result : " + result.getStatusCode());
@@ -5426,7 +5426,7 @@ public class MastersService {
     }
 
     // Delete EMailDetails
-    public boolean deleteEMailDetails(Long emailId, String loginUserID, String authToken) {
+    public boolean deleteEMailDetails(Long emailId, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -5436,7 +5436,7 @@ public class MastersService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "email/" + emailId)
-                            .queryParam("loginUserID", loginUserID);
+                            .queryParam("loginUserId", loginUserId);
             ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.DELETE, entity, String.class);
             log.info("result : " + result);
             return true;
@@ -5447,7 +5447,7 @@ public class MastersService {
     }
 
     // UnDelete EMailDetails
-    public boolean unDeleteEMailDetails(String emailId, String loginUserID, String authToken) {
+    public boolean unDeleteEMailDetails(String emailId, String loginUserId, String authToken) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -5457,7 +5457,7 @@ public class MastersService {
             HttpEntity<?> entity = new HttpEntity<>(headers);
             UriComponentsBuilder builder =
                     UriComponentsBuilder.fromHttpUrl(getMastersServiceUrl() + "email/undelete/" + emailId)
-                            .queryParam("loginUserID", loginUserID);
+                            .queryParam("loginUserId", loginUserId);
             ResponseEntity<String> result = getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
             log.info("result : " + result);
             return true;

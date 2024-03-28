@@ -39,6 +39,11 @@ public class SalesReturnHeaderSpecification implements Specification<SalesReturn
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("branchCodeOfReceivingWarehouse");
             predicates.add(group.in(findSalesReturnHeader.getBranchCodeOfReceivingWarehouse()));
         }
+
+        if (findSalesReturnHeader.getBranchCode() != null && !findSalesReturnHeader.getBranchCode().isEmpty()) {
+            final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("branchCode");
+            predicates.add(group.in(findSalesReturnHeader.getBranchCode()));
+        }
         if (findSalesReturnHeader.getReturnOrderNo() != null && !findSalesReturnHeader.getReturnOrderNo().isEmpty()) {
             final Path<DeferredImportSelector.Group> group = root.<DeferredImportSelector.Group>get("returnOrderNo");
             predicates.add(group.in(findSalesReturnHeader.getReturnOrderNo()));

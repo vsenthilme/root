@@ -2,7 +2,7 @@ package com.tekclover.wms.api.masters.scheduler;
 
 import com.tekclover.wms.api.masters.exception.BadRequestException;
 import com.tekclover.wms.api.masters.model.businesspartner.v2.BusinessPartnerV2;
-import com.tekclover.wms.api.masters.model.dto.InboundOrderCancelInput;
+
 import com.tekclover.wms.api.masters.model.email.OrderCancelInput;
 import com.tekclover.wms.api.masters.model.imbasicdata1.v2.ImBasicData1V2;
 import com.tekclover.wms.api.masters.model.masters.Customer;

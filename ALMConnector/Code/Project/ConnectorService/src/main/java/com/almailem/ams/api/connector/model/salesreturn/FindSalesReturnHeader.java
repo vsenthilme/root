@@ -12,6 +12,7 @@ public class FindSalesReturnHeader {
     private List<String> companyCode;
     private List<String> branchCodeOfReceivingWarehouse;
     private List<String> returnOrderNo;
+    private List<String> branchCode;
 
     private Date fromOrderReceivedOn;
 

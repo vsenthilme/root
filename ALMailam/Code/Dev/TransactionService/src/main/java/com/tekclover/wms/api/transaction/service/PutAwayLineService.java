@@ -1884,6 +1884,8 @@ public class PutAwayLineService extends BaseService {
 //                    log.info("Inbound Confirmation Successful. Inventory Created Successfully");
 //                }
 //            }
+            putAwayLineV2Repository.updateInboundHeaderRxdLinesCountProc(companyCode, plantId, languageId, warehouseId, refDocNumber, preInboundNo);
+            log.info("InboundHeader received lines count updated: " + refDocNumber);
             return createdPutAwayLines;
 
         } catch (Exception e) {

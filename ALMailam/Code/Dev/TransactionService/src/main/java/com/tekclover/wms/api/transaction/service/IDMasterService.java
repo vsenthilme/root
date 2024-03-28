@@ -4,6 +4,7 @@ import java.time.Year;
 import java.util.Collections;
 import java.util.Date;
 
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundOrderCancelInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -324,6 +325,27 @@ public class IDMasterService {
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			ResponseEntity<String> result =
 					getRestTemplate().exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+			return result.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BadRequestException(e.getLocalizedMessage());
+		}
+	}
+
+	// Send EMail
+	public String sendMail(InboundOrderCancelInput inboundOrderCancelInput) {
+		try {
+			AuthToken authTokenForIDMasterService = authTokenService.getIDMasterServiceAuthToken();
+			String authToken = authTokenForIDMasterService.getAccess_token();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+			headers.add("User-Agent", "Classic WMS's RestTemplate");
+			headers.add("Authorization", "Bearer " + authToken);
+			UriComponentsBuilder builder =
+					UriComponentsBuilder.fromHttpUrl(getIDMasterServiceApiUrl() + "email/sendMail");
+			HttpEntity<?> entity = new HttpEntity<>(inboundOrderCancelInput, headers);
+			ResponseEntity<String> result =
+					getRestTemplate().exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
 			return result.getBody();
 		} catch (Exception e) {
 			e.printStackTrace();

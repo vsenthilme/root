@@ -72,9 +72,8 @@ public class EMailController {
 
     //send Mail
     @ApiOperation(response = EMailDetails.class, value = "Send Email") // label for swagger
-    @GetMapping("/sendMail")
-    public ResponseEntity<?> sendEmail(@Valid @RequestBody OrderCancelInput orderCancelInput)
-            throws IOException, MessagingException {
+    @PostMapping("/sendMail")
+    public ResponseEntity<?> sendEmail(@Valid @RequestBody OrderCancelInput orderCancelInput) throws IOException, MessagingException {
         sendMailService.sendMail(orderCancelInput);
         return new ResponseEntity<>(HttpStatus.OK);
     }

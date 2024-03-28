@@ -67,16 +67,22 @@ public class SendMailService {
         String localDate = DateUtils.getCurrentDateWithoutTimestamp();
         String c_id = orderCancelInput.getCompanyCodeId();
         String plant_id = orderCancelInput.getPlantId();
-        String lang_id = orderCancelInput.getLanguageId();
-        String wh_id = orderCancelInput.getWarehouseId();
         String ref_doc_no = orderCancelInput.getRefDocNumber();
-        String pre_ib_ob_no = orderCancelInput.getPreInboundNo();
+
+        String emailSubject = "Almailem - AutoLab / Amghara - Order Failed Status - " + ref_doc_no + ", " + c_id + ", " +  plant_id + ", " + localDate;
+        String emailBodyText = "Dear Almailem Team,<br><br>" + "Please find the failed order details for your reference" +
+                "<br><br> OrderNo   : " + ref_doc_no +
+                "<br> CompanyCode   : " + c_id +
+                "<br> BranchCode    : " + plant_id +
+                "<br> Warehouse     : " + orderCancelInput.getWarehouseId() +
+                "<br> OrderType     : " + orderCancelInput.getReferenceField2() +
+                "<br><br>Regards<br>Operations Team - Almailem";
 
         EMailDetails email = new EMailDetails();
 
         email.setSenderName("Almailem-Support");
-        email.setSubject("Almailem - AutoLab / Amghara - Order Failed Status - " + plant_id + ", " + localDate);
-        email.setBodyText("Dear Almailem Team,<br><br>" + "Please find the failed order details for your reference<br><br>Regards<br>Operations Team - Almailem");
+        email.setSubject(emailSubject);
+        email.setBodyText(emailBodyText);
         email.setToAddress(toAddress);
         email.setCcAddress(ccAddress);
         sendMail(email);

@@ -5,6 +5,7 @@ import com.tekclover.wms.api.transaction.model.cyclecount.perpetual.v2.Perpetual
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegrationHeader;
 import com.tekclover.wms.api.transaction.model.inbound.preinbound.InboundIntegrationLine;
 import com.tekclover.wms.api.transaction.model.inbound.v2.InboundHeaderV2;
+import com.tekclover.wms.api.transaction.model.inbound.v2.InboundOrderCancelInput;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.OutboundIntegrationHeaderV2;
 import com.tekclover.wms.api.transaction.model.outbound.preoutbound.v2.OutboundIntegrationLineV2;
 import com.tekclover.wms.api.transaction.model.outbound.v2.OutboundHeaderV2;
@@ -50,6 +51,8 @@ public class TransactionService {
     StockAdjustmentService stockAdjustmentService;
     @Autowired
     CycleCountService cycleCountService;
+    @Autowired
+    IDMasterService idMasterService;
     //-------------------------------------------------------------------------------------------
 
     @Autowired
@@ -157,6 +160,20 @@ public class TransactionService {
                     log.error("Error on inbound processing : " + e.toString());
                     // Updating the Processed Status
                     orderService.updateProcessedInboundOrderV2(inbound.getRefDocumentNo(), inbound.getInboundOrderTypeId(),  100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(inbound.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(inbound.getBranchCode());
+                    inboundOrderCancelInput.setWarehouseId(inbound.getWarehouseID());
+                    inboundOrderCancelInput.setRefDocNumber(inbound.getRefDocumentNo());
+                    inboundOrderCancelInput.setReferenceField1(String.valueOf(inbound.getInboundOrderTypeId()));
+                    inboundOrderCancelInput.setReferenceField2(inbound.getRefDocumentType());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
                     try {
                         preinboundheaderService.createInboundIntegrationLogV2(inbound, e.toString());
                         inboundList.remove(inbound);
@@ -265,6 +282,20 @@ public class TransactionService {
                     log.error("Error on outbound processing : " + e.toString());
                     // Updating the Processed Status
                     orderService.updateProcessedOrderV2(outbound.getRefDocumentNo(), outbound.getOutboundOrderTypeID(),100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(outbound.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(outbound.getBranchCode());
+                    inboundOrderCancelInput.setWarehouseId(outbound.getWarehouseID());
+                    inboundOrderCancelInput.setRefDocNumber(outbound.getRefDocumentNo());
+                    inboundOrderCancelInput.setReferenceField1(String.valueOf(outbound.getOutboundOrderTypeID()));
+                    inboundOrderCancelInput.setReferenceField2(outbound.getRefDocumentType());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
                     try {
                         preOutboundHeaderService.createOutboundIntegrationLogV2(outbound, e.toString());
                         outboundList.remove(outbound);
@@ -310,6 +341,18 @@ public class TransactionService {
                     log.error("Error on PerpetualStockCount processing : " + e.toString());
                     // Updating the Processed Status
                     cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo(), 100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(stockCount.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(stockCount.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(stockCount.getCycleCountNo());
+                    inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
                     stockCountPerpetualList.remove(stockCount);
                     warehouseApiResponse.setStatusCode("1400");
@@ -349,6 +392,18 @@ public class TransactionService {
                     log.error("Error on PeriodicStockCount processing : " + e.toString());
                     // Updating the Processed Status
                     cycleCountService.updateProcessedOrderV2(stockCount.getCycleCountNo(), 100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(stockCount.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(stockCount.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(stockCount.getCycleCountNo());
+                    inboundOrderCancelInput.setReferenceField2(stockCount.getStockCountType());
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
                     stockCountPeriodicList.remove(stockCount);
                     warehouseApiResponse.setStatusCode("1400");
@@ -389,6 +444,18 @@ public class TransactionService {
                     log.error("Error on StockAdjustment processing : " + e.toString());
                     // Updating the Processed Status
                     stockAdjustmentMiddlewareService.updateProcessedOrderV2(stockAdjustment.getStockAdjustmentId(), 100L);
+
+                    //============================================================================================
+                    //Sending Failed Details through Mail
+                    InboundOrderCancelInput inboundOrderCancelInput = new InboundOrderCancelInput();
+                    inboundOrderCancelInput.setCompanyCodeId(stockAdjustment.getCompanyCode());
+                    inboundOrderCancelInput.setPlantId(stockAdjustment.getBranchCode());
+                    inboundOrderCancelInput.setRefDocNumber(String.valueOf(stockAdjustment.getStockAdjustmentId()));
+                    inboundOrderCancelInput.setReferenceField2("Stock Adjustment");
+
+                    idMasterService.sendMail(inboundOrderCancelInput);
+                    //============================================================================================
+
 //                    preOutboundHeaderService.createOutboundIntegrationLogV2(outbound);
                     stockAdjustmentList.remove(stockAdjustment);
                     warehouseApiResponse.setStatusCode("1400");

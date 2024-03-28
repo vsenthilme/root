@@ -2176,7 +2176,7 @@ public interface InventoryV2Repository extends PagingAndSortingRepository<Invent
             "(COALESCE(:plantIds, null) IS NULL OR (plant_id IN (:plantIds))) and \n" +
             "(COALESCE(:warehouseIds, null) IS NULL OR (wh_id IN (:warehouseIds))) and \n" +
             "is_deleted = 0 \n" +
-            "group by itm_code,mfr_name,plant_id,wh_id,c_id \n" +
+            "group by itm_code,mfr_name,plant_id,wh_id,c_id,lang_id \n" +
 
             "Select itemCode, languageId, companyCodeId, plantId, warehouseId, manufacturerSKU, itemText, \r\n"
             + "companyDescription, plantDescription, warehouseDescription, barcodeId, manufacturerName, \r\n"
